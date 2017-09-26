@@ -1,0 +1,3 @@
+[submodule "doc/uvote/src"]
+	path = doc/uvote/src
+	url = git@github.com:webcraftmedia/uvote.git
