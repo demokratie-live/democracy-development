@@ -131,3 +131,7 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 
    - Wahlspezifische Zusatzanforderungen: z.B. vorgegebene Reihenfolge der Kandidaten
    auf Stimmzettel, vorgegebenes Layout, ungültig wählen möglich, . . .
+   
+## Entwicklung & Werkzeuge
+
+Vorschlag: Nutzung von Kanban: https://kb.webcraft-media.de/?controller=BoardViewController&action=readonly&token=649348bb701244fff358494e1a9945a9bf2fcf0eaa2f69116b0df197a93d
