@@ -1,6 +1,7 @@
 # Demokratie-App
 
 Webseite: https://www.democracy-deutschland.de/
+
 Crowdfinanzierung: https://www.startnext.com/democracy
 
 ## Funktion
