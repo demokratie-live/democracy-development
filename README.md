@@ -134,4 +134,4 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
    
 ## Entwicklung & Werkzeuge
 
-Vorschlag: Nutzung von Kanban: https://kb.webcraft-media.de/?controller=BoardViewController&action=readonly&token=649348bb701244fff358494e1a9945a9bf2fcf0eaa2f69116b0df197a93d
+Vorschlag: Nutzung von [Kanban](https://kb.webcraft-media.de/?controller=BoardViewController&action=readonly&token=649348bb701244fff358494e1a9945a9bf2fcf0eaa2f69116b0df197a93d)
