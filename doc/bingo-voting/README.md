@@ -1,3 +1,6 @@
+
+![Screenshot](https://crypto.iti.kit.edu/fileadmin/_migrated/pics/BV_CeBIT08.jpg)
+
 # Bingo Voting
 
   Bingo Voting ist ein elektronisches Wahlverfahren, das am Europäischen Institut für Systemsicherheit (EISS) 
