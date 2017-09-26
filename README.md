@@ -135,3 +135,7 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 ## Entwicklung & Werkzeuge
 
 Vorschlag: Nutzung von [Kanban](https://kb.webcraft-media.de/?controller=BoardViewController&action=readonly&token=649348bb701244fff358494e1a9945a9bf2fcf0eaa2f69116b0df197a93d)
+
+[Analysetool Dateistrucktur](https://veniversum.me/git-visualizer/?owner=demokratie-live&repo=demokratie-app)
+
+[Analysetool Commits](http://ghv.artzub.com/#repo=demokratie-app&climit=10000&user=demokratie-live)
