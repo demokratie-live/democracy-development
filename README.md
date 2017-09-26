@@ -76,8 +76,7 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
    - *Wahlgeheimnis*: Während und nach der Wahl darf keine Information bekannt werden, die
    darauf schließen lässt, was ein Wähler gewählt hat.
 
-   - *Quittungsfreiheit/Belegfreiheit*: Selbst, wenn der Wähler es wollte, könnte er einem Drit-
-   ten nicht beweisen , was er gewählt hat.
+   - *Quittungsfreiheit/Belegfreiheit*: Selbst, wenn der Wähler es wollte, könnte er einem Dritten nicht beweisen , was er gewählt hat.
 
    - *Nicht-Erpressbarkeit/Unmöglichkeit von Stimmkauf*: Der Wähler kann, selbst wenn
    er es wollte, nicht in einer Art und Weise seine Stimme abgeben, die dem Angreifer beweisen
@@ -86,23 +85,19 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 
    - *Keine erzwungene Enthaltung*: Eine wahlberechtigte Person kann nicht gezwungen oder
    erpresst werden, nicht zu wählen. Diese Anforderung gehört streng genommen zur Nicht-
-   Erpressbarkeit, wird aber oft als Sonderfall behandelt, da diese Anforderung z.B. bei Präsen-
-   zwahlen prinzipiell unmöglich zu erreichen ist.
+   Erpressbarkeit, wird aber oft als Sonderfall behandelt, da diese Anforderung z.B. bei Präsenzwahlen prinzipiell unmöglich zu erreichen ist.
 
    - *Keine vorläufigen Zwischenergebnisse*: Vorläufige Zwischenergebnisse lassen die Aus-
-   wahl eines Wählers, der in einem bestimmten Zeitraum gewählt hat, mit höherer Wahr-
-   scheinlichkeit 7 bestimmen, als wenn nur das Gesamtergebnis vorliegt. Diese Anforderung
+   wahl eines Wählers, der in einem bestimmten Zeitraum gewählt hat, mit höherer Wahrscheinlichkeit 7 bestimmen, als wenn nur das Gesamtergebnis vorliegt. Diese Anforderung
    gehört aus einem anderen Grund außerdem auch zur Gleichheit der Wahl.
 
 ### Anforderungen, die die Korrektheit und die Nachvollziehbarkeit bzw. Öffentlichkeit der Wahl betreffen:
 
    - *Korrektheit*: Das Wahlergebnis wird aus den abgegebenen Stimmen korrekt berechnet.
 
-   - *Integrität*: Es werden genau die Stimmen gezählt, die von wahlberechtigten Wählern abge-
-   geben wurden. Es werden keine Stimmen unbefugt hinzugefügt, gelöscht oder verändert.
+   - *Integrität*: Es werden genau die Stimmen gezählt, die von wahlberechtigten Wählern abgegeben wurden. Es werden keine Stimmen unbefugt hinzugefügt, gelöscht oder verändert.
 
-   - *Verifizierbarkeit*: Jeder kann nachprüfen, ob die eigene Stimme in der Auszählung berück-
-   sichtigt wurde (individuelle Verifizierbarkeit) und ob das Wahlergebnis korrekt berechnet
+   - *Verifizierbarkeit*: Jeder kann nachprüfen, ob die eigene Stimme in der Auszählung berücksichtigt wurde (individuelle Verifizierbarkeit) und ob das Wahlergebnis korrekt berechnet
    wurde (universelle Verifizierbarkeit)
 
 ### Anforderungen, die die Gleichheit bzw. Fairness der Wahl betreffen:
@@ -110,14 +105,12 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
    - *Gleiches Stimmgewicht*: Jeder Wähler kann nur eine Stimme abgeben und jede Stimme
    wird nur einmal gezählt. 
 
-   - *Keine vorläufigen Zwischenergebnisse*: Jeder soll unter gleichen Voraussetzungen, al-
-   so auch mit der gleichen Information zur Stimmabgabe gehen. Diese Anforderung gehört
+   - *Keine vorläufigen Zwischenergebnisse*: Jeder soll unter gleichen Voraussetzungen, also auch mit der gleichen Information zur Stimmabgabe gehen. Diese Anforderung gehört
    außerdem auch zum Wahlgeheimnis.
 
 ### Sonstige wünschenswerte oder möglicherweise notwendige Anforderungen:
 
-   - *Robustheit*: Niemand soll einen Abbruch der Wahl oder eine Wiederholungswahl provozie-
-   ren können. Dazu muss eine Manipulation beweisbar sein, damit zwischen einer echten und
+   - *Robustheit*: Niemand soll einen Abbruch der Wahl oder eine Wiederholungswahl provozieren können. Dazu muss eine Manipulation beweisbar sein, damit zwischen einer echten und
    einer behaupteten Manipulation unterschieden werden kann.
 
    - *Benutzerfreundlichkeit*: intuitiv, leicht benutzbar, schnell, . . .
