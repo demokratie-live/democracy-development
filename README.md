@@ -1,3 +1,7 @@
+
+
+![Screenshot](https://www.democracy-deutschland.de/images/forfb2.png)
+
 # Demokratie-App
 
 Webseite: https://www.democracy-deutschland.de/
