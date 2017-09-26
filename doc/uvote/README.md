@@ -1,12 +1,12 @@
- ## uvote1.png
-![Screenshot](https://github.com/demokratie-live/demokratie-app/blob/master/doc/uvote/uvote1.png)
+ ## uvote1_c.png
+![Screenshot](https://github.com/demokratie-live/demokratie-app/blob/master/doc/uvote/uvote1_c.png)
 
- ## uvote2.png
-![Screenshot](https://github.com/demokratie-live/demokratie-app/blob/master/doc/uvote/uvote2.png)
+ ## uvote2_c.png
+![Screenshot](https://github.com/demokratie-live/demokratie-app/blob/master/doc/uvote/uvote2_c.png)
 
 
- ## uvote3.png
-![Screenshot](https://github.com/demokratie-live/demokratie-app/blob/master/doc/uvote/uvote3.png)
+ ## uvote3_c.png
+![Screenshot](https://github.com/demokratie-live/demokratie-app/blob/master/doc/uvote/uvote3_c.png)
 
- ## uvote4.png
-![Screenshot](https://github.com/demokratie-live/demokratie-app/blob/master/doc/uvote/uvote4.png)
+ ## uvote4_c.png
+![Screenshot](https://github.com/demokratie-live/demokratie-app/blob/master/doc/uvote/uvote4_c.png)
