@@ -148,7 +148,7 @@ Vorschlag: Nutzung von [Kanban](https://kb.webcraft-media.de/?controller=BoardVi
 
 Soll das Projekt Open oder Closed Source entwickelt werden?
 
-### Open Source
+### Open Source ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
 
 - Jeder kann mitmachen, Collaboration ist einfach.
 - Software kann auf Schwachstellen analysiert werden.
@@ -159,3 +159,9 @@ Soll das Projekt Open oder Closed Source entwickelt werden?
 
 - Software kann nicht auf Schwachstellen analysiert werden
 - Bessere monetäre Verwertbarkeit?
+
+## Welche Lizenz?
+
+- [MIT](https://de.wikipedia.org/wiki/MIT-Lizenz) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
+- [GNU](https://de.wikipedia.org/wiki/GNU_General_Public_License)
+- [CC](https://de.wikipedia.org/wiki/Creative_Commons)
