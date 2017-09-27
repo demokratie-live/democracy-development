@@ -132,3 +132,17 @@ Vorschlag: Nutzung von [Kanban](https://kb.webcraft-media.de/?controller=BoardVi
 [Analysetool Dateistruktur](https://veniversum.me/git-visualizer/?owner=demokratie-live&repo=demokratie-app)
 
 [Analysetool Commits](http://ghv.artzub.com/#repo=demokratie-app&climit=10000&user=demokratie-live)
+
+## Open vs Closed Source
+
+Soll das Projekt Open oder Closed Source entwickelt werden?
+
+### Open Source
+
+- Jeder kann mitmachen, Collaboration ist einfach.
+- Software kann auf Schwachstellen analysiert werden.
+- Es entsteht ein öffentliche Werkzeug, dass jeder verwenden kann.
+
+### Closed Source
+
+- Software kann nicht auf Schwachstellen analysiert werden
