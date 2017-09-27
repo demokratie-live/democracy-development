@@ -48,6 +48,8 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 - Client muss schön & benutzbar sein (usability)
 
 ![v1](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/v1.png)
+
+
 ![v1_structure](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/v1_structure.png)
 
 ### V2
