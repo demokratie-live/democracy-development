@@ -46,6 +46,8 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 - Client kann zu diesen Fragen abstimmen, Zeigt Ergebnis an
 - Client muss schön & benutzbar sein (usability)
 
+![v1](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/v1.png)
+
 ### V2
 
  - Redaktion für Bundestag wird aufgebaut, betreibt einen Frage-Server
