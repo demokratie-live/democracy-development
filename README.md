@@ -135,6 +135,8 @@ Vorschlag: Nutzung von [Kanban](https://kb.webcraft-media.de/?controller=BoardVi
 
 [Analysetool Commits](http://ghv.artzub.com/#repo=demokratie-app&climit=10000&user=demokratie-live)
 
+[Malwerkzeug zur Planung](https://www.draw.io/)
+
 ## Open vs Closed Source
 
 Soll das Projekt Open oder Closed Source entwickelt werden?
