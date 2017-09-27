@@ -38,9 +38,10 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 
 ### V1
 
+- Identität > Wie darf ein Nutzer sich registrieren und wie kann ein Nutzer sich auf der Desktop-Anwendung mit seinem Handy-Account anmelden?
+- Vote Mechanismus(z.B. Ja/Nein/Enthaltung oder von -10 bis +10)
 - Technologie Entscheidung
 - Zwei kompatible Clients für Handy(+iOS) & Web (Die Handy App läd die HTML & JS files vom Hanyspeicher?!)
-- Identität > Wie darf ein Nutzer sich registrieren und wie kann ein Nutzer sich auf der Desktop-Anwendung mit seinem Handy-Account anmelden?
 - Sicherheit: Transportsicherheit(https); Annahme: Client ist sicher, Server ist sicher und vertrauenswürdig
 - Server stellt 10 allgemeine Fragen zur Verfügung, Berechnet Ergebnis
 - Client kann zu diesen Fragen abstimmen, Zeigt Ergebnis an
