@@ -162,6 +162,6 @@ Soll das Projekt Open oder Closed Source entwickelt werden?
 
 ## Welche Lizenz?
 
-- [MIT](https://de.wikipedia.org/wiki/MIT-Lizenz) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
+- [MIT](https://de.wikipedia.org/wiki/MIT-Lizenz) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)  ![alex](https://avatars2.githubusercontent.com/u/1324583?v=4&s=40) 
 - [GNU](https://de.wikipedia.org/wiki/GNU_General_Public_License)
 - [CC](https://de.wikipedia.org/wiki/Creative_Commons)
