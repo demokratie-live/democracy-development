@@ -6,7 +6,9 @@
 
 Webseite: https://www.democracy-deutschland.de/
 
-Crowdfinanzierung: https://www.startnext.com/democracy
+Crowdfinanzierung: [Startnext](https://www.startnext.com/democracy)
+
+Demo: https://www.democracy-deutschland.de/#prototyp
 
 ## Funktion
 
@@ -37,12 +39,12 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 ### V1
 
 - Technologie Entscheidung
-- Zwei kompatible Clients für Handy(+iOS) & Web
+- Zwei kompatible Clients für Handy(+iOS) & Web (Die Handy App läd die HTML & JS files vom Hanyspeicher?!)
 - Identität > Wie darf ein Nutzer sich registrieren und wie kann ein Nutzer sich auf der Desktop-Anwendung mit seinem Handy-Account anmelden?
 - Sicherheit: Transportsicherheit(https); Annahme: Client ist sicher, Server ist sicher und vertrauenswürdig
 - Server stellt 10 allgemeine Fragen zur Verfügung, Berechnet Ergebnis
 - Client kann zu diesen Fragen abstimmen, Zeigt Ergebnis an
-- Client muss schön sein & benutzbar(usability)
+- Client muss schön & benutzbar sein (usability)
 
 ### V2
 
@@ -142,7 +144,9 @@ Soll das Projekt Open oder Closed Source entwickelt werden?
 - Jeder kann mitmachen, Collaboration ist einfach.
 - Software kann auf Schwachstellen analysiert werden.
 - Es entsteht ein öffentliche Werkzeug, dass jeder verwenden kann.
+- "Because there is no requirement to create a commercial product that will sell and generate money, open source software can tend to evolve more in line with developers’ wishes than the needs of the end user." [Source](http://entrepreneurhandbook.co.uk/open-source-software/)
 
 ### Closed Source
 
 - Software kann nicht auf Schwachstellen analysiert werden
+- Bessere monetäre Verwertbarkeit?
