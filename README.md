@@ -48,10 +48,21 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 - Client kann zu diesen Fragen abstimmen, Zeigt Ergebnis an
 - Client muss schön & benutzbar sein (usability)
 
+V1 Entwicklungs-Vorschlag:
+
 ![v1](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/v1.png)
 
+Struktur Vorschlag:
 
 ![v1_structure](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/v1_structure.png)
+
+Zentrale Architektur Fragen:
+
+![v1_architektur](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/Server-Client%20Architektur.png)
+
+Idealer Daten-Deployfluss:
+
+![v1_ideal_flow](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/Ideal%20Flow.png)
 
 ### V2
 
@@ -136,7 +147,9 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
    
 ## Entwicklung & Werkzeuge
 
-Vorschlag: Nutzung von [Kanban](https://kb.webcraft-media.de/?controller=BoardViewController&action=readonly&token=649348bb701244fff358494e1a9945a9bf2fcf0eaa2f69116b0df197a93d)
+[Circuit](https://eu.yourcircuit.com/#/conversation/98b71e1a-cf2f-48b1-b4fa-2573d4bb7ba1)
+
+[MeisterTask](https://www.meistertask.com/app/project/p7zXoSfq/demokratie)
 
 [Analysetool Dateistruktur](https://veniversum.me/git-visualizer/?owner=demokratie-live&repo=demokratie-app)
 
@@ -162,6 +175,11 @@ Soll das Projekt Open oder Closed Source entwickelt werden?
 
 ## Welche Lizenz?
 
-- [MIT](https://de.wikipedia.org/wiki/MIT-Lizenz) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)  ![alex](https://avatars2.githubusercontent.com/u/1324583?v=4&s=40) 
+- [MIT](https://de.wikipedia.org/wiki/MIT-Lizenz) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)  ![alex](https://avatars2.githubusercontent.com/u/1324583?v=4&s=16) 
 - [GNU](https://de.wikipedia.org/wiki/GNU_General_Public_License)
 - [CC](https://de.wikipedia.org/wiki/Creative_Commons)
+
+## Welche Architektur?
+
+- [Ruby mit Turbolinks](https://www.youtube.com/watch?v=SWEts0rlezA)
+- [NativeScript mit AngularJS2](https://www.youtube.com/watch?time_continue=1214&v=R3nyG2xtzeQ)
