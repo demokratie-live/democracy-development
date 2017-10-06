@@ -40,9 +40,9 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 
 - Identität > Wie darf ein Nutzer sich registrieren und wie kann ein Nutzer sich auf der Desktop-Anwendung mit seinem Handy-Account anmelden?
 - Vote Mechanismus(z.B. Ja/Nein/Enthaltung oder von -10 bis +10)
-- Anforderungen an eine Frage (z.b. was ist eine gültige Frage, In welcher Reihenfolge werden die Fragen angeziegt - Alter, beliebtheit)
+- Anforderungen an eine Frage (z.b. was ist eine gültige Frage, In welcher Reihenfolge werden die Fragen angezeigt - Alter, beliebtheit)
 - Technologie Entscheidung
-- Zwei kompatible Clients für Handy(+iOS) & Web (Die Handy App läd die HTML & JS files vom Hanyspeicher?!)
+- Zwei kompatible Clients für Handy(+iOS) & Web (Die Handy App läd die HTML & JS files vom Handyspeicher?!)
 - Sicherheit: Transportsicherheit(https); Annahme: Client ist sicher, Server ist sicher und vertrauenswürdig
 - Server stellt 10 allgemeine Fragen zur Verfügung, Berechnet Ergebnis
 - Client kann zu diesen Fragen abstimmen, Zeigt Ergebnis an
