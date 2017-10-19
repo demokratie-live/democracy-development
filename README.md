@@ -16,7 +16,7 @@ Es soll eine App und Desktop-Anwendung entwickelt werden, die es ermöglicht üb
 
 ## Nutzen
 
-Es wird ein Stimmungsbild über politische Entscheidungen erstellt, dass als Grundlage für die Entscheidung der Verantwortungsträger dienen kann. Die Nutzer können Druck auf Entscheidungsträger ausüben, wenn dieser sich nicht an die Entscheidung der Mehrheit hält und eine Erklärung für sein Verhalten einfordern.
+Es wird ein Stimmungsbild über politische Entscheidungen erstellt, das als Grundlage für die Entscheidung der Verantwortungsträger dienen kann. Die Nutzer können Druck auf die Entscheidungsträger ausüben, wenn diese sich nicht an die Entscheidung der Mehrheit halten und eine Erklärung für sein Verhalten einfordern.
 
 Stimmung wird messbar, zu jeder Zeit, zu jedem Thema, dass genug Teilnehmer hat.
 
@@ -25,7 +25,7 @@ Stimmung wird messbar, zu jeder Zeit, zu jedem Thema, dass genug Teilnehmer hat.
 - Sicherheit (Anonymität, Beweisbarkeit, Fälschungssicherheit)
 - Useability & geringe Hürden zur Teilnahme.
 
-Es sollte der Ansatz Security-by-Design verfolgt werden, um den Nutzer glaubhaft zu versichern, dass er keine Nachteile durch die Nutzung der Applikation hat. Absolute Sicherheit ist leider nie möglich und bedarf erheblichen Arbeitsaufwand. Hier muss zwischen Aufwand, Sicherheit und Usability abgewägt werden. Es sollte ein Modell der schrittweisen einführung von Sicherheitsmechanismen verfolgt werden, um die Realisierung zu ermöglichen - der Nutzer sollte über die bereits erfüllten und unerfüllten Sicherheitsziele zu jeder Zeit informiert werden.
+Es sollte der Ansatz Security-by-Design verfolgt werden, um den Nutzer glaubhaft zu versichern, dass er keine Nachteile durch die Nutzung der Applikation hat. Absolute Sicherheit ist leider nie möglich und bedarf erheblichen Arbeitsaufwand. Hier muss zwischen Aufwand, Sicherheit und Usability abgewägt werden. Es sollte ein Modell der schrittweisen Einführung von Sicherheitsmechanismen verfolgt werden, um die Realisierung zu ermöglichen - der Nutzer sollte über die bereits erfüllten und unerfüllten Sicherheitsziele zu jeder Zeit informiert werden.
 
 ### Sicherheitsziele:
 - Anonym
@@ -40,7 +40,7 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 
 - Identität > Wie darf ein Nutzer sich registrieren und wie kann ein Nutzer sich auf der Desktop-Anwendung mit seinem Handy-Account anmelden?
 - Vote Mechanismus(z.B. Ja/Nein/Enthaltung oder von -10 bis +10)
-- Anforderungen an eine Frage (z.b. was ist eine gültige Frage, In welcher Reihenfolge werden die Fragen angezeigt - Alter, beliebtheit)
+- Anforderungen an eine Frage (z.b. Was ist eine gültige Frage, In welcher Reihenfolge werden die Fragen angezeigt - Alter, Beliebtheit)
 - Technologie Entscheidung
 - Zwei kompatible Clients für Handy(+iOS) & Web (Die Handy App läd die HTML & JS files vom Handyspeicher?!)
 - Sicherheit: Transportsicherheit(https); Annahme: Client ist sicher, Server ist sicher und vertrauenswürdig
