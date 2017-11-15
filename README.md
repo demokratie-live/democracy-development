@@ -182,4 +182,15 @@ Soll das Projekt Open oder Closed Source entwickelt werden?
 ## Welche Architektur?
 
 - [Ruby mit Turbolinks](https://www.youtube.com/watch?v=SWEts0rlezA)
-- [NativeScript mit AngularJS2](https://www.youtube.com/watch?time_continue=1214&v=R3nyG2xtzeQ)
+- [NativeScript mit AngularJS2](https://www.youtube.com/watch?time_continue=1214&v=R3nyG2xtzeQ) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
+- [ReactNative](http://www.reactnative.com/) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
+- [GraphQL](http://graphql.org/) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
+- [Xamarin](https://www.xamarin.com/)
+- [Ember.js](https://www.emberjs.com/)
+
+- [AWS Lambda](https://aws.amazon.com/de/lambda/details/) mit [Node](https://nodejs.org)
+- [Azure Serverless](https://azure.microsoft.com/en-us/overview/serverless-computing/) mit [Node](https://nodejs.org) oder [PHP](https://php.net)
+
+## Weiter Vorschläge
+
+- Nutzererfahrung mit [Papierprototyp](https://de.wikipedia.org/wiki/Paper_Prototyping) ermitteln und testen
