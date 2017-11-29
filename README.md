@@ -145,6 +145,8 @@ Idealer Daten-Deployfluss:
    - Wahlspezifische Zusatzanforderungen: z.B. vorgegebene Reihenfolge der Kandidaten
    auf Stimmzettel, vorgegebenes Layout, ungültig wählen möglich, . . .
    
+   - [Datenschutz Grundverordnung](https://dsgvo-gesetz.de/) & [Wiki](https://de.wikipedia.org/wiki/Datenschutz-Grundverordnung)
+   
 ## Entwicklung & Werkzeuge
 
 [Circuit](https://eu.yourcircuit.com/#/conversation/98b71e1a-cf2f-48b1-b4fa-2573d4bb7ba1)
