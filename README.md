@@ -1,6 +1,6 @@
 
 
-![Screenshot](https://www.democracy-deutschland.de/images/forfb2.png)
+![Screenshot](https://www.democracy-deutschland.de/files/images/forfb2.png)
 
 # Demokratie-App
 
@@ -188,6 +188,7 @@ Client:
 - [GraphQL](http://graphql.org/) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
 - [Xamarin](https://www.xamarin.com/)
 - [Ember.js](https://www.emberjs.com/)
+- [Cordova](https://cordova.apache.org/)
 
 Server:
 - [AWS Lambda](https://aws.amazon.com/de/lambda/details/) mit [Node](https://nodejs.org) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
