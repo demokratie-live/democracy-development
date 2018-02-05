@@ -36,6 +36,8 @@ Es sollte der Ansatz Security-by-Design verfolgt werden, um den Nutzer glaubhaft
 
 Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert werden.
 
+![app](https://github.com/demokratie-live/democracy-assets/blob/master/docu/api_structure_app.png)
+
 ### V1
 
 - Identität > Wie darf ein Nutzer sich registrieren und wie kann ein Nutzer sich auf der Desktop-Anwendung mit seinem Handy-Account anmelden?
