@@ -2,6 +2,8 @@ import mongoose from './config/db';
 import Procedure from './models/Procedure';
 import _ from 'lodash';
 import Scraper from 'dip21-scraper';
+// TODO REMOVE
+import Progress from 'cli-progress';
 
 const scraper = new Scraper();
 
@@ -56,27 +58,130 @@ const saveProcedure = async (procedureId, procedureData) => {
   );
 };
 
-Promise.all([
-  new Promise((resolve) => {
-    scraper.scrape({
-      selectedPeriod: () => '8',
-      selectedOperationTypes: () => [''],
-      stackSize: () => 7,
-      startLinkProgress: () => {},
-      doScrape: () => true,
-      updateLinkProgress: () => {},
-      stopLinkProgress: () => {},
-      startDataProgress: () => {},
-      logData: saveProcedure,
-      updateDataProgress: () => {},
-      logLinks: () => {},
-      stopDataProgress: () => {},
-      finished: () => {
-        resolve();
-      },
-    });
-  }),
-]).then(() => mongoose.disconnect());
+const procedureStatusWhitelist = ['Überwiesen', 'Beschlussempfehlung liegt vor'];
+
+function doScrape(data) {
+  const parts = data.date.match(/(\d+)/g);
+  const dipDate = new Date(Date.UTC(parts[2], parts[1] - 1, parts[0]));
+
+  let scrapeData = pastScrapeData.find(({ procedureId }) => procedureId === data.id);
+  if (!scrapeData) {
+    scrapeData = { updatedAt: 0 };
+  }
+  const scrapeDate = new Date(scrapeData.updatedAt);
+
+  const timeSpanDib = new Date() - dipDate;
+  const timeSpanScrape = new Date() - scrapeDate;
+
+  const oneDay = 1000 * 60 * 60 * 24;
+  const oneWeek = oneDay * 7;
+  const oneMonth = oneDay * 31;
+  const oneYear = oneDay * 365;
+
+  /*
+    TIME SCRAPE
+
+    scrape when dib_date > scrape_date                              // always scrape when dib_date is after last scrape_date
+    scrape when time_span_dib < 3 Month                             // always scrape last 3 Months
+    scrape when time_span_scrape > 1 Month                          // always scrape when last scrape_date is one month old
+    scrape when time_span_scrape > 1 Day && time_span_dib < 1 Year  // always scrape when last scrape_date is one day old and dib is up to 1 year old
+    scrape when time_span_scrape > 1 Week && time_span_dib < 4 Year // always scrape when last scrape_date is one week old and dib is up to 4 year old
+  */
+  if (
+    dipDate > scrapeDate ||
+    timeSpanDib < 3 * oneMonth ||
+    timeSpanScrape > oneMonth ||
+    (timeSpanScrape > oneDay && timeSpanDib < oneYear) ||
+    (timeSpanScrape > oneWeek && timeSpanDib < 4 * oneYear)
+  ) {
+    return true;
+  }
+
+  /*
+    STATUS SCRAPE
+    Gesetzes Status -> whitelist
+   */
+  if (procedureStatusWhitelist.find(white => white === scrapeData.currentStatus)) {
+    return true;
+  }
+
+  // return new Date() - dipDate <= oneYear; // Scrape 1 year
+}
+
+var pastScrapeData = null;
+
+// TODO REMOVE
+const barLink = new Progress.Bar(
+  {
+    format:
+      '[{bar}] {percentage}% | ETA: {eta_formatted} | duration: {duration_formatted} | {value}/{total}',
+  },
+  Progress.Presets.shades_classic,
+);
+
+async function startLinkProgress(sum, current) {
+  console.log('Eintragslinks sammeln');
+
+  barLink.start(sum, current);
+}
+
+async function updateLinkProgress(current) {
+  barLink.update(current);
+}
+
+async function stopLinkProgress() {
+  barLink.stop();
+}
+
+const barData = new Progress.Bar(
+  {
+    format:
+      '[{bar}] {percentage}% | ETA: {eta_formatted} | duration: {duration_formatted} | {value}/{total} | {errorCounter}',
+  },
+  Progress.Presets.shades_classic,
+);
+
+async function startDataProgress(sum, errorCounter) {
+  console.log('Einträge downloaden');
+  barData.start(sum, 0, errorCounter);
+}
+
+async function updateDataProgress(current, errorCounter) {
+  barData.update(current, errorCounter);
+}
+
+async function stopDataProgress() {
+  barData.stop();
+}
+// TODO REMOVE
+
+(async () => {
+  pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
+  await scraper.scrape({
+    selectedPeriod: () => '',
+    selectedOperationTypes: () => ['6'],
+    stackSize: 7,
+    doScrape,
+    // startLinkProgress: () => {},
+    startLinkProgress,
+    // updateLinkProgress: () => {},
+    updateLinkProgress,
+    // stopLinkProgress: () => {},
+    stopLinkProgress,
+    // startDataProgress: () => {},
+    startDataProgress,
+    // stopDataProgress: () => {},
+    stopDataProgress,
+    // updateDataProgress: () => {},
+    updateDataProgress,
+    logData: saveProcedure,
+    logLinks: () => {},
+    finished: () => {
+      resolve();
+    },
+  });
+  mongoose.disconnect();
+})();
 
 //
 /*
