@@ -8,6 +8,12 @@
   "scripts": {
     "start": "node src/index.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "cli-progress": "^1.7.0",
+    "commander": "^2.13.0",
+    "fs-extra": "^5.0.0",
+    "inquirer": "^5.0.1",
+    "jsonfile": "^4.0.0"
+  },
   "devDependencies": {}
 }
