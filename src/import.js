@@ -2,6 +2,7 @@ import mongoose from './config/db';
 import Procedure from './models/Procedure';
 import _ from 'lodash';
 import Scraper from 'dip21-scraper';
+import { CronJob } from 'cron';
 
 const scraper = new Scraper();
 
@@ -60,7 +61,7 @@ const saveProcedure = async (procedureId, procedureData) => {
     approvalRequired: ensureArray(procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT),
     euDocNr: procedureData.VORGANG.EU_DOK_NR || undefined,
     abstract: procedureData.VORGANG.ABSTRAKT || undefined,
-    promulgation: procedureData.VORGANG.VERKUENDUNG || undefined,
+    promulgation: ensureArray(procedureData.VORGANG.VERKUENDUNG),
     legalValidity: procedureData.VORGANG.INKRAFTTRETEN || undefined,
     tags: ensureArray(procedureData.VORGANG.SCHLAGWORT),
     history,
@@ -75,9 +76,10 @@ const saveProcedure = async (procedureId, procedureData) => {
     },
   );
 };
-
-Promise.all([
-  new Promise((resolve) => {
+const job = new CronJob(
+  '*/30 * * * *',
+  () => {
+    console.log('### Start Cronjob');
     scraper.scrape({
       selectedPeriod: () => '8',
       selectedOperationTypes: () => [''],
@@ -92,11 +94,14 @@ Promise.all([
       logLinks: () => {},
       stopDataProgress: () => {},
       finished: () => {
-        resolve();
+        console.log('### Finish Cronjob');
       },
     });
-  }),
-]).then(() => mongoose.disconnect());
+  },
+  null,
+  true,
+  'Europe/Berlin',
+);
 
 /*
 

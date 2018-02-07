@@ -1,8 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import diffHistory from 'mongoose-diff-history/diffHistory';
 
-console.log(diffHistory);
-
 import ProcessFlow from './Schemas/ProcessFlow';
 
 const ProcedureSchema = new Schema(
