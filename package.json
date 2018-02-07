@@ -1,0 +1,13 @@
+{
+  "name": "bundestag.io",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "author": "Ulf Gebhardt",
+  "license": "Apache2",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
