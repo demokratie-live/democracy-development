@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import version from 'mongoose-version';
 
 import ProcessFlow from './Schemas/ProcessFlow';
 
@@ -21,5 +22,7 @@ const ProcedureSchema = new Schema(
   },
   { timestamps: true },
 );
+
+ProcedureSchema.plugin(version, { collection: 'Procedure__versions' });
 
 export default mongoose.model('Procedure', ProcedureSchema);
