@@ -174,62 +174,43 @@ async function updateDataProgress(current, errorCounter) {
 async function stopDataProgress() {
   barData.stop();
 }
-// TODO REMOVE
+// ^ TODO REMOVE
 
-(async () => {
-  pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
-  await scraper.scrape({
-    selectedPeriod: () => '',
-    selectedOperationTypes: () => ['6'],
-    stackSize: 7,
-    doScrape,
-    // startLinkProgress: () => {},
-    startLinkProgress,
-    // updateLinkProgress: () => {},
-    updateLinkProgress,
-    // stopLinkProgress: () => {},
-    stopLinkProgress,
-    // startDataProgress: () => {},
-    startDataProgress,
-    // stopDataProgress: () => {},
-    stopDataProgress,
-    // updateDataProgress: () => {},
-    updateDataProgress,
-    logData: saveProcedure,
-    logLinks: () => {},
-    finished: () => {
-      resolve();
-    },
-  });
-  mongoose.disconnect();
-})();
-
-/*const job = new CronJob(
+const job = new CronJob(
   '*/30 * * * *',
-  () => {
+  async () => {
     console.log('### Start Cronjob');
-    scraper.scrape({
-      selectedPeriod: () => '8',
-      selectedOperationTypes: () => [''],
+    pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
+    await scraper.scrape({
+      selectedPeriod: () => '',
+      selectedOperationTypes: () => ['6'],
       stackSize: 7,
-      startLinkProgress: () => {},
-      doScrape: () => true,
-      updateLinkProgress: () => {},
-      stopLinkProgress: () => {},
-      startDataProgress: () => {},
+      doScrape,
+      // startLinkProgress: () => {},
+      startLinkProgress,
+      // updateLinkProgress: () => {},
+      updateLinkProgress,
+      // stopLinkProgress: () => {},
+      stopLinkProgress,
+      // startDataProgress: () => {},
+      startDataProgress,
+      // stopDataProgress: () => {},
+      stopDataProgress,
+      // updateDataProgress: () => {},
+      updateDataProgress,
       logData: saveProcedure,
-      updateDataProgress: () => {},
       logLinks: () => {},
-      stopDataProgress: () => {},
       finished: () => {
+        // resolve();
         console.log('### Finish Cronjob');
       },
     });
+    // mongoose.disconnect();
   },
   null,
   true,
   'Europe/Berlin',
-);*/
+);
 
 /*
 
