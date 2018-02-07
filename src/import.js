@@ -10,6 +10,16 @@ function parseDate(input) {
   // note parts[1]-1
   return new Date(Date.UTC(parts[2], parts[1] - 1, parts[0]));
 }
+
+const ensureArray = (element) => {
+  if (element) {
+    if (!_.isArray(element)) {
+      return [element];
+    }
+    return element;
+  }
+};
+
 const saveProcedure = async (procedureId, procedureData) => {
   const process = _.isArray(procedureData.VORGANGSABLAUF.VORGANGSPOSITION)
     ? procedureData.VORGANGSABLAUF.VORGANGSPOSITION
@@ -29,27 +39,37 @@ const saveProcedure = async (procedureId, procedureData) => {
     }
     return flow;
   });
+
+  let approvalRequired;
+  if (procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT) {
+    if (!_.isArray(procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT)) {
+      approvalRequired = [procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT];
+    } else {
+      approvalRequired = procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT;
+    }
+  }
+
   const procedureObj = {
     procedureId: procedureData.vorgangId || undefined,
     type: procedureData.VORGANG.VORGANGSTYP || undefined,
-    period: procedureData.VORGANG.WAHLPERIODE || undefined,
+    period: parseInt(procedureData.VORGANG.WAHLPERIODE, 10) || undefined,
     title: procedureData.VORGANG.TITEL || undefined,
     currentStatus: procedureData.VORGANG.AKTUELLER_STAND || undefined,
     signature: procedureData.VORGANG.SIGNATUR || undefined,
     gestOrderNumber: procedureData.VORGANG.GESTA_ORDNUNGSNUMMER || undefined,
-    approvalRequired: procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT || undefined,
+    approvalRequired: ensureArray(procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT),
     euDocNr: procedureData.VORGANG.EU_DOK_NR || undefined,
     abstract: procedureData.VORGANG.ABSTRAKT || undefined,
     promulgation: procedureData.VORGANG.VERKUENDUNG || undefined,
     legalValidity: procedureData.VORGANG.INKRAFTTRETEN || undefined,
-    tags: procedureData.VORGANG.SCHLAGWORT || undefined,
+    tags: ensureArray(procedureData.VORGANG.SCHLAGWORT),
     history,
   };
-  await Procedure.findOneAndUpdate(
+  await Procedure.update(
     {
       procedureId: procedureObj.procedureId,
     },
-    _.pickBy(procedureObj),
+    { $set: _.pickBy(procedureObj) },
     {
       upsert: true,
     },
@@ -61,7 +81,7 @@ Promise.all([
     scraper.scrape({
       selectedPeriod: () => '8',
       selectedOperationTypes: () => [''],
-      stackSize: () => 7,
+      stackSize: 7,
       startLinkProgress: () => {},
       doScrape: () => true,
       updateLinkProgress: () => {},
@@ -78,7 +98,6 @@ Promise.all([
   }),
 ]).then(() => mongoose.disconnect());
 
-//
 /*
 
 program.option('-p, --path  [type]', 'Path of dir with json files').parse(process.argv);

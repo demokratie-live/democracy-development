@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "mongoose": "^5.0.3",
-    "mongoose-version": "^1.1.0"
+    "mongoose-diff-history": "^1.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
