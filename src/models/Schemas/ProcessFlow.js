@@ -11,7 +11,7 @@ const ProcessFlowSchema = new Schema(
     decision: { type: Object },
     date: { type: Date },
   },
-  { timestamps: true },
+  { _id: false },
 );
 
 export default ProcessFlowSchema;
