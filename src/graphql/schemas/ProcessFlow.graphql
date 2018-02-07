@@ -1,0 +1,8 @@
+type ProcessFlow {
+  assignment: String
+  initiator: String
+  findSpot: String
+  findSpotUrl: String
+  decisionTenor: String
+  date: Date
+}
