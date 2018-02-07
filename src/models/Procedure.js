@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import version from 'mongoose-version';
+import diffHistory from 'mongoose-diff-history/diffHistory';
 
 import ProcessFlow from './Schemas/ProcessFlow';
 
@@ -23,6 +23,6 @@ const ProcedureSchema = new Schema(
   { timestamps: true },
 );
 
-ProcedureSchema.plugin(version, { collection: 'Procedure__versions' });
+ProcedureSchema.plugin(diffHistory.plugin, { omit: ['updatedAt', 'history._id'] });
 
 export default mongoose.model('Procedure', ProcedureSchema);
