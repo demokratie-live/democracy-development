@@ -6,14 +6,18 @@
   "license": "Apache2",
   "private": true,
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "imp": "node src/import.js",
+    "lint": "eslint ./src"
   },
   "dependencies": {
-    "cli-progress": "^1.7.0",
-    "commander": "^2.13.0",
-    "fs-extra": "^5.0.0",
-    "inquirer": "^5.0.1",
-    "jsonfile": "^4.0.0"
+    "mongoose": "^5.0.3",
+    "mongoose-version": "^1.1.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "prettier": "^1.10.2"
+  }
 }
