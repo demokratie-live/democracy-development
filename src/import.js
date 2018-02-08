@@ -1,18 +1,19 @@
-import mongoose from './config/db';
-import Procedure from './models/Procedure';
 import _ from 'lodash';
-import Scraper from 'dip21-scraper';
 import { CronJob } from 'cron';
-// TODO REMOVE
-import Progress from 'cli-progress';
+import Scraper from 'dip21-scraper';
+import Progress from 'cli-progress'; // TODO REMOVE
+import Procedure from './models/Procedure';
+import mongoose from './config/db';
 
 const scraper = new Scraper();
+let pastScrapeData = null;
+const procedureStatusWhitelist = ['Überwiesen', 'Beschlussempfehlung liegt vor'];
 
-function parseDate(input) {
+const parseDate = (input) => {
   const parts = input.match(/(\d+)/g);
   // note parts[1]-1
   return new Date(Date.UTC(parts[2], parts[1] - 1, parts[0]));
-}
+};
 
 const ensureArray = (element) => {
   if (element) {
@@ -21,6 +22,7 @@ const ensureArray = (element) => {
     }
     return element;
   }
+  return null;
 };
 
 const saveProcedure = async (procedureId, procedureData) => {
@@ -43,14 +45,14 @@ const saveProcedure = async (procedureId, procedureData) => {
     return flow;
   });
 
-  let approvalRequired;
+  /* let approvalRequired;
   if (procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT) {
     if (!_.isArray(procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT)) {
       approvalRequired = [procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT];
     } else {
       approvalRequired = procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT;
     }
-  }
+  } */
 
   const procedureObj = {
     procedureId: procedureData.vorgangId || undefined,
@@ -79,9 +81,7 @@ const saveProcedure = async (procedureId, procedureData) => {
   );
 };
 
-const procedureStatusWhitelist = ['Überwiesen', 'Beschlussempfehlung liegt vor'];
-
-function doScrape(data) {
+const doScrape = (data) => {
   const parts = data.date.match(/(\d+)/g);
   const dipDate = new Date(Date.UTC(parts[2], parts[1] - 1, parts[0]));
 
@@ -99,37 +99,29 @@ function doScrape(data) {
   const oneMonth = oneDay * 31;
   const oneYear = oneDay * 365;
 
-  /*
-    TIME SCRAPE
-
-    scrape when dib_date > scrape_date                              // always scrape when dib_date is after last scrape_date
-    scrape when time_span_dib < 3 Month                             // always scrape last 3 Months
-    scrape when time_span_scrape > 1 Month                          // always scrape when last scrape_date is one month old
-    scrape when time_span_scrape > 1 Day && time_span_dib < 1 Year  // always scrape when last scrape_date is one day old and dib is up to 1 year old
-    scrape when time_span_scrape > 1 Week && time_span_dib < 4 Year // always scrape when last scrape_date is one week old and dib is up to 4 year old
-  */
+  // TIME SCRAPE
   if (
+    // always scrape when dib_date is after last scrape_date
     dipDate > scrapeDate ||
+    // always scrape last 3 Months
     timeSpanDib < 3 * oneMonth ||
+    // always scrape when last scrape_date is one month old
     timeSpanScrape > oneMonth ||
+    // always scrape when last scrape_date is one day old and dib is up to 1 year old
     (timeSpanScrape > oneDay && timeSpanDib < oneYear) ||
+    // always scrape when last scrape_date is one week old and dib is up to 4 year old
     (timeSpanScrape > oneWeek && timeSpanDib < 4 * oneYear)
   ) {
     return true;
   }
 
-  /*
-    STATUS SCRAPE
-    Gesetzes Status -> whitelist
-   */
+  // STATUS SCRAPE -> Whitelist
   if (procedureStatusWhitelist.find(white => white === scrapeData.currentStatus)) {
     return true;
   }
 
-  // return new Date() - dipDate <= oneYear; // Scrape 1 year
-}
-
-var pastScrapeData = null;
+  return false;
+};
 
 // TODO REMOVE
 const barLink = new Progress.Bar(
@@ -176,8 +168,8 @@ async function stopDataProgress() {
 }
 // ^ TODO REMOVE
 
-const job = new CronJob(
-  '*/30 * * * *',
+new CronJob(
+  '*/2 * * * *',
   async () => {
     console.log('### Start Cronjob');
     pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
@@ -211,83 +203,3 @@ const job = new CronJob(
   true,
   'Europe/Berlin',
 );
-
-/*
-
-program.option('-p, --path  [type]', 'Path of dir with json files').parse(process.argv);
-
-const files = fs.readdirSync(program.path);
-
-function parseDate(input) {
-  const parts = input.match(/(\d+)/g);
-  // note parts[1]-1
-  return new Date(Date.UTC(parts[2], parts[1] - 1, parts[0]));
-}
-
-const procedures = files.map(async (file) => {
-  const filePath = `${program.path}/${file}`;
-  if (path.extname(filePath) === '.json') {
-    const procedure = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    const process = _.isArray(procedure.VORGANGSABLAUF.VORGANGSPOSITION)
-      ? procedure.VORGANGSABLAUF.VORGANGSPOSITION
-      : [procedure.VORGANGSABLAUF.VORGANGSPOSITION];
-
-    const history = process.map((e) => {
-      const flow = {
-        procedureId: procedure.vorgangId.trim(),
-        assignment: e.ZUORDNUNG.trim(),
-        initiator: e.URHEBER.trim(),
-        findSpot: e.FUNDSTELLE.trim(),
-        findSpotUrl: _.trim(e.FUNDSTELLE_LINK),
-        date: parseDate(e.FUNDSTELLE.substr(0, 10)),
-      };
-      if (e.BESCHLUSS) {
-        flow.decision = e.BESCHLUSS;
-        flow.decisionTenor = e.BESCHLUSS.BESCHLUSSTENOR;
-      }
-      return flow;
-    });
-
-    const procedureObj = {
-      procedureId: procedure.vorgangId || undefined,
-      type: procedure.VORGANG.VORGANGSTYP || undefined,
-      period: procedure.VORGANG.WAHLPERIODE || undefined,
-      title: procedure.VORGANG.TITEL || undefined,
-      currentStatus: procedure.VORGANG.AKTUELLER_STAND || undefined,
-      signature: procedure.VORGANG.SIGNATUR || undefined,
-      gestOrderNumber: procedure.VORGANG.GESTA_ORDNUNGSNUMMER || undefined,
-      approvalRequired: procedure.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT || undefined,
-      euDocNr: procedure.VORGANG.EU_DOK_NR || undefined,
-      abstract: procedure.VORGANG.ABSTRAKT || undefined,
-      promulgation: procedure.VORGANG.VERKUENDUNG || undefined,
-      legalValidity: procedure.VORGANG.INKRAFTTRETEN || undefined,
-      tags: procedure.VORGANG.SCHLAGWORT || undefined,
-      history,
-    };
-    return Procedure.findOneAndUpdate(
-      {
-        procedureId: procedureObj.procedureId,
-      },
-      _.pickBy(procedureObj),
-      {
-        upsert: true,
-      },
-    ).catch((err) => {
-      console.log('##ERROR', err);
-      console.log('##ERROR', procedureObj.procedureId);
-      console.log('##ERROR', procedureObj.title);
-    });
-  }
-  return undefined;
-});
-
-Promise.all(procedures)
-  .then(() => {
-    console.log('finish');
-
-    console.log(procedures.length);
-
-    mongoose.disconnect();
-  })
-  .catch(err => console.log(err));
-*/
