@@ -3,7 +3,8 @@ import { CronJob } from 'cron';
 import Scraper from 'dip21-scraper';
 import Progress from 'cli-progress'; // TODO REMOVE
 import Procedure from './models/Procedure';
-import mongoose from './config/db';
+// import mongoose from './config/db';
+require('./config/db');
 
 const scraper = new Scraper();
 let pastScrapeData = null;
