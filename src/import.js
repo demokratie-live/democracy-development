@@ -79,6 +79,7 @@ const saveProcedure = async (procedureId, procedureData) => {
 const job = new CronJob(
   '*/30 * * * *',
   () => {
+    const start = Date.now();
     console.log('### Start Cronjob');
     scraper.scrape({
       selectedPeriod: () => '8',
@@ -94,7 +95,12 @@ const job = new CronJob(
       logLinks: () => {},
       stopDataProgress: () => {},
       finished: () => {
-        console.log('### Finish Cronjob');
+        const end = Date.now();
+        const elapsed = end - start;
+        const difference = new Date(elapsed);
+        const diff_hours = difference.getHours();
+        const diff_mins = difference.getMinutes();
+        console.log(`### Finish Cronjob! ${diff_hours}:${diff_mins}`);
       },
     });
   },

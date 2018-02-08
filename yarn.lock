@@ -1663,6 +1663,12 @@ jsondiffpatch@^0.1.38:
   dependencies:
     chalk "^0.5.1"
 
+jsondiffpatch@^0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/jsondiffpatch/-/jsondiffpatch-0.2.5.tgz#50361d995cf8c86137e8d5589f20fa5220db3511"
+  dependencies:
+    chalk "^0.5.1"
+
 jsonify@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"

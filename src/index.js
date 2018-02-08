@@ -1,47 +1,40 @@
-const Scraper = require("dip21-scraper");
+const Scraper = require('dip21-scraper');
+
 const scraper = new Scraper();
 
-const program = require("commander");
-const inquirer = require("inquirer");
-const _progress = require("cli-progress");
-const jsonfile = require("jsonfile");
-const fs = require("fs-extra");
+const program = require('commander');
+const inquirer = require('inquirer');
+const _progress = require('cli-progress');
+const jsonfile = require('jsonfile');
+const fs = require('fs-extra');
 
 program
-  .version("0.0.1")
-  .description("Bundestag scraper")
+  .version('0.0.1')
+  .description('Bundestag scraper')
+  .option('-p, --period [PeriodenNummer|Alle]', 'Select a specified period [null]', null)
   .option(
-    "-p, --period [PeriodenNummer|Alle]",
-    "Select a specified period [null]",
-    null
-  )
-  .option(
-    "-t, --operationtypes <OperationTypeNummer|Alle>",
-    "Select specified OperationTypes [null]",
-    null
+    '-t, --operationtypes <OperationTypeNummer|Alle>',
+    'Select specified OperationTypes [null]',
+    null,
   )
   .parse(process.argv);
 
 async function selectPeriod(periods) {
-  var selectedPeriod = program.period;
+  let selectedPeriod = program.period;
   if (!selectedPeriod) {
     const period = await inquirer.prompt({
-      type: "list",
-      name: "value",
-      message: "Wähle eine Legislaturperiode",
-      choices: periods
+      type: 'list',
+      name: 'value',
+      message: 'Wähle eine Legislaturperiode',
+      choices: periods,
     });
     selectedPeriod = period.value;
-  } else if (
-    !periods.find(function(period) {
-      return period.name === selectedPeriod;
-    })
-  ) {
+  } else if (!periods.find(period => period.name === selectedPeriod)) {
     console.log(`'${selectedPeriod}' is not a valid option for period`);
     process.exit(1);
   }
-  if (selectedPeriod === "Alle") {
-    selectedPeriod = "";
+  if (selectedPeriod === 'Alle') {
+    selectedPeriod = '';
   }
   console.log(`Selected Period '${selectedPeriod}'`);
   return selectedPeriod;
@@ -51,19 +44,17 @@ async function selectOperationTypes(operationTypes) {
   let selectedOperationTypes = [];
   if (!program.operationtypes) {
     const operationType = await inquirer.prompt({
-      type: "checkbox",
-      name: "values",
-      message: "Wähle Vorgangstyp(en)",
-      choices: operationTypes
+      type: 'checkbox',
+      name: 'values',
+      message: 'Wähle Vorgangstyp(en)',
+      choices: operationTypes,
     });
     selectedOperationTypes = operationType.values;
   } else {
-    const selectedOperationTypes_proto = program.operationtypes.split(",");
+    const selectedOperationTypes_proto = program.operationtypes.split(',');
     selectedOperationTypes = selectedOperationTypes_proto
-      .map(sNumber => {
-        const selection = operationTypes.find(
-          ({ number }) => number === sNumber
-        );
+      .map((sNumber) => {
+        const selection = operationTypes.find(({ number }) => number === sNumber);
         if (selection) {
           return selection.value;
         }
@@ -74,19 +65,19 @@ async function selectOperationTypes(operationTypes) {
 }
 
 async function finished() {
-  console.log("############### FINISH ###############");
+  console.log('############### FINISH ###############');
 }
 
-var barLink = new _progress.Bar(
+const barLink = new _progress.Bar(
   {
     format:
-      "[{bar}] {percentage}% | ETA: {eta_formatted} | duration: {duration_formatted} | {value}/{total}"
+      '[{bar}] {percentage}% | ETA: {eta_formatted} | duration: {duration_formatted} | {value}/{total}',
   },
-  _progress.Presets.shades_classic
+  _progress.Presets.shades_classic,
 );
 
 async function startLinkProgress(sum, current) {
-  console.log("Eintragslinks sammeln");
+  console.log('Eintragslinks sammeln');
 
   barLink.start(sum, current);
 }
@@ -99,16 +90,16 @@ async function stopLinkProgress() {
   barLink.stop();
 }
 
-var barData = new _progress.Bar(
+const barData = new _progress.Bar(
   {
     format:
-      "[{bar}] {percentage}% | ETA: {eta_formatted} | duration: {duration_formatted} | {value}/{total} | {errorCounter}"
+      '[{bar}] {percentage}% | ETA: {eta_formatted} | duration: {duration_formatted} | {value}/{total} | {errorCounter}',
   },
-  _progress.Presets.shades_classic
+  _progress.Presets.shades_classic,
 );
 
 async function startDataProgress(sum, errorCounter) {
-  console.log("Einträge downloaden");
+  console.log('Einträge downloaden');
   barData.start(sum, 0, errorCounter);
 }
 
@@ -126,30 +117,28 @@ async function logLinks(links) {
     links,
     {
       spaces: 2,
-      EOL: "\r\n"
+      EOL: '\r\n',
     },
-    err => {}
+    (err) => {},
   );
 }
 
 async function logData(process, processData) {
-  const directory = `files/${processData.VORGANG.WAHLPERIODE}/${
-    processData.VORGANG.VORGANGSTYP
-  }`;
+  const directory = `files/${processData.VORGANG.WAHLPERIODE}/${processData.VORGANG.VORGANGSTYP}`;
   await fs.ensureDir(directory);
   jsonfile.writeFile(
     `${directory}/${process}.json`,
     processData,
     {
       spaces: 2,
-      EOL: "\r\n"
+      EOL: '\r\n',
     },
-    err => {}
+    (err) => {},
   );
 }
 
 function doScrape({ id, url, date }) {
-  //console.log(id, url, date);
+  // console.log(id, url, date);
   return Math.random() >= 0.5;
 }
 
@@ -167,7 +156,7 @@ try {
     logLinks,
     logData,
     doScrape,
-    stackSize: 7
+    stackSize: 7,
   });
 } catch (error) {
   console.error(error);
