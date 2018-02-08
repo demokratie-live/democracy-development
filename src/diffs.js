@@ -2,6 +2,7 @@
 import diffHistory from 'mongoose-diff-history/diffHistory';
 import jsondiffpatch from 'jsondiffpatch';
 import fs from 'fs';
+import jsonfile from 'jsonfile';
 
 import mongoose from './config/db';
 import Procedure from './models/Procedure';
@@ -9,69 +10,51 @@ import Procedure from './models/Procedure';
 (async () => {
   const History = mongoose.model('History');
 
-  History.find({ collectionId: '5a7b2b2da57539646d01f192' }).then((data) => {
-    data.forEach(async (entry) => {
-      const procedure = await Procedure.findOne(entry.collectionId);
-      console.log(procedure.procedureId);
-      console.log(entry.version);
-      // jsondiffpatch.formatters.html.format(entry.diff);
-      // console.log(jsondiffpatch.formatters.console.format(entry.diff, procedure));
-      const html = jsondiffpatch.formatters.html.format(entry.diff, procedure);
-      fs.writeFile(`./diffs/${procedure.procedureId}-${entry.version}.html`, html, (err) => {
-        if (err) {
-          return console.log(err);
-        }
-
-        return console.log('The file was saved!');
-      });
-    });
-  });
-
-  const diffObjects = await History.aggregate([
-    {
-      $group: {
-        _id: '$collectionId',
-        count: { $sum: 1 },
-      },
-    },
+  const histories = await History.aggregate([
+    { $sort: { version: 1 } },
+    { $group: { _id: '$collectionId', procedures: { $push: '$$ROOT' } } },
   ]);
+  histories.forEach((procedureHistories) => {
+    const procedureVersions = procedureHistories.procedures.map(async changeset =>
+      new Promise(resolve =>
+        diffHistory.getVersion(Procedure, changeset.collectionId, changeset.version, (err, obj) =>
+          resolve({ obj, changeset }))));
 
-  // console.log(diffObjects);
-  const changes = [];
-  const promises = [];
-  await diffObjects.forEach(async ({ _id, count }) => {
-    changes[_id] = {};
-    // console.log(`ID: ${_id} ########################################################################`);
-    await [...Array(count)].forEach(async (el, index) => {
-      // const oldEntry = new Promise((resolve, reject) =>
-      //   diffHistory.getVersion(Procedure, _id, index, (err, obj) => {
-      //     if (err) {
-      //       reject(err);
-      //     }
-      //     resolve(obj);
-      //   })).catch(err => console.log(err));
-      // const newEntry = new Promise((resolve, reject) =>
-      //   diffHistory.getVersion(Procedure, _id, index + 1, (err, obj) => {
-      //     if (err) {
-      //       reject(err);
-      //     }
-      //     resolve(obj);
-      //   })).catch(err => console.log(err));
-      // Promise.all([oldEntry, newEntry]).then((data) => {
-      //   console.log('x', data);
-      //   const delta = jsondiffpatch.diff(data[0], data[1]);
-      //   console.log('y');
-      //   // console.log(delta);
-      //   // const html = jsondiffpatch.formatters.html.format(delta, oldEntry);
-      //   // console.log('###', html);
-      // });
+    Promise.all([...procedureVersions]).then(async (procedureVersion) => {
+      procedureVersion = procedureVersion.map((procedure) => {
+        procedure.obj.updatedAt = procedure.changeset.updatedAt;
+        return procedure;
+      });
+
+      const curProcedure = await Procedure.findById(procedureVersion[0].obj._id);
+      console.log(curProcedure);
+
+      let contents = fs.readFileSync('./diffs/template.html', 'utf8');
+
+      contents = contents.replace('###TITLE###', curProcedure.title);
+      contents = contents.replace('###ID###', `${curProcedure.period}-${curProcedure.procedureId}`);
+      contents = contents.replace(
+        '###OBJECTS###',
+        JSON.stringify([...procedureVersion.map(ele => ele.obj), curProcedure]),
+      );
+      contents = contents.replace(
+        '###JS###',
+        procedureVersion
+          .map((obj, index) => `
+            var delta = jsondiffpatch.diff(objects[${index}], objects[${index + 1}]);
+            console.log(delta)
+            document.getElementById('diff-${index}').innerHTML = jsondiffpatch.formatters.html.format(delta, objects[${index}]);
+            `)
+          .join(''),
+      );
+      contents = contents.replace(
+        '###DIFF_HTML###',
+        `<table>${procedureVersion
+          .map(({ obj }, index) => `<td id="diff-${index}">Hallo</td>`)
+          .join('')}</table>`,
+      );
+      // console.log(contents);
+      fs.writeFile(`./diffs/${procedureVersion[0].obj.procedureId}.html`, contents, (err) => {});
     });
-    // console.log(await diffHistory.getHistories('Procedure', _id, ['promulgation', 'history']));
   });
-
-  //   console.log(
-  //     diffObjects[0]._id,
-  //     await diffHistory.getHistories('Procedure', diffObjects[0]._id, ['promulgation', 'history']),
-  //   );
-  //   console.log(await History.find({ collectionId: '5a7b2c46a57539646d0201e7' }));
 })();
