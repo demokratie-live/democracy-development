@@ -169,36 +169,45 @@ async function stopDataProgress() {
 }
 // ^ TODO REMOVE
 
+let cronIsRunning = false;
+
 new CronJob(
   '*/2 * * * *',
   async () => {
-    console.log('### Start Cronjob');
-    pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
-    await scraper.scrape({
-      selectedPeriod: () => '',
-      selectedOperationTypes: () => ['6'],
-      stackSize: 7,
-      doScrape,
-      // startLinkProgress: () => {},
-      startLinkProgress,
-      // updateLinkProgress: () => {},
-      updateLinkProgress,
-      // stopLinkProgress: () => {},
-      stopLinkProgress,
-      // startDataProgress: () => {},
-      startDataProgress,
-      // stopDataProgress: () => {},
-      stopDataProgress,
-      // updateDataProgress: () => {},
-      updateDataProgress,
-      logData: saveProcedure,
-      logLinks: () => {},
-      finished: () => {
-        // resolve();
-        console.log('### Finish Cronjob');
-      },
-    });
-    // mongoose.disconnect();
+    if (!cronIsRunning) {
+      cronIsRunning = true;
+      const start = Date.now();
+      console.log('### Start Cronjob');
+      pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
+      await scraper.scrape({
+        selectedPeriod: () => '',
+        selectedOperationTypes: () => ['6'],
+        stackSize: 7,
+        doScrape,
+        // startLinkProgress: () => {},
+        startLinkProgress,
+        // updateLinkProgress: () => {},
+        updateLinkProgress,
+        // stopLinkProgress: () => {},
+        stopLinkProgress,
+        // startDataProgress: () => {},
+        startDataProgress,
+        // stopDataProgress: () => {},
+        stopDataProgress,
+        // updateDataProgress: () => {},
+        updateDataProgress,
+        logData: saveProcedure,
+        logLinks: () => {},
+        finished: () => {
+          const end = Date.now();
+          const elapsed = end - start;
+          const difference = new Date(elapsed);
+          const diffMins = difference.getMinutes();
+          console.log(`### Finish Cronjob! ${diffMins}`);
+          cronIsRunning = false;
+        },
+      });
+    }
   },
   null,
   true,
