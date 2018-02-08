@@ -1,8 +1,6 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
 import diffHistory from 'mongoose-diff-history/diffHistory';
-import jsondiffpatch from 'jsondiffpatch';
-import fs from 'fs';
-import jsonfile from 'jsonfile';
+import fs from 'fs-extra';
 
 import mongoose from './config/db';
 import Procedure from './models/Procedure';
@@ -20,16 +18,17 @@ import Procedure from './models/Procedure';
         diffHistory.getVersion(Procedure, changeset.collectionId, changeset.version, (err, obj) =>
           resolve({ obj, changeset }))));
 
-    Promise.all([...procedureVersions]).then(async (procedureVersion) => {
-      procedureVersion = procedureVersion.map((procedure) => {
-        procedure.obj.updatedAt = procedure.changeset.updatedAt;
-        return procedure;
+    Promise.all([...procedureVersions]).then(async (procVers) => {
+      const procedureVersion = procVers.map((procedure) => {
+        const tmpProcedure = procedure;
+        tmpProcedure.obj.updatedAt = procedure.changeset.updatedAt;
+        return tmpProcedure;
       });
 
       const curProcedure = await Procedure.findById(procedureVersion[0].obj._id);
       console.log(curProcedure);
 
-      let contents = fs.readFileSync('./diffs/template.html', 'utf8');
+      let contents = fs.readFileSync('./assets/templates/diff.html', 'utf8');
 
       contents = contents.replace('###TITLE###', curProcedure.title);
       contents = contents.replace('###ID###', `${curProcedure.period}-${curProcedure.procedureId}`);
@@ -50,11 +49,13 @@ import Procedure from './models/Procedure';
       contents = contents.replace(
         '###DIFF_HTML###',
         `<table>${procedureVersion
-          .map(({ obj }, index) => `<td id="diff-${index}">Hallo</td>`)
+          .map((obj, index) => `<td id="diff-${index}">Hallo</td>`)
           .join('')}</table>`,
       );
       // console.log(contents);
-      fs.writeFile(`./diffs/${procedureVersion[0].obj.procedureId}.html`, contents, (err) => {});
+      const directory = `diffs/${curProcedure.period}/${curProcedure.type}`;
+      await fs.ensureDir(directory);
+      fs.writeFile(`${directory}/${procedureVersion[0].obj.procedureId}.html`, contents, () => {});
     });
   });
 })();
