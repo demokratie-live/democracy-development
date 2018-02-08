@@ -9,6 +9,8 @@ require('./config/db');
 const scraper = new Scraper();
 let pastScrapeData = null;
 const procedureStatusWhitelist = ['Überwiesen', 'Beschlussempfehlung liegt vor'];
+let cronIsRunning = false;
+let cronStart = null;
 
 const parseDate = (input) => {
   const parts = input.match(/(\d+)/g);
@@ -133,19 +135,19 @@ const barLink = new Progress.Bar(
   Progress.Presets.shades_classic,
 );
 
-async function startLinkProgress(sum, current) {
+const logStartLinkProgress = async (sum, current) => {
   console.log('Eintragslinks sammeln');
 
   barLink.start(sum, current);
-}
+};
 
-async function updateLinkProgress(current) {
+const logUpdateLinkProgress = async (current) => {
   barLink.update(current);
-}
+};
 
-async function stopLinkProgress() {
+const logStopLinkProgress = async () => {
   barLink.stop();
-}
+};
 
 const barData = new Progress.Bar(
   {
@@ -155,61 +157,61 @@ const barData = new Progress.Bar(
   Progress.Presets.shades_classic,
 );
 
-async function startDataProgress(sum, errorCounter) {
+const logStartDataProgress = async (sum, errorCounter) => {
   console.log('Einträge downloaden');
   barData.start(sum, 0, errorCounter);
-}
+};
 
-async function updateDataProgress(current, errorCounter) {
+const logUpdateDataProgress = async (current, errorCounter) => {
   barData.update(current, errorCounter);
-}
+};
 
-async function stopDataProgress() {
+const logStopDataProgress = async () => {
   barData.stop();
-}
+};
+
+const logError = (error) => {
+  console.log(error);
+};
 // ^ TODO REMOVE
 
-let cronIsRunning = false;
+const logFinished = () => {
+  const end = Date.now();
+  const elapsed = end - cronStart;
+  const difference = new Date(elapsed);
+  const diffMins = difference.getMinutes();
+  console.log(`### Finish Cronjob! Time: ${diffMins} min`);
+  cronIsRunning = false;
+};
 
-new CronJob(
-  '*/2 * * * *',
-  async () => {
-    if (!cronIsRunning) {
-      cronIsRunning = true;
-      const start = Date.now();
-      console.log('### Start Cronjob');
-      pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
-      await scraper.scrape({
-        selectedPeriod: () => '',
-        selectedOperationTypes: () => ['6'],
-        stackSize: 7,
-        doScrape,
-        // startLinkProgress: () => {},
-        startLinkProgress,
-        // updateLinkProgress: () => {},
-        updateLinkProgress,
-        // stopLinkProgress: () => {},
-        stopLinkProgress,
-        // startDataProgress: () => {},
-        startDataProgress,
-        // stopDataProgress: () => {},
-        stopDataProgress,
-        // updateDataProgress: () => {},
-        updateDataProgress,
-        logData: saveProcedure,
-        logLinks: () => {},
-        finished: () => {
-          const end = Date.now();
-          const elapsed = end - start;
-          const difference = new Date(elapsed);
-          const diffMins = difference.getMinutes();
-          console.log(`### Finish Cronjob! ${diffMins}`);
-          cronIsRunning = false;
-        },
-      });
-    }
-  },
-  null,
-  true,
-  'Europe/Berlin',
-);
+console.log('### Waiting for Cronjob');
+const cronTask = async () => {
+  if (!cronIsRunning) {
+    cronIsRunning = true;
+    cronStart = Date.now();
+    console.log('### Start Cronjob');
+    // get old Scrape Data for cache
+    pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
+    // Do the scrape
+    await scraper.scrape({
+      // settings
+      browserStackSize: () => 7,
+      selectOperationTypes: () => ['6'],
+      // log
+      logStartLinkProgress,
+      logUpdateLinkProgress,
+      logStopLinkProgress,
+      logStartDataProgress,
+      logUpdateDataProgress,
+      logStopDataProgress,
+      logError,
+      logFinished,
+      // data
+      outScraperData: saveProcedure,
+      // cache(link skip logic)
+      doScrape,
+    });
+  }
+};
+
+new CronJob('*/2 * * * *', cronTask, null, true, 'Europe/Berlin');
