@@ -12,13 +12,13 @@ import Procedure from './models/Procedure';
     { $sort: { version: 1 } },
     { $group: { _id: '$collectionId', procedures: { $push: '$$ROOT' } } },
   ]);
-  histories.forEach((procedureHistories) => {
+  const promises = histories.map(async (procedureHistories) => {
     const procedureVersions = procedureHistories.procedures.map(async changeset =>
       new Promise(resolve =>
         diffHistory.getVersion(Procedure, changeset.collectionId, changeset.version, (err, obj) =>
           resolve({ obj, changeset }))));
 
-    Promise.all([...procedureVersions]).then(async (procVers) => {
+    return Promise.all([...procedureVersions]).then(async (procVers) => {
       const procedureVersion = procVers.map((procedure) => {
         const tmpProcedure = procedure;
         tmpProcedure.obj.updatedAt = procedure.changeset.updatedAt;
@@ -26,7 +26,6 @@ import Procedure from './models/Procedure';
       });
 
       const curProcedure = await Procedure.findById(procedureVersion[0].obj._id);
-      console.log(curProcedure);
 
       let contents = fs.readFileSync('./assets/templates/diff.html', 'utf8');
 
@@ -52,10 +51,13 @@ import Procedure from './models/Procedure';
           .map((obj, index) => `<td id="diff-${index}">Hallo</td>`)
           .join('')}</table>`,
       );
-      // console.log(contents);
       const directory = `diffs/${curProcedure.period}/${curProcedure.type}`;
       await fs.ensureDir(directory);
-      fs.writeFile(`${directory}/${procedureVersion[0].obj.procedureId}.html`, contents, () => {});
+      return new Promise(resolve =>
+        fs.writeFile(`${directory}/${procedureVersion[0].obj.procedureId}.html`, contents, () => {
+          resolve();
+        }));
     });
   });
+  Promise.all(promises).then(() => mongoose.disconnect());
 })();

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import mongoose from 'mongoose';
 
 import CONSTANTS from './constants';
@@ -13,7 +12,7 @@ try {
   mongoose.createConnection(CONSTANTS.DB_URL, {});
 }
 
-mongoose.connection.once('open', () => console.log('MongoDB is running')).on('error', (e) => {
+mongoose.connection.once('open', () => {}).on('error', (e) => {
   throw e;
 });
 
