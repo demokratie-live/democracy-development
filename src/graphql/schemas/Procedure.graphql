@@ -18,5 +18,5 @@ type Procedure {
 
 type Query {
   getProcedure(_id: ID!): Procedure
-  getProcedures(pageSize: Int, offset: Int): [Procedure]
+  procedures(pageSize: Int, offset: Int): [Procedure]
 }

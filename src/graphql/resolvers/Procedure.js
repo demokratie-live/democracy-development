@@ -1,5 +1,6 @@
 export default {
   Query: {
-    getProcedures: (parent, { offset = 0, pageSize = 20 }, { ProcedureModel }) => ProcedureModel.find(),
+    procedures: (parent, { offset = 0, pageSize = 20 }, { ProcedureModel }) =>
+      ProcedureModel.find({ type: 'Gesetzgebung' }),
   },
 };
