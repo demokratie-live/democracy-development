@@ -4,7 +4,6 @@ type Procedure {
   procedureId: String
   type: String
   period: Int
-  title: String
   currentStatus: String
   signature: String
   gestOrderNumber: String
