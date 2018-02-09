@@ -22,7 +22,7 @@ const schema = makeExecutableSchema({
   resolvers,
 });
 
-const engine = new Engine({ engineConfig: { apiKey: process.env.ENGINE_API_KEY } }); // service:bundestagio:z92snEHIyKGpcgQOVD29Pw
+const engine = new Engine({ engineConfig: { apiKey: process.env.ENGINE_API_KEY } });
 engine.start();
 app.use(engine.expressMiddleware());
 
