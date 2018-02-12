@@ -42,8 +42,20 @@ const saveProcedure = async (procedureId, procedureData) => {
       date: parseDate(e.FUNDSTELLE.substr(0, 10)),
     };
     if (e.BESCHLUSS) {
-      flow.decision = e.BESCHLUSS;
-      flow.decisionTenor = e.BESCHLUSS.BESCHLUSSTENOR;
+      if (!_.isArray(e.BESCHLUSS)) {
+        e.BESCHLUSS = [e.BESCHLUSS];
+      }
+      if (e.BESCHLUSS.length > 0) {
+        flow.decision = e.BESCHLUSS.map(beschluss => ({
+          page: beschluss.BESCHLUSSSEITE || undefined,
+          tenor: beschluss.BESCHLUSSTENOR || undefined,
+          document: beschluss.BEZUGSDOKUMENT || undefined,
+          type: beschluss.ABSTIMMUNGSART || undefined,
+          comment: beschluss.ABSTIMMUNG_BEMERKUNG || undefined,
+          majority: beschluss.MEHRHEIT || undefined,
+          foundation: beschluss.GRUNDLAGE || undefined,
+        }));
+      }
     }
     return flow;
   });
@@ -69,7 +81,7 @@ const saveProcedure = async (procedureId, procedureData) => {
     euDocNr: procedureData.VORGANG.EU_DOK_NR || undefined,
     abstract: procedureData.VORGANG.ABSTRAKT || undefined,
     promulgation: ensureArray(procedureData.VORGANG.VERKUENDUNG),
-    legalValidity: procedureData.VORGANG.INKRAFTTRETEN || undefined,
+    legalValidity: ensureArray(procedureData.VORGANG.INKRAFTTRETEN),
     tags: ensureArray(procedureData.VORGANG.SCHLAGWORT),
     history,
   };

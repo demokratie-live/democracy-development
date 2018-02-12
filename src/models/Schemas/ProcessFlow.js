@@ -1,5 +1,7 @@
 import { Schema } from 'mongoose';
 
+import ProcessDecision from './ProcessDecision';
+
 const ProcessFlowSchema = new Schema(
   {
     procedureId: { type: String },
@@ -7,8 +9,7 @@ const ProcessFlowSchema = new Schema(
     initiator: { type: String },
     findSpot: { type: String },
     findSpotUrl: { type: String },
-    decisionTenor: { type: String },
-    decision: { type: Object },
+    decision: { type: [ProcessDecision], default: undefined },
     date: { type: Date },
   },
   { _id: false },
