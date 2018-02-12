@@ -23,6 +23,6 @@ const ProcedureSchema = new Schema(
   { timestamps: true },
 );
 
-ProcedureSchema.plugin(diffHistory.plugin, { omit: ['updatedAt', 'history'] });
+ProcedureSchema.plugin(diffHistory.plugin, { omit: ['updatedAt'] });
 
 export default mongoose.model('Procedure', ProcedureSchema);
