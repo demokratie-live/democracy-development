@@ -3,6 +3,6 @@ type ProcessFlow {
   initiator: String
   findSpot: String
   findSpotUrl: String
-  decisionTenor: String
+  decision: [Decision]
   date: Date
 }
