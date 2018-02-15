@@ -38,44 +38,11 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 
 ![app](https://github.com/demokratie-live/democracy-assets/blob/master/docu/api_structure_app.png)
 
-### V1
+## Roadmap - Versionen
 
-- Identität > Wie darf ein Nutzer sich registrieren und wie kann ein Nutzer sich auf der Desktop-Anwendung mit seinem Handy-Account anmelden?
-- Vote Mechanismus(z.B. Ja/Nein/Enthaltung oder von -10 bis +10)
-- Anforderungen an eine Frage (z.b. Was ist eine gültige Frage, In welcher Reihenfolge werden die Fragen angezeigt - Alter, Beliebtheit)
-- Technologie Entscheidung
-- Zwei kompatible Clients für Handy(+iOS) & Web (Die Handy App läd die HTML & JS files vom Handyspeicher?!)
-- Sicherheit: Transportsicherheit(https); Annahme: Client ist sicher, Server ist sicher und vertrauenswürdig
-- Server stellt 10 allgemeine Fragen zur Verfügung, Berechnet Ergebnis
-- Client kann zu diesen Fragen abstimmen, Zeigt Ergebnis an
-- Client muss schön & benutzbar sein (usability)
+DEMOCRACY Deutschland wurde über Startnext für einen Prototyp finanziert. Selbstverständlich planen wir darüber hinaus.
 
-V1 Entwicklungs-Vorschlag:
-
-![v1](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/v1.png)
-
-Struktur Vorschlag:
-
-![v1_structure](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/v1_structure.png)
-
-Zentrale Architektur Fragen:
-
-![v1_architektur](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/Server-Client%20Architektur.png)
-
-Idealer Daten-Deployfluss:
-
-![v1_ideal_flow](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/Ideal%20Flow.png)
-
-### V2
-
- - Redaktion für Bundestag wird aufgebaut, betreibt einen Frage-Server
- - Möglichkeit mehrere Frage-Server aufzusetzen und die Fragen in der gleichen App anzuzeigen. > Followermodell?
- - Sicherheitsziel: Anonymität gegenüber den Servern; jeder darf einen Frage-Server betreiben, kann aber nicht zurückschließen, wer abgestimmt hat und wie.
-
-### V3
-
- - Serverfunktionalität wird in den Client eingebunden -> Jeder kann Fragen stellen
- - Sicherheitsziel: Dezentral, Anonym, beweisbares Ergebniss, Ausfallssicherheit - ein Client geht offline - das Ergebniss kann nachwievor berechnet werden.
+Daher haben wir eine Roadmap entwickelt, was wir wann erreichen möchten: [Roadmap](https://github.com/demokratie-live/democracy-app/wiki/Roadmap)
  
 ## Definitionen
 
@@ -84,8 +51,9 @@ Idealer Daten-Deployfluss:
  - Welche Bedingungen muss eine Frage erfüllen? (z.b. muss eine konkrete/definierte Auswirkung haben, wer hat die Verantwortung die Auswirkungen zu dokumentieren/kommunizieren/durchzusetzen)
  - Wie lange darf zu einer Frage beantwortet werden? (z.b. immer, bis Ergebnis vorliegt, 3 Wochen)
  
- 
- 
+ Zentrale Architektur Fragen:
+
+![v1_architektur](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/Server-Client%20Architektur.png)
  
 ## Anforderungen an Wahlverfahren
 
@@ -151,8 +119,6 @@ Idealer Daten-Deployfluss:
    
 ## Entwicklung & Werkzeuge
 
-[Circuit](https://eu.yourcircuit.com/#/conversation/98b71e1a-cf2f-48b1-b4fa-2573d4bb7ba1)
-
 [MeisterTask](https://www.meistertask.com/app/project/p7zXoSfq/demokratie)
 
 [Analysetool Dateistruktur](https://veniversum.me/git-visualizer/?owner=demokratie-live&repo=demokratie-app)
@@ -161,38 +127,24 @@ Idealer Daten-Deployfluss:
 
 [Malwerkzeug zur Planung](https://www.draw.io/)
 
-## Open vs Closed Source
+## Open Source
 
-Soll das Projekt Open oder Closed Source entwickelt werden?
+Wir entwickeln Open Source unter der Apache 2.0 Lizenz
 
-### Open Source ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
-
+Vorteile:
 - Jeder kann mitmachen, Collaboration ist einfach.
 - Software kann auf Schwachstellen analysiert werden.
 - Es entsteht ein öffentliche Werkzeug, dass jeder verwenden kann.
+
+Nachteile:
+- Software kann auf Schwachstellen analysiert werden.
 - "Because there is no requirement to create a commercial product that will sell and generate money, open source software can tend to evolve more in line with developers’ wishes than the needs of the end user." [Source](http://entrepreneurhandbook.co.uk/open-source-software/)
-
-### Closed Source
-
-- Software kann nicht auf Schwachstellen analysiert werden
-- Bessere monetäre Verwertbarkeit?
-
-## Welche Lizenz?
-
-- [MIT](https://de.wikipedia.org/wiki/MIT-Lizenz) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)  ![alex](https://avatars2.githubusercontent.com/u/1324583?v=4&s=16) 
-- [GNU](https://de.wikipedia.org/wiki/GNU_General_Public_License)
-- [CC](https://de.wikipedia.org/wiki/Creative_Commons)
 
 ## Welche Architektur?
 
 Client:
-- [Ruby mit Turbolinks](https://www.youtube.com/watch?v=SWEts0rlezA)
-- [NativeScript mit AngularJS2](https://www.youtube.com/watch?time_continue=1214&v=R3nyG2xtzeQ) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
-- [ReactNative](http://www.reactnative.com/) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
-- [GraphQL](http://graphql.org/) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
-- [Xamarin](https://www.xamarin.com/)
-- [Ember.js](https://www.emberjs.com/)
-- [Cordova](https://cordova.apache.org/)
+- X [ReactNative](http://www.reactnative.com/) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
+- X [GraphQL](http://graphql.org/) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
 
 Server:
 - [AWS Lambda](https://aws.amazon.com/de/lambda/details/) mit [Node](https://nodejs.org) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
