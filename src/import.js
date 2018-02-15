@@ -1,7 +1,10 @@
+/* eslint-disable no-mixed-operators */
+
 import _ from 'lodash';
 import { CronJob } from 'cron';
 import Scraper from 'dip21-scraper';
-import Progress from 'cli-progress'; // TODO REMOVE
+import ProgressBar from 'ascii-progress';
+import prettyMs from 'pretty-ms';
 import Procedure from './models/Procedure';
 // import mongoose from './config/db';
 require('./config/db');
@@ -28,7 +31,7 @@ const ensureArray = (element) => {
   return null;
 };
 
-const saveProcedure = async (procedureId, procedureData) => {
+const saveProcedure = async ({ procedureData }) => {
   const process = _.isArray(procedureData.VORGANGSABLAUF.VORGANGSPOSITION)
     ? procedureData.VORGANGSABLAUF.VORGANGSPOSITION
     : [procedureData.VORGANGSABLAUF.VORGANGSPOSITION];
@@ -96,7 +99,7 @@ const saveProcedure = async (procedureId, procedureData) => {
   );
 };
 
-const doScrape = (data) => {
+const doScrape = ({ data }) => {
   const parts = data.date.match(/(\d+)/g);
   const dipDate = new Date(Date.UTC(parts[2], parts[1] - 1, parts[0]));
 
@@ -138,54 +141,69 @@ const doScrape = (data) => {
   return false;
 };
 
-// TODO REMOVE
-const barLink = new Progress.Bar(
-  {
-    format:
-      '[{bar}] {percentage}% | ETA: {eta_formatted} | duration: {duration_formatted} | {value}/{total}',
-  },
-  Progress.Presets.shades_classic,
-);
+let bar1;
+let bar2;
+let bar3;
 
-const logStartLinkProgress = async (sum, current) => {
+const logStartLinkProgress = async () => {
   console.log('Eintragslinks sammeln');
-
-  barLink.start(sum, current);
+  bar1 = new ProgressBar({
+    schema: 'filters [:bar] :percent :completed/:sum | :estf | :duration',
+  });
+  bar2 = new ProgressBar({
+    schema: 'pages [:bar] :percent :completed/:sum | :estf | :duration',
+  });
 };
 
-const logUpdateLinkProgress = async (current) => {
-  barLink.update(current);
+const logUpdateLinkProgress = async ({ search }) => {
+  // barSearchPages.update(search.pages.completed, {}, search.pages.sum);
+  // barSearchInstances.update(search.instances.completed, {}, search.instances.sum);
+
+  bar1.tick(_.toInteger(search.instances.completed / search.instances.sum * 100 - bar1.current), {
+    completed: search.instances.completed,
+    sum: search.instances.sum,
+    estf: prettyMs(
+      _.toInteger((new Date() - bar1.start) / bar1.current * (bar1.total - bar1.current)),
+      { compact: true },
+    ),
+    duration: prettyMs(_.toInteger(new Date() - bar1.start), { secDecimalDigits: 0 }),
+  });
+  bar2.tick(_.toInteger(search.pages.completed / search.pages.sum * 100 - bar2.current), {
+    completed: search.pages.completed,
+    sum: search.pages.sum,
+    estf: prettyMs(
+      _.toInteger((new Date() - bar2.start) / bar2.current * (bar2.total - bar2.current)),
+      { compact: true },
+    ),
+    duration: prettyMs(_.toInteger(new Date() - bar2.start), { secDecimalDigits: 0 }),
+  });
 };
 
-const logStopLinkProgress = async () => {
-  barLink.stop();
-};
-
-const barData = new Progress.Bar(
-  {
-    format:
-      '[{bar}] {percentage}% | ETA: {eta_formatted} | duration: {duration_formatted} | {value}/{total} | {errorCounter}',
-  },
-  Progress.Presets.shades_classic,
-);
-
-const logStartDataProgress = async (sum, errorCounter) => {
+const logStartDataProgress = async ({ sum }) => {
   console.log('Einträge downloaden');
-  barData.start(sum, 0, errorCounter);
+  // barData.start(sum, 0, { retries, maxRetries });
+  bar3 = new ProgressBar({
+    schema: 'links [:bar] :percent :current/:total | :estf | :duration',
+    total: sum,
+  });
 };
 
-const logUpdateDataProgress = async (current, errorCounter) => {
-  barData.update(current, errorCounter);
+const logUpdateDataProgress = async ({ value }) => {
+  // barData.update(value, { retries, maxRetries });
+  let tick = 0;
+  if (value > bar3.current) {
+    tick = 1;
+  } else if (value < bar3.current) {
+    tick = -1;
+  }
+  bar3.tick(tick, {
+    estf: prettyMs(
+      _.toInteger((new Date() - bar3.start) / bar3.current * (bar3.total - bar3.current)),
+      { compact: true },
+    ),
+    duration: prettyMs(_.toInteger(new Date() - bar3.start), { secDecimalDigits: 0 }),
+  });
 };
-
-const logStopDataProgress = async () => {
-  barData.stop();
-};
-
-const logError = (error) => {
-  console.log(error);
-};
-// ^ TODO REMOVE
 
 const logFinished = () => {
   const end = Date.now();
@@ -207,16 +225,14 @@ const cronTask = async () => {
     // Do the scrape
     await scraper.scrape({
       // settings
-      browserStackSize: () => 7,
-      selectOperationTypes: () => ['6'],
+      browserStackSize: 7,
+      selectPeriods: ['Alle'],
+      selectOperationTypes: ['100'],
       // log
       logStartLinkProgress,
       logUpdateLinkProgress,
-      logStopLinkProgress,
       logStartDataProgress,
       logUpdateDataProgress,
-      logStopDataProgress,
-      logError,
       logFinished,
       // data
       outScraperData: saveProcedure,
@@ -226,4 +242,4 @@ const cronTask = async () => {
   }
 };
 
-new CronJob('*/2 * * * *', cronTask, null, true, 'Europe/Berlin');
+new CronJob('*/1 * * * *', cronTask, null, true, 'Europe/Berlin');
