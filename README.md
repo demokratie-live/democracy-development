@@ -51,7 +51,7 @@ yarn lint
 ## Contributing
 
 Anyone and everyone is welcome to [contribute](CONTRIBUTING.md). Start by checking out the list of
-[open issues](https://github.com/demokratie-live/democracy-client/issues).
+[open issues](https://github.com/bundestag/bundestag.io/issues).
 
 ## License
 
