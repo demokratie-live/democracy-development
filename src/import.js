@@ -145,7 +145,7 @@ let bar1;
 let bar2;
 let bar3;
 
-const logStartLinkProgress = async () => {
+const logStartSearchProgress = async () => {
   console.log('Eintragslinks sammeln');
   bar1 = new ProgressBar({
     schema: 'filters [:bar] :percent :completed/:sum | :estf | :duration',
@@ -155,7 +155,8 @@ const logStartLinkProgress = async () => {
   });
 };
 
-const logUpdateLinkProgress = async ({ search }) => {
+const logUpdateSearchProgress = async ({ search }) => {
+  // console.log(search);
   // barSearchPages.update(search.pages.completed, {}, search.pages.sum);
   // barSearchInstances.update(search.instances.completed, {}, search.instances.sum);
 
@@ -163,7 +164,7 @@ const logUpdateLinkProgress = async ({ search }) => {
     completed: search.instances.completed,
     sum: search.instances.sum,
     estf: prettyMs(
-      _.toInteger((new Date() - bar1.start) / bar1.current * (bar1.total - bar1.current)),
+      _.toInteger((new Date() - bar1.start) / (bar1.current + 1) * (bar1.total - bar1.current)),
       { compact: true },
     ),
     duration: prettyMs(_.toInteger(new Date() - bar1.start), { secDecimalDigits: 0 }),
@@ -172,11 +173,16 @@ const logUpdateLinkProgress = async ({ search }) => {
     completed: search.pages.completed,
     sum: search.pages.sum,
     estf: prettyMs(
-      _.toInteger((new Date() - bar2.start) / bar2.current * (bar2.total - bar2.current)),
+      _.toInteger((new Date() - bar2.start) / (bar2.current + 1) * (bar2.total - bar2.current)),
       { compact: true },
     ),
     duration: prettyMs(_.toInteger(new Date() - bar2.start), { secDecimalDigits: 0 }),
   });
+};
+
+const logStopSearchProgress = () => {
+  // bar1.clear();
+  // bar2.clear();
 };
 
 const logStartDataProgress = async ({ sum }) => {
@@ -198,11 +204,15 @@ const logUpdateDataProgress = async ({ value }) => {
   }
   bar3.tick(tick, {
     estf: prettyMs(
-      _.toInteger((new Date() - bar3.start) / bar3.current * (bar3.total - bar3.current)),
+      _.toInteger((new Date() - bar3.start) / (bar3.current + 1) * (bar3.total - bar3.current)),
       { compact: true },
     ),
     duration: prettyMs(_.toInteger(new Date() - bar3.start), { secDecimalDigits: 0 }),
   });
+};
+
+const logStopDataProgress = () => {
+  // bar3.clear();
 };
 
 const logFinished = () => {
@@ -223,23 +233,36 @@ const cronTask = async () => {
     // get old Scrape Data for cache
     pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
     // Do the scrape
-    await scraper.scrape({
-      // settings
-      browserStackSize: 7,
-      selectPeriods: ['Alle'],
-      selectOperationTypes: ['100'],
-      // log
-      logStartLinkProgress,
-      logUpdateLinkProgress,
-      logStartDataProgress,
-      logUpdateDataProgress,
-      logFinished,
-      // data
-      outScraperData: saveProcedure,
-      // cache(link skip logic)
-      doScrape,
-    });
+    await scraper
+      .scrape({
+        // settings
+        browserStackSize: 3,
+        selectPeriods: ['Alle'],
+        selectOperationTypes: ['100'],
+        // log
+        logStartSearchProgress,
+        logUpdateSearchProgress,
+        logStopSearchProgress,
+        logStartDataProgress,
+        logUpdateDataProgress,
+        logStopDataProgress,
+        logFinished,
+        logError: console.log,
+        // data
+        outScraperData: saveProcedure,
+        // cache(link skip logic)
+        doScrape,
+      })
+      .catch((error) => {
+        console.log(error);
+        logFinished();
+      });
   }
 };
 
-new CronJob('*/10 * * * *', cronTask, null, true, 'Europe/Berlin');
+const job = new CronJob('*/10 * * * *', cronTask, null, true, 'Europe/Berlin');
+
+process.on('SIGINT', async () => {
+  job.stop();
+  process.exit(1);
+});
