@@ -242,4 +242,4 @@ const cronTask = async () => {
   }
 };
 
-new CronJob('*/1 * * * *', cronTask, null, true, 'Europe/Berlin');
+new CronJob('*/10 * * * *', cronTask, null, true, 'Europe/Berlin');
