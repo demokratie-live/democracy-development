@@ -27,6 +27,7 @@
     "graphql-tools": "^2.20.2",
     "jsondiffpatch": "^0.2.5",
     "jsonfile": "^4.0.0",
+    "log": "^1.4.0",
     "merge-graphql-schemas": "^1.4.0",
     "mongoose": "^5.0.3",
     "mongoose-diff-history": "^1.2.0",

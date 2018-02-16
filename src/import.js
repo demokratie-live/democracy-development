@@ -6,8 +6,12 @@ import Scraper from 'dip21-scraper';
 import ProgressBar from 'ascii-progress';
 import prettyMs from 'pretty-ms';
 import chalk from 'chalk';
+import fs from 'fs-extra';
+import Log from 'log';
 
 import Procedure from './models/Procedure';
+
+const log = new Log('debug', fs.createWriteStream('error.log'));
 
 // import mongoose from './config/db';
 require('./config/db');
@@ -244,11 +248,11 @@ const logError = ({ error }) => {
     case 'not found':
     case 'warning':
       if (error.function !== 'saveJson' && error.function !== 'getProcedureRunningData') {
-        console.log(error);
+        log(error);
       }
       break;
     default:
-      console.log(error);
+      log(error);
       break;
   }
 };
