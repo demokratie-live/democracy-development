@@ -11,7 +11,7 @@ import Log from 'log';
 
 import Procedure from './models/Procedure';
 
-const log = new Log('debug', fs.createWriteStream('error-import.log'));
+const log = new Log('error', fs.createWriteStream('error-import.log'));
 
 // import mongoose from './config/db';
 require('./config/db');
@@ -246,7 +246,7 @@ const logError = ({ error }) => {
   if (error.type === 'fatal' && error.message) {
     console.log(error);
   }
-  log(error);
+  log.error(error);
 };
 
 console.log('### Waiting for Cronjob');
