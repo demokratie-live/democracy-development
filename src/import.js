@@ -243,18 +243,7 @@ const logFinished = () => {
 };
 
 const logError = ({ error }) => {
-  switch (error.type) {
-    case 'timeout':
-    case 'not found':
-    case 'warning':
-      if (error.function !== 'saveJson' && error.function !== 'getProcedureRunningData') {
-        log(error);
-      }
-      break;
-    default:
-      log(error);
-      break;
-  }
+  log(error);
 };
 
 console.log('### Waiting for Cronjob');
