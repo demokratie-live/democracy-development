@@ -1,8 +1,18 @@
+/* eslint-disable no-mixed-operators */
+
 import _ from 'lodash';
 import { CronJob } from 'cron';
 import Scraper from 'dip21-scraper';
-import Progress from 'cli-progress'; // TODO REMOVE
+import ProgressBar from 'ascii-progress';
+import prettyMs from 'pretty-ms';
+import chalk from 'chalk';
+import fs from 'fs-extra';
+import Log from 'log';
+
 import Procedure from './models/Procedure';
+
+const log = new Log('error', fs.createWriteStream('error-import.log'));
+
 // import mongoose from './config/db';
 require('./config/db');
 
@@ -28,7 +38,7 @@ const ensureArray = (element) => {
   return null;
 };
 
-const saveProcedure = async (procedureId, procedureData) => {
+const saveProcedure = async ({ procedureData }) => {
   const process = _.isArray(procedureData.VORGANGSABLAUF.VORGANGSPOSITION)
     ? procedureData.VORGANGSABLAUF.VORGANGSPOSITION
     : [procedureData.VORGANGSABLAUF.VORGANGSPOSITION];
@@ -96,7 +106,7 @@ const saveProcedure = async (procedureId, procedureData) => {
   );
 };
 
-const doScrape = (data) => {
+const doScrape = ({ data }) => {
   const parts = data.date.match(/(\d+)/g);
   const dipDate = new Date(Date.UTC(parts[2], parts[1] - 1, parts[0]));
 
@@ -138,62 +148,105 @@ const doScrape = (data) => {
   return false;
 };
 
-// TODO REMOVE
-const barLink = new Progress.Bar(
-  {
-    format:
-      '[{bar}] {percentage}% | ETA: {eta_formatted} | duration: {duration_formatted} | {value}/{total}',
-  },
-  Progress.Presets.shades_classic,
-);
+let bar1;
+let bar2;
+let bar3;
 
-const logStartLinkProgress = async (sum, current) => {
-  console.log('Eintragslinks sammeln');
-
-  barLink.start(sum, current);
+const logStartSearchProgress = async () => {
+  bar1 = new ProgressBar({
+    schema: 'filters [:bar] :percent :completed/:sum | :estf | :duration',
+    width: 20,
+  });
+  bar2 = new ProgressBar({
+    schema: 'pages [:bar] :percent :completed/:sum | :estf | :duration',
+    width: 20,
+  });
 };
 
-const logUpdateLinkProgress = async (current) => {
-  barLink.update(current);
+const logUpdateSearchProgress = async ({ search }) => {
+  bar1.tick(_.toInteger(search.instances.completed / search.instances.sum * 100 - bar1.current), {
+    completed: search.instances.completed,
+    sum: search.instances.sum,
+    estf: prettyMs(
+      _.toInteger((new Date() - bar1.start) / bar1.current * (bar1.total - bar1.current)),
+      { compact: true },
+    ),
+    duration: prettyMs(_.toInteger(new Date() - bar1.start), { secDecimalDigits: 0 }),
+  });
+  bar2.tick(_.toInteger(search.pages.completed / search.pages.sum * 100 - bar2.current), {
+    completed: search.pages.completed,
+    sum: search.pages.sum,
+    estf: prettyMs(
+      _.toInteger((new Date() - bar2.start) / bar2.current * (bar2.total - bar2.current)),
+      { compact: true },
+    ),
+    duration: prettyMs(_.toInteger(new Date() - bar2.start), { secDecimalDigits: 0 }),
+  });
 };
 
-const logStopLinkProgress = async () => {
-  barLink.stop();
+const logStopSearchProgress = () => {
+  // bar1.clear();
+  // bar2.clear();
 };
 
-const barData = new Progress.Bar(
-  {
-    format:
-      '[{bar}] {percentage}% | ETA: {eta_formatted} | duration: {duration_formatted} | {value}/{total} | {errorCounter}',
-  },
-  Progress.Presets.shades_classic,
-);
-
-const logStartDataProgress = async (sum, errorCounter) => {
-  console.log('Einträge downloaden');
-  barData.start(sum, 0, errorCounter);
+const logStartDataProgress = async ({ sum }) => {
+  console.log('links analysieren');
+  bar3 = new ProgressBar({
+    schema:
+      'links | :cpercent | :current/:total | :estf | :duration | :browsersRunning | :browsersScraped | :browserErrors ',
+    total: sum,
+  });
 };
 
-const logUpdateDataProgress = async (current, errorCounter) => {
-  barData.update(current, errorCounter);
+function getColor(value) {
+  // value from 0 to 1
+  return (1 - value) * 120;
+}
+
+const logUpdateDataProgress = async ({ value, browsers }) => {
+  // barData.update(value, { retries, maxRetries });
+  let tick = 0;
+  if (value > bar3.current) {
+    tick = 1;
+  } else if (value < bar3.current) {
+    tick = -1;
+  }
+  bar3.tick(tick, {
+    estf: chalk.hsl(getColor(1 - bar3.current / bar3.total), 100, 50)(prettyMs(
+      _.toInteger((new Date() - bar3.start) / bar3.current * (bar3.total - bar3.current)),
+      { compact: true },
+    )),
+    duration: prettyMs(_.toInteger(new Date() - bar3.start), { secDecimalDigits: 0 }),
+    browserErrors: browsers.map(({ errors }) => chalk.hsl(getColor(errors / 5), 100, 50)(errors)),
+    browsersRunning: browsers.reduce((count, { used }) => count + (used ? 1 : 0), 0),
+    browsersScraped: browsers.map(({ scraped }) => {
+      if (_.maxBy(browsers, 'scraped').scraped === scraped) {
+        return chalk.green(scraped);
+      } else if (_.minBy(browsers, 'scraped').scraped === scraped) {
+        return chalk.red(scraped);
+      }
+      return scraped;
+    }),
+    cpercent: chalk.hsl(getColor(1 - bar3.current / bar3.total), 100, 50)(`${(bar3.current / bar3.total * 100).toFixed(1)}%`),
+  });
 };
 
-const logStopDataProgress = async () => {
-  barData.stop();
+const logStopDataProgress = () => {
+  // bar3.clear();
 };
-
-const logError = (error) => {
-  console.log(error);
-};
-// ^ TODO REMOVE
 
 const logFinished = () => {
   const end = Date.now();
   const elapsed = end - cronStart;
-  const difference = new Date(elapsed);
-  const diffMins = difference.getMinutes();
-  console.log(`### Finish Cronjob! Time: ${diffMins} min`);
+  console.log(`### Finish Cronjob! Time: ${prettyMs(_.toInteger(elapsed))}`);
   cronIsRunning = false;
+};
+
+const logError = ({ error }) => {
+  if (error.type === 'fatal' && error.message) {
+    console.log(error);
+  }
+  log.error(error);
 };
 
 console.log('### Waiting for Cronjob');
@@ -205,25 +258,36 @@ const cronTask = async () => {
     // get old Scrape Data for cache
     pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
     // Do the scrape
-    await scraper.scrape({
-      // settings
-      browserStackSize: () => 7,
-      selectOperationTypes: () => ['6'],
-      // log
-      logStartLinkProgress,
-      logUpdateLinkProgress,
-      logStopLinkProgress,
-      logStartDataProgress,
-      logUpdateDataProgress,
-      logStopDataProgress,
-      logError,
-      logFinished,
-      // data
-      outScraperData: saveProcedure,
-      // cache(link skip logic)
-      doScrape,
-    });
+    await scraper
+      .scrape({
+        // settings
+        browserStackSize: 3,
+        selectPeriods: ['Alle'],
+        selectOperationTypes: ['100'],
+        // log
+        logStartSearchProgress,
+        logUpdateSearchProgress,
+        logStopSearchProgress,
+        logStartDataProgress,
+        logUpdateDataProgress,
+        logStopDataProgress,
+        logFinished,
+        logError,
+        // data
+        outScraperData: saveProcedure,
+        // cache(link skip logic)
+        doScrape,
+      })
+      .catch((error) => {
+        console.log(error);
+        logFinished();
+      });
   }
 };
 
-new CronJob('*/2 * * * *', cronTask, null, true, 'Europe/Berlin');
+const job = new CronJob('*/15 * * * *', cronTask, null, true, 'Europe/Berlin', null, true);
+
+process.on('SIGINT', async () => {
+  job.stop();
+  process.exit(1);
+});
