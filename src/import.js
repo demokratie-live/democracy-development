@@ -9,6 +9,8 @@ require('./config/db');
 const scraper = new Scraper();
 let pastScrapeData = null;
 const procedureStatusWhitelist = ['Überwiesen', 'Beschlussempfehlung liegt vor'];
+let cronIsRunning = false;
+let cronStart = null;
 
 const parseDate = (input) => {
   const parts = input.match(/(\d+)/g);
@@ -40,8 +42,20 @@ const saveProcedure = async (procedureId, procedureData) => {
       date: parseDate(e.FUNDSTELLE.substr(0, 10)),
     };
     if (e.BESCHLUSS) {
-      flow.decision = e.BESCHLUSS;
-      flow.decisionTenor = e.BESCHLUSS.BESCHLUSSTENOR;
+      if (!_.isArray(e.BESCHLUSS)) {
+        e.BESCHLUSS = [e.BESCHLUSS];
+      }
+      if (e.BESCHLUSS.length > 0) {
+        flow.decision = e.BESCHLUSS.map(beschluss => ({
+          page: beschluss.BESCHLUSSSEITE || undefined,
+          tenor: beschluss.BESCHLUSSTENOR || undefined,
+          document: beschluss.BEZUGSDOKUMENT || undefined,
+          type: beschluss.ABSTIMMUNGSART || undefined,
+          comment: beschluss.ABSTIMMUNG_BEMERKUNG || undefined,
+          majority: beschluss.MEHRHEIT || undefined,
+          foundation: beschluss.GRUNDLAGE || undefined,
+        }));
+      }
     }
     return flow;
   });
@@ -67,7 +81,7 @@ const saveProcedure = async (procedureId, procedureData) => {
     euDocNr: procedureData.VORGANG.EU_DOK_NR || undefined,
     abstract: procedureData.VORGANG.ABSTRAKT || undefined,
     promulgation: ensureArray(procedureData.VORGANG.VERKUENDUNG),
-    legalValidity: procedureData.VORGANG.INKRAFTTRETEN || undefined,
+    legalValidity: ensureArray(procedureData.VORGANG.INKRAFTTRETEN),
     tags: ensureArray(procedureData.VORGANG.SCHLAGWORT),
     history,
   };
@@ -133,19 +147,19 @@ const barLink = new Progress.Bar(
   Progress.Presets.shades_classic,
 );
 
-async function startLinkProgress(sum, current) {
+const logStartLinkProgress = async (sum, current) => {
   console.log('Eintragslinks sammeln');
 
   barLink.start(sum, current);
-}
+};
 
-async function updateLinkProgress(current) {
+const logUpdateLinkProgress = async (current) => {
   barLink.update(current);
-}
+};
 
-async function stopLinkProgress() {
+const logStopLinkProgress = async () => {
   barLink.stop();
-}
+};
 
 const barData = new Progress.Bar(
   {
@@ -155,52 +169,61 @@ const barData = new Progress.Bar(
   Progress.Presets.shades_classic,
 );
 
-async function startDataProgress(sum, errorCounter) {
+const logStartDataProgress = async (sum, errorCounter) => {
   console.log('Einträge downloaden');
   barData.start(sum, 0, errorCounter);
-}
+};
 
-async function updateDataProgress(current, errorCounter) {
+const logUpdateDataProgress = async (current, errorCounter) => {
   barData.update(current, errorCounter);
-}
+};
 
-async function stopDataProgress() {
+const logStopDataProgress = async () => {
   barData.stop();
-}
+};
+
+const logError = (error) => {
+  console.log(error);
+};
 // ^ TODO REMOVE
 
-new CronJob(
-  '*/2 * * * *',
-  async () => {
+const logFinished = () => {
+  const end = Date.now();
+  const elapsed = end - cronStart;
+  const difference = new Date(elapsed);
+  const diffMins = difference.getMinutes();
+  console.log(`### Finish Cronjob! Time: ${diffMins} min`);
+  cronIsRunning = false;
+};
+
+console.log('### Waiting for Cronjob');
+const cronTask = async () => {
+  if (!cronIsRunning) {
+    cronIsRunning = true;
+    cronStart = Date.now();
     console.log('### Start Cronjob');
+    // get old Scrape Data for cache
     pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
+    // Do the scrape
     await scraper.scrape({
-      selectedPeriod: () => '',
-      selectedOperationTypes: () => ['6'],
-      stackSize: 7,
+      // settings
+      browserStackSize: () => 7,
+      selectOperationTypes: () => ['6'],
+      // log
+      logStartLinkProgress,
+      logUpdateLinkProgress,
+      logStopLinkProgress,
+      logStartDataProgress,
+      logUpdateDataProgress,
+      logStopDataProgress,
+      logError,
+      logFinished,
+      // data
+      outScraperData: saveProcedure,
+      // cache(link skip logic)
       doScrape,
-      // startLinkProgress: () => {},
-      startLinkProgress,
-      // updateLinkProgress: () => {},
-      updateLinkProgress,
-      // stopLinkProgress: () => {},
-      stopLinkProgress,
-      // startDataProgress: () => {},
-      startDataProgress,
-      // stopDataProgress: () => {},
-      stopDataProgress,
-      // updateDataProgress: () => {},
-      updateDataProgress,
-      logData: saveProcedure,
-      logLinks: () => {},
-      finished: () => {
-        // resolve();
-        console.log('### Finish Cronjob');
-      },
     });
-    // mongoose.disconnect();
-  },
-  null,
-  true,
-  'Europe/Berlin',
-);
+  }
+};
+
+new CronJob('*/2 * * * *', cronTask, null, true, 'Europe/Berlin');

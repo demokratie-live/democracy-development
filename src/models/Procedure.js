@@ -18,11 +18,11 @@ const ProcedureSchema = new Schema(
     promulgation: [String],
     legalValidity: [String],
     tags: [String],
-    history: [ProcessFlow],
+    history: { type: [ProcessFlow], default: undefined },
   },
   { timestamps: true },
 );
 
-ProcedureSchema.plugin(diffHistory.plugin, { omit: ['updatedAt', 'history._id'] });
+ProcedureSchema.plugin(diffHistory.plugin, { omit: ['updatedAt'] });
 
 export default mongoose.model('Procedure', ProcedureSchema);
