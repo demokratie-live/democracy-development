@@ -11,7 +11,7 @@ import Log from 'log';
 
 import Procedure from './models/Procedure';
 
-const log = new Log('debug', fs.createWriteStream('error.log'));
+const log = new Log('debug', fs.createWriteStream('error-import.log'));
 
 // import mongoose from './config/db';
 require('./config/db');
