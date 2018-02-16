@@ -1,0 +1,14 @@
+matrix:
+    include:
+        # test
+        -   os: linux
+            language: node_js
+            node_js:
+                - 8
+            install:
+                - yarn --version
+                - yarn install
+            script:
+                - yarn lint
+after_script:
+  - echo "BUILD FINISHED"
