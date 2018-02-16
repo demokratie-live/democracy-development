@@ -5,7 +5,10 @@ import { CronJob } from 'cron';
 import Scraper from 'dip21-scraper';
 import ProgressBar from 'ascii-progress';
 import prettyMs from 'pretty-ms';
+import chalk from 'chalk';
+
 import Procedure from './models/Procedure';
+
 // import mongoose from './config/db';
 require('./config/db');
 
@@ -146,25 +149,22 @@ let bar2;
 let bar3;
 
 const logStartSearchProgress = async () => {
-  console.log('Eintragslinks sammeln');
   bar1 = new ProgressBar({
     schema: 'filters [:bar] :percent :completed/:sum | :estf | :duration',
+    width: 20,
   });
   bar2 = new ProgressBar({
     schema: 'pages [:bar] :percent :completed/:sum | :estf | :duration',
+    width: 20,
   });
 };
 
 const logUpdateSearchProgress = async ({ search }) => {
-  // console.log(search);
-  // barSearchPages.update(search.pages.completed, {}, search.pages.sum);
-  // barSearchInstances.update(search.instances.completed, {}, search.instances.sum);
-
   bar1.tick(_.toInteger(search.instances.completed / search.instances.sum * 100 - bar1.current), {
     completed: search.instances.completed,
     sum: search.instances.sum,
     estf: prettyMs(
-      _.toInteger((new Date() - bar1.start) / (bar1.current + 1) * (bar1.total - bar1.current)),
+      _.toInteger((new Date() - bar1.start) / bar1.current * (bar1.total - bar1.current)),
       { compact: true },
     ),
     duration: prettyMs(_.toInteger(new Date() - bar1.start), { secDecimalDigits: 0 }),
@@ -173,7 +173,7 @@ const logUpdateSearchProgress = async ({ search }) => {
     completed: search.pages.completed,
     sum: search.pages.sum,
     estf: prettyMs(
-      _.toInteger((new Date() - bar2.start) / (bar2.current + 1) * (bar2.total - bar2.current)),
+      _.toInteger((new Date() - bar2.start) / bar2.current * (bar2.total - bar2.current)),
       { compact: true },
     ),
     duration: prettyMs(_.toInteger(new Date() - bar2.start), { secDecimalDigits: 0 }),
@@ -186,15 +186,20 @@ const logStopSearchProgress = () => {
 };
 
 const logStartDataProgress = async ({ sum }) => {
-  console.log('Einträge downloaden');
-  // barData.start(sum, 0, { retries, maxRetries });
+  console.log('links analysieren');
   bar3 = new ProgressBar({
-    schema: 'links [:bar] :percent :current/:total | :estf | :duration',
+    schema:
+      'links | :cpercent | :current/:total | :estf | :duration | :browsersRunning | :browsersScraped | :browserErrors ',
     total: sum,
   });
 };
 
-const logUpdateDataProgress = async ({ value }) => {
+function getColor(value) {
+  // value from 0 to 1
+  return (1 - value) * 120;
+}
+
+const logUpdateDataProgress = async ({ value, browsers }) => {
   // barData.update(value, { retries, maxRetries });
   let tick = 0;
   if (value > bar3.current) {
@@ -203,11 +208,22 @@ const logUpdateDataProgress = async ({ value }) => {
     tick = -1;
   }
   bar3.tick(tick, {
-    estf: prettyMs(
-      _.toInteger((new Date() - bar3.start) / (bar3.current + 1) * (bar3.total - bar3.current)),
+    estf: chalk.hsl(getColor(1 - bar3.current / bar3.total), 100, 50)(prettyMs(
+      _.toInteger((new Date() - bar3.start) / bar3.current * (bar3.total - bar3.current)),
       { compact: true },
-    ),
+    )),
     duration: prettyMs(_.toInteger(new Date() - bar3.start), { secDecimalDigits: 0 }),
+    browserErrors: browsers.map(({ errors }) => chalk.hsl(getColor(errors / 5), 100, 50)(errors)),
+    browsersRunning: browsers.reduce((count, { used }) => count + (used ? 1 : 0), 0),
+    browsersScraped: browsers.map(({ scraped }) => {
+      if (_.maxBy(browsers, 'scraped').scraped === scraped) {
+        return chalk.green(scraped);
+      } else if (_.minBy(browsers, 'scraped').scraped === scraped) {
+        return chalk.red(scraped);
+      }
+      return scraped;
+    }),
+    cpercent: chalk.hsl(getColor(1 - bar3.current / bar3.total), 100, 50)(`${(bar3.current / bar3.total * 100).toFixed(1)}%`),
   });
 };
 
@@ -218,10 +234,23 @@ const logStopDataProgress = () => {
 const logFinished = () => {
   const end = Date.now();
   const elapsed = end - cronStart;
-  const difference = new Date(elapsed);
-  const diffMins = difference.getMinutes();
-  console.log(`### Finish Cronjob! Time: ${diffMins} min`);
+  console.log(`### Finish Cronjob! Time: ${prettyMs(_.toInteger(elapsed))}`);
   cronIsRunning = false;
+};
+
+const logError = ({ error }) => {
+  switch (error.type) {
+    case 'timeout':
+    case 'not found':
+    case 'warning':
+      if (error.function !== 'saveJson' && error.function !== 'getProcedureRunningData') {
+        console.log(error);
+      }
+      break;
+    default:
+      console.log(error);
+      break;
+  }
 };
 
 console.log('### Waiting for Cronjob');
@@ -247,7 +276,7 @@ const cronTask = async () => {
         logUpdateDataProgress,
         logStopDataProgress,
         logFinished,
-        logError: console.log,
+        logError,
         // data
         outScraperData: saveProcedure,
         // cache(link skip logic)
@@ -260,7 +289,7 @@ const cronTask = async () => {
   }
 };
 
-const job = new CronJob('*/10 * * * *', cronTask, null, true, 'Europe/Berlin');
+const job = new CronJob('*/15 * * * *', cronTask, null, true, 'Europe/Berlin', null, true);
 
 process.on('SIGINT', async () => {
   job.stop();
