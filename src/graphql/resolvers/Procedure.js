@@ -4,9 +4,6 @@ export default {
       console.log('getProcedures');
       return ProcedureModel.find({ type: 'Gesetzgebung', procedureId: { $in: IDs } });
     },
-    allProcedures: async (parent, args, { ProcedureModel }) => {
-      console.log(await ProcedureModel.find({ type: 'Gesetzgebung' }).count());
-      return ProcedureModel.find({ type: 'Gesetzgebung' });
-    },
+    allProcedures: async (parent, args, { ProcedureModel }) => ProcedureModel.find({ type: 'Gesetzgebung', period: { $gte: 18 } }),
   },
 };
