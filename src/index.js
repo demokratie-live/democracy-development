@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import { createServer } from 'http';
-import { Engine } from 'apollo-engine';
+// import { Engine } from 'apollo-engine';
 
 import './config/db';
 import constants from './config/constants';
@@ -22,9 +22,9 @@ const schema = makeExecutableSchema({
   resolvers,
 });
 
-const engine = new Engine({ engineConfig: { apiKey: process.env.ENGINE_API_KEY } });
-engine.start();
-app.use(engine.expressMiddleware());
+// const engine = new Engine({ engineConfig: { apiKey: process.env.ENGINE_API_KEY } });
+// engine.start();
+// app.use(engine.expressMiddleware());
 
 app.use(bodyParser.json());
 
