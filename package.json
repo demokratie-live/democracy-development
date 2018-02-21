@@ -6,8 +6,9 @@
   "license": "Apache2",
   "private": true,
   "scripts": {
-    "start": "babel-node src/index.js",
-    "dev": "nodemon -e js,graphql src/index.js --exec \"node --require dotenv/config --require babel-register\"",
+    "start": "node ./node_modules/babel-cli/bin/babel-node.js src/index.js",
+    "dev":
+      "nodemon -e js,graphql src/index.js --exec \"node --require dotenv/config --require babel-register\"",
     "imp": "babel-node src/import.js",
     "diffs": "babel-node src/diffs.js",
     "lint": "eslint ./src"
@@ -32,9 +33,7 @@
     "mongoose": "^5.0.3",
     "mongoose-diff-history": "^1.2.0",
     "nodemon": "^1.14.12",
-    "pretty-ms": "^3.1.0"
-  },
-  "devDependencies": {
+    "pretty-ms": "^3.1.0",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
@@ -44,5 +43,6 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
     "prettier": "^1.10.2"
-  }
+  },
+  "devDependencies": {}
 }
