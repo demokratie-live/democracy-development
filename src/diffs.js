@@ -25,6 +25,10 @@ import Procedure from './models/Procedure';
         return tmpProcedure;
       });
 
+      if (!procedureVersion.find(d => d.changeset.diff.currentStatus)) {
+        return;
+      }
+
       const curProcedure = await Procedure.findById(procedureVersion[0].obj._id);
 
       let contents = fs.readFileSync('./assets/templates/diff.html', 'utf8');
