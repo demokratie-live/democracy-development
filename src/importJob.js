@@ -218,10 +218,11 @@ const cronTask = async () => {
         doScrape,
       })
       .then(async () => {
-        const histories = await History.find(
-          { createdAt: { $gte: cron.lastFinishDate } },
-          { collectionId: 1 },
-        ).then(h => h.map(p => p.collectionId));
+        // empty query for initial webhook
+        const query = cron.lastFinishDate ? { createdAt: { $gte: cron.lastFinishDate } } : {};
+
+        const histories = await History.find(query, { collectionId: 1 }).then(h =>
+          h.map(p => p.collectionId));
         const procedureIds = await Procedure.find(
           { _id: { $in: histories } },
           { procedureId: 1 },
