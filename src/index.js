@@ -59,6 +59,6 @@ graphqlServer.listen(constants.PORT, (err) => {
     console.error(err);
   } else {
     console.log(`App is listen on port: ${constants.PORT}`);
-    new CronJob('*/1 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
+    new CronJob('*/15 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
   }
 });
