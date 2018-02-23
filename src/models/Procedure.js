@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import diffHistory from 'mongoose-diff-history/diffHistory';
 
 import ProcessFlow from './Schemas/ProcessFlow';
+import Document from './Schemas/Document';
 
 const ProcedureSchema = new Schema(
   {
@@ -18,6 +19,8 @@ const ProcedureSchema = new Schema(
     promulgation: [String],
     legalValidity: [String],
     tags: [String],
+    subjectGroups: [String],
+    importantDocuments: [Document],
     history: { type: [ProcessFlow], default: undefined },
   },
   { timestamps: true },

@@ -93,8 +93,16 @@ const saveProcedure = async ({ procedureData }) => {
     promulgation: ensureArray(procedureData.VORGANG.VERKUENDUNG),
     legalValidity: ensureArray(procedureData.VORGANG.INKRAFTTRETEN),
     tags: ensureArray(procedureData.VORGANG.SCHLAGWORT),
+    subjectGroups: ensureArray(procedureData.VORGANG.SACHGEBIET),
+    importantDocuments: ensureArray(procedureData.VORGANG.WICHTIGE_DRUCKSACHE).map(doc => ({
+      editor: doc.DRS_HERAUSGEBER,
+      number: doc.DRS_NUMMER,
+      type: doc.DRS_TYP,
+      url: doc.DRS_LINK,
+    })),
     history,
   };
+
   await Procedure.update(
     {
       procedureId: procedureObj.procedureId,
@@ -244,9 +252,16 @@ const logFinished = () => {
 
 const logError = ({ error }) => {
   if (error.type === 'fatal' && error.message) {
-    console.log(error);
+    console.log(error.message);
   }
-  log.error(error);
+  switch (error.code) {
+    case 1004:
+      break;
+
+    default:
+      log.error(error);
+      break;
+  }
 };
 
 console.log('### Waiting for Cronjob');
