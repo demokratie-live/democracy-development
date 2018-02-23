@@ -57,7 +57,7 @@ import Procedure from './models/Procedure';
       );
       const directory = `diffs/${curProcedure.period}/${curProcedure.type}`;
       await fs.ensureDir(directory);
-      return new Promise(resolve =>
+      new Promise(resolve =>
         fs.writeFile(`${directory}/${procedureVersion[0].obj.procedureId}.html`, contents, () => {
           resolve();
         }));
