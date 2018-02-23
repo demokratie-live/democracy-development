@@ -246,8 +246,8 @@ const cronTask = async () => {
               },
             );
           })
-          .catch((error) => {
-            console.log("democracy server error");
+          .catch(() => {
+            console.log('democracy server error');
           });
 
         console.log('#####FINISH####');
