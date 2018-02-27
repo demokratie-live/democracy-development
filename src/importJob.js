@@ -1,20 +1,22 @@
 /* eslint-disable no-mixed-operators */
 
 import _ from 'lodash';
-import { CronJob } from 'cron';
 import Scraper from 'dip21-scraper';
-import ProgressBar from 'ascii-progress';
 import prettyMs from 'pretty-ms';
-import chalk from 'chalk';
 import fs from 'fs-extra';
 import Log from 'log';
+import axios from 'axios';
 
 import Procedure from './models/Procedure';
+import CronJobModel from './models/CronJob';
+import mongoose from './config/db';
+import CONSTANTS from './config/constants';
 
 const log = new Log('error', fs.createWriteStream('error-import.log'));
 
-// import mongoose from './config/db';
-require('./config/db');
+// require('./config/db');
+
+const History = mongoose.model('History');
 
 const scraper = new Scraper();
 let pastScrapeData = null;
@@ -156,93 +158,6 @@ const doScrape = ({ data }) => {
   return false;
 };
 
-let bar1;
-let bar2;
-let bar3;
-
-const logStartSearchProgress = async () => {
-  bar1 = new ProgressBar({
-    schema: 'filters [:bar] :percent :completed/:sum | :estf | :duration',
-    width: 20,
-  });
-  bar2 = new ProgressBar({
-    schema: 'pages [:bar] :percent :completed/:sum | :estf | :duration',
-    width: 20,
-  });
-};
-
-const logUpdateSearchProgress = async ({ search }) => {
-  bar1.tick(_.toInteger(search.instances.completed / search.instances.sum * 100 - bar1.current), {
-    completed: search.instances.completed,
-    sum: search.instances.sum,
-    estf: prettyMs(
-      _.toInteger((new Date() - bar1.start) / bar1.current * (bar1.total - bar1.current)),
-      { compact: true },
-    ),
-    duration: prettyMs(_.toInteger(new Date() - bar1.start), { secDecimalDigits: 0 }),
-  });
-  bar2.tick(_.toInteger(search.pages.completed / search.pages.sum * 100 - bar2.current), {
-    completed: search.pages.completed,
-    sum: search.pages.sum,
-    estf: prettyMs(
-      _.toInteger((new Date() - bar2.start) / bar2.current * (bar2.total - bar2.current)),
-      { compact: true },
-    ),
-    duration: prettyMs(_.toInteger(new Date() - bar2.start), { secDecimalDigits: 0 }),
-  });
-};
-
-const logStopSearchProgress = () => {
-  // bar1.clear();
-  // bar2.clear();
-};
-
-const logStartDataProgress = async ({ sum }) => {
-  console.log('links analysieren');
-  bar3 = new ProgressBar({
-    schema:
-      'links | :cpercent | :current/:total | :estf | :duration | :browsersRunning | :browsersScraped | :browserErrors ',
-    total: sum,
-  });
-};
-
-function getColor(value) {
-  // value from 0 to 1
-  return (1 - value) * 120;
-}
-
-const logUpdateDataProgress = async ({ value, browsers }) => {
-  // barData.update(value, { retries, maxRetries });
-  let tick = 0;
-  if (value > bar3.current) {
-    tick = 1;
-  } else if (value < bar3.current) {
-    tick = -1;
-  }
-  bar3.tick(tick, {
-    estf: chalk.hsl(getColor(1 - bar3.current / bar3.total), 100, 50)(prettyMs(
-      _.toInteger((new Date() - bar3.start) / bar3.current * (bar3.total - bar3.current)),
-      { compact: true },
-    )),
-    duration: prettyMs(_.toInteger(new Date() - bar3.start), { secDecimalDigits: 0 }),
-    browserErrors: browsers.map(({ errors }) => chalk.hsl(getColor(errors / 5), 100, 50)(errors)),
-    browsersRunning: browsers.reduce((count, { used }) => count + (used ? 1 : 0), 0),
-    browsersScraped: browsers.map(({ scraped }) => {
-      if (_.maxBy(browsers, 'scraped').scraped === scraped) {
-        return chalk.green(scraped);
-      } else if (_.minBy(browsers, 'scraped').scraped === scraped) {
-        return chalk.red(scraped);
-      }
-      return scraped;
-    }),
-    cpercent: chalk.hsl(getColor(1 - bar3.current / bar3.total), 100, 50)(`${(bar3.current / bar3.total * 100).toFixed(1)}%`),
-  });
-};
-
-const logStopDataProgress = () => {
-  // bar3.clear();
-};
-
 const logFinished = () => {
   const end = Date.now();
   const elapsed = end - cronStart;
@@ -269,6 +184,21 @@ const cronTask = async () => {
   if (!cronIsRunning) {
     cronIsRunning = true;
     cronStart = Date.now();
+    const cron = await CronJobModel.findOneAndUpdate(
+      {
+        name: 'import-procedures',
+      },
+      {
+        $set: {
+          name: 'import-procedures',
+          lastStartDate: cronStart,
+        },
+      },
+      {
+        upsert: true,
+        new: true,
+      },
+    );
     console.log('### Start Cronjob');
     // get old Scrape Data for cache
     pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
@@ -276,16 +206,10 @@ const cronTask = async () => {
     await scraper
       .scrape({
         // settings
-        browserStackSize: 3,
+        browserStackSize: 5,
         selectPeriods: ['Alle'],
         selectOperationTypes: ['100'],
         // log
-        logStartSearchProgress,
-        logUpdateSearchProgress,
-        logStopSearchProgress,
-        logStartDataProgress,
-        logUpdateDataProgress,
-        logStopDataProgress,
         logFinished,
         logError,
         // data
@@ -293,16 +217,65 @@ const cronTask = async () => {
         // cache(link skip logic)
         doScrape,
       })
-      .catch((error) => {
+      .then(async () => {
+        // empty query for initial webhook
+        const query = cron.lastFinishDate ? { createdAt: { $gte: cron.lastFinishDate } } : {};
+
+        const histories = await History.find(query, { collectionId: 1 }).then(h =>
+          h.map(p => p.collectionId));
+        const procedureIds = await Procedure.find(
+          { _id: { $in: histories } },
+          { procedureId: 1 },
+        ).then(results => results.map(p => p.procedureId));
+        axios
+          .post(`${CONSTANTS.DEMOCRACY_SERVER_URL}/webhooks/bundestagio/update`, {
+            procedureIds,
+          })
+          .then(async (response) => {
+            console.log(response.data);
+            await CronJobModel.update(
+              {
+                name: 'import-procedures',
+              },
+              {
+                $set: {
+                  lastFinishDate: Date.now(),
+                },
+              },
+              {
+                upsert: true,
+              },
+            );
+          })
+          .catch(() => {
+            console.log('democracy server error');
+          });
+
+        console.log('#####FINISH####');
+      })
+      .catch(async (error) => {
         console.log(error);
         logFinished();
+        await CronJobModel.update(
+          {
+            name: 'import-procedures',
+          },
+          {
+            $set: {
+              lastErrorDate: Date.now(),
+            },
+          },
+          {
+            upsert: true,
+          },
+        );
       });
   }
 };
 
-const job = new CronJob('*/15 * * * *', cronTask, null, true, 'Europe/Berlin', null, true);
+export default cronTask;
 
-process.on('SIGINT', async () => {
-  job.stop();
-  process.exit(1);
-});
+// process.on('SIGINT', async () => {
+//   job.stop();
+//   process.exit(1);
+// });

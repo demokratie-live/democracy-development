@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import express from 'express';
+import { CronJob } from 'cron';
 import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
@@ -11,6 +12,8 @@ import './config/db';
 import constants from './config/constants';
 import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers';
+
+import importJob from './importJob';
 
 // Models
 import ProcedureModel from './models/Procedure';
@@ -56,5 +59,6 @@ graphqlServer.listen(constants.PORT, (err) => {
     console.error(err);
   } else {
     console.log(`App is listen on port: ${constants.PORT}`);
+    new CronJob('*/15 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
   }
 });
