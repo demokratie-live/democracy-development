@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import express from 'express';
-import { CronJob } from 'cron';
+// import { CronJob } from 'cron';
 import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
@@ -13,7 +13,7 @@ import constants from './config/constants';
 import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers';
 
-import importJob from './importJob';
+// import importJob from './importJob';
 
 // Models
 import ProcedureModel from './models/Procedure';
@@ -62,4 +62,4 @@ graphqlServer.listen(constants.PORT, (err) => {
   }
 });
 
-new CronJob('*/15 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
+// new CronJob('*/15 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
