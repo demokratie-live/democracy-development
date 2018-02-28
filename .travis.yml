@@ -20,6 +20,7 @@ matrix:
                     docker login -u "$DOCKER_USER" -p "$DOCKER_PASS";
                     export REPO="democracy/bundestag.io";
                     docker build -f Dockerfile -t $REPO:$COMMIT .;
+                    docker tag $REPO:$COMMIT $REPO:master;
                     docker push $REPO;
                   fi
 after_script:
