@@ -16,7 +16,8 @@ matrix:
             script:
                 - yarn lint
             after_success:
-                - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then
+                #- if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then
+                - if [ $TRAVIS_BRANCH == "master" ] then
                     docker login -u "$DOCKER_USER" -p "$DOCKER_PASS";
                     export REPO="democracy/bundestag.io";
                     docker build -f Dockerfile -t $REPO:$COMMIT .;
