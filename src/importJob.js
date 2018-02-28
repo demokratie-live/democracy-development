@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-operators */
-/*
+
 import _ from 'lodash';
 import Scraper from 'dip21-scraper';
 import prettyMs from 'pretty-ms';
@@ -80,7 +80,7 @@ const saveProcedure = async ({ procedureData }) => {
       approvalRequired = procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT;
     }
   } */
-/*
+
   const procedureObj = {
     procedureId: procedureData.vorgangId || undefined,
     type: procedureData.VORGANG.VORGANGSTYP || undefined,
@@ -274,7 +274,7 @@ const cronTask = async () => {
 };
 
 export default cronTask;
-*/
+
 // process.on('SIGINT', async () => {
 //   job.stop();
 //   process.exit(1);

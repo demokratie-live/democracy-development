@@ -16,4 +16,4 @@ COPY . .
 
 RUN yarn
 
-CMD ["yarn", "imp"]
+CMD ["yarn", "start"]
