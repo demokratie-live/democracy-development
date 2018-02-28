@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import { createServer } from 'http';
-// import { Engine } from 'apollo-engine';
+import { Engine } from 'apollo-engine';
 
 import './config/db';
 import constants from './config/constants';
@@ -25,9 +25,9 @@ const schema = makeExecutableSchema({
   resolvers,
 });
 
-// const engine = new Engine({ engineConfig: { apiKey: process.env.ENGINE_API_KEY } });
-// engine.start();
-// app.use(engine.expressMiddleware());
+const engine = new Engine({ engineConfig: { apiKey: process.env.ENGINE_API_KEY } });
+engine.start();
+app.use(engine.expressMiddleware());
 
 app.use(bodyParser.json());
 
@@ -59,6 +59,7 @@ graphqlServer.listen(constants.PORT, (err) => {
     console.error(err);
   } else {
     console.log(`App is listen on port: ${constants.PORT}`);
-    new CronJob('*/15 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
   }
 });
+
+new CronJob('*/15 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
