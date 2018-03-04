@@ -12,8 +12,8 @@ WORKDIR /app
 
 COPY package*.json ./
 
-COPY . .
-
 RUN yarn
 
-CMD ["yarn", "imp"]
+COPY . .
+
+CMD ["yarn", "start"]
