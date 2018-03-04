@@ -205,8 +205,7 @@ const logFinished = () => {
 };
 
 const logError = ({ error }) => {
-  process.stdout.write('\n');
-  console.log(error);
+  log.error(error);
 };
 
 console.log('### Waiting for Cronjob');
