@@ -6,6 +6,7 @@ import prettyMs from 'pretty-ms';
 import fs from 'fs-extra';
 import Log from 'log';
 import axios from 'axios';
+import chalk from 'chalk';
 
 import Procedure from './models/Procedure';
 import CronJobModel from './models/CronJob';
@@ -158,6 +159,44 @@ const doScrape = ({ data }) => {
   return false;
 };
 
+const logUpdateSearchProgress = async ({ search }) => {
+  process.stdout.clearLine();
+  process.stdout.cursorTo(0);
+  process.stdout.write(`Instances: ${search.instances.completed}/${search.instances.sum} (${_.toInteger(search.instances.completed / search.instances.sum * 100)}%) | Pages: ${search.pages.completed}/${search.pages.sum} (${_.toInteger(search.pages.completed / search.pages.sum * 100)}%)`);
+};
+
+let linksSum = 0;
+let startDate;
+
+const logStartDataProgress = async ({ sum }) => {
+  startDate = new Date();
+  process.stdout.write('\n');
+  linksSum = sum;
+};
+function getColor(value) {
+  // value from 0 to 1
+  return (1 - value) * 120;
+}
+
+const logUpdateDataProgress = async ({ value, browsers }) => {
+  process.stdout.clearLine();
+  process.stdout.cursorTo(0);
+  process.stdout.write(`Links: ${_.toInteger(value / linksSum * 100)}% | ${value}/${linksSum} | ${chalk.hsl(
+    getColor(1 - value / linksSum),
+    100,
+    50,
+  )(prettyMs(_.toInteger((new Date() - startDate) / value * (linksSum - value)), {
+    compact: true,
+  }))} | ${browsers.map(({ scraped }) => {
+    if (_.maxBy(browsers, 'scraped').scraped === scraped) {
+      return chalk.green(scraped);
+    } else if (_.minBy(browsers, 'scraped').scraped === scraped) {
+      return chalk.red(scraped);
+    }
+    return scraped;
+  })} | ${browsers.map(({ errors }) => chalk.hsl(getColor(errors / 4), 100, 50)(errors))}`);
+};
+
 const logFinished = () => {
   const end = Date.now();
   const elapsed = end - cronStart;
@@ -166,17 +205,8 @@ const logFinished = () => {
 };
 
 const logError = ({ error }) => {
-  if (error.type === 'fatal' && error.message) {
-    console.log(error.message);
-  }
-  switch (error.code) {
-    case 1004:
-      break;
-
-    default:
-      log.error(error);
-      break;
-  }
+  process.stdout.write('\n');
+  console.log(error);
 };
 
 console.log('### Waiting for Cronjob');
@@ -209,6 +239,12 @@ const cronTask = async () => {
         browserStackSize: 5,
         selectPeriods: ['Alle'],
         selectOperationTypes: ['100'],
+        logUpdateSearchProgress,
+        logStartDataProgress,
+        logUpdateDataProgress,
+        logStopDataProgress: () => {
+          process.stdout.write('\n');
+        },
         // log
         logFinished,
         logError,
@@ -274,8 +310,3 @@ const cronTask = async () => {
 };
 
 export default cronTask;
-
-// process.on('SIGINT', async () => {
-//   job.stop();
-//   process.exit(1);
-// });
