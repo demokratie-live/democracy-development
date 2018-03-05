@@ -6,7 +6,6 @@ import prettyMs from 'pretty-ms';
 import fs from 'fs-extra';
 import Log from 'log';
 import axios from 'axios';
-// import chalk from 'chalk';
 import moment from 'moment';
 
 import Procedure from './models/Procedure';
@@ -211,9 +210,7 @@ const cronTask = async () => {
         browserStackSize: 5,
         selectPeriods: ['Alle'],
         selectOperationTypes: ['100'],
-        // logUpdateSearchProgress,
         logStartDataProgress,
-        // logUpdateDataProgress,
         logStopDataProgress: () => {
           process.stdout.write('\n');
         },
