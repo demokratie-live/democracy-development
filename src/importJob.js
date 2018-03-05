@@ -7,7 +7,7 @@ import fs from 'fs-extra';
 import Log from 'log';
 import axios from 'axios';
 import chalk from 'chalk';
-import moment from 'moment'
+import moment from 'moment';
 
 import Procedure from './models/Procedure';
 import CronJobModel from './models/CronJob';
