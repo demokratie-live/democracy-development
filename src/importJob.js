@@ -7,6 +7,7 @@ import fs from 'fs-extra';
 import Log from 'log';
 import axios from 'axios';
 import chalk from 'chalk';
+import moment from 'moment'
 
 import Procedure from './models/Procedure';
 import CronJobModel from './models/CronJob';
@@ -228,7 +229,7 @@ const cronTask = async () => {
         new: true,
       },
     );
-    console.log('### Start Cronjob');
+    console.log(`### Start Cronjob ${moment(cronStart).format()}`);
     // get old Scrape Data for cache
     pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
     // Do the scrape
