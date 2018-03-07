@@ -162,11 +162,19 @@ const doScrape = ({ data }) => {
 let linksSum = 0;
 let startDate;
 
+const logUpdateSearchProgress = ({ hasError }) => {
+  process.stdout.write(hasError ? 'e' : '.');
+};
+
 const logStartDataProgress = async ({ sum }) => {
   startDate = new Date();
   process.stdout.write('\n');
   linksSum = sum;
   console.log(`Started at ${startDate} - ${linksSum} Links found`);
+};
+
+const logUpdateDataProgress = ({ hasError }) => {
+  process.stdout.write(hasError ? 'e' : '.');
 };
 
 const logFinished = () => {
@@ -210,10 +218,12 @@ const cronTask = async () => {
         browserStackSize: 5,
         selectPeriods: ['Alle'],
         selectOperationTypes: ['100'],
+        logUpdateSearchProgress,
         logStartDataProgress,
         logStopDataProgress: () => {
           process.stdout.write('\n');
         },
+        logUpdateDataProgress,
         // log
         logFinished,
         logError,
