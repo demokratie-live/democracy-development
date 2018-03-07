@@ -20,6 +20,4 @@ RUN yarn
 
 COPY . .
 
-CMD service ssh start && yarn start
-#CMD ["/bin/init_container.sh"]
-# CMD [ "yarn", "start" ]
+CMD service ssh start && yarn start > process.log
