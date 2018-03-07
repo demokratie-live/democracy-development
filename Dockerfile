@@ -20,7 +20,9 @@ RUN yarn
 
 COPY . .
 
-COPY init_container.sh /bin/
-RUN chmod 755 /bin/init_container.sh
-CMD ["/bin/init_container.sh"]
+# COPY ./init_container.sh /bin/
+# RUN chmod 755 /bin/init_container.sh
+RUN chmod 755 /app/init_container.sh
+CMD ["/bin/bash", "/app/init_container.sh"]
+#CMD ["/bin/init_container.sh"]
 # CMD [ "yarn", "start" ]
