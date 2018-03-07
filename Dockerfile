@@ -4,7 +4,7 @@ FROM node:carbon
 # SSH Server support
 # ------------------------
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends openssh-server \
+    && apt-get install -y --no-install-recommends openssh-server lnav \
     && echo "root:Docker!" | chpasswd
 
 COPY sshd_config /etc/ssh/
@@ -20,6 +20,4 @@ RUN yarn
 
 COPY . .
 
-CMD service ssh start && yarn start
-#CMD ["/bin/init_container.sh"]
-# CMD [ "yarn", "start" ]
+CMD service ssh start && yarn start > process.log
