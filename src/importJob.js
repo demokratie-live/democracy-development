@@ -97,7 +97,7 @@ const saveProcedure = async ({ procedureData }) => {
     legalValidity: ensureArray(procedureData.VORGANG.INKRAFTTRETEN),
     tags: ensureArray(procedureData.VORGANG.SCHLAGWORT),
     subjectGroups: ensureArray(procedureData.VORGANG.SACHGEBIET),
-    importantDocuments: ensureArray(procedureData.VORGANG.WICHTIGE_DRUCKSACHE).map(doc => ({
+    importantDocuments: ensureArray(procedureData.VORGANG.WICHTIGE_DRUCKSACHE || []).map(doc => ({
       editor: doc.DRS_HERAUSGEBER,
       number: doc.DRS_NUMMER,
       type: doc.DRS_TYP,
