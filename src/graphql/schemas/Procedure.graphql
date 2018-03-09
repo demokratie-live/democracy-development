@@ -16,7 +16,7 @@ type Procedure {
   subjectGroups: [String]
   history: [ProcessFlow]
   importantDocuments: [Document]
-  lastUpdateDate: Date
+  updatedAt: Date
 }
 
 type Query {

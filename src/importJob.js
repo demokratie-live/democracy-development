@@ -285,7 +285,6 @@ const cronTask = async () => {
           }
           data.changedIds.push(procedureId);
         }
-        console.log(groups);
         axios
           .post(`${CONSTANTS.DEMOCRACY_SERVER_URL}`, {
             data: groups,
