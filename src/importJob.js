@@ -215,7 +215,7 @@ const cronTask = async () => {
     await scraper
       .scrape({
         // settings
-        browserStackSize: 1,
+        browserStackSize: 5,
         selectPeriods: ['Alle'],
         selectOperationTypes: ['100'],
         logUpdateSearchProgress,
