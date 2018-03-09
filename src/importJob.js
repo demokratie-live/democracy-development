@@ -216,7 +216,7 @@ const cronTask = async () => {
       .scrape({
         // settings
         browserStackSize: 1,
-        selectPeriods: ['Alle'],
+        selectPeriods: ['19'],
         selectOperationTypes: ['100'],
         logUpdateSearchProgress,
         logStartDataProgress,
@@ -238,13 +238,57 @@ const cronTask = async () => {
 
         const histories = await History.find(query, { collectionId: 1 }).then(h =>
           h.map(p => p.collectionId));
-        const procedureIds = await Procedure.find(
+        const procedures = await Procedure.find(
           { _id: { $in: histories } },
-          { procedureId: 1 },
-        ).then(results => results.map(p => p.procedureId));
+          { procedureId: 1, type: 1, period: 1 },
+        );
+
+        const counts = await Procedure.aggregate([{
+          $group: {
+            _id: {
+              period: '$period',
+              type: '$type',
+            },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $group: {
+            _id: '$_id.period',
+            types: {
+              $push: {
+                type: '$_id.type',
+                count: '$count',
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            period: '$_id',
+            types: 1,
+          },
+        }]);
+
+        const groups = {};
+        for (let i = 0; i < procedures.length; i += 1) {
+          const { period, type, procedureId } = procedures[i];
+          const { count } = counts.find(c => c.period === period).types.find(t => t.type === type);
+          if (!groups[period]) {
+            groups[period] = [{ type: procedures[i].type, count, changedIds: [] }];
+          }
+          let data = groups[period].find(t => t.type === type);
+          if (!data) {
+            groups[period].push({ type: procedures[i].type, count, changedIds: [] });
+            data = groups[period].find(t => t.type === type);
+          }
+          data.changedIds.push(procedureId);
+        }
+        console.log(groups);
         axios
-          .post(`${CONSTANTS.DEMOCRACY_SERVER_URL}/webhooks/bundestagio/update`, {
-            procedureIds,
+          .post(`${CONSTANTS.DEMOCRACY_SERVER_URL}`, {
+            data: groups,
           })
           .then(async (response) => {
             console.log(response.data);
@@ -262,8 +306,8 @@ const cronTask = async () => {
               },
             );
           })
-          .catch(() => {
-            console.log('democracy server error');
+          .catch((e) => {
+            console.log(`democracy server error: ${e}`);
           });
 
         console.log('#####FINISH####');

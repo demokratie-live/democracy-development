@@ -16,10 +16,12 @@ type Procedure {
   subjectGroups: [String]
   history: [ProcessFlow]
   importantDocuments: [Document]
+  lastUpdateDate: Date
 }
 
 type Query {
   getProcedure(_id: ID!): Procedure
   procedures(pageSize: Int, offset: Int, IDs: [String!]): [Procedure]
   allProcedures(pageSize: Int, offset: Int): [Procedure]
+  procedureUpdates(pageSize: Int, offset: Int, period: [Int!], type: [String!]): [Procedure]
 }
