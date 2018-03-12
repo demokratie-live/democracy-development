@@ -216,7 +216,7 @@ const cronTask = async () => {
       .scrape({
         // settings
         browserStackSize: 1,
-        selectPeriods: ['19'],
+        selectPeriods: ['Alle'],
         selectOperationTypes: ['100'],
         logUpdateSearchProgress,
         logStartDataProgress,
@@ -236,6 +236,7 @@ const cronTask = async () => {
         // empty query for initial webhook
         const query = cron.lastFinishDate ? { createdAt: { $gte: cron.lastFinishDate } } : {};
 
+        // Find updated procedures
         const histories = await History.find(query, { collectionId: 1 }).then(h =>
           h.map(p => p.collectionId));
         const procedures = await Procedure.find(
@@ -243,48 +244,46 @@ const cronTask = async () => {
           { procedureId: 1, type: 1, period: 1 },
         );
 
-        const counts = await Procedure.aggregate([{
+        // Find Counts per Period & Type before Cronstart
+        const groups = await Procedure.aggregate([{
+          // Filter by updatedAt
+          $project: {
+            period: 1,
+            type: 1,
+            cond: { $lt: ['$updatedAt', cronStart] },
+          },
+        },
+        {
+          // Group by Period & Type
           $group: {
-            _id: {
-              period: '$period',
-              type: '$type',
-            },
+            _id: { period: '$period', type: '$type' },
             count: { $sum: 1 },
           },
         },
         {
+          // Group by Period
           $group: {
             _id: '$_id.period',
-            types: {
-              $push: {
-                type: '$_id.type',
-                count: '$count',
-              },
-            },
+            types: { $push: { type: '$_id.type', countBefore: '$count' } },
           },
         },
         {
-          $project: {
-            _id: 0,
-            period: '$_id',
-            types: 1,
-          },
+          // Rename _id Field to period
+          $project: { _id: 0, period: '$_id', types: 1 },
         }]);
 
-        const groups = {};
-        for (let i = 0; i < procedures.length; i += 1) {
-          const { period, type, procedureId } = procedures[i];
-          const { count } = counts.find(c => c.period === period).types.find(t => t.type === type);
-          if (!groups[period]) {
-            groups[period] = [{ type: procedures[i].type, count, changedIds: [] }];
+        // Loop through Groups and Types - assign changed IDs
+        for (let i = 0; i < groups.length; i += 1) {
+          const { period } = groups[i];
+          for (let j = 0; j < groups[i].types.length; j += 1) {
+            const { type } = groups[i].types[j];
+            groups[i].types[j].changedIds = procedures
+              .filter(p => (p.period === period && p.type === type))
+              .map(v => v.procedureId);
           }
-          let data = groups[period].find(t => t.type === type);
-          if (!data) {
-            groups[period].push({ type: procedures[i].type, count, changedIds: [] });
-            data = groups[period].find(t => t.type === type);
-          }
-          data.changedIds.push(procedureId);
         }
+
+        // Send Data to Hook
         axios
           .post(`${CONSTANTS.DEMOCRACY_SERVER_URL}`, {
             data: groups,
