@@ -9,4 +9,4 @@ RUN npm install nodemon@latest -g
 
 COPY . .
 
-ENTRYPOINT [ "nodemon", "-L", "--exec", "babel-node", "src/index.js" ]
+ENTRYPOINT [ "yarn", "start" ]
