@@ -241,6 +241,7 @@ const cronTask = async () => {
           h.map(p => p.collectionId));
         const procedures = await Procedure.find(
           { _id: { $in: histories } },
+          // { updatedAt: { $gte: cronStart } },
           { procedureId: 1, type: 1, period: 1 },
         );
 
