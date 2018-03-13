@@ -245,7 +245,7 @@ const cronTask = async () => {
         );
 
         // Find Counts per Period & Type before Cronstart
-        const groups = await Procedure.aggregate([{
+        let groups = await Procedure.aggregate([{
           // Filter by updatedAt
           $project: {
             period: 1,
@@ -273,14 +273,14 @@ const cronTask = async () => {
         }]);
 
         // Loop through Groups and Types - assign changed IDs
-        groups.forEach((group, i) => {
-          const { period } = group;
-          group.types.forEach((typ, j) => {
-            const { type } = typ;
-            groups[i].types[j].changedIds = procedures
-              .filter(p => (p.period === period && p.type === type))
+        groups = groups.map((group) => {
+          const types = group.types.map((type) => {
+            const changedIds = procedures
+              .filter(p => (p.period === group.period && p.type === type.type))
               .map(v => v.procedureId);
+            return { ...type, changedIds };
           });
+          return { ...group, types };
         });
 
         // Send Data to Hook
