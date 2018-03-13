@@ -1,23 +1,12 @@
-FROM node:carbon
-
-# ------------------------
-# SSH Server support
-# ------------------------
-RUN apt-get update
-
-
-EXPOSE 3100
-
-# Install App
+FROM node:latest
 
 WORKDIR /app
 
 COPY package*.json ./
 
 RUN yarn install
-
-VOLUME .:/app
+RUN npm install nodemon@latest -g
 
 COPY . .
 
-ENTRYPOINT ["yarn", "start"]
+ENTRYPOINT [ "nodemon", "-L", "--exec", "babel-node", "src/index.js" ]
