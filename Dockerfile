@@ -3,21 +3,21 @@ FROM node:carbon
 # ------------------------
 # SSH Server support
 # ------------------------
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends openssh-server \
-    && echo "root:Docker!" | chpasswd
+RUN apt-get update
 
-COPY sshd_config /etc/ssh/
 
-EXPOSE 2222 80
+EXPOSE 3100
 
 # Install App
+
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN yarn
+RUN yarn install
+
+VOLUME .:/app
 
 COPY . .
 
-CMD service ssh start && yarn start > process.log
+ENTRYPOINT ["yarn", "start"]
