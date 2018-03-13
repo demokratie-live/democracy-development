@@ -21,7 +21,7 @@ type Procedure {
 
 type Query {
   getProcedure(_id: ID!): Procedure
-  procedures(pageSize: Int, offset: Int, IDs: [String!]): [Procedure]
-  allProcedures(pageSize: Int, offset: Int): [Procedure]
-  procedureUpdates(pageSize: Int, offset: Int, period: [Int!], type: [String!]): [Procedure]
+  procedures(offset: Int, IDs: [String!]): [Procedure]
+  allProcedures(offset: Int): [Procedure]
+  procedureUpdates(offset: Int, period: [Int!], type: [String!]): [Procedure]
 }

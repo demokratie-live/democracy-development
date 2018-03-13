@@ -216,7 +216,7 @@ const cronTask = async () => {
       .scrape({
         // settings
         browserStackSize: 5,
-        selectPeriods: ['Alle'],
+        selectPeriods: ['19'],
         selectOperationTypes: ['100'],
         logUpdateSearchProgress,
         logStartDataProgress,
@@ -273,19 +273,19 @@ const cronTask = async () => {
         }]);
 
         // Loop through Groups and Types - assign changed IDs
-        for (let i = 0; i < groups.length; i += 1) {
-          const { period } = groups[i];
-          for (let j = 0; j < groups[i].types.length; j += 1) {
-            const { type } = groups[i].types[j];
+        groups.forEach((group, i) => {
+          const { period } = group;
+          group.types.forEach((typ, j) => {
+            const { type } = typ;
             groups[i].types[j].changedIds = procedures
               .filter(p => (p.period === period && p.type === type))
               .map(v => v.procedureId);
-          }
-        }
+          });
+        });
 
         // Send Data to Hook
         axios
-          .post(`${CONSTANTS.DEMOCRACY_SERVER_URL}`, {
+          .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
             data: groups,
           })
           .then(async (response) => {
@@ -304,8 +304,8 @@ const cronTask = async () => {
               },
             );
           })
-          .catch((e) => {
-            console.log(`democracy server error: ${e}`);
+          .catch((error) => {
+            console.log(`democracy server error: ${error}`);
           });
 
         console.log('#####FINISH####');
