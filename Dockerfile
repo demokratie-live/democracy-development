@@ -4,8 +4,9 @@ WORKDIR /app
 
 COPY package*.json ./
 
+RUN git --version
 RUN yarn install
-RUN npm install nodemon@latest -g
+#RUN npm install nodemon@latest -g
 
 COPY . .
 
