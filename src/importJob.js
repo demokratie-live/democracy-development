@@ -236,15 +236,58 @@ const cronTask = async () => {
         // empty query for initial webhook
         const query = cron.lastFinishDate ? { createdAt: { $gte: cron.lastFinishDate } } : {};
 
+        // Find updated procedures
         const histories = await History.find(query, { collectionId: 1 }).then(h =>
           h.map(p => p.collectionId));
-        const procedureIds = await Procedure.find(
+        const procedures = await Procedure.find(
           { _id: { $in: histories } },
-          { procedureId: 1 },
-        ).then(results => results.map(p => p.procedureId));
+          // { updatedAt: { $gte: cronStart } },
+          { procedureId: 1, type: 1, period: 1 },
+        );
+
+        // Find Counts per Period & Type before Cronstart
+        let groups = await Procedure.aggregate([{
+          // Filter by updatedAt
+          $project: {
+            period: 1,
+            type: 1,
+            cond: { $lt: ['$updatedAt', cronStart] },
+          },
+        },
+        {
+          // Group by Period & Type
+          $group: {
+            _id: { period: '$period', type: '$type' },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          // Group by Period
+          $group: {
+            _id: '$_id.period',
+            types: { $push: { type: '$_id.type', countBefore: '$count' } },
+          },
+        },
+        {
+          // Rename _id Field to period
+          $project: { _id: 0, period: '$_id', types: 1 },
+        }]);
+
+        // Loop through Groups and Types - assign changed IDs
+        groups = groups.map((group) => {
+          const types = group.types.map((type) => {
+            const changedIds = procedures
+              .filter(p => (p.period === group.period && p.type === type.type))
+              .map(v => v.procedureId);
+            return { ...type, changedIds };
+          });
+          return { ...group, types };
+        });
+
+        // Send Data to Hook
         axios
-          .post(`${CONSTANTS.DEMOCRACY_SERVER_URL}/webhooks/bundestagio/update`, {
-            procedureIds,
+          .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
+            data: groups,
           })
           .then(async (response) => {
             console.log(response.data);
@@ -262,8 +305,8 @@ const cronTask = async () => {
               },
             );
           })
-          .catch(() => {
-            console.log('democracy server error');
+          .catch((error) => {
+            console.log(`democracy server error: ${error}`);
           });
 
         console.log('#####FINISH####');
