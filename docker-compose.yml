@@ -20,8 +20,6 @@ services:
       DB_URL: mongodb://mongodb/bundestagio
       DEMOCRACY_SERVER_WEBHOOK_URL: http://democracy/webhooks/bundestagio/update
       PORT: 80
-    volumes:
-      - ./bundestagIo:/app
     networks:
       bundestagio:
         aliases: 
@@ -42,8 +40,6 @@ services:
       DB_URL: mongodb://mongodb/democracy
       BUNDESTAGIO_SERVER_URL: http://bundestagio/graphql
       PORT: 80
-    volumes:
-      - ./app-server:/app
     networks:
       default:
       bundestagio:
