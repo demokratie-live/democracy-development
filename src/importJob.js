@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-operators */
 
 import _ from 'lodash';
-import Scraper from 'dip21-scraper';
+import Scraper from '@democracy-deutschland/dip21-scraper';
 import prettyMs from 'pretty-ms';
 import fs from 'fs-extra';
 import Log from 'log';
@@ -10,14 +10,12 @@ import moment from 'moment';
 
 import Procedure from './models/Procedure';
 import CronJobModel from './models/CronJob';
-import mongoose from './config/db';
+import { mongoose } from './config/db';
 import CONSTANTS from './config/constants';
 
 const log = new Log('error', fs.createWriteStream('error-import.log'));
 
 // require('./config/db');
-
-const History = mongoose.model('History');
 
 const scraper = new Scraper();
 let pastScrapeData = null;
@@ -190,6 +188,7 @@ const logError = ({ error }) => {
 
 console.log('### Waiting for Cronjob');
 const cronTask = async () => {
+  const History = mongoose.model('History');
   if (!cronIsRunning) {
     cronIsRunning = true;
     cronStart = Date.now();
@@ -246,38 +245,40 @@ const cronTask = async () => {
         );
 
         // Find Counts per Period & Type before Cronstart
-        let groups = await Procedure.aggregate([{
-          // Filter by updatedAt
-          $project: {
-            period: 1,
-            type: 1,
-            cond: { $lt: ['$updatedAt', cronStart] },
+        let groups = await Procedure.aggregate([
+          {
+            // Filter by updatedAt
+            $project: {
+              period: 1,
+              type: 1,
+              cond: { $lt: ['$updatedAt', cronStart] },
+            },
           },
-        },
-        {
-          // Group by Period & Type
-          $group: {
-            _id: { period: '$period', type: '$type' },
-            count: { $sum: 1 },
+          {
+            // Group by Period & Type
+            $group: {
+              _id: { period: '$period', type: '$type' },
+              count: { $sum: 1 },
+            },
           },
-        },
-        {
-          // Group by Period
-          $group: {
-            _id: '$_id.period',
-            types: { $push: { type: '$_id.type', countBefore: '$count' } },
+          {
+            // Group by Period
+            $group: {
+              _id: '$_id.period',
+              types: { $push: { type: '$_id.type', countBefore: '$count' } },
+            },
           },
-        },
-        {
-          // Rename _id Field to period
-          $project: { _id: 0, period: '$_id', types: 1 },
-        }]);
+          {
+            // Rename _id Field to period
+            $project: { _id: 0, period: '$_id', types: 1 },
+          },
+        ]);
 
         // Loop through Groups and Types - assign changed IDs
         groups = groups.map((group) => {
           const types = group.types.map((type) => {
             const changedIds = procedures
-              .filter(p => (p.period === group.period && p.type === type.type))
+              .filter(p => p.period === group.period && p.type === type.type)
               .map(v => v.procedureId);
             return { ...type, changedIds };
           });
