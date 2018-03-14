@@ -16,7 +16,7 @@ services:
       - 80
     restart: always
     environment:
-      VIRTUAL_HOST: bundestagio.docker
+      VIRTUAL_HOST: bundestag.io
       DB_URL: mongodb://mongodb/bundestagio
       DEMOCRACY_SERVER_WEBHOOK_URL: http://democracy/webhooks/bundestagio/update
       PORT: 80
@@ -28,25 +28,25 @@ services:
     depends_on:
       - mongodb
 
-  democracy:
-    image: node:latest
-    build: ./app-server
-    container_name: democracy
-    expose:
-      - 80
-    restart: always
-    environment:
-      VIRTUAL_HOST: democracy.docker
-      DB_URL: mongodb://mongodb/democracy
-      BUNDESTAGIO_SERVER_URL: http://bundestagio/graphql
-      PORT: 80
-    networks:
-      default:
-      bundestagio:
-        aliases:
-          - "democracy"
-    depends_on:
-      - mongodb
+  # democracy:
+  #   image: node:latest
+  #   build: ./app-server
+  #   container_name: democracy
+  #   expose:
+  #     - 80
+  #   restart: always
+  #   environment:
+  #     VIRTUAL_HOST: democracy.docker
+  #     DB_URL: mongodb://mongodb/democracy
+  #     BUNDESTAGIO_SERVER_URL: http://bundestagio/graphql
+  #     PORT: 80
+  #   networks:
+  #     default:
+  #     bundestagio:
+  #       aliases:
+  #         - "democracy"
+  #   depends_on:
+  #     - mongodb
 
   mongodb:
     image: mongo:3.6
