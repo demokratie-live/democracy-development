@@ -9,7 +9,6 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
 
   bundestagio:
-    image: node:latest
     build: ./bundestagIo
     container_name: bundestagio
     expose:
@@ -29,7 +28,6 @@ services:
       - mongodb
 
   democracy:
-    image: node:latest
     build: ./app-server
     container_name: democracy
     expose:
@@ -41,10 +39,10 @@ services:
       BUNDESTAGIO_SERVER_URL: http://bundestagio/graphql
       PORT: 80
     networks:
-      default:
       bundestagio:
         aliases:
           - "democracy"
+      default:
     depends_on:
       - mongodb
 
