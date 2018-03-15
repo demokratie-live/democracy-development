@@ -34,15 +34,15 @@ services:
       - 80
     restart: always
     environment:
-      VIRTUAL_HOST: democracy.docker
+      VIRTUAL_HOST: democracy.bundestag.io
       DB_URL: mongodb://mongodb/democracy
       BUNDESTAGIO_SERVER_URL: http://bundestagio/graphql
       PORT: 80
     networks:
+      default:
       bundestagio:
         aliases:
           - "democracy"
-      default:
     depends_on:
       - mongodb
 
