@@ -1,13 +1,12 @@
 FROM node:latest
 
+
+RUN mkdir /app
+
 WORKDIR /app
 
-COPY package*.json ./
-
-RUN git --version
-RUN yarn install
-#RUN npm install nodemon@latest -g
-
 COPY . .
+
+RUN yarn install
 
 ENTRYPOINT [ "yarn", "start" ]
