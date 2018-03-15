@@ -1,9 +1,9 @@
-[submodule "app-server"]
-	path = app-server
+[submodule "server"]
+	path = server
 	url = https://github.com/demokratie-live/democracy-server
-[submodule "bundestagIo"]
-	path = bundestagIo
+[submodule "bundestag.io"]
+	path = bundestag.io
 	url = https://github.com/demokratie-live/bundestag.io
-[submodule "mobile-client"]
-	path = mobile-client
+[submodule "client"]
+	path = client
 	url = https://github.com/demokratie-live/democracy-client
