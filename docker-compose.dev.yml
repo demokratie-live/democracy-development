@@ -9,7 +9,7 @@ services:
       - dev
     volumes:
        - ./bundestag.io:/app
-       - ./bundestag.io/node_modules:/app/node_modules
+       - /app/node_modules
 
   democracy:
     environment:
@@ -21,7 +21,7 @@ services:
       - 3000:80
     volumes:
        - ./server/:/app/
-       - ./server/node_modules:/app/node_modules
+       - /app/node_modules
 
   mongodb:
     volumes:
