@@ -54,68 +54,6 @@ Daher haben wir eine Roadmap entwickelt, was wir wann erreichen möchten: [Roadm
  Zentrale Architektur Fragen:
 
 ![v1_architektur](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/Server-Client%20Architektur.png)
- 
-## Anforderungen an Wahlverfahren
-
-  Die  Anforderungen an Wahlverfahren sind grob anhand der Wahlgrundsätze in Deutschland
-  strukturiert.
-
-
-### Anforderungen, die die geheime, freie Wahl betreffen:
-
-   - *Wahlgeheimnis*: Während und nach der Wahl darf keine Information bekannt werden, die
-   darauf schließen lässt, was ein Wähler gewählt hat.
-
-   - *Quittungsfreiheit/Belegfreiheit*: Selbst, wenn der Wähler es wollte, könnte er einem Dritten nicht beweisen , was er gewählt hat.
-
-   - *Nicht-Erpressbarkeit/Unmöglichkeit von Stimmkauf*: Der Wähler kann, selbst wenn
-   er es wollte, nicht in einer Art und Weise seine Stimme abgeben, die dem Angreifer beweisen
-   könnte, dass der Wähler mit hoher Wahrscheinlichkeit nicht das gewählt hat, was er eigentlich
-   vorhatte .
-
-   - *Keine erzwungene Enthaltung*: Eine wahlberechtigte Person kann nicht gezwungen oder
-   erpresst werden, nicht zu wählen. Diese Anforderung gehört streng genommen zur Nicht-
-   Erpressbarkeit, wird aber oft als Sonderfall behandelt, da diese Anforderung z.B. bei Präsenzwahlen prinzipiell unmöglich zu erreichen ist.
-
-   - *Keine vorläufigen Zwischenergebnisse*: Vorläufige Zwischenergebnisse lassen die Aus-
-   wahl eines Wählers, der in einem bestimmten Zeitraum gewählt hat, mit höherer Wahrscheinlichkeit 7 bestimmen, als wenn nur das Gesamtergebnis vorliegt. Diese Anforderung
-   gehört aus einem anderen Grund außerdem auch zur Gleichheit der Wahl.
-
-### Anforderungen, die die Korrektheit und die Nachvollziehbarkeit bzw. Öffentlichkeit der Wahl betreffen:
-
-   - *Korrektheit*: Das Wahlergebnis wird aus den abgegebenen Stimmen korrekt berechnet.
-
-   - *Integrität*: Es werden genau die Stimmen gezählt, die von wahlberechtigten Wählern abgegeben wurden. Es werden keine Stimmen unbefugt hinzugefügt, gelöscht oder verändert.
-
-   - *Verifizierbarkeit*: Jeder kann nachprüfen, ob die eigene Stimme in der Auszählung berücksichtigt wurde (individuelle Verifizierbarkeit) und ob das Wahlergebnis korrekt berechnet
-   wurde (universelle Verifizierbarkeit)
-
-### Anforderungen, die die Gleichheit bzw. Fairness der Wahl betreffen:
-
-   - *Gleiches Stimmgewicht*: Jeder Wähler kann nur eine Stimme abgeben und jede Stimme
-   wird nur einmal gezählt. 
-
-   - *Keine vorläufigen Zwischenergebnisse*: Jeder soll unter gleichen Voraussetzungen, also auch mit der gleichen Information zur Stimmabgabe gehen. Diese Anforderung gehört
-   außerdem auch zum Wahlgeheimnis.
-
-### Sonstige wünschenswerte oder möglicherweise notwendige Anforderungen:
-
-   - *Robustheit*: Niemand soll einen Abbruch der Wahl oder eine Wiederholungswahl provozieren können. Dazu muss eine Manipulation beweisbar sein, damit zwischen einer echten und
-   einer behaupteten Manipulation unterschieden werden kann.
-
-   - *Benutzerfreundlichkeit*: intuitiv, leicht benutzbar, schnell, . . .
-
-   - *Möglichkeit einer späteren Nachzählung / Archivierung der Stimmen*
-
-   - *Flexibilität*: z.B. Möglichkeit von Kumulieren, Panaschieren, Write-In-Kandidaten, . . .
-
-   - *Korrigierbarkeit*: Möglichkeit, im Nachhinein als unberechtigt/falsch abgegeben identifi-
-   zierte Stimme zu löschen oder zu ändern)
-
-   - Wahlspezifische Zusatzanforderungen: z.B. vorgegebene Reihenfolge der Kandidaten
-   auf Stimmzettel, vorgegebenes Layout, ungültig wählen möglich, . . .
-   
-   - [Datenschutz Grundverordnung](https://dsgvo-gesetz.de/) & [Wiki](https://de.wikipedia.org/wiki/Datenschutz-Grundverordnung)
    
 ## Entwicklung & Werkzeuge
 
