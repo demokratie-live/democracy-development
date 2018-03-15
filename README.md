@@ -32,7 +32,7 @@ Es sollte der Ansatz Security-by-Design verfolgt werden, um den Nutzer glaubhaft
 - Beweisbares Ergebniss
 - (partielle) Dezentralität
 
-## Implemntierung - Ziele
+## Implementierung - Ziele
 
 Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert werden.
 
@@ -44,14 +44,7 @@ DEMOCRACY Deutschland wurde über Startnext für einen Prototyp finanziert. Selb
 
 Daher haben wir eine Roadmap entwickelt, was wir wann erreichen möchten: [Roadmap](https://github.com/demokratie-live/democracy-app/wiki/Roadmap)
  
-## Definitionen
-
- - Wer darf eine Frage stellen?
- - Wer darf darauf Antworten(Identität)?
- - Welche Bedingungen muss eine Frage erfüllen? (z.b. muss eine konkrete/definierte Auswirkung haben, wer hat die Verantwortung die Auswirkungen zu dokumentieren/kommunizieren/durchzusetzen)
- - Wie lange darf zu einer Frage beantwortet werden? (z.b. immer, bis Ergebnis vorliegt, 3 Wochen)
- 
- Zentrale Architektur Fragen:
+ ## Zentrale Architektur Fragen:
 
 ![v1_architektur](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/Server-Client%20Architektur.png)
    
@@ -69,25 +62,14 @@ Daher haben wir eine Roadmap entwickelt, was wir wann erreichen möchten: [Roadm
 
 Wir entwickeln Open Source unter der Apache 2.0 Lizenz
 
-Vorteile:
-- Jeder kann mitmachen, Collaboration ist einfach.
-- Software kann auf Schwachstellen analysiert werden.
-- Es entsteht ein öffentliche Werkzeug, dass jeder verwenden kann.
-
-Nachteile:
-- Software kann auf Schwachstellen analysiert werden.
-- "Because there is no requirement to create a commercial product that will sell and generate money, open source software can tend to evolve more in line with developers’ wishes than the needs of the end user." [Source](http://entrepreneurhandbook.co.uk/open-source-software/)
-
 ## Welche Architektur?
 
-Client:
-- X [ReactNative](http://www.reactnative.com/) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
-- X [GraphQL](http://graphql.org/) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
+Für den Client [hier](https://github.com/demokratie-live/democracy-client/network/dependencies) und [hier](https://github.com/demokratie-live/democracy-client/blob/master/README.md) nachzulesen.
 
-Server:
-- [AWS Lambda](https://aws.amazon.com/de/lambda/details/) mit [Node](https://nodejs.org) ![ulf](https://avatars3.githubusercontent.com/u/1238238?v=4&s=16)
-- [Azure Serverless](https://azure.microsoft.com/en-us/overview/serverless-computing/) mit [Node](https://nodejs.org) oder [PHP](https://php.net)
+Für den Server [hier](https://github.com/demokratie-live/democracy-server/network/dependencies) und [hier](https://github.com/demokratie-live/democracy-server/blob/master/README.md) nachzulesen.
 
-## Weiter Vorschläge
+Für den bundestag.io (Bundestags-API) [hier](https://github.com/demokratie-live/bundestag.io/network/dependencies) und [hier](https://github.com/demokratie-live/bundestag.io/blob/master/README.md) nachzulesen
 
-- Nutzererfahrung mit [Papierprototyp](https://de.wikipedia.org/wiki/Paper_Prototyping) ermitteln und testen
+## Running the Dev Environment
+
+TODO
