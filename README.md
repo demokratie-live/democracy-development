@@ -91,3 +91,17 @@ Server:
 ## Weiter Vorschläge
 
 - Nutzererfahrung mit [Papierprototyp](https://de.wikipedia.org/wiki/Paper_Prototyping) ermitteln und testen
+
+## Contributing
+
+Anyone and everyone is welcome to [contribute](CONTRIBUTING.md). Start by checking out the list of
+[open issues](https://github.com/demokratie-live/democracy-development/issues).
+
+## License
+
+Copyright © 2017-present DEMOCRACY Deutschland e.V.. This source code is licensed under the Apache 2.0 license found in the
+[LICENSE](https://github.com/demokratie-live/democracy-development/blob/master/LICENSE) file.
+
+---
+
+Made with ♥ by Team DEMOCRACY ([democracy-deutschland.de](https://www.democracy-deutschland.de)), [startnext contributors](https://www.startnext.com/democracy/unterstuetzer/) and [contributors](https://github.com/demokratie-live/democracy-development/graphs/contributors)
