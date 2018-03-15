@@ -2,7 +2,7 @@
 
 # Bundestag.io &nbsp; <a href="https://github.com/kriasoft/nodejs-api-starter/stargazers" target="_blank"><img src="https://img.shields.io/github/stars/bundestag/bundestag.io.svg?style=social&label=Star&maxAge=3600" height="20"/></a>  <a href="https://twitter.com/democracy_de" target="_blank"><img src="https://img.shields.io/twitter/follow/democracy_de.svg?style=social&label=Follow&maxAge=3600" height="20"/></a>  <a href="https://www.facebook.com/democracygermany/" target="_blank"><img src="https://github.com/demokratie-live/democracy-assets/blob/master/docu/facebook.png" height="20"/></a>  <a href="https://discord.gg/Pdu3ZEV" target="_blank"><img src="https://github.com/demokratie-live/democracy-assets/blob/master/docu/discord.png" height="20"/></a>
 
-[![Build Status](https://travis-ci.org/bundestag/bundestag.io.svg?branch=master)](https://travis-ci.org/bundestag/bundestag.io) &nbsp;  [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/XXXX/badge)](https://bestpractices.coreinfrastructure.org/projects/XXXX)
+[![Build Status](https://travis-ci.org/bundestag/bundestag.io.svg?branch=master)](https://travis-ci.org/bundestag/bundestag.io)
 
 The Serversoftware for <a href="https://bundestag.io">Bundestag.io</a>. This is an API Defintion and Server for Data from <a href="https://www.bundestag.de">bundestag.de</a>
 
