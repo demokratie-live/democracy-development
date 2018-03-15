@@ -1,0 +1,69 @@
+version: '3'
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  bundestagio:
+    build: ./bundestagIo
+    container_name: bundestagio
+    expose:
+      - 80
+    restart: always
+    environment:
+      VIRTUAL_HOST: bundestag.io
+      DB_URL: mongodb://mongodb/bundestagio
+      DEMOCRACY_SERVER_WEBHOOK_URL: http://democracy/webhooks/bundestagio/update
+      PORT: 80
+    networks:
+      bundestagio:
+        aliases: 
+          - "bundestagio"
+      default:
+    depends_on:
+      - mongodb
+
+  democracy:
+    build: ./app-server
+    container_name: democracy
+    expose:
+      - 80
+    restart: always
+    environment:
+      VIRTUAL_HOST: democracy.bundestag.io
+      DB_URL: mongodb://mongodb/democracy
+      BUNDESTAGIO_SERVER_URL: http://bundestagio/graphql
+      PORT: 80
+    networks:
+      default:
+      bundestagio:
+        aliases:
+          - "democracy"
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:3.6
+    container_name: mongodb
+    volumes:
+      - db_data:/data/db
+    restart: always
+    networks:
+      bundestagio:
+        aliases:
+          - "mongodb"
+    command: mongod --smallfiles
+volumes:
+  db_data: #/data/mongodb/db
+
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
+  bundestagio: 
+    driver: bridge

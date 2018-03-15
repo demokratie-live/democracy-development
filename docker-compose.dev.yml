@@ -1,0 +1,9 @@
+version: '3'
+services:
+  bundestagio:
+    environment:
+      VIRTUAL_HOST: bundestagio.docker
+
+  democracy:
+    environment:
+      VIRTUAL_HOST: democracy.docker

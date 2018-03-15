@@ -1,3 +1,9 @@
-[submodule "doc/uvote/src"]
-	path = doc/uvote/src
-	url = git@github.com:webcraftmedia/uvote.git
+[submodule "app-server"]
+	path = app-server
+	url = https://github.com/demokratie-live/democracy-server
+[submodule "bundestagIo"]
+	path = bundestagIo
+	url = https://github.com/demokratie-live/bundestag.io
+[submodule "mobile-client"]
+	path = mobile-client
+	url = https://github.com/demokratie-live/democracy-client
