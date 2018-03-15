@@ -9,7 +9,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
 
   bundestagio:
-    build: ./bundestagIo
+    build: ./bundestag.io
     container_name: bundestagio
     expose:
       - 80
@@ -28,7 +28,7 @@ services:
       - mongodb
 
   democracy:
-    build: ./app-server
+    build: ./server
     container_name: democracy
     expose:
       - 80
