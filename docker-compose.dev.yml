@@ -2,8 +2,27 @@ version: '3'
 services:
   bundestagio:
     environment:
-      VIRTUAL_HOST: bundestagio.docker
+      VIRTUAL_HOST: bundestagio.local
+      PERIODS: '19'
+    entrypoint:
+      - yarn
+      - dev
+    volumes:
+       - ./bundestag.io:/app
+       - /app/node_modules
 
   democracy:
     environment:
-      VIRTUAL_HOST: democracy.docker
+      VIRTUAL_HOST: democracy.local
+    entrypoint:
+      - yarn
+      - dev
+    ports:
+      - 3000:80
+    volumes:
+       - ./server/:/app/
+       - /app/node_modules
+
+  mongodb:
+    volumes:
+      - /usr/local/mongodb:/data/db

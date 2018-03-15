@@ -1,0 +1,14 @@
+{
+  "name": "democracy-development",
+  "version": "0.1.0",
+  "repository": "https://github.com/demokratie-live/democracy-development.git",
+  "author": "Manuel Ruck <github@manuelruck.de>",
+  "license": "MIT",
+  "scripts": {
+    "yarn-install":
+      "cd bundestag.io && yarn && cd ../client && yarn && cd ../server && yarn",
+    "docker-up-dev":
+      "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up",
+    "dev": "yarn yarn-install && yarn docker-up-dev"
+  }
+}
