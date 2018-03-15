@@ -5,10 +5,8 @@ RUN mkdir /app
 
 WORKDIR /app
 
-ADD package*.json .
+COPY . .
 
 RUN yarn install
-
-COPY . .
 
 ENTRYPOINT [ "yarn", "start" ]
