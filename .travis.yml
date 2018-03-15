@@ -1,23 +1,7 @@
-env:
-  global:
-    - secure: "Jvmy84tq5ySCV8wcdvDFB8xWwms6SaL0ubpffk293pjrKseWBEoRvCAo4PgKwkfubUMx5mPtn1ntvjnA29cvnUo0lqNpZRMzM/Wx9qkseEz6FWLPin8asFG20XScLAd1F1X1Bah080rtxWP9X0isPXzmgEEOpbBgbZppwvXGe/fEVR8R0QtX97mwwHxKkv/ozdCQYYOVgq+mhcvXtGGhiSy2Ydls0u4ST9Jrs34XhgBjrRFczRjHw1Ou7XS7tg4sq0DhszDLhTX7+k0uTfEFwaLLzzidI8zLUKutPNF72JJcl8frs4mjySeH/QS+C2mX7uTdb1TGIw7gr7w+7WpUNis1PUGWsaBIgSXvD9+BAObgDbNk/vHNU0v4tgsKzzj4D3YirPBbDEd06WtSvFetD02kctAFXyJQi0J0tK9j1KROVwWfqQs1X1SES2lh6ENvcyyVu0OirELnB9GQ4MuGhd5M2oe2B66TdtfWiCj3W5IRmjVYolz+gr4DrYhLZknpDzYHRNtOOJP2/qrkoO25UzOU3qn7qOK06J3YvdsBPCBes6J0Rj7ln7jF7CuAC7WBdvlTsEqkdWNPGvEtENSHT4y00cL4+k48eY5LEfAUjdskSdSGO4fRh95CfTy3WXHvhRpTBCclXgfe0RrnbrTQZYC2HufrsHAnyg7+eC+anyc="
-    - secure: "gIBS21T0WhLKgNN255rax3IhXSabvDbbsWsbxg2bPZEt5ZgKO5QB0u52RQvymxjONuvh153WggenYWvOLcoej8tPnorR6U6wkQQuT6r0V+cLgkAb7i1dtTukw5/LidY7vRKK1LewtWJ/S4wS7v57zTevaX49T5RsALcsAxXLsgb2vot12ScjhHe7TF6/V+ax1nOV6itpQLX3GY/OaK1n689319X7TSZHRFnj0m/jTlsCLLB3qHdlzBVu0okLodHpecKMd1wf1DRetOwJyAOL3wVJNR1KSsbPehEOO/tigyyMyTy5IHs8LoO8O652Gs0mHOAYEFYRdotNug4m8rb6BAa7Ed0GZ2apdzBbbPnDsgV0X/GUfxjAJHLtpo29NtEf4aVzO3/IQhm0v2MKivMv9xTOoTZknm/8Cawt/Mzb3pTLtaqhy9oIVR4MfIyL1eY7WwyjGvreuPQMga1yw83eZJyvIMDlpa1karj4NeEB3O1togDgzDbSZQa6+JXEP7OIEVVa8Z5DiqnNpw6UoHHoUljRorncuBHvE1iabLpbKSzlKv/mVJV8pptoD814J0qOBbazFv4fYcNMR2sFXZOnlgWwgR/WU+8yBkXjXw6KV2P06CNwtyBCqnEi+VE7AUwwKwkhJf8QVm93HE89Yfe/YHsVu/rrjw0SQ/GTgqMjMaw="
-    - COMMIT=${TRAVIS_COMMIT::8}
 matrix:
     include:
-        # docker-compose
         -   os: linux
-            # language: node_js
-            # node_js:
-            #    - 8
-            # install:
             script:
-                - export REPO="democracy/democracy-development";
-                - docker-compose build -f Dockerfile -t $REPO:$COMMIT .;
-                - docker tag $REPO:$COMMIT $REPO:master;
-                - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then
-                    docker login -u "$DOCKER_USER" -p "$DOCKER_PASS";
-                    docker push $REPO;
-                  fi
+                - docker-compose build
 after_script:
   - echo "BUILD FINISHED"
