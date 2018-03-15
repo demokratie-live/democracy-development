@@ -5,7 +5,7 @@ env:
     - COMMIT=${TRAVIS_COMMIT::8}
 matrix:
     include:
-        # test
+        # docker-compose
         -   os: linux
             # language: node_js
             # node_js:
