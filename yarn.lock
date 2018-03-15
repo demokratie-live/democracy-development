@@ -2,6 +2,24 @@
 # yarn lockfile v1
 
 
+"@democracy-deutschland/dip21-scraper@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.0.tgz#1be62874e77d323cac461dd368f3486781b3a976"
+  dependencies:
+    chalk "^2.3.1"
+    colors "^1.1.2"
+    commander "^2.13.0"
+    fs-extra "^5.0.0"
+    inquirer "^5.0.1"
+    jsonfile "^4.0.0"
+    lodash "^4.17.5"
+    log "^1.4.0"
+    node-gyp "^3.6.2"
+    pretty-ms "^3.1.0"
+    request "^2.83.0"
+    request-cookies "^1.1.0"
+    x2js "^3.1.1"
+
 "@types/node@^9.4.6":
   version "9.4.7"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.7.tgz#57d81cd98719df2c9de118f2d5f3b1120dcd7275"
@@ -1313,24 +1331,6 @@ detect-libc@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
 
-"dip21-scraper@https://github.com/demokratie-live/dip21-scraper.git#master":
-  version "0.0.2"
-  resolved "https://github.com/demokratie-live/dip21-scraper.git#b074af9be129b4fe058af28425991ec14a9df3b1"
-  dependencies:
-    chalk "^2.3.1"
-    colors "^1.1.2"
-    commander "^2.13.0"
-    fs-extra "^5.0.0"
-    inquirer "^5.0.1"
-    jsonfile "^4.0.0"
-    lodash "^4.17.5"
-    log "^1.4.0"
-    node-gyp "^3.6.2"
-    pretty-ms "^3.1.0"
-    request "^2.83.0"
-    request-cookies "^1.1.0"
-    x2js "^3.1.1"
-
 doctrine@1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-1.5.0.tgz#379dce730f6166f76cefa4e6707a159b02c5a6fa"
@@ -2638,7 +2638,7 @@ merge-descriptors@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/merge-descriptors/-/merge-descriptors-1.0.1.tgz#b00aaa556dd8b44568150ec9d1b953f3f90cbb61"
 
-merge-graphql-schemas@^1.4.0:
+merge-graphql-schemas@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/merge-graphql-schemas/-/merge-graphql-schemas-1.5.0.tgz#d86278cb1102fe14bb308288136325971aecd86e"
   dependencies:
