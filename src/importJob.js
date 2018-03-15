@@ -210,12 +210,16 @@ const cronTask = async () => {
     console.log(`### Start Cronjob ${moment(cronStart).format()}`);
     // get old Scrape Data for cache
     pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
+    let selectPeriods = ['Alle'];
+    if (process.env.PERIODS) {
+      selectPeriods = process.env.PERIODS.split(',');
+    }
     // Do the scrape
     await scraper
       .scrape({
         // settings
         browserStackSize: 5,
-        selectPeriods: ['Alle'],
+        selectPeriods,
         selectOperationTypes: ['100'],
         logUpdateSearchProgress,
         logStartDataProgress,

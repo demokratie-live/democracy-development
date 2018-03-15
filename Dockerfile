@@ -1,12 +1,15 @@
 FROM node:latest
 
+
+RUN mkdir /app
+
+ADD package*.json /app
 WORKDIR /app
 
-COPY package*.json ./
+#COPY package*.json ./
 
 RUN git --version
 RUN yarn install
-#RUN npm install nodemon@latest -g
 
 COPY . .
 
