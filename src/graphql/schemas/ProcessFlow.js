@@ -1,3 +1,4 @@
+export default `
 type ProcessFlow {
   assignment: String
   initiator: String
@@ -6,3 +7,4 @@ type ProcessFlow {
   decision: [Decision]
   date: Date
 }
+`;

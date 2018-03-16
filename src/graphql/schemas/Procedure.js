@@ -1,3 +1,4 @@
+export default `
 type Procedure {
   _id: ID!
   title: String!
@@ -25,3 +26,4 @@ type Query {
   allProcedures(offset: Int): [Procedure]
   procedureUpdates(offset: Int, period: [Int!], type: [String!]): [Procedure]
 }
+`;
