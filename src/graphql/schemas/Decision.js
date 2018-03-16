@@ -1,3 +1,4 @@
+export default `
 type Decision {
   page: String
   tenor: String
@@ -7,3 +8,4 @@ type Decision {
   foundation: String
   majority: String
 }
+`;

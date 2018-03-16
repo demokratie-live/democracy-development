@@ -11,7 +11,9 @@
       "nodemon -L -e js,graphql src/index.js --exec \"node --require dotenv/config --require babel-register\"",
     "imp": "babel-node src/import.js",
     "diffs": "babel-node src/diffs.js",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "build": "babel src -d dist -s",
+    "serve": "node dist/index.js"
   },
   "dependencies": {
     "@democracy-deutschland/dip21-scraper": "^0.1.0",
