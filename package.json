@@ -12,7 +12,7 @@
     "imp": "babel-node src/import.js",
     "diffs": "babel-node src/diffs.js",
     "lint": "eslint ./src",
-    "build": "babel src -d dist",
+    "build": "babel src -d dist -s",
     "serve": "node dist/index.js"
   },
   "dependencies": {
