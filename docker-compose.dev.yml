@@ -9,7 +9,7 @@ services:
       - dev
     volumes:
        - ./bundestag.io:/app
-       - /app/node_modules
+    restart: 'no'
 
   democracy:
     environment:
@@ -21,8 +21,10 @@ services:
       - 3000:80
     volumes:
        - ./server/:/app/
-       - /app/node_modules
+    restart: 'no'
 
   mongodb:
+    ports:
+      - 27017:27017
     volumes:
       - /usr/local/mongodb:/data/db
