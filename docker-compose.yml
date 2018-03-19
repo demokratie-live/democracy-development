@@ -28,6 +28,7 @@ services:
       - mongodb
 
   democracy:
+    env_file: ./server/.env
     build: ./server
     container_name: democracy
     expose:
