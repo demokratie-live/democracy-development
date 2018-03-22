@@ -60,20 +60,17 @@ services:
     build: ./bundestag.io
     container_name: bundestagio
     expose:
-      - 443
+      - 80
     restart: always
     environment:
-      VIRTUAL_HOST: bundestagio.wofair.de
-      LETSENCRYPT_HOST: bundestagio.wofair.de
-      LETSENCRYPT_EMAIL: contact@democracy-deutschland.de
+      VIRTUAL_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
+      LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/bundestagio
-      DEMOCRACY_SERVER_WEBHOOK_URL: https://democracy/webhooks/bundestagio/update
-      PORT: 443
+      DEMOCRACY_SERVER_WEBHOOK_URL: https://${DOMAIN_DEMOCRACY:-democracy.bundestag.io}/webhooks/bundestagio/update
+      PORT: 80
     networks:
-      bundestagio:
-        aliases: 
-          - "bundestagio"
-      default:
+      - default
     depends_on:
       - mongodb
 
@@ -82,20 +79,17 @@ services:
     build: ./server
     container_name: democracy
     expose:
-      - 443
+      - 80
     restart: always
     environment:
-      VIRTUAL_HOST: democracy.wofair.de
-      LETSENCRYPT_HOST: democracy.wofair.de
-      LETSENCRYPT_EMAIL: contact@democracy-deutschland.de
+      VIRTUAL_HOST: ${DOMAIN_DEMOCRACY:-democracy.bundestag.io}
+      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY:-democracy.bundestag.io}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/democracy
-      BUNDESTAGIO_SERVER_URL: https://bundestagio/graphql
-      PORT: 443
+      BUNDESTAGIO_SERVER_URL: https://${DOMAIN_BUNDESTAGIO:-bundestag.io}/graphql
+      PORT: 80
     networks:
-      default:
-      bundestagio:
-        aliases:
-          - "democracy"
+      - default
     depends_on:
       - mongodb
 
@@ -106,9 +100,7 @@ services:
       - db_data:/data/db
     restart: always
     networks:
-      bundestagio:
-        aliases:
-          - "mongodb"
+      - default
     command: mongod --smallfiles
 volumes:
   db_data: #/data/mongodb/db
@@ -117,6 +109,4 @@ volumes:
 networks:
   default:
     external:
-      name: nginx-proxy
-  bundestagio: 
-    driver: bridge
+      name: ${NETWORK:-nginx-proxy}
