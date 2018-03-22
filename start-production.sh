@@ -12,4 +12,4 @@ git status
 
 echo "### Start docker Process ###"
 echo "# docker-compose up -d --build $@"
-docker-compose up -d --build $@
+docker-compose up -f docker-compose.yml -f docker-compose.prod.yml -d --build $@

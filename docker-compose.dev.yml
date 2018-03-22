@@ -7,6 +7,8 @@ services:
     entrypoint:
       - yarn
       - dev
+    ports:
+      - 3100:80
     volumes:
        - ./bundestag.io:/app
     restart: 'no'

@@ -38,24 +38,6 @@ services:
         max-size: ${NGINX_GEN_LOG_MAX_SIZE:-2m}
         max-file: ${NGINX_GEN_LOG_MAX_FILE:-10}
 
-  nginx-letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: ${LETS_ENCRYPT:-nginx-letsencrypt}
-    restart: always
-    volumes:
-      - ${NGINX_FILES_PATH:-./data}/conf.d:/etc/nginx/conf.d
-      - ${NGINX_FILES_PATH:-./data}/vhost.d:/etc/nginx/vhost.d
-      - ${NGINX_FILES_PATH:-./data}/html:/usr/share/nginx/html
-      - ${NGINX_FILES_PATH:-./data}/certs:/etc/nginx/certs:rw
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    environment:
-      NGINX_DOCKER_GEN_CONTAINER: ${DOCKER_GEN:-nginx-gen}
-      NGINX_PROXY_CONTAINER: ${NGINX_WEB:-nginx-web}
-    logging:
-      options:
-        max-size: ${NGINX_LETSENCRYPT_LOG_MAX_SIZE:-2m}
-        max-file: ${NGINX_LETSENCRYPT_LOG_MAX_FILE:-10}
-
   bundestagio:
     build: ./bundestag.io
     container_name: bundestagio
@@ -67,10 +49,13 @@ services:
       LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/bundestagio
-      DEMOCRACY_SERVER_WEBHOOK_URL: https://${DOMAIN_DEMOCRACY:-democracy.bundestag.io}/webhooks/bundestagio/update
+      DEMOCRACY_SERVER_WEBHOOK_URL: http://democracy/webhooks/bundestagio/update
       PORT: 80
     networks:
-      - default
+      default:
+      intern:
+        aliases:
+          - "bundestagio"
     depends_on:
       - mongodb
 
@@ -86,10 +71,13 @@ services:
       LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY:-democracy.bundestag.io}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/democracy
-      BUNDESTAGIO_SERVER_URL: https://${DOMAIN_BUNDESTAGIO:-bundestag.io}/graphql
+      BUNDESTAGIO_SERVER_URL: http://bundestagio/graphql
       PORT: 80
     networks:
-      - default
+      default:
+      intern:
+        aliases:
+          - "democracy"
     depends_on:
       - mongodb
 
@@ -100,7 +88,10 @@ services:
       - db_data:/data/db
     restart: always
     networks:
-      - default
+      default:
+      intern:
+        aliases:
+          - "mongodb"
     command: mongod --smallfiles
 volumes:
   db_data: #/data/mongodb/db
@@ -110,3 +101,5 @@ networks:
   default:
     external:
       name: ${NETWORK:-nginx-proxy}
+  intern: 
+    driver: bridge
