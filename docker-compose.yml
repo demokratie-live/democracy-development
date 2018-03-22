@@ -63,8 +63,8 @@ services:
       - 443
     restart: always
     environment:
-      VIRTUAL_HOST: bundestag.io
-      LETSENCRYPT_HOST: bundestag.io
+      VIRTUAL_HOST: bundestagio.wofair.de
+      LETSENCRYPT_HOST: bundestagio.wofair.de
       LETSENCRYPT_EMAIL: contact@democracy-deutschland.de
       DB_URL: mongodb://mongodb/bundestagio
       DEMOCRACY_SERVER_WEBHOOK_URL: https://democracy/webhooks/bundestagio/update
@@ -85,8 +85,8 @@ services:
       - 443
     restart: always
     environment:
-      VIRTUAL_HOST: democracy.bundestag.io
-      LETSENCRYPT_HOST: democracy.bundestag.io
+      VIRTUAL_HOST: democracy.wofair.de
+      LETSENCRYPT_HOST: democracy.wofair.de
       LETSENCRYPT_EMAIL: contact@democracy-deutschland.de
       DB_URL: mongodb://mongodb/democracy
       BUNDESTAGIO_SERVER_URL: https://bundestagio/graphql
