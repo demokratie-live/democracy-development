@@ -1,12 +1,42 @@
 version: '3'
 services:
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    container_name: nginx-proxy
+  nginx-web:
+    image: nginx
+    labels:
+        com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+    container_name: ${NGINX_WEB:-nginx-web}
+    restart: always
     ports:
-      - 80:80
+      - "${IP:-0.0.0.0}:80:80"
+      - "${IP:-0.0.0.0}:443:443"
     volumes:
+      - ${NGINX_FILES_PATH:-./data}/conf.d:/etc/nginx/conf.d
+      - ${NGINX_FILES_PATH:-./data}/vhost.d:/etc/nginx/vhost.d
+      - ${NGINX_FILES_PATH:-./data}/html:/usr/share/nginx/html
+      - ${NGINX_FILES_PATH:-./data}/certs:/etc/nginx/certs:ro
+      - ${NGINX_FILES_PATH:-./data}/htpasswd:/etc/nginx/htpasswd:ro
+    logging:
+      options:
+        max-size: ${NGINX_WEB_LOG_MAX_SIZE:-4m}
+        max-file: ${NGINX_WEB_LOG_MAX_FILE:-10}
+
+  nginx-gen:
+    image: jwilder/docker-gen
+    command: -notify-sighup ${NGINX_WEB:-nginx-web} -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
+    container_name: ${DOCKER_GEN:-nginx-gen}
+    restart: always
+    volumes:
+      - ${NGINX_FILES_PATH:-./data}/conf.d:/etc/nginx/conf.d
+      - ${NGINX_FILES_PATH:-./data}/vhost.d:/etc/nginx/vhost.d
+      - ${NGINX_FILES_PATH:-./data}/html:/usr/share/nginx/html
+      - ${NGINX_FILES_PATH:-./data}/certs:/etc/nginx/certs:ro
+      - ${NGINX_FILES_PATH:-./data}/htpasswd:/etc/nginx/htpasswd:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro
+    logging:
+      options:
+        max-size: ${NGINX_GEN_LOG_MAX_SIZE:-2m}
+        max-file: ${NGINX_GEN_LOG_MAX_FILE:-10}
 
   bundestagio:
     build: ./bundestag.io
@@ -15,15 +45,17 @@ services:
       - 80
     restart: always
     environment:
-      VIRTUAL_HOST: bundestag.io
+      VIRTUAL_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
+      LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/bundestagio
       DEMOCRACY_SERVER_WEBHOOK_URL: http://democracy/webhooks/bundestagio/update
       PORT: 80
     networks:
-      bundestagio:
-        aliases: 
-          - "bundestagio"
       default:
+      intern:
+        aliases:
+          - "bundestagio"
     depends_on:
       - mongodb
 
@@ -35,13 +67,15 @@ services:
       - 80
     restart: always
     environment:
-      VIRTUAL_HOST: democracy.bundestag.io
+      VIRTUAL_HOST: ${DOMAIN_DEMOCRACY:-democracy.bundestag.io}
+      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY:-democracy.bundestag.io}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/democracy
       BUNDESTAGIO_SERVER_URL: http://bundestagio/graphql
       PORT: 80
     networks:
       default:
-      bundestagio:
+      intern:
         aliases:
           - "democracy"
     depends_on:
@@ -54,7 +88,8 @@ services:
       - db_data:/data/db
     restart: always
     networks:
-      bundestagio:
+      default:
+      intern:
         aliases:
           - "mongodb"
     command: mongod --smallfiles
@@ -65,6 +100,6 @@ volumes:
 networks:
   default:
     external:
-      name: nginx-proxy
-  bundestagio: 
+      name: ${NETWORK:-nginx-proxy}
+  intern: 
     driver: bridge
