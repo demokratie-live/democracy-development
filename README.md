@@ -4,6 +4,8 @@
 
 # Demokratie-App
 
+[![Build Status](https://travis-ci.org/demokratie-live/democracy-development.svg?branch=master)](https://travis-ci.org/demokratie-live/democracy-development)
+
 Webseite: https://www.democracy-deutschland.de/
 
 Crowdfinanzierung: [Startnext](https://www.startnext.com/democracy)
