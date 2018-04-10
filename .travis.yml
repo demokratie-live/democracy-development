@@ -9,6 +9,6 @@ matrix:
             script:
                 - cd client
                 - COMMIT=git rev-parse HEAD
-                - if git branch --contains $COMMIT | grep 'origin/master'; then exit 0 else exit 1 fi 
+                - if git branch --contains $COMMIT | grep 'origin/master'; then exit 0; else exit 1; fi 
 after_script:
   - echo "BUILD FINISHED"
