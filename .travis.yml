@@ -5,5 +5,10 @@ matrix:
                 - openssl aes-256-cbc -K $encrypted_fd73522261db_key -iv $encrypted_fd73522261db_iv -in .env.enc -out ./server/.env -d
             script:
                 - docker-compose build
+        -   os: linux
+            script:
+                - cd client
+                - COMMIT=git rev-parse HEAD
+                - if git branch --contains $COMMIT | grep 'origin/master'; then exit 0 else exit 1 fi 
 after_script:
   - echo "BUILD FINISHED"
