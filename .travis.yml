@@ -9,7 +9,7 @@ matrix:
             script:
                 - cd client
                 - COMMIT=$(git rev-parse HEAD)
-                - BRANCHES=$(git branch --contains ${COMMIT})
+                - BRANCHES=$(git branch -r --contains ${COMMIT})
                 - echo ${BRANCHES}
                 - if ${BRANCHES} | grep 'origin/master'; then exit 0; else exit 1; fi 
 after_script:
