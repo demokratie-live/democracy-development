@@ -11,6 +11,7 @@ matrix:
                 - COMMIT=$(git rev-parse HEAD)
                 - BRANCHES=$(git branch -r --contains ${COMMIT})
                 - echo ${BRANCHES}
-                - if echo "$BRANCHES" | grep 'origin/master'; then exit 0; else exit 1; fi 
+                - ORIGINMASTER='origin/master'
+                - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi 
 after_script:
   - echo "BUILD FINISHED"
