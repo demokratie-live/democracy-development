@@ -1,6 +1,6 @@
 export default {
   Query: {
-    procedures: (parent, { IDs, period = [19], type = ['Gesetzgebung'] }, { ProcedureModel }) =>
+    procedures: (parent, { IDs, period = [19], type = ['Gesetzgebung', 'Antrag'] }, { ProcedureModel }) =>
       ProcedureModel.aggregate([
         { $match: { procedureId: { $in: IDs }, period: { $in: period }, type: { $in: type } } },
         {
@@ -21,7 +21,7 @@ export default {
         { $project: { objectHistory: false } },
       ]),
 
-    allProcedures: async (parent, { period = [19], type = ['Gesetzgebung'] }, { ProcedureModel }) =>
+    allProcedures: async (parent, { period = [19], type = ['Gesetzgebung', 'Antrag'] }, { ProcedureModel }) =>
       ProcedureModel.aggregate([
         { $match: { period: { $in: period }, type: { $in: type } } },
         {

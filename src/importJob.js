@@ -220,7 +220,7 @@ const cronTask = async () => {
         // settings
         browserStackSize: 5,
         selectPeriods,
-        selectOperationTypes: ['100'],
+        selectOperationTypes: ['100', '500'],
         logUpdateSearchProgress,
         logStartDataProgress,
         logStopDataProgress: () => {
