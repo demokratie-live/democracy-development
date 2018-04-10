@@ -12,6 +12,6 @@ matrix:
                 - BRANCHES=$(git branch -r --contains ${COMMIT})
                 - echo ${BRANCHES}
                 - ORIGINMASTER='origin/master'
-                - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi 
+                - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 1; else exit 1; fi 
 after_script:
   - echo "BUILD FINISHED"
