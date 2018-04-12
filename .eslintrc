@@ -5,8 +5,8 @@
     "jest": true,
     "browser": true
   },
-  "extends": ["airbnb-base"],
-
+  "extends": ["airbnb"],
+  "plugins": ["react"],
   "rules": {
     "linebreak-style": 0,
     "no-console": 0,

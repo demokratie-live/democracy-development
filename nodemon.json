@@ -1,0 +1,7 @@
+{
+  "verbose": true,
+  "ignore": ["node_modules", "**/.next/**/*", "src/pages/**/*"],
+  "watch": ["src/**/*"],
+  "ext": "js json graphql",
+  "exec": "node --require babel-register"
+}

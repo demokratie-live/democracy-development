@@ -7,6 +7,7 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import { createServer } from 'http';
 import { Engine } from 'apollo-engine';
+import Next from 'next';
 
 import mongo from './config/db';
 import constants from './config/constants';
@@ -18,9 +19,15 @@ import importJob from './importJob';
 // Models
 import ProcedureModel from './models/Procedure';
 
-(async () => {
+const dev = process.env.NODE_ENV !== 'production';
+
+const app = Next({ dev });
+const handle = app.getRequestHandler();
+
+app.prepare().then(async () => {
+  console.log(constants);
   await mongo();
-  const app = express();
+  const server = express();
 
   const schema = makeExecutableSchema({
     typeDefs,
@@ -30,13 +37,13 @@ import ProcedureModel from './models/Procedure';
   if (process.env.ENGINE_API_KEY) {
     const engine = new Engine({ engineConfig: { apiKey: process.env.ENGINE_API_KEY } });
     engine.start();
-    app.use(engine.expressMiddleware());
+    server.use(engine.expressMiddleware());
   }
 
-  app.use(bodyParser.json());
+  server.use(bodyParser.json());
 
   if (process.env.ENVIRONMENT !== 'production') {
-    app.use(
+    server.use(
       constants.GRAPHIQL_PATH,
       graphiqlExpress({
         endpointURL: constants.GRAPHQL_PATH,
@@ -44,7 +51,7 @@ import ProcedureModel from './models/Procedure';
     );
   }
 
-  app.use(constants.GRAPHQL_PATH, (req, res, next) => {
+  server.use(constants.GRAPHQL_PATH, (req, res, next) => {
     graphqlExpress({
       schema,
       context: {
@@ -56,7 +63,9 @@ import ProcedureModel from './models/Procedure';
     })(req, res, next);
   });
 
-  const graphqlServer = createServer(app);
+  server.get('*', (req, res) => handle(req, res));
+
+  const graphqlServer = createServer(server);
 
   graphqlServer.listen(constants.PORT, (err) => {
     if (err) {
@@ -66,4 +75,4 @@ import ProcedureModel from './models/Procedure';
       new CronJob('*/15 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
     }
   });
-})();
+});
