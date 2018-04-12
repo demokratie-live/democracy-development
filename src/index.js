@@ -25,7 +25,6 @@ const app = Next({ dev });
 const handle = app.getRequestHandler();
 
 app.prepare().then(async () => {
-  console.log(constants);
   await mongo();
   const server = express();
 

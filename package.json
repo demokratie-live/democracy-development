@@ -10,7 +10,7 @@
     "dev": "nodemon src/index.js",
     "imp": "babel-node src/import.js",
     "diffs": "babel-node src/diffs.js",
-    "lint": "eslint ./pages",
+    "lint": "eslint ./src ./pages",
     "build": "babel src -d dist -s",
     "serve": "node dist/index.js"
   },
@@ -50,6 +50,7 @@
     "react-dom": "^16.3.1"
   },
   "devDependencies": {
+    "babel-preset-stage-0": "^6.24.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "prettier-eslint": "^8.8.1"
