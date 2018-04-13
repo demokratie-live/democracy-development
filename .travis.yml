@@ -12,13 +12,13 @@ matrix:
                 - openssl aes-256-cbc -K $encrypted_fd73522261db_key -iv $encrypted_fd73522261db_iv -in .env.enc -out ./server/.env -d
             script:
                 - docker-compose build
-        -   if: tag =~ *-alpha\+server
+        -   if: tag =~ *-alpha\+server AND tag = branch
             os: linux
             before_install:
                 - openssl aes-256-cbc -K $encrypted_fd73522261db_key -iv $encrypted_fd73522261db_iv -in .env.enc -out ./server/.env -d
             script:
                 - docker-compose build
-                - docker build -t doctl
+                - docker build -t doctl ./doctl
                 - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl ssh ${DIGITALOCEAN_ALPHA_SERVER_DROPLET_NAME} --ssh-user "${DIGITALOCEAN_ALPHA_SERVER_USER}" --ssh-command "~/democracy-development/start-production.sh"
             after_success:
                 - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Server Alpha Version $TRAVIS_BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
