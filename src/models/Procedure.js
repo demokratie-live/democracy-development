@@ -22,6 +22,20 @@ const ProcedureSchema = new Schema(
     subjectGroups: [String],
     importantDocuments: [Document],
     history: { type: [ProcessFlow], default: undefined },
+    customData: {
+      title: {
+        changed: Date,
+        value: String,
+      },
+      voteResults: {
+        changed: Date,
+        value: {
+          yes: Number,
+          no: Number,
+          abstination: Number,
+        },
+      },
+    },
   },
   { timestamps: true },
 );

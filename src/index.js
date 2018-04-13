@@ -8,6 +8,8 @@ import { makeExecutableSchema } from 'graphql-tools';
 import { createServer } from 'http';
 import { Engine } from 'apollo-engine';
 import Next from 'next';
+import basicAuth from 'express-basic-auth';
+import auth from 'http-auth';
 
 import mongo from './config/db';
 import constants from './config/constants';
@@ -38,6 +40,15 @@ app.prepare().then(async () => {
     engine.start();
     server.use(engine.expressMiddleware());
   }
+
+  /**
+   * ADMIN PROTECTION
+   */
+  const basic = auth.basic({
+    realm: 'Simon Area.',
+    file: `${__dirname}/../data/admins.htpasswd`,
+  });
+  server.use('/admin', auth.connect(basic));
 
   server.use(bodyParser.json());
 
