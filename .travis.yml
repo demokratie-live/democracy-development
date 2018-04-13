@@ -17,9 +17,8 @@ matrix:
             before_install:
                 - openssl aes-256-cbc -K $encrypted_fd73522261db_key -iv $encrypted_fd73522261db_iv -in .env.enc -out ./server/.env -d
             script:
-                - ssh
                 - docker-compose build
-                - docker build -t doctl -f ./doctl .
+                - docker build -t doctl -f ./doctl -
                 - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_ALPHA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_ALPHA_SERVER_USER} --ssh-command "~/democracy-development/start-production.sh"
             after_success:
                 - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Server Alpha Version $TRAVIS_TAG deployed!\\\"}\" ${DISCORD_WEBHOOK}"
