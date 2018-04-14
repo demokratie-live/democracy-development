@@ -23,17 +23,22 @@ const ProcedureSchema = new Schema(
     importantDocuments: [Document],
     history: { type: [ProcessFlow], default: undefined },
     customData: {
-      title: {
-        changed: Date,
-        value: String,
-      },
+      title: String,
       voteResults: {
-        changed: Date,
-        value: {
-          yes: Number,
-          no: Number,
-          abstination: Number,
-        },
+        yes: Number,
+        no: Number,
+        abstination: Number,
+        partyVotes: [
+          {
+            party: String,
+            main: { type: String, enum: ['YES', 'NO', 'ABSTINATION'] },
+            deviants: {
+              yes: Number,
+              abstination: Number,
+              no: Number,
+            },
+          },
+        ],
       },
     },
   },

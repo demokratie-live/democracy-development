@@ -81,4 +81,17 @@ export default {
         { $project: { objectHistory: false } },
       ]),
   },
+  Mutation: {
+    saveProcedureCustomData: async (parent, { procedureId, partyVotes }, { ProcedureModel }) => {
+      // TODO: SECURE THIS FUNCTION
+      console.log(partyVotes);
+      await ProcedureModel.update(
+        { procedureId },
+        { $set: { 'customData.voteResults.partyVotes': partyVotes } },
+      );
+      const procedure = await ProcedureModel.findOne({ procedureId });
+      console.log(procedure.customData);
+      return procedure;
+    },
+  },
 };

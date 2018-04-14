@@ -21,7 +21,6 @@ class Procedures extends Component {
       !search ||
         title.toLowerCase().indexOf(search.toLowerCase()) !== -1 ||
         search === procedureId);
-    console.log('MATH ', Math.ceil(data.length / rowsPerPage));
     return (
       <div id="accordion">
         <Pagination size="sm">
@@ -71,7 +70,7 @@ class Procedures extends Component {
   }
 }
 
-const testQuery = gql`
+const proceduresQuery = gql`
   query procedures($status: [String!]) {
     procedures(status: $status) {
       procedureId
@@ -79,11 +78,27 @@ const testQuery = gql`
       type
       period
       currentStatus
+      customData {
+        voteResults {
+          yes
+          no
+          abstination
+          partyVotes {
+            party
+            main
+            deviants {
+              yes
+              abstination
+              no
+            }
+          }
+        }
+      }
     }
   }
 `;
 
-export default graphql(testQuery, {
+export default graphql(proceduresQuery, {
   options: {
     variables: {
       status: [
@@ -110,8 +125,5 @@ export default graphql(testQuery, {
       ],
     },
   },
-  props: ({ data, data: { procedures } }) => {
-    console.log(data);
-    return { procedures };
-  },
+  props: ({ data, data: { procedures } }) => ({ procedures }),
 })(Procedures);

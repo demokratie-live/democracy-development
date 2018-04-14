@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 
 import VoteEdit from './VoteEdit';
@@ -6,16 +8,18 @@ import VoteEdit from './VoteEdit';
 class Procedure extends Component {
   state = {
     changed: false,
-    data: {}
+    data: [],
   };
   render() {
     const {
-      procedureId, title, type, period, currentStatus,
+      procedureId, title, type, period, currentStatus, saveChanges, customData,
     } = this.props;
     const { changed } = this.state;
+    const rowHeaderClasses = `card-header ${customData ? 'bg-success' : 'bg-secondary'} `;
+    console.log('customData', rowHeaderClasses);
     return (
       <div key={procedureId} className="card">
-        <div className="card-header  bg-secondary" id={`heading-${procedureId}`}>
+        <div className={rowHeaderClasses} id={`heading-${procedureId}`}>
           <h5 className="mb-0">
             <button
               className="btn btn-link cut-text  text-light"
@@ -52,11 +56,25 @@ class Procedure extends Component {
               <div className="form-group">
                 <VoteEdit
                   procedureId={procedureId}
+                  partyVotes={customData ? customData.voteResults.partyVotes : []}
                   parties={['CDU', 'SPD', 'AFD', 'Grüne', 'Linke', 'FDP']}
-                  onChange={(data) => {this.setState({ changed: true, data })}}
+                  onChange={(data) => {
+                    this.setState({ changed: true, data });
+                  }}
                 />
               </div>
-              <Button color="primary" onClick={() => console.log(this.state.data)} disabled={!changed}>
+              <Button
+                color="primary"
+                onClick={() =>
+                  saveChanges({
+                    variables: {
+                      procedureId,
+                      partyVotes: this.state.data,
+                    },
+                  })
+                }
+                disabled={!changed}
+              >
                 Speichern
               </Button>
             </form>
@@ -78,4 +96,30 @@ class Procedure extends Component {
   }
 }
 
-export default Procedure;
+const saveChanges = gql`
+  mutation saveProcedureCustomData($procedureId: String!, $partyVotes: [PartyVoteInput!]!) {
+    saveProcedureCustomData(procedureId: $procedureId, partyVotes: $partyVotes) {
+      customData {
+        title
+        voteResults {
+          yes
+          no
+          abstination
+          partyVotes {
+            party
+            main
+            deviants {
+              yes
+              abstination
+              no
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export default graphql(saveChanges, {
+  name: 'saveChanges',
+})(Procedure);
