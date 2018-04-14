@@ -1,8 +1,21 @@
 export default {
   Query: {
-    procedures: (parent, { IDs, period = [19], type = ['Gesetzgebung', 'Antrag'] }, { ProcedureModel }) =>
-      ProcedureModel.aggregate([
-        { $match: { procedureId: { $in: IDs }, period: { $in: period }, type: { $in: type } } },
+    procedures: (
+      parent,
+      {
+        IDs, period = [19], type = ['Gesetzgebung', 'Antrag'], status,
+      },
+      { ProcedureModel },
+    ) => {
+      let match = { period: { $in: period }, type: { $in: type } };
+      if (status) {
+        match = { ...match, currentStatus: { $in: status } };
+      }
+      if (IDs) {
+        match = { ...match, procedureId: { $in: IDs } };
+      }
+      return ProcedureModel.aggregate([
+        { $match: match },
         {
           $lookup: {
             from: 'histories',
@@ -19,9 +32,14 @@ export default {
           },
         },
         { $project: { objectHistory: false } },
-      ]),
+      ]);
+    },
 
-    allProcedures: async (parent, { period = [19], type = ['Gesetzgebung', 'Antrag'] }, { ProcedureModel }) =>
+    allProcedures: async (
+      parent,
+      { period = [19], type = ['Gesetzgebung', 'Antrag'] },
+      { ProcedureModel },
+    ) =>
       ProcedureModel.aggregate([
         { $match: { period: { $in: period }, type: { $in: type } } },
         {

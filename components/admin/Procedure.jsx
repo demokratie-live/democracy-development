@@ -4,9 +4,15 @@ import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import VoteEdit from './VoteEdit';
 
 class Procedure extends Component {
-  state = {};
+  state = {
+    changed: false,
+    data: {}
+  };
   render() {
-    const { procedureId, title, type } = this.props;
+    const {
+      procedureId, title, type, period, currentStatus,
+    } = this.props;
+    const { changed } = this.state;
     return (
       <div key={procedureId} className="card">
         <div className="card-header  bg-secondary" id={`heading-${procedureId}`}>
@@ -37,14 +43,22 @@ class Procedure extends Component {
               <dd className="col-sm-9">{title}</dd>
               <dt className="col-sm-3">Type:</dt>
               <dd className="col-sm-9">{type}</dd>
+              <dt className="col-sm-3">Legislaturperiode:</dt>
+              <dd className="col-sm-9">{period}</dd>
+              <dt className="col-sm-3">Status:</dt>
+              <dd className="col-sm-9">{currentStatus}</dd>
             </dl>
             <form>
               <div className="form-group">
                 <VoteEdit
                   procedureId={procedureId}
                   parties={['CDU', 'SPD', 'AFD', 'Grüne', 'Linke', 'FDP']}
+                  onChange={(data) => {this.setState({ changed: true, data })}}
                 />
               </div>
+              <Button color="primary" onClick={() => console.log(this.state.data)} disabled={!changed}>
+                Speichern
+              </Button>
             </form>
           </div>
         </div>
