@@ -17,3 +17,7 @@ services:
       options:
         max-size: ${NGINX_LETSENCRYPT_LOG_MAX_SIZE:-2m}
         max-file: ${NGINX_LETSENCRYPT_LOG_MAX_FILE:-10}
+
+  mongodb:
+    volumes:
+      - /mnt/mongodb/db:/data/db
