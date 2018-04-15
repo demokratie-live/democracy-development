@@ -28,6 +28,7 @@ const ProcedureSchema = new Schema(
         yes: Number,
         no: Number,
         abstination: Number,
+        decisionText: String,
         partyVotes: [
           {
             party: String,

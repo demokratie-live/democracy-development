@@ -3,6 +3,8 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
+import GET_PROCEDURE_LIST from '../../src/graphql/queries/procedureList';
+
 import Procedure from './Procedure';
 
 class Procedures extends Component {
@@ -70,35 +72,7 @@ class Procedures extends Component {
   }
 }
 
-const proceduresQuery = gql`
-  query procedures($status: [String!]) {
-    procedures(status: $status) {
-      procedureId
-      title
-      type
-      period
-      currentStatus
-      customData {
-        voteResults {
-          yes
-          no
-          abstination
-          partyVotes {
-            party
-            main
-            deviants {
-              yes
-              abstination
-              no
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-export default graphql(proceduresQuery, {
+export default graphql(GET_PROCEDURE_LIST, {
   options: {
     variables: {
       status: [
@@ -125,5 +99,5 @@ export default graphql(proceduresQuery, {
       ],
     },
   },
-  props: ({ data, data: { procedures } }) => ({ procedures }),
+  props: ({ data: { procedures } }) => ({ procedures }),
 })(Procedures);

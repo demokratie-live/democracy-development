@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import GET_PROCEDURE_LIST from '../../src/graphql/queries/procedureList';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 
 import VoteEdit from './VoteEdit';
@@ -9,14 +10,30 @@ class Procedure extends Component {
   state = {
     changed: false,
     data: [],
+    decisionText: '',
   };
   render() {
     const {
-      procedureId, title, type, period, currentStatus, saveChanges, customData,
+      procedureId,
+      title,
+      type,
+      period,
+      currentStatus,
+      saveChanges,
+      customData,
+      history,
     } = this.props;
     const { changed } = this.state;
-    const rowHeaderClasses = `card-header ${customData ? 'bg-success' : 'bg-secondary'} `;
-    console.log('customData', rowHeaderClasses);
+    const namedVoted =
+      history &&
+      history.some(({ decision }) =>
+        decision &&
+          decision.some(({ type: decisionType }) => decisionType === 'Namentliche Abstimmung'));
+    const findSpotUrl = history.find(({ assignment, initiator }) => assignment === 'BT' && initiator === '3. Beratung');
+    const rowHeaderClasses = `card-header ${
+      customData || namedVoted ? 'bg-success' : findSpotUrl ? 'bg-secondary' : 'bg-warning'
+    } `;
+    console.log({ props: this.props, namedVoted });
     return (
       <div key={procedureId} className="card">
         <div className={rowHeaderClasses} id={`heading-${procedureId}`}>
@@ -51,33 +68,50 @@ class Procedure extends Component {
               <dd className="col-sm-9">{period}</dd>
               <dt className="col-sm-3">Status:</dt>
               <dd className="col-sm-9">{currentStatus}</dd>
+              {namedVoted && [
+                <dt className="col-sm-3">Namentliche Abstimmung</dt>,
+                <dd className="col-sm-9">Ja</dd>,
+              ]}
+              {findSpotUrl && [
+                <dt className="col-sm-3">Beschlusstext Dokument</dt>,
+                <dd className="col-sm-9">
+                  <a href={findSpotUrl.findSpotUrl} target="_blank">
+                    {findSpotUrl.findSpotUrl}
+                  </a>
+                </dd>,
+              ]}
             </dl>
-            <form>
-              <div className="form-group">
-                <VoteEdit
-                  procedureId={procedureId}
-                  partyVotes={customData ? customData.voteResults.partyVotes : []}
-                  parties={['CDU', 'SPD', 'AFD', 'Grüne', 'Linke', 'FDP']}
-                  onChange={(data) => {
-                    this.setState({ changed: true, data });
-                  }}
-                />
-              </div>
-              <Button
-                color="primary"
-                onClick={() =>
-                  saveChanges({
-                    variables: {
-                      procedureId,
-                      partyVotes: this.state.data,
-                    },
-                  })
-                }
-                disabled={!changed}
-              >
-                Speichern
-              </Button>
-            </form>
+            {!namedVoted && (
+              <form>
+                <div className="form-group">
+                  <VoteEdit
+                    procedureId={procedureId}
+                    partyVotes={customData ? customData.voteResults.partyVotes : []}
+                    parties={['CDU', 'SPD', 'AFD', 'Grüne', 'Linke', 'FDP']}
+                    decisionText={customData ? customData.voteResults.decisionText : ''}
+                    onChange={(data, decisionText) => {
+                      console.log({ decisionText });
+                      this.setState({ changed: true, data, decisionText });
+                    }}
+                  />
+                </div>
+                <Button
+                  color="primary"
+                  onClick={() =>
+                    saveChanges({
+                      variables: {
+                        procedureId,
+                        partyVotes: this.state.data,
+                        decisionText: this.state.decisionText,
+                      },
+                    })
+                  }
+                  disabled={!changed}
+                >
+                  Speichern
+                </Button>
+              </form>
+            )}
           </div>
         </div>
         <style jsx>
@@ -97,8 +131,16 @@ class Procedure extends Component {
 }
 
 const saveChanges = gql`
-  mutation saveProcedureCustomData($procedureId: String!, $partyVotes: [PartyVoteInput!]!) {
-    saveProcedureCustomData(procedureId: $procedureId, partyVotes: $partyVotes) {
+  mutation saveProcedureCustomData(
+    $procedureId: String!
+    $partyVotes: [PartyVoteInput!]!
+    $decisionText: String!
+  ) {
+    saveProcedureCustomData(
+      procedureId: $procedureId
+      partyVotes: $partyVotes
+      decisionText: $decisionText
+    ) {
       customData {
         title
         voteResults {
@@ -122,4 +164,11 @@ const saveChanges = gql`
 
 export default graphql(saveChanges, {
   name: 'saveChanges',
+  options: {
+    refetchQueries: [
+      {
+        query: GET_PROCEDURE_LIST,
+      },
+    ],
+  },
 })(Procedure);

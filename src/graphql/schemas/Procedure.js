@@ -15,6 +15,7 @@ type VoteResults {
   yes: Int
   no: Int
   abstination: Int
+  decisionText: String
   partyVotes: [PartyVote]
 }
 
@@ -72,6 +73,6 @@ type Query {
 }
 
 type Mutation {
-  saveProcedureCustomData(procedureId: String!, partyVotes: [PartyVoteInput!]!): Procedure
+  saveProcedureCustomData(procedureId: String!, partyVotes: [PartyVoteInput!]!, decisionText: String!): Procedure
 }
 `;

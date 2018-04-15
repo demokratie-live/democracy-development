@@ -4,6 +4,7 @@ import { FormGroup, Label, Input } from 'reactstrap';
 class VoteEdit extends Component {
   state = {
     selections: [],
+    decisionText: '',
   };
 
   componentWillMount() {
@@ -13,10 +14,11 @@ class VoteEdit extends Component {
         main,
         deviants: { yes, no, abstination },
       })),
+      decisionText: this.props.decisionText,
     });
   }
 
-  onChange = (party, main) => () => {
+  onChange = (party, main, radio) => () => {
     const { selections } = this.state;
     const { parties, onChange } = this.props;
     let changedSelections = [...selections];
@@ -26,10 +28,14 @@ class VoteEdit extends Component {
       abstination: parseInt(this.inputs[party].ABSTINATION.value, 10) || 0,
     };
     const selectionIndex = changedSelections.findIndex(({ party: pty }) => pty === party);
+    const editValues = { party, deviants };
+    if (radio) {
+      editValues.main = main;
+    }
     if (selectionIndex !== -1) {
-      changedSelections[selectionIndex] = { party, main, deviants };
+      changedSelections[selectionIndex] = { ...changedSelections[selectionIndex], ...editValues };
     } else {
-      changedSelections = [...changedSelections, { party, main, deviants }];
+      changedSelections = [...changedSelections, editValues];
     }
 
     this.setState(
@@ -38,7 +44,21 @@ class VoteEdit extends Component {
       },
       () => {
         if (parties.length === this.state.selections.length) {
-          onChange(this.state.selections);
+          onChange(this.state.selections, this.state.decisionText);
+        }
+      },
+    );
+  };
+
+  onChangeDecision = ({ target: { value } }) => {
+    const { parties, onChange } = this.props;
+    this.setState(
+      {
+        decisionText: value,
+      },
+      () => {
+        if (parties.length === this.state.selections.length) {
+          onChange(this.state.selections, this.state.decisionText);
         }
       },
     );
@@ -51,9 +71,9 @@ class VoteEdit extends Component {
       selections.find(({ party: pty }) => pty === party) ||
       partyVotes.find(({ party: pty }) => pty === party);
     if (selection) {
-      return selection.deviants[voting.toLowerCase()] || null;
+      return selection.deviants[voting.toLowerCase()] || '';
     }
-    return null;
+    return '';
   };
 
   inputs = {};
@@ -73,40 +93,52 @@ class VoteEdit extends Component {
     const { parties, procedureId, partyVotes } = this.props;
     const labels = { YES: 'ja', ABSTINATION: 'enthaltung', NO: 'nein' };
     return (
-      <div className="container row">
-        {parties.map(party => (
-          <fieldset key={party} className="col-md" style={{ minWidth: 100 }}>
-            <legend>{party}</legend>
-            {['YES', 'NO', 'ABSTINATION'].map(voting => (
-              <FormGroup check key={voting}>
-                <Label check>
+      <div>
+        <FormGroup>
+          <Label for="decision-text">Beschlusstext</Label>
+          <Input
+            value={this.state.decisionText}
+            onChange={this.onChangeDecision}
+            type="textarea"
+            name="decisionText"
+            id="decision-text"
+          />
+        </FormGroup>
+        <div className="container row">
+          {parties.map(party => (
+            <fieldset key={party} className="col-md" style={{ minWidth: 100 }}>
+              <legend>{party}</legend>
+              {['YES', 'NO', 'ABSTINATION'].map(voting => (
+                <FormGroup check key={voting}>
+                  <Label check>
+                    <Input
+                      checked={this.isChecked({ party, selection: voting })}
+                      type="radio"
+                      value={voting}
+                      name={`vote-${party}-${procedureId}`}
+                      onChange={this.onChange(party, voting, true)}
+                    />
+                    {labels[voting]}
+                  </Label>
                   <Input
-                    checked={this.isChecked({ party, selection: voting })}
-                    type="radio"
-                    value={voting}
-                    name={`vote-${party}-${procedureId}`}
+                    type="number"
+                    name="text1"
+                    bsSize="5"
+                    value={this.getValue({ party, voting })}
+                    placeholder="0"
+                    innerRef={(node) => {
+                      this.inputs = {
+                        ...this.inputs,
+                        [party]: { ...this.inputs[party], [voting]: node },
+                      };
+                    }}
                     onChange={this.onChange(party, voting)}
                   />
-                  {labels[voting]}
-                </Label>
-                <Input
-                  type="number"
-                  name="text1"
-                  bsSize="5"
-                  value={this.getValue({ party, voting })}
-                  placeholder="0"
-                  innerRef={(node) => {
-                    this.inputs = {
-                      ...this.inputs,
-                      [party]: { ...this.inputs[party], [voting]: node },
-                    };
-                  }}
-                  onChange={this.onChange(party, voting)}
-                />
-              </FormGroup>
-            ))}
-          </fieldset>
-        ))}
+                </FormGroup>
+              ))}
+            </fieldset>
+          ))}
+        </div>
       </div>
     );
   }
