@@ -19,7 +19,6 @@ matrix:
     os: linux
     before_install:
     - openssl aes-256-cbc -k "$SECRET" -in .env.enc -out ./server/.env -d
-    - tar xvf secret.tar
     script:
     - docker-compose build
   # Tag alpha server
@@ -29,7 +28,6 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in .env.enc -out ./server/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
-    - tar xvf secret.tar
     script:
     - docker-compose build
     - docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_HOST}" - < ./doctl
