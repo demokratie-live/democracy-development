@@ -6,5 +6,5 @@ export default ({ role = 'WEB' }) => (req, res, next) => {
     return res.redirect(`/login?from=${req.originalUrl}`);
     // next(new Error('You have no permissions'));
   }
-  next();
+  return next();
 };

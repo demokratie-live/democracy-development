@@ -8,7 +8,6 @@ import { makeExecutableSchema } from 'graphql-tools';
 import { createServer } from 'http';
 import { Engine } from 'apollo-engine';
 import Next from 'next';
-import basicAuth from 'express-basic-auth';
 import auth from './express/auth';
 import requireAuth from './express/auth/requireAuth';
 
@@ -92,7 +91,7 @@ app.prepare().then(async () => {
       console.error(err);
     } else {
       console.log(`App is listen on port: ${constants.PORT}`);
-      // new CronJob('*/15 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
+      new CronJob('*/15 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
     }
   });
 });

@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
-import cookieSession from 'cookie-session';
 
 import jwt from './jsonWebToken';
 

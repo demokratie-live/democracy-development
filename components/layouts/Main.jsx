@@ -1,6 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Head from 'next/head';
-import withData from '../../lib/withData';
 
 const Layout = ({ children }) => (
   <div>
@@ -17,13 +17,13 @@ const Layout = ({ children }) => (
         crossOrigin="anonymous"
       />
     </Head>
-    <nav className="nav">
-      <a className="nav-link" href="#">
-        Active
-      </a>
-    </nav>
+    <nav className="nav" />
     <div className="container">{children}</div>
   </div>
 );
+
+Layout.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default Layout;
