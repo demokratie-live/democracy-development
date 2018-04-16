@@ -50,10 +50,10 @@ matrix:
     - gem update --system
     - gem install fastlane --no-rdoc --no-ri --no-document --quiet
     install:
+    - cd client
     - nvm install 8
     - yarn --version
     - yarn install
-    - cd client
     android:
       components:
       - tools
@@ -89,11 +89,11 @@ matrix:
     before_install:
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
     install:
+    - cd client
     - nvm install 8
     - npm install -g yarn
     - yarn --version
     - yarn install
-    - cd client
     script:
     - fastlane update_fastlane
     - cd ios
