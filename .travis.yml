@@ -43,11 +43,10 @@ matrix:
     jdk: oraclejdk8
 
     before_install:
-    - cd client
     - echo y | android update sdk --no-ui --filter build-tools-26.0.1,build-tools-26.0.2,android-26,extra-android-m2repository
-    - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
-    - openssl aes-256-cbc -k "$SECRET" -in android/Google_Play_Android_Developer.json.enc -out android/Google_Play_Android_Developer.json -d
-    - openssl aes-256-cbc -k "$SECRET" -in android/app/democracy2-release-key.keystore.enc -out android/app/democracy2-release-key.keystore -d
+    - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
+    - openssl aes-256-cbc -k "$SECRET" -in client/android/Google_Play_Android_Developer.json.enc -out client/android/Google_Play_Android_Developer.json -d
+    - openssl aes-256-cbc -k "$SECRET" -in client/android/app/democracy2-release-key.keystore.enc -out client/android/app/democracy2-release-key.keystore -d
     - gem update --system
     - gem install fastlane --no-rdoc --no-ri --no-document --quiet
 
@@ -75,7 +74,7 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     script:
-    - cd android && fastlane android alpha
+    - cd client/android && fastlane android alpha
     after_success:
     - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Alpha Version $TRAVIS_BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
@@ -90,7 +89,7 @@ matrix:
 
     before_install:
     - cd client
-    - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
+    - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
 
     install:
     - nvm install 8
@@ -100,7 +99,7 @@ matrix:
 
     script:
     - fastlane update_fastlane
-    - cd ios
+    - cd client/ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios alpha
     after_success:
     - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Version $TRAVIS_BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
