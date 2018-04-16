@@ -14,18 +14,18 @@ env:
   - secure: "Xnbd0sTkr30NF/IPozUZs5Uks8V7uizIfuIoERUXy7IN4FfBuc+x+v2HR4Unho8eFh6TNDB3LA+b28Ce4aEajrxuVablLunBTLy/z48A5cyDg8dK2mXEA2iBLYTNei4BT+OBABHtmYd9uEmVTzeq07GPsb2N83LqIwSVAjZSuVJlVgT3a+j1fQrlTE3IjhgM+MaEYR8OaM/+tde5/TH3+lhBM7k71Jfw4a/no7VC1T9fnZ5MlpzZT4rqvl0OgesLrpRnyWlgbPrnrUZRR8h6+p/On9G1Azg5bF8UAfdZloez05zCT54u69tHiA6UdY24ytZtnlgcQmJ40k/NYitjzgiuJ9d7NN1YRhx5qApXdwYrt7D+9ElKuIORMnOIOe9uiUs/MlQ0Llbu51oPUUj/vUYUvhXU1XBY7yvgV1pWB6klW+xXMK+wNd+fze2EHotr0y7DX7+441OohwVC5YIFahdD4rTjHpEqolAhEH6j5y4/T0Gx/jcT/TJKUwPeR3/q71k5OxtRSgtNdxSlZnmAKLEiexS7lGkyE4/dfzxuqxzlyXaGDeAXcduwKs9H4SbZXPjMMIH4KSoOjMw3FMNyN2xJsdi/+fLqq9DAwQLgleRM0bLQCzQfRSjUzqV+6TfYGLBkqRNh8vlFy1orrebnzhVz11RO2FtGhy8tMdhCRyA="
 matrix:
   include:
-  # basic docer build test
+  # basic docker build test
   - if: tag IS blank
     os: linux
-    before_install:
-    - openssl aes-256-cbc -k "$SECRET" -in .env.enc -out ./server/.env -d
+    #before_install:
+    #- openssl aes-256-cbc -k "$SECRET" -in .env.enc -out server/.env -d
     script:
     - docker-compose build
-  # Tag alpha server
+  # server deploy alpha
   - if: tag =~ -alpha\+server
     os: linux
     before_install:
-    - openssl aes-256-cbc -k "$SECRET" -in .env.enc -out ./server/.env -d
+    #- openssl aes-256-cbc -k "$SECRET" -in .env.enc -out server/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
     script:
@@ -36,5 +36,75 @@ matrix:
     - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"SUCCESS: New Server Alpha Version $TRAVIS_TAG deployed!\"}" ${DISCORD_WEBHOOK}'
     after_failure:
     - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"FAILURE: Deploying new Server Alpha Version $TRAVIS_TAG failed!\"}" ${DISCORD_WEBHOOK}'
+  # android deploy Alpha
+  - if: tag =~ -alpha\+client
+    os: linux
+    language: android
+    jdk: oraclejdk8
+
+    before_install:
+    - cd client
+    - echo y | android update sdk --no-ui --filter build-tools-26.0.1,build-tools-26.0.2,android-26,extra-android-m2repository
+    - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
+    - openssl aes-256-cbc -k "$SECRET" -in android/Google_Play_Android_Developer.json.enc -out android/Google_Play_Android_Developer.json -d
+    - openssl aes-256-cbc -k "$SECRET" -in android/app/democracy2-release-key.keystore.enc -out android/app/democracy2-release-key.keystore -d
+    - gem update --system
+    - gem install fastlane --no-rdoc --no-ri --no-document --quiet
+
+    install:
+    - nvm install 8
+    - yarn --version
+    - yarn install
+    android:
+      components:
+      - tools
+      - platform-tools
+      # android 23
+      - build-tools-23.0.1
+      - build-tools-25.0.1
+      - build-tools-26.0.1
+      - build-tools-26.0.2
+      - android-23
+      # extra
+      - extra-android-m2repository
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - addon-google_apis-google-16
+      licenses:
+      - 'android-sdk-preview-license-.+'
+      - 'android-sdk-license-.+'
+      - 'google-gdk-license-.+'
+    script:
+    - cd android && fastlane android alpha
+    after_success:
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Alpha Version $TRAVIS_BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    after_failure:
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Alpha Version $TRAVIS_BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+
+  # ios deploy alpha
+  - if: tag =~ -alpha\+client
+    osx_image: xcode9.2
+    language: objective-c
+    xcode_project: ios/democracyclient.xcodeproj
+    xcode_scheme: ios/democracyclientTests
+
+    before_install:
+    - cd client
+    - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
+
+    install:
+    - nvm install 8
+    - npm install -g yarn
+    - yarn --version
+    - yarn install
+
+    script:
+    - fastlane update_fastlane
+    - cd ios
+    - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios alpha
+    after_success:
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Version $TRAVIS_BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    after_failure:
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Version $TRAVIS_BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
 after_script:
 - echo "BUILD FINISHED"
