@@ -16,7 +16,7 @@ env:
   - secure: "uNbKCD4ywLQn4zTGR9YtW1O1rL8ZpGvmGml8KUCbzoH8c4z9X5EE046ceS3phxbL7uoW7Qg1Y8p8do61fEEZJncWgKJxmYvTviDf6esY2CsnMGlUuid5AUmpZPzHyieN9+5lSRl/fsg00EK2ygEaeQzAreopOJM34NWilbm5HhOqEpJoTMFoRqMOkeFcxj5MQHT/c2IxjIAd2NQeyiQhoSRMQOlDFxYL3rANU3dLlZpS0MVy36LudBuBYMLsioznxb8bWfPKoST9ukiGgGygY+LJE7HHuIjq8EaCrz1E0vgTj1Huno0N+Ot7JxaL3U4mEydlBeSkYDSgRos1Il3EJixKCZ0HJKLIINMC0hRFbom+86P5PGJy6AMSrA0Qxek7dtfVLhiKKMmZug1eDHEPdOdfeb2Xr0YQzXZTmWTwh5BRcCDSKVYVb4r86RpkYp5ym2ITUPaQnKB2ManRRtVv3OZLTQHY7q+hatp/lgC6XIMIZiOF6K5cN0rpSRUU2hHCH3nZzmKf44SA+v1d4Z2q3mQ1PnTNUd6rGtxk+v2vGKxeEPdqsH2J8KBKloVCAgxs/uiQh9aHxsIp7jwofYeQydnO473xzgRvkyC6i1VxpJFd2qtyjejV8LiVYo4S5/BoZS+b4s1hkoUOGwme90DdnMuKLXYOO+7AlAMcqzL7CfA="
   # CERTIFICATE_PASSWORD
   # FASTLANE_PASSWORD (apple_id password)
-  - secure: "lRH/AJW4qEkRGsuj5+EsnSY3D9rPGAVJERZW7IRr36WEksS6Qq8yf3WBMz7qF6FCd9I6jnCs9TX0IvN8GFdaJyuC87m/hwgtLEvqAyxLRaTLAa2qzDv0tiI3MVfMg3rmb1YiSG6dptzTmziIYylR7NMTCGsrcGaMGoFNuEY0ORt8a4AB/X2RR2POTj2PB181ZBwAFuGlHT0sW1MiLlwpna5QZIoC4pj/of3gjylhNSuU7n8f/YwnTY2puSeWTS1LW6O4YYPcJOlm5G9ixDTm7DmZtBurYqL/5j6lEXwhk+fmheKr8rRfnvtZo67jRTC+gMrS8JHoQgqOHuNdJDQdQAa/5YLk2fzHrJneGGGuauo1iNNEv8gz7Q42SQSMXTvsMu3lctXsrsuIuU30hR3/0GVve7+nXGMAQhM4rx7ob3kow/qPV9WBQHKnHcqeIGOIVowH0Hwidei2xcz0jSVIGIiDcufb1V0nwD9Tt0tb5gMi58nYaq4n75x5t/PlAr+FXCom4HLsWPv1IYVquXicT7NNsmZh8pI3Z/yIF1/5mDsfVgJMkjOQ/gxt01lrCzP11Zk8BXGS49vZqOeHjHHtpKFGYiNi/YjebK1LPtH4/WIWxb6jfRtKzz7vDaZyPzU/y38hqDA77wyHDRg0pZXmHumhw+dP8Dw94S3e0UeAgd8="
+  - secure: "qjKFIxN/ZdrAWmAtibJBihYeRbiPg3MuYUOUrlF0BZPyakCZwcly5WeNd/HziSOKL7hYb+0P2loIfOReB3vOH9zMUSQTJS71ZXQluG5l/V3v5Gg9YTcOsusWnG5n3NLVYafUHdXNVTqmvTUqIl5jNElKyUcm1sUrsk3aQVkP1ufOY+HLQtvjli9mLdbAbHjTl0JGhxFCi2b6tnG95986WHdtDuEhrRuqQhOiVTK1hDlvT8dlTTLfOCrNG9HPYew8/tqGrSA/iSsdywnnqHFDTPdLK5HeMUMPnBYzY8S2VFx9o+l0lcfPzDKqMy0rEqRcKdgGzwgK/t62Q/W5bjXLoJvsv0YzgTm9EJpH7gg9qbN+z+sczSpNfnCSms9ms8fr4wlbkHpucLDtuZm5xYC3KMh0da0QDynXmXghPmxxLJ3F2jJeOhxLWXEw3VX6O3he2yvr6NRNRzEhbF9ruPe+3BWVBennvxsv0FqVG6XY1RF4VbQ0ahiYPZFH6wXrpz3G/KaaItKboX/MExkBt3Y4hdkeAncxbu14xQ4YTT5QD/Qlxpw0JsPj1+Qmf4DDCYj67J3J4nc9LniyPds704bE+VM5XjJ3XHb+hOstKYdaI5xtG7Ra1DYqCBExkUKw81aChuOdxrFZ3hY8fHGniNEWgfo7dm9Tb8BEUE4HeW99k60="
   # GRAPHQL_URL
   #- secure: "H3ONNvuDhoZw49b04Ge2RxAHvB6HhcQDQLIiZTU67eMx6K5qYNT7EvXX3ZPtwYarn7MUySxrTe0sgcslEiBdo9zS+QFMa/S/W5iPtT0k5yPJEA5VsjAqRtW8tyS6laXJaQpxboWqMSX1lN2qZvwga7xi6uYlngqv4YyZuYT1EO3yly3vAFMbM2lUiZhzdvNv2ijNLZ16V/HTaYSAClRAinQUv1rsGxS9UhG3m++5Y+3lIA3sl1VRy5btMHRkJ9dinoK/WtIcbC0Dr++8gF2t+tLBBuNSDQx2IEJOnQ2XwV6Fhn0B2WATM16PVLd697OYSZ3kCKw5naV1vCP5Zf4weE2wga0avFhK3bhYPJ02Jq6ORMjiaJTy9Cdzt5yvC4MOElgpS+7prwXGDd3AnSa/8hdgJGmSHRP11tpwNH67e4t1DZvrrqUJYtNVYJMlhjTPjxHXvRAADoC9+kfNO1xR26JFhDnb2x4OI7jvAIdCfnICqAAfdZ1V0nECGFvUTHydOc4nd9gJPSLYVianjBUpXqOmzShuMocPHRvgwma2QJXSpXJsTdPLGB7J/4FVFTow7aMHGOKK+jm54cA2pnC0JTaoJIwNo4TGAmthtwDGD2NSd3sPqeFnZW45oVhTmqw2t5bT/gYT0yfe264HRlLxJDFWS/YuEz8UMEwoL7vdsyM="
   # MATCH_GIT  
@@ -90,9 +90,9 @@ matrix:
     script:
     - cd android && fastlane android alpha
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Alpha Version $TRAVIS_BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Alpha Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Alpha Version $TRAVIS_BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Alpha Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
 
   # ios deploy alpha
   - if: tag =~ -alpha\+client
@@ -113,8 +113,8 @@ matrix:
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios alpha
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Version $TRAVIS_BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Version $TRAVIS_BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
 after_script:
 - echo "BUILD FINISHED"
