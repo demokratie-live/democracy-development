@@ -46,7 +46,7 @@ matrix:
     - echo y | android update sdk --no-ui --filter build-tools-26.0.1,build-tools-26.0.2,android-26,extra-android-m2repository
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
     - openssl aes-256-cbc -k "$SECRET" -in client/android/Google_Play_Android_Developer.json.enc -out client/android/Google_Play_Android_Developer.json -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/android/democracy2-release-key.keystore.enc -out client/android/democracy2-release-key.keystore -d
+    - openssl aes-256-cbc -k "$SECRET" -in client/android/app/democracy2-release-key.keystore.enc -out client/android/app/democracy2-release-key.keystore -d
     - gem update --system
     - gem install fastlane --no-rdoc --no-ri --no-document --quiet
     install:
