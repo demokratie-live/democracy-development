@@ -36,12 +36,12 @@ matrix:
     - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"SUCCESS: New Server Alpha Version $TRAVIS_TAG deployed!\"}" ${DISCORD_WEBHOOK}'
     after_failure:
     - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"FAILURE: Deploying new Server Alpha Version $TRAVIS_TAG failed!\"}" ${DISCORD_WEBHOOK}'
+
   # android deploy Alpha
   - if: tag =~ -alpha\+client
     os: linux
     language: android
     jdk: oraclejdk8
-
     before_install:
     - echo y | android update sdk --no-ui --filter build-tools-26.0.1,build-tools-26.0.2,android-26,extra-android-m2repository
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
@@ -49,16 +49,16 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in client/android/app/democracy2-release-key.keystore.enc -out client/android/app/democracy2-release-key.keystore -d
     - gem update --system
     - gem install fastlane --no-rdoc --no-ri --no-document --quiet
-
     install:
     - nvm install 8
     - yarn --version
     - yarn install
+    - cd client
     android:
       components:
       - tools
       - platform-tools
-      # android 23
+      # android 23,25,26
       - build-tools-23.0.1
       - build-tools-25.0.1
       - build-tools-26.0.1
@@ -74,7 +74,7 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     script:
-    - cd client/android && fastlane android alpha
+    - cd android && fastlane android alpha
     after_success:
     - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Alpha Version $TRAVIS_BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
@@ -86,20 +86,17 @@ matrix:
     language: objective-c
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
-
     before_install:
-    - cd client
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
-
     install:
     - nvm install 8
     - npm install -g yarn
     - yarn --version
     - yarn install
-
+    - cd client
     script:
     - fastlane update_fastlane
-    - cd client/ios
+    - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios alpha
     after_success:
     - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Version $TRAVIS_BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
