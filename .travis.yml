@@ -17,7 +17,7 @@ matrix:
   # basic docker build test
   - if: tag IS blank
     os: linux
-    #before_install:
+    before_install:
     - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
     script:
     - docker-compose build
