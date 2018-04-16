@@ -9,7 +9,8 @@ import { createServer } from 'http';
 import { Engine } from 'apollo-engine';
 import Next from 'next';
 import basicAuth from 'express-basic-auth';
-import auth from 'http-auth';
+import auth from './express/auth';
+import requireAuth from './express/auth/requireAuth';
 
 import mongo from './config/db';
 import constants from './config/constants';
@@ -20,6 +21,7 @@ import importJob from './importJob';
 
 // Models
 import ProcedureModel from './models/Procedure';
+import UserModel from './models/User';
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -44,11 +46,14 @@ app.prepare().then(async () => {
   /**
    * ADMIN PROTECTION
    */
-  const basic = auth.basic({
-    realm: 'Simon Area.',
-    file: `${__dirname}/../data/admins.htpasswd`,
-  });
-  server.use('/admin', auth.connect(basic));
+  auth(server);
+  server.use('/admin', requireAuth({ role: 'BACKEND' }));
+
+  // const basic = auth.basic({
+  //   realm: 'Simon Area.',
+  //   file: `${__dirname}/../data/admins.htpasswd`,
+  // });
+  // server.use('/admin', auth.connect(basic));
 
   server.use(bodyParser.json());
 
@@ -62,11 +67,16 @@ app.prepare().then(async () => {
   }
 
   server.use(constants.GRAPHQL_PATH, (req, res, next) => {
+    console.log('req.user', req.user);
     graphqlExpress({
       schema,
       context: {
+        req,
+        res,
+        user: req.user,
         // Models
         ProcedureModel,
+        UserModel,
       },
       tracing: true,
       cacheControl: true,

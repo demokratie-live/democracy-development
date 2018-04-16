@@ -3,5 +3,5 @@
   "ignore": ["node_modules", "**/.next/**/*", "src/pages/**/*"],
   "watch": ["**/src/**/*"],
   "ext": "js jsx json graphql",
-  "exec": "node --require babel-register"
+  "exec": "node --require babel-register --require dotenv/config"
 }

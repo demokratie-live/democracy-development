@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import withData from '../../lib/withData';
 
 const Layout = ({ children }) => (
   <div>
