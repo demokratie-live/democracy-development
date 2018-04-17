@@ -6,7 +6,12 @@
     "jest": true,
     "browser": true
   },
-  "extends": ["airbnb"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "plugins": ["react"],
   "rules": {
     "linebreak-style": 0,

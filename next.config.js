@@ -5,10 +5,11 @@ const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   webpack: (config) => {
-    config.plugins = config.plugins || [];
+    const newConfig = { ...config };
+    newConfig.plugins = newConfig.plugins || [];
 
-    config.plugins = [
-      ...config.plugins,
+    newConfig.plugins = [
+      ...newConfig.plugins,
 
       // Read the .env file
       new Dotenv({
@@ -17,7 +18,7 @@ module.exports = {
       }),
     ];
 
-    return config;
+    return newConfig;
   },
   webpackDevMiddleware: config =>
     // Perform customizations to webpack dev middleware config

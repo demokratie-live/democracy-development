@@ -1,17 +1,18 @@
-import React, { Component } from 'react';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
-import { Button } from 'reactstrap';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { graphql } from "react-apollo";
+import gql from "graphql-tag";
+import { Button } from "reactstrap";
 
-import GET_PROCEDURE_LIST from '../../src/graphql/queries/procedureList';
+import GET_PROCEDURE_LIST from "../../src/graphql/queries/procedureList";
 
-import VoteEdit from './VoteEdit';
+import VoteEdit from "./VoteEdit";
 
 class Procedure extends Component {
   state = {
     changed: false,
     data: [],
-    decisionText: '',
+    decisionText: ""
   };
   render() {
     const {
@@ -22,19 +23,31 @@ class Procedure extends Component {
       currentStatus,
       saveChanges,
       customData,
-      history,
+      history
     } = this.props;
     const { changed } = this.state;
     const namedVoted =
       history &&
-      history.some(({ decision }) =>
-        decision &&
-          decision.some(({ type: decisionType }) => decisionType === 'Namentliche Abstimmung'));
-    const findSpotUrl = history.find(({ assignment, initiator }) => assignment === 'BT' && initiator === '3. Beratung');
+      history.some(
+        ({ decision }) =>
+          decision &&
+          decision.some(
+            ({ type: decisionType }) =>
+              decisionType === "Namentliche Abstimmung"
+          )
+      );
+    const findSpotUrl = history.find(
+      ({ assignment, initiator }) =>
+        assignment === "BT" && initiator === "3. Beratung"
+    );
     const rowHeaderClasses = `card-header ${
-      customData || namedVoted ? 'bg-success' : findSpotUrl ? 'bg-secondary' : 'bg-warning'
+      customData || namedVoted
+        ? "bg-success"
+        : findSpotUrl
+          ? "bg-secondary"
+          : "bg-warning"
     } `;
-    console.log({ props: this.props, namedVoted });
+
     return (
       <div key={procedureId} className="card">
         <div className={rowHeaderClasses} id={`heading-${procedureId}`}>
@@ -75,7 +88,7 @@ class Procedure extends Component {
                 </dt>,
                 <dd key="2" className="col-sm-9">
                   Ja
-                </dd>,
+                </dd>
               ]}
               {findSpotUrl && [
                 <dt key="1" className="col-sm-3">
@@ -85,7 +98,7 @@ class Procedure extends Component {
                   <a href={findSpotUrl.findSpotUrl} target="_blank">
                     {findSpotUrl.findSpotUrl}
                   </a>
-                </dd>,
+                </dd>
               ]}
             </dl>
             {!namedVoted && (
@@ -93,11 +106,22 @@ class Procedure extends Component {
                 <div className="form-group">
                   <VoteEdit
                     procedureId={procedureId}
-                    partyVotes={customData ? customData.voteResults.partyVotes : []}
-                    parties={['CDU', 'SPD', 'AFD', 'Grüne', 'Linke', 'FDP', 'Andere']}
-                    decisionText={customData ? customData.voteResults.decisionText : ''}
+                    partyVotes={
+                      customData ? customData.voteResults.partyVotes : []
+                    }
+                    parties={[
+                      "CDU",
+                      "SPD",
+                      "AFD",
+                      "Grüne",
+                      "Linke",
+                      "FDP",
+                      "Andere"
+                    ]}
+                    decisionText={
+                      customData ? customData.voteResults.decisionText : ""
+                    }
                     onChange={(data, decisionText) => {
-                      console.log({ decisionText });
                       this.setState({ changed: true, data, decisionText });
                     }}
                   />
@@ -109,8 +133,8 @@ class Procedure extends Component {
                       variables: {
                         procedureId,
                         partyVotes: this.state.data,
-                        decisionText: this.state.decisionText,
-                      },
+                        decisionText: this.state.decisionText
+                      }
                     })
                   }
                   disabled={!changed}
@@ -136,6 +160,17 @@ class Procedure extends Component {
     );
   }
 }
+
+Procedure.propTypes = {
+  procedureId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  period: PropTypes.number.isRequired,
+  currentStatus: PropTypes.string.isRequired,
+  saveChanges: PropTypes.func.isRequired,
+  customData: PropTypes.shape().isRequired,
+  history: PropTypes.shape().isRequired
+};
 
 const saveChanges = gql`
   mutation saveProcedureCustomData(
@@ -170,12 +205,12 @@ const saveChanges = gql`
 `;
 
 export default graphql(saveChanges, {
-  name: 'saveChanges',
+  name: "saveChanges",
   options: {
     refetchQueries: [
       {
-        query: GET_PROCEDURE_LIST,
-      },
-    ],
-  },
+        query: GET_PROCEDURE_LIST
+      }
+    ]
+  }
 })(Procedure);

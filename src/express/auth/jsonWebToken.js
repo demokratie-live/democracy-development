@@ -1,36 +1,36 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
-import { Strategy, ExtractJwt } from 'passport-jwt';
-import passport from 'passport';
-import mongoose from 'mongoose';
+import { Strategy, ExtractJwt } from "passport-jwt";
+import passport from "passport";
+import mongoose from "mongoose";
 
-export default (app) => {
-  const UserModel = mongoose.model('User');
+export default app => {
+  const UserModel = mongoose.model("User");
 
-  passport.use(new Strategy(
-    {
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        ExtractJwt.fromUrlQueryParameter('auth_token'),
-        ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ]),
-      secretOrKey: process.env.AUTH_JWT_SECRET,
-    },
-    async (jwtPayload, done) => {
-      try {
-        const user = await UserModel.findById(jwtPayload._id);
-        console.log('user', user);
-        if (!user) {
-          return done(null, false);
+  passport.use(
+    new Strategy(
+      {
+        jwtFromRequest: ExtractJwt.fromExtractors([
+          ExtractJwt.fromUrlQueryParameter("auth_token"),
+          ExtractJwt.fromAuthHeaderAsBearerToken()
+        ]),
+        secretOrKey: process.env.AUTH_JWT_SECRET
+      },
+      async (jwtPayload, done) => {
+        try {
+          const user = await UserModel.findById(jwtPayload._id);
+          if (!user) {
+            return done(null, false);
+          }
+          return done(null, user);
+        } catch (err) {
+          return done(err, false);
         }
-        return done(null, user);
-      } catch (err) {
-        return done(err, false);
       }
-    },
-  ));
+    )
+  );
 
   app.use((req, res, next) => {
-    passport.authenticate('jwt', { session: true }, (err, user) => {
-      // console.log(info);
+    passport.authenticate("jwt", { session: true }, (err, user) => {
       if (user) {
         req.user = user;
       }
@@ -38,7 +38,7 @@ export default (app) => {
     })(req, res, next);
   });
 
-  app.get('/test', (req, res) => {
+  app.get("/test", (req, res) => {
     res.send({ query: req.query, user: req.user });
   });
 };

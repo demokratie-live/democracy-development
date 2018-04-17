@@ -1,55 +1,53 @@
-import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import { graphql, compose } from 'react-apollo';
-import { withRouter } from 'next/router';
+import React, { Component } from "react";
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
+import { graphql, compose } from "react-apollo";
+import { withRouter } from "next/router";
 
-import Layout from '../components/layouts/Main';
+import Layout from "../components/layouts/Main";
 
-import redirect from '../lib/redirect';
+import redirect from "../lib/redirect";
 
-import withData from '../lib/withData';
-import SIGN_IN from '../src/graphql/mutations/signIn';
-import UPDATE_JWT from '../src/graphql/mutations/client/updateJwt';
+import withData from "../lib/withData";
+import SIGN_IN from "../src/graphql/mutations/signIn";
+import UPDATE_JWT from "../src/graphql/mutations/client/updateJwt";
 
 class Login extends Component {
   state = {
-    email: '',
-    password: '',
+    email: "",
+    password: ""
   };
 
-  doSignIn = async (e) => {
+  doSignIn = async e => {
     e.preventDefault();
     const {
       signIn,
       updateJwt,
-      router: { query },
+      router: { query }
     } = this.props;
     const { email, password } = this.state;
 
     const {
       data: {
-        signIn: { jwt },
-      },
+        signIn: { jwt }
+      }
     } = await signIn({
       variables: {
         email,
-        password,
-      },
+        password
+      }
     });
 
     const result = await updateJwt({
       variables: {
-        token: jwt,
-      },
+        token: jwt
+      }
     });
 
     if (query.from) {
       redirect({}, query.from);
     } else {
-      redirect({}, '/');
+      redirect({}, "/");
     }
-
-    console.log({ result });
   };
   render() {
     const { email, password } = this.state;
@@ -69,7 +67,9 @@ class Login extends Component {
                 id="exampleEmail"
                 placeholder="something@idk.cool"
                 value={email}
-                onChange={({ target: { value } }) => this.setState({ email: value })}
+                onChange={({ target: { value } }) =>
+                  this.setState({ email: value })
+                }
               />
             </FormGroup>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
@@ -82,7 +82,9 @@ class Login extends Component {
                 id="examplePassword"
                 placeholder="don't tell!"
                 value={password}
-                onChange={({ target: { value } }) => this.setState({ password: value })}
+                onChange={({ target: { value } }) =>
+                  this.setState({ password: value })
+                }
               />
             </FormGroup>
             <Button>Submit</Button>
@@ -93,11 +95,15 @@ class Login extends Component {
   }
 }
 
-export default withRouter(withData(compose(
-  graphql(SIGN_IN, {
-    name: 'signIn',
-  }),
-  graphql(UPDATE_JWT, {
-    name: 'updateJwt',
-  }),
-)(Login)));
+export default withRouter(
+  withData(
+    compose(
+      graphql(SIGN_IN, {
+        name: "signIn"
+      }),
+      graphql(UPDATE_JWT, {
+        name: "updateJwt"
+      })
+    )(Login)
+  )
+);

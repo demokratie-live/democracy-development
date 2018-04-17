@@ -1,20 +1,23 @@
-import React, { Component } from 'react';
-import { FormGroup, Label, Input } from 'reactstrap';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { FormGroup, Label, Input } from "reactstrap";
 
 class VoteEdit extends Component {
   state = {
     selections: [],
-    decisionText: '',
+    decisionText: ""
   };
 
   componentWillMount() {
     this.setState({
-      selections: this.props.partyVotes.map(({ party, main, deviants: { yes, no, abstination } }) => ({
-        party,
-        main,
-        deviants: { yes, no, abstination },
-      })),
-      decisionText: this.props.decisionText,
+      selections: this.props.partyVotes.map(
+        ({ party, main, deviants: { yes, no, abstination } }) => ({
+          party,
+          main,
+          deviants: { yes, no, abstination }
+        })
+      ),
+      decisionText: this.props.decisionText
     });
   }
 
@@ -25,28 +28,33 @@ class VoteEdit extends Component {
     const deviants = {
       yes: parseInt(this.inputs[party].YES.value, 10) || 0,
       no: parseInt(this.inputs[party].NO.value, 10) || 0,
-      abstination: parseInt(this.inputs[party].ABSTINATION.value, 10) || 0,
+      abstination: parseInt(this.inputs[party].ABSTINATION.value, 10) || 0
     };
-    const selectionIndex = changedSelections.findIndex(({ party: pty }) => pty === party);
+    const selectionIndex = changedSelections.findIndex(
+      ({ party: pty }) => pty === party
+    );
     const editValues = { party, deviants };
     if (radio) {
       editValues.main = main;
     }
     if (selectionIndex !== -1) {
-      changedSelections[selectionIndex] = { ...changedSelections[selectionIndex], ...editValues };
+      changedSelections[selectionIndex] = {
+        ...changedSelections[selectionIndex],
+        ...editValues
+      };
     } else {
       changedSelections = [...changedSelections, editValues];
     }
 
     this.setState(
       {
-        selections: changedSelections,
+        selections: changedSelections
       },
       () => {
         if (parties.length === this.state.selections.length) {
           onChange(this.state.selections, this.state.decisionText);
         }
-      },
+      }
     );
   };
 
@@ -54,13 +62,13 @@ class VoteEdit extends Component {
     const { parties, onChange } = this.props;
     this.setState(
       {
-        decisionText: value,
+        decisionText: value
       },
       () => {
         if (parties.length === this.state.selections.length) {
           onChange(this.state.selections, this.state.decisionText);
         }
-      },
+      }
     );
   };
 
@@ -71,16 +79,15 @@ class VoteEdit extends Component {
       selections.find(({ party: pty }) => pty === party) ||
       partyVotes.find(({ party: pty }) => pty === party);
     if (selection) {
-      return selection.deviants[voting.toLowerCase()] || '';
+      return selection.deviants[voting.toLowerCase()] || "";
     }
-    return '';
+    return "";
   };
 
   inputs = {};
   radios = {};
 
   isChecked = ({ party, selection }) => {
-    const { partyVotes } = this.props;
     const { selections } = this.state;
     const curParty = selections.find(({ party: pty }) => pty === party);
     if (curParty) {
@@ -90,8 +97,8 @@ class VoteEdit extends Component {
   };
 
   render() {
-    const { parties, procedureId, partyVotes } = this.props;
-    const labels = { YES: 'ja', ABSTINATION: 'enthaltung', NO: 'nein' };
+    const { parties, procedureId } = this.props;
+    const labels = { YES: "ja", ABSTINATION: "enthaltung", NO: "nein" };
     return (
       <div>
         <FormGroup>
@@ -108,7 +115,7 @@ class VoteEdit extends Component {
           {parties.map(party => (
             <fieldset key={party} className="col-md" style={{ minWidth: 100 }}>
               <legend>{party}</legend>
-              {['YES', 'NO', 'ABSTINATION'].map(voting => (
+              {["YES", "NO", "ABSTINATION"].map(voting => (
                 <FormGroup check key={voting}>
                   <Label check>
                     <Input
@@ -126,10 +133,10 @@ class VoteEdit extends Component {
                     bsSize="5"
                     value={this.getValue({ party, voting })}
                     placeholder="0"
-                    innerRef={(node) => {
+                    innerRef={node => {
                       this.inputs = {
                         ...this.inputs,
-                        [party]: { ...this.inputs[party], [voting]: node },
+                        [party]: { ...this.inputs[party], [voting]: node }
                       };
                     }}
                     onChange={this.onChange(party, voting)}
@@ -143,4 +150,13 @@ class VoteEdit extends Component {
     );
   }
 }
+
+VoteEdit.propTypes = {
+  partyVotes: PropTypes.shape().isRequired,
+  decisionText: PropTypes.string.isRequired,
+  procedureId: PropTypes.string.isRequired,
+  parties: PropTypes.shape().isRequired,
+  onChange: PropTypes.func.isRequired
+};
+
 export default VoteEdit;
