@@ -11,8 +11,7 @@
     "imp": "babel-node src/import.js",
     "diffs": "babel-node src/diffs.js",
     "lint": "eslint ./src ./pages ./lib ./components",
-    "build": "next build",
-    "serve": "node dist/index.js"
+    "build": "next build"
   },
   "dependencies": {
     "@democracy-deutschland/dip21-scraper": "^0.1.0",

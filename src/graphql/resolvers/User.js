@@ -1,5 +1,5 @@
-import { verify, hash } from '../../../lib/password';
 import isEmail from 'validator/lib/isEmail';
+import { verify, hash } from '../../../lib/password';
 
 export default {
   Query: {},
@@ -11,13 +11,12 @@ export default {
 
       let user = await UserModel.findOne({ email });
       if (user) {
-        return verify(password, user.password).then((passwordCorrect) => {
-          if (passwordCorrect) {
-            user.jwt = user.createToken(res);
-            return user;
-          }
-          return Promise.reject(Error('password incorrect'));
-        });
+        const isPasswordValid = verify(password, user.password);
+        if (isPasswordValid) {
+          user.jwt = user.createToken(res);
+          return user;
+        }
+        return Promise.reject(Error('password incorrect'));
       }
       user = await UserModel.create({ email, password: await hash(password, 10) });
 

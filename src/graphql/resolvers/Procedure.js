@@ -1,12 +1,12 @@
 const deputiesNumber = {
   19: {
-    linke: 69,
-    spd: 153,
-    gruene: 67,
-    cdu: 246,
-    fdp: 80,
-    fraktionslos: 2,
-    afd: 92,
+    Linke: 69,
+    SPD: 153,
+    Grüne: 67,
+    CDU: 246,
+    FDP: 80,
+    AFD: 92,
+    Andere: 2,
   },
 };
 
@@ -97,25 +97,63 @@ export default {
     saveProcedureCustomData: async (
       parent,
       { procedureId, partyVotes, decisionText },
-      { ProcedureModel },
+      { ProcedureModel, user },
     ) => {
+      if (!user || user.role !== 'BACKEND') {
+        throw new Error('Authentication required');
+      }
       const procedure = await ProcedureModel.findOne({ procedureId });
 
-      const voteResults = {
+      let voteResults = {
         partyVotes,
         decisionText,
       };
 
-      if (procedure.period === 19) {
-        console.log(partyVotes);
+      if (deputiesNumber[procedure.period]) {
+        const sumResults = {
+          yes: 0,
+          abstination: 0,
+          no: 0,
+        };
+        partyVotes.forEach(({ party, main, deviants }) => {
+          switch (main) {
+            case 'YES':
+              sumResults.yes +=
+                deputiesNumber[procedure.period][party] -
+                deviants.yes -
+                deviants.abstination -
+                deviants.no;
+              break;
+            case 'ABSTINATION':
+              sumResults.abstination +=
+                deputiesNumber[procedure.period][party] -
+                deviants.yes -
+                deviants.abstination -
+                deviants.no;
+              break;
+            case 'NO':
+              sumResults.no +=
+                deputiesNumber[procedure.period][party] -
+                deviants.yes -
+                deviants.abstination -
+                deviants.no;
+              break;
+
+            default:
+              break;
+          }
+          sumResults.yes += deviants.yes;
+          sumResults.abstination += deviants.abstination;
+          sumResults.no += deviants.no;
+        });
+        voteResults = { ...voteResults, ...sumResults };
       }
 
-      // TODO: SECURE THIS FUNCTION
       await ProcedureModel.update(
         { procedureId },
         {
           $set: {
-            'customData.voteResults': voteResults,
+            'customData.voteResults': { ...voteResults },
           },
         },
       );

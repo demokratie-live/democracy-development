@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Button } from 'reactstrap';
+
 import GET_PROCEDURE_LIST from '../../src/graphql/queries/procedureList';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 
 import VoteEdit from './VoteEdit';
 
@@ -69,12 +70,18 @@ class Procedure extends Component {
               <dt className="col-sm-3">Status:</dt>
               <dd className="col-sm-9">{currentStatus}</dd>
               {namedVoted && [
-                <dt className="col-sm-3">Namentliche Abstimmung</dt>,
-                <dd className="col-sm-9">Ja</dd>,
+                <dt key="1" className="col-sm-3">
+                  Namentliche Abstimmung
+                </dt>,
+                <dd key="2" className="col-sm-9">
+                  Ja
+                </dd>,
               ]}
               {findSpotUrl && [
-                <dt className="col-sm-3">Beschlusstext Dokument</dt>,
-                <dd className="col-sm-9">
+                <dt key="1" className="col-sm-3">
+                  Beschlusstext Dokument
+                </dt>,
+                <dd key="2" className="col-sm-9">
                   <a href={findSpotUrl.findSpotUrl} target="_blank">
                     {findSpotUrl.findSpotUrl}
                   </a>
@@ -87,7 +94,7 @@ class Procedure extends Component {
                   <VoteEdit
                     procedureId={procedureId}
                     partyVotes={customData ? customData.voteResults.partyVotes : []}
-                    parties={['CDU', 'SPD', 'AFD', 'Grüne', 'Linke', 'FDP']}
+                    parties={['CDU', 'SPD', 'AFD', 'Grüne', 'Linke', 'FDP', 'Andere']}
                     decisionText={customData ? customData.voteResults.decisionText : ''}
                     onChange={(data, decisionText) => {
                       console.log({ decisionText });
