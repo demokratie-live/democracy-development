@@ -8,7 +8,7 @@
     "yarn-install":
       "cd bundestag.io && yarn && cd ../client && yarn && cd ../server && yarn",
     "docker-up-dev":
-      "set COMPOSE_CONVERT_WINDOWS_PATHS=1 && docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build",
+      "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build",
     "dev": "yarn yarn-install && yarn docker-up-dev"
   }
 }
