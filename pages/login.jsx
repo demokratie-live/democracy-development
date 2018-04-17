@@ -19,7 +19,6 @@ class Login extends Component {
 
   doSignIn = async (e) => {
     e.preventDefault();
-    console.log(this.props);
     const {
       signIn,
       updateJwt,
@@ -46,6 +45,8 @@ class Login extends Component {
 
     if (query.from) {
       redirect({}, query.from);
+    } else {
+      redirect({}, '/');
     }
 
     console.log({ result });

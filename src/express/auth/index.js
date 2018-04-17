@@ -20,6 +20,10 @@ export default (app) => {
   });
 
   app.use(cookieParser());
+  app.get('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.redirect('/login');
+  });
   const parseCookieToken = async (req, res, next) => {
     req.headers.authorization = `Bearer ${req.cookies.token}`;
 

@@ -20,7 +20,7 @@ export default {
         });
       }
       user = await UserModel.create({ email, password: await bcrypt.hash(password, 10) });
-      console.log('user', user);
+
       user.jwt = user.createToken(res);
       return user;
     },

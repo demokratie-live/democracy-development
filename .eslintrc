@@ -13,6 +13,7 @@
     "no-console": 0,
     "no-new": 0,
     "import/no-extraneous-dependencies": 0,
-    "no-underscore-dangle": 0
+    "no-underscore-dangle": 0,
+    "jsx-a11y/anchor-is-valid": 0
   }
 }
