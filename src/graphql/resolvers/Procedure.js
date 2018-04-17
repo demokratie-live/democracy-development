@@ -1,3 +1,15 @@
+const deputiesNumber = {
+  19: {
+    linke: 69,
+    spd: 153,
+    gruene: 67,
+    cdu: 246,
+    fdp: 80,
+    fraktionslos: 2,
+    afd: 92,
+  },
+};
+
 export default {
   Query: {
     procedures: (
@@ -87,20 +99,27 @@ export default {
       { procedureId, partyVotes, decisionText },
       { ProcedureModel },
     ) => {
+      const procedure = await ProcedureModel.findOne({ procedureId });
+
+      const voteResults = {
+        partyVotes,
+        decisionText,
+      };
+
+      if (procedure.period === 19) {
+        console.log(partyVotes);
+      }
+
       // TODO: SECURE THIS FUNCTION
-      console.log(partyVotes);
       await ProcedureModel.update(
         { procedureId },
         {
           $set: {
-            'customData.voteResults.partyVotes': partyVotes,
-            'customData.voteResults.decisionText': decisionText,
+            'customData.voteResults': voteResults,
           },
         },
       );
-      const procedure = await ProcedureModel.findOne({ procedureId });
-      console.log(procedure.customData);
-      return procedure;
+      return ProcedureModel.findOne({ procedureId });
     },
   },
 };
