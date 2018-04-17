@@ -37,7 +37,7 @@ class Login extends Component {
       }
     });
 
-    const result = await updateJwt({
+    await updateJwt({
       variables: {
         token: jwt
       }
