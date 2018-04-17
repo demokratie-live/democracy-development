@@ -11,13 +11,6 @@ const VoteResults = () => (
       <h2>Abstimmungsergebnisse</h2>
       <ProceduresList />
     </div>
-    <style jsx>
-      {`
-        h1 {
-          color: yellow;
-        }
-      `}
-    </style>
   </Layout>
 );
 

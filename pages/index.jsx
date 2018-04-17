@@ -11,11 +11,5 @@ export default () => (
       <br />
       <a href="https://www.democracy-deutschland.de/#!start">Democracy Deutschland</a>
     </div>
-    <style jsx>
-      {`
-        h1 {
-        }
-      `}
-    </style>
   </Layout>
 );

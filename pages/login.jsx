@@ -88,12 +88,6 @@ class Login extends Component {
             <Button>Submit</Button>
           </Form>
         </div>
-        <style jsx>
-          {`
-            h1 {
-            }
-          `}
-        </style>
       </Layout>
     );
   }

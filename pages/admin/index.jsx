@@ -7,12 +7,5 @@ export default () => (
     <div className="alert alert-primary">
       <h1>Wilkommen bei Admin</h1>
     </div>
-    <style jsx>
-      {`
-        h1 {
-          color: yellow;
-        }
-      `}
-    </style>
   </Layout>
 );

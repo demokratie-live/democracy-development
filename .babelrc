@@ -4,7 +4,7 @@
       "presets": [["env", { "modules": "commonjs" }], "next/babel"]
     },
     "production": {
-      "presets": "next/babel"
+      "presets": [["env", { "modules": "commonjs" }], "next/babel"]
     },
     "test": {
       "presets": [["env", { "modules": "commonjs" }], "next/babel"]
