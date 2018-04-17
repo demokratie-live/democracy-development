@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import passport from 'passport';
-import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
 
+import { hash } from '../../../lib/password';
 import jwt from './jsonWebToken';
 
 export default (app) => {
@@ -13,7 +13,7 @@ export default (app) => {
     if (!rootUser && process.env.ROOT_USER_MAIL) {
       User.create({
         email: process.env.ROOT_USER_MAIL,
-        password: await bcrypt.hash(process.env.ROOT_USER_PASSWORD, 10),
+        password: hash(process.env.ROOT_USER_PASSWORD),
         role: 'BACKEND',
       });
     }

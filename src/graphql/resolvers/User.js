@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import { verify, hash } from '../../../lib/password';
 import isEmail from 'validator/lib/isEmail';
 
 export default {
@@ -11,7 +11,7 @@ export default {
 
       let user = await UserModel.findOne({ email });
       if (user) {
-        return bcrypt.compare(password, user.password).then((passwordCorrect) => {
+        return verify(password, user.password).then((passwordCorrect) => {
           if (passwordCorrect) {
             user.jwt = user.createToken(res);
             return user;
@@ -19,7 +19,7 @@ export default {
           return Promise.reject(Error('password incorrect'));
         });
       }
-      user = await UserModel.create({ email, password: await bcrypt.hash(password, 10) });
+      user = await UserModel.create({ email, password: await hash(password, 10) });
 
       user.jwt = user.createToken(res);
       return user;
