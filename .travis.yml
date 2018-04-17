@@ -31,6 +31,33 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
     script:
     - docker-compose build
+  # client in master?
+  - if: type IN (pull_request)
+    os: linux
+    script:
+    - cd client
+    - COMMIT=$(git rev-parse HEAD)
+    - BRANCHES=$(git branch -r --contains ${COMMIT})
+    - ORIGINMASTER='origin/master'
+    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi
+  # server in master?
+  - if: type IN (pull_request)
+    os: linux
+    script:
+    - cd server
+    - COMMIT=$(git rev-parse HEAD)
+    - BRANCHES=$(git branch -r --contains ${COMMIT})
+    - ORIGINMASTER='origin/master'
+    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi
+  # bundestag.io in master?
+  - if: type IN (pull_request)
+    os: linux
+    script:
+    - cd bundestag.io
+    - COMMIT=$(git rev-parse HEAD)
+    - BRANCHES=$(git branch -r --contains ${COMMIT})
+    - ORIGINMASTER='origin/master'
+    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi
   # server deploy alpha
   - if: tag =~ -alpha\+server
     os: linux
