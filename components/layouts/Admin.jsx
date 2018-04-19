@@ -1,17 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Head from 'next/head';
-import Link from 'next/link';
-import { Button } from 'reactstrap';
+import React from "react";
+import PropTypes from "prop-types";
+import Head from "next/head";
+import Link from "next/link";
+import { Button } from "reactstrap";
 
-import initApollo from '../../lib/initApollo';
-import redirect from '../../lib/redirect';
+import initApollo from "../../lib/initApollo";
+import redirect from "../../lib/redirect";
 
 const Layout = ({ children }) => {
   const logout = () => {
     const client = initApollo();
     client.resetStore();
-    redirect({}, '/logout');
+    redirect({}, "/logout");
   };
 
   return (
@@ -20,7 +20,6 @@ const Layout = ({ children }) => {
         <link
           rel="stylesheet"
           href="/static/bootstrap/css/bootstrap.min.css"
-          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
           crossOrigin="anonymous"
         />
         <script
@@ -38,8 +37,14 @@ const Layout = ({ children }) => {
           integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
           crossOrigin="anonymous"
         />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
       </Head>
       <nav className="nav">
         <Link href="/admin">
@@ -56,7 +61,7 @@ const Layout = ({ children }) => {
 };
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 export default Layout;
