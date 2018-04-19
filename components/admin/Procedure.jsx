@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 import { Button } from "reactstrap";
-import { propType } from "graphql-anywhere";
 
 import GET_PROCEDURE_LIST from "../../src/graphql/queries/procedureList";
 
