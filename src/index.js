@@ -1,69 +1,106 @@
 /* eslint-disable no-console */
 
-import express from 'express';
-import { CronJob } from 'cron';
-import bodyParser from 'body-parser';
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
-import { makeExecutableSchema } from 'graphql-tools';
-import { createServer } from 'http';
-import { Engine } from 'apollo-engine';
+import express from "express";
+import { CronJob } from "cron";
+import bodyParser from "body-parser";
+import { graphqlExpress, graphiqlExpress } from "apollo-server-express";
+import { makeExecutableSchema } from "graphql-tools";
+import { createServer } from "http";
+import { Engine } from "apollo-engine";
+import Next from "next";
+import auth from "./express/auth";
+import requireAuth from "./express/auth/requireAuth";
 
-import mongo from './config/db';
-import constants from './config/constants';
-import typeDefs from './graphql/schemas';
-import resolvers from './graphql/resolvers';
+import mongo from "./config/db";
+import constants from "./config/constants";
+import typeDefs from "./graphql/schemas";
+import resolvers from "./graphql/resolvers";
 
-import importJob from './importJob';
+import importJob from "./importJob";
 
 // Models
-import ProcedureModel from './models/Procedure';
+import ProcedureModel from "./models/Procedure";
+import UserModel from "./models/User";
 
-(async () => {
+const dev = process.env.NODE_ENV !== "production";
+
+const app = Next({ dev });
+const handle = app.getRequestHandler();
+
+app.prepare().then(async () => {
   await mongo();
-  const app = express();
+  const server = express();
 
   const schema = makeExecutableSchema({
     typeDefs,
-    resolvers,
+    resolvers
   });
 
   if (process.env.ENGINE_API_KEY) {
-    const engine = new Engine({ engineConfig: { apiKey: process.env.ENGINE_API_KEY } });
+    const engine = new Engine({
+      engineConfig: { apiKey: process.env.ENGINE_API_KEY }
+    });
     engine.start();
-    app.use(engine.expressMiddleware());
+    server.use(engine.expressMiddleware());
   }
 
-  app.use(bodyParser.json());
+  /**
+   * ADMIN PROTECTION
+   */
+  auth(server);
+  server.use("/admin", requireAuth({ role: "BACKEND" }));
 
-  if (process.env.ENVIRONMENT !== 'production') {
-    app.use(
+  // const basic = auth.basic({
+  //   realm: 'Simon Area.',
+  //   file: `${__dirname}/../data/admins.htpasswd`,
+  // });
+  // server.use('/admin', auth.connect(basic));
+
+  server.use(bodyParser.json());
+
+  if (process.env.ENVIRONMENT !== "production") {
+    server.use(
       constants.GRAPHIQL_PATH,
       graphiqlExpress({
-        endpointURL: constants.GRAPHQL_PATH,
-      }),
+        endpointURL: constants.GRAPHQL_PATH
+      })
     );
   }
 
-  app.use(constants.GRAPHQL_PATH, (req, res, next) => {
+  server.use(constants.GRAPHQL_PATH, (req, res, next) => {
     graphqlExpress({
       schema,
       context: {
+        req,
+        res,
+        user: req.user,
         // Models
         ProcedureModel,
+        UserModel
       },
       tracing: true,
-      cacheControl: true,
+      cacheControl: true
     })(req, res, next);
   });
 
-  const graphqlServer = createServer(app);
+  server.get("*", (req, res) => handle(req, res));
 
-  graphqlServer.listen(constants.PORT, (err) => {
+  const graphqlServer = createServer(server);
+
+  graphqlServer.listen(constants.PORT, err => {
     if (err) {
       console.error(err);
     } else {
       console.log(`App is listen on port: ${constants.PORT}`);
-      new CronJob('*/15 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
+      new CronJob(
+        "*/15 * * * *",
+        importJob,
+        null,
+        true,
+        "Europe/Berlin",
+        null,
+        true
+      );
     }
   });
-})();
+});

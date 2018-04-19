@@ -3,3 +3,4 @@ diffs/*
 *.log
 .env
 /dist/*
+.next

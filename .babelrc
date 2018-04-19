@@ -1,14 +1,13 @@
 {
-  "presets": [
-    [
-      "env",
-      {
-        "targets": {
-          "node": "current"
-        }
-      }
-    ],
-    "stage-3"
-  ],
-  "plugins": [["transform-object-rest-spread"]]
+  "env": {
+    "development": {
+      "presets": [["env", { "modules": "commonjs" }], "next/babel"]
+    },
+    "production": {
+      "presets": [["env", { "modules": "commonjs" }], "next/babel"]
+    },
+    "test": {
+      "presets": [["env", { "modules": "commonjs" }], "next/babel"]
+    }
+  }
 }
