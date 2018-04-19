@@ -152,10 +152,10 @@ class VoteEdit extends Component {
 }
 
 VoteEdit.propTypes = {
-  partyVotes: PropTypes.shape().isRequired,
+  partyVotes: PropTypes.array.isRequired,
   decisionText: PropTypes.string.isRequired,
   procedureId: PropTypes.string.isRequired,
-  parties: PropTypes.shape().isRequired,
+  parties: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired
 };
 

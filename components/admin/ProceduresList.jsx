@@ -1,13 +1,13 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { graphql } from "react-apollo";
-import { propType } from "graphql-anywhere";
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 
 import GET_PROCEDURE_LIST from "../../src/graphql/queries/procedureList";
 
 import Procedure from "./Procedure";
 
-class Procedures extends Component {
+class ProceduresList extends Component {
   state = {
     search: false,
     page: 1,
@@ -81,8 +81,8 @@ class Procedures extends Component {
   }
 }
 
-Procedures.propTypes = {
-  procedures: propType(GET_PROCEDURE_LIST)
+ProceduresList.propTypes = {
+  procedures: PropTypes.array.isRequired
 };
 
 export default graphql(GET_PROCEDURE_LIST, {
@@ -112,5 +112,5 @@ export default graphql(GET_PROCEDURE_LIST, {
       ]
     }
   },
-  props: ({ data: { procedures } }) => ({ procedures })
-})(Procedures);
+  props: ({ data: { procedures } }) => ({ procedures: procedures || [] })
+})(ProceduresList);

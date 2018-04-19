@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 import { Button } from "reactstrap";
+import { propType } from "graphql-anywhere";
 
 import GET_PROCEDURE_LIST from "../../src/graphql/queries/procedureList";
 
@@ -135,6 +136,8 @@ class Procedure extends Component {
                         partyVotes: this.state.data,
                         decisionText: this.state.decisionText
                       }
+                    }).then(() => {
+                      alert("saved");
                     })
                   }
                   disabled={!changed}
@@ -168,8 +171,12 @@ Procedure.propTypes = {
   period: PropTypes.number.isRequired,
   currentStatus: PropTypes.string.isRequired,
   saveChanges: PropTypes.func.isRequired,
-  customData: PropTypes.shape().isRequired,
-  history: PropTypes.shape().isRequired
+  customData: PropTypes.shape(),
+  history: PropTypes.array.isRequired
+};
+
+Procedure.defaultProps = {
+  customData: {}
 };
 
 const saveChanges = gql`
