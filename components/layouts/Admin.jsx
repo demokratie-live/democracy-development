@@ -41,7 +41,7 @@ const Layout = ({ children }) => {
       </Head>
       <nav className="nav">
         <Link href="/admin">
-          <a className="nav-link">Dashbord</a>
+          <a className="nav-link">Dashboard</a>
         </Link>
         <Link href="/admin/vote-results">
           <a className="nav-link">Vorgänge</a>
