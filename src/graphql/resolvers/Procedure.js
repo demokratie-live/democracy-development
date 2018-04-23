@@ -1,3 +1,6 @@
+import axios from 'axios';
+import CONSTANTS from '../../config/constants';
+
 const deputiesNumber = {
   19: {
     Linke: 69,
@@ -157,6 +160,15 @@ export default {
           },
         },
       );
+
+      axios.post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
+        data: [{period: procedure.period, types: [{type: procedure.type, changedIds: [ procedure.procedureId ]}]}],
+      }).then(async (response) => {
+        console.log(response.data);
+      }).catch((error) => {
+        console.log(`democracy server error: ${error}`);
+      });
+
       return ProcedureModel.findOne({ procedureId });
     },
   },
