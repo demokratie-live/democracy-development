@@ -28,6 +28,12 @@ cd bundestag.io
 yarn install
 ```
 
+### Configure environment variables
+```
+cp .env.example .env
+```
+Change .env if necessary.
+
 ### Compile and start
 ```
 yarn ~~start~~ dev
