@@ -35,6 +35,7 @@ matrix:
     os: linux
     before_install:
     - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
     script:
     - docker-compose build
   # client in master?
@@ -69,6 +70,7 @@ matrix:
     os: linux
     before_install:
     - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
     script:
@@ -84,6 +86,7 @@ matrix:
     os: linux
     before_install:
     - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
     script:

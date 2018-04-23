@@ -13,5 +13,6 @@ git status
 echo "### Start docker Process ###"
 echo "# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build"
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
-echo "# docker system prune"
-docker system prune
+echo "### Cleanup ###"
+echo "# y | docker system prune"
+echo y | docker system prune
