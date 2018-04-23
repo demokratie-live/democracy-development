@@ -84,8 +84,6 @@ services:
   mongodb:
     image: mongo:3.6
     container_name: mongodb
-    volumes:
-      - db_data:/data/db
     restart: always
     networks:
       default:
