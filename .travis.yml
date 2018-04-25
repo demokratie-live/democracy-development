@@ -76,7 +76,7 @@ matrix:
     script:
     - docker-compose build
     - docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_ALPHA_HOST}" - < ./doctl
-    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_ALPHA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_ALPHA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./start-production.sh $TRAVIS_TAG"
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_ALPHA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_ALPHA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
     after_success:
     - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"SUCCESS: New Server Alpha Version $TRAVIS_TAG deployed!\"}" ${DISCORD_WEBHOOK}'
     after_failure:
@@ -97,7 +97,7 @@ matrix:
     script:
     - docker-compose build
     - docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_BETA_HOST}" - < ./doctl
-    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_BETA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_BETA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./start-production.sh $TRAVIS_TAG"
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_BETA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_BETA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
     after_success:
     - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"SUCCESS: New Server Beta Version $TRAVIS_TAG deployed!\"}" ${DISCORD_WEBHOOK}'
     after_failure:
