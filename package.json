@@ -8,7 +8,6 @@
   "scripts": {
     "start": "NODE_ENV=production babel-node src/index.js",
     "dev": "nodemon src/index.js",
-    "imp": "babel-node src/import.js",
     "diffs": "babel-node src/diffs.js",
     "lint": "eslint . --ext js,jsx",
     "build": "next build"
