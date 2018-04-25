@@ -89,6 +89,11 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
+    # ensure we are on the master branch
+    - COMMIT=$(git rev-parse HEAD)
+    - BRANCHES=$(git branch -r --contains ${COMMIT})
+    - ORIGINMASTER='origin/master'
+    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then : else exit 1; fi
     script:
     - docker-compose build
     - docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_BETA_HOST}" - < ./doctl
@@ -155,6 +160,11 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in client/android/app/democracy2-release-key.keystore.enc -out client/android/app/democracy2-release-key.keystore -d
     - gem update --system
     - gem install fastlane --no-rdoc --no-ri --no-document --quiet
+    # ensure we are on the master branch
+    - COMMIT=$(git rev-parse HEAD)
+    - BRANCHES=$(git branch -r --contains ${COMMIT})
+    - ORIGINMASTER='origin/master'
+    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then : else exit 1; fi
     install:
     - cd client
     - nvm install 8
@@ -219,6 +229,11 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
+    # ensure we are on the master branch
+    - COMMIT=$(git rev-parse HEAD)
+    - BRANCHES=$(git branch -r --contains ${COMMIT})
+    - ORIGINMASTER='origin/master'
+    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then : else exit 1; fi
     install:
     - cd client
     - nvm install 8
