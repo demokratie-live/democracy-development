@@ -4,6 +4,3 @@
 [submodule "bundestag.io"]
 	path = bundestag.io
 	url = https://github.com/demokratie-live/bundestag.io
-[submodule "client"]
-	path = client
-	url = https://github.com/demokratie-live/democracy-client
