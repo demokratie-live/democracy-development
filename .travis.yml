@@ -93,7 +93,7 @@ matrix:
     - COMMIT=$(git rev-parse HEAD)
     - BRANCHES=$(git branch -r --contains ${COMMIT})
     - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then : else exit 1; fi
+    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then : ; else exit 1; fi
     script:
     - docker-compose build
     - docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_BETA_HOST}" - < ./doctl
@@ -164,7 +164,7 @@ matrix:
     - COMMIT=$(git rev-parse HEAD)
     - BRANCHES=$(git branch -r --contains ${COMMIT})
     - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then : else exit 1; fi
+    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then : ; else exit 1; fi
     install:
     - cd client
     - nvm install 8
@@ -233,7 +233,7 @@ matrix:
     - COMMIT=$(git rev-parse HEAD)
     - BRANCHES=$(git branch -r --contains ${COMMIT})
     - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then : else exit 1; fi
+    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then : ; else exit 1; fi
     install:
     - cd client
     - nvm install 8
