@@ -1,0 +1,13 @@
+{
+  "verbose": true,
+  "ignore": [
+    "node_modules",
+    "**/.next/**/*",
+    "src/pages/**/*",
+    "next.config.js"
+  ],
+  "watch": ["**/src/**/*"],
+  "ext": "js jsx json graphql",
+  "exec": "node --require babel-register",
+  "legacyWatch": true
+}
