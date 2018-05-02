@@ -79,8 +79,8 @@
     to-fast-properties "^2.0.0"
 
 "@democracy-deutschland/dip21-scraper@^0.1.0":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.2.tgz#91a008a0570c20f5a43982d20093f4b246b2a806"
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.4.tgz#223ebbca915f60187c56f40fa503abc4b4d60547"
   dependencies:
     chalk "^2.3.1"
     colors "^1.1.2"
