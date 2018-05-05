@@ -40,7 +40,8 @@ class Procedure extends Component {
 
     const findSpotUrl = history.find(
       ({ assignment, initiator }) =>
-        assignment === "BT" && initiator === "3. Beratung"
+        (assignment === "BT" && initiator === "3. Beratung") ||
+        (assignment === "BT" && initiator === "Beratung")
     );
     const rowHeaderClasses = `card-header ${
       customData || namedVoted
@@ -52,6 +53,10 @@ class Procedure extends Component {
 
     const documents = importantDocuments.map(({ url, editor, number }) =>
       <div key={number}><a href={url} target="_blank">{editor} {number}</a> <br /></div>
+    );
+
+    const histories = history.map(({ assignment, initiator, findSpot, findSpotUrl }) =>
+      <div key={initiator}>{assignment} {initiator}: <a href={findSpotUrl} target="_blank">{findSpot}</a> <br /></div>
     );
 
     return (
@@ -102,6 +107,14 @@ class Procedure extends Component {
                 </dt>,
                 <dd key="2" className="col-sm-9">
                   {documents}
+                </dd>
+              ]}
+              {histories && [
+                <dt key="1" className="col-sm-3">
+                  Historie
+                </dt>,
+                <dd key="2" className="col-sm-9">
+                  {histories}
                 </dd>
               ]}
               {findSpotUrl && [

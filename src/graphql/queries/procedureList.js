@@ -17,6 +17,7 @@ const proceduresQuery = gql`
       history {
         assignment
         initiator
+        findSpot
         findSpotUrl
         decision {
           type
