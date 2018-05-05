@@ -23,7 +23,8 @@ class Procedure extends Component {
       currentStatus,
       saveChanges,
       customData,
-      history
+      history,
+      importantDocuments
     } = this.props;
     const { changed } = this.state;
     const namedVoted =
@@ -36,9 +37,11 @@ class Procedure extends Component {
               decisionType === "Namentliche Abstimmung"
           )
       );
+
     const findSpotUrl = history.find(
       ({ assignment, initiator }) =>
-        assignment === "BT" && initiator === "3. Beratung"
+        (assignment === "BT" && initiator === "3. Beratung") ||
+        (assignment === "BT" && initiator === "Beratung")
     );
     const rowHeaderClasses = `card-header ${
       customData || namedVoted
@@ -46,7 +49,15 @@ class Procedure extends Component {
         : findSpotUrl
           ? "bg-secondary"
           : "bg-warning"
-    } `;
+      } `;
+
+    const documents = importantDocuments.map(({ url, editor, number }) =>
+      <div key={number}><a href={url} target="_blank">{editor} {number}</a> <br /></div>
+    );
+
+    const histories = history.map(({ assignment, initiator, findSpot, findSpotUrl }) =>
+      <div key={initiator}>{assignment} {initiator}: <a href={findSpotUrl} target="_blank">{findSpot}</a> <br /></div>
+    );
 
     return (
       <div key={procedureId} className="card">
@@ -88,6 +99,22 @@ class Procedure extends Component {
                 </dt>,
                 <dd key="2" className="col-sm-9">
                   Ja
+                </dd>
+              ]}
+              {importantDocuments && [
+                <dt key="1" className="col-sm-3">
+                  Dokumente
+                </dt>,
+                <dd key="2" className="col-sm-9">
+                  {documents}
+                </dd>
+              ]}
+              {histories && [
+                <dt key="1" className="col-sm-3">
+                  Historie
+                </dt>,
+                <dd key="2" className="col-sm-9">
+                  {histories}
                 </dd>
               ]}
               {findSpotUrl && [
@@ -171,7 +198,8 @@ Procedure.propTypes = {
   currentStatus: PropTypes.string.isRequired,
   saveChanges: PropTypes.func.isRequired,
   customData: PropTypes.shape(),
-  history: PropTypes.array.isRequired
+  history: PropTypes.array.isRequired,
+  importantDocuments: PropTypes.array.isRequired
 };
 
 Procedure.defaultProps = {
@@ -179,35 +207,35 @@ Procedure.defaultProps = {
 };
 
 const saveChanges = gql`
-  mutation saveProcedureCustomData(
-    $procedureId: String!
-    $partyVotes: [PartyVoteInput!]!
-    $decisionText: String!
+          mutation saveProcedureCustomData(
+            $procedureId: String!
+            $partyVotes: [PartyVoteInput!]!
+            $decisionText: String!
   ) {
-    saveProcedureCustomData(
-      procedureId: $procedureId
-      partyVotes: $partyVotes
-      decisionText: $decisionText
+          saveProcedureCustomData(
+            procedureId: $procedureId
+        partyVotes: $partyVotes
+        decisionText: $decisionText
     ) {
-      customData {
+          customData {
         title
         voteResults {
           yes
           no
-          abstination
+        abstination
           partyVotes {
-            party
+          party
             main
-            deviants {
-              yes
+        deviants {
+          yes
               abstination
-              no
-            }
-          }
-        }
+        no
       }
     }
   }
+}
+}
+}
 `;
 
 export default graphql(saveChanges, {

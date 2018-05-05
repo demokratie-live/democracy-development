@@ -18,11 +18,25 @@ export default {
     procedures: (
       parent,
       {
-        IDs, period = [19], type = ['Gesetzgebung', 'Antrag'], status,
+        IDs, period = [19], type = ['Gesetzgebung', 'Antrag'], status, voteDate
       },
       { ProcedureModel },
     ) => {
       let match = { period: { $in: period }, type: { $in: type } };
+      if (voteDate) {
+        match = {
+          ...match,
+          history: {
+            $elemMatch: {
+              decision: {
+                $elemMatch: {
+                  tenor: { $in: ['Ablehnung der Vorlage', 'Annahme der Vorlage'] }
+                }
+              }
+            }
+          }
+        }
+      }
       if (status) {
         match = { ...match, currentStatus: { $in: status } };
       }
@@ -162,7 +176,7 @@ export default {
       );
 
       axios.post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
-        data: [{period: procedure.period, types: [{type: procedure.type, changedIds: [ procedure.procedureId ]}]}],
+        data: [{ period: procedure.period, types: [{ type: procedure.type, changedIds: [procedure.procedureId] }] }],
       }).then(async (response) => {
         console.log(response.data);
       }).catch((error) => {

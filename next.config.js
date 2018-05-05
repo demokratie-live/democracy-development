@@ -1,9 +1,10 @@
-require("dotenv").config();
+//require("dotenv").config();
 
-const path = require("path");
-const Dotenv = require("dotenv-webpack");
+//const path = require("path");
+//const Dotenv = require("dotenv-webpack");
 
 module.exports = {
+  /*
   webpack: config => {
     const newConfig = { ...config };
     newConfig.plugins = newConfig.plugins || [];
@@ -25,6 +26,7 @@ module.exports = {
 
     // Important: return the modified config
     config,
+  */
   // Enable / disable X-Powered-By, enabled by default
   poweredByHeader: true
 };

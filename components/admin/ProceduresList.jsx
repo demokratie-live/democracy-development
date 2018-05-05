@@ -88,28 +88,7 @@ ProceduresList.propTypes = {
 export default graphql(GET_PROCEDURE_LIST, {
   options: {
     variables: {
-      status: [
-        // Unterhalb keys für Vergangen
-        "Erledigt durch Ablauf der Wahlperiode",
-        "Zurückgezogen",
-        "Abgeschlossen - Ergebnis siehe Vorgangsablauf",
-        "Für nichtig erklärt",
-        "Verkündet",
-        "Zusammengeführt mit... (siehe Vorgangsablauf)",
-        "Für erledigt erklärt",
-        "Verabschiedet",
-        "Bundesrat hat zugestimmt",
-        "Bundesrat hat Einspruch eingelegt",
-        "Bundesrat hat Zustimmung versagt",
-        "Bundesrat hat Vermittlungsausschuss nicht angerufen",
-        "Im Vermittlungsverfahren",
-        "Vermittlungsvorschlag liegt vor",
-        "Für mit dem Grundgesetz unvereinbar erklärt",
-        "Nicht ausgefertigt wegen Zustimmungsverweigerung des Bundespräsidenten",
-        "Zustimmung versagt",
-        "Teile des Gesetzes für nichtig erklärt",
-        "Für gegenstandslos erklärt"
-      ]
+      voteDate: true
     }
   },
   props: ({ data: { procedures } }) => ({ procedures: procedures || [] })

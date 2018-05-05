@@ -4,6 +4,7 @@ export default {
   DEMOCRACY_SERVER_WEBHOOK_URL:
     process.env.DEMOCRACY_SERVER_WEBHOOK_URL ||
     "http://localhost:3000/webhooks/bundestagio/update",
+  GRAPHIQL: process.env.GRAPHIQL || false,
   GRAPHIQL_PATH: "/graphiql",
   GRAPHQL_PATH: "/graphql"
 };

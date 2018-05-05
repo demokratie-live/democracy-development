@@ -36,6 +36,7 @@ app.prepare().then(async () => {
     resolvers
   });
 
+  // Apollo Engine
   if (process.env.ENGINE_API_KEY) {
     const engine = new Engine({
       engineConfig: { apiKey: process.env.ENGINE_API_KEY }
@@ -44,21 +45,14 @@ app.prepare().then(async () => {
     server.use(engine.expressMiddleware());
   }
 
-  /**
-   * ADMIN PROTECTION
-   */
+  // Authentification
   auth(server);
   server.use("/admin", requireAuth({ role: "BACKEND" }));
 
-  // const basic = auth.basic({
-  //   realm: 'Simon Area.',
-  //   file: `${__dirname}/../data/admins.htpasswd`,
-  // });
-  // server.use('/admin', auth.connect(basic));
-
   server.use(bodyParser.json());
 
-  if (process.env.ENVIRONMENT !== "production") {
+  // Graphiql
+  if (constants.GRAPHIQL) {
     server.use(
       constants.GRAPHIQL_PATH,
       graphiqlExpress({
@@ -67,6 +61,7 @@ app.prepare().then(async () => {
     );
   }
 
+  // Graphql
   server.use(constants.GRAPHQL_PATH, (req, res, next) => {
     graphqlExpress({
       schema,
@@ -83,10 +78,11 @@ app.prepare().then(async () => {
     })(req, res, next);
   });
 
+  // Other requests
   server.get("*", (req, res) => handle(req, res));
 
+  // Create & start Server + Cron
   const graphqlServer = createServer(server);
-
   graphqlServer.listen(constants.PORT, err => {
     if (err) {
       console.error(err);
