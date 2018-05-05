@@ -67,7 +67,7 @@ type Procedure {
 
 type Query {
   getProcedure(_id: ID!): Procedure
-  procedures(offset: Int, IDs: [String!], status: [String!]): [Procedure]
+  procedures(offset: Int, IDs: [String!], status: [String!], voteDate: [Boolean!]): [Procedure]
   allProcedures(offset: Int): [Procedure]
   procedureUpdates(offset: Int, period: [Int!], type: [String!]): [Procedure]
 }
