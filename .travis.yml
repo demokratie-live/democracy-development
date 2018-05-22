@@ -118,7 +118,8 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in client/android/Google_Play_Android_Developer.json.enc -out client/android/Google_Play_Android_Developer.json -d
     - openssl aes-256-cbc -k "$SECRET" -in client/android/app/democracy2-release-key.keystore.enc -out client/android/app/democracy2-release-key.keystore -d
     - gem update --system
-    - gem install fastlane --no-rdoc --no-ri --no-document --quiet
+    - bundle install
+    - bundle update fastlane
     install:
     - cd client
     - nvm install 8
@@ -144,7 +145,7 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     script:
-    - cd android && fastlane android alpha
+    - cd android && bundle exec fastlane android alpha
     after_success:
     - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Alpha Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
@@ -162,7 +163,8 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in client/android/Google_Play_Android_Developer.json.enc -out client/android/Google_Play_Android_Developer.json -d
     - openssl aes-256-cbc -k "$SECRET" -in client/android/app/democracy2-release-key.keystore.enc -out client/android/app/democracy2-release-key.keystore -d
     - gem update --system
-    - gem install fastlane --no-rdoc --no-ri --no-document --quiet
+    - bundle install
+    - bundle update fastlane
     install:
     - cd client
     - nvm install 8
@@ -194,7 +196,7 @@ matrix:
     - ORIGINMASTER='origin/master'
     - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
     # build android & publish using fastlane
-    - cd android && fastlane android beta
+    - cd android && bundle exec fastlane android beta
     after_success:
     - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Beta Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
@@ -209,6 +211,8 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
+    - bundle install
+    - bundle update fastlane
     install:
     - cd client
     - nvm install 8
@@ -216,7 +220,6 @@ matrix:
     - yarn --version
     - yarn install
     script:
-    - gem update fastlane
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios alpha
     after_success:
@@ -233,6 +236,8 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
+    - bundle install
+    - bundle update fastlane
     install:
     - cd client
     - nvm install 8
@@ -246,7 +251,6 @@ matrix:
     - ORIGINMASTER='origin/master'
     - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
     # build ios and publish using fastlane
-    - gem update fastlane
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios beta
     after_success:
