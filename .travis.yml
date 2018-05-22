@@ -216,7 +216,7 @@ matrix:
     - yarn --version
     - yarn install
     script:
-    - fastlane update_fastlane
+    - gem update fastlane
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios alpha
     after_success:
@@ -246,7 +246,7 @@ matrix:
     - ORIGINMASTER='origin/master'
     - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
     # build ios and publish using fastlane
-    - fastlane update_fastlane
+    - gem update fastlane
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios beta
     after_success:
