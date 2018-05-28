@@ -39,6 +39,7 @@ services:
         max-file: ${NGINX_GEN_LOG_MAX_FILE:-10}
 
   bundestagio:
+    env_file: ./bundestag.io/.env
     build: ./bundestag.io
     container_name: bundestagio
     expose:

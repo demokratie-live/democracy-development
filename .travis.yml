@@ -89,13 +89,17 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
-    # ensure we are on the master branch
-    # - COMMIT=$(git rev-parse HEAD)
-    # - BRANCHES=$(git branch -r --contains ${COMMIT})
-    # - if `echo ${BRANCHES} | grep "origin/master" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
     script:
+    # ensure we are on the master branch - this does not work for some reason???
+    #- COMMIT=$(git rev-parse HEAD)
+    #- BRANCHES=$(git branch -r --contains ${COMMIT})
+    #- ORIGINMASTER='origin/master'
+    #- if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    # build docker-compose
     - docker-compose build
+    # build doctl
     - docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_BETA_HOST}" - < ./doctl
+    # run ssh command using doctl
     - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_BETA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_BETA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
     after_success:
     - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"SUCCESS: New Server Beta Version $TRAVIS_TAG deployed!\"}" ${DISCORD_WEBHOOK}'
@@ -114,7 +118,8 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in client/android/Google_Play_Android_Developer.json.enc -out client/android/Google_Play_Android_Developer.json -d
     - openssl aes-256-cbc -k "$SECRET" -in client/android/app/democracy2-release-key.keystore.enc -out client/android/app/democracy2-release-key.keystore -d
     - gem update --system
-    - gem install fastlane --no-rdoc --no-ri --no-document --quiet
+    - bundle install
+    - bundle update fastlane
     install:
     - cd client
     - nvm install 8
@@ -140,7 +145,7 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     script:
-    - cd android && fastlane android alpha
+    - cd android && bundle exec fastlane android alpha
     after_success:
     - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Alpha Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
@@ -158,11 +163,8 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in client/android/Google_Play_Android_Developer.json.enc -out client/android/Google_Play_Android_Developer.json -d
     - openssl aes-256-cbc -k "$SECRET" -in client/android/app/democracy2-release-key.keystore.enc -out client/android/app/democracy2-release-key.keystore -d
     - gem update --system
-    - gem install fastlane --no-rdoc --no-ri --no-document --quiet
-    # ensure we are on the master branch
-    # - COMMIT=$(git rev-parse HEAD)
-    # - BRANCHES=$(git branch -r --contains ${COMMIT})
-    # - if `echo ${BRANCHES} | grep "origin/master" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    - bundle install
+    - bundle update fastlane
     install:
     - cd client
     - nvm install 8
@@ -188,7 +190,13 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     script:
-    - cd android && fastlane android beta
+    # ensure we are on the master branch
+    - COMMIT=$(git rev-parse HEAD)
+    - BRANCHES=$(git branch -r --contains ${COMMIT})
+    - ORIGINMASTER='origin/master'
+    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    # build android & publish using fastlane
+    - cd android && bundle exec fastlane android beta
     after_success:
     - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Beta Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
@@ -203,6 +211,8 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
+    - bundle install
+    - bundle update fastlane
     install:
     - cd client
     - nvm install 8
@@ -210,7 +220,6 @@ matrix:
     - yarn --version
     - yarn install
     script:
-    - fastlane update_fastlane
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios alpha
     after_success:
@@ -227,10 +236,8 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
     - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
-    # ensure we are on the master branch
-    # - COMMIT=$(git rev-parse HEAD)
-    # - BRANCHES=$(git branch -r --contains ${COMMIT})
-    # - if `echo ${BRANCHES} | grep "origin/master" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    - bundle install
+    - bundle update fastlane
     install:
     - cd client
     - nvm install 8
@@ -238,7 +245,12 @@ matrix:
     - yarn --version
     - yarn install
     script:
-    - fastlane update_fastlane
+    # ensure we are on the master branch
+    - COMMIT=$(git rev-parse HEAD)
+    - BRANCHES=$(git branch -r --contains ${COMMIT})
+    - ORIGINMASTER='origin/master'
+    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    # build ios and publish using fastlane
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios beta
     after_success:
