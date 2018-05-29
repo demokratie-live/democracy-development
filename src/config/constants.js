@@ -4,6 +4,7 @@ export default {
   DEMOCRACY_SERVER_WEBHOOK_URL:
     process.env.DEMOCRACY_SERVER_WEBHOOK_URL ||
     "http://localhost:3000/webhooks/bundestagio/update",
+  ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL || "elasticsearch",
   GRAPHIQL: process.env.GRAPHIQL || false,
   GRAPHIQL_PATH: "/graphiql",
   GRAPHQL_PATH: "/graphql"
