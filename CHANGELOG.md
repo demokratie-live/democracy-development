@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.1
+
+* [NEW] scrape bt-agenda
+
 ### 0.1.0
 
 * lock graphiql via config
