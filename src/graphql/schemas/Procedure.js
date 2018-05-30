@@ -9,6 +9,7 @@ enum VoteDecision {
 type ProcedureCustomData {
   title: String
   voteResults: VoteResults
+  expectedVotingDate: Date
 }
 
 type VoteResults {

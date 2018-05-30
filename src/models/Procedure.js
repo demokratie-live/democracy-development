@@ -1,8 +1,8 @@
-import mongoose, { Schema } from 'mongoose';
-import diffHistory from 'mongoose-diff-history/diffHistory';
+import mongoose, { Schema } from "mongoose";
+import diffHistory from "mongoose-diff-history/diffHistory";
 
-import ProcessFlow from './Schemas/ProcessFlow';
-import Document from './Schemas/Document';
+import ProcessFlow from "./Schemas/ProcessFlow";
+import Document from "./Schemas/Document";
 
 const ProcedureSchema = new Schema(
   {
@@ -24,6 +24,7 @@ const ProcedureSchema = new Schema(
     history: { type: [ProcessFlow], default: undefined },
     customData: {
       title: String,
+      expectedVotingDate: Date,
       voteResults: {
         yes: Number,
         no: Number,
@@ -32,20 +33,20 @@ const ProcedureSchema = new Schema(
         partyVotes: [
           {
             party: String,
-            main: { type: String, enum: ['YES', 'NO', 'ABSTINATION'] },
+            main: { type: String, enum: ["YES", "NO", "ABSTINATION"] },
             deviants: {
               yes: Number,
               abstination: Number,
-              no: Number,
-            },
-          },
-        ],
-      },
-    },
+              no: Number
+            }
+          }
+        ]
+      }
+    }
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-ProcedureSchema.plugin(diffHistory.plugin, { omit: ['updatedAt'] });
+ProcedureSchema.plugin(diffHistory.plugin, { omit: ["updatedAt"] });
 
-export default mongoose.model('Procedure', ProcedureSchema);
+export default mongoose.model("Procedure", ProcedureSchema);

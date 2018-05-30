@@ -17,6 +17,7 @@ import typeDefs from "./graphql/schemas";
 import resolvers from "./graphql/resolvers";
 
 import importJob from "./importJob";
+import importAgenda from "./importAgenda";
 
 // Models
 import ProcedureModel from "./models/Procedure";
@@ -91,6 +92,15 @@ app.prepare().then(async () => {
       new CronJob(
         "*/15 * * * *",
         importJob,
+        null,
+        true,
+        "Europe/Berlin",
+        null,
+        true
+      );
+      new CronJob(
+        "*/15 * * * *",
+        importAgenda,
         null,
         true,
         "Europe/Berlin",
