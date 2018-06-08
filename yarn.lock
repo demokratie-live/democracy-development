@@ -78,14 +78,15 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@democracy-deutschland/dip21-scraper@^0.1.0":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.4.tgz#223ebbca915f60187c56f40fa503abc4b4d60547"
+"@democracy-deutschland/dip21-scraper@0.1.5-4":
+  version "0.1.5-4"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.5-4.tgz#285df522e741462ff5c65563f3377ddb6aaf27f7"
   dependencies:
     chalk "^2.3.1"
     colors "^1.1.2"
     commander "^2.13.0"
     fs-extra "^5.0.0"
+    html-entities "^1.2.1"
     inquirer "^5.0.1"
     jsonfile "^4.0.0"
     lodash "^4.17.5"
@@ -3459,7 +3460,7 @@ hosted-git-info@^2.1.4:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.6.0.tgz#23235b29ab230c576aab0d4f13fc046b0b038222"
 
-html-entities@^1.2.0:
+html-entities@^1.2.0, html-entities@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-1.2.1.tgz#0df29351f0721163515dfb9e5543e5f6eed5162f"
 

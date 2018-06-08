@@ -89,7 +89,7 @@ app.prepare().then(async () => {
     } else {
       console.log(`App is listen on port: ${constants.PORT}`);
       new CronJob(
-        "*/15 * * * *",
+        "15 * * * *",
         importJob,
         null,
         true,
