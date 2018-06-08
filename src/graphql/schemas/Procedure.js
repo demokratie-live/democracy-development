@@ -50,6 +50,7 @@ type Procedure {
   type: String
   period: Int
   currentStatus: String
+  currentStatusHistory: [String]
   signature: String
   gestOrderNumber: String
   approvalRequired: [String]
