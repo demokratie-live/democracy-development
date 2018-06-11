@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@democracy-deutschland/bt-agenda": "^0.2.2",
-    "@democracy-deutschland/dip21-scraper": "^0.1.0",
+    "@democracy-deutschland/dip21-scraper": "0.1.5-4",
     "@material-ui/icons": "^1.0.0-beta.42",
     "apollo-cache-inmemory": "^1.1.12",
     "apollo-client": "^2.2.8",
