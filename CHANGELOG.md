@@ -2,7 +2,8 @@
 
 ### 0.1.1
 
-* [NEW] scrape bt-agenda
+* [Added] scrape bt-agenda
+* [Added] Add support for scraping currentState history
 
 ### 0.1.0
 
