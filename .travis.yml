@@ -137,6 +137,7 @@ matrix:
       - build-tools-26.0.1
       - build-tools-26.0.2
       - android-23
+      - android-26
       # extra
       - extra-android-m2repository
       - extra-google-google_play_services
@@ -146,9 +147,6 @@ matrix:
       - 'android-sdk-preview-license-.+'
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
-      #- 'build-tools-.+'
-      #- 'android-.+'
-      #- 'extra-android-m2repository'
     script:
     - cd android && bundle exec fastlane android alpha
     after_success:
@@ -188,6 +186,7 @@ matrix:
       - build-tools-26.0.1
       - build-tools-26.0.2
       - android-23
+      - android-26
       # extra
       - extra-android-m2repository
       - extra-google-google_play_services
@@ -197,9 +196,6 @@ matrix:
       - 'android-sdk-preview-license-.+'
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
-      #- 'build-tools-.+'
-      #- 'android-.+'
-      #- 'extra-android-m2repository'
     script:
     # ensure we are on the master branch
     - COMMIT=$(git rev-parse HEAD)
