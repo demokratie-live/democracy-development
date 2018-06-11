@@ -56,6 +56,7 @@
     "material-ui": "^1.0.0-beta.41",
     "merge-graphql-schemas": "^1.5.0",
     "moment": "^2.21.0",
+    "mongoosastic": "^4.4.1",
     "mongoose": "^5.0.3",
     "mongoose-diff-history": "^1.2.0",
     "next": "^5.1.0",

@@ -79,6 +79,27 @@ app.prepare().then(async () => {
     })(req, res, next);
   });
 
+  server.get("/search", (req, res) => {
+    ProcedureModel.search(
+      {
+        function_score: {
+          query: {
+            multi_match: {
+              query: req.query.s,
+              fields: ["title^3", "tags^2.5", "abstract^2"],
+              fuzziness: "AUTO",
+              prefix_length: 2
+            }
+          }
+        }
+      },
+      (err, result) => {
+        console.log(err, result);
+        res.send(result);
+      }
+    );
+  });
+
   // Other requests
   server.get("*", (req, res) => handle(req, res));
 
