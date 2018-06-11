@@ -78,9 +78,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@democracy-deutschland/dip21-scraper@0.1.5-4":
-  version "0.1.5-4"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.5-4.tgz#285df522e741462ff5c65563f3377ddb6aaf27f7"
+"@democracy-deutschland/dip21-scraper@0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.5.tgz#be81a5f4f6328f330388334b0a1acfa0db639505"
   dependencies:
     chalk "^2.3.1"
     colors "^1.1.2"
