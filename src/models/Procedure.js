@@ -4,6 +4,7 @@ import diffHistory from "mongoose-diff-history/diffHistory";
 
 import ProcessFlow from "./Schemas/ProcessFlow";
 import Document from "./Schemas/Document";
+import PartyVotes from "./Schemas/PartyVotes";
 
 import constants from "../config/constants";
 
@@ -13,23 +14,33 @@ const ProcedureSchema = new Schema(
       type: String,
       index: { unique: true },
       es_indexed: true,
-      es_fields: {
-        folded: {
-          type: "text",
-          analyzer: "german"
-        }
-      }
+      es_type: "text"
     },
-    type: { type: String, required: true },
-    period: { type: Number, required: true },
+    type: {
+      type: String,
+      required: true,
+      es_indexed: true,
+      es_type: "text"
+    },
+    period: {
+      type: Number,
+      required: true,
+      es_indexed: true,
+      es_type: "integer"
+    },
     title: {
       type: String,
       required: true,
       es_indexed: true,
+      es_type: "text",
+      analyzer: "german",
       es_fields: {
-        folded: {
-          type: "text",
-          analyzer: "german"
+        completion: {
+          type: "completion"
+        },
+        autocomplete: {
+          type: "keyword",
+          index: true
         }
       }
     },
@@ -41,12 +52,8 @@ const ProcedureSchema = new Schema(
     abstract: {
       type: String,
       es_indexed: true,
-      es_fields: {
-        folded: {
-          type: "text",
-          analyzer: "german"
-        }
-      }
+      es_type: "text",
+      analyzer: "german"
     },
     promulgation: [String],
     legalValidity: [String],
@@ -54,46 +61,40 @@ const ProcedureSchema = new Schema(
       {
         type: String,
         es_indexed: true,
-        es_fields: {
-          folded: {
-            type: "text",
-            analyzer: "german"
-          }
-        }
+        es_type: "text",
+        analyzer: "german"
       }
     ],
     subjectGroups: [
       {
         type: String,
         es_indexed: true,
-        es_fields: {
-          folded: {
-            type: "text",
-            analyzer: "german"
-          }
-        }
+        es_type: "text",
+        analyzer: "german"
       }
     ],
     importantDocuments: [Document],
-    history: { type: [ProcessFlow], default: undefined },
+    history: {
+      type: [ProcessFlow],
+      default: undefined,
+      es_indexed: false,
+      es_include_in_parent: true
+    },
     customData: {
-      title: String,
+      title: {
+        type: String,
+        es_indexed: false
+      },
       voteResults: {
         yes: Number,
         no: Number,
         abstination: Number,
-        decisionText: String,
-        partyVotes: [
-          {
-            party: String,
-            main: { type: String, enum: ["YES", "NO", "ABSTINATION"] },
-            deviants: {
-              yes: Number,
-              abstination: Number,
-              no: Number
-            }
-          }
-        ]
+        decisionText: { type: String, es_indexed: false },
+        partyVotes: {
+          type: [PartyVotes],
+          es_indexed: false,
+          es_include_in_parent: true
+        }
       }
     }
   },
@@ -105,4 +106,29 @@ ProcedureSchema.plugin(mongoosastic, { host: constants.ELASTICSEARCH_URL });
 
 export { ProcedureSchema };
 
-export default mongoose.model("Procedure", ProcedureSchema);
+const Procedure = mongoose.model("Procedure", ProcedureSchema);
+
+Procedure.createMapping({}, err => {
+  if (err) {
+    console.log(err);
+  } else {
+    let stream = Procedure.synchronize(),
+      count = 0;
+    stream.on("data", function() {
+      count++;
+    });
+
+    new Promise((resolve, reject) => {
+      stream.on("close", function() {
+        console.log("indexed " + count + " documents!");
+        resolve();
+      });
+      stream.on("error", function(err) {
+        console.log("ERROR Elastic: ", err);
+        reject();
+      });
+    });
+  }
+});
+
+export default Procedure;
