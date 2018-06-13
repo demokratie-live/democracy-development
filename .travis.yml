@@ -111,17 +111,18 @@ matrix:
     language: android
     jdk: oraclejdk8
     before_install:
-    - echo y | android update sdk --no-ui --filter build-tools-26.0.1,build-tools-26.0.2,android-26,extra-android-m2repository
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/android/Google_Play_Android_Developer.json.enc -out client/android/Google_Play_Android_Developer.json -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/android/app/democracy2-release-key.keystore.enc -out client/android/app/democracy2-release-key.keystore -d
+    - cd client
+    - openssl aes-256-cbc -k "$SECRET" -in .env.alpha.enc -out .env.alpha -d
+    - openssl aes-256-cbc -k "$SECRET" -in .env.beta.enc -out .env.beta -d
+    - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
+    - openssl aes-256-cbc -k "$SECRET" -in android/Google_Play_Android_Developer.json.enc -out android/Google_Play_Android_Developer.json -d
+    - openssl aes-256-cbc -k "$SECRET" -in android/app/democracy2-release-key.keystore.enc -out android/app/democracy2-release-key.keystore -d  
+    - cd android
     - gem update --system
     - bundle install
     - bundle update fastlane
     install:
-    - cd client
+    - cd ..
     - nvm install 8
     - yarn --version
     - yarn install
@@ -131,10 +132,14 @@ matrix:
       - platform-tools
       # android 23,25,26
       - build-tools-23.0.1
+      - build-tools-25.0.0
       - build-tools-25.0.1
+      - build-tools-25.0.2
       - build-tools-26.0.1
       - build-tools-26.0.2
       - android-23
+      - android-25
+      - android-26
       # extra
       - extra-android-m2repository
       - extra-google-google_play_services
@@ -156,17 +161,18 @@ matrix:
     language: android
     jdk: oraclejdk8
     before_install:
-    - echo y | android update sdk --no-ui --filter build-tools-26.0.1,build-tools-26.0.2,android-26,extra-android-m2repository
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/android/Google_Play_Android_Developer.json.enc -out client/android/Google_Play_Android_Developer.json -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/android/app/democracy2-release-key.keystore.enc -out client/android/app/democracy2-release-key.keystore -d
+    - cd client
+    - openssl aes-256-cbc -k "$SECRET" -in .env.alpha.enc -out .env.alpha -d
+    - openssl aes-256-cbc -k "$SECRET" -in .env.beta.enc -out .env.beta -d
+    - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
+    - openssl aes-256-cbc -k "$SECRET" -in android/Google_Play_Android_Developer.json.enc -out android/Google_Play_Android_Developer.json -d
+    - openssl aes-256-cbc -k "$SECRET" -in android/app/democracy2-release-key.keystore.enc -out android/app/democracy2-release-key.keystore -d
+    - cd android
     - gem update --system
     - bundle install
     - bundle update fastlane
     install:
-    - cd client
+    - cd ..
     - nvm install 8
     - yarn --version
     - yarn install
@@ -176,10 +182,14 @@ matrix:
       - platform-tools
       # android 23,25,26
       - build-tools-23.0.1
+      - build-tools-25.0.0
       - build-tools-25.0.1
+      - build-tools-25.0.2
       - build-tools-26.0.1
       - build-tools-26.0.2
       - android-23
+      - android-25
+      - android-26
       # extra
       - extra-android-m2repository
       - extra-google-google_play_services
@@ -208,13 +218,16 @@ matrix:
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
     before_install:
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
+    - cd client
+    - openssl aes-256-cbc -k "$SECRET" -in .env.alpha.enc -out .env.alpha -d
+    - openssl aes-256-cbc -k "$SECRET" -in .env.beta.enc -out .env.beta -d
+    - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
+    - cd ios
+    - gem update --system
     - bundle install
     - bundle update fastlane
     install:
-    - cd client
+    - cd ..
     - nvm install 8
     - npm install -g yarn
     - yarn --version
@@ -233,13 +246,16 @@ matrix:
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
     before_install:
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
+    - cd client
+    - openssl aes-256-cbc -k "$SECRET" -in .env.alpha.enc -out .env.alpha -d
+    - openssl aes-256-cbc -k "$SECRET" -in .env.beta.enc -out .env.beta -d
+    - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
+    - cd ios
+    - gem update --system
     - bundle install
     - bundle update fastlane
     install:
-    - cd client
+    - cd ..
     - nvm install 8
     - npm install -g yarn
     - yarn --version
