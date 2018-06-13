@@ -83,7 +83,7 @@ services:
           - "democracy"
     depends_on:
       - mongodb
-      # - elasticsearch
+      - elasticsearch
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
