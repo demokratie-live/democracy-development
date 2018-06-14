@@ -17,17 +17,22 @@ const checkDocuments = async data => {
       await Promise.all(
         rows.map(async ({ topicDetails, dateTime }) => {
           await Promise.all(
-            topicDetails.map(async ({ text, documents }) => {
+            topicDetails.map(async ({ documents }) => {
               const procedures = await Procedure.find({
                 "importantDocuments.number": { $in: documents }
               });
               if (
-                procedures.length > 0 &&
-                text.indexOf("Beschlussempfehlung") !== -1
+                procedures.length > 0
+                // && text.indexOf("Beschlussempfehlung") !== -1
               ) {
                 const promisesUpdate = procedures.map(
                   async ({ procedureId, currentStatus }) => {
-                    if (currentStatus === "Beschlussempfehlung liegt vor") {
+                    console.log(procedureId, dateTime, Date(), new Date(dateTime));
+                    if (
+                      (currentStatus === "Beschlussempfehlung liegt vor" ||
+                        currentStatus === "Überwiesen") &&
+                      new Date() < new Date(dateTime)
+                    ) {
                       await Procedure.findOneAndUpdate(
                         { procedureId },
                         {
