@@ -7,15 +7,14 @@
   "private": true,
   "scripts": {
     "start": "babel-node src/index.js",
-    "dev":
-      "nodemon -L -e js,graphql src/index.js --exec \"node --require dotenv/config --require babel-register\"",
+    "dev": "nodemon -L -e js,graphql src/index.js --exec \"node --require dotenv/config --require babel-register\"",
     "lint": "eslint . --ext js,jsx",
     "build": "next build",
     "serve": "babel-node src/index.js",
     "diffs": "babel-node src/diffs.js"
   },
   "dependencies": {
-    "@democracy-deutschland/bt-agenda": "^0.2.2",
+    "@democracy-deutschland/bt-agenda": "0.2.5-0",
     "@democracy-deutschland/dip21-scraper": "^0.1.0",
     "@material-ui/icons": "^1.0.0-beta.42",
     "apollo-cache-inmemory": "^1.1.12",

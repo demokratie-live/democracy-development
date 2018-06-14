@@ -1,10 +1,14 @@
 import Scraper from "@democracy-deutschland/bt-agenda";
 import moment from "moment";
+import axios from "axios";
+
+import CONSTANTS from "./config/constants";
 
 import Procedure from "./models/Procedure";
 import Agenda from "./models/Agenda";
 
 const checkDocuments = async data => {
+  const procedureIds = [];
   await Promise.all(
     data.map(async ({ rows, year, week, meeting, date, ...rest }) => {
       await Agenda.findOneAndUpdate(
@@ -15,41 +19,52 @@ const checkDocuments = async data => {
         }
       );
       await Promise.all(
-        rows.map(async ({ topicDetails, dateTime }) => {
-          await Promise.all(
-            topicDetails.map(async ({ documents }) => {
-              const procedures = await Procedure.find({
-                "importantDocuments.number": { $in: documents }
-              });
-              if (
-                procedures.length > 0
-                // && text.indexOf("Beschlussempfehlung") !== -1
-              ) {
-                const promisesUpdate = procedures.map(
-                  async ({ procedureId, currentStatus }) => {
-                    if (
-                      (currentStatus === "Beschlussempfehlung liegt vor" ||
-                        currentStatus === "Überwiesen") &&
-                      new Date() < new Date(dateTime)
-                    ) {
-                      await Procedure.findOneAndUpdate(
-                        { procedureId },
-                        {
-                          $set: { "customData.expectedVotingDate": dateTime }
-                        }
-                      );
-                      return true;
+        rows.map(async ({ dateTime, topicDocuments: documents }) => {
+          const procedures = await Procedure.find({
+            "importantDocuments.number": { $in: documents }
+          });
+          if (procedures.length > 0) {
+            const promisesUpdate = procedures.map(
+              async ({ procedureId, currentStatus }) => {
+                if (
+                  (currentStatus === "Beschlussempfehlung liegt vor" ||
+                    currentStatus === "Überwiesen") &&
+                  new Date() < new Date(dateTime)
+                ) {
+                  await Procedure.findOneAndUpdate(
+                    {
+                      procedureId,
+                      "customData.expectedVotingDate": { $ne: dateTime }
+                    },
+                    {
+                      $set: { "customData.expectedVotingDate": dateTime }
                     }
-                  }
-                );
-                await Promise.all(promisesUpdate);
+                  ).then(data => {
+                    if (data) {
+                      procedureIds.push(procedureId);
+                    }
+                  });
+                  return true;
+                }
               }
-            })
-          );
+            );
+            await Promise.all(promisesUpdate);
+          }
         })
       );
     })
   );
+
+  await axios
+    .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
+      procedureIds
+    })
+    .then(async response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.log(`democracy server error: ${error}`);
+    });
 };
 
 const scraper = new Scraper();
