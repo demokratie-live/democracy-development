@@ -27,7 +27,6 @@ const checkDocuments = async data => {
               ) {
                 const promisesUpdate = procedures.map(
                   async ({ procedureId, currentStatus }) => {
-                    console.log(procedureId, dateTime, Date(), new Date(dateTime));
                     if (
                       (currentStatus === "Beschlussempfehlung liegt vor" ||
                         currentStatus === "Überwiesen") &&
