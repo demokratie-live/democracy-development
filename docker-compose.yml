@@ -60,7 +60,6 @@ services:
           - "bundestagio"
     depends_on:
       - mongodb
-      - elasticsearch
 
   democracy:
     env_file: ./server/.env
@@ -84,25 +83,6 @@ services:
           - "democracy"
     depends_on:
       - mongodb
-      - elasticsearch
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-    networks:
-      default:
-      intern:
-        aliases:
-          - "elasticsearch" 
-    ports:
-      - 9200:9200
-      - 9300:9300
-    deploy:
-      resources:
-        limits:
-          memory: 3000M
 
   mongodb:
     image: mongo:3.6
