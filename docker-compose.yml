@@ -44,7 +44,10 @@ services:
     container_name: bundestagio
     expose:
       - 80
-    restart: always
+    volumes:
+      - ./bundestag.io:/app
+    entrypoint: ["sh", "-c"]
+    command: ["cp /tmp/yarn.lock yarn.lock & nodemon server.js & if [ '(tar -cf - /usr/local/share/.cache/yarn/v1 | crc32)' != '(tar -cf - .yarn_cache | crc32)' ]; then cp -r /usr/local/share/.cache/yarn/v1/. .yarn_cache/; fi"]
     environment:
       VIRTUAL_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
       LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
@@ -66,7 +69,10 @@ services:
     container_name: democracy
     expose:
       - 80
-    restart: always
+    volumes:
+      - ./server:/app
+    entrypoint: ["sh", "-c"]
+    command: ["cp /tmp/yarn.lock yarn.lock & nodemon server.js & if [ '(tar -cf - /usr/local/share/.cache/yarn/v1 | crc32)' != '(tar -cf - .yarn_cache | crc32)' ]; then cp -r /usr/local/share/.cache/yarn/v1/. .yarn_cache/; fi"]
     environment:
       VIRTUAL_HOST: ${DOMAIN_DEMOCRACY:-democracy.bundestag.io}
       LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY:-democracy.bundestag.io}
