@@ -60,6 +60,7 @@ services:
           - "bundestagio"
     depends_on:
       - mongodb
+      - elasticsearch
 
   democracy:
     env_file: ./server/.env
@@ -98,8 +99,6 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
-    depends_on:
-      - mongodb
     deploy:
       resources:
         limits:
