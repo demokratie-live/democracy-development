@@ -330,23 +330,6 @@ const cronTask = async () => {
           .catch(error => {
             console.log(`democracy server error: ${error}`);
           });
-        let stream = Procedure.synchronize(),
-          count = 0;
-
-        stream.on("data", function() {
-          count++;
-        });
-
-        await new Promise((resolve, reject) => {
-          stream.on("close", function() {
-            console.log("indexed " + count + " documents!");
-            resolve();
-          });
-          stream.on("error", function(err) {
-            console.log(err);
-            reject();
-          });
-        });
 
         console.log("#####FINISH####");
       })
