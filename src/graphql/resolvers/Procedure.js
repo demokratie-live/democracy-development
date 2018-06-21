@@ -192,7 +192,8 @@ export default {
                 { type: procedure.type, changedIds: [procedure.procedureId] }
               ]
             }
-          ]
+          ],
+          timeout: 1000 * 60 * 5,
         })
         .then(async response => {
           console.log(response.data);
