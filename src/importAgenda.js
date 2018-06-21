@@ -57,7 +57,8 @@ const checkDocuments = async data => {
 
   await axios
     .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
-      procedureIds
+      data: { procedureIds },
+      timeout: 1000 * 60 * 5
     })
     .then(async response => {
       console.log(response.data);
