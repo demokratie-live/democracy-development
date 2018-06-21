@@ -111,7 +111,7 @@ const Procedure = mongoose.model("Procedure", ProcedureSchema);
 
 Procedure.createMapping({}, err => {
   if (err) {
-    console.log(err);
+    console.log("Procedure.createMapping", err);
   } else {
     let stream = Procedure.synchronize(),
       count = 0;
