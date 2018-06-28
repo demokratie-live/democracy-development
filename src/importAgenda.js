@@ -7,8 +7,9 @@ import CONSTANTS from "./config/constants";
 import Procedure from "./models/Procedure";
 import Agenda from "./models/Agenda";
 
+let procedureIds = [];
+
 const checkDocuments = async data => {
-  const procedureIds = [];
   await Promise.all(
     data.map(async ({ rows, year, week, meeting, date, ...rest }) => {
       await Agenda.findOneAndUpdate(
@@ -19,22 +20,31 @@ const checkDocuments = async data => {
         }
       );
       await Promise.all(
-        rows.map(async ({ dateTime, topicDocuments: documents }) => {
+        rows.map(async ({ dateTime, topicDocuments: documents, status }) => {
+          const igonreDocs = status
+            .filter(stat => stat.indexOf("Überweisung") === 0)
+            .map(stat => {
+              return stat.match(/(\d{1,3}\/\d{1,10})/gs);
+            });
+
+          if (igonreDocs.length > 0) {
+            return;
+          }
+
           const procedures = await Procedure.find({
             "importantDocuments.number": { $in: documents }
           });
           if (procedures.length > 0) {
             const promisesUpdate = procedures.map(
               async ({ procedureId, currentStatus }) => {
+                console.log(procedureId);
                 if (
-                  (currentStatus === "Beschlussempfehlung liegt vor" ||
-                    currentStatus === "Überwiesen") &&
-                  new Date() < new Date(dateTime)
+                  currentStatus === "Beschlussempfehlung liegt vor" ||
+                  currentStatus === "Überwiesen"
                 ) {
                   await Procedure.findOneAndUpdate(
                     {
-                      procedureId,
-                      "customData.expectedVotingDate": { $ne: dateTime }
+                      procedureId
                     },
                     {
                       $set: { "customData.expectedVotingDate": dateTime }
@@ -54,7 +64,9 @@ const checkDocuments = async data => {
       );
     })
   );
+};
 
+const syncWithDemocracy = async () => {
   await axios
     .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
       data: { procedureIds },
@@ -66,12 +78,13 @@ const checkDocuments = async data => {
     .catch(error => {
       console.log(`democracy server error: ${error}`);
     });
+  procedureIds = [];
 };
 
 const scraper = new Scraper();
 (async () => {
   scraper.addListener("data", checkDocuments);
-  scraper.addListener("finish", data => console.log("FINISH", data));
+  scraper.addListener("finish", syncWithDemocracy);
 
   const agenda = await Agenda.find({})
     .sort({
