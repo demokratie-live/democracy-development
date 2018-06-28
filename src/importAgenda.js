@@ -24,7 +24,7 @@ const checkDocuments = async data => {
           const igonreDocs = status
             .filter(stat => stat.indexOf("Überweisung") === 0)
             .map(stat => {
-              return stat.match(/(\d{1,3}\/\d{1,10})/gs);
+              return stat.match(/(\d{1,3}\/\d{1,10})/gs); // eslint-disable-line
             });
 
           if (igonreDocs.length > 0) {
