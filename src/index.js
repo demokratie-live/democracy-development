@@ -18,6 +18,7 @@ import resolvers from "./graphql/resolvers";
 
 import importJob from "./importJob";
 import importAgenda from "./importAgenda";
+import importNamedPolls from "./importNamedPolls";
 
 // Models
 import ProcedureModel from "./models/Procedure";
@@ -110,18 +111,27 @@ app.prepare().then(async () => {
       console.error(err);
     } else {
       console.log(`App is listen on port: ${constants.PORT}`);
+      // new CronJob(
+      //   "15 * * * *",
+      //   importJob,
+      //   null,
+      //   true,
+      //   "Europe/Berlin",
+      //   null,
+      //   true
+      // );
+      // new CronJob(
+      //   "*/15 * * * *",
+      //   importAgenda,
+      //   null,
+      //   true,
+      //   "Europe/Berlin",
+      //   null,
+      //   true
+      // );
       new CronJob(
-        "15 * * * *",
-        importJob,
-        null,
-        true,
-        "Europe/Berlin",
-        null,
-        true
-      );
-      new CronJob(
-        "*/15 * * * *",
-        importAgenda,
+        "*/30 * * * *",
+        importNamedPolls,
         null,
         true,
         "Europe/Berlin",

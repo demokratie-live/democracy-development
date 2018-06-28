@@ -36,12 +36,14 @@ type Deviants {
   yes: Int
   abstination: Int
   no: Int
+  notVoted: Int
 }
 
 input DeviantsInput {
   yes: Int
   abstination: Int
   no: Int
+  notVoted: Int
 }
 
 type Procedure {

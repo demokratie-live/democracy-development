@@ -97,6 +97,25 @@
     striptags "^3.1.1"
     x2js "^3.1.1"
 
+"@democracy-deutschland/bt-named-polls@0.1.0-1":
+  version "0.1.0-1"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bt-named-polls/-/bt-named-polls-0.1.0-1.tgz#b70745a104d2a97518967f315e419a3bfe804514"
+  dependencies:
+    chalk "^2.3.1"
+    colors "^1.1.2"
+    commander "^2.13.0"
+    fs-extra "^5.0.0"
+    inquirer "^5.0.1"
+    jsonfile "^4.0.0"
+    lodash "^4.17.5"
+    log "^1.4.0"
+    node-gyp "^3.6.2"
+    pretty-ms "^3.1.0"
+    request "^2.83.0"
+    request-cookies "^1.1.0"
+    striptags "^3.1.1"
+    x2js "^3.1.1"
+
 "@democracy-deutschland/dip21-scraper@0.1.5":
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.5.tgz#be81a5f4f6328f330388334b0a1acfa0db639505"
