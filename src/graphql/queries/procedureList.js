@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 const proceduresQuery = gql`
   query procedures($voteDate: [Boolean!]) {
@@ -29,6 +29,7 @@ const proceduresQuery = gql`
           no
           abstination
           decisionText
+          notVoted
           partyVotes {
             party
             main
@@ -36,6 +37,7 @@ const proceduresQuery = gql`
               yes
               abstination
               no
+              notVoted
             }
           }
         }

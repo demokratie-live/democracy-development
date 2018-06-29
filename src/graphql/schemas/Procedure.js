@@ -16,6 +16,7 @@ type VoteResults {
   yes: Int
   no: Int
   abstination: Int
+  notVoted: Int
   decisionText: String
   partyVotes: [PartyVote]
 }

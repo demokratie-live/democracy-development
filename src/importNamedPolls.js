@@ -1,5 +1,6 @@
 import Scraper from "@democracy-deutschland/bt-named-polls";
-import moment from "moment";
+
+// import moment from "moment";
 import axios from "axios";
 
 import CONSTANTS from "./config/constants";
@@ -7,8 +8,10 @@ import CONSTANTS from "./config/constants";
 import Procedure from "./models/Procedure";
 import NamedPolls from "./models/NamedPolls";
 
+let procedureIds = [];
+
 const checkDocuments = async data => {
-  const procedureIds = [];
+  // const procedureIds = [];
 
   const { id, title, date, documents, voteResults } = data;
 
@@ -19,7 +22,7 @@ const checkDocuments = async data => {
     notVoted: 0
   };
 
-  const namedPoll = await NamedPolls.findOneAndUpdate(
+  await NamedPolls.findOneAndUpdate(
     { pollId: id },
     {
       pollId: id,
@@ -46,6 +49,7 @@ const checkDocuments = async data => {
   );
 
   const procedures = await Procedure.find({
+    period: 19,
     "importantDocuments.number": { $in: documents }
   });
 
@@ -56,23 +60,13 @@ const checkDocuments = async data => {
         decision.find(({ type, comment }) => {
           try {
             if (type === "Namentliche Abstimmung") {
-              if (
-                comment.match(/\d{1,3}:\d{1,3}:\d{1,3}/)[0] ===
-                `${summarized.yes}:${summarized.abstination}:${summarized.no}`
-              ) {
-                console.log(
-                  `${comment.match(/\d{1,3}:\d{1,3}:\d{1,3}/)[0]} === ${
-                    summarized.yes
-                  }:${summarized.no}:${summarized.abstination}`,
-                  comment.match(/\d{1,3}:\d{1,3}:\d{1,3}/)[0] ===
-                    `${summarized.yes}:${summarized.no}:${
-                      summarized.abstination
-                    }`
-                );
-              }
               return (
                 comment.match(/\d{1,3}:\d{1,3}:\d{1,3}/)[0] ===
-                `${summarized.yes}:${summarized.no}:${summarized.abstination}`
+                  `${summarized.yes}:${summarized.no}:${
+                    summarized.abstination
+                  }` ||
+                comment.match(/\d{1,3}:\d{1,3}:\d{1,3}/)[0] ===
+                  `${summarized.yes}:${summarized.abstination}:${summarized.no}`
               );
             }
           } catch (error) {
@@ -83,29 +77,96 @@ const checkDocuments = async data => {
       );
     });
   });
-  console.log(
-    "\x1b[36m%s\x1b[0m",
-    `${procedures.length} – ${title}`,
-    matchedProcedures.length
-  );
 
-  // await axios
-  //   .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
-  //     data: { procedureIds },
-  //     timeout: 1000 * 60 * 5
-  //   })
-  //   .then(async response => {
-  //     console.log(response.data);
-  //   })
-  //   .catch(error => {
-  //     console.log(`democracy server error: ${error}`);
-  //   });
+  const customData = {
+    voteResults: {
+      partyVotes: Object.keys(voteResults).map(key => {
+        let main = [
+          {
+            decision: "YES",
+            value: parseInt(voteResults[key]["Ja"], 10)
+          },
+          {
+            decision: "ABSTINATION",
+            value: parseInt(voteResults[key]["Enthalten"], 10)
+          },
+          {
+            decision: "NO",
+            value: parseInt(voteResults[key]["Nein"], 10)
+          },
+          {
+            decision: "NOTVOTED",
+            value: parseInt(voteResults[key]["Nicht"], 10)
+          }
+        ].reduce(
+          (prev, { decision, value }) => {
+            if (prev.value < value) {
+              return { decision, value };
+            }
+            return prev;
+          },
+          { value: 0 }
+        );
+
+        return {
+          deviants: {
+            yes: voteResults[key]["Ja"],
+            abstination: voteResults[key]["Enthalten"],
+            no: voteResults[key]["Nein"],
+            notVoted: voteResults[key]["Nicht"]
+          },
+          party: key,
+          main: main.decision
+        };
+      }),
+      yes: Object.keys(voteResults).reduce((prev, key) => {
+        return prev + parseInt(voteResults[key]["Ja"], 10);
+      }, 0),
+      abstination: Object.keys(voteResults).reduce((prev, key) => {
+        return prev + parseInt(voteResults[key]["Enthalten"], 10);
+      }, 0),
+      no: Object.keys(voteResults).reduce((prev, key) => {
+        return prev + parseInt(voteResults[key]["Nein"], 10);
+      }, 0),
+      notVoted: Object.keys(voteResults).reduce((prev, key) => {
+        return prev + parseInt(voteResults[key]["Nicht"], 10);
+      }, 0)
+    }
+  };
+
+  // console.log(util.inspect(customData, false, null));
+
+  await matchedProcedures.map(({ procedureId }) => {
+    procedureIds.push(procedureId);
+    Procedure.findOneAndUpdate(
+      { procedureId },
+      { customData },
+      {
+        // returnNewDocument: true
+      }
+    );
+  });
+};
+
+const syncWithDemocracy = async () => {
+  await axios
+    .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
+      data: { procedureIds: [...new Set(procedureIds)] },
+      timeout: 1000 * 60 * 5
+    })
+    .then(async response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.log(`democracy server error: ${error}`);
+    });
+  procedureIds = [];
 };
 
 const scraper = new Scraper();
 (async () => {
   scraper.addListener("data", checkDocuments);
-  scraper.addListener("finish", data => console.log("FINISH", data));
+  scraper.addListener("finish", syncWithDemocracy);
   scraper.addListener("error", () => console.log("ERROR"));
 
   const lastNamedPoll = await NamedPolls.findOne({}, { pollId: 1 }).sort({
@@ -114,8 +175,8 @@ const scraper = new Scraper();
 
   scraper
     .scrape({
-      // startId: lastNamedPoll ? lastNamedPoll.pollId : 1,
-      startId: 1
+      // startId: lastNamedPoll ? lastNamedPoll.pollId : 1
+      startId: 500
     })
     .catch(error => {
       console.error(error);

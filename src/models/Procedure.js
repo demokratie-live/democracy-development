@@ -90,6 +90,7 @@ const ProcedureSchema = new Schema(
         yes: Number,
         no: Number,
         abstination: Number,
+        notVoted: Number,
         decisionText: { type: String, es_indexed: false },
         partyVotes: {
           type: [PartyVotes],
