@@ -9,6 +9,7 @@ enum VoteDecision {
 type ProcedureCustomData {
   title: String
   voteResults: VoteResults
+  expectedVotingDate: Date
 }
 
 type VoteResults {
@@ -50,6 +51,7 @@ type Procedure {
   type: String
   period: Int
   currentStatus: String
+  currentStatusHistory: [String]
   signature: String
   gestOrderNumber: String
   approvalRequired: [String]

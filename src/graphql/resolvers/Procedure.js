@@ -1,5 +1,7 @@
-import axios from 'axios';
-import CONSTANTS from '../../config/constants';
+import axios from "axios";
+import diffHistory from "mongoose-diff-history/diffHistory";
+
+import CONSTANTS from "../../config/constants";
 
 const deputiesNumber = {
   19: {
@@ -9,8 +11,8 @@ const deputiesNumber = {
     CDU: 246,
     FDP: 80,
     AFD: 92,
-    Andere: 2,
-  },
+    Andere: 2
+  }
 };
 
 export default {
@@ -18,9 +20,13 @@ export default {
     procedures: (
       parent,
       {
-        IDs, period = [19], type = ['Gesetzgebung', 'Antrag'], status, voteDate
+        IDs,
+        period = [19],
+        type = ["Gesetzgebung", "Antrag"],
+        status,
+        voteDate
       },
-      { ProcedureModel },
+      { ProcedureModel }
     ) => {
       let match = { period: { $in: period }, type: { $in: type } };
       if (voteDate) {
@@ -30,12 +36,14 @@ export default {
             $elemMatch: {
               decision: {
                 $elemMatch: {
-                  tenor: { $in: ['Ablehnung der Vorlage', 'Annahme der Vorlage'] }
+                  tenor: {
+                    $in: ["Ablehnung der Vorlage", "Annahme der Vorlage"]
+                  }
                 }
               }
             }
           }
-        }
+        };
       }
       if (status) {
         match = { ...match, currentStatus: { $in: status } };
@@ -47,46 +55,46 @@ export default {
         { $match: match },
         {
           $lookup: {
-            from: 'histories',
-            localField: '_id',
-            foreignField: 'collectionId',
-            as: 'objectHistory',
-          },
+            from: "histories",
+            localField: "_id",
+            foreignField: "collectionId",
+            as: "objectHistory"
+          }
         },
         {
           $addFields: {
             bioUpdateAt: {
-              $max: '$objectHistory.createdAt',
-            },
-          },
+              $max: "$objectHistory.createdAt"
+            }
+          }
         },
-        { $project: { objectHistory: false } },
+        { $project: { objectHistory: false } }
       ]);
     },
 
     allProcedures: async (
       parent,
-      { period = [19], type = ['Gesetzgebung', 'Antrag'] },
-      { ProcedureModel },
+      { period = [19], type = ["Gesetzgebung", "Antrag"] },
+      { ProcedureModel }
     ) =>
       ProcedureModel.aggregate([
         { $match: { period: { $in: period }, type: { $in: type } } },
         {
           $lookup: {
-            from: 'histories',
-            localField: '_id',
-            foreignField: 'collectionId',
-            as: 'objectHistory',
-          },
+            from: "histories",
+            localField: "_id",
+            foreignField: "collectionId",
+            as: "objectHistory"
+          }
         },
         {
           $addFields: {
             bioUpdateAt: {
-              $max: '$objectHistory.createdAt',
-            },
-          },
+              $max: "$objectHistory.createdAt"
+            }
+          }
         },
-        { $project: { objectHistory: false } },
+        { $project: { objectHistory: false } }
       ]),
 
     procedureUpdates: async (parent, { period, type }, { ProcedureModel }) =>
@@ -94,61 +102,61 @@ export default {
         { $match: { period: { $in: period }, type: { $in: type } } },
         {
           $lookup: {
-            from: 'histories',
-            localField: '_id',
-            foreignField: 'collectionId',
-            as: 'objectHistory',
-          },
+            from: "histories",
+            localField: "_id",
+            foreignField: "collectionId",
+            as: "objectHistory"
+          }
         },
         {
           $addFields: {
             bioUpdateAt: {
-              $max: '$objectHistory.createdAt',
-            },
-          },
+              $max: "$objectHistory.createdAt"
+            }
+          }
         },
-        { $project: { objectHistory: false } },
-      ]),
+        { $project: { objectHistory: false } }
+      ])
   },
   Mutation: {
     saveProcedureCustomData: async (
       parent,
       { procedureId, partyVotes, decisionText },
-      { ProcedureModel, user },
+      { ProcedureModel, user }
     ) => {
-      if (!user || user.role !== 'BACKEND') {
-        throw new Error('Authentication required');
+      if (!user || user.role !== "BACKEND") {
+        throw new Error("Authentication required");
       }
       const procedure = await ProcedureModel.findOne({ procedureId });
 
       let voteResults = {
         partyVotes,
-        decisionText,
+        decisionText
       };
 
       if (deputiesNumber[procedure.period]) {
         const sumResults = {
           yes: 0,
           abstination: 0,
-          no: 0,
+          no: 0
         };
         partyVotes.forEach(({ party, main, deviants }) => {
           switch (main) {
-            case 'YES':
+            case "YES":
               sumResults.yes +=
                 deputiesNumber[procedure.period][party] -
                 deviants.yes -
                 deviants.abstination -
                 deviants.no;
               break;
-            case 'ABSTINATION':
+            case "ABSTINATION":
               sumResults.abstination +=
                 deputiesNumber[procedure.period][party] -
                 deviants.yes -
                 deviants.abstination -
                 deviants.no;
               break;
-            case 'NO':
+            case "NO":
               sumResults.no +=
                 deputiesNumber[procedure.period][party] -
                 deviants.yes -
@@ -170,20 +178,52 @@ export default {
         { procedureId },
         {
           $set: {
-            'customData.voteResults': { ...voteResults },
-          },
-        },
+            "customData.voteResults": { ...voteResults }
+          }
+        }
       );
 
-      axios.post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
-        data: [{ period: procedure.period, types: [{ type: procedure.type, changedIds: [procedure.procedureId] }] }],
-      }).then(async (response) => {
-        console.log(response.data);
-      }).catch((error) => {
-        console.log(`democracy server error: ${error}`);
-      });
+      axios
+        .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
+          data: [
+            {
+              period: procedure.period,
+              types: [
+                { type: procedure.type, changedIds: [procedure.procedureId] }
+              ]
+            }
+          ],
+          timeout: 1000 * 60 * 5,
+        })
+        .then(async response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(`democracy server error: ${error}`);
+        });
 
       return ProcedureModel.findOne({ procedureId });
-    },
+    }
   },
+
+  Procedure: {
+    currentStatusHistory: async procedure => {
+      const { _id } = procedure;
+      const history = await diffHistory
+        .getDiffs("Procedure", _id)
+        .then(histories => {
+          return histories.reduce((prev, version) => {
+            let cur = prev;
+            if (version.diff.currentStatus) {
+              if (cur.length === 0) {
+                cur.push(version.diff.currentStatus[0]);
+              }
+              cur.push(version.diff.currentStatus[1]);
+            }
+            return cur;
+          }, []);
+        });
+      return history;
+    }
+  }
 };
