@@ -7,3 +7,6 @@
 [submodule "client"]
 	path = client
 	url = https://github.com/demokratie-live/democracy-client
+[submodule "elasticsearch"]
+	path = elasticsearch
+	url = https://github.com/demokratie-live/democracy-search
