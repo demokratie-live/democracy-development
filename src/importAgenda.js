@@ -66,18 +66,20 @@ const checkDocuments = async data => {
 };
 
 const syncWithDemocracy = async () => {
-  await axios
-    .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
-      data: { procedureIds },
-      timeout: 1000 * 60 * 5
-    })
-    .then(async response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.log(`democracy server error: ${error}`);
-    });
-  procedureIds = [];
+  if (procedureIds.length > 0) {
+    await axios
+      .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
+        data: { procedureIds },
+        timeout: 1000 * 60 * 5
+      })
+      .then(async response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(`democracy server error: ${error}`);
+      });
+    procedureIds = [];
+  }
 };
 
 const scraper = new Scraper();
