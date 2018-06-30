@@ -83,9 +83,8 @@ const syncWithDemocracy = async () => {
 };
 
 const scraper = new Scraper();
-(async () => {
-  scraper.addListener("data", checkDocuments);
-  scraper.addListener("finish", syncWithDemocracy);
+export default async () => {
+  console.log("START AGENDA SCRAPER");
 
   const agenda = await Agenda.find({})
     .sort({
@@ -103,8 +102,10 @@ const scraper = new Scraper();
     startWeek = lastPastAgenda.week;
     startYear = lastPastAgenda.year;
   }
-  scraper
+  await scraper
     .scrape({
+      onData: checkDocuments,
+      onFinish: syncWithDemocracy,
       startWeek,
       startYear,
       continue: true
@@ -112,4 +113,6 @@ const scraper = new Scraper();
     .catch(error => {
       console.error(error);
     });
-})();
+
+  console.log("FINISH AGENDA SCRAPER");
+};

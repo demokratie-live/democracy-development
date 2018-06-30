@@ -78,9 +78,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@democracy-deutschland/bt-agenda@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bt-agenda/-/bt-agenda-0.3.0.tgz#137002bd1c2618e4d1a80a0f20b2f7ea30a4ed7e"
+"@democracy-deutschland/bt-agenda@0.5.0-1":
+  version "0.5.0-1"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bt-agenda/-/bt-agenda-0.5.0-1.tgz#e849deed4ec9b543e4169887686d5c86c94aea7e"
   dependencies:
     chalk "^2.3.1"
     colors "^1.1.2"
