@@ -66,24 +66,25 @@ const checkDocuments = async data => {
 };
 
 const syncWithDemocracy = async () => {
-  await axios
-    .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
-      data: { procedureIds },
-      timeout: 1000 * 60 * 5
-    })
-    .then(async response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.log(`democracy server error: ${error}`);
-    });
-  procedureIds = [];
+  if (procedureIds.length > 0) {
+    await axios
+      .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
+        data: { procedureIds },
+        timeout: 1000 * 60 * 5
+      })
+      .then(async response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(`democracy server error: ${error}`);
+      });
+    procedureIds = [];
+  }
 };
 
 const scraper = new Scraper();
-(async () => {
-  scraper.addListener("data", checkDocuments);
-  scraper.addListener("finish", syncWithDemocracy);
+export default async () => {
+  console.log("START AGENDA SCRAPER");
 
   const agenda = await Agenda.find({})
     .sort({
@@ -101,8 +102,10 @@ const scraper = new Scraper();
     startWeek = lastPastAgenda.week;
     startYear = lastPastAgenda.year;
   }
-  scraper
+  await scraper
     .scrape({
+      onData: checkDocuments,
+      onFinish: syncWithDemocracy,
       startWeek,
       startYear,
       continue: true
@@ -110,4 +113,6 @@ const scraper = new Scraper();
     .catch(error => {
       console.error(error);
     });
-})();
+
+  console.log("FINISH AGENDA SCRAPER");
+};
