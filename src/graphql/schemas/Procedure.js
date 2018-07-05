@@ -4,6 +4,7 @@ enum VoteDecision {
   YES
   ABSTINATION
   NO
+  NOTVOTED
 }
 
 type ProcedureCustomData {

@@ -28,8 +28,8 @@ const proceduresQuery = gql`
           yes
           no
           abstination
-          decisionText
           notVoted
+          decisionText
           partyVotes {
             party
             main

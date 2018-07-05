@@ -97,9 +97,9 @@
     striptags "^3.1.1"
     x2js "^3.1.1"
 
-"@democracy-deutschland/bt-named-polls@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bt-named-polls/-/bt-named-polls-0.1.0.tgz#360ec271e15ce33968b2274adb41b3d0e03544e5"
+"@democracy-deutschland/bt-named-polls@0.1.1-0":
+  version "0.1.1-0"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bt-named-polls/-/bt-named-polls-0.1.1-0.tgz#8dc9e2e7cb6feb51c4d0d0592820ad46e529c7b4"
   dependencies:
     chalk "^2.3.1"
     colors "^1.1.2"

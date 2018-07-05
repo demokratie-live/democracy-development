@@ -111,24 +111,24 @@ app.prepare().then(async () => {
       console.error(err);
     } else {
       console.log(`App is listen on port: ${constants.PORT}`);
-      // new CronJob(
-      //   "15 * * * *",
-      //   importJob,
-      //   null,
-      //   true,
-      //   "Europe/Berlin",
-      //   null,
-      //   true
-      // );
-      // new CronJob(
-      //   "*/15 * * * *",
-      //   importAgenda,
-      //   null,
-      //   true,
-      //   "Europe/Berlin",
-      //   null,
-      //   true
-      // );
+      new CronJob(
+        "15 * * * *",
+        importJob,
+        null,
+        true,
+        "Europe/Berlin",
+        null,
+        true
+      );
+      new CronJob(
+        "*/15 * * * *",
+        importAgenda,
+        null,
+        true,
+        "Europe/Berlin",
+        null,
+        true
+      );
       new CronJob(
         "*/30 * * * *",
         importNamedPolls,

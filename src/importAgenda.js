@@ -69,7 +69,7 @@ const syncWithDemocracy = async () => {
   if (procedureIds.length > 0) {
     await axios
       .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
-        data: { procedureIds },
+        data: { procedureIds: [...new Set(procedureIds)], name: "Agenda" },
         timeout: 1000 * 60 * 5
       })
       .then(async response => {

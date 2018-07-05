@@ -151,7 +151,7 @@ const checkDocuments = async data => {
 const syncWithDemocracy = async () => {
   await axios
     .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
-      data: { procedureIds: [...new Set(procedureIds)] },
+      data: { procedureIds: [...new Set(procedureIds)], name: "NamedPolls" },
       timeout: 1000 * 60 * 5
     })
     .then(async response => {
@@ -164,11 +164,7 @@ const syncWithDemocracy = async () => {
 };
 
 const scraper = new Scraper();
-(async () => {
-  scraper.addListener("data", checkDocuments);
-  scraper.addListener("finish", syncWithDemocracy);
-  scraper.addListener("error", () => console.log("ERROR"));
-
+export default async () => {
   const lastNamedPoll = await NamedPolls.findOne({}, { pollId: 1 }).sort({
     pollId: -1
   });
@@ -176,9 +172,11 @@ const scraper = new Scraper();
   scraper
     .scrape({
       // startId: lastNamedPoll ? lastNamedPoll.pollId : 1
-      startId: 500
+      startId: 500,
+      onData: checkDocuments,
+      onFinish: syncWithDemocracy
     })
     .catch(error => {
       console.error(error);
     });
-})();
+};
