@@ -10,6 +10,7 @@ import { Engine } from "apollo-engine";
 import Next from "next";
 import auth from "./express/auth";
 import requireAuth from "./express/auth/requireAuth";
+import cors from "cors";
 
 import mongo from "./config/db";
 import constants from "./config/constants";
@@ -31,6 +32,8 @@ const handle = app.getRequestHandler();
 app.prepare().then(async () => {
   await mongo();
   const server = express();
+
+  server.use(cors())
 
   const schema = makeExecutableSchema({
     typeDefs,

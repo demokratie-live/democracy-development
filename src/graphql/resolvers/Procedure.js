@@ -24,10 +24,14 @@ export default {
         period = [19],
         type = ["Gesetzgebung", "Antrag"],
         status,
-        voteDate
+        voteDate,
+        limit = 99999999,
+        offset = 0
       },
       { ProcedureModel }
     ) => {
+      console.log("LIMIT", limit);
+      console.log("OFFSET", offset);
       let match = { period: { $in: period }, type: { $in: type } };
       if (voteDate) {
         match = {
@@ -44,6 +48,10 @@ export default {
             }
           }
         };
+        return ProcedureModel.find({ ...match })
+          .sort({ createdAt: 1 })
+          .skip(offset)
+          .limit(limit);
       }
       if (status) {
         match = { ...match, currentStatus: { $in: status } };
@@ -68,7 +76,9 @@ export default {
             }
           }
         },
-        { $project: { objectHistory: false } }
+        { $project: { objectHistory: false } },
+        { $skip: offset },
+        { $limit: limit }
       ]);
     },
 
@@ -198,7 +208,7 @@ export default {
               ]
             }
           ],
-          timeout: 1000 * 60 * 5,
+          timeout: 1000 * 60 * 5
         })
         .then(async response => {
           console.log(response.data);
