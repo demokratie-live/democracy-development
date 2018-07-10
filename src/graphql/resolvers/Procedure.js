@@ -8,10 +8,13 @@ const deputiesNumber = {
     Linke: 69,
     SPD: 153,
     Grüne: 67,
+    "B90/Grüne": 67,
     CDU: 246,
+    "CDU/CSU": 246,
     FDP: 80,
     AFD: 92,
-    Andere: 2
+    Andere: 2,
+    Fraktionslos: 2
   }
 };
 
@@ -24,7 +27,9 @@ export default {
         period = [19],
         type = ["Gesetzgebung", "Antrag"],
         status,
-        voteDate
+        voteDate,
+        limit = 999999,
+        offset = 0
       },
       { ProcedureModel }
     ) => {
@@ -44,7 +49,13 @@ export default {
             }
           }
         };
+
+        return ProcedureModel.find(match)
+          .sort("createdAt")
+          .skip(offset)
+          .limit(limit);
       }
+
       if (status) {
         match = { ...match, currentStatus: { $in: status } };
       }
@@ -126,17 +137,18 @@ export default {
   Mutation: {
     saveProcedureCustomData: async (
       parent,
-      { procedureId, partyVotes, decisionText },
+      { procedureId, partyVotes, decisionText, votingDocument },
       { ProcedureModel, user }
     ) => {
-      if (!user || user.role !== "BACKEND") {
-        throw new Error("Authentication required");
-      }
+      // TODO: Add auth handling
+      // if (!user || user.role !== "BACKEND") {
+      //   throw new Error("Authentication required");
+      // }
       const procedure = await ProcedureModel.findOne({ procedureId });
 
       let voteResults = {
-        partyVotes,
-        decisionText
+        decisionText,
+        votingDocument
       };
 
       if (deputiesNumber[procedure.period]) {
@@ -145,12 +157,16 @@ export default {
           abstination: 0,
           no: 0
         };
-        partyVotes.forEach(({ party, main, deviants }) => {
+        const partyResults = partyVotes.map(({ party, main, deviants }, i) => {
           switch (main) {
             case "YES":
               sumResults.yes +=
                 deputiesNumber[procedure.period][party] -
                 deviants.yes -
+                deviants.abstination -
+                deviants.no;
+              deviants.yes =
+                deputiesNumber[procedure.period][party] -
                 deviants.abstination -
                 deviants.no;
               break;
@@ -160,6 +176,10 @@ export default {
                 deviants.yes -
                 deviants.abstination -
                 deviants.no;
+              deviants.abstination =
+                deputiesNumber[procedure.period][party] -
+                deviants.yes -
+                deviants.no;
               break;
             case "NO":
               sumResults.no +=
@@ -167,6 +187,10 @@ export default {
                 deviants.yes -
                 deviants.abstination -
                 deviants.no;
+              deviants.no =
+                deputiesNumber[procedure.period][party] -
+                deviants.yes -
+                deviants.abstination;
               break;
 
             default:
@@ -175,8 +199,15 @@ export default {
           sumResults.yes += deviants.yes;
           sumResults.abstination += deviants.abstination;
           sumResults.no += deviants.no;
+          return { party, main, deviants };
         });
-        voteResults = { ...voteResults, ...sumResults };
+
+        console.log("partyVotes", partyResults);
+        voteResults = {
+          ...voteResults,
+          partyVotes: partyResults,
+          ...sumResults
+        };
       }
 
       await ProcedureModel.update(
@@ -198,7 +229,7 @@ export default {
               ]
             }
           ],
-          timeout: 1000 * 60 * 5,
+          timeout: 1000 * 60 * 5
         })
         .then(async response => {
           console.log(response.data);
@@ -229,6 +260,20 @@ export default {
           }, []);
         });
       return history;
+    },
+    namedVote: procedure => {
+      const namedVote = procedure.history.some(h => {
+        if (h.decision) {
+          return h.decision.some(decision => {
+            if (decision.type === "Namentliche Abstimmung") {
+              return true;
+            }
+            return false;
+          });
+        }
+        return false;
+      });
+      return namedVote;
     }
   }
 };
