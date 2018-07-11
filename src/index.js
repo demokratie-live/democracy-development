@@ -7,6 +7,7 @@ import { graphqlExpress, graphiqlExpress } from "apollo-server-express";
 import { makeExecutableSchema } from "graphql-tools";
 import { createServer } from "http";
 import { Engine } from "apollo-engine";
+import cors from "cors";
 import Next from "next";
 import auth from "./express/auth";
 import requireAuth from "./express/auth/requireAuth";
@@ -54,6 +55,8 @@ app.prepare().then(async () => {
   server.use("/admin", requireAuth({ role: "BACKEND" }));
 
   server.use(bodyParser.json());
+
+  server.use(cors());
 
   // Graphiql
   if (constants.GRAPHIQL) {
