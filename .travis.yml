@@ -130,6 +130,54 @@ matrix:
     - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"SUCCESS: New Server Beta Version $TRAVIS_TAG deployed!\"}" ${DISCORD_WEBHOOK}'
     after_failure:
     - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"FAILURE: Deploying new Server Beta Version $TRAVIS_TAG failed!\"}" ${DISCORD_WEBHOOK}'
+  # android deploy internal
+  - if: tag =~ -internal\+client
+    os: linux
+    language: android
+    jdk: oraclejdk8
+    before_install:
+    - cd client
+    - openssl aes-256-cbc -k "$SECRET" -in .env.internal.enc -out .env.internal -d
+    - openssl aes-256-cbc -k "$SECRET" -in android/Google_Play_Android_Developer.json.enc -out android/Google_Play_Android_Developer.json -d
+    - openssl aes-256-cbc -k "$SECRET" -in android/app/democracy2-release-key.keystore.enc -out android/app/democracy2-release-key.keystore -d  
+    - cd android
+    - gem update --system
+    - bundle install
+    - bundle update fastlane
+    install:
+    - cd ..
+    - nvm install 8
+    - yarn --version
+    - yarn install
+    android:
+      components:
+      - tools
+      - platform-tools
+      # android 23,25,26
+      - build-tools-23.0.1
+      - build-tools-25.0.0
+      - build-tools-25.0.1
+      - build-tools-25.0.2
+      - build-tools-26.0.1
+      - build-tools-26.0.2
+      - android-23
+      - android-25
+      - android-26
+      # extra
+      - extra-android-m2repository
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - addon-google_apis-google-16
+      licenses:
+      - 'android-sdk-preview-license-.+'
+      - 'android-sdk-license-.+'
+      - 'google-gdk-license-.+'
+    script:
+    - cd android && bundle exec fastlane android internal
+    after_success:
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Internal Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    after_failure:
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Internal Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
   # android deploy alpha
   - if: tag =~ -alpha\+client
     os: linux
@@ -138,8 +186,6 @@ matrix:
     before_install:
     - cd client
     - openssl aes-256-cbc -k "$SECRET" -in .env.alpha.enc -out .env.alpha -d
-    - openssl aes-256-cbc -k "$SECRET" -in .env.beta.enc -out .env.beta -d
-    - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
     - openssl aes-256-cbc -k "$SECRET" -in android/Google_Play_Android_Developer.json.enc -out android/Google_Play_Android_Developer.json -d
     - openssl aes-256-cbc -k "$SECRET" -in android/app/democracy2-release-key.keystore.enc -out android/app/democracy2-release-key.keystore -d  
     - cd android
@@ -177,9 +223,9 @@ matrix:
     script:
     - cd android && bundle exec fastlane android alpha
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Alpha Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Alpha Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Alpha Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Alpha Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
   # android deploy beta
   - if: tag =~ -beta\+client
     os: linux
@@ -187,9 +233,7 @@ matrix:
     jdk: oraclejdk8
     before_install:
     - cd client
-    - openssl aes-256-cbc -k "$SECRET" -in .env.alpha.enc -out .env.alpha -d
     - openssl aes-256-cbc -k "$SECRET" -in .env.beta.enc -out .env.beta -d
-    - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
     - openssl aes-256-cbc -k "$SECRET" -in android/Google_Play_Android_Developer.json.enc -out android/Google_Play_Android_Developer.json -d
     - openssl aes-256-cbc -k "$SECRET" -in android/app/democracy2-release-key.keystore.enc -out android/app/democracy2-release-key.keystore -d
     - cd android
@@ -233,9 +277,35 @@ matrix:
     # build android & publish using fastlane
     - cd android && bundle exec fastlane android beta
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Beta Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Beta Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Beta Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Beta Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+  # ios deploy internal
+  - if: tag =~ -internal\+client
+    osx_image: xcode9.2
+    language: objective-c
+    xcode_project: ios/democracyclient.xcodeproj
+    xcode_scheme: ios/democracyclientTests
+    before_install:
+    - cd client
+    - openssl aes-256-cbc -k "$SECRET" -in .env.internal.enc -out .env.internal -d
+    - cd ios
+    - gem update --system
+    - bundle install
+    - bundle update fastlane
+    install:
+    - cd ..
+    - nvm install 8
+    - npm install -g yarn
+    - yarn --version
+    - yarn install
+    script:
+    - cd ios
+    - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios internal
+    after_success:
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Internal Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    after_failure:
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Internal Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
   # ios deploy alpha
   - if: tag =~ -alpha\+client
     osx_image: xcode9.2
@@ -261,9 +331,9 @@ matrix:
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios alpha
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Alpha Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Alpha Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Alpha Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Alpha Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
   # ios deploy beta
   - if: tag =~ -beta\+client
     osx_image: xcode9.2
@@ -295,8 +365,8 @@ matrix:
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios beta
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Beta Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Beta Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Beta Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Beta Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
 after_script:
 - echo "BUILD FINISHED"
