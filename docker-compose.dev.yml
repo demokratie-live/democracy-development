@@ -36,6 +36,7 @@ services:
       - 3200:80
     volumes:
        - ./admin/:/app/
+       - /app/.next
     restart: 'always'
     depends_on:
       - bundestagio

@@ -95,7 +95,6 @@ services:
       VIRTUAL_HOST: ${DOMAIN_BUNDESTAGIO_ADMIN:-admin.bundestag.io}
       LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAGIO_ADMIN:-admin.bundestag.io}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
-      BUNDESTAGIO_SERVER_URL: http://bundestagio/graphql
       PORT: 80
     networks:
       default:
