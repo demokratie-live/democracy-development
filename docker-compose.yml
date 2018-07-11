@@ -51,6 +51,7 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/bundestagio
       DEMOCRACY_SERVER_WEBHOOK_URL: http://democracy/webhooks/bundestagio/update
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-elasticsearch}
       PORT: 80
     networks:
       default:
@@ -73,6 +74,7 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/democracy
       BUNDESTAGIO_SERVER_URL: http://bundestagio/graphql
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-elasticsearch}
       PORT: 80
     networks:
       default:
