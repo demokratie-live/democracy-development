@@ -77,6 +77,7 @@ matrix:
     before_install:
     - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in admin.io/.env.enc -out admin.io/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
     script:
