@@ -11,7 +11,6 @@ import cors from "cors";
 import Next from "next";
 import auth from "./express/auth";
 import requireAuth from "./express/auth/requireAuth";
-import cors from "cors";
 
 import mongo from "./config/db";
 import constants from "./config/constants";
