@@ -130,7 +130,7 @@ app.prepare().then(async () => {
         true
       );
       new CronJob(
-        "*/30 * * * *",
+        "30 * * * *",
         importNamedPolls,
         null,
         true,
