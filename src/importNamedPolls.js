@@ -11,8 +11,7 @@ import NamedPolls from "./models/NamedPolls";
 let procedureIds = [];
 
 const checkDocuments = async data => {
-  // const procedureIds = [];
-
+  process.stdout.write("n");
   const { id, title, date, documents, voteResults } = data;
 
   const summarized = {
@@ -160,11 +159,13 @@ const syncWithDemocracy = async () => {
     .catch(error => {
       console.log(`democracy server error: ${error}`);
     });
+  console.log("FINISH NAMED POLL SCRAPER");
   procedureIds = [];
 };
 
 const scraper = new Scraper();
 export default async () => {
+  console.log("START NAMED POLL SCRAPER");
   const lastNamedPoll = await NamedPolls.findOne({}, { pollId: 1 }).sort({
     pollId: -1
   });
@@ -172,11 +173,10 @@ export default async () => {
   scraper
     .scrape({
       // startId: lastNamedPoll ? lastNamedPoll.pollId : 1
-      startId: 500,
       onData: checkDocuments,
       onFinish: syncWithDemocracy
     })
     .catch(error => {
-      console.error(error);
+      console.error("ERROR: Named Polls", error);
     });
 };
