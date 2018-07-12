@@ -10,3 +10,6 @@
 [submodule "elasticsearch"]
 	path = elasticsearch
 	url = https://github.com/demokratie-live/democracy-search
+[submodule "admin"]
+	path = admin
+	url = https://github.com/demokratie-live/bundestag.io-admin
