@@ -135,9 +135,9 @@ const checkDocuments = async data => {
 
   // console.log(util.inspect(customData, false, null));
 
-  await matchedProcedures.map(({ procedureId }) => {
+  await matchedProcedures.map(async ({ procedureId }) => {
     procedureIds.push(procedureId);
-    Procedure.findOneAndUpdate(
+    await Procedure.findOneAndUpdate(
       { procedureId },
       { customData },
       {
