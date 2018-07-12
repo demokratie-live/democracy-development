@@ -1,13 +1,14 @@
 {
   "name": "bundestag.io",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "src/index.js",
   "author": "Ulf Gebhardt",
   "license": "Apache2",
   "private": true,
   "scripts": {
     "start": "babel-node src/index.js",
-    "dev": "nodemon -L -e js,graphql src/index.js --exec \"node --require dotenv/config --require babel-register\"",
+    "dev":
+      "nodemon -L -e js,graphql src/index.js --exec \"node --require dotenv/config --require babel-register\"",
     "lint": "eslint . --ext js,jsx",
     "build": "next build",
     "serve": "babel-node src/index.js",

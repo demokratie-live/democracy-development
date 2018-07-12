@@ -116,8 +116,13 @@ export default {
           }
         },
         { $project: { objectHistory: false } }
-      ])
+      ]),
+
+    procedure: async (parent, { procedureId }, { ProcedureModel }) => {
+      return ProcedureModel.findOne({ procedureId });
+    }
   },
+
   Mutation: {
     saveProcedureCustomData: async (
       parent,

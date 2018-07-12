@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.2
+
+- [Fix] Edit Vote Results
+
 ### 0.1.1
 
 - [Changed] scrape bt-agenda `Überwiesen` status

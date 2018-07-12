@@ -43,20 +43,41 @@ class Procedure extends Component {
         (assignment === "BT" && initiator === "3. Beratung") ||
         (assignment === "BT" && initiator === "Beratung")
     );
+
+    const hastCustomData =
+      customData &&
+      customData.voteResults &&
+      (customData.voteResults.yes ||
+        customData.voteResults.abstination ||
+        customData.voteResults.no);
+
     const rowHeaderClasses = `card-header ${
-      customData || namedVoted
+      hastCustomData || namedVoted
         ? "bg-success"
         : findSpotUrl
           ? "bg-secondary"
           : "bg-warning"
-      } `;
+    } `;
 
-    const documents = importantDocuments.map(({ url, editor, number }) =>
-      <div key={number}><a href={url} target="_blank">{editor} {number}</a> <br /></div>
-    );
+    const documents = importantDocuments.map(({ url, editor, number }) => (
+      <div key={number}>
+        <a href={url} target="_blank">
+          {editor} {number}
+        </a>{" "}
+        <br />
+      </div>
+    ));
 
-    const histories = history.map(({ assignment, initiator, findSpot, findSpotUrl }) =>
-      <div key={initiator}>{assignment} {initiator}: <a href={findSpotUrl} target="_blank">{findSpot}</a> <br /></div>
+    const histories = history.map(
+      ({ assignment, initiator, findSpot, findSpotUrl }) => (
+        <div key={initiator}>
+          {assignment} {initiator}:{" "}
+          <a href={findSpotUrl} target="_blank">
+            {findSpot}
+          </a>{" "}
+          <br />
+        </div>
+      )
     );
 
     return (
@@ -207,35 +228,35 @@ Procedure.defaultProps = {
 };
 
 const saveChanges = gql`
-          mutation saveProcedureCustomData(
-            $procedureId: String!
-            $partyVotes: [PartyVoteInput!]!
-            $decisionText: String!
+  mutation saveProcedureCustomData(
+    $procedureId: String!
+    $partyVotes: [PartyVoteInput!]!
+    $decisionText: String!
   ) {
-          saveProcedureCustomData(
-            procedureId: $procedureId
-        partyVotes: $partyVotes
-        decisionText: $decisionText
+    saveProcedureCustomData(
+      procedureId: $procedureId
+      partyVotes: $partyVotes
+      decisionText: $decisionText
     ) {
-          customData {
+      customData {
         title
         voteResults {
           yes
           no
-        abstination
+          abstination
           partyVotes {
-          party
+            party
             main
-        deviants {
-          yes
+            deviants {
+              yes
               abstination
-        no
+              no
+            }
+          }
+        }
       }
     }
   }
-}
-}
-}
 `;
 
 export default graphql(saveChanges, {
