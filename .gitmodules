@@ -10,3 +10,6 @@
 [submodule "elasticsearch"]
 	path = elasticsearch
 	url = https://github.com/demokratie-live/democracy-search
+[submodule "docu"]
+	path = docu
+	url = ../democracy-docu.git
