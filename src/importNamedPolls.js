@@ -21,6 +21,13 @@ const checkDocuments = async data => {
     notVoted: 0
   };
 
+  Object.keys(voteResults).map(key => {
+    summarized.yes += parseInt(voteResults[key]["Ja"], 10);
+    summarized.no += parseInt(voteResults[key]["Nein"], 10);
+    summarized.abstination += parseInt(voteResults[key]["Enthalten"], 10);
+    summarized.notVoted += parseInt(voteResults[key]["Nicht"], 10);
+  });
+
   await NamedPolls.findOneAndUpdate(
     { pollId: id },
     {
@@ -28,11 +35,8 @@ const checkDocuments = async data => {
       title,
       date,
       documents,
+      ...summarized,
       voteResults: Object.keys(voteResults).map(key => {
-        summarized.yes += parseInt(voteResults[key]["Ja"], 10);
-        summarized.no += parseInt(voteResults[key]["Nein"], 10);
-        summarized.abstination += parseInt(voteResults[key]["Enthalten"], 10);
-        summarized.notVoted += parseInt(voteResults[key]["Nicht"], 10);
         return {
           party: key,
           yes: voteResults[key]["Ja"],
@@ -47,6 +51,17 @@ const checkDocuments = async data => {
     }
   );
 
+  return;
+};
+
+const matchWithProcedure = async ({
+  documents,
+  yes,
+  abstination,
+  no,
+  notVoted,
+  voteResults
+}) => {
   const procedures = await Procedure.find({
     period: 19,
     "importantDocuments.number": { $in: documents }
@@ -61,11 +76,9 @@ const checkDocuments = async data => {
             if (type === "Namentliche Abstimmung") {
               return (
                 comment.match(/\d{1,3}:\d{1,3}:\d{1,3}/)[0] ===
-                  `${summarized.yes}:${summarized.no}:${
-                    summarized.abstination
-                  }` ||
+                  `${yes}:${no}:${abstination}` ||
                 comment.match(/\d{1,3}:\d{1,3}:\d{1,3}/)[0] ===
-                  `${summarized.yes}:${summarized.abstination}:${summarized.no}`
+                  `${yes}:${abstination}:${no}`
               );
             }
           } catch (error) {
@@ -77,77 +90,82 @@ const checkDocuments = async data => {
     });
   });
 
-  const customData = {
-    voteResults: {
-      partyVotes: Object.keys(voteResults).map(key => {
-        let main = [
-          {
-            decision: "YES",
-            value: parseInt(voteResults[key]["Ja"], 10)
-          },
-          {
-            decision: "ABSTINATION",
-            value: parseInt(voteResults[key]["Enthalten"], 10)
-          },
-          {
-            decision: "NO",
-            value: parseInt(voteResults[key]["Nein"], 10)
-          },
-          {
-            decision: "NOTVOTED",
-            value: parseInt(voteResults[key]["Nicht"], 10)
-          }
-        ].reduce(
-          (prev, { decision, value }) => {
-            if (prev.value < value) {
-              return { decision, value };
+  // console.log(matchedProcedures.map(({ procedureId }) => procedureId));
+  if (matchedProcedures.length > 0) {
+    const customData = {
+      voteResults: {
+        partyVotes: voteResults.map(partyVote => {
+          let main = [
+            {
+              decision: "YES",
+              value: partyVote.yes
+            },
+            {
+              decision: "ABSTINATION",
+              value: partyVote.abstination
+            },
+            {
+              decision: "NO",
+              value: partyVote.no
+            },
+            {
+              decision: "NOTVOTED",
+              value: partyVote.notVoted
             }
-            return prev;
-          },
-          { value: 0 }
-        );
+          ].reduce(
+            (prev, { decision, value }) => {
+              if (prev.value < value) {
+                return { decision, value };
+              }
+              return prev;
+            },
+            { value: 0 }
+          );
 
-        return {
-          deviants: {
-            yes: voteResults[key]["Ja"],
-            abstination: voteResults[key]["Enthalten"],
-            no: voteResults[key]["Nein"],
-            notVoted: voteResults[key]["Nicht"]
-          },
-          party: key,
-          main: main.decision
-        };
-      }),
-      yes: Object.keys(voteResults).reduce((prev, key) => {
-        return prev + parseInt(voteResults[key]["Ja"], 10);
-      }, 0),
-      abstination: Object.keys(voteResults).reduce((prev, key) => {
-        return prev + parseInt(voteResults[key]["Enthalten"], 10);
-      }, 0),
-      no: Object.keys(voteResults).reduce((prev, key) => {
-        return prev + parseInt(voteResults[key]["Nein"], 10);
-      }, 0),
-      notVoted: Object.keys(voteResults).reduce((prev, key) => {
-        return prev + parseInt(voteResults[key]["Nicht"], 10);
-      }, 0)
-    }
-  };
-
-  // console.log(util.inspect(customData, false, null));
-
-  await matchedProcedures.map(async ({ procedureId }) => {
-    procedureIds.push(procedureId);
-    await Procedure.findOneAndUpdate(
-      { procedureId },
-      { customData },
-      {
-        // returnNewDocument: true
+          return {
+            deviants: {
+              yes: partyVote.yes,
+              abstination: partyVote.abstination,
+              no: partyVote.no,
+              notVoted: partyVote.notVoted
+            },
+            party: partyVote.party,
+            main: main.decision
+          };
+        }),
+        yes: yes,
+        abstination: abstination,
+        no: no,
+        notVoted: notVoted
       }
-    );
-  });
+    };
+
+    // console.log(util.inspect(customData, false, null));
+
+    await matchedProcedures.map(async ({ procedureId }) => {
+      procedureIds.push(procedureId);
+      await Procedure.findOneAndUpdate(
+        { procedureId },
+        { customData },
+        {
+          // returnNewDocument: true
+        }
+      );
+    });
+  }
 };
 
 const syncWithDemocracy = async () => {
+  console.log("NamedPolls: syncWithDemocracy");
+
+  const polls = await NamedPolls.find();
+
+  await Promise.all(
+    polls.map(poll => {
+      return matchWithProcedure(poll);
+    })
+  );
+
   await axios
     .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
       data: { procedureIds: [...new Set(procedureIds)], name: "NamedPolls" },
@@ -166,13 +184,30 @@ const syncWithDemocracy = async () => {
 const scraper = new Scraper();
 export default async () => {
   console.log("START NAMED POLL SCRAPER");
+  let startId = 1;
   const lastNamedPoll = await NamedPolls.findOne({}, { pollId: 1 }).sort({
     pollId: -1
   });
 
+  // Scrape one time a day all named polls
+  if (lastNamedPoll) {
+    const lastFullScrapeObj = await NamedPolls.findOne(
+      {},
+      { updatedAt: 1 }
+    ).sort({
+      updatedAt: 1
+    });
+
+    const lastFullScrape = new Date(lastFullScrapeObj.updatedAt);
+    // Do your operations
+    var curDate = new Date();
+    var hours = (curDate.getTime() - lastFullScrape.getTime()) / 1000 / 60 / 60;
+    startId = hours < 24 ? lastNamedPoll.pollId : startId;
+  }
+
   scraper
     .scrape({
-      // startId: lastNamedPoll ? lastNamedPoll.pollId : 1
+      startId,
       onData: checkDocuments,
       onFinish: syncWithDemocracy
     })

@@ -6,6 +6,10 @@ const NamedPollsSchema = new Schema(
     title: String,
     date: Date,
     documents: [String],
+    yes: Number,
+    abstination: Number,
+    no: Number,
+    notVoted: Number,
     voteResults: [
       {
         party: String,
