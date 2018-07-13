@@ -4,11 +4,13 @@ enum VoteDecision {
   YES
   ABSTINATION
   NO
+  NOTVOTED
 }
 
 type ProcedureCustomData {
   title: String
   voteResults: VoteResults
+  expectedVotingDate: Date
 }
 
 type VoteResults {
@@ -50,6 +52,7 @@ type Procedure {
   type: String
   period: Int
   currentStatus: String
+  currentStatusHistory: [String]
   signature: String
   gestOrderNumber: String
   approvalRequired: [String]
@@ -66,8 +69,8 @@ type Procedure {
 }
 
 type Query {
-  getProcedure(_id: ID!): Procedure
-  procedures(offset: Int, IDs: [String!], status: [String!], voteDate: [Boolean!]): [Procedure]
+  procedure(procedureId: String!): Procedure
+  procedures(offset: Int, IDs: [String!], status: [String!], voteDate: [Boolean!], limit: Int, offset: Int): [Procedure]
   allProcedures(offset: Int): [Procedure]
   procedureUpdates(offset: Int, period: [Int!], type: [String!]): [Procedure]
 }

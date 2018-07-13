@@ -1,67 +1,83 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
-import diffHistory from 'mongoose-diff-history/diffHistory';
-import fs from 'fs-extra';
+import diffHistory from "mongoose-diff-history/diffHistory";
+import fs from "fs-extra";
 
-import mongoConnect, { mongoose } from './config/db';
-import Procedure from './models/Procedure';
+import mongoConnect, { mongoose } from "./config/db";
+import Procedure from "./models/Procedure";
 
 (async () => {
   await mongoConnect();
-  const History = mongoose.model('History');
+  const History = mongoose.model("History");
 
   const histories = await History.aggregate([
     { $sort: { version: 1 } },
-    { $group: { _id: '$collectionId', procedures: { $push: '$$ROOT' } } },
+    { $group: { _id: "$collectionId", procedures: { $push: "$$ROOT" } } }
   ]);
-  const promises = histories.map(async (procedureHistories) => {
-    const procedureVersions = procedureHistories.procedures.map(async changeset =>
-      new Promise(resolve =>
-        diffHistory.getVersion(Procedure, changeset.collectionId, changeset.version, (err, obj) =>
-          resolve({ obj, changeset }))));
+  const promises = histories.map(async procedureHistories => {
+    const procedureVersions = procedureHistories.procedures.map(
+      async changeset =>
+        new Promise(resolve =>
+          diffHistory.getVersion(
+            Procedure,
+            changeset.collectionId,
+            changeset.version,
+            (err, obj) => resolve({ obj, changeset })
+          )
+        )
+    );
 
-    return Promise.all([...procedureVersions]).then(async (procVers) => {
-      const procedureVersion = procVers.map((procedure) => {
+    return Promise.all([...procedureVersions]).then(async procVers => {
+      const procedureVersion = procVers.map(procedure => {
         const tmpProcedure = procedure;
         tmpProcedure.obj.updatedAt = procedure.changeset.updatedAt;
         return tmpProcedure;
       });
 
-      if (!procedureVersion.find(d => d.changeset.diff.currentStatus)) {
-        return;
-      }
+      const curProcedure = await Procedure.findById(
+        procedureVersion[0].obj._id
+      );
 
-      const curProcedure = await Procedure.findById(procedureVersion[0].obj._id);
+      let contents = fs.readFileSync("./assets/templates/diff.html", "utf8");
 
-      let contents = fs.readFileSync('./assets/templates/diff.html', 'utf8');
-
-      contents = contents.replace('###TITLE###', curProcedure.title);
-      contents = contents.replace('###ID###', `${curProcedure.period}-${curProcedure.procedureId}`);
+      contents = contents.replace("###TITLE###", curProcedure.title);
       contents = contents.replace(
-        '###OBJECTS###',
-        JSON.stringify([...procedureVersion.map(ele => ele.obj), curProcedure]),
+        "###ID###",
+        `${curProcedure.period}-${curProcedure.procedureId}`
       );
       contents = contents.replace(
-        '###JS###',
+        "###OBJECTS###",
+        JSON.stringify([...procedureVersion.map(ele => ele.obj), curProcedure])
+      );
+      contents = contents.replace(
+        "###JS###",
         procedureVersion
-          .map((obj, index) => `
-            var delta = jsondiffpatch.diff(objects[${index}], objects[${index + 1}]);
+          .map(
+            (obj, index) => `
+            var delta = jsondiffpatch.diff(objects[${index}], objects[${index +
+              1}]);
             console.log(delta)
             document.getElementById('diff-${index}').innerHTML = jsondiffpatch.formatters.html.format(delta, objects[${index}]);
-            `)
-          .join(''),
+            `
+          )
+          .join("")
       );
       contents = contents.replace(
-        '###DIFF_HTML###',
+        "###DIFF_HTML###",
         `<table>${procedureVersion
           .map((obj, index) => `<td id="diff-${index}">Hallo</td>`)
-          .join('')}</table>`,
+          .join("")}</table>`
       );
       const directory = `diffs/${curProcedure.period}/${curProcedure.type}`;
       await fs.ensureDir(directory);
       new Promise(resolve =>
-        fs.writeFile(`${directory}/${procedureVersion[0].obj.procedureId}.html`, contents, () => {
-          resolve();
-        }));
+        fs.writeFile(
+          `${directory}/${procedureVersion[0].obj.procedureId}.html`,
+          contents,
+          () => {
+            resolve();
+          }
+        )
+      );
     });
   });
   Promise.all(promises).then(() => mongoose.disconnect());

@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-import CONSTANTS from './constants';
+import CONSTANTS from "./constants";
 
 mongoose.Promise = global.Promise;
 
-// mongoose.set('debug', true);
+// mongoose.set("debug", true);
 const connect = async () =>
   new Promise((resolve, reject) => {
     try {
@@ -14,10 +14,10 @@ const connect = async () =>
     }
 
     mongoose.connection
-      .once('open', () => {
+      .once("open", () => {
         resolve();
       })
-      .on('error', (e) => {
+      .on("error", e => {
         reject(e);
       });
   });
