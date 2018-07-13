@@ -6,14 +6,20 @@ env:
   - secure: x27uGBUltnahb6YLZBPPWe/mJHDAXRNZW8d0bgM9CFowJZE9VmcIkLvh/ZWST10TSeY0Ry1TWyGfpQwLJHuD1AmUFI06tKGR3+/wCcjOLoOX4O7oUQAcheVZ/2GCv2QdzO9zX0SQxfKXOAIIVrs6qjylTJuA3ELM1f8QdQ8qnUDiPmpjyqR4o1MDvvqda4Oennh0nZGu1HnbwkRXmSQr+BO9pKA1SZbOK5W0cqTHxX4lZbbo5UT7N6BCjSXolyKjfB5FbtXZWD8onqXuYx6kwt93vkMYmWeLqUCepvY3BDQXMMK+pTiTI0mVKTMHwgyvan9wZqORJ9g5wofoiwkS4faUcNte2+Svz/1Qk+C0JmNw55ja2SVp6E7QRaTAmuYhhHDtwLsL4ukYwYTyd6oSOS5HnRm1KJsL4ggJrHZDeKheKNVKtQcJtFov8DCh4pBqttx3VQM0KypcCT0MEzuJmbI/iggREJU7EWpIhpa1kHaEZHYHGHdg/PDgxkY2lwZXclwyFxtfcL0rCDhri4TuuYjKdF/Th6F5ReWtTo08wFPxTKq+08sMulsB7yt/+zaQ0FQ3YIlR4In9uswHgNfLK1HcIlG89J5T1OnmGg9v5uZDRWER4uwM8NzTkpvpOjGFKs+1KOCcfX/ztxGD4bJ1UYuhPzgagIDjbW8Sgar1ATU=
   # DIGITALOCEAN_ACCESS_TOKEN
   - secure: Cvczli2QXTNwU7mzsslAB4SCTj5ZiMXX14uPrazR2ggXA8KrFIpt+lQj6EQ5AVpI/nr9P1KuasQPSYGn14IWdDYOGWGwPUFWQpxsTAdv7y+C2cJlZfDmkTH38cUXoudkq+LqXfWdfMFxt5WaVmqdWfov3ENP4yHZazRaq4VjdPuzxm79WQpdXY0VYCqO0m+6cNA3bqzMquTC/pRxdOticBJraGz2Frhz78m0ZsSN3nn1fUdgEwlpeyMGgiGCP9/V/bb5iw15X1JguFf+GcKsMFufWuAPcg16BvfhTpLbKs9pmfBb1itYFKvlCVJV/jGF5ifQ48iNiy+6c9wvRoL9kDGrfDMFiV9qrI/v3zkCAu1n0xsV54iyDnnLLWUTrnVazTwMed3lbgWMyOtGDwOgs4TnxjN4MXIJCMeYefde1DO5mkES8lSCQ+hXFucjK9g3B4lrI5vEvFrTvDou2F3uNSPkA/Pjr89tlkOsH83mMk7fr+m/MkyCwabh5NNMB/qB5nud6LkiBgdWYuhWGksPgDdqXU10q2YOudzfMvs7Xq/640UAMKwsdBlpXj5N4ocnaeTMbrty1ExMlPBwHQIEIlhzALZnTq/FocRiQT+HUfNcF1I5IXAM7U+kMq9vL0cPzdOuPh4P6vxfxCrSdkFmEbf8SkfJ5HuQj44PzpifC9w=
+  # DIGITALOCEAN_INTERNAL_SERVER_DROPLET_NAME
+  - secure: "TO9UT00fQw42gJo8LOMuq1eWqWg7TI3FU63giKiYSDqRoJTdGfAQ8NF9VYNULOdwLRi5A8UXacDRrc3JcvwG7G4lv9aud0q9wVPv/Z7XRjB7h/YqJ0Jm6BfKSe8kOKNv68+nsTQBnuuL/Bg9Z8GBcjXcPiyvS7G3+8w1pjLezuiA99dtJm8/ppNLZMhQh0x84lSZHJulFAC1lu8O53EyykezHJMKDZtetiE5xYEfwdqcCSBjmXU9PZ2ALfLejLE8SF2o/1GxK/L5BqOYLpYbTXaoN42mw9ADa1lfiSX8wOSFDc3yWeY6bj3D3IMjddGuvPI0ZD6Oxu6FFWF4l4YUK0blSIVWwpf3PdSZrT+lq4PYky6x0Z6uO+uuP+f1MrPW0G7InMhQhps1ZrpNc63O3PWSU6j78uN6cW8PuiCQpDyWSBqgyX6yvqDFbJ3P7ucvR5ier+ZrABKCN14kWl42mHqcDF1onw9Q76laz5VExqJrq4wvntUbkx5KexxZp3v38dCIeMFYutpu9BKU8H2H5qZRdKxZIfffZN8mRR/AxHknYcJZxGZop3RddbP3WPFyh4k1hcnfnpLlkTEp3IpuuEQpR+W39GkTtYU2Vq6xiT7fUFf7EARvJ2K3jg4hFeQ+te2iqXFVBl91gVx2RYLaM7evNbH1IyDR/hb8yluOaeQ="
   # DIGITALOCEAN_ALPHA_SERVER_DROPLET_NAME
   - secure: msZSe8h8/Rk2QrtmxInP1+zMWujEFRQTJn1ku/HNoAzAkqju8vSbpmDB0CmWg4ASn97D7gnZCYhsVBEoLx13u69p9sJpEqsX+juBteP+UtmGJ+ivvOMRCuSWNJmQK+YngsBJygzead77o4RKC7GGTqO4prvPsgmVkkmYtesoVicBKZR4Mzs2R4Y1t2XebRLBNuylQQw2P3UEPL/zXEYz9NDW+iV49W3NbfX3HGydOzRBpw88iFNXqN1wfxCx/X02SwhNVJmELFULgkHQzhSwfBT4CBcGOiKJBu2hgf1JEcFYVsmcoFwSj5YnWlILZ+h64iFkqwTkVOspGshZY3doGv3tX+lFpHIww1RFLWUZnePsfmRi1Jn3VRRQcrkhMmRAQv4PIpg6ieT1CvilZG7E9zAKHBMS6f/qR5lTe1HV4ccnAqVE/vSsvLbEy2uMSd+bA9BiQjy6JM9avba0q9V5sJ72eWUWqXaFkvN9iYrLuelHOJKfeC8vdRHeANzQhkq90v5auXhJHG9jcpmQFbj9DNptNBNQJPwn5kuvDA3w4wvP9lbqxFJkF/tB5wk+X6THUTkz/AufpU4rPL2+rO71eqifBzxkk0gt4Hqmsio7rhayfghlYTMx8EK+rm26i92WO3z73aDoCJj0gKP5PgrEy/oGfULvGDZB0ynHtaXxYeI=
   # DIGITALOCEAN_BETA_SERVER_DROPLET_NAME
   - secure: "1lVMVwr52WG9gwKdwci/Dhuu8vJarn/l1hQt/Ki9luwBaFomcQ73u2hVt6OvtLrdCTuILM/zC0aPqcs6F7YEytyddFnSv2tGlNGZ8b+j7Sk9+z/gJRMwV+jrEaq6NdR7bFBa7MftcUoXBbtAdcZtPV4IhH3wFvyLJzyHj/gep+OUCV75R2jViCgDpar/axWz4d5iu1nKtg1Ujvd8I9jKqn7o54NtowiT0A98A635Q/sFx9t+gqrZ2NrTg/b26e7EUXZDbSwdUge4OOcMGDPvedvtHhXq9eErEr4EHxCRUWqFIkDp/oY+yWjge/IWFyB9JLJfeh0g+R3wQE/JTZKoqcJC8gRiFCz6uiPCWJYrUlujEPJKtjmfbfTHg9EzJjB11kX0drQ6RTcFnPC6tEehsioPJqyPxMZ5FHLBaFVf73If6PRYp80Id6vgtdU+xoP0KbNvo5eszzDDgjKkxR5P1aJLniZbKQuSCvs1nsbJcIftuJ1gSv5xR4qcJevsL/EL8Ql5rzvoVHkFlF3ChexlzSKXRtzN+kCjsN1isturn8SVkOvXlB3G0+mJjdPowpQFYuJTYuOP3qJKOoZYgZS4ho3m9FqGpdXdy9a+wYUgjL64fB6tT+XBLXtRLBqdWzEfnWudPcjF3MTmDX7G+1KLKkbjIgcNZyWMBm7jWA6y4PE="
+  # DIGITALOCEAN_INTERNAL_SERVER_USER
+  - secure: "Xohl2sdLioCgSD4JfMS0T4gb5ELqhxB7Mp5UV7wZouRGZhoEd7kqTXCi+tWYMXu/vNNfP6FPQHvDx8VKd4vSjKTz3E+dRDcOF2FDeYFiOAkXaWFWCO+sHg/lUHJdkRfzzsmGKe7UNKA8bNlJCtoKP+WjOQ1oqdYeIj9GTkbnXw9kHJzRBhJ0ft4LqkVRocdnUFPy+1c+0IgdSC5BP6W85V2zbnhGZpJM6vQ8/aCBNfvLjmpvJw6z+X/vhA3jY/SUP23buuu9yQwvuXWm3DQtFsCtgXL5Wtd3x8h5XcUxOoORkf58wG6IhE7o7oNUaPBqAuopPwhDq6vduHHo5MsAubddTCTY6gdTcdX7fd85sy1zt5q04N3eP8y2mM2Zy/ZrfLOFfZUi/eZaTz1tRnlta9ovdYWIuyl8Qk50xg2FRfrxdr4STL7YVDrl0El8kch+iuHfqNA9GPxL6XZvWxf1bgWLWpD2Da3JsTsB2Ws75SYLtP1d7O9EednVfYsoiHgPyuQ+PRUtrNPuKjIAyQY7EQu5qaKpAO3f9SMXS0GN9jtyH5aOVeYSZuDBwwR6dQJ3VgywwnLM5QapcxnStVH37DhEN0sQOjKn9KLvi+u1eCseySJIePzaq5u+PiARe+80MaNlKN2oTcKtgSAnLi7vY4Vd+ZpdtSVyqNWG+1XxmOA="
   # DIGITALOCEAN_ALPHA_SERVER_USER
   - secure: lHYJcGXxrn7VL37pT/36m1HWBaP+CQt0dA61Zo+t9pNY4GHws1Nhn06iX5UlWTHvmFfpOmTeKZbY5ksWTSQdIdcHRnDT95Q1mp/wpEm9LL76IT2CaFoSF6lgDeX+1CLTZmuLZd2Mx5kK4nu+k6s8iqKgtSoPyNENuO5OV20LOCc3/rbiPOqb0EBvCc7iim8D9ZC+F/ertD78ylvZemYNthjflymTVXz8imSo1emdEFNYfSrlVU7nKIRZUcE2ua/RPC7PxEuPPGrNNZPJ2RqoOIR4hJECFiZmPTbXDx99tjFI1xxHJ0R7qIrbgFoObUFtN6FlahdHNUipes6zHtUUAqKDVRFxlQ+xdcPY1wGDTACCCSbg8ySL+HfKUWa2LiAEfTRi54NvVKMWPDRRGHjTlPyzE+bqYKcJgkZjzFVv1eeKkec9t+tStSG8DGrO251SbyH6fPQRYREcJyXT4iRiYIDKwtnb3g8ziWCwN8x79y5xWA+Oy/8RmhSmgTIUIoq6Q7Rg4nWXSTzjdyvSPlqvbQKuCL+Ce1yFl8IytW7BKC53fg73zJtlYVQb4oPHWkry9GZp4qS1Aj4JzFHqfm3yBJvHrJ1HyjS1S+KsM2OLFWmJL4F1MJTwiARiNDilhhi3mMr98oSDgwLPVDmtl4NObqBewkX/G0QU+oYx8dnTuh8=
   # DIGITAL_OCEAN_BETA_SERVER_USER
   - secure: "RHdd5TihEHff9XP1K8Kbw+4ZqTk9luv3qSnkqFThtpDIcIgQPPoWh1owpwdzVgosCEOB/ja7Gu+ckpSNkarKWfLEplHXv57NsHY9JR6eyKCz9Ype4qlAv2UIKcCTIoPIYETGLX7SNwazYfYCsIhTmy4KV7rnBqRB+jEe+mpgIMB8W49e53uqsHfmV40VP9f6/DW07gLMwmMCYNM379I5cAXGb2YNnD/usVt0Q1FRIEVtagx8iRX3ctFdAcJwAarkn8WXDFjwmoLZyd9vD3aYUnQeqTHRQA75hRuQI0+tMKLnoZTAMLmDkV8sD/m7Fto9vXEbtrfLRkro4iKDZ9G0vtr5jK+Bz6UoSrsdnsKelk6gKshDXa1IkFe1PXdwGtkr2jxXt9vqwDdo7u1Rwuy51QWpa751T5FkGmyb8L/i4FHbr/hxOlPziKx6BUSDujU+13aj8uD28qMtAJsq5BEh8urdWqAuqZtYOfDaZfgpNHRnCFjprmZUy9p+26tuKJy2bD7OBQkHdcgFJ6hmGwPANJ8DFfsz+9uFFTq9F5mJn4wj4nGBpuTy9iwJJ0OwqbPBIQWWqfRfZ8j1Mx8ZIr4atqyMWy2TNAwDWgQlUuA3k7+PSligbTmx2/1xA8H0trleK6JwUbG1sw68INICQ/cG2Gg2Cs2RP69fCeNsBediXus="
+  # DIGITAL_OCEAN_INTERNAL_HOST
+  - secure: "AITUPvAYU2dnKsIoyw/Iag9un5mlO9p9tcVAJW8VCCmMgMdgtiW73V/5l70wf/7f8dNrTjqmhzIz1OYOYOSduMo93nK6bxPdeUK8Je6s1dYGpvNjM9WXa34w2ISU3sNxGLPNWWYeh9WZcXJVlfvaT+EH5naHPOqV9EYDxSZlmzdXtmZuZOz2JFblWkaeYKvOBCnCQIBvH1sp9lDX2BdtVD9Gwkzj8OtzF/y661nGEf8auMOOSHSofev3xIK9vKTs+O3FA4L1fMk556qTlMOGHcYGrPZzC4emOdPpMqp6IcBEDdplmao78/ino6tUunvZppO7x4ROTk7WUGC206CV9oPQxSmyzaqMxatxi0db2pkx/jvvkVhG+yFt8d9oxLRP1h8vunpRFTSBTINj5gn1GuIl8qa64pE5Abf+Zf6Gk137QU/zaqG6J01YRoKTC2mQJzBdzjUu7xajKBlDWOg38y1BfsdG+XZE1WsyBQTjfHZ3jjNGiJxuMhi/0DL4xqC5OV45iiG61uegky20bDXMQ/o3etaAzrIspLEDvqmxRBoCIq4Itdq/4T+8bhAumsvEjPWpPDmtqKCtH2n12UTgApp3cyymxAn15p0EuJLVZ7ARUgsjWTj7w6K01JUY9uJUI209wAnhq7eZsdT7TYQ32HqiO41MuAGHtWvrxWwEyuQ="
   # DIGITAL_OCEAN_ALPHA_HOST
   - secure: "hPQ2FSmdCgZweg49AuLZr8uBSTW2OyC9lY0n3hjyUXiB1qCWQCjwqFLoLVn0XaKCLqokE1NSsMGyUC+i2Cq+iNCYKnUiLGHttBiXRSvuyxWOGQD/fHrY2XgzTElu6o0yZAtc7oz4deEIfuu+TlaCWUdDANa2JX+qKZmebSGMow3RxILBX8Z37L8z3DLbf8JVApfAf7fQ1GsgDw/F0XxEx23GR27qTYqcRgEc4MgFPeko6IOfawxdD+dOGznIs/P/TuyHj2RveXFwft3Y0I1A57uA9daWcdmQzNWnQdIvK/FnFxUGhCyG7saaS1ETM4qvfWE7SCxaxO031YQlzMUckhJ6pCu1YZ1VIlNlk591Q3qbXlej80+HTqG+n5UpSWRwC8b3YuNst2a9lshqplWybPonZeZOpS3L/X9ijlMtTM2podb4EwIJxdS8xo1MWX0ZNFfpTuqPOdS/cy7IU9twyOXcOOnOwlVvzlsJpDNGAjIabCeRrZDr+EgaC9e0EF/2hTtzmUYZ2kliHvKX1WdSVTvKN3jNMLg9KzwTXJGzhN9A0+fUzf96h96nah114jtISGyARemp2326kU6N9bbJSpEYtX6Wxe88OdtgCE1N9MUr86z/wa7QFUqIv4X+WFlvhclVOWazNwY6FlpQhUfIeoSyOND+ijI/acHqNWvW5Ek="
   # DIGITAL_OCEAN_BETA_HOST
@@ -65,6 +71,25 @@ matrix:
     - BRANCHES=$(git branch -r --contains ${COMMIT})
     - ORIGINMASTER='origin/master'
     - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi
+  # server deploy internal
+  - if: tag =~ -internal\+server
+    os: linux
+    before_install:
+    - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
+    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
+    script:
+    # build docker-compose
+    - docker-compose build
+    # build doctl
+    - docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_INTERNAL_HOST}" - < ./doctl
+    # run ssh command using doctl
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_INTERNAL_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_INTERNAL_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
+    after_success:
+    - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"SUCCESS: New Server Internal Version $TRAVIS_TAG deployed!\"}" ${DISCORD_WEBHOOK}'
+    after_failure:
+    - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"FAILURE: Deploying new Server Internal Version $TRAVIS_TAG failed!\"}" ${DISCORD_WEBHOOK}'
   # server deploy alpha
   - if: tag =~ -alpha\+server
     os: linux
@@ -105,6 +130,54 @@ matrix:
     - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"SUCCESS: New Server Beta Version $TRAVIS_TAG deployed!\"}" ${DISCORD_WEBHOOK}'
     after_failure:
     - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"FAILURE: Deploying new Server Beta Version $TRAVIS_TAG failed!\"}" ${DISCORD_WEBHOOK}'
+  # android deploy internal
+  - if: tag =~ -internal\+client
+    os: linux
+    language: android
+    jdk: oraclejdk8
+    before_install:
+    - cd client
+    - openssl aes-256-cbc -k "$SECRET" -in .env.internal.enc -out .env.internal -d
+    - openssl aes-256-cbc -k "$SECRET" -in android/Google_Play_Android_Developer.json.enc -out android/Google_Play_Android_Developer.json -d
+    - openssl aes-256-cbc -k "$SECRET" -in android/app/democracy2-release-key.keystore.enc -out android/app/democracy2-release-key.keystore -d  
+    - cd android
+    - gem update --system
+    - bundle install
+    - bundle update fastlane
+    install:
+    - cd ..
+    - nvm install 8
+    - yarn --version
+    - yarn install
+    android:
+      components:
+      - tools
+      - platform-tools
+      # android 23,25,26
+      - build-tools-23.0.1
+      - build-tools-25.0.0
+      - build-tools-25.0.1
+      - build-tools-25.0.2
+      - build-tools-26.0.1
+      - build-tools-26.0.2
+      - android-23
+      - android-25
+      - android-26
+      # extra
+      - extra-android-m2repository
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - addon-google_apis-google-16
+      licenses:
+      - 'android-sdk-preview-license-.+'
+      - 'android-sdk-license-.+'
+      - 'google-gdk-license-.+'
+    script:
+    - cd android && bundle exec fastlane android internal
+    after_success:
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Internal Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    after_failure:
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Internal Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
   # android deploy alpha
   - if: tag =~ -alpha\+client
     os: linux
@@ -113,8 +186,6 @@ matrix:
     before_install:
     - cd client
     - openssl aes-256-cbc -k "$SECRET" -in .env.alpha.enc -out .env.alpha -d
-    - openssl aes-256-cbc -k "$SECRET" -in .env.beta.enc -out .env.beta -d
-    - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
     - openssl aes-256-cbc -k "$SECRET" -in android/Google_Play_Android_Developer.json.enc -out android/Google_Play_Android_Developer.json -d
     - openssl aes-256-cbc -k "$SECRET" -in android/app/democracy2-release-key.keystore.enc -out android/app/democracy2-release-key.keystore -d  
     - cd android
@@ -152,9 +223,9 @@ matrix:
     script:
     - cd android && bundle exec fastlane android alpha
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Alpha Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Alpha Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Alpha Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Alpha Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
   # android deploy beta
   - if: tag =~ -beta\+client
     os: linux
@@ -162,9 +233,7 @@ matrix:
     jdk: oraclejdk8
     before_install:
     - cd client
-    - openssl aes-256-cbc -k "$SECRET" -in .env.alpha.enc -out .env.alpha -d
     - openssl aes-256-cbc -k "$SECRET" -in .env.beta.enc -out .env.beta -d
-    - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
     - openssl aes-256-cbc -k "$SECRET" -in android/Google_Play_Android_Developer.json.enc -out android/Google_Play_Android_Developer.json -d
     - openssl aes-256-cbc -k "$SECRET" -in android/app/democracy2-release-key.keystore.enc -out android/app/democracy2-release-key.keystore -d
     - cd android
@@ -208,9 +277,35 @@ matrix:
     # build android & publish using fastlane
     - cd android && bundle exec fastlane android beta
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Beta Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Beta Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Beta Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Beta Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+  # ios deploy internal
+  - if: tag =~ -internal\+client
+    osx_image: xcode9.2
+    language: objective-c
+    xcode_project: ios/democracyclient.xcodeproj
+    xcode_scheme: ios/democracyclientTests
+    before_install:
+    - cd client
+    - openssl aes-256-cbc -k "$SECRET" -in .env.internal.enc -out .env.internal -d
+    - cd ios
+    - gem update --system
+    - bundle install
+    - bundle update fastlane
+    install:
+    - cd ..
+    - nvm install 8
+    - npm install -g yarn
+    - yarn --version
+    - yarn install
+    script:
+    - cd ios
+    - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios internal
+    after_success:
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Internal Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    after_failure:
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Internal Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
   # ios deploy alpha
   - if: tag =~ -alpha\+client
     osx_image: xcode9.2
@@ -222,6 +317,7 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in .env.alpha.enc -out .env.alpha -d
     - openssl aes-256-cbc -k "$SECRET" -in .env.beta.enc -out .env.beta -d
     - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
+    - openssl aes-256-cbc -k "$SECRET" -in .env.internal.enc -out .env.internal -d
     - cd ios
     - gem update --system
     - bundle install
@@ -236,9 +332,9 @@ matrix:
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios alpha
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Alpha Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Alpha Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Alpha Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Alpha Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
   # ios deploy beta
   - if: tag =~ -beta\+client
     osx_image: xcode9.2
@@ -250,6 +346,7 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in .env.alpha.enc -out .env.alpha -d
     - openssl aes-256-cbc -k "$SECRET" -in .env.beta.enc -out .env.beta -d
     - openssl aes-256-cbc -k "$SECRET" -in .env.production.enc -out .env.production -d
+    - openssl aes-256-cbc -k "$SECRET" -in .env.internal.enc -out .env.internal -d
     - cd ios
     - gem update --system
     - bundle install
@@ -270,8 +367,8 @@ matrix:
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios beta
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Beta Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Beta Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Beta Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Beta Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
 after_script:
 - echo "BUILD FINISHED"
