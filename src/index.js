@@ -23,6 +23,7 @@ import importAgenda from "./importAgenda";
 // Models
 import ProcedureModel from "./models/Procedure";
 import UserModel from "./models/User";
+import LegislativePeriodModel from "./models/LegislativePeriod";
 
 const dev = process.env.NODE_ENV !== "production";
 
@@ -33,7 +34,7 @@ app.prepare().then(async () => {
   await mongo();
   const server = express();
 
-  server.use(cors())
+  server.use(cors());
 
   const schema = makeExecutableSchema({
     typeDefs,
@@ -77,7 +78,8 @@ app.prepare().then(async () => {
         user: req.user,
         // Models
         ProcedureModel,
-        UserModel
+        UserModel,
+        LegislativePeriodModel
       },
       tracing: true,
       cacheControl: true
