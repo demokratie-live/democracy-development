@@ -2,7 +2,10 @@ import mongoose, { Schema } from "mongoose";
 
 const LegislativePeriodSchema = new Schema(
   {
-    legislativePeriod: { type: Number, required: true, unique: true }
+    number: { type: Number, required: true, unique: true },
+    start: { type: Date, required: true },
+    end: Date,
+    deputies: { type: Number, required: true }
   },
   { timestamps: true }
 );

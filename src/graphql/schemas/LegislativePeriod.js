@@ -1,7 +1,10 @@
 export default `
 
 type LegislativePeriod {
-  legislativePeriod: Int!
+  number: Int!
+  start: Date!
+  end: Date
+  deputies: Int!
 }
 
 type Query {
