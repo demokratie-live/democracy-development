@@ -1,4 +1,4 @@
-version: '3'
+﻿version: '3'
 services:
   nginx-letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
