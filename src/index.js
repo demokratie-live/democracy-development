@@ -11,6 +11,8 @@ import Next from "next";
 import auth from "./express/auth";
 import requireAuth from "./express/auth/requireAuth";
 
+import "./services/logger";
+
 import mongo from "./config/db";
 import constants from "./config/constants";
 import typeDefs from "./graphql/schemas";
@@ -109,7 +111,7 @@ app.prepare().then(async () => {
     if (err) {
       console.error(err);
     } else {
-      console.log(`App is listen on port: ${constants.PORT}`);
+      Log.info(`App is listen on port: ${constants.PORT}`);
       new CronJob(
         "15 * * * *",
         importJob,
