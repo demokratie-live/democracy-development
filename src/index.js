@@ -10,6 +10,7 @@ import { Engine } from "apollo-engine";
 import Next from "next";
 import auth from "./express/auth";
 import requireAuth from "./express/auth/requireAuth";
+import { inspect } from "util";
 
 import "./services/logger";
 
@@ -96,7 +97,9 @@ app.prepare().then(async () => {
         }
       },
       (err, result) => {
-        console.log(err, result);
+        if (err) {
+          Log.error(inspect(err));
+        }
         res.send(result);
       }
     );
@@ -109,7 +112,7 @@ app.prepare().then(async () => {
   const graphqlServer = createServer(server);
   graphqlServer.listen(constants.PORT, err => {
     if (err) {
-      console.error(err);
+      Log.error(inspect(err));
     } else {
       Log.info(`App is listen on port: ${constants.PORT}`);
       new CronJob(

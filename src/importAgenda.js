@@ -1,6 +1,7 @@
 import Scraper from "@democracy-deutschland/bt-agenda";
 import moment from "moment";
 import axios from "axios";
+import { inspect } from "util";
 
 import CONSTANTS from "./config/constants";
 
@@ -73,10 +74,10 @@ const syncWithDemocracy = async () => {
         timeout: 1000 * 60 * 5
       })
       .then(async response => {
-        console.log(response.data);
+        Log.debug(inspect(response.data));
       })
       .catch(error => {
-        console.log(`democracy server error: ${error}`);
+        Log.error(`democracy server error: ${inspect(error)}`);
       });
     procedureIds = [];
   }
@@ -84,7 +85,7 @@ const syncWithDemocracy = async () => {
 
 const scraper = new Scraper();
 export default async () => {
-  console.log("START AGENDA SCRAPER");
+  Log.info("START AGENDA SCRAPER");
 
   const agenda = await Agenda.find({})
     .sort({
@@ -111,8 +112,8 @@ export default async () => {
       continue: true
     })
     .catch(error => {
-      console.error(error);
+      Log.error(inspect(error));
     });
 
-  console.log("FINISH AGENDA SCRAPER");
+  Log.info("FINISH AGENDA SCRAPER");
 };

@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import mongoosastic from "mongoosastic";
 import diffHistory from "mongoose-diff-history/diffHistory";
+import { inspect } from "util";
 
 import ProcessFlow from "./Schemas/ProcessFlow";
 import Document from "./Schemas/Document";
@@ -111,7 +112,7 @@ const Procedure = mongoose.model("Procedure", ProcedureSchema);
 
 Procedure.createMapping({}, err => {
   if (err) {
-    console.log("Procedure.createMapping", err);
+    Log.error(`Procedure.createMapping ${inspect(err)}`);
   } else {
     let stream = Procedure.synchronize(),
       count = 0;
@@ -121,11 +122,11 @@ Procedure.createMapping({}, err => {
 
     new Promise((resolve, reject) => {
       stream.on("close", function() {
-        console.log("indexed " + count + " documents!");
+        Log.info("indexed " + count + " documents!");
         resolve();
       });
       stream.on("error", function(err) {
-        console.log("ERROR Elastic: ", err);
+        Log.error("ERROR Elastic: ", err);
         reject();
       });
     });

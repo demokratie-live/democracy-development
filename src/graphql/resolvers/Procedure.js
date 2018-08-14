@@ -1,5 +1,6 @@
 import axios from "axios";
 import diffHistory from "mongoose-diff-history/diffHistory";
+import { inspect } from "util";
 
 import CONSTANTS from "../../config/constants";
 
@@ -198,13 +199,13 @@ export default {
               ]
             }
           ],
-          timeout: 1000 * 60 * 5,
+          timeout: 1000 * 60 * 5
         })
         .then(async response => {
-          console.log(response.data);
+          Log.debug(inspect(response.data));
         })
         .catch(error => {
-          console.log(`democracy server error: ${error}`);
+          Log.error(`democracy server error: ${inspect(error)}`);
         });
 
       return ProcedureModel.findOne({ procedureId });
