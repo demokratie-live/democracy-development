@@ -2,6 +2,8 @@ import axios from "axios";
 import diffHistory from "mongoose-diff-history/diffHistory";
 import { mongoose } from "../../config/db";
 
+const History = mongoose.model("History");
+
 import CONSTANTS from "../../config/constants";
 
 const deputiesNumber = {
@@ -52,25 +54,7 @@ export default {
       if (IDs) {
         match = { ...match, procedureId: { $in: IDs } };
       }
-      return ProcedureModel.aggregate([
-        { $match: match },
-        {
-          $lookup: {
-            from: "histories",
-            localField: "_id",
-            foreignField: "collectionId",
-            as: "objectHistory"
-          }
-        },
-        {
-          $addFields: {
-            bioUpdateAt: {
-              $max: "$objectHistory.createdAt"
-            }
-          }
-        },
-        { $project: { objectHistory: false } }
-      ]);
+      return ProcedureModel.find(match);
     },
 
     allProcedures: async (
@@ -80,25 +64,7 @@ export default {
     ) => ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
 
     procedureUpdates: async (parent, { period, type }, { ProcedureModel }) =>
-      ProcedureModel.aggregate([
-        { $match: { period: { $in: period }, type: { $in: type } } },
-        {
-          $lookup: {
-            from: "histories",
-            localField: "_id",
-            foreignField: "collectionId",
-            as: "objectHistory"
-          }
-        },
-        {
-          $addFields: {
-            bioUpdateAt: {
-              $max: "$objectHistory.createdAt"
-            }
-          }
-        },
-        { $project: { objectHistory: false } }
-      ]),
+      ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
 
     procedure: async (parent, { procedureId }, { ProcedureModel }) => {
       return ProcedureModel.findOne({ procedureId });
@@ -180,7 +146,7 @@ export default {
               ]
             }
           ],
-          timeout: 1000 * 60 * 5,
+          timeout: 1000 * 60 * 5
         })
         .then(async response => {
           console.log(response.data);
@@ -195,8 +161,10 @@ export default {
 
   Procedure: {
     bioUpdateAt: async procedure => {
-      const History = mongoose.model("History");
-      const h = await History.findOne({ collectionId: procedure }, { createdAt: 1 }).sort({ createdAt: -1 });
+      const h = await History.findOne(
+        { collectionId: procedure },
+        { createdAt: 1 }
+      ).sort({ createdAt: -1 });
       if (h) {
         return h.createdAt;
       }
