@@ -7,8 +7,7 @@
   "private": true,
   "scripts": {
     "start": "babel-node src/index.js",
-    "dev":
-      "nodemon -L -e js,graphql src/index.js --exec \"node --require dotenv/config --require babel-register\"",
+    "dev": "nodemon -L -e js,graphql src/index.js --exec \"node --require dotenv/config --require babel-register\"",
     "lint": "eslint . --ext js,jsx",
     "build": "next build",
     "serve": "babel-node src/index.js",
@@ -78,6 +77,7 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "prettier-eslint": "^8.8.1"
+    "eslint-plugin-prettier": "^2.6.2",
+    "prettier": "^1.14.2"
   }
 }
