@@ -4,16 +4,17 @@ import _ from "lodash";
 import Scraper from "@democracy-deutschland/dip21-scraper";
 import prettyMs from "pretty-ms";
 import fs from "fs-extra";
-import Log from "log";
+import FileLogger from "log";
 import axios from "axios";
 import moment from "moment";
+import { inspect } from "util";
 
 import Procedure from "./models/Procedure";
 import CronJobModel from "./models/CronJob";
 import { mongoose } from "./config/db";
 import CONSTANTS from "./config/constants";
 
-const log = new Log("error", fs.createWriteStream("error-import.log"));
+const log = new FileLogger("error", fs.createWriteStream("error-import.log"));
 
 // require('./config/db');
 
@@ -179,7 +180,7 @@ const logStartDataProgress = async ({ sum }) => {
   startDate = new Date();
   process.stdout.write("\n");
   linksSum = sum;
-  console.log(`Started at ${startDate} - ${linksSum} Links found`);
+  Log.info(`Started at ${startDate} - ${linksSum} Links found`);
 };
 
 const logUpdateDataProgress = ({ hasError }) => {
@@ -189,7 +190,7 @@ const logUpdateDataProgress = ({ hasError }) => {
 const logFinished = () => {
   const end = Date.now();
   const elapsed = end - cronStart;
-  console.log(`### Finish Cronjob! Time: ${prettyMs(_.toInteger(elapsed))}`);
+  Log.info(`### Finish Cronjob! Time: ${prettyMs(_.toInteger(elapsed))}`);
   cronIsRunning = false;
 };
 
@@ -197,7 +198,6 @@ const logError = ({ error }) => {
   log.error(error);
 };
 
-console.log("### Waiting for Cronjob");
 const cronTask = async () => {
   const History = mongoose.model("History");
   if (!cronIsRunning) {
@@ -218,7 +218,7 @@ const cronTask = async () => {
         new: true
       }
     );
-    console.log(`### Start Cronjob ${moment(cronStart).format()}`);
+    global.Log.info(`### Start Cronjob ${moment(cronStart).format()}`);
     // get old Scrape Data for cache
     pastScrapeData = await Procedure.find(
       {},
@@ -329,13 +329,13 @@ const cronTask = async () => {
             );
           })
           .catch(error => {
-            console.log(`democracy server error: ${error}`);
+            Log.error(`democracy server error: ${inspect(error)}`);
           });
 
-        console.log("#####FINISH####");
+        Log.info("#####FINISH####");
       })
       .catch(async error => {
-        console.log(error);
+        Log.error(error);
         logFinished();
         await CronJobModel.update(
           {

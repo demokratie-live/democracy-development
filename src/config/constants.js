@@ -14,5 +14,12 @@ export default {
   ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL || "elasticsearch",
   GRAPHIQL: process.env.GRAPHIQL || false,
   GRAPHIQL_PATH: "/graphiql",
-  GRAPHQL_PATH: "/graphql"
+  GRAPHQL_PATH: "/graphql",
+  LOGGING: {
+    CONSOLE: process.env.LOGGING_CONSOLE || false,
+    FILE: process.env.LOGGING_FILE || false,
+    DISCORD: process.env.LOGGING_DISCORD || false,
+    DISCORD_WEBHOOK: process.env.LOGGING_DISCORD_WEBHOOK || false,
+    MONGO: process.env.LOGGING_MONGO || false
+  }
 };
