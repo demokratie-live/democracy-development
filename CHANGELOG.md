@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.3
+
+- [Add] Logger
+
 ### 0.1.2
 
 - [Fix] Edit Vote Results
