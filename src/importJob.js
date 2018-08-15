@@ -4,7 +4,7 @@ import _ from "lodash";
 import Scraper from "@democracy-deutschland/dip21-scraper";
 import prettyMs from "pretty-ms";
 import fs from "fs-extra";
-import Log from "log";
+import FileLogger from "log";
 import axios from "axios";
 import moment from "moment";
 import { inspect } from "util";
@@ -14,7 +14,7 @@ import CronJobModel from "./models/CronJob";
 import { mongoose } from "./config/db";
 import CONSTANTS from "./config/constants";
 
-const log = new Log("error", fs.createWriteStream("error-import.log"));
+const log = new FileLogger("error", fs.createWriteStream("error-import.log"));
 
 // require('./config/db');
 
@@ -180,7 +180,7 @@ const logStartDataProgress = async ({ sum }) => {
   startDate = new Date();
   process.stdout.write("\n");
   linksSum = sum;
-  // Log.info(`Started at ${startDate} - ${linksSum} Links found`);
+  Log.info(`Started at ${startDate} - ${linksSum} Links found`);
 };
 
 const logUpdateDataProgress = ({ hasError }) => {
@@ -190,7 +190,7 @@ const logUpdateDataProgress = ({ hasError }) => {
 const logFinished = () => {
   const end = Date.now();
   const elapsed = end - cronStart;
-  // Log.info(`### Finish Cronjob! Time: ${prettyMs(_.toInteger(elapsed))}`);
+  Log.info(`### Finish Cronjob! Time: ${prettyMs(_.toInteger(elapsed))}`);
   cronIsRunning = false;
 };
 
