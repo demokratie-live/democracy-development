@@ -22,9 +22,9 @@ const checkDocuments = async data => {
       );
       await Promise.all(
         rows.map(async ({ dateTime, topicDocuments: documents, status }) => {
-          const igonreDocs = status.filter(stat => stat.indexOf('Überweisung') === 0).map(
-               stat.match(/(\d{1,3}\/\d{1,10})/g) // eslint-disable-line
-          );
+          const igonreDocs = status
+            .filter(stat => stat.indexOf('Überweisung') === 0)
+            .map(stat => stat.match(/(\d{1,3}\/\d{1,10})/g));
 
           if (igonreDocs.length > 0) {
             return;
@@ -46,13 +46,14 @@ const checkDocuments = async data => {
                   {
                     $set: { 'customData.expectedVotingDate': dateTime },
                   },
-                ).then(data => {
-                  if (data) {
+                ).then(datas => {
+                  if (datas) {
                     procedureIds.push(procedureId);
                   }
                 });
                 return true;
               }
+              return false;
             });
             await Promise.all(promisesUpdate);
           }
