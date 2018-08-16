@@ -1,11 +1,11 @@
-import axios from "axios";
-import diffHistory from "mongoose-diff-history/diffHistory";
-import { inspect } from "util";
+import axios from 'axios';
+import diffHistory from 'mongoose-diff-history/diffHistory';
+import { inspect } from 'util';
 
-import { mongoose } from "../../config/db";
-import CONSTANTS from "../../config/constants";
+import { mongoose } from '../../config/db';
+import CONSTANTS from '../../config/constants';
 
-const History = mongoose.model("History");
+const History = mongoose.model('History');
 
 const deputiesNumber = {
   19: {
@@ -15,22 +15,16 @@ const deputiesNumber = {
     CDU: 246,
     FDP: 80,
     AFD: 92,
-    Andere: 2
-  }
+    Andere: 2,
+  },
 };
 
 export default {
   Query: {
     procedures: (
       parent,
-      {
-        IDs,
-        period = [19],
-        type = ["Gesetzgebung", "Antrag"],
-        status,
-        voteDate
-      },
-      { ProcedureModel }
+      { IDs, period = [19], type = ['Gesetzgebung', 'Antrag'], status, voteDate },
+      { ProcedureModel },
     ) => {
       let match = { period: { $in: period }, type: { $in: type } };
       if (voteDate) {
@@ -41,12 +35,12 @@ export default {
               decision: {
                 $elemMatch: {
                   tenor: {
-                    $in: ["Ablehnung der Vorlage", "Annahme der Vorlage"]
-                  }
-                }
-              }
-            }
-          }
+                    $in: ['Ablehnung der Vorlage', 'Annahme der Vorlage'],
+                  },
+                },
+              },
+            },
+          },
         };
       }
       if (status) {
@@ -60,57 +54,56 @@ export default {
 
     allProcedures: async (
       parent,
-      { period = [19], type = ["Gesetzgebung", "Antrag"] },
-      { ProcedureModel }
+      { period = [19], type = ['Gesetzgebung', 'Antrag'] },
+      { ProcedureModel },
     ) => ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
 
     procedureUpdates: async (parent, { period, type }, { ProcedureModel }) =>
       ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
 
-    procedure: async (parent, { procedureId }, { ProcedureModel }) => {
-      return ProcedureModel.findOne({ procedureId });
-    }
+    procedure: async (parent, { procedureId }, { ProcedureModel }) =>
+      ProcedureModel.findOne({ procedureId }),
   },
 
   Mutation: {
     saveProcedureCustomData: async (
       parent,
       { procedureId, partyVotes, decisionText },
-      { ProcedureModel, user }
+      { ProcedureModel, user },
     ) => {
-      if (!user || user.role !== "BACKEND") {
-        throw new Error("Authentication required");
+      if (!user || user.role !== 'BACKEND') {
+        throw new Error('Authentication required');
       }
       const procedure = await ProcedureModel.findOne({ procedureId });
 
       let voteResults = {
         partyVotes,
-        decisionText
+        decisionText,
       };
 
       if (deputiesNumber[procedure.period]) {
         const sumResults = {
           yes: 0,
           abstination: 0,
-          no: 0
+          no: 0,
         };
         partyVotes.forEach(({ party, main, deviants }) => {
           switch (main) {
-            case "YES":
+            case 'YES':
               sumResults.yes +=
                 deputiesNumber[procedure.period][party] -
                 deviants.yes -
                 deviants.abstination -
                 deviants.no;
               break;
-            case "ABSTINATION":
+            case 'ABSTINATION':
               sumResults.abstination +=
                 deputiesNumber[procedure.period][party] -
                 deviants.yes -
                 deviants.abstination -
                 deviants.no;
               break;
-            case "NO":
+            case 'NO':
               sumResults.no +=
                 deputiesNumber[procedure.period][party] -
                 deviants.yes -
@@ -132,9 +125,9 @@ export default {
         { procedureId },
         {
           $set: {
-            "customData.voteResults": { ...voteResults }
-          }
-        }
+            'customData.voteResults': { ...voteResults },
+          },
+        },
       );
 
       axios
@@ -142,12 +135,10 @@ export default {
           data: [
             {
               period: procedure.period,
-              types: [
-                { type: procedure.type, changedIds: [procedure.procedureId] }
-              ]
-            }
+              types: [{ type: procedure.type, changedIds: [procedure.procedureId] }],
+            },
           ],
-          timeout: 1000 * 60 * 5
+          timeout: 1000 * 60 * 5,
         })
         .then(async response => {
           Log.debug(inspect(response.data));
@@ -157,15 +148,14 @@ export default {
         });
 
       return ProcedureModel.findOne({ procedureId });
-    }
+    },
   },
 
   Procedure: {
     bioUpdateAt: async procedure => {
-      const h = await History.findOne(
-        { collectionId: procedure },
-        { createdAt: 1 }
-      ).sort({ createdAt: -1 });
+      const h = await History.findOne({ collectionId: procedure }, { createdAt: 1 }).sort({
+        createdAt: -1,
+      });
       if (h) {
         return h.createdAt;
       }
@@ -174,21 +164,19 @@ export default {
 
     currentStatusHistory: async procedure => {
       const { _id } = procedure;
-      const history = await diffHistory
-        .getDiffs("Procedure", _id)
-        .then(histories => {
-          return histories.reduce((prev, version) => {
-            let cur = prev;
-            if (version.diff.currentStatus) {
-              if (cur.length === 0) {
-                cur.push(version.diff.currentStatus[0]);
-              }
-              cur.push(version.diff.currentStatus[1]);
+      const history = await diffHistory.getDiffs('Procedure', _id).then(histories =>
+        histories.reduce((prev, version) => {
+          const cur = prev;
+          if (version.diff.currentStatus) {
+            if (cur.length === 0) {
+              cur.push(version.diff.currentStatus[0]);
             }
-            return cur;
-          }, []);
-        });
+            cur.push(version.diff.currentStatus[1]);
+          }
+          return cur;
+        }, []),
+      );
       return history;
-    }
-  }
+    },
+  },
 };

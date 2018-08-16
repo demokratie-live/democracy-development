@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Head from "next/head";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Head from 'next/head';
 
 const Layout = ({ children }) => (
   <div>
@@ -33,7 +33,7 @@ const Layout = ({ children }) => (
 );
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
 export default Layout;

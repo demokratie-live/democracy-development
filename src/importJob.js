@@ -1,20 +1,20 @@
 /* eslint-disable no-mixed-operators */
 
-import _ from "lodash";
-import Scraper from "@democracy-deutschland/dip21-scraper";
-import prettyMs from "pretty-ms";
-import fs from "fs-extra";
-import FileLogger from "log";
-import axios from "axios";
-import moment from "moment";
-import { inspect } from "util";
+import _ from 'lodash';
+import Scraper from '@democracy-deutschland/dip21-scraper';
+import prettyMs from 'pretty-ms';
+import fs from 'fs-extra';
+import FileLogger from 'log';
+import axios from 'axios';
+import moment from 'moment';
+import { inspect } from 'util';
 
-import Procedure from "./models/Procedure";
-import CronJobModel from "./models/CronJob";
-import { mongoose } from "./config/db";
-import CONSTANTS from "./config/constants";
+import Procedure from './models/Procedure';
+import CronJobModel from './models/CronJob';
+import { mongoose } from './config/db';
+import CONSTANTS from './config/constants';
 
-const log = new FileLogger("error", fs.createWriteStream("error-import.log"));
+const log = new FileLogger('error', fs.createWriteStream('error-import.log'));
 
 // require('./config/db');
 
@@ -54,7 +54,7 @@ const saveProcedure = async ({ procedureData }) => {
       initiator: e.URHEBER.trim(),
       findSpot: e.FUNDSTELLE.trim(),
       findSpotUrl: _.trim(e.FUNDSTELLE_LINK),
-      date: parseDate(e.FUNDSTELLE.substr(0, 10))
+      date: parseDate(e.FUNDSTELLE.substr(0, 10)),
     };
     if (e.BESCHLUSS) {
       if (!_.isArray(e.BESCHLUSS)) {
@@ -68,7 +68,7 @@ const saveProcedure = async ({ procedureData }) => {
           type: beschluss.ABSTIMMUNGSART || undefined,
           comment: beschluss.ABSTIMMUNG_BEMERKUNG || undefined,
           majority: beschluss.MEHRHEIT || undefined,
-          foundation: beschluss.GRUNDLAGE || undefined
+          foundation: beschluss.GRUNDLAGE || undefined,
         }));
       }
     }
@@ -92,34 +92,30 @@ const saveProcedure = async ({ procedureData }) => {
     currentStatus: procedureData.VORGANG.AKTUELLER_STAND || undefined,
     signature: procedureData.VORGANG.SIGNATUR || undefined,
     gestOrderNumber: procedureData.VORGANG.GESTA_ORDNUNGSNUMMER || undefined,
-    approvalRequired: ensureArray(
-      procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT
-    ),
+    approvalRequired: ensureArray(procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT),
     euDocNr: procedureData.VORGANG.EU_DOK_NR || undefined,
     abstract: procedureData.VORGANG.ABSTRAKT || undefined,
     promulgation: ensureArray(procedureData.VORGANG.VERKUENDUNG),
     legalValidity: ensureArray(procedureData.VORGANG.INKRAFTTRETEN),
     tags: ensureArray(procedureData.VORGANG.SCHLAGWORT),
     subjectGroups: ensureArray(procedureData.VORGANG.SACHGEBIET),
-    importantDocuments: ensureArray(
-      procedureData.VORGANG.WICHTIGE_DRUCKSACHE || []
-    ).map(doc => ({
+    importantDocuments: ensureArray(procedureData.VORGANG.WICHTIGE_DRUCKSACHE || []).map(doc => ({
       editor: doc.DRS_HERAUSGEBER,
       number: doc.DRS_NUMMER,
       type: doc.DRS_TYP,
-      url: doc.DRS_LINK
+      url: doc.DRS_LINK,
     })),
-    history
+    history,
   };
 
   await Procedure.update(
     {
-      procedureId: procedureObj.procedureId
+      procedureId: procedureObj.procedureId,
     },
     { $set: _.pickBy(procedureObj) },
     {
-      upsert: true
-    }
+      upsert: true,
+    },
   );
 };
 
@@ -173,18 +169,18 @@ let linksSum = 0;
 let startDate;
 
 const logUpdateSearchProgress = ({ hasError }) => {
-  process.stdout.write(hasError ? "e" : ".");
+  process.stdout.write(hasError ? 'e' : '.');
 };
 
 const logStartDataProgress = async ({ sum }) => {
   startDate = new Date();
-  process.stdout.write("\n");
+  process.stdout.write('\n');
   linksSum = sum;
   Log.info(`Started at ${startDate} - ${linksSum} Links found`);
 };
 
 const logUpdateDataProgress = ({ hasError }) => {
-  process.stdout.write(hasError ? "e" : ".");
+  process.stdout.write(hasError ? 'e' : '.');
 };
 
 const logFinished = () => {
@@ -199,34 +195,31 @@ const logError = ({ error }) => {
 };
 
 const cronTask = async () => {
-  const History = mongoose.model("History");
+  const History = mongoose.model('History');
   if (!cronIsRunning) {
     cronIsRunning = true;
     cronStart = Date.now();
     const cron = await CronJobModel.findOneAndUpdate(
       {
-        name: "import-procedures"
+        name: 'import-procedures',
       },
       {
         $set: {
-          name: "import-procedures",
-          lastStartDate: cronStart
-        }
+          name: 'import-procedures',
+          lastStartDate: cronStart,
+        },
       },
       {
         upsert: true,
-        new: true
-      }
+        new: true,
+      },
     );
     global.Log.info(`### Start Cronjob ${moment(cronStart).format()}`);
     // get old Scrape Data for cache
-    pastScrapeData = await Procedure.find(
-      {},
-      { procedureId: 1, updatedAt: 1, currentStatus: 1 }
-    );
-    let selectPeriods = ["Alle"];
+    pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
+    let selectPeriods = ['Alle'];
     if (process.env.PERIODS) {
-      selectPeriods = process.env.PERIODS.split(",");
+      selectPeriods = process.env.PERIODS.split(',');
     }
     // Do the scrape
     await scraper
@@ -234,11 +227,11 @@ const cronTask = async () => {
         // settings
         browserStackSize: 5,
         selectPeriods,
-        selectOperationTypes: ["100", "500"],
+        selectOperationTypes: ['100', '500'],
         logUpdateSearchProgress,
         logStartDataProgress,
         logStopDataProgress: () => {
-          process.stdout.write("\n");
+          process.stdout.write('\n');
         },
         logUpdateDataProgress,
         // log
@@ -248,23 +241,21 @@ const cronTask = async () => {
         outScraperData: saveProcedure,
         // cache(link skip logic)
         // doScrape
-        type: "html",
-        liveScrapeStates: ["Beschlussempfehlung liegt vor", "Überwiesen"]
+        type: 'html',
+        liveScrapeStates: ['Beschlussempfehlung liegt vor', 'Überwiesen'],
       })
       .then(async () => {
         // empty query for initial webhook
-        const query = cron.lastFinishDate
-          ? { createdAt: { $gte: cron.lastFinishDate } }
-          : {};
+        const query = cron.lastFinishDate ? { createdAt: { $gte: cron.lastFinishDate } } : {};
 
         // Find updated procedures
-        const histories = await History.find(query, { collectionId: 1 }).then(
-          h => h.map(p => p.collectionId)
+        const histories = await History.find(query, { collectionId: 1 }).then(h =>
+          h.map(p => p.collectionId),
         );
         const procedures = await Procedure.find(
           { _id: { $in: histories } },
           // { updatedAt: { $gte: cronStart } },
-          { procedureId: 1, type: 1, period: 1 }
+          { procedureId: 1, type: 1, period: 1 },
         );
 
         // Find Counts per Period & Type before Cronstart
@@ -274,27 +265,27 @@ const cronTask = async () => {
             $project: {
               period: 1,
               type: 1,
-              cond: { $lt: ["$updatedAt", cronStart] }
-            }
+              cond: { $lt: ['$updatedAt', cronStart] },
+            },
           },
           {
             // Group by Period & Type
             $group: {
-              _id: { period: "$period", type: "$type" },
-              count: { $sum: 1 }
-            }
+              _id: { period: '$period', type: '$type' },
+              count: { $sum: 1 },
+            },
           },
           {
             // Group by Period
             $group: {
-              _id: "$_id.period",
-              types: { $push: { type: "$_id.type", countBefore: "$count" } }
-            }
+              _id: '$_id.period',
+              types: { $push: { type: '$_id.type', countBefore: '$count' } },
+            },
           },
           {
             // Rename _id Field to period
-            $project: { _id: 0, period: "$_id", types: 1 }
-          }
+            $project: { _id: 0, period: '$_id', types: 1 },
+          },
         ]);
 
         // Loop through Groups and Types - assign changed IDs
@@ -311,44 +302,44 @@ const cronTask = async () => {
         // Send Data to Hook
         axios
           .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
-            data: groups
+            data: groups,
           })
           .then(async () => {
             await CronJobModel.update(
               {
-                name: "import-procedures"
+                name: 'import-procedures',
               },
               {
                 $set: {
-                  lastFinishDate: Date.now()
-                }
+                  lastFinishDate: Date.now(),
+                },
               },
               {
-                upsert: true
-              }
+                upsert: true,
+              },
             );
           })
           .catch(error => {
             Log.error(`democracy server error: ${inspect(error)}`);
           });
 
-        Log.info("#####FINISH####");
+        Log.info('#####FINISH####');
       })
       .catch(async error => {
         Log.error(error);
         logFinished();
         await CronJobModel.update(
           {
-            name: "import-procedures"
+            name: 'import-procedures',
           },
           {
             $set: {
-              lastErrorDate: Date.now()
-            }
+              lastErrorDate: Date.now(),
+            },
           },
           {
-            upsert: true
-          }
+            upsert: true,
+          },
         );
       });
   }
