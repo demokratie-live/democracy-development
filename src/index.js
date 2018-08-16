@@ -115,8 +115,8 @@ app.prepare().then(async () => {
       Log.error(inspect(err));
     } else {
       Log.info(`App is listen on port: ${constants.PORT}`);
-      new CronJob('15 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
-      new CronJob('*/15 * * * *', importAgenda, null, true, 'Europe/Berlin', null, true);
+      CronJob('15 * * * *', importJob, null, true, 'Europe/Berlin', null, true);
+      CronJob('*/15 * * * *', importAgenda, null, true, 'Europe/Berlin', null, true);
     }
   });
 });
