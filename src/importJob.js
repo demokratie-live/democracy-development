@@ -16,8 +16,6 @@ import CONSTANTS from './config/constants';
 
 const log = new FileLogger('error', fs.createWriteStream('error-import.log'));
 
-// require('./config/db');
-
 const scraper = new Scraper();
 let pastScrapeData = null; // eslint-disable-line
 // const procedureStatusWhitelist = [

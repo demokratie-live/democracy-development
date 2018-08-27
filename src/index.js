@@ -14,7 +14,7 @@ import requireAuth from './express/auth/requireAuth';
 
 import './services/logger';
 
-import mongo from './config/db';
+import DB from './config/db';
 import constants from './config/constants';
 import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers';
@@ -26,13 +26,16 @@ import importAgenda from './importAgenda';
 import ProcedureModel from './models/Procedure';
 import UserModel from './models/User';
 
-const dev = process.env.NODE_ENV !== 'production';
+const main = async () => {
+  const dev = process.env.NODE_ENV !== 'production';
 
-const app = Next({ dev });
-const handle = app.getRequestHandler();
+  const app = Next({ dev });
+  const handle = app.getRequestHandler();
 
-app.prepare().then(async () => {
-  await mongo();
+  await app.prepare();
+
+  // Start DB Connection
+  await DB();
   const server = express();
 
   const schema = makeExecutableSchema({
@@ -124,4 +127,15 @@ app.prepare().then(async () => {
       }
     }
   });
-});
+};
+
+// Async Warpping Function
+// Catches all errors and dies on them
+(async () => {
+  try {
+    await main();
+  } catch (error) {
+    Log.error(error.stack);
+    process.exit(1);
+  }
+})();
