@@ -158,38 +158,23 @@ export default {
         const sumResults = {
           yes: 0,
           abstination: 0,
-          no: 0
+          no: 0,
         };
-        const partyResults = partyVotes.map(({ party, main, deviants }, i) => {
+        const partyResults = partyVotes.map(({ party, main, deviants }) => {
           switch (main) {
             case "YES":
-              sumResults.yes +=
-                deputiesNumber[procedure.period][party] -
-                deviants.yes -
-                deviants.abstination -
-                deviants.no;
               deviants.yes =
                 deputiesNumber[procedure.period][party] -
                 deviants.abstination -
                 deviants.no;
               break;
             case "ABSTINATION":
-              sumResults.abstination +=
-                deputiesNumber[procedure.period][party] -
-                deviants.yes -
-                deviants.abstination -
-                deviants.no;
               deviants.abstination =
                 deputiesNumber[procedure.period][party] -
                 deviants.yes -
                 deviants.no;
               break;
             case "NO":
-              sumResults.no +=
-                deputiesNumber[procedure.period][party] -
-                deviants.yes -
-                deviants.abstination -
-                deviants.no;
               deviants.no =
                 deputiesNumber[procedure.period][party] -
                 deviants.yes -
@@ -199,6 +184,7 @@ export default {
             default:
               break;
           }
+          console.log("calculate vote results:",party, sumResults, deviants)
           sumResults.yes += deviants.yes;
           sumResults.abstination += deviants.abstination;
           sumResults.no += deviants.no;
