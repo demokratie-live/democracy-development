@@ -17,6 +17,7 @@ type VoteResults {
   yes: Int
   no: Int
   abstination: Int
+  notVoted: Int
   decisionText: String
   votingDocument: String
   partyVotes: [PartyVote]
@@ -38,6 +39,7 @@ type Deviants {
   yes: Int
   abstination: Int
   no: Int
+  notVoted: Int
 }
 
 input DeviantsInput {
