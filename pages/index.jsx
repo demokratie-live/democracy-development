@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import Layout from "../components/layouts/Main";
+import Layout from '../components/layouts/Main';
 
 const Home = () => (
   <Layout>
@@ -9,9 +9,7 @@ const Home = () => (
       <h2>Coming sooooon!</h2>
       <a href="https://github.com/demokratie-live/bundestag.io">GitHub</a>
       <br />
-      <a href="https://www.democracy-deutschland.de/#!start">
-        Democracy Deutschland
-      </a>
+      <a href="https://www.democracy-deutschland.de/#!start">Democracy Deutschland</a>
     </div>
   </Layout>
 );
