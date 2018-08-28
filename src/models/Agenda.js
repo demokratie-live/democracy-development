@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
 const AgendaSchema = new Schema(
   {
@@ -9,9 +9,9 @@ const AgendaSchema = new Schema(
     previousYear: Number,
     previousWeek: Number,
     nextYear: Number,
-    nextWeek: Number
+    nextWeek: Number,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export default mongoose.model("Agenda", AgendaSchema);
+export default mongoose.model('Agenda', AgendaSchema);

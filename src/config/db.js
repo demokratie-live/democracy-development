@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-import CONSTANTS from "./constants";
+import CONSTANTS from './constants';
 
 mongoose.Promise = global.Promise;
 
@@ -8,16 +8,19 @@ mongoose.Promise = global.Promise;
 const connect = async () =>
   new Promise((resolve, reject) => {
     try {
-      mongoose.connect(CONSTANTS.DB_URL, {});
+      mongoose.connect(
+        CONSTANTS.DB_URL,
+        {},
+      );
     } catch (err) {
       mongoose.createConnection(CONSTANTS.DB_URL, {});
     }
 
     mongoose.connection
-      .once("open", () => {
+      .once('open', () => {
         resolve();
       })
-      .on("error", e => {
+      .on('error', e => {
         reject(e);
       });
   });

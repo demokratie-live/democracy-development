@@ -5,11 +5,11 @@ import cookieParser from 'cookie-parser';
 import { hash } from '../../../lib/password';
 import jwt from './jsonWebToken';
 
-export default (app) => {
+export default app => {
   const User = mongoose.model('User');
 
   // create root user
-  User.findOne({ email: process.env.ROOT_USER_MAIL }).then(async (rootUser) => {
+  User.findOne({ email: process.env.ROOT_USER_MAIL }).then(async rootUser => {
     if (!rootUser && process.env.ROOT_USER_MAIL) {
       User.create({
         email: process.env.ROOT_USER_MAIL,

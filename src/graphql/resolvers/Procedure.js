@@ -1,7 +1,11 @@
-import axios from "axios";
-import diffHistory from "mongoose-diff-history/diffHistory";
+import axios from 'axios';
+import diffHistory from 'mongoose-diff-history/diffHistory';
+import { inspect } from 'util';
 
-import CONSTANTS from "../../config/constants";
+import { mongoose } from '../../config/db';
+import CONSTANTS from '../../config/constants';
+
+const History = mongoose.model('History');
 
 const deputiesNumber = {
   19: {
@@ -22,16 +26,8 @@ export default {
   Query: {
     procedures: (
       parent,
-      {
-        IDs,
-        period = [19],
-        type = ["Gesetzgebung", "Antrag"],
-        status,
-        voteDate,
-        limit = 999999,
-        offset = 0
-      },
-      { ProcedureModel }
+      { IDs, period = [19], type = ['Gesetzgebung', 'Antrag'], status, voteDate },
+      { ProcedureModel },
     ) => {
       console.log("LIMIT", limit);
       console.log("OFFSET", offset);
@@ -44,12 +40,12 @@ export default {
               decision: {
                 $elemMatch: {
                   tenor: {
-                    $in: ["Ablehnung der Vorlage", "Annahme der Vorlage"]
-                  }
-                }
-              }
-            }
-          }
+                    $in: ['Ablehnung der Vorlage', 'Annahme der Vorlage'],
+                  },
+                },
+              },
+            },
+          },
         };
         return ProcedureModel.find({ ...match })
           .sort({ createdAt: 1 })
@@ -63,78 +59,20 @@ export default {
       if (IDs) {
         match = { ...match, procedureId: { $in: IDs } };
       }
-      return ProcedureModel.aggregate([
-        { $match: match },
-        {
-          $lookup: {
-            from: "histories",
-            localField: "_id",
-            foreignField: "collectionId",
-            as: "objectHistory"
-          }
-        },
-        {
-          $addFields: {
-            bioUpdateAt: {
-              $max: "$objectHistory.createdAt"
-            }
-          }
-        },
-        { $project: { objectHistory: false } },
-        { $skip: offset },
-        { $limit: limit }
-      ]);
+      return ProcedureModel.find(match);
     },
 
     allProcedures: async (
       parent,
-      { period = [19], type = ["Gesetzgebung", "Antrag"] },
-      { ProcedureModel }
-    ) =>
-      ProcedureModel.aggregate([
-        { $match: { period: { $in: period }, type: { $in: type } } },
-        {
-          $lookup: {
-            from: "histories",
-            localField: "_id",
-            foreignField: "collectionId",
-            as: "objectHistory"
-          }
-        },
-        {
-          $addFields: {
-            bioUpdateAt: {
-              $max: "$objectHistory.createdAt"
-            }
-          }
-        },
-        { $project: { objectHistory: false } }
-      ]),
+      { period = [19], type = ['Gesetzgebung', 'Antrag'] },
+      { ProcedureModel },
+    ) => ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
 
     procedureUpdates: async (parent, { period, type }, { ProcedureModel }) =>
-      ProcedureModel.aggregate([
-        { $match: { period: { $in: period }, type: { $in: type } } },
-        {
-          $lookup: {
-            from: "histories",
-            localField: "_id",
-            foreignField: "collectionId",
-            as: "objectHistory"
-          }
-        },
-        {
-          $addFields: {
-            bioUpdateAt: {
-              $max: "$objectHistory.createdAt"
-            }
-          }
-        },
-        { $project: { objectHistory: false } }
-      ]),
+      ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
 
-    procedure: async (parent, { procedureId }, { ProcedureModel }) => {
-      return ProcedureModel.findOne({ procedureId });
-    }
+    procedure: async (parent, { procedureId }, { ProcedureModel }) =>
+      ProcedureModel.findOne({ procedureId }),
   },
 
   Mutation: {
@@ -143,15 +81,15 @@ export default {
       { procedureId, partyVotes, decisionText, votingDocument },
       { ProcedureModel, user }
     ) => {
-      // TODO: Add auth handling
-      // if (!user || user.role !== "BACKEND") {
-      //   throw new Error("Authentication required");
-      // }
+      if (!user || user.role !== 'BACKEND') {
+        throw new Error('Authentication required');
+      }
       const procedure = await ProcedureModel.findOne({ procedureId });
 
       let voteResults = {
-        decisionText,
-        votingDocument
+        partyVotes,
+          decisionText,
+          votingDocument
       };
 
       if (deputiesNumber[procedure.period]) {
@@ -203,9 +141,9 @@ export default {
         { procedureId },
         {
           $set: {
-            "customData.voteResults": { ...voteResults }
-          }
-        }
+            'customData.voteResults': { ...voteResults },
+          },
+        },
       );
 
       axios
@@ -213,41 +151,47 @@ export default {
           data: [
             {
               period: procedure.period,
-              types: [
-                { type: procedure.type, changedIds: [procedure.procedureId] }
-              ]
-            }
+              types: [{ type: procedure.type, changedIds: [procedure.procedureId] }],
+            },
           ],
           timeout: 1000 * 60 * 5
         })
         .then(async response => {
-          console.log(response.data);
+          Log.debug(inspect(response.data));
         })
         .catch(error => {
-          console.log(`democracy server error: ${error}`);
+          Log.error(`democracy server error: ${inspect(error)}`);
         });
 
       return ProcedureModel.findOne({ procedureId });
-    }
+    },
   },
 
   Procedure: {
+    bioUpdateAt: async procedure => {
+      const h = await History.findOne({ collectionId: procedure }, { createdAt: 1 }).sort({
+        createdAt: -1,
+      });
+      if (h) {
+        return h.createdAt;
+      }
+      return null;
+    },
+
     currentStatusHistory: async procedure => {
       const { _id } = procedure;
-      const history = await diffHistory
-        .getDiffs("Procedure", _id)
-        .then(histories => {
-          return histories.reduce((prev, version) => {
-            let cur = prev;
-            if (version.diff.currentStatus) {
-              if (cur.length === 0) {
-                cur.push(version.diff.currentStatus[0]);
-              }
-              cur.push(version.diff.currentStatus[1]);
+      const history = await diffHistory.getDiffs('Procedure', _id).then(histories =>
+        histories.reduce((prev, version) => {
+          const cur = prev;
+          if (version.diff.currentStatus) {
+            if (cur.length === 0) {
+              cur.push(version.diff.currentStatus[0]);
             }
-            return cur;
-          }, []);
-        });
+            cur.push(version.diff.currentStatus[1]);
+          }
+          return cur;
+        }, []),
+      );
       return history;
     },
     namedVote: procedure => {

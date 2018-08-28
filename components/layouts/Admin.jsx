@@ -1,17 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Head from "next/head";
-import Link from "next/link";
-import { Button } from "reactstrap";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Head from 'next/head';
+import Link from 'next/link';
+import { Button } from 'reactstrap';
 
-import initApollo from "../../lib/initApollo";
-import redirect from "../../lib/redirect";
+import initApollo from '../../lib/initApollo';
+import redirect from '../../lib/redirect';
 
 const Layout = ({ children }) => {
   const logout = () => {
     const client = initApollo();
     client.resetStore();
-    redirect({}, "/logout");
+    redirect({}, '/logout');
   };
 
   return (
@@ -54,7 +54,7 @@ const Layout = ({ children }) => {
 };
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
 export default Layout;
