@@ -12,25 +12,31 @@ const deputiesNumber = {
     Linke: 69,
     SPD: 153,
     Grüne: 67,
-    "B90/Grüne": 67,
+    'B90/Grüne': 67,
     CDU: 246,
-    "CDU/CSU": 246,
+    'CDU/CSU': 246,
     FDP: 80,
     AFD: 92,
     Andere: 2,
-    Fraktionslos: 2
-  }
+    Fraktionslos: 2,
+  },
 };
 
 export default {
   Query: {
     procedures: (
       parent,
-      { IDs, period = [19], type = ['Gesetzgebung', 'Antrag'], status, voteDate },
+      {
+        IDs,
+        period = [19],
+        type = ['Gesetzgebung', 'Antrag'],
+        status,
+        voteDate,
+        limit = 99999,
+        offset = 0,
+      },
       { ProcedureModel },
     ) => {
-      console.log("LIMIT", limit);
-      console.log("OFFSET", offset);
       let match = { period: { $in: period }, type: { $in: type } };
       if (voteDate) {
         match = {
@@ -79,17 +85,17 @@ export default {
     saveProcedureCustomData: async (
       parent,
       { procedureId, partyVotes, decisionText, votingDocument },
-      { ProcedureModel, user }
+      { ProcedureModel, user },
     ) => {
       if (!user || user.role !== 'BACKEND') {
-        throw new Error('Authentication required');
+        return new Error('Authentication required');
       }
       const procedure = await ProcedureModel.findOne({ procedureId });
 
       let voteResults = {
         partyVotes,
-          decisionText,
-          votingDocument
+        decisionText,
+        votingDocument,
       };
 
       if (deputiesNumber[procedure.period]) {
@@ -100,40 +106,37 @@ export default {
         };
         const partyResults = partyVotes.map(({ party, main, deviants }) => {
           switch (main) {
-            case "YES":
+            case 'YES':
+              console.log('YES', deputiesNumber[procedure.period][party]);
               deviants.yes =
-                deputiesNumber[procedure.period][party] -
-                deviants.abstination -
-                deviants.no;
+                deputiesNumber[procedure.period][party] - deviants.abstination - deviants.no;
               break;
-            case "ABSTINATION":
+            case 'ABSTINATION':
+              console.log('ABSTINATION', deputiesNumber[procedure.period][party]);
               deviants.abstination =
-                deputiesNumber[procedure.period][party] -
-                deviants.yes -
-                deviants.no;
+                deputiesNumber[procedure.period][party] - deviants.yes - deviants.no;
               break;
-            case "NO":
+            case 'NO':
+              console.log('No', deputiesNumber[procedure.period][party]);
               deviants.no =
-                deputiesNumber[procedure.period][party] -
-                deviants.yes -
-                deviants.abstination;
+                deputiesNumber[procedure.period][party] - deviants.yes - deviants.abstination;
               break;
 
             default:
               break;
           }
-          console.log("calculate vote results:",party, sumResults, deviants)
+          console.log('calculate vote results:', party, sumResults, deviants);
           sumResults.yes += deviants.yes;
           sumResults.abstination += deviants.abstination;
           sumResults.no += deviants.no;
           return { party, main, deviants };
         });
 
-        console.log("partyVotes", partyResults);
+        console.log('partyVotes', partyResults);
         voteResults = {
           ...voteResults,
           partyVotes: partyResults,
-          ...sumResults
+          ...sumResults,
         };
       }
 
@@ -154,7 +157,7 @@ export default {
               types: [{ type: procedure.type, changedIds: [procedure.procedureId] }],
             },
           ],
-          timeout: 1000 * 60 * 5
+          timeout: 1000 * 60 * 5,
         })
         .then(async response => {
           Log.debug(inspect(response.data));
@@ -198,7 +201,7 @@ export default {
       const namedVote = procedure.history.some(h => {
         if (h.decision) {
           return h.decision.some(decision => {
-            if (decision.type === "Namentliche Abstimmung") {
+            if (decision.type === 'Namentliche Abstimmung') {
               return true;
             }
             return false;
@@ -207,6 +210,6 @@ export default {
         return false;
       });
       return namedVote;
-    }
-  }
+    },
+  },
 };
