@@ -33,19 +33,11 @@ done
 shift $((OPTIND-1))
 
 if [ -z "${title}" ] || [ -z "${description}" ] || [ -z "${color}" ]; then
-    echo "title ${title}"
-    echo "description ${description}"
-    echo "color ${color}"
-    echo "smth is zero"
     usage
 fi
 
 # data = "{\"content\":\"SUCCESS: TEST Version $TRAVIS_TAG failed!\"}" 
-data="{\"embeds\": [{
-				\"title\": \"${title}\",
-				\"description\": \"${description}\",
-				\"color\": \"${color}\",
-			}]}"
+data="{\"embeds\": [{\"title\": \"${title}\",\"description\": \"${description}\",\"color\": \"${color}\",}]}"
 
 
 curl -H 'Content-Type: application/json'  -X POST -d ${data} ${DISCORD_WEBHOOK}
