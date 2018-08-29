@@ -37,7 +37,7 @@ if [ -z "${title}" ] || [ -z "${description}" ] || [ -z "${color}" ]; then
 fi
 
 # data = "{\"content\":\"SUCCESS: TEST Version $TRAVIS_TAG failed!\"}" 
-data="{\"embeds\": [{\"title\": \"${title}\",\"description\": \"${description}\",\"color\": \"${color}\",}]}"
+data="{ \"embeds\": [{\"title\": \"${title}\",\"description\": \"${description}\",\"color\": \"${color}\"}]}"
+echo data
 
-
-curl -H 'Content-Type: application/json'  -X POST -d "${data}" ${DISCORD_WEBHOOK}
+curl -H 'Content-Type: application/json'  -X POST -d \'${data}\' ${DISCORD_WEBHOOK}
