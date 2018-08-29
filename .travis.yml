@@ -490,10 +490,10 @@ matrix:
       - 'google-gdk-license-.+'
     script:
     # ensure we are on the master branch
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    #- COMMIT=$(git rev-parse HEAD)
+    #- BRANCHES=$(git branch -r --contains ${COMMIT})
+    #- ORIGINMASTER='origin/master'
+    #- if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
     # build android & publish using fastlane
     - cd android && bundle exec fastlane android production
     after_success:
@@ -521,10 +521,10 @@ matrix:
     - yarn install
     script:
     # ensure we are on the master branch
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    #- COMMIT=$(git rev-parse HEAD)
+    #- BRANCHES=$(git branch -r --contains ${COMMIT})
+    #- ORIGINMASTER='origin/master'
+    #- if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
     # build ios and publish using fastlane
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios production
