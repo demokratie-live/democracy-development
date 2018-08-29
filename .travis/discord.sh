@@ -1,0 +1,1 @@
+curl -H 'Content-Type: application/json'  -X POST -d "{\"content\":\"SUCCESS: TEST Version $TRAVIS_TAG failed!\"}" ${DISCORD_WEBHOOK}

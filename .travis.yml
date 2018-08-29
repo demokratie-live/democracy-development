@@ -532,5 +532,24 @@ matrix:
     - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Production Version $TRAVIS_TAG $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
     after_failure:
     - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Production Version $TRAVIS_TAG $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+  
+
+  # TEST
+  - if: tag =~ test
+    os: linux
+    before_install:
+    - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
+    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
+    script:
+    - ./travis/discord.sh
+    #- docker-compose build
+    #- docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_ALPHA_HOST}" - < ./doctl
+    #- docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_ALPHA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_ALPHA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
+    #after_success:
+    #- 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"SUCCESS: New Server Alpha Version $TRAVIS_TAG deployed!\"}" ${DISCORD_WEBHOOK}'
+    #after_failure:
+    #- 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"FAILURE: Deploying new Server Alpha Version $TRAVIS_TAG failed!\"}" ${DISCORD_WEBHOOK}'
 after_script:
 - echo "BUILD FINISHED"
