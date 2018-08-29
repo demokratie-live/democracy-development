@@ -19,6 +19,7 @@ import mongo from './config/db';
 import constants from './config/constants';
 import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers';
+import { auth as authDirective } from './graphql/schemaDirectives';
 
 import importJob from './importJob';
 import importAgenda from './importAgenda';
@@ -41,6 +42,9 @@ app.prepare().then(async () => {
   const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
+    schemaDirectives: {
+      auth: authDirective,
+    },
   });
 
   // Apollo Engine

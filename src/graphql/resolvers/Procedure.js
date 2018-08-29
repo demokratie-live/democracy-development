@@ -65,7 +65,9 @@ export default {
       if (IDs) {
         match = { ...match, procedureId: { $in: IDs } };
       }
-      return ProcedureModel.find(match);
+      return ProcedureModel.find(match)
+        .skip(offset)
+        .limit(limit);
     },
 
     allProcedures: async (
@@ -85,11 +87,8 @@ export default {
     saveProcedureCustomData: async (
       parent,
       { procedureId, partyVotes, decisionText, votingDocument },
-      { ProcedureModel, user },
+      { ProcedureModel },
     ) => {
-      if (!user || user.role !== 'BACKEND') {
-        return new Error('Authentication required');
-      }
       const procedure = await ProcedureModel.findOne({ procedureId });
 
       let voteResults = {
@@ -104,20 +103,18 @@ export default {
           abstination: 0,
           no: 0,
         };
-        const partyResults = partyVotes.map(({ party, main, deviants }) => {
+        const partyResults = partyVotes.map(({ party, main, deviants: partyDeviants }) => {
+          const deviants = { ...partyDeviants };
           switch (main) {
             case 'YES':
-              console.log('YES', deputiesNumber[procedure.period][party]);
               deviants.yes =
                 deputiesNumber[procedure.period][party] - deviants.abstination - deviants.no;
               break;
             case 'ABSTINATION':
-              console.log('ABSTINATION', deputiesNumber[procedure.period][party]);
               deviants.abstination =
                 deputiesNumber[procedure.period][party] - deviants.yes - deviants.no;
               break;
             case 'NO':
-              console.log('No', deputiesNumber[procedure.period][party]);
               deviants.no =
                 deputiesNumber[procedure.period][party] - deviants.yes - deviants.abstination;
               break;
@@ -125,14 +122,12 @@ export default {
             default:
               break;
           }
-          console.log('calculate vote results:', party, sumResults, deviants);
           sumResults.yes += deviants.yes;
           sumResults.abstination += deviants.abstination;
           sumResults.no += deviants.no;
           return { party, main, deviants };
         });
 
-        console.log('partyVotes', partyResults);
         voteResults = {
           ...voteResults,
           partyVotes: partyResults,
