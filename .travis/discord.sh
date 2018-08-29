@@ -1,18 +1,18 @@
 #!/bin/bash
 
 # Usage description
-usage() { echo "Usage: $0 [-title <string>] [-description <string>] [-color <error|info|*>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-t <string>] [-d <string>] [-c <error|info|*>]" 1>&2; exit 1; }
 
 # Parse Options
-while getopts ":title:description:color" o; do
+while getopts ":t:d:c" o; do
     case "${o}" in
-        title)
+        t)
             title=${OPTARG}
             ;;
-        description)
+        d)
             description=${OPTARG}
             ;;
-        color)
+        c)
             case "${OPTARG}" in
               "error")
                   color="0xE8341C"
@@ -26,6 +26,7 @@ while getopts ":title:description:color" o; do
             esac
             ;;
         *)
+            usage
             ;;
     esac
 done

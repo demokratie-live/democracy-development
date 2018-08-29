@@ -544,9 +544,9 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
     script:
     - ./.travis/discord.sh
-    - ./.travis/discord.sh -title "SUCCESS Test" -description "Test $TRAVIS_TAG" -color info
-    - ./.travis/discord.sh -title "FAILURE Test" -description "Test $TRAVIS_TAG" -color error
-    - ./.travis/discord.sh -title "??? Test" -description "Test $TRAVIS_TAG" -color warn
+    - ./.travis/discord.sh -t "SUCCESS Test" -d "Test $TRAVIS_TAG" -c info
+    - ./.travis/discord.sh -t "FAILURE Test" -d "Test $TRAVIS_TAG" -c error
+    - ./.travis/discord.sh -t "??? Test" -d "Test $TRAVIS_TAG" -c warn
     #- docker-compose build
     #- docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_ALPHA_HOST}" - < ./doctl
     #- docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_ALPHA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_ALPHA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
