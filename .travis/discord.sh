@@ -26,13 +26,15 @@ while getopts ":title:description:color" o; do
             esac
             ;;
         *)
+            echo "some parameter: ${OPTARG}"
             usage
             ;;
     esac
 done
 shift $((OPTIND-1))
 
-if [ -z "${title}" ] || [ -z "${description}" ]; then
+if [ -z "${title}" ] || [ -z "${description}" ] || [ -z "${color}" ]; then
+    echo "smth is zero"
     usage
 fi
 
