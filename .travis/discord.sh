@@ -13,17 +13,18 @@ while getopts ":title:description:color" o; do
             description=${OPTARG}
             ;;
         color)
-          case "${OPTARG}" in
-            "error")
-                color="0xE8341C"
-                ;;
-            "info")
-                color="0x68C244"
-                ;;
-            *)
-                color="0xF2D42C"
-                ;;
+            case "${OPTARG}" in
+              "error")
+                  color="0xE8341C"
+                  ;;
+              "info")
+                  color="0x68C244"
+                  ;;
+              *)
+                  color="0xF2D42C"
+                  ;;
             esac
+            ;;
         *)
             usage
             ;;
