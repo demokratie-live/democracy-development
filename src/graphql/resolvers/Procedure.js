@@ -145,13 +145,12 @@ export default {
       );
 
       axios
-        .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
-          data: [
-            {
-              period: procedure.period,
-              types: [{ type: procedure.type, changedIds: [procedure.procedureId] }],
-            },
-          ],
+        .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
+          data: {
+            procedureIds: [procedure.procedureId],
+            name: 'ChangeVoteData',
+          },
+
           timeout: 1000 * 60 * 5,
         })
         .then(async response => {
