@@ -94,7 +94,7 @@ const ProcedureSchema = new Schema(
         decisionText: { type: String, es_indexed: false },
         votingDocument: {
           type: String,
-          enum: ["mainDocument", "recommendedDecision"]
+          enum: ['mainDocument', 'recommendedDecision'],
         },
         partyVotes: {
           type: [PartyVotes],

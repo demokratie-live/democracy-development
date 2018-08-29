@@ -1,9 +1,7 @@
 export default {
   Query: {
-    legislativePeriods: async (parent, {}, { LegislativePeriodModel }) => {
-      console.log(await LegislativePeriodModel.find());
-      return LegislativePeriodModel.find();
-    }
+    legislativePeriods: async (parent, args, { LegislativePeriodModel }) =>
+      LegislativePeriodModel.find(),
   },
-  Mutation: {}
+  Mutation: {},
 };

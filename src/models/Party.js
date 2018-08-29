@@ -1,12 +1,12 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
 const PartySchema = new Schema(
   {
     name: { type: String, required: true },
     aliases: [String],
-    color: String
+    color: String,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export default mongoose.model("Party", PartySchema);
+export default mongoose.model('Party', PartySchema);
