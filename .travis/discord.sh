@@ -26,8 +26,6 @@ while getopts ":title:description:color" o; do
             esac
             ;;
         *)
-            echo "some parameter: ${OPTARG}"
-            usage
             ;;
     esac
 done
