@@ -32,6 +32,9 @@ done
 shift $((OPTIND-1))
 
 if [ -z "${title}" ] || [ -z "${description}" ] || [ -z "${color}" ]; then
+    echo "title ${title}"
+    echo "description ${description}"
+    echo "color ${color}"
     echo "smth is zero"
     usage
 fi
