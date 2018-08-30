@@ -9,7 +9,8 @@
     "start": "babel-node src/index.js",
     "dev": "nodemon -L -e js,graphql src/index.js --exec \"node --require dotenv/config --require babel-register\"",
     "lint": "eslint . --ext js,jsx",
-    "serve": "babel-node src/index.js",
+    "build": "babel ./ -d dist -s --ignore node_modules,dist",
+    "serve": "node dist/src/index.js",
     "diffs": "babel-node src/diffs.js"
   },
   "dependencies": {
