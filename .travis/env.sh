@@ -1,5 +1,5 @@
 #!/bin/bash
 
 set -o allexport
-source ./.env.travis
+source ./.travis/.env.travis
 set +o allexport
