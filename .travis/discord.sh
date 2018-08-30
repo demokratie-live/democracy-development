@@ -1,10 +1,12 @@
 #!/bin/bash
 
+DISCORD_WEBHOOK="https://discordapp.com/api/webhooks/420188756214153218/5cVrpefAF9vt55thL0XJ33eptuMrtKOU03vS1O4jGa99DPz0AvDIvDPXSYgNrL5xKft7"
+
 # Usage description
 usage() { echo "Usage: $0 [-t <string>] [-d <string>] [-c <error|info|*>]" 1>&2; exit 1; }
 
 # Parse Options
-while getopts ":t:d:c" o; do
+while getopts ":t:d:c:" o; do
     case "${o}" in
         t)
             title=${OPTARG}
@@ -15,13 +17,13 @@ while getopts ":t:d:c" o; do
         c)
             case "${OPTARG}" in
               "error")
-                  color="0xE8341C"
+                  color=15217692
                   ;;
-              "info")
-                  color="0x68C244"
+              info)
+                  color=6865476
                   ;;
               *)
-                  color="0xF2D42C"
+                  color=15914028
                   ;;
             esac
             ;;
@@ -32,13 +34,10 @@ while getopts ":t:d:c" o; do
 done
 shift $((OPTIND-1))
 
-if [ -z "${title}" ] || [ -z "${description}" ] || [ -z "${color}" ]; then
+if [ -z "${title}" ] || [ -z "${description}" ]; then
     usage
 fi
 
-# data = "{\"content\":\"SUCCESS: TEST Version $TRAVIS_TAG failed!\"}" 
-data="{ \"embeds\": [{\"title\": \"${title}\",\"description\": \"${description}\",\"color\": \"${color}\"}]}"
-echo $data
-echo ${data}
+data="{ \"embeds\": [{\"title\": \"${title}\",\"description\": \"${description}\",\"color\": ${color}}]}"
 
 curl -H 'Content-Type: application/json'  -X POST -d "${data}" ${DISCORD_WEBHOOK}
