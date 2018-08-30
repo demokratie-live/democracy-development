@@ -8,10 +8,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 import { createServer } from 'http';
 import { Engine } from 'apollo-engine';
 import cors from 'cors';
-import Next from 'next';
 import { inspect } from 'util';
-import auth from './express/auth';
-import requireAuth from './express/auth/requireAuth';
 
 import './services/logger';
 
@@ -29,12 +26,7 @@ import importNamedPolls from './importNamedPolls';
 import ProcedureModel from './models/Procedure';
 import UserModel from './models/User';
 
-const dev = process.env.NODE_ENV !== 'production';
-
-const app = Next({ dev });
-const handle = app.getRequestHandler();
-
-app.prepare().then(async () => {
+(async () => {
   await mongo();
   const server = express();
 
@@ -56,10 +48,6 @@ app.prepare().then(async () => {
     engine.start();
     server.use(engine.expressMiddleware());
   }
-
-  // Authentification
-  auth(server);
-  server.use('/admin', requireAuth({ role: 'BACKEND' }));
 
   server.use(bodyParser.json());
 
@@ -115,9 +103,6 @@ app.prepare().then(async () => {
     );
   });
 
-  // Other requests
-  server.get('*', (req, res) => handle(req, res));
-
   // Create & start Server + Cron
   const graphqlServer = createServer(server);
   graphqlServer.listen(constants.PORT, err => {
@@ -135,4 +120,4 @@ app.prepare().then(async () => {
       }
     }
   });
-});
+})();
