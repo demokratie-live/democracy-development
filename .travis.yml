@@ -468,10 +468,11 @@ matrix:
     - source ./.travis/env.sh
     - set +o allexport
     script:
+    - echo $DISCORD_WEBHOOK
     - ./.travis/gitbranch.sh -d "./" -b "origin/master"
-    - ./.travis/gitbranch.sh -d "./" -b "origin/sprint#35/deployment"
+    - ./.travis/gitbranch.sh -d "./" -b "origin/sprint\#35/deployment"
     - ./.travis/gitbranch.sh -d "./client" -b "origin/master"
-    - ./.travis/gitbranch.sh -d "./bundestag.io0" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master"
     - ./.travis/gitbranch.sh -d "./server" -b "origin/master"
     - ./.travis/discord.sh -t "SUCCESS Test" -d "Test $TRAVIS_TAG" -c info
     - ./.travis/discord.sh -t "FAILURE Test" -d "Test $TRAVIS_TAG" -c error
