@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema } from 'mongoose';
 
 const PartyVotesSchema = new Schema(
   {
@@ -6,16 +6,16 @@ const PartyVotesSchema = new Schema(
     main: {
       type: String,
       es_indexed: false,
-      enum: ["YES", "NO", "ABSTINATION", "NOTVOTED"]
+      enum: ['YES', 'NO', 'ABSTINATION', 'NOTVOTED'],
     },
     deviants: {
       yes: Number,
       abstination: Number,
       no: Number,
-      notVoted: Number
-    }
+      notVoted: Number,
+    },
   },
-  { _id: false }
+  { _id: false },
 );
 
 export default PartyVotesSchema;

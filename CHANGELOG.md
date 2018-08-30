@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.1.3
+
+- [Changed] Seperate Procedure.bioUpdatedAt in field-resolver
+- [Add] Logger
+
 ### 0.1.2
 
 - [Fix] Edit Vote Results

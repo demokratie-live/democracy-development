@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
 const NamedPollsSchema = new Schema(
   {
@@ -16,11 +16,11 @@ const NamedPollsSchema = new Schema(
         yes: Number,
         no: Number,
         abstination: Number,
-        notVoted: Number
-      }
-    ]
+        notVoted: Number,
+      },
+    ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export default mongoose.model("NamedPolls", NamedPollsSchema);
+export default mongoose.model('NamedPolls', NamedPollsSchema);
