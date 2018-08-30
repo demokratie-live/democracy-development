@@ -97,6 +97,7 @@ const ProcedureSchema = new Schema(
           type: String,
           enum: ['mainDocument', 'recommendedDecision'],
         },
+        votingRecommendation: Boolean,
         partyVotes: {
           type: [PartyVotes],
           es_indexed: false,

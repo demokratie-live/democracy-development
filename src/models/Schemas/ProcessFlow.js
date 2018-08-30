@@ -26,6 +26,7 @@ const ProcessFlowSchema = new Schema(
       es_include_in_parent: true,
       es_indexed: false,
     },
+    abstract: String,
     date: { type: Date },
   },
   { _id: false },

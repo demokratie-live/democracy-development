@@ -2,6 +2,7 @@ import Scraper from '@democracy-deutschland/bt-named-polls';
 
 // import moment from "moment";
 import axios from 'axios';
+import { inspect } from 'util';
 
 import CONSTANTS from './config/constants';
 
@@ -128,11 +129,42 @@ const matchWithProcedure = async ({ documents, yes, abstination, no, notVoted, v
 
     // console.log(util.inspect(customData, false, null));
 
-    await matchedProcedures.map(async ({ procedureId }) => {
+    await matchedProcedures.map(async ({ procedureId, history }) => {
+      const namedHistoryEntry = history
+        .find(
+          ({ decision }) =>
+            decision && decision.find(({ type }) => type === 'Namentliche Abstimmung'),
+        )
+        .decision.find(({ type }) => type === 'Namentliche Abstimmung');
+      const votingRecommendationEntry = history.find(
+        ({ initiator }) => initiator && initiator.indexOf('Beschlussempfehlung und Bericht') !== -1,
+      );
+
+      customData.voteResults.votingDocument =
+        namedHistoryEntry.comment.indexOf('Annahme der Beschlussempfehlung auf Ablehnung') !== -1
+          ? 'recommendedDecision'
+          : 'mainDocument';
+
+      if (votingRecommendationEntry) {
+        switch (votingRecommendationEntry.abstract) {
+          case 'Empfehlung: Annahme der Vorlage':
+            customData.voteResults.votingRecommendation = true;
+            break;
+          case 'Empfehlung: Ablehnung der Vorlage':
+            customData.voteResults.votingRecommendation = false;
+            break;
+
+          default:
+            break;
+        }
+      }
+
       procedureIds.push(procedureId);
       await Procedure.findOneAndUpdate(
         { procedureId },
-        { customData },
+        {
+          customData,
+        },
         {
           // returnNewDocument: true
         },

@@ -7,6 +7,11 @@ enum VoteDecision {
   NOTVOTED
 }
 
+enum VotingDocument {
+  mainDocument
+  recommendedDecision
+}
+
 type ProcedureCustomData {
   title: String
   voteResults: VoteResults
@@ -19,7 +24,8 @@ type VoteResults {
   abstination: Int
   notVoted: Int
   decisionText: String
-  votingDocument: String
+  votingDocument: VotingDocument
+  votingRecommendation: Boolean
   partyVotes: [PartyVote]
 }
 
