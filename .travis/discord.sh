@@ -1,7 +1,5 @@
 #!/bin/bash
 
-DISCORD_WEBHOOK="https://discordapp.com/api/webhooks/420188756214153218/5cVrpefAF9vt55thL0XJ33eptuMrtKOU03vS1O4jGa99DPz0AvDIvDPXSYgNrL5xKft7"
-
 # Usage description
 usage() { echo "Usage: $0 [-t <string>] [-d <string>] [-c <error|info|*>]" 1>&2; exit 1; }
 
