@@ -464,9 +464,7 @@ matrix:
     os: linux
     before_install:
     - ./.travis/decrypt.sh
-    - set -o allexport
     - source ./.travis/env.sh
-    - set +o allexport
     script:
     - echo $DISCORD_WEBHOOK
     - ./.travis/gitbranch.sh -d "./" -b "origin/master"
