@@ -464,7 +464,9 @@ matrix:
     os: linux
     before_install:
     - ./.travis/decrypt.sh
+    - set -o allexport
     - source ./.travis/env.sh
+    - set +o allexport
     script:
     - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     - ./.travis/gitbranch.sh -d "./" -b "origin/sprint#35/deployment"
