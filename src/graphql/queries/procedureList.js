@@ -28,6 +28,7 @@ const proceduresQuery = gql`
           yes
           no
           abstination
+          notVoted
           decisionText
           partyVotes {
             party
@@ -36,6 +37,7 @@ const proceduresQuery = gql`
               yes
               abstination
               no
+              notVoted
             }
           }
         }

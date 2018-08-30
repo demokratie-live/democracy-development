@@ -23,6 +23,7 @@ import { auth as authDirective } from './graphql/schemaDirectives';
 
 import importJob from './importJob';
 import importAgenda from './importAgenda';
+import importNamedPolls from './importNamedPolls';
 
 // Models
 import ProcedureModel from './models/Procedure';
@@ -127,6 +128,7 @@ app.prepare().then(async () => {
       const crons = [
         new CronJob('15 * * * *', importJob, null, true, 'Europe/Berlin', null, true),
         new CronJob('*/15 * * * *', importAgenda, null, true, 'Europe/Berlin', null, true),
+        new CronJob('30 * * * *', importNamedPolls, null, true, 'Europe/Berlin', null, true),
       ];
       if (constants.DEBUG) {
         Log.info('crons', crons.length);
