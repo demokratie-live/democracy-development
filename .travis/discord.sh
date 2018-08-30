@@ -38,6 +38,4 @@ fi
 
 data="{ \"embeds\": [{\"title\": \"${title}\",\"description\": \"${description}\",\"color\": ${color}}]}"
 
-echo $DISCORD_WEBHOOK
-
 curl -H 'Content-Type: application/json'  -X POST -d "${data}" "${DISCORD_WEBHOOK}"
