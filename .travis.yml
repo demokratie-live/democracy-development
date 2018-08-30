@@ -23,22 +23,22 @@ matrix:
   - if: type IN (pull_request)
     os: linux
     script:
-    - - ./.travis/gitbranch.sh -d "./client" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./client" -b "origin/master" || travis_terminate 1;
   # server in master?
   - if: type IN (pull_request)
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./server" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./server" -b "origin/master" || travis_terminate 1;
   # bundestag.io in master?
   - if: type IN (pull_request)
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master" || travis_terminate 1;
   # elasticsearch in master?
   - if: type IN (pull_request)
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/master" || travis_terminate 1;
   
   # ########################
   # DEPLOY INTERNAL
@@ -103,8 +103,10 @@ matrix:
     script:
     - cd android && bundle exec fastlane android internal
     after_success:
+    - cd ./../../
     - ./.travis/discord.sh -t "Success Internal $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
+    - cd ./../../
     - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy internal
   - if: tag =~ -internal\+client
@@ -129,8 +131,10 @@ matrix:
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios internal
     after_success:
+    - cd ./../../
     - ./.travis/discord.sh -t "Success Internal $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
+    - cd ./../../
     - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
 
   # ########################
@@ -193,8 +197,10 @@ matrix:
     script:
     - cd android && bundle exec fastlane android alpha
     after_success:
+    - cd ./../../
     - ./.travis/discord.sh -t "Success Alpha $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
+    - cd ./../../
     - ./.travis/discord.sh -t "Failure Alpha $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy alpha
   - if: tag =~ -alpha\+client
@@ -219,8 +225,10 @@ matrix:
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios alpha
     after_success:
+    - cd ./../../
     - ./.travis/discord.sh -t "Success Alpha $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
+    - cd ./../../
     - ./.travis/discord.sh -t "Failure Alpha $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   
   # ########################
@@ -230,11 +238,11 @@ matrix:
   - if: tag =~ -beta\+server
     os: linux
     before_install:
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" || travis_terminate 1;
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     script:
-    # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     # build docker-compose
     - docker-compose build
     # build doctl
@@ -251,6 +259,8 @@ matrix:
     language: android
     jdk: oraclejdk8
     before_install:
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" || travis_terminate 1;
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     - cd client/android
@@ -286,13 +296,13 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     script:
-    # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     # build android & publish using fastlane
     - cd android && bundle exec fastlane android beta
     after_success:
+    - cd ./../../
     - ./.travis/discord.sh -t "Success Beta $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
+    - cd ./../../
     - ./.travis/discord.sh -t "Failure Beta $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy beta
   - if: tag =~ -beta\+client
@@ -301,6 +311,8 @@ matrix:
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
     before_install:
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" || travis_terminate 1;
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     - cd client/ios
@@ -314,14 +326,14 @@ matrix:
     - yarn --version
     - yarn install
     script:
-    # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     # build ios and publish using fastlane
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios beta
     after_success:
+    - cd ./../../
     - ./.travis/discord.sh -t "Success Beta $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
+    - cd ./../../
     - ./.travis/discord.sh -t "Failure Beta $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
 
   # ########################
@@ -331,11 +343,11 @@ matrix:
   - if: tag =~ -production\+server
     os: linux
     before_install:
+    # ensure we are on the master branch - this does not work for some reason???
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" || travis_terminate 1;
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     script:
-    # ensure we are on the master branch - this does not work for some reason???
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     # build docker-compose
     - docker-compose build
     # build doctl
@@ -352,6 +364,8 @@ matrix:
     language: android
     jdk: oraclejdk8
     before_install:
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" || travis_terminate 1;
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     - cd client/android
@@ -387,13 +401,13 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     script:
-    # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     # build android & publish using fastlane
     - cd android && bundle exec fastlane android production
     after_success:
+    - cd ./../../
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
+    - cd ./../../
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy production
   - if: tag =~ -production\+client
@@ -402,6 +416,8 @@ matrix:
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
     before_install:
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" || travis_terminate 1;
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     - cd client/ios
@@ -415,14 +431,14 @@ matrix:
     - yarn --version
     - yarn install
     script:
-    # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     # build ios and publish using fastlane
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios production
     after_success:
+    - cd ./../../
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
+    - cd ./../../
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
 after_script:
 - echo "BUILD FINISHED"
