@@ -93,7 +93,7 @@ export default {
 
       let voteResults = {
         partyVotes,
-        decisionText,
+        decisionText: decisionText.trim(),
         votingDocument,
       };
 
@@ -128,11 +128,30 @@ export default {
           return { party, main, deviants };
         });
 
+        const votingRecommendationEntry = procedure.history.find(
+          ({ initiator }) =>
+            initiator && initiator.indexOf('Beschlussempfehlung und Bericht') !== -1,
+        );
+
         voteResults = {
           ...voteResults,
           partyVotes: partyResults,
           ...sumResults,
         };
+
+        if (votingRecommendationEntry) {
+          switch (votingRecommendationEntry.abstract) {
+            case 'Empfehlung: Annahme der Vorlage':
+              voteResults.votingRecommendation = true;
+              break;
+            case 'Empfehlung: Ablehnung der Vorlage':
+              voteResults.votingRecommendation = false;
+              break;
+
+            default:
+              break;
+          }
+        }
       }
 
       await ProcedureModel.update(
