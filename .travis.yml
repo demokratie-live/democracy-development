@@ -23,38 +23,22 @@ matrix:
   - if: type IN (pull_request)
     os: linux
     script:
-    - cd client
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi
+    - - ./.travis/gitbranch.sh -d "./client" -b "origin/master"
   # server in master?
   - if: type IN (pull_request)
     os: linux
     script:
-    - cd server
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi
+    - ./.travis/gitbranch.sh -d "./server" -b "origin/master"
   # bundestag.io in master?
   - if: type IN (pull_request)
     os: linux
     script:
-    - cd bundestag.io
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi
+    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master"
   # elasticsearch in master?
   - if: type IN (pull_request)
     os: linux
     script:
-    - cd elasticsearch
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi
+    - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/master"
   
   # ########################
   # DEPLOY INTERNAL
@@ -249,11 +233,8 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     script:
-    # ensure we are on the master branch - this does not work for some reason???
-    #- COMMIT=$(git rev-parse HEAD)
-    #- BRANCHES=$(git branch -r --contains ${COMMIT})
-    #- ORIGINMASTER='origin/master'
-    #- if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     # build docker-compose
     - docker-compose build
     # build doctl
@@ -306,10 +287,7 @@ matrix:
       - 'google-gdk-license-.+'
     script:
     # ensure we are on the master branch
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     # build android & publish using fastlane
     - cd android && bundle exec fastlane android beta
     after_success:
@@ -337,10 +315,7 @@ matrix:
     - yarn install
     script:
     # ensure we are on the master branch
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     # build ios and publish using fastlane
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios beta
@@ -360,10 +335,7 @@ matrix:
     - source ./.travis/env.sh
     script:
     # ensure we are on the master branch - this does not work for some reason???
-    #- COMMIT=$(git rev-parse HEAD)
-    #- BRANCHES=$(git branch -r --contains ${COMMIT})
-    #- ORIGINMASTER='origin/master'
-    #- if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     # build docker-compose
     - docker-compose build
     # build doctl
@@ -416,10 +388,7 @@ matrix:
       - 'google-gdk-license-.+'
     script:
     # ensure we are on the master branch
-    #- COMMIT=$(git rev-parse HEAD)
-    #- BRANCHES=$(git branch -r --contains ${COMMIT})
-    #- ORIGINMASTER='origin/master'
-    #- if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     # build android & publish using fastlane
     - cd android && bundle exec fastlane android production
     after_success:
@@ -447,10 +416,7 @@ matrix:
     - yarn install
     script:
     # ensure we are on the master branch
-    #- COMMIT=$(git rev-parse HEAD)
-    #- BRANCHES=$(git branch -r --contains ${COMMIT})
-    #- ORIGINMASTER='origin/master'
-    #- if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     # build ios and publish using fastlane
     - cd ios
     - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios production
@@ -458,29 +424,5 @@ matrix:
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
-
-  # TEST
-  - if: tag =~ test
-    os: linux
-    before_install:
-    - ./.travis/decrypt.sh
-    - source ./.travis/env.sh
-    script:
-    - echo $DISCORD_WEBHOOK
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
-    - ./.travis/gitbranch.sh -d "./" -b "origin/sprint\#35/deployment"
-    - ./.travis/gitbranch.sh -d "./client" -b "origin/master"
-    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master"
-    - ./.travis/gitbranch.sh -d "./server" -b "origin/master"
-    - ./.travis/discord.sh -t "SUCCESS Test" -d "Test $TRAVIS_TAG" -c info
-    - ./.travis/discord.sh -t "FAILURE Test" -d "Test $TRAVIS_TAG" -c error
-    - ./.travis/discord.sh -t "??? Test" -d "Test $TRAVIS_TAG" -c warn
-    #- docker-compose build
-    #- docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_ALPHA_HOST}" - < ./doctl
-    #- docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_ALPHA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_ALPHA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
-    #after_success:
-    #- 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"SUCCESS: New Server Alpha Version $TRAVIS_TAG deployed!\"}" ${DISCORD_WEBHOOK}'
-    #after_failure:
-    #- 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"FAILURE: Deploying new Server Alpha Version $TRAVIS_TAG failed!\"}" ${DISCORD_WEBHOOK}'
 after_script:
 - echo "BUILD FINISHED"
