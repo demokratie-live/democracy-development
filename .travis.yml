@@ -348,12 +348,7 @@ matrix:
     # ensure we are on the master branch - this does not work for some reason???
     - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     script:
-    # build docker-compose
-    - docker-compose build
-    # build doctl
-    - docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_PRODUCTION_HOST}" - < ./doctl
-    # run ssh command using doctl
-    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_PRODUCTION_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_PRODUCTION_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
+    - ./.travis/deploy.digitalocean.sh -h ${DIGITAL_OCEAN_PRODUCTION_HOST} -d ${DIGITALOCEAN_PRODUCTION_SERVER_DROPLET_NAME} -u ${DIGITALOCEAN_PRODUCTION_SERVER_USER}
     after_success:
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[Server] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
@@ -390,13 +385,13 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
     install:
     - ./.travis/update.fastlane.sh -d "android"
     - ./.travis/install.yarn.sh
     script:
     # build android & publish using fastlane
-    - ./.travis/deploy.fastlane.sh -d "android"
+    - ./.travis/deploy.fastlane.sh -d "android" -l "production"
     after_success:
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
@@ -411,13 +406,13 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
     install:
     - ./.travis/update.fastlane.sh -d "ios"
     - ./.travis/install.yarn.sh
     script:
     # build ios and publish using fastlane
-    - ./.travis/deploy.fastlane.sh -d "ios"
+    - ./.travis/deploy.fastlane.sh -d "ios" -l "production"
     after_success:
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
