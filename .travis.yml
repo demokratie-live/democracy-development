@@ -388,7 +388,7 @@ matrix:
       - 'google-gdk-license-.+'
     before_install:
     # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master" || ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed - Not on Master" -c error
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     install:
@@ -409,7 +409,7 @@ matrix:
     xcode_scheme: ios/democracyclientTests
     before_install:
     # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master" || ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed - Not on Master" -c error
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     install:
