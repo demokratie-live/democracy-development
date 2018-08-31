@@ -45,48 +45,6 @@ matrix:
     script:
     - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/master" -r false
   
-  # client in alpha/master?
-  - if: type IN (pull_request) && branch = alpha/master
-    os: linux
-    script:
-    - ./.travis/gitbranch.sh -d "./client" -b "origin/alpha/master" -r false
-  # server in alpha/master?
-  - if: type IN (pull_request) && branch = alpha/master
-    os: linux
-    script:
-    - ./.travis/gitbranch.sh -d "./server" -b "origin/alpha/master" -r false
-  # bundestag.io in alpha/master?
-  - if: type IN (pull_request) && branch = alpha/master
-    os: linux
-    script:
-    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/alpha/master" -r false
-  # elasticsearch in alpha/master?
-  - if: type IN (pull_request) && branch = alpha/master
-    os: linux
-    script:
-    - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/alpha/master" -r false
-
-  # client in beta/master?
-  - if: type IN (pull_request) && branch = beta/master
-    os: linux
-    script:
-    - ./.travis/gitbranch.sh -d "./client" -b "origin/beta/master" -r false
-  # server in beta/master?
-  - if: type IN (pull_request) && branch = beta/master
-    os: linux
-    script:
-    - ./.travis/gitbranch.sh -d "./server" -b "origin/beta/master" -r false
-  # bundestag.io in beta/master?
-  - if: type IN (pull_request) && branch = beta/master
-    os: linux
-    script:
-    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/beta/master" -r false
-  # elasticsearch in beta/master?
-  - if: type IN (pull_request) && branch = beta/master
-    os: linux
-    script:
-    - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/beta/master" -r false
-  
   # ########################
   # DEPLOY INTERNAL
   # ########################
