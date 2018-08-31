@@ -31,5 +31,7 @@ BRANCHES=$(git branch -r --contains ${COMMIT})
 if `echo ${BRANCHES} | grep "${branch}" 1>/dev/null 2>&1`; then
   exit 0;
 else
+  cd -
+  ./.travis/discord.sh -t "Failure $TRAVIS_TAG" -d "[Git] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed - $directory is not on $branch" -c error
   exit 1;
 fi
