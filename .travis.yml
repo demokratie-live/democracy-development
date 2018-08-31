@@ -343,10 +343,10 @@ matrix:
   - if: tag =~ -production\+server
     os: linux
     before_install:
-    # ensure we are on the master branch - this does not work for some reason???
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
+    # ensure we are on the master branch - this does not work for some reason???
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     script:
     # build docker-compose
     - docker-compose build
@@ -387,10 +387,10 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     before_install:
-    # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     install:
     - ./.travis/update.fastlane.sh -d "android"
     - ./.travis/install.yarn.sh
@@ -408,10 +408,10 @@ matrix:
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
     before_install:
-    # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     install:
     - ./.travis/update.fastlane.sh -d "ios"
     - ./.travis/install.yarn.sh
