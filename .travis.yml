@@ -346,7 +346,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the master branch - this does not work for some reason???
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
     script:
     - ./.travis/deploy.digitalocean.sh -h ${DIGITAL_OCEAN_PRODUCTION_HOST} -d ${DIGITALOCEAN_PRODUCTION_SERVER_DROPLET_NAME} -u ${DIGITALOCEAN_PRODUCTION_SERVER_USER}
     after_success:
