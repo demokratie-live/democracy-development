@@ -3,7 +3,6 @@ env:
   # SECRET
   - secure: "Xnbd0sTkr30NF/IPozUZs5Uks8V7uizIfuIoERUXy7IN4FfBuc+x+v2HR4Unho8eFh6TNDB3LA+b28Ce4aEajrxuVablLunBTLy/z48A5cyDg8dK2mXEA2iBLYTNei4BT+OBABHtmYd9uEmVTzeq07GPsb2N83LqIwSVAjZSuVJlVgT3a+j1fQrlTE3IjhgM+MaEYR8OaM/+tde5/TH3+lhBM7k71Jfw4a/no7VC1T9fnZ5MlpzZT4rqvl0OgesLrpRnyWlgbPrnrUZRR8h6+p/On9G1Azg5bF8UAfdZloez05zCT54u69tHiA6UdY24ytZtnlgcQmJ40k/NYitjzgiuJ9d7NN1YRhx5qApXdwYrt7D+9ElKuIORMnOIOe9uiUs/MlQ0Llbu51oPUUj/vUYUvhXU1XBY7yvgV1pWB6klW+xXMK+wNd+fze2EHotr0y7DX7+441OohwVC5YIFahdD4rTjHpEqolAhEH6j5y4/T0Gx/jcT/TJKUwPeR3/q71k5OxtRSgtNdxSlZnmAKLEiexS7lGkyE4/dfzxuqxzlyXaGDeAXcduwKs9H4SbZXPjMMIH4KSoOjMw3FMNyN2xJsdi/+fLqq9DAwQLgleRM0bLQCzQfRSjUzqV+6TfYGLBkqRNh8vlFy1orrebnzhVz11RO2FtGhy8tMdhCRyA="
 matrix:
-  fast_finish: true
   include:
   # ########################
   # TESTING
@@ -364,20 +363,6 @@ matrix:
     os: linux
     language: android
     jdk: oraclejdk8
-    before_install:
-    # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
-    - ./.travis/decrypt.sh
-    - source ./.travis/env.sh
-    - cd client/android
-    - gem update --system
-    - bundle install
-    - bundle update fastlane
-    install:
-    - cd ..
-    - nvm install 8
-    - yarn --version
-    - yarn install
     android:
       components:
       - tools
@@ -401,14 +386,20 @@ matrix:
       - 'android-sdk-preview-license-.+'
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
+    before_install:
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" || ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed - Not on Master" -c error
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    install:
+    - ./.travis/update.fastlane.sh -d "android"
+    - ./.travis/install.yarn.sh
     script:
     # build android & publish using fastlane
-    - cd android && bundle exec fastlane android production
+    - ./.travis/deploy.fastlane.sh -d "android"
     after_success:
-    - cd ./../../
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
-    - cd ./../../
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy production
   - if: tag =~ -production\+client
@@ -418,28 +409,18 @@ matrix:
     xcode_scheme: ios/democracyclientTests
     before_install:
     # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" || ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed - Not on Master" -c error
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
-    - cd client/ios
-    - gem update --system
-    - bundle install
-    - bundle update fastlane
     install:
-    - cd ..
-    - nvm install 8
-    - npm install -g yarn
-    - yarn --version
-    - yarn install
+    - ./.travis/update.fastlane.sh -d "ios"
+    - ./.travis/install.yarn.sh
     script:
     # build ios and publish using fastlane
-    - cd ios
-    - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios production
+    - ./.travis/deploy.fastlane.sh -d "ios"
     after_success:
-    - cd ./../../
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
-    - cd ./../../
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
 after_script:
 - echo "BUILD FINISHED"
