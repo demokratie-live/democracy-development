@@ -28,22 +28,22 @@ matrix:
   - if: type IN (pull_request)
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./client" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./client" -b "origin/master" -r false
   # server in master?
   - if: type IN (pull_request)
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./server" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./server" -b "origin/master" -r false
   # bundestag.io in master?
   - if: type IN (pull_request)
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master" -r false
   # elasticsearch in master?
   - if: type IN (pull_request)
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/master"
+    - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/master" -r false
   
   # ########################
   # DEPLOY INTERNAL
@@ -54,6 +54,7 @@ matrix:
     before_install:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
+    # do not ensure we are on the any branch - this is internal
     script:
     # build docker-compose
     - docker-compose build
@@ -70,18 +71,6 @@ matrix:
     os: linux
     language: android
     jdk: oraclejdk8
-    before_install:
-    - ./.travis/decrypt.sh
-    - source ./.travis/env.sh
-    - cd client/android
-    - gem update --system
-    - bundle install
-    - bundle update fastlane
-    install:
-    - cd ..
-    - nvm install 8
-    - yarn --version
-    - yarn install
     android:
       components:
       - tools
@@ -105,13 +94,19 @@ matrix:
       - 'android-sdk-preview-license-.+'
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # do not ensure we are on the any branch - this is internal
+    install:
+    - ./.travis/update.fastlane.sh -d "android"
+    - source ./.travis/install.yarn.sh
     script:
-    - cd android && bundle exec fastlane android internal
+    # build android & publish using fastlane
+    - ./.travis/deploy.fastlane.sh -d "android" -l "internal"
     after_success:
-    - cd ./../../
     - ./.travis/discord.sh -t "Success Internal $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
-    - cd ./../../
     - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy internal
   - if: tag =~ -internal\+client
@@ -122,24 +117,16 @@ matrix:
     before_install:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
-    - cd client/ios
-    - gem update --system
-    - bundle install
-    - bundle update fastlane
+    # do not ensure we are on the any branch - this is internal
     install:
-    - cd ..
-    - nvm install 8
-    - npm install -g yarn
-    - yarn --version
-    - yarn install
+    - ./.travis/update.fastlane.sh -d "ios"
+    - source ./.travis/install.yarn.sh
     script:
-    - cd ios
-    - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios internal
+    # build ios and publish using fastlane
+    - ./.travis/deploy.fastlane.sh -d "ios" -l "internal"
     after_success:
-    - cd ./../../
     - ./.travis/discord.sh -t "Success Internal $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
-    - cd ./../../
     - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
 
   # ########################
@@ -151,9 +138,14 @@ matrix:
     before_install:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
+    # ensure we are on the alpha/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
     script:
+    # build docker-compose
     - docker-compose build
+    # build doctl
     - docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_ALPHA_HOST}" - < ./doctl
+    # run ssh command using doctl
     - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_ALPHA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_ALPHA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
     after_success:
     - ./.travis/discord.sh -t "Success Alpha $TRAVIS_TAG" -d "[Server] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
@@ -164,18 +156,6 @@ matrix:
     os: linux
     language: android
     jdk: oraclejdk8
-    before_install:
-    - ./.travis/decrypt.sh
-    - source ./.travis/env.sh
-    - cd client/android
-    - gem update --system
-    - bundle install
-    - bundle update fastlane
-    install:
-    - cd ..
-    - nvm install 8
-    - yarn --version
-    - yarn install
     android:
       components:
       - tools
@@ -199,13 +179,20 @@ matrix:
       - 'android-sdk-preview-license-.+'
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the alpha/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
+    install:
+    - ./.travis/update.fastlane.sh -d "android"
+    - source ./.travis/install.yarn.sh
     script:
-    - cd android && bundle exec fastlane android alpha
+    # build android & publish using fastlane
+    - ./.travis/deploy.fastlane.sh -d "android" -l "alpha"
     after_success:
-    - cd ./../../
     - ./.travis/discord.sh -t "Success Alpha $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
-    - cd ./../../
     - ./.travis/discord.sh -t "Failure Alpha $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy alpha
   - if: tag =~ -alpha\+client
@@ -216,24 +203,17 @@ matrix:
     before_install:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
-    - cd client/ios
-    - gem update --system
-    - bundle install
-    - bundle update fastlane
+    # ensure we are on the alpha/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
     install:
-    - cd ..
-    - nvm install 8
-    - npm install -g yarn
-    - yarn --version
-    - yarn install
+    - ./.travis/update.fastlane.sh -d "ios"
+    - source ./.travis/install.yarn.sh
     script:
-    - cd ios
-    - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios alpha
+    # build ios and publish using fastlane
+    - ./.travis/deploy.fastlane.sh -d "ios" -l "alpha"
     after_success:
-    - cd ./../../
     - ./.travis/discord.sh -t "Success Alpha $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
-    - cd ./../../
     - ./.travis/discord.sh -t "Failure Alpha $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   
   # ########################
@@ -243,10 +223,10 @@ matrix:
   - if: tag =~ -beta\+server
     os: linux
     before_install:
-    # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
+    # ensure we are on the beta/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
     script:
     # build docker-compose
     - docker-compose build
@@ -263,20 +243,6 @@ matrix:
     os: linux
     language: android
     jdk: oraclejdk8
-    before_install:
-    # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
-    - ./.travis/decrypt.sh
-    - source ./.travis/env.sh
-    - cd client/android
-    - gem update --system
-    - bundle install
-    - bundle update fastlane
-    install:
-    - cd ..
-    - nvm install 8
-    - yarn --version
-    - yarn install
     android:
       components:
       - tools
@@ -300,14 +266,20 @@ matrix:
       - 'android-sdk-preview-license-.+'
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the beta/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
+    install:
+    - ./.travis/update.fastlane.sh -d "android"
+    - source ./.travis/install.yarn.sh
     script:
     # build android & publish using fastlane
-    - cd android && bundle exec fastlane android beta
+    - ./.travis/deploy.fastlane.sh -d "android" -l "beta"
     after_success:
-    - cd ./../../
     - ./.travis/discord.sh -t "Success Beta $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
-    - cd ./../../
     - ./.travis/discord.sh -t "Failure Beta $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy beta
   - if: tag =~ -beta\+client
@@ -315,30 +287,20 @@ matrix:
     language: objective-c
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
-    before_install:
-    # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master"
+    before_install:    
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
-    - cd client/ios
-    - gem update --system
-    - bundle install
-    - bundle update fastlane
+    # ensure we are on the beta/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
     install:
-    - cd ..
-    - nvm install 8
-    - npm install -g yarn
-    - yarn --version
-    - yarn install
+    - ./.travis/update.fastlane.sh -d "ios"
+    - source ./.travis/install.yarn.sh
     script:
     # build ios and publish using fastlane
-    - cd ios
-    - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios beta
+    - ./.travis/deploy.fastlane.sh -d "ios" -l "beta"
     after_success:
-    - cd ./../../
     - ./.travis/discord.sh -t "Success Beta $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
-    - cd ./../../
     - ./.travis/discord.sh -t "Failure Beta $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
 
   # ########################
@@ -351,7 +313,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the master branch - this does not work for some reason???
-    #- ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
     script:
     # build docker-compose
     - docker-compose build
@@ -395,7 +357,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the master branch
-    #- ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
     install:
     - ./.travis/update.fastlane.sh -d "android"
     - source ./.travis/install.yarn.sh
@@ -416,7 +378,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the master branch
-    #- ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
     install:
     - ./.travis/update.fastlane.sh -d "ios"
     - source ./.travis/install.yarn.sh
@@ -427,5 +389,6 @@ matrix:
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+    
 after_script:
 - echo "BUILD FINISHED"
