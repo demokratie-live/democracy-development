@@ -27,8 +27,8 @@ if [ -z "${host}" ] || [ -z "${dropplet}" ] || [ -z "${user}" ]; then
 fi
 
 # build docker-compose
-docker-compose build
+sudo docker-compose build
 # build doctl
-docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${host}" - < ./doctl
+sudo docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${host}" - < ./doctl
 # run ssh command using doctl
-docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${dropplet} --ssh-user ${user} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
+sudo docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${dropplet} --ssh-user ${user} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
