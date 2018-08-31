@@ -25,25 +25,67 @@ matrix:
   # CHECK FOR MASTER
   # ########################
   # client in master?
-  - if: type IN (pull_request)
+  - if: type IN (pull_request) && branch = master
     os: linux
     script:
     - ./.travis/gitbranch.sh -d "./client" -b "origin/master" -r false
   # server in master?
-  - if: type IN (pull_request)
+  - if: type IN (pull_request) && branch = master
     os: linux
     script:
     - ./.travis/gitbranch.sh -d "./server" -b "origin/master" -r false
   # bundestag.io in master?
-  - if: type IN (pull_request)
+  - if: type IN (pull_request) && branch = master
     os: linux
     script:
     - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master" -r false
   # elasticsearch in master?
-  - if: type IN (pull_request)
+  - if: type IN (pull_request) && branch = master
     os: linux
     script:
     - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/master" -r false
+  
+  # client in alpha/master?
+  - if: type IN (pull_request) && branch = alpha/master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./client" -b "origin/alpha/master" -r false
+  # server in alpha/master?
+  - if: type IN (pull_request) && branch = alpha/master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./server" -b "origin/alpha/master" -r false
+  # bundestag.io in alpha/master?
+  - if: type IN (pull_request) && branch = alpha/master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/alpha/master" -r false
+  # elasticsearch in alpha/master?
+  - if: type IN (pull_request) && branch = alpha/master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/alpha/master" -r false
+
+  # client in beta/master?
+  - if: type IN (pull_request) && branch = beta/master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./client" -b "origin/beta/master" -r false
+  # server in beta/master?
+  - if: type IN (pull_request) && branch = beta/master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./server" -b "origin/beta/master" -r false
+  # bundestag.io in beta/master?
+  - if: type IN (pull_request) && branch = beta/master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/beta/master" -r false
+  # elasticsearch in beta/master?
+  - if: type IN (pull_request) && branch = beta/master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/beta/master" -r false
   
   # ########################
   # DEPLOY INTERNAL
@@ -151,6 +193,25 @@ matrix:
     - ./.travis/discord.sh -t "Success Alpha $TRAVIS_TAG" -d "[Server] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Alpha $TRAVIS_TAG" -d "[Server] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+  # search deploy alpha
+  - if: tag =~ -alpha\+search
+    os: linux
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the alpha/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
+    script:
+    # build docker-compose
+    - docker-compose build
+    # build doctl
+    - docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_ALPHA_SEARCH_HOST}" - < ./doctl
+    # run ssh command using doctl
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_ALPHA_SEARCH_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_ALPHA_SEARCH_USER} --ssh-command "cd ~/democracy-search && ./deploy-production.sh origin/alpha/master"
+    after_success:
+    - ./.travis/discord.sh -t "Success Alpha $TRAVIS_TAG" -d "[Search] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Alpha $TRAVIS_TAG" -d "[Search] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # android deploy alpha
   - if: tag =~ -alpha\+client
     os: linux
@@ -238,6 +299,25 @@ matrix:
     - ./.travis/discord.sh -t "Success Beta $TRAVIS_TAG" -d "[Server] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Beta $TRAVIS_TAG" -d "[Server] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+  # search deploy beta
+  - if: tag =~ -beta\+search
+    os: linux
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the beta/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
+    script:
+    # build docker-compose
+    - docker-compose build
+    # build doctl
+    - docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_BETA_SEARCH_HOST}" - < ./doctl
+    # run ssh command using doctl
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_BETA_SEARCH_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_BETA_SEARCH_USER} --ssh-command "cd ~/democracy-search && ./deploy-production.sh origin/beta/master"
+    after_success:
+    - ./.travis/discord.sh -t "Success Beta $TRAVIS_TAG" -d "[Search] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Beta $TRAVIS_TAG" -d "[Search] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # android deploy beta
   - if: tag =~ -beta\+client
     os: linux
@@ -325,6 +405,25 @@ matrix:
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[Server] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Server] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+  # search deploy production
+  - if: tag =~ -beta\+search
+    os: linux
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
+    script:
+    # build docker-compose
+    - docker-compose build
+    # build doctl
+    - docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_PRODUCTION_SEARCH_HOST}" - < ./doctl
+    # run ssh command using doctl
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_BETA_PRODUCTION_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_PRODUCTION_SEARCH_USER} --ssh-command "cd ~/democracy-search && ./deploy-production.sh origin/master"
+    after_success:
+    - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[Search] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Search] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # android deploy production
   - if: tag =~ -production\+client
     os: linux
@@ -389,6 +488,6 @@ matrix:
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
-    
+
 after_script:
 - echo "BUILD FINISHED"
