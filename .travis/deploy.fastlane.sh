@@ -25,4 +25,6 @@ fi
 
 cd client/${directory}
 DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ${directory} ${lane}
-cd ../../
+result=$?
+cd -
+exit result
