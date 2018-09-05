@@ -2,7 +2,6 @@ import Scraper from '@democracy-deutschland/bt-named-polls';
 
 // import moment from "moment";
 import axios from 'axios';
-import { inspect } from 'util';
 
 import CONSTANTS from './config/constants';
 
@@ -22,7 +21,7 @@ const checkDocuments = async data => {
     notVoted: 0,
   };
 
-  Object.keys(voteResults).map(key => {
+  Object.keys(voteResults).forEach(key => {
     summarized.yes += parseInt(voteResults[key].Ja, 10);
     summarized.no += parseInt(voteResults[key].Nein, 10);
     summarized.abstination += parseInt(voteResults[key].Enthalten, 10);
