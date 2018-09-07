@@ -13,3 +13,6 @@
 [submodule "docu"]
 	path = docu
 	url = ../democracy-docu.git
+[submodule "website"]
+	path = website
+	url = ../democracy-website.git
