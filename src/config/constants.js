@@ -14,6 +14,9 @@ export default {
   GRAPHIQL: process.env.GRAPHIQL || false,
   GRAPHIQL_PATH: '/graphiql',
   GRAPHQL_PATH: '/graphql',
+  WHITELIST_DATA_SOURCES: process.env.WHITELIST_DATA_SOURCES
+    ? process.env.WHITELIST_DATA_SOURCES.split(',')
+    : ['::ffff:127.0.0.1', '::1'],
   LOGGING: {
     CONSOLE: process.env.LOGGING_CONSOLE || false,
     FILE: process.env.LOGGING_FILE || false,

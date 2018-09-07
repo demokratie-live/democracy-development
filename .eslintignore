@@ -1,9 +1,6 @@
 node_modules/
-.next/
-static/
 
 # ignore until admin area is excluded
 components/admin/
 components/layouts/Admin.jsx
 lib/withData.jsx
-pages/
