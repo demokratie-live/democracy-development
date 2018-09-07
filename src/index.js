@@ -7,10 +7,8 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import { createServer } from 'http';
 import { Engine } from 'apollo-engine';
-import Next from 'next';
+import cors from 'cors';
 import { inspect } from 'util';
-import auth from './express/auth';
-import requireAuth from './express/auth/requireAuth';
 
 import './services/logger';
 
@@ -18,26 +16,28 @@ import mongo from './config/db';
 import constants from './config/constants';
 import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers';
+import { auth as authDirective } from './graphql/schemaDirectives';
 
 import importJob from './importJob';
 import importAgenda from './importAgenda';
+import importNamedPolls from './importNamedPolls';
 
 // Models
 import ProcedureModel from './models/Procedure';
 import UserModel from './models/User';
 
-const dev = process.env.NODE_ENV !== 'production';
-
-const app = Next({ dev });
-const handle = app.getRequestHandler();
-
-app.prepare().then(async () => {
+(async () => {
   await mongo();
   const server = express();
+
+  server.use(cors());
 
   const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
+    schemaDirectives: {
+      auth: authDirective,
+    },
   });
 
   // Apollo Engine
@@ -49,11 +49,9 @@ app.prepare().then(async () => {
     server.use(engine.expressMiddleware());
   }
 
-  // Authentification
-  auth(server);
-  server.use('/admin', requireAuth({ role: 'BACKEND' }));
-
   server.use(bodyParser.json());
+
+  server.use(cors());
 
   // Graphiql
   if (constants.GRAPHIQL) {
@@ -105,9 +103,6 @@ app.prepare().then(async () => {
     );
   });
 
-  // Other requests
-  server.get('*', (req, res) => handle(req, res));
-
   // Create & start Server + Cron
   const graphqlServer = createServer(server);
   graphqlServer.listen(constants.PORT, err => {
@@ -118,10 +113,11 @@ app.prepare().then(async () => {
       const crons = [
         new CronJob('15 * * * *', importJob, null, true, 'Europe/Berlin', null, true),
         new CronJob('*/15 * * * *', importAgenda, null, true, 'Europe/Berlin', null, true),
+        new CronJob('30 * * * *', importNamedPolls, null, true, 'Europe/Berlin', null, true),
       ];
       if (constants.DEBUG) {
         Log.info('crons', crons.length);
       }
     }
   });
-});
+})();

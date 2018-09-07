@@ -12,10 +12,13 @@ const deputiesNumber = {
     Linke: 69,
     SPD: 153,
     Grüne: 67,
+    'B90/Grüne': 67,
     CDU: 246,
+    'CDU/CSU': 246,
     FDP: 80,
     AFD: 92,
     Andere: 2,
+    Fraktionslos: 2,
   },
 };
 
@@ -23,7 +26,15 @@ export default {
   Query: {
     procedures: (
       parent,
-      { IDs, period = [19], type = ['Gesetzgebung', 'Antrag'], status, voteDate },
+      {
+        IDs,
+        period = [19],
+        type = ['Gesetzgebung', 'Antrag'],
+        status,
+        voteDate,
+        limit = 99999,
+        offset = 0,
+      },
       { ProcedureModel },
     ) => {
       let match = { period: { $in: period }, type: { $in: type } };
@@ -42,14 +53,21 @@ export default {
             },
           },
         };
+        return ProcedureModel.find({ ...match })
+          .sort({ createdAt: 1 })
+          .skip(offset)
+          .limit(limit);
       }
+
       if (status) {
         match = { ...match, currentStatus: { $in: status } };
       }
       if (IDs) {
         match = { ...match, procedureId: { $in: IDs } };
       }
-      return ProcedureModel.find(match);
+      return ProcedureModel.find(match)
+        .skip(offset)
+        .limit(limit);
     },
 
     allProcedures: async (
@@ -68,17 +86,15 @@ export default {
   Mutation: {
     saveProcedureCustomData: async (
       parent,
-      { procedureId, partyVotes, decisionText },
-      { ProcedureModel, user },
+      { procedureId, partyVotes, decisionText, votingDocument },
+      { ProcedureModel },
     ) => {
-      if (!user || user.role !== 'BACKEND') {
-        throw new Error('Authentication required');
-      }
       const procedure = await ProcedureModel.findOne({ procedureId });
 
       let voteResults = {
         partyVotes,
-        decisionText,
+        decisionText: decisionText.trim(),
+        votingDocument,
       };
 
       if (deputiesNumber[procedure.period]) {
@@ -87,28 +103,20 @@ export default {
           abstination: 0,
           no: 0,
         };
-        partyVotes.forEach(({ party, main, deviants }) => {
+        const partyResults = partyVotes.map(({ party, main, deviants: partyDeviants }) => {
+          const deviants = { ...partyDeviants };
           switch (main) {
             case 'YES':
-              sumResults.yes +=
-                deputiesNumber[procedure.period][party] -
-                deviants.yes -
-                deviants.abstination -
-                deviants.no;
+              deviants.yes =
+                deputiesNumber[procedure.period][party] - deviants.abstination - deviants.no;
               break;
             case 'ABSTINATION':
-              sumResults.abstination +=
-                deputiesNumber[procedure.period][party] -
-                deviants.yes -
-                deviants.abstination -
-                deviants.no;
+              deviants.abstination =
+                deputiesNumber[procedure.period][party] - deviants.yes - deviants.no;
               break;
             case 'NO':
-              sumResults.no +=
-                deputiesNumber[procedure.period][party] -
-                deviants.yes -
-                deviants.abstination -
-                deviants.no;
+              deviants.no =
+                deputiesNumber[procedure.period][party] - deviants.yes - deviants.abstination;
               break;
 
             default:
@@ -117,8 +125,33 @@ export default {
           sumResults.yes += deviants.yes;
           sumResults.abstination += deviants.abstination;
           sumResults.no += deviants.no;
+          return { party, main, deviants };
         });
-        voteResults = { ...voteResults, ...sumResults };
+
+        const votingRecommendationEntry = procedure.history.find(
+          ({ initiator }) =>
+            initiator && initiator.indexOf('Beschlussempfehlung und Bericht') !== -1,
+        );
+
+        voteResults = {
+          ...voteResults,
+          partyVotes: partyResults,
+          ...sumResults,
+        };
+
+        if (votingRecommendationEntry) {
+          switch (votingRecommendationEntry.abstract) {
+            case 'Empfehlung: Annahme der Vorlage':
+              voteResults.votingRecommendation = true;
+              break;
+            case 'Empfehlung: Ablehnung der Vorlage':
+              voteResults.votingRecommendation = false;
+              break;
+
+            default:
+              break;
+          }
+        }
       }
 
       await ProcedureModel.update(
@@ -131,13 +164,12 @@ export default {
       );
 
       axios
-        .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
-          data: [
-            {
-              period: procedure.period,
-              types: [{ type: procedure.type, changedIds: [procedure.procedureId] }],
-            },
-          ],
+        .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
+          data: {
+            procedureIds: [procedure.procedureId],
+            name: 'ChangeVoteData',
+          },
+
           timeout: 1000 * 60 * 5,
         })
         .then(async response => {
@@ -177,6 +209,20 @@ export default {
         }, []),
       );
       return history;
+    },
+    namedVote: procedure => {
+      const namedVote = procedure.history.some(h => {
+        if (h.decision) {
+          return h.decision.some(decision => {
+            if (decision.type === 'Namentliche Abstimmung') {
+              return true;
+            }
+            return false;
+          });
+        }
+        return false;
+      });
+      return namedVote;
     },
   },
 };

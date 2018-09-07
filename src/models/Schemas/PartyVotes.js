@@ -6,12 +6,13 @@ const PartyVotesSchema = new Schema(
     main: {
       type: String,
       es_indexed: false,
-      enum: ['YES', 'NO', 'ABSTINATION'],
+      enum: ['YES', 'NO', 'ABSTINATION', 'NOTVOTED'],
     },
     deviants: {
       yes: Number,
       abstination: Number,
       no: Number,
+      notVoted: Number,
     },
   },
   { _id: false },

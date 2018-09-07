@@ -56,6 +56,9 @@ const saveProcedure = async ({ procedureData }) => {
       findSpotUrl: _.trim(e.FUNDSTELLE_LINK),
       date: parseDate(e.FUNDSTELLE.substr(0, 10)),
     };
+    if (e.VP_ABSTRAKT) {
+      flow.abstract = e.VP_ABSTRAKT.trim();
+    }
     if (e.BESCHLUSS) {
       if (!_.isArray(e.BESCHLUSS)) {
         e.BESCHLUSS = [e.BESCHLUSS];

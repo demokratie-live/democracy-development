@@ -7,6 +7,11 @@ enum VoteDecision {
   NOTVOTED
 }
 
+enum VotingDocument {
+  mainDocument
+  recommendedDecision
+}
+
 type ProcedureCustomData {
   title: String
   voteResults: VoteResults
@@ -17,7 +22,10 @@ type VoteResults {
   yes: Int
   no: Int
   abstination: Int
+  notVoted: Int
   decisionText: String
+  votingDocument: VotingDocument
+  votingRecommendation: Boolean
   partyVotes: [PartyVote]
 }
 
@@ -37,12 +45,14 @@ type Deviants {
   yes: Int
   abstination: Int
   no: Int
+  notVoted: Int
 }
 
 input DeviantsInput {
   yes: Int
   abstination: Int
   no: Int
+  notVoted: Int
 }
 
 type Procedure {
@@ -66,6 +76,7 @@ type Procedure {
   importantDocuments: [Document]
   bioUpdateAt: Date
   customData: ProcedureCustomData
+  namedVote: Boolean
 }
 
 type Query {
@@ -76,6 +87,6 @@ type Query {
 }
 
 type Mutation {
-  saveProcedureCustomData(procedureId: String!, partyVotes: [PartyVoteInput!]!, decisionText: String!): Procedure
+  saveProcedureCustomData(procedureId: String!, partyVotes: [PartyVoteInput!]!, decisionText: String!, votingDocument: String!): Procedure @auth(requires: BACKEND) 
 }
 `;
