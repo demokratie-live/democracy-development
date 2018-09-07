@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.x
+
+- [Added] Catch all errors and log them
+
 ### 0.1.3
 
 - [Changed] Seperate Procedure.bioUpdatedAt in field-resolver
