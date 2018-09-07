@@ -42,6 +42,7 @@ matrix:
     before_install:
     - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in admin/.env.enc -out admin/.env -d
     script:
     - docker-compose build
   # client in master?
