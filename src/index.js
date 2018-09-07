@@ -129,13 +129,12 @@ const main = async () => {
   });
 };
 
-// Async Warpping Function
-// Catches all errors and dies on them
+// Async Wrapping Function
+// Catches all errors
 (async () => {
   try {
     await main();
   } catch (error) {
     Log.error(error.stack);
-    process.exit(1);
   }
 })();
