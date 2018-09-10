@@ -49,7 +49,6 @@ const saveProcedure = async ({ procedureData }) => {
     : [procedureData.VORGANGSABLAUF.VORGANGSPOSITION];
   const history = process.map(e => {
     const flow = {
-      procedureId: procedureData.vorgangId.trim(),
       assignment: e.ZUORDNUNG.trim(),
       initiator: e.URHEBER.trim(),
       findSpot: e.FUNDSTELLE.trim(),
