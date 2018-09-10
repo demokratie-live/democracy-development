@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.X
+
+- [Fix] more dynamic connection whitelisting
+
 ### 0.1.3
 
 - [Changed] Seperate Procedure.bioUpdatedAt in field-resolver
