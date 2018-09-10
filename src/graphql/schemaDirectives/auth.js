@@ -41,7 +41,16 @@ class AuthDirective extends SchemaDirectiveVisitor {
         const [, , context] = args;
         let allow = true;
         if (requiredRole === 'BACKEND') {
-          if (!CONSTANTS.WHITELIST_DATA_SOURCES.includes(context.req.connection.remoteAddress)) {
+          if (
+            !CONSTANTS.WHITELIST_DATA_SOURCES.some(
+              address => context.req.connection.remoteAddress.indexOf(address) !== -1,
+            )
+          ) {
+            Log.warn(
+              `Connection to Bio blocked from ${
+                context.req.connection.remoteAddress
+              } for role 'BACKEND'`,
+            );
             allow = false;
           }
         }
