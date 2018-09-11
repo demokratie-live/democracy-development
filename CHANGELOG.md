@@ -2,6 +2,7 @@
 
 ### 0.1.X
 
+- [Fix] more dynamic connection whitelisting
 - [Fix] Do not save procedure id in History subobject
 
 ### 0.1.3
