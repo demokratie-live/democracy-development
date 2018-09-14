@@ -2,11 +2,12 @@
 import diffHistory from 'mongoose-diff-history/diffHistory';
 import fs from 'fs-extra';
 
-import mongoConnect, { mongoose } from './config/db';
+import DB, { mongoose } from './config/db';
 import Procedure from './models/Procedure';
 
 (async () => {
-  await mongoConnect();
+  // Start DB Connection
+  await DB();
   const History = mongoose.model('History');
 
   const histories = await History.aggregate([
