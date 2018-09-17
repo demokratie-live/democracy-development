@@ -43,7 +43,8 @@ class AuthDirective extends SchemaDirectiveVisitor {
         if (requiredRole === 'BACKEND') {
           if (
             !CONSTANTS.WHITELIST_DATA_SOURCES.some(
-              address => context.req.connection.remoteAddress.indexOf(address) !== -1,
+              address =>
+                address.length > 3 && context.req.connection.remoteAddress.indexOf(address) !== -1,
             )
           ) {
             Log.warn(
