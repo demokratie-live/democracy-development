@@ -12,7 +12,7 @@ import { inspect } from 'util';
 
 import './services/logger';
 
-import mongo from './config/db';
+import DB from './config/db';
 import constants from './config/constants';
 import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers';
@@ -26,8 +26,10 @@ import importNamedPolls from './importNamedPolls';
 import ProcedureModel from './models/Procedure';
 import UserModel from './models/User';
 
-(async () => {
-  await mongo();
+const main = async () => {
+  // Start DB Connection
+  await DB();
+
   const server = express();
 
   server.use(cors());
@@ -120,4 +122,14 @@ import UserModel from './models/User';
       }
     }
   });
+};
+
+// Async Wrapping Function
+// Catches all errors
+(async () => {
+  try {
+    await main();
+  } catch (error) {
+    Log.error(error.stack);
+  }
 })();
