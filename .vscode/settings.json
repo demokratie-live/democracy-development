@@ -1,0 +1,9 @@
+{
+    "eslint.packageManager": "yarn",
+    "editor.formatOnSave": true,
+    "[javascript]": {
+        "editor.formatOnSave": false,
+    },
+    "eslint.autoFixOnSave": true,
+    "eslint.alwaysShowStatus": true
+}
