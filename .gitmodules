@@ -16,6 +16,3 @@
 [submodule "docu"]
 	path = docu
 	url = ../democracy-docu.git
-[submodule "desktop"]
-	path = desktop
-	url = ../democracy-desktop.git
