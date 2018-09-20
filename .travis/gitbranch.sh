@@ -27,6 +27,7 @@ if [ -z "${directory}" ] || [ -z "${branch}" ]; then
 fi
 
 cd $directory
+git fetch --all
 
 COMMIT=$(git rev-parse HEAD)
 echo "Commit ${COMMIT}"
