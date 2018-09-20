@@ -54,7 +54,7 @@ matrix:
     before_install:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
-    # do not ensure we are on the any branch - this is internal
+    # do not ensure we are on any branch - this is internal
     script:
     # build docker-compose
     - docker-compose build
@@ -97,7 +97,7 @@ matrix:
     before_install:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
-    # do not ensure we are on the any branch - this is internal
+    # do not ensure we are on any branch - this is internal
     install:
     - ./.travis/update.fastlane.sh -d "android"
     - source ./.travis/install.yarn.sh
@@ -117,7 +117,7 @@ matrix:
     before_install:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
-    # do not ensure we are on the any branch - this is internal
+    # do not ensure we are on any branch - this is internal
     install:
     - ./.travis/update.fastlane.sh -d "ios"
     - source ./.travis/install.yarn.sh
