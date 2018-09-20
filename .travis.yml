@@ -16,16 +16,8 @@ matrix:
   - if: tag IS blank
     os: linux
     before_install:
-<<<<<<< HEAD
-    - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in admin/.env.enc -out admin/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in desktop/.env.enc -out desktop/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in desktop/.env.enc -out desktop/.env -d
-=======
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
->>>>>>> sprint#35/deployment
     script:
     - docker-compose build
   
@@ -60,18 +52,9 @@ matrix:
   - if: tag =~ -internal\+server
     os: linux
     before_install:
-<<<<<<< HEAD
-    - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in admin/.env.enc -out admin/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
-    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
-    - openssl aes-256-cbc -k "$SECRET" -in desktop/.env.enc -out desktop/.env -d
-=======
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # do not ensure we are on the any branch - this is internal
->>>>>>> sprint#35/deployment
     script:
     # build docker-compose
     - docker-compose build
@@ -153,19 +136,10 @@ matrix:
   - if: tag =~ -alpha\+server
     os: linux
     before_install:
-<<<<<<< HEAD
-    - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in admin/.env.enc -out admin/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
-    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
-    - openssl aes-256-cbc -k "$SECRET" -in desktop/.env.enc -out desktop/.env -d
-=======
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the alpha/master branch
     - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
->>>>>>> sprint#35/deployment
     script:
     # build docker-compose
     - docker-compose build
@@ -181,19 +155,10 @@ matrix:
   - if: tag =~ -alpha\+search
     os: linux
     before_install:
-<<<<<<< HEAD
-    - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in admin/.env.enc -out admin/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
-    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
-    - openssl aes-256-cbc -k "$SECRET" -in desktop/.env.enc -out desktop/.env -d
-=======
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the alpha/master branch
     - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
->>>>>>> sprint#35/deployment
     script:
     # build docker-compose
     - docker-compose build
