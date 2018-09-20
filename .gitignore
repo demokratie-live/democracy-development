@@ -1,8 +1,4 @@
 *.log
 .env
 /data/
-/secret
-/ssh_key
-/ssh_key.pub
-/secret.zip
 .vs
