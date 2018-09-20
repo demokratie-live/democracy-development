@@ -30,12 +30,13 @@ cd $directory
 
 COMMIT=$(git rev-parse HEAD)
 echo "Commit ${COMMIT}"
-BRANCHES=$(git branch --contains ${COMMIT})
+BRANCHES=$(git branch -r --contains ${COMMIT})
 echo "Branches ${BRANCHES}"
 echo ${BRANCHES}
 echo $BRANCHES
-git branch --contains ${COMMIT}
-echo $(git branch --contains ${COMMIT})
+echo git branch -r --contains ${COMMIT}
+git branch -r --contains ${COMMIT}
+echo $(git branch -r --contains ${COMMIT})
 
 if `echo ${BRANCHES} | grep "${branch}" 1>/dev/null 2>&1`; then
   cd -

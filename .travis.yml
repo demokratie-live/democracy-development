@@ -28,22 +28,22 @@ matrix:
   - if: type IN (pull_request) && branch = master
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./client" -b "origin/master" -r false
+    - source ./.travis/gitbranch.sh -d "./client" -b "origin/master" -r false
   # server in master?
   - if: type IN (pull_request) && branch = master
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./server" -b "origin/master" -r false
+    - source ./.travis/gitbranch.sh -d "./server" -b "origin/master" -r false
   # bundestag.io in master?
   - if: type IN (pull_request) && branch = master
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master" -r false
+    - source ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master" -r false
   # elasticsearch in master?
   - if: type IN (pull_request) && branch = master
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/master" -r false
+    - source ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/master" -r false
   
   # ########################
   # DEPLOY INTERNAL
@@ -139,7 +139,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the alpha/master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
+    - source ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
     script:
     # build docker-compose
     - docker-compose build
@@ -158,7 +158,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the alpha/master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
+    - source ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
     script:
     # build docker-compose
     - docker-compose build
@@ -202,7 +202,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the alpha/master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
+    - source ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
     install:
     - ./.travis/update.fastlane.sh -d "android"
     - source ./.travis/install.yarn.sh
@@ -223,7 +223,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the alpha/master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
+    - source ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
     install:
     - ./.travis/update.fastlane.sh -d "ios"
     - source ./.travis/install.yarn.sh
@@ -245,7 +245,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the beta/master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
+    - source ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
     script:
     # build docker-compose
     - docker-compose build
@@ -264,7 +264,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the beta/master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
+    - source ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
     script:
     # build docker-compose
     - docker-compose build
@@ -308,7 +308,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the beta/master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
+    - source ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
     install:
     - ./.travis/update.fastlane.sh -d "android"
     - source ./.travis/install.yarn.sh
@@ -329,7 +329,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the beta/master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
+    - source ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
     install:
     - ./.travis/update.fastlane.sh -d "ios"
     - source ./.travis/install.yarn.sh
@@ -351,7 +351,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the master branch - this does not work for some reason???
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
+    - source ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
     script:
     # build docker-compose
     - docker-compose build
@@ -370,7 +370,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
+    - source ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
     script:
     # build docker-compose
     - docker-compose build
@@ -414,7 +414,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
+    - source ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
     install:
     - ./.travis/update.fastlane.sh -d "android"
     - source ./.travis/install.yarn.sh
@@ -435,7 +435,7 @@ matrix:
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the master branch
-    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
+    - source ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
     install:
     - ./.travis/update.fastlane.sh -d "ios"
     - source ./.travis/install.yarn.sh
