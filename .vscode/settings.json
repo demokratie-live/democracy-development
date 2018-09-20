@@ -5,5 +5,12 @@
         "editor.formatOnSave": false,
     },
     "eslint.autoFixOnSave": true,
-    "eslint.alwaysShowStatus": true
+    "eslint.alwaysShowStatus": true,
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/ios": true,
+        "**/android": true,
+        "**/.next": true
+    }
 }
