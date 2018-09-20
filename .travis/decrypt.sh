@@ -11,6 +11,10 @@ openssl aes-256-cbc -k "$SECRET" -in ./.travis/ssh_key.pub.enc -out ./.travis/ss
 openssl aes-256-cbc -k "$SECRET" -in ./server/.env.enc -out ./server/.env -d
 # Bundestag.io .env
 openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io/.env.enc -out ./bundestag.io/.env -d
+# Bundestag.io Admin .env
+openssl aes-256-cbc -k "$SECRET" -in ./admin/.env.enc -out ./admin/.env -d
+# Desktop Cient .env
+openssl aes-256-cbc -k "$SECRET" -in ./desktop/.env.enc -out ./desktop/.env -d
 
 # Client Store Credentials
 openssl aes-256-cbc -k "$SECRET" -in ./client/android/Google_Play_Android_Developer.json.enc -out ./client/android/Google_Play_Android_Developer.json -d
