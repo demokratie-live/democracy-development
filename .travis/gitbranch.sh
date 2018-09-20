@@ -27,7 +27,6 @@ if [ -z "${directory}" ] || [ -z "${branch}" ]; then
 fi
 
 cd $directory
-git fetch --all
 
 COMMIT=$(git rev-parse HEAD)
 echo "Commit ${COMMIT}"
@@ -35,6 +34,9 @@ BRANCHES=$(git branch -r --contains ${COMMIT})
 echo "Branches ${BRANCHES}"
 echo ${BRANCHES}
 echo $BRANCHES
+echo git branch -r --contains ${COMMIT}
+git branch -r --contains ${COMMIT}
+echo $(git branch -r --contains ${COMMIT})
 
 if `echo ${BRANCHES} | grep "${branch}" 1>/dev/null 2>&1`; then
   cd -
