@@ -43,6 +43,8 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in admin/.env.enc -out admin/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in desktop/.env.enc -out desktop/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in desktop/.env.enc -out desktop/.env -d
     script:
     - docker-compose build
   # client in master?
@@ -81,6 +83,7 @@ matrix:
     - openssl aes-256-cbc -k "$SECRET" -in admin/.env.enc -out admin/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
+    - openssl aes-256-cbc -k "$SECRET" -in desktop/.env.enc -out desktop/.env -d
     script:
     # build docker-compose
     - docker-compose build
@@ -98,8 +101,10 @@ matrix:
     before_install:
     - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in admin/.env.enc -out admin/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
+    - openssl aes-256-cbc -k "$SECRET" -in desktop/.env.enc -out desktop/.env -d
     script:
     - docker-compose build
     - docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_ALPHA_HOST}" - < ./doctl
@@ -114,8 +119,10 @@ matrix:
     before_install:
     - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
+    - openssl aes-256-cbc -k "$SECRET" -in admin/.env.enc -out admin/.env -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
     - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
+    - openssl aes-256-cbc -k "$SECRET" -in desktop/.env.enc -out desktop/.env -d
     script:
     # ensure we are on the master branch - this does not work for some reason???
     #- COMMIT=$(git rev-parse HEAD)
