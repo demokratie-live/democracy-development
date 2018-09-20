@@ -29,6 +29,7 @@ fi
 cd $directory
 
 COMMIT=$(git rev-parse HEAD)
+echo "Commit ${COMMIT}"
 BRANCHES=$(git branch -r --contains ${COMMIT})
 
 if `echo ${BRANCHES} | grep "${branch}" 1>/dev/null 2>&1`; then
