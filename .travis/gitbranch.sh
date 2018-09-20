@@ -28,8 +28,11 @@ fi
 
 cd $directory
 
+# Update Git so it does find all the required branches
+git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+git fetch --all
+
 COMMIT=$(git rev-parse HEAD)
-echo "Commit ${COMMIT}"
 BRANCHES=$(git branch -r --contains ${COMMIT})
 echo "Branches ${BRANCHES}"
 echo ${BRANCHES}
