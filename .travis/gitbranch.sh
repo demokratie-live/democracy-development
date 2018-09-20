@@ -32,6 +32,8 @@ COMMIT=$(git rev-parse HEAD)
 echo "Commit ${COMMIT}"
 BRANCHES=$(git branch -r --contains ${COMMIT})
 echo "Branches ${BRANCHES}"
+echo ${BRANCHES}
+echo $BRANCHES
 
 if `echo ${BRANCHES} | grep "${branch}" 1>/dev/null 2>&1`; then
   cd -
