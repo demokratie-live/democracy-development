@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.5
+
+- [Fix] Add missing finished voteResults for admin area
+
 ### 0.1.4
 
 - [Fix] Do not save procedure id in History subobject
