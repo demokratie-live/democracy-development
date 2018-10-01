@@ -5,6 +5,8 @@ import { inspect } from 'util';
 import { mongoose } from '../../config/db';
 import CONSTANTS from '../../config/constants';
 
+import PROCEDURE_STATES from '../../config/procedureStates';
+
 const History = mongoose.model('History');
 
 const deputiesNumber = {
@@ -34,6 +36,7 @@ export default {
         type = ['Gesetzgebung', 'Antrag'],
         status,
         voteDate,
+        manageVoteDate = false,
         limit = 99999,
         offset = 0,
       },
@@ -54,6 +57,34 @@ export default {
               },
             },
           },
+        };
+        return ProcedureModel.find({ ...match })
+          .sort({ createdAt: 1 })
+          .skip(offset)
+          .limit(limit);
+      }
+
+      if (manageVoteDate) {
+        match = {
+          ...match,
+          $or: [
+            {
+              history: {
+                $elemMatch: {
+                  decision: {
+                    $elemMatch: {
+                      tenor: {
+                        $in: ['Ablehnung der Vorlage', 'Annahme der Vorlage'],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            {
+              currentStatus: { $in: PROCEDURE_STATES.COMPLETED },
+            },
+          ],
         };
         return ProcedureModel.find({ ...match })
           .sort({ createdAt: 1 })
