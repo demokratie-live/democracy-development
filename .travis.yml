@@ -104,13 +104,6 @@ matrix:
     script:
     # build android & publish using fastlane
     - ./.travis/deploy.fastlane.sh -d "android" -l "internal"
-    deploy:
-      provider: releases
-      api_key: $GITHUB_OAUTH_TOKEN
-      file: "./client/android/app/build/outputs/apk/app-internal-release.apk"
-      skip_cleanup: true
-      on:
-        tags: true
     after_success:
     - ./.travis/discord.sh -t "Success Internal $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
@@ -456,6 +449,12 @@ matrix:
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
-
+deploy:
+  provider: releases
+  api_key: $GITHUB_OAUTH_TOKEN
+  file: "./client/android/app/build/outputs/apk/app-internal-release.apk"
+  skip_cleanup: true
+  on:
+    tags: true
 after_script:
 - echo "BUILD FINISHED"
