@@ -68,6 +68,10 @@ matrix:
     - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[Server] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # android deploy internal
   - if: tag =~ -internal\+client
+    addons:
+      apt:
+        packages:
+        - python2.7
     os: linux
     language: android
     jdk: oraclejdk8
@@ -82,6 +86,7 @@ matrix:
       - build-tools-25.0.2
       - build-tools-26.0.1
       - build-tools-26.0.2
+      - build-tools-26.0.3
       - android-23
       - android-25
       - android-26
@@ -95,8 +100,6 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     before_install:
-    - sudo apt-get update -qq
-    - sudo apt-get install -y python2.7
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # do not ensure we are on any branch - this is internal
