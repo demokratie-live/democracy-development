@@ -110,7 +110,7 @@ matrix:
     # build android & publish using fastlane
     - ./.travis/deploy.fastlane.sh -d "android" -l "internal"
     after_success:
-    - source ./.travis/travis_upload_release_to_github.py
+    - ./.travis/travis_upload_release_to_github.py
     - ./.travis/discord.sh -t "Success Internal $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
