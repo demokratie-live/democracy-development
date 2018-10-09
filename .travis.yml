@@ -68,10 +68,10 @@ matrix:
     - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[Server] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # android deploy internal
   - if: tag =~ -internal\+client
-    addons:
-      apt:
-        packages:
-        - python2.7
+    # addons:
+    #  apt:
+    #    packages:
+    #    - python2.7
     os: linux
     language: android
     jdk: oraclejdk8
@@ -109,8 +109,17 @@ matrix:
     script:
     # build android & publish using fastlane
     - ./.travis/deploy.fastlane.sh -d "android" -l "internal"
+    deploy:
+      provider: releases
+      skip_cleanup: true
+      api_key:
+        secure: iDqnOTI+zID2HWLikj9i8jY+De+5EuGz6HjyjyuH+Zi3z7MTmS5Pr+ZR9NWxm+Rjyh99+rIaFqhP3vHr76LtlbKjG4qN/bMMm91daKylXv/HEY8gw9+jg9gNjIqerEWkpoYfmCb+1gEERYTe/tPgvIKQyNGdgCjwo5ngC1otffM3wo4G516EbTErlegHubs8o5MyQwTF613x734Onf5LtUzdr1dS1RahYCdjCfmYMcwtnJ/ufWaqdkX0vQcKzs3OAkaqp5EFEpVKwfkobRE/yN7IIJwvW39EYmWXo0z8fsJ+MgCbiM+rUtz/o38f5ZvB+CYbKlbYS8dGJecMwcClNAFo+ptkDYhkQ9Kqulf1ZUCl4n5tHkuVRlJpuEykRMelXrT73Ix4xdkcCb/XmrMt/o4zyyvTAr7ghIgVnilj6fG30s4OOnV3uMruJ4I25GD8CyFGaCaPtS+CY6qYUX4nvAgObKDa5PVVjZ+P+8sv2MZmcx1AJgOZvxoxsedCPuIl9QjyttRXphYEByBa3hXykh1eMqYCD5KwadeD621hBUOrK5dpUkngWRR63JZe095gmQtIjPJr1kxn1bhFcQK1tZQ3Voct3TefC0LPzU0a+GPimTWQRNTv7BwevVt7QOMfleAO1h3duD8VRjFB2X4uR1g4qcNQ72csv8wcFfroCGE=
+      file_glob: true
+      file: "./client/android/app/build/outputs/apk/*-release.apk"
+      on:
+        tags: true
     after_success:
-    - ./.travis/travis_upload_release_to_github.py
+    # - ./.travis/travis_upload_release_to_github.py
     - ./.travis/discord.sh -t "Success Internal $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
@@ -455,14 +464,5 @@ matrix:
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
-deploy:
-  provider: releases
-  skip_cleanup: true
-  api_key:
-    secure: iDqnOTI+zID2HWLikj9i8jY+De+5EuGz6HjyjyuH+Zi3z7MTmS5Pr+ZR9NWxm+Rjyh99+rIaFqhP3vHr76LtlbKjG4qN/bMMm91daKylXv/HEY8gw9+jg9gNjIqerEWkpoYfmCb+1gEERYTe/tPgvIKQyNGdgCjwo5ngC1otffM3wo4G516EbTErlegHubs8o5MyQwTF613x734Onf5LtUzdr1dS1RahYCdjCfmYMcwtnJ/ufWaqdkX0vQcKzs3OAkaqp5EFEpVKwfkobRE/yN7IIJwvW39EYmWXo0z8fsJ+MgCbiM+rUtz/o38f5ZvB+CYbKlbYS8dGJecMwcClNAFo+ptkDYhkQ9Kqulf1ZUCl4n5tHkuVRlJpuEykRMelXrT73Ix4xdkcCb/XmrMt/o4zyyvTAr7ghIgVnilj6fG30s4OOnV3uMruJ4I25GD8CyFGaCaPtS+CY6qYUX4nvAgObKDa5PVVjZ+P+8sv2MZmcx1AJgOZvxoxsedCPuIl9QjyttRXphYEByBa3hXykh1eMqYCD5KwadeD621hBUOrK5dpUkngWRR63JZe095gmQtIjPJr1kxn1bhFcQK1tZQ3Voct3TefC0LPzU0a+GPimTWQRNTv7BwevVt7QOMfleAO1h3duD8VRjFB2X4uR1g4qcNQ72csv8wcFfroCGE=
-  file_glob: true
-  file: "./client/android/app/build/outputs/apk/*-release.apk"
-  on:
-    tags: true
 after_script:
 - echo "BUILD FINISHED"
