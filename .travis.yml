@@ -68,10 +68,6 @@ matrix:
     - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[Server] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # android deploy internal
   - if: tag =~ -internal\+client
-    # addons:
-    #  apt:
-    #    packages:
-    #    - python2.7
     os: linux
     language: android
     jdk: oraclejdk8
