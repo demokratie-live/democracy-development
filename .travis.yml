@@ -82,6 +82,7 @@ matrix:
       - build-tools-25.0.2
       - build-tools-26.0.1
       - build-tools-26.0.2
+      - build-tools-26.0.3
       - android-23
       - android-25
       - android-26
@@ -425,6 +426,7 @@ matrix:
     # build android & publish using fastlane
     - ./.travis/deploy.fastlane.sh -d "android" -l "production"
     after_success:
+    - ./.travis/upload.sh ./client/android/app/build/outputs/apk/app-production-release.apk
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
@@ -449,6 +451,5 @@ matrix:
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
-
 after_script:
 - echo "BUILD FINISHED"
