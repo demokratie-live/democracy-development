@@ -12,6 +12,8 @@ services:
     volumes:
        - ./bundestag.io:/app
     restart: 'no'
+    depends_on:
+      - mongodb
 
   democracy:
     environment:
@@ -24,6 +26,36 @@ services:
     volumes:
        - ./server/:/app/
     restart: 'no'
+    depends_on:
+      - mongodb
+
+  bundestagio-admin:
+    environment:
+      VIRTUAL_HOST: admin.local
+    ports:
+      - 3200:80
+    volumes:
+       - ./admin/:/app/
+       - /app/.next
+    restart: 'always'
+    depends_on:
+      - bundestagio
+
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+  #   container_name: elasticsearch
+  #   environment:
+  #     - discovery.type=single-node
+  #   networks:
+  #     default:
+  #     intern:
+  #       aliases:
+  #         - "elasticsearch" 
+  #   ports:
+  #     - 9200:9200
+  #     - 9300:9300
+  #   depends_on:
+  #     - mongodb
 
   mongodb:
     ports:

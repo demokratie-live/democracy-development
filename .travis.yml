@@ -2,139 +2,194 @@ env:
   global:
   # SECRET
   - secure: "Xnbd0sTkr30NF/IPozUZs5Uks8V7uizIfuIoERUXy7IN4FfBuc+x+v2HR4Unho8eFh6TNDB3LA+b28Ce4aEajrxuVablLunBTLy/z48A5cyDg8dK2mXEA2iBLYTNei4BT+OBABHtmYd9uEmVTzeq07GPsb2N83LqIwSVAjZSuVJlVgT3a+j1fQrlTE3IjhgM+MaEYR8OaM/+tde5/TH3+lhBM7k71Jfw4a/no7VC1T9fnZ5MlpzZT4rqvl0OgesLrpRnyWlgbPrnrUZRR8h6+p/On9G1Azg5bF8UAfdZloez05zCT54u69tHiA6UdY24ytZtnlgcQmJ40k/NYitjzgiuJ9d7NN1YRhx5qApXdwYrt7D+9ElKuIORMnOIOe9uiUs/MlQ0Llbu51oPUUj/vUYUvhXU1XBY7yvgV1pWB6klW+xXMK+wNd+fze2EHotr0y7DX7+441OohwVC5YIFahdD4rTjHpEqolAhEH6j5y4/T0Gx/jcT/TJKUwPeR3/q71k5OxtRSgtNdxSlZnmAKLEiexS7lGkyE4/dfzxuqxzlyXaGDeAXcduwKs9H4SbZXPjMMIH4KSoOjMw3FMNyN2xJsdi/+fLqq9DAwQLgleRM0bLQCzQfRSjUzqV+6TfYGLBkqRNh8vlFy1orrebnzhVz11RO2FtGhy8tMdhCRyA="
-  # DISCORD_WEBHOOK
-  - secure: x27uGBUltnahb6YLZBPPWe/mJHDAXRNZW8d0bgM9CFowJZE9VmcIkLvh/ZWST10TSeY0Ry1TWyGfpQwLJHuD1AmUFI06tKGR3+/wCcjOLoOX4O7oUQAcheVZ/2GCv2QdzO9zX0SQxfKXOAIIVrs6qjylTJuA3ELM1f8QdQ8qnUDiPmpjyqR4o1MDvvqda4Oennh0nZGu1HnbwkRXmSQr+BO9pKA1SZbOK5W0cqTHxX4lZbbo5UT7N6BCjSXolyKjfB5FbtXZWD8onqXuYx6kwt93vkMYmWeLqUCepvY3BDQXMMK+pTiTI0mVKTMHwgyvan9wZqORJ9g5wofoiwkS4faUcNte2+Svz/1Qk+C0JmNw55ja2SVp6E7QRaTAmuYhhHDtwLsL4ukYwYTyd6oSOS5HnRm1KJsL4ggJrHZDeKheKNVKtQcJtFov8DCh4pBqttx3VQM0KypcCT0MEzuJmbI/iggREJU7EWpIhpa1kHaEZHYHGHdg/PDgxkY2lwZXclwyFxtfcL0rCDhri4TuuYjKdF/Th6F5ReWtTo08wFPxTKq+08sMulsB7yt/+zaQ0FQ3YIlR4In9uswHgNfLK1HcIlG89J5T1OnmGg9v5uZDRWER4uwM8NzTkpvpOjGFKs+1KOCcfX/ztxGD4bJ1UYuhPzgagIDjbW8Sgar1ATU=
-  # DIGITALOCEAN_ACCESS_TOKEN
-  - secure: Cvczli2QXTNwU7mzsslAB4SCTj5ZiMXX14uPrazR2ggXA8KrFIpt+lQj6EQ5AVpI/nr9P1KuasQPSYGn14IWdDYOGWGwPUFWQpxsTAdv7y+C2cJlZfDmkTH38cUXoudkq+LqXfWdfMFxt5WaVmqdWfov3ENP4yHZazRaq4VjdPuzxm79WQpdXY0VYCqO0m+6cNA3bqzMquTC/pRxdOticBJraGz2Frhz78m0ZsSN3nn1fUdgEwlpeyMGgiGCP9/V/bb5iw15X1JguFf+GcKsMFufWuAPcg16BvfhTpLbKs9pmfBb1itYFKvlCVJV/jGF5ifQ48iNiy+6c9wvRoL9kDGrfDMFiV9qrI/v3zkCAu1n0xsV54iyDnnLLWUTrnVazTwMed3lbgWMyOtGDwOgs4TnxjN4MXIJCMeYefde1DO5mkES8lSCQ+hXFucjK9g3B4lrI5vEvFrTvDou2F3uNSPkA/Pjr89tlkOsH83mMk7fr+m/MkyCwabh5NNMB/qB5nud6LkiBgdWYuhWGksPgDdqXU10q2YOudzfMvs7Xq/640UAMKwsdBlpXj5N4ocnaeTMbrty1ExMlPBwHQIEIlhzALZnTq/FocRiQT+HUfNcF1I5IXAM7U+kMq9vL0cPzdOuPh4P6vxfxCrSdkFmEbf8SkfJ5HuQj44PzpifC9w=
-  # DIGITALOCEAN_ALPHA_SERVER_DROPLET_NAME
-  - secure: msZSe8h8/Rk2QrtmxInP1+zMWujEFRQTJn1ku/HNoAzAkqju8vSbpmDB0CmWg4ASn97D7gnZCYhsVBEoLx13u69p9sJpEqsX+juBteP+UtmGJ+ivvOMRCuSWNJmQK+YngsBJygzead77o4RKC7GGTqO4prvPsgmVkkmYtesoVicBKZR4Mzs2R4Y1t2XebRLBNuylQQw2P3UEPL/zXEYz9NDW+iV49W3NbfX3HGydOzRBpw88iFNXqN1wfxCx/X02SwhNVJmELFULgkHQzhSwfBT4CBcGOiKJBu2hgf1JEcFYVsmcoFwSj5YnWlILZ+h64iFkqwTkVOspGshZY3doGv3tX+lFpHIww1RFLWUZnePsfmRi1Jn3VRRQcrkhMmRAQv4PIpg6ieT1CvilZG7E9zAKHBMS6f/qR5lTe1HV4ccnAqVE/vSsvLbEy2uMSd+bA9BiQjy6JM9avba0q9V5sJ72eWUWqXaFkvN9iYrLuelHOJKfeC8vdRHeANzQhkq90v5auXhJHG9jcpmQFbj9DNptNBNQJPwn5kuvDA3w4wvP9lbqxFJkF/tB5wk+X6THUTkz/AufpU4rPL2+rO71eqifBzxkk0gt4Hqmsio7rhayfghlYTMx8EK+rm26i92WO3z73aDoCJj0gKP5PgrEy/oGfULvGDZB0ynHtaXxYeI=
-  # DIGITALOCEAN_BETA_SERVER_DROPLET_NAME
-  - secure: "1lVMVwr52WG9gwKdwci/Dhuu8vJarn/l1hQt/Ki9luwBaFomcQ73u2hVt6OvtLrdCTuILM/zC0aPqcs6F7YEytyddFnSv2tGlNGZ8b+j7Sk9+z/gJRMwV+jrEaq6NdR7bFBa7MftcUoXBbtAdcZtPV4IhH3wFvyLJzyHj/gep+OUCV75R2jViCgDpar/axWz4d5iu1nKtg1Ujvd8I9jKqn7o54NtowiT0A98A635Q/sFx9t+gqrZ2NrTg/b26e7EUXZDbSwdUge4OOcMGDPvedvtHhXq9eErEr4EHxCRUWqFIkDp/oY+yWjge/IWFyB9JLJfeh0g+R3wQE/JTZKoqcJC8gRiFCz6uiPCWJYrUlujEPJKtjmfbfTHg9EzJjB11kX0drQ6RTcFnPC6tEehsioPJqyPxMZ5FHLBaFVf73If6PRYp80Id6vgtdU+xoP0KbNvo5eszzDDgjKkxR5P1aJLniZbKQuSCvs1nsbJcIftuJ1gSv5xR4qcJevsL/EL8Ql5rzvoVHkFlF3ChexlzSKXRtzN+kCjsN1isturn8SVkOvXlB3G0+mJjdPowpQFYuJTYuOP3qJKOoZYgZS4ho3m9FqGpdXdy9a+wYUgjL64fB6tT+XBLXtRLBqdWzEfnWudPcjF3MTmDX7G+1KLKkbjIgcNZyWMBm7jWA6y4PE="
-  # DIGITALOCEAN_ALPHA_SERVER_USER
-  - secure: lHYJcGXxrn7VL37pT/36m1HWBaP+CQt0dA61Zo+t9pNY4GHws1Nhn06iX5UlWTHvmFfpOmTeKZbY5ksWTSQdIdcHRnDT95Q1mp/wpEm9LL76IT2CaFoSF6lgDeX+1CLTZmuLZd2Mx5kK4nu+k6s8iqKgtSoPyNENuO5OV20LOCc3/rbiPOqb0EBvCc7iim8D9ZC+F/ertD78ylvZemYNthjflymTVXz8imSo1emdEFNYfSrlVU7nKIRZUcE2ua/RPC7PxEuPPGrNNZPJ2RqoOIR4hJECFiZmPTbXDx99tjFI1xxHJ0R7qIrbgFoObUFtN6FlahdHNUipes6zHtUUAqKDVRFxlQ+xdcPY1wGDTACCCSbg8ySL+HfKUWa2LiAEfTRi54NvVKMWPDRRGHjTlPyzE+bqYKcJgkZjzFVv1eeKkec9t+tStSG8DGrO251SbyH6fPQRYREcJyXT4iRiYIDKwtnb3g8ziWCwN8x79y5xWA+Oy/8RmhSmgTIUIoq6Q7Rg4nWXSTzjdyvSPlqvbQKuCL+Ce1yFl8IytW7BKC53fg73zJtlYVQb4oPHWkry9GZp4qS1Aj4JzFHqfm3yBJvHrJ1HyjS1S+KsM2OLFWmJL4F1MJTwiARiNDilhhi3mMr98oSDgwLPVDmtl4NObqBewkX/G0QU+oYx8dnTuh8=
-  # DIGITAL_OCEAN_BETA_SERVER_USER
-  - secure: "RHdd5TihEHff9XP1K8Kbw+4ZqTk9luv3qSnkqFThtpDIcIgQPPoWh1owpwdzVgosCEOB/ja7Gu+ckpSNkarKWfLEplHXv57NsHY9JR6eyKCz9Ype4qlAv2UIKcCTIoPIYETGLX7SNwazYfYCsIhTmy4KV7rnBqRB+jEe+mpgIMB8W49e53uqsHfmV40VP9f6/DW07gLMwmMCYNM379I5cAXGb2YNnD/usVt0Q1FRIEVtagx8iRX3ctFdAcJwAarkn8WXDFjwmoLZyd9vD3aYUnQeqTHRQA75hRuQI0+tMKLnoZTAMLmDkV8sD/m7Fto9vXEbtrfLRkro4iKDZ9G0vtr5jK+Bz6UoSrsdnsKelk6gKshDXa1IkFe1PXdwGtkr2jxXt9vqwDdo7u1Rwuy51QWpa751T5FkGmyb8L/i4FHbr/hxOlPziKx6BUSDujU+13aj8uD28qMtAJsq5BEh8urdWqAuqZtYOfDaZfgpNHRnCFjprmZUy9p+26tuKJy2bD7OBQkHdcgFJ6hmGwPANJ8DFfsz+9uFFTq9F5mJn4wj4nGBpuTy9iwJJ0OwqbPBIQWWqfRfZ8j1Mx8ZIr4atqyMWy2TNAwDWgQlUuA3k7+PSligbTmx2/1xA8H0trleK6JwUbG1sw68INICQ/cG2Gg2Cs2RP69fCeNsBediXus="
-  # DIGITAL_OCEAN_ALPHA_HOST
-  - secure: "hPQ2FSmdCgZweg49AuLZr8uBSTW2OyC9lY0n3hjyUXiB1qCWQCjwqFLoLVn0XaKCLqokE1NSsMGyUC+i2Cq+iNCYKnUiLGHttBiXRSvuyxWOGQD/fHrY2XgzTElu6o0yZAtc7oz4deEIfuu+TlaCWUdDANa2JX+qKZmebSGMow3RxILBX8Z37L8z3DLbf8JVApfAf7fQ1GsgDw/F0XxEx23GR27qTYqcRgEc4MgFPeko6IOfawxdD+dOGznIs/P/TuyHj2RveXFwft3Y0I1A57uA9daWcdmQzNWnQdIvK/FnFxUGhCyG7saaS1ETM4qvfWE7SCxaxO031YQlzMUckhJ6pCu1YZ1VIlNlk591Q3qbXlej80+HTqG+n5UpSWRwC8b3YuNst2a9lshqplWybPonZeZOpS3L/X9ijlMtTM2podb4EwIJxdS8xo1MWX0ZNFfpTuqPOdS/cy7IU9twyOXcOOnOwlVvzlsJpDNGAjIabCeRrZDr+EgaC9e0EF/2hTtzmUYZ2kliHvKX1WdSVTvKN3jNMLg9KzwTXJGzhN9A0+fUzf96h96nah114jtISGyARemp2326kU6N9bbJSpEYtX6Wxe88OdtgCE1N9MUr86z/wa7QFUqIv4X+WFlvhclVOWazNwY6FlpQhUfIeoSyOND+ijI/acHqNWvW5Ek="
-  # DIGITAL_OCEAN_BETA_HOST
-  - secure: "RL3KTQ89iTfB48vBdzvPl+FLdEz0/XQye//M7vflQde5hVfCmCBWleCCQcUvVCMvPzut2ivfaJ5I7LwtMNx9pQBsa7/ketF9gZ89zGH+vJ6CQgxbGW6+qFw8HhtMwO0dCP61OqrB1ZBGM9V2s7v6HuPdk+N+t3pzIlhr77tGyJXT1eVrsqz1agZcH51Oo7bBjEZJqrekDVWIn/vh3BKh7NziRndFtMBBvjhW4e6RtD4I9UlMLGrfdHqNGinw24AHQQ0QQu7LDWzTU8yew0/lljONUYRYrx7EKCcAI06UdM5y91/XxaaR9PpS3yWoY9n4rr9SiEspksZir7ODoB07Ulr7SQi1QTLCQCsos8LpKnbfQnotcUUb6YF/MzejzAhHi2bOtK+DKQNvxH6BPZhMDbpjYovkgOKjm73D3NXHhYHo4ioj4RqhHpM3cNz+s5nOi8r3Eg4Xx79M/0IuTL1zgV4vcU7cFjr2xlXjekxJETepKC6nn24KMK3y4u58dGGFhL8DMsDuiFeG1NfNGGLsCaPAwLOlFQw6ksZtFWHBwasGf/QItfFY3nwuydOMAQDJh3UEC1/l29RDq8fZ+nXSDeADReZsOVTzY9hvL64R+Y2IjAcVbR2pEzUxfusnnOOfNF3Ud6Esb4+nDq8A/by1e5P16B5Jf/nMremZ7XXPxY8="
-  # ANDROID_PASS
-  - secure: "uNbKCD4ywLQn4zTGR9YtW1O1rL8ZpGvmGml8KUCbzoH8c4z9X5EE046ceS3phxbL7uoW7Qg1Y8p8do61fEEZJncWgKJxmYvTviDf6esY2CsnMGlUuid5AUmpZPzHyieN9+5lSRl/fsg00EK2ygEaeQzAreopOJM34NWilbm5HhOqEpJoTMFoRqMOkeFcxj5MQHT/c2IxjIAd2NQeyiQhoSRMQOlDFxYL3rANU3dLlZpS0MVy36LudBuBYMLsioznxb8bWfPKoST9ukiGgGygY+LJE7HHuIjq8EaCrz1E0vgTj1Huno0N+Ot7JxaL3U4mEydlBeSkYDSgRos1Il3EJixKCZ0HJKLIINMC0hRFbom+86P5PGJy6AMSrA0Qxek7dtfVLhiKKMmZug1eDHEPdOdfeb2Xr0YQzXZTmWTwh5BRcCDSKVYVb4r86RpkYp5ym2ITUPaQnKB2ManRRtVv3OZLTQHY7q+hatp/lgC6XIMIZiOF6K5cN0rpSRUU2hHCH3nZzmKf44SA+v1d4Z2q3mQ1PnTNUd6rGtxk+v2vGKxeEPdqsH2J8KBKloVCAgxs/uiQh9aHxsIp7jwofYeQydnO473xzgRvkyC6i1VxpJFd2qtyjejV8LiVYo4S5/BoZS+b4s1hkoUOGwme90DdnMuKLXYOO+7AlAMcqzL7CfA="
-  # FASTLANE_PASSWORD (apple_id password)
-  - secure: "qjKFIxN/ZdrAWmAtibJBihYeRbiPg3MuYUOUrlF0BZPyakCZwcly5WeNd/HziSOKL7hYb+0P2loIfOReB3vOH9zMUSQTJS71ZXQluG5l/V3v5Gg9YTcOsusWnG5n3NLVYafUHdXNVTqmvTUqIl5jNElKyUcm1sUrsk3aQVkP1ufOY+HLQtvjli9mLdbAbHjTl0JGhxFCi2b6tnG95986WHdtDuEhrRuqQhOiVTK1hDlvT8dlTTLfOCrNG9HPYew8/tqGrSA/iSsdywnnqHFDTPdLK5HeMUMPnBYzY8S2VFx9o+l0lcfPzDKqMy0rEqRcKdgGzwgK/t62Q/W5bjXLoJvsv0YzgTm9EJpH7gg9qbN+z+sczSpNfnCSms9ms8fr4wlbkHpucLDtuZm5xYC3KMh0da0QDynXmXghPmxxLJ3F2jJeOhxLWXEw3VX6O3he2yvr6NRNRzEhbF9ruPe+3BWVBennvxsv0FqVG6XY1RF4VbQ0ahiYPZFH6wXrpz3G/KaaItKboX/MExkBt3Y4hdkeAncxbu14xQ4YTT5QD/Qlxpw0JsPj1+Qmf4DDCYj67J3J4nc9LniyPds704bE+VM5XjJ3XHb+hOstKYdaI5xtG7Ra1DYqCBExkUKw81aChuOdxrFZ3hY8fHGniNEWgfo7dm9Tb8BEUE4HeW99k60="
   # MATCH_GIT
-  - secure: "iPG/QRIybRTYIzTRjNA9+Ce4Edzf6+LF/tSSaBlECvKOpXyCa7ZgM6ERWLx/FuX2mYQxxDmUfZdpDs6SDyffxlkkB3+5p4yBDANUL3GmzjbjFhHrVKHop8kvDriS1sNWKVIYZYFke7SKyOUucQ0c0cDVdYQJIxnXv5JZkaFG5e3OBRmkOZq82AxavemtjGjbaOPTSMr5SKbNP5YQyuZWfosHWYVorpr1bsdKuAoQJyY8THUcfkr9G4SSBI9cQY255yL1M1EIYPLan1pRdchhQkW+z4UBqM0mLsea7V8LznEcqVrDzU7+lA7jC4YzzUBNPhCqxa+6Rm1TMahodHwpRjMjeO4SFQ3aybbLEOo3Gn0FI65Ma2AFDhF3bjOd7FkOqc+mtZ+ActTN3KhhIquRrpPcgPAbwSzgg4B4mhFJYmpPGZPI3BJ40hEbM3mo+tYTH63Yx9/l8Q4uZk6vCtYhJj66i4QmCDBOBEHYDeHFQn5i4MhA/C7d5e7plxmyjaDQZnLuU4Hf+fI4X0p8c8yAre6x8WfCoO9WyUEp9//kQnoe+ECXfTCNk8tPPUbnBghKSkDykIyrY2KCkSSJ8iedEntBx5WPqKtklubI4BmAFsTcQUvsUSvSHFASduxeLliVaKLi4UYVWv50YzdHwzabR1rqousktP9U9NP95neMfvk="
-  # MATCH_PASSWORD (Certificat Password)
-  - secure: "a0FUvgEIzBCbRrM3jwqaSoUWoB4947iY3wc3DFKBw/+GkO6QIo8LUu6abF5p1vKgK6dNQ8uaDrBgB052X89vy6ca0SI90ZwfNA+LOpgE/Ibs2YDN+dj0qHZiCXLvg602087L2zfhnkt2/yn1epNK8F7r9sz923Ju7wm/Lut6TqJdwXJUPJLOOtzjFaSxiHS9J2wW3LfRWAQSqcAF5uz60LNmewdjraU+TWXV6oAU4M9luER4WujbKAvagSzZgGOY/vPw0mi95gTrKfTXd0ax+JH4L1oXXDyPqWNmjuounnhA3UicJJPPs5deWP3i+hdhA3qLVvyXCotl7dRYS+ByPUvx6Ri/xwE8TxCrcZcZWdQAB3TmkiQyXmRzO3jvKKc71dMU+I/2J5a5ayvpapRPvl49LyrqcxfDecJwnCM0XBPtNoIsqXr1elQeHpxU0GIGNCzKu7c05kLmqBrTZHsoD1EHZ5JC9zbaIS0ZTgWCFfhetLnNVQ8OvqeYB8EPo2wpAuJ35HiIugQNMZUN/K28by3mQCesYfWp+09G2xgZfTvuQVwDau4qi2vVeDDLOZ1ViM6GE9k+orkHwIx4dSLtjAGH0tIB+Ywgi7NSi5kR5pDRfk0/1X4XoySwIm1H7KXWc7FmBuv9CqyqErpcsdXTE8sLK3EhnPmb6dzDrwhvOjI="
-  # BUILD NUMBER
-  - BUILD_NUMBER=`expr $TRAVIS_BUILD_NUMBER + 100000`
+  - secure: "g+NTxqZ+/oL1UWRSsEYslPBAWQhSIguJQnhjCLqSt8mTEOMGVTMjbaBZwzY2tOBP/SOjPI6LNyYlKA/awcHQ7xOSU+ecaEsfnQYpvamRtO4MqEcIic/k2WQV/T1Zcsa4679xU+BAQmySciT5vF4DC/yk0CTnnR5NWc0ITKh3wvwllX7u+vII6NvK/UE7zU7XnneyzsP3Z8/419M89ttuyLiS6aEtndR7OYbHFKb5bL583HhWb3YFgJL5aKXT9OQfLlU/7IKFeEi70X3UEtt8gZmOwjpI8Wssgx22IQ2yOFy0PcvVhldSv/+cWQYDsWPl/6Sjc+pA3aYYToFGEp+vbT6KN2Bwng/NERxAyUXQig9sK/KCUyOg6xpRjFDgrbpUA1fZ1aTGI5kmlrmY4vjikoWLX71WWLIsY4LQuWvANPl5/nTh0NsLqPOJ2VEK5bhgsu1N2GtW0mFXAJDToed6qlUUrlg6a3znEiK2hvq5/7xFED/sMXfHr8KjnAHnIVbmVeNb8CNPrHXCLNr5NAY8PEMRxHlK+7KSos3w0RkOj/j7iURrJLKk22D5c3dPbE8O+LxIKtNvgOH8ksneT9Yrg1QyilwO3ZkdMo9pOZiNsjnWNUu/T/dc3sSXrt2eOU8gRl5Ho3+4yptyTNk2jJJmEsm7z6pkNi4jHEIV452QoGM="
+  # DIGITALOCEAN_ACCESS_TOKEN
+  - secure: "oWwpAQWuj9DkI5tq1WszPq5saf8RaC5U6wj/2YqMbBlSSLV/aVQp0g5+vrGEhRVas99u3obH+2H5iNKJPDECb8WmLB+U/g0ix4+zehpeoEZlMW10kCbQQIRBaNQ8go8lt4qsq0X1MEhrKMZ62uLvzVFt2Lh1MDZEGlUrHnoGB/q0R2BW6dNOWpYFwXf3oX6GFDaS1M78xwmpQ1UAkDa2Y/UmL37DyOttnptHW0/CDxP+sEn6F9/uo+3HoY96joqbSo9Rce4Jrunikc0eRIMUD3ubV1110Z2foERjLgfs9o8tyMlcfoQxeGmBrADaosauphOX9trd0pLcGCKN01pZwvJNogaE722zMUXRs71LuC6bgAjlx2JA5Vh25HF6utikkgOzlr/zev0f71dveqjjWxoagda9jxUp0FTsZx8Di+tMEzK9Cn9sdMWB5yPwzpTxi4+dG+jYe7qLmeGBWgs7kGapgUy/07vzGSpfgp6D57ZWXgjlr5R7jXFNNj6YJIfkzUNJbe5mmXN28wEWvmuiLs8pvCnbLTt/tEUHwokutONB6d+hRZl22Y2hgBz08ygEgXg9jqLkVgolwd1otPU7UhWpi4JsrlAOgEIQYSiSGInU8vtSl9qzcjN8wA69ul8P3EpxKZDaGbzbveeEdfuwdwAPM0wGSAO7bJwPFpp7oo8="
 matrix:
+  sudo: required
   include:
+  # ########################
+  # TESTING
+  # ########################
   # basic docker build test
   - if: tag IS blank
     os: linux
     before_install:
-    - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
     script:
     - docker-compose build
+  
+  # ########################
+  # CHECK FOR MASTER
+  # ########################
   # client in master?
-  - if: type IN (pull_request)
+  - if: type IN (pull_request) && branch = master
     os: linux
     script:
-    - cd client
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi
+    - ./.travis/gitbranch.sh -d "./client" -b "origin/master" -r false
   # server in master?
-  - if: type IN (pull_request)
+  - if: type IN (pull_request) && branch = master
     os: linux
     script:
-    - cd server
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi
+    - ./.travis/gitbranch.sh -d "./server" -b "origin/master" -r false
   # bundestag.io in master?
-  - if: type IN (pull_request)
+  - if: type IN (pull_request) && branch = master
     os: linux
     script:
-    - cd bundestag.io
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then exit 0; else exit 1; fi
+    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master" -r false
+  # elasticsearch in master?
+  - if: type IN (pull_request) && branch = master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/master" -r false
+  
+  # ########################
+  # DEPLOY INTERNAL
+  # ########################
+  # server deploy internal
+  - if: tag =~ -internal\+server
+    os: linux
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # do not ensure we are on any branch - this is internal
+    script:
+    # build docker-compose
+    - docker-compose build
+    # build doctl
+    - docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_INTERNAL_HOST}" - < ./doctl
+    # run ssh command using doctl
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_INTERNAL_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_INTERNAL_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
+    after_success:
+    - ./.travis/discord.sh -t "Success Internal $TRAVIS_TAG" -d "[Server] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[Server] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+  # android deploy internal
+  - if: tag =~ -internal\+client
+    os: linux
+    language: android
+    jdk: oraclejdk8
+    android:
+      components:
+      - tools
+      - platform-tools
+      # android 23,25,26
+      - build-tools-23.0.1
+      - build-tools-25.0.0
+      - build-tools-25.0.1
+      - build-tools-25.0.2
+      - build-tools-26.0.1
+      - build-tools-26.0.2
+      - android-23
+      - android-25
+      - android-26
+      # extra
+      - extra-android-m2repository
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - addon-google_apis-google-16
+      licenses:
+      - 'android-sdk-preview-license-.+'
+      - 'android-sdk-license-.+'
+      - 'google-gdk-license-.+'
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # do not ensure we are on any branch - this is internal
+    install:
+    - ./.travis/update.fastlane.sh -d "android"
+    - source ./.travis/install.yarn.sh
+    script:
+    # build android & publish using fastlane
+    - ./.travis/deploy.fastlane.sh -d "android" -l "internal"
+    after_success:
+    - ./.travis/discord.sh -t "Success Internal $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+  # ios deploy internal
+  - if: tag =~ -internal\+client
+    osx_image: xcode9.2
+    language: objective-c
+    xcode_project: ios/democracyclient.xcodeproj
+    xcode_scheme: ios/democracyclientTests
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # do not ensure we are on any branch - this is internal
+    install:
+    - ./.travis/update.fastlane.sh -d "ios"
+    - source ./.travis/install.yarn.sh
+    script:
+    # build ios and publish using fastlane
+    - ./.travis/deploy.fastlane.sh -d "ios" -l "internal"
+    after_success:
+    - ./.travis/discord.sh -t "Success Internal $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+
+  # ########################
+  # DEPLOY ALPHA
+  # ########################
   # server deploy alpha
   - if: tag =~ -alpha\+server
     os: linux
     before_install:
-    - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
-    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the alpha/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
     script:
-    - docker-compose build
-    - docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_ALPHA_HOST}" - < ./doctl
-    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_ALPHA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_ALPHA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
-    after_success:
-    - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"SUCCESS: New Server Alpha Version $TRAVIS_TAG deployed!\"}" ${DISCORD_WEBHOOK}'
-    after_failure:
-    - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"FAILURE: Deploying new Server Alpha Version $TRAVIS_TAG failed!\"}" ${DISCORD_WEBHOOK}'
-  # server deploy beta
-  - if: tag =~ -beta\+server
-    os: linux
-    before_install:
-    - openssl aes-256-cbc -k "$SECRET" -in server/.env.enc -out server/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in bundestag.io/.env.enc -out bundestag.io/.env -d
-    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.enc -out ssh_key -d
-    - openssl aes-256-cbc -k "$SECRET" -in ssh_key.pub.enc -out ssh_key.pub -d
-    script:
-    # ensure we are on the master branch - this does not work for some reason???
-    #- COMMIT=$(git rev-parse HEAD)
-    #- BRANCHES=$(git branch -r --contains ${COMMIT})
-    #- ORIGINMASTER='origin/master'
-    #- if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
     # build docker-compose
     - docker-compose build
     # build doctl
-    - docker build -t doctl --build-arg SSH_KEY="$(cat ./ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_BETA_HOST}" - < ./doctl
+    - docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_ALPHA_HOST}" - < ./doctl
     # run ssh command using doctl
-    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_BETA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_BETA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_ALPHA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_ALPHA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
     after_success:
-    - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"SUCCESS: New Server Beta Version $TRAVIS_TAG deployed!\"}" ${DISCORD_WEBHOOK}'
+    - ./.travis/discord.sh -t "Success Alpha $TRAVIS_TAG" -d "[Server] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
-    - 'curl -H ''Content-Type: application/json''  -X POST -d "{\"content\":\"FAILURE: Deploying new Server Beta Version $TRAVIS_TAG failed!\"}" ${DISCORD_WEBHOOK}'
+    - ./.travis/discord.sh -t "Failure Alpha $TRAVIS_TAG" -d "[Server] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+  # search deploy alpha
+  - if: tag =~ -alpha\+search
+    os: linux
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the alpha/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
+    script:
+    # build docker-compose
+    - docker-compose build
+    # build doctl
+    - docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_ALPHA_SEARCH_HOST}" - < ./doctl
+    # run ssh command using doctl
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_ALPHA_SEARCH_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_ALPHA_SEARCH_USER} --ssh-command "cd ~/democracy-search && ./deploy-production.sh origin/alpha/master"
+    after_success:
+    - ./.travis/discord.sh -t "Success Alpha $TRAVIS_TAG" -d "[Search] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Alpha $TRAVIS_TAG" -d "[Search] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # android deploy alpha
   - if: tag =~ -alpha\+client
     os: linux
     language: android
     jdk: oraclejdk8
-    before_install:
-    - echo y | android update sdk --no-ui --filter build-tools-26.0.1,build-tools-26.0.2,android-26,extra-android-m2repository
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/android/Google_Play_Android_Developer.json.enc -out client/android/Google_Play_Android_Developer.json -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/android/app/democracy2-release-key.keystore.enc -out client/android/app/democracy2-release-key.keystore -d
-    - gem update --system
-    - bundle install
-    - bundle update fastlane
-    install:
-    - cd client
-    - nvm install 8
-    - yarn --version
-    - yarn install
     android:
       components:
       - tools
       - platform-tools
       # android 23,25,26
       - build-tools-23.0.1
+      - build-tools-25.0.0
       - build-tools-25.0.1
+      - build-tools-25.0.2
       - build-tools-26.0.1
       - build-tools-26.0.2
+      - build-tools-26.0.3
       - android-23
+      - android-25
+      - android-26
       # extra
       - extra-android-m2repository
       - extra-google-google_play_services
@@ -144,63 +199,21 @@ matrix:
       - 'android-sdk-preview-license-.+'
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
-    script:
-    - cd android && bundle exec fastlane android alpha
-    after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Alpha Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
-    after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Alpha Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
-  # android deploy beta
-  - if: tag =~ -beta\+client
-    os: linux
-    language: android
-    jdk: oraclejdk8
     before_install:
-    - echo y | android update sdk --no-ui --filter build-tools-26.0.1,build-tools-26.0.2,android-26,extra-android-m2repository
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/android/Google_Play_Android_Developer.json.enc -out client/android/Google_Play_Android_Developer.json -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/android/app/democracy2-release-key.keystore.enc -out client/android/app/democracy2-release-key.keystore -d
-    - gem update --system
-    - bundle install
-    - bundle update fastlane
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the alpha/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
     install:
-    - cd client
-    - nvm install 8
-    - yarn --version
-    - yarn install
-    android:
-      components:
-      - tools
-      - platform-tools
-      # android 23,25,26
-      - build-tools-23.0.1
-      - build-tools-25.0.1
-      - build-tools-26.0.1
-      - build-tools-26.0.2
-      - android-23
-      # extra
-      - extra-android-m2repository
-      - extra-google-google_play_services
-      - extra-google-m2repository
-      - addon-google_apis-google-16
-      licenses:
-      - 'android-sdk-preview-license-.+'
-      - 'android-sdk-license-.+'
-      - 'google-gdk-license-.+'
+    - ./.travis/update.fastlane.sh -d "android"
+    - source ./.travis/install.yarn.sh
     script:
-    # ensure we are on the master branch
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
     # build android & publish using fastlane
-    - cd android && bundle exec fastlane android beta
+    - ./.travis/deploy.fastlane.sh -d "android" -l "alpha"
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New Android Beta Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - ./.travis/discord.sh -t "Success Alpha $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new Android Beta Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - ./.travis/discord.sh -t "Failure Alpha $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy alpha
   - if: tag =~ -alpha\+client
     osx_image: xcode9.2
@@ -208,54 +221,234 @@ matrix:
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
     before_install:
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
-    - bundle install
-    - bundle update fastlane
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the alpha/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
     install:
-    - cd client
-    - nvm install 8
-    - npm install -g yarn
-    - yarn --version
-    - yarn install
+    - ./.travis/update.fastlane.sh -d "ios"
+    - source ./.travis/install.yarn.sh
     script:
-    - cd ios
-    - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios alpha
+    # build ios and publish using fastlane
+    - ./.travis/deploy.fastlane.sh -d "ios" -l "alpha"
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Alpha Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - ./.travis/discord.sh -t "Success Alpha $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Alpha Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - ./.travis/discord.sh -t "Failure Alpha $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+  
+  # ########################
+  # DEPLOY BETA
+  # ########################
+  # server deploy beta
+  - if: tag =~ -beta\+server
+    os: linux
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the beta/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
+    script:
+    # build docker-compose
+    - docker-compose build
+    # build doctl
+    - docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_BETA_HOST}" - < ./doctl
+    # run ssh command using doctl
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_BETA_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_BETA_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
+    after_success:
+    - ./.travis/discord.sh -t "Success Beta $TRAVIS_TAG" -d "[Server] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Beta $TRAVIS_TAG" -d "[Server] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+  # search deploy beta
+  - if: tag =~ -beta\+search
+    os: linux
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the beta/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
+    script:
+    # build docker-compose
+    - docker-compose build
+    # build doctl
+    - docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_BETA_SEARCH_HOST}" - < ./doctl
+    # run ssh command using doctl
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_BETA_SEARCH_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_BETA_SEARCH_USER} --ssh-command "cd ~/democracy-search && ./deploy-production.sh origin/beta/master"
+    after_success:
+    - ./.travis/discord.sh -t "Success Beta $TRAVIS_TAG" -d "[Search] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Beta $TRAVIS_TAG" -d "[Search] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+  # android deploy beta
+  - if: tag =~ -beta\+client
+    os: linux
+    language: android
+    jdk: oraclejdk8
+    android:
+      components:
+      - tools
+      - platform-tools
+      # android 23,25,26
+      - build-tools-23.0.1
+      - build-tools-25.0.0
+      - build-tools-25.0.1
+      - build-tools-25.0.2
+      - build-tools-26.0.1
+      - build-tools-26.0.2
+      - build-tools-26.0.3
+      - android-23
+      - android-25
+      - android-26
+      # extra
+      - extra-android-m2repository
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - addon-google_apis-google-16
+      licenses:
+      - 'android-sdk-preview-license-.+'
+      - 'android-sdk-license-.+'
+      - 'google-gdk-license-.+'
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the beta/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
+    install:
+    - ./.travis/update.fastlane.sh -d "android"
+    - source ./.travis/install.yarn.sh
+    script:
+    # build android & publish using fastlane
+    - ./.travis/deploy.fastlane.sh -d "android" -l "beta"
+    after_success:
+    - ./.travis/discord.sh -t "Success Beta $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Beta $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy beta
   - if: tag =~ -beta\+client
     osx_image: xcode9.2
     language: objective-c
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
-    before_install:
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.alpha.enc -out client/.env.alpha -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.beta.enc -out client/.env.beta -d
-    - openssl aes-256-cbc -k "$SECRET" -in client/.env.production.enc -out client/.env.production -d
-    - bundle install
-    - bundle update fastlane
+    before_install:    
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the beta/master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/beta/master" -r true
     install:
-    - cd client
-    - nvm install 8
-    - npm install -g yarn
-    - yarn --version
-    - yarn install
+    - ./.travis/update.fastlane.sh -d "ios"
+    - source ./.travis/install.yarn.sh
     script:
-    # ensure we are on the master branch
-    - COMMIT=$(git rev-parse HEAD)
-    - BRANCHES=$(git branch -r --contains ${COMMIT})
-    - ORIGINMASTER='origin/master'
-    - if `echo ${BRANCHES} | grep "${ORIGINMASTER}" 1>/dev/null 2>&1`; then echo "ok" ; else exit 1; fi
     # build ios and publish using fastlane
-    - cd ios
-    - DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS="-t DAV" bundle exec fastlane ios beta
+    - ./.travis/deploy.fastlane.sh -d "ios" -l "beta"
     after_success:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"SUCCESS: New iOS TestFlight Beta Version $BUILD_NUMBER available!\\\"}\" ${DISCORD_WEBHOOK}"
+    - ./.travis/discord.sh -t "Success Beta $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
-    - "curl -H 'Content-Type: application/json'  -X POST -d \"{\\\"content\\\":\\\"FAILURE: Deploying new iOS TestFlight Beta Version $BUILD_NUMBER failed!\\\"}\" ${DISCORD_WEBHOOK}"
+    - ./.travis/discord.sh -t "Failure Beta $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+
+  # ########################
+  # DEPLOY PRODUCTION
+  # ########################
+  # server deploy production
+  - if: tag =~ -production\+server
+    os: linux
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the master branch - this does not work for some reason???
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
+    script:
+    # build docker-compose
+    - docker-compose build
+    # build doctl
+    - docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_PRODUCTION_HOST}" - < ./doctl
+    # run ssh command using doctl
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_PRODUCTION_SERVER_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_PRODUCTION_SERVER_USER} --ssh-command "cd ~/democracy-development && ./deploy-production.sh $TRAVIS_TAG"
+    after_success:
+    - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[Server] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Server] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+  # search deploy production
+  - if: tag =~ -beta\+search
+    os: linux
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
+    script:
+    # build docker-compose
+    - docker-compose build
+    # build doctl
+    - docker build -t doctl --build-arg SSH_KEY="$(cat ./.travis/ssh_key)" --build-arg SSH_KEY_PUB="$(cat ./.travis/ssh_key.pub)" --build-arg HOST_IP="${DIGITAL_OCEAN_PRODUCTION_SEARCH_HOST}" - < ./doctl
+    # run ssh command using doctl
+    - docker run --rm -e DIGITALOCEAN_ACCESS_TOKEN="${DIGITALOCEAN_ACCESS_TOKEN}" doctl compute ssh ${DIGITALOCEAN_BETA_PRODUCTION_DROPLET_NAME} --ssh-user ${DIGITALOCEAN_PRODUCTION_SEARCH_USER} --ssh-command "cd ~/democracy-search && ./deploy-production.sh origin/master"
+    after_success:
+    - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[Search] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Search] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+  # android deploy production
+  - if: tag =~ -production\+client
+    os: linux
+    language: android
+    jdk: oraclejdk8
+    android:
+      components:
+      - tools
+      - platform-tools
+      # android 23,25,26
+      - build-tools-23.0.1
+      - build-tools-25.0.0
+      - build-tools-25.0.1
+      - build-tools-25.0.2
+      - build-tools-26.0.1
+      - build-tools-26.0.2
+      - build-tools-26.0.3
+      - android-23
+      - android-25
+      - android-26
+      # extra
+      - extra-android-m2repository
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - addon-google_apis-google-16
+      licenses:
+      - 'android-sdk-preview-license-.+'
+      - 'android-sdk-license-.+'
+      - 'google-gdk-license-.+'
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
+    install:
+    - ./.travis/update.fastlane.sh -d "android"
+    - source ./.travis/install.yarn.sh
+    script:
+    # build android & publish using fastlane
+    - ./.travis/deploy.fastlane.sh -d "android" -l "production"
+    after_success:
+    - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+  # ios deploy production
+  - if: tag =~ -production\+client
+    osx_image: xcode9.2
+    language: objective-c
+    xcode_project: ios/democracyclient.xcodeproj
+    xcode_scheme: ios/democracyclientTests
+    before_install:
+    - ./.travis/decrypt.sh
+    - source ./.travis/env.sh
+    # ensure we are on the master branch
+    - ./.travis/gitbranch.sh -d "./" -b "origin/master" -r true
+    install:
+    - ./.travis/update.fastlane.sh -d "ios"
+    - source ./.travis/install.yarn.sh
+    script:
+    # build ios and publish using fastlane
+    - ./.travis/deploy.fastlane.sh -d "ios" -l "production"
+    after_success:
+    - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
+    after_failure:
+    - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
+
 after_script:
 - echo "BUILD FINISHED"
