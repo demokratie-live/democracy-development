@@ -74,7 +74,11 @@ export default {
                   decision: {
                     $elemMatch: {
                       tenor: {
-                        $in: ['Ablehnung der Vorlage', 'Annahme der Vorlage'],
+                        $in: [
+                          'Ablehnung der Vorlage',
+                          'Annahme der Vorlage',
+                          'Erklärung der Vorlage für erledigt',
+                        ],
                       },
                     },
                   },
