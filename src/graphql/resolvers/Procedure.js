@@ -89,6 +89,7 @@ export default {
               currentStatus: { $in: PROCEDURE_STATES.COMPLETED },
             },
           ],
+          currentStatus: { $ne: 'Zurückgezogen' },
         };
         return ProcedureModel.find({ ...match })
           .sort({ createdAt: 1 })
