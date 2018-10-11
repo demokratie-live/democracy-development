@@ -34,27 +34,54 @@ const checkDocuments = async data => {
             'importantDocuments.number': { $in: documents },
           });
           if (procedures.length > 0) {
-            const promisesUpdate = procedures.map(async ({ procedureId, currentStatus }) => {
-              if (
-                currentStatus === 'Beschlussempfehlung liegt vor' ||
-                currentStatus === 'Überwiesen'
-              ) {
-                await Procedure.findOneAndUpdate(
-                  {
-                    procedureId,
-                  },
-                  {
-                    $set: { 'customData.expectedVotingDate': dateTime },
-                  },
-                ).then(datas => {
-                  if (datas) {
-                    procedureIds.push(procedureId);
-                  }
-                });
-                return true;
-              }
-              return false;
-            });
+            const promisesUpdate = procedures.map(
+              async ({ procedureId, currentStatus, history }) => {
+                const recomendetDecisionDocument = history.find(
+                  doc =>
+                    doc.initiator && doc.initiator.indexOf('Beschlussempfehlung und Bericht') === 0,
+                );
+                const recomendetDecisionDocumentDate =
+                  (recomendetDecisionDocument && new Date(recomendetDecisionDocument.date)) ||
+                  false;
+
+                if (
+                  (currentStatus === 'Beschlussempfehlung liegt vor' ||
+                    currentStatus === 'Überwiesen') &&
+                  (recomendetDecisionDocumentDate && recomendetDecisionDocumentDate <= dateTime)
+                ) {
+                  await Procedure.findOneAndUpdate(
+                    {
+                      procedureId,
+                    },
+                    {
+                      $set: { 'customData.expectedVotingDate': dateTime },
+                    },
+                  ).then(datas => {
+                    if (datas) {
+                      procedureIds.push(procedureId);
+                    }
+                  });
+                  return true;
+                } else if (
+                  currentStatus === 'Beschlussempfehlung liegt vor' ||
+                  currentStatus === 'Überwiesen'
+                ) {
+                  await Procedure.findOneAndUpdate(
+                    {
+                      procedureId,
+                    },
+                    {
+                      $set: { 'customData.possibleVotingDate': dateTime },
+                    },
+                  ).then(datas => {
+                    if (datas) {
+                      procedureIds.push(procedureId);
+                    }
+                  });
+                }
+                return false;
+              },
+            );
             await Promise.all(promisesUpdate);
           }
         }),
