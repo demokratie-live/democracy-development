@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.6
+
+- [Fix] Add more missing finished voteResults for admin area
+
 ### 0.1.5
 
 - [Fix] Add missing finished voteResults for admin area
