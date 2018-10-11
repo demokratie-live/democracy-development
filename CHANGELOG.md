@@ -1,6 +1,6 @@
 # Changelog
 
-### 0.1.X
+### 0.1.6
 
 - [Fix] Add more missing finished voteResults for admin area
 
