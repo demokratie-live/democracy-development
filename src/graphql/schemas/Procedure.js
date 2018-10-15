@@ -16,6 +16,7 @@ type ProcedureCustomData {
   title: String
   voteResults: VoteResults
   expectedVotingDate: Date
+  possibleVotingDate: Date
 }
 
 type VoteResults {

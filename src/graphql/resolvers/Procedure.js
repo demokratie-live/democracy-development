@@ -88,10 +88,13 @@ export default {
             {
               currentStatus: { $in: PROCEDURE_STATES.COMPLETED },
             },
+            {
+              'customData.possibleVotingDate': { $exists: true },
+            },
           ],
         };
         return ProcedureModel.find({ ...match })
-          .sort({ createdAt: 1 })
+          .sort({ updatedAt: 1 })
           .skip(offset)
           .limit(limit);
       }
