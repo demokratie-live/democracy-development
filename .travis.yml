@@ -34,11 +34,21 @@ matrix:
     os: linux
     script:
     - ./.travis/gitbranch.sh -d "./server" -b "origin/master" -r false
+  # desktop in master?
+  - if: type IN (pull_request) && branch = master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./desktop" -b "origin/master" -r false
   # bundestag.io in master?
   - if: type IN (pull_request) && branch = master
     os: linux
     script:
     - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master" -r false
+  # admin bundestag.io in master?
+  - if: type IN (pull_request) && branch = master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./admin" -b "origin/master" -r false
   # elasticsearch in master?
   - if: type IN (pull_request) && branch = master
     os: linux
@@ -426,6 +436,7 @@ matrix:
     # build android & publish using fastlane
     - ./.travis/deploy.fastlane.sh -d "android" -l "production"
     after_success:
+    - ./.travis/upload.sh ./client/android/app/build/outputs/apk/app-production-release.apk
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[Android] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
@@ -450,6 +461,5 @@ matrix:
     - ./.travis/discord.sh -t "Success Production $TRAVIS_TAG" -d "[iOS] Deployed Build $BUILD_NUMBER on Tag $TRAVIS_TAG successful" -c info
     after_failure:
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[iOS] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
-
 after_script:
 - echo "BUILD FINISHED"
