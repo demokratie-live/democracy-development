@@ -125,6 +125,39 @@ export default {
   },
 
   Mutation: {
+    setExpectedVotingDate: async (
+      parent,
+      { procedureId, expectedVotingDate },
+      { ProcedureModel },
+    ) => {
+      const procedure = await ProcedureModel.findOne({ procedureId });
+      await ProcedureModel.update(
+        { procedureId },
+        {
+          $set: {
+            'customData.expectedVotingDate': new Date(expectedVotingDate),
+          },
+        },
+        { new: true },
+      );
+      axios
+        .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
+          data: {
+            procedureIds: [procedure.procedureId],
+            name: 'ChangeVoteData',
+          },
+
+          timeout: 1000 * 60 * 5,
+        })
+        .then(async response => {
+          Log.debug(inspect(response.data));
+        })
+        .catch(error => {
+          Log.error(`democracy server error: ${inspect(error)}`);
+        });
+
+      return ProcedureModel.findOne({ procedureId });
+    },
     saveProcedureCustomData: async (
       parent,
       { procedureId, partyVotes, decisionText, votingDocument },
