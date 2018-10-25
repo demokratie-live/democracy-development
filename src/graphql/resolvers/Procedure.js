@@ -92,7 +92,7 @@ export default {
               'customData.possibleVotingDate': { $exists: true },
             },
           ],
-          currentStatus: { $ne: 'Zurückgezogen' },
+          currentStatus: { $nin: ['Zurückgezogen', 'Für erledigt erklärt'] },
         };
         return ProcedureModel.find({ ...match })
           .sort({ updatedAt: 1 })
