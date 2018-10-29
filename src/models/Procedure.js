@@ -87,6 +87,7 @@ const ProcedureSchema = new Schema(
         es_indexed: false,
       },
       expectedVotingDate: Date,
+      possibleVotingDate: Date,
       voteResults: {
         yes: Number,
         no: Number,

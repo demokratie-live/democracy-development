@@ -16,6 +16,7 @@ type ProcedureCustomData {
   title: String
   voteResults: VoteResults
   expectedVotingDate: Date
+  possibleVotingDate: Date
 }
 
 type VoteResults {
@@ -88,5 +89,6 @@ type Query {
 
 type Mutation {
   saveProcedureCustomData(procedureId: String!, partyVotes: [PartyVoteInput!]!, decisionText: String!, votingDocument: String!): Procedure @auth(requires: BACKEND) 
+  setExpectedVotingDate(procedureId: String!, expectedVotingDate: Date!): Procedure @auth(requires: BACKEND) 
 }
 `;
