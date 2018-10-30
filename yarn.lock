@@ -127,10 +127,10 @@
     striptags "^3.1.1"
     x2js "^3.1.1"
 
-"@democracy-deutschland/dip21-scraper@0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.5.tgz#be81a5f4f6328f330388334b0a1acfa0db639505"
-  integrity sha512-JKDCp+1NTR5CZGg3gf1cEL4vZS6rzmWX9dpE8LmR+REb+H7ndyFLYKwSDzSb2cXFSTrCzWybVQEo5iEPOA2n7w==
+"@democracy-deutschland/dip21-scraper@0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.6.tgz#aea1c6ae5e08eb8040d8cf756490ee86a39a15e9"
+  integrity sha512-tG5tRT6Zv1zctjNu4Cda95KcdhM+s3+gOjzCT3tbeurLkkCr1p/DrGSzxB7fnndAQpygdG4rPnCEXMmH6XY21A==
   dependencies:
     chalk "^2.3.1"
     colors "^1.1.2"
