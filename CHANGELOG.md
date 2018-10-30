@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.7
+
+- [Fix] Update Scraper (offset fix)
+
 ### 0.1.6
 
 - [Fix] Add more missing finished voteResults for admin area
