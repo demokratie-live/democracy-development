@@ -1,6 +1,6 @@
 # Changelog
 
-### 0.1.X
+### 0.1.7
 
 - [Fix] Update Scraper (offset fix)
 
