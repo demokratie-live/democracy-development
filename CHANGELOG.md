@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.8
+
+- [Changed] better manage possible votes in admin area
+
 ### 0.1.7
 
 - [Fix] Update Scraper (offset fix)
