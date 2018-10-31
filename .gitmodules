@@ -1,6 +1,3 @@
-[submodule "bundestag.io"]
-	path = bundestag.io
-	url = https://github.com/demokratie-live/bundestag.io
 [submodule "client"]
 	path = client
 	url = https://github.com/demokratie-live/democracy-client
@@ -25,3 +22,6 @@
 [submodule "democracy-app.de-admin"]
 	path = democracy-app.de-admin
 	url = ../democracy-admin.git
+[submodule "bundestag.io-api"]
+	path = bundestag.io-api
+	url = ../bundestag.io.git

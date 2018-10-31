@@ -12,8 +12,8 @@ openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-api/.env.enc -out ./demo
 # Server-Admin .env
 openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-admin/.env.enc -out ./democracy-app.de-admin/.env -d
 
-# Bundestag.io .env
-openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io/.env.enc -out ./bundestag.io/.env -d
+# Bundestag.io-api .env
+openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io-api/.env.enc -out ./bundestag.io-api/.env -d
 # Bundestag.io Admin .env
 openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io-admin/.env.enc -out ./bundestag.io-admin/.env -d
 

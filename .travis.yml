@@ -44,11 +44,11 @@ matrix:
     os: linux
     script:
     - ./.travis/gitbranch.sh -d "./democracy-app.de-admin" -b "origin/master" -r false
-  # bundestag.io in master?
+  # bundestag.io-api in master?
   - if: type IN (pull_request) && branch = master
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master" -r false
+    - ./.travis/gitbranch.sh -d "./bundestag.io-api" -b "origin/master" -r false
   # bundestag.io-admin in master?
   - if: type IN (pull_request) && branch = master
     os: linux

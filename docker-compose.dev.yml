@@ -1,8 +1,8 @@
 version: '3'
 services:
-  bundestag.io:
+  bundestag.io-api:
     environment:
-      VIRTUAL_HOST: bundestag.io.local
+      VIRTUAL_HOST: bundestag.io-api.local
       PERIODS: '19'
     entrypoint:
       - yarn
@@ -10,7 +10,7 @@ services:
     ports:
       - 3100:80
     volumes:
-       - ./bundestag.io:/app
+       - ./bundestag.io-api:/app
     restart: 'no'
     depends_on:
       - mongodb
