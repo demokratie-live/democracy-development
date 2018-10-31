@@ -34,26 +34,41 @@ matrix:
     os: linux
     script:
     - ./.travis/gitbranch.sh -d "./server" -b "origin/master" -r false
-  # desktop in master?
+  # server-admin in master?
   - if: type IN (pull_request) && branch = master
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./desktop" -b "origin/master" -r false
+    - ./.travis/gitbranch.sh -d "./server-admin" -b "origin/master" -r false
+  # democracy-app.de in master?
+  - if: type IN (pull_request) && branch = master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./democracy-app.de" -b "origin/master" -r false
   # bundestag.io in master?
   - if: type IN (pull_request) && branch = master
     os: linux
     script:
     - ./.travis/gitbranch.sh -d "./bundestag.io" -b "origin/master" -r false
-  # admin bundestag.io in master?
+  # bundestag.io-admin in master?
   - if: type IN (pull_request) && branch = master
     os: linux
     script:
-    - ./.travis/gitbranch.sh -d "./admin" -b "origin/master" -r false
+    - ./.travis/gitbranch.sh -d "./bundestag.io-admin" -b "origin/master" -r false
+  # democracy-deutschland.de in master?
+  - if: type IN (pull_request) && branch = master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./democracy-deutschland.de" -b "origin/master" -r false
   # elasticsearch in master?
   - if: type IN (pull_request) && branch = master
     os: linux
     script:
     - ./.travis/gitbranch.sh -d "./elasticsearch" -b "origin/master" -r false
+  # docu in master?
+  - if: type IN (pull_request) && branch = master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./docu" -b "origin/master" -r false
   
   # ########################
   # DEPLOY INTERNAL

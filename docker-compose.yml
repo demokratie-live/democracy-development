@@ -38,29 +38,6 @@ services:
         max-size: ${NGINX_GEN_LOG_MAX_SIZE:-2m}
         max-file: ${NGINX_GEN_LOG_MAX_FILE:-10}
 
-  bundestagio:
-    env_file: ./bundestag.io/.env
-    build: ./bundestag.io
-    container_name: bundestagio
-    expose:
-      - 80
-    restart: always
-    environment:
-      VIRTUAL_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
-      LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
-      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
-      DB_URL: mongodb://mongodb/bundestagio
-      DEMOCRACY_SERVER_WEBHOOK_URL: http://democracy/webhooks/bundestagio/update
-      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-elasticsearch}
-      PORT: 80
-    networks:
-      default:
-      intern:
-        aliases:
-          - "bundestagio"
-    depends_on:
-      - mongodb
-
   democracy:
     env_file: ./server/.env
     build: ./server
@@ -84,10 +61,53 @@ services:
     depends_on:
       - mongodb
 
+  democracy-admin:
+    env_file: ./server-admin/.env
+    build: ./server-admin
+    container_name: democracy-admin
+    expose:
+      - 80
+    restart: always
+    environment:
+      VIRTUAL_HOST: ${DOMAIN_DEMOCRACY_ADMIN:-admin.democracy.bundestag.io}
+      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY_ADMIN:-admin.democracy.bundestag.io}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
+      PORT: 80
+    networks:
+      default:
+      intern:
+        aliases:
+          - "democracy-admin"
+    depends_on:
+      - mongodb
+
+  bundestagio:
+    env_file: ./bundestag.io/.env
+    build: ./bundestag.io
+    container_name: bundestagio
+    expose:
+      - 80
+    restart: always
+    environment:
+      VIRTUAL_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
+      LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
+      DB_URL: mongodb://mongodb/bundestagio
+      DEMOCRACY_SERVER_WEBHOOK_URL: http://democracy/webhooks/bundestagio/update
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-elasticsearch}
+      PORT: 80
+    networks:
+      default:
+      intern:
+        aliases:
+          - "bundestagio"
+    depends_on:
+      - mongodb
+
   bundestagio-admin:
-    env_file: ./admin/.env
-    build: ./admin
-    container_name: admin
+    env_file: ./bundestag.io-admin/.env
+    build: ./bundestag.io-admin
+    container_name: bundestagio-admin
     expose:
       - 80
     restart: always
@@ -100,27 +120,27 @@ services:
       default:
       intern:
         aliases:
-          - "admin"
+          - "bundestagio-admin"
     depends_on:
       - bundestagio
 
-  desktop:
-    env_file: ./desktop/.env
-    build: ./desktop
-    container_name: desktop
+  democracyappde:
+    env_file: ./democracy-app.de/.env
+    build: ./democracy-app.de
+    container_name: democracyappde
     expose:
       - 80
     restart: always
     environment:
-      VIRTUAL_HOST: ${DOMAIN_DESKTOP:-web.bundestag.io}
-      LETSENCRYPT_HOST: ${DOMAIN_DESKTOP:-web.bundestag.io}
+      VIRTUAL_HOST: ${DOMAIN_DEMOCRACYAPPDE:-democracy-app.de}
+      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACYAPPDE:-democracy-app.de}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       PORT: 80
     networks:
       default:
       intern:
         aliases:
-          - "desktop"
+          - "democracyappde"
     depends_on:
       - democracy
 

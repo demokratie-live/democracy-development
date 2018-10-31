@@ -29,13 +29,25 @@ services:
     depends_on:
       - mongodb
 
-  bundestagio-admin:
+  democracy-admin:
     environment:
-      VIRTUAL_HOST: admin.local
+      VIRTUAL_HOST: democracy-admin.local
     ports:
       - 3200:80
     volumes:
-       - ./admin/:/app/
+       - ./server-admin/:/app/
+       - /app/.next
+    restart: 'always'
+    depends_on:
+      - mongodb
+
+  bundestagio-admin:
+    environment:
+      VIRTUAL_HOST: bundestag.io-admin.local
+    ports:
+      - 3200:80
+    volumes:
+       - ./bundestag.io-admin/:/app/
        - /app/.next
     restart: 'always'
     depends_on:
