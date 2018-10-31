@@ -10,15 +10,18 @@
 [submodule "elasticsearch"]
 	path = elasticsearch
 	url = https://github.com/demokratie-live/democracy-search
-[submodule "admin"]
-	path = admin
+[submodule "bundestag.io-admin"]
+	path = bundestag.io-admin
 	url = https://github.com/demokratie-live/bundestag.io-admin
 [submodule "docu"]
 	path = docu
 	url = https://github.com/demokratie-live/democracy-docu.git
-[submodule "website"]
-	path = website
+[submodule "democracy-deutschland.de"]
+	path = democracy-deutschland.de
 	url = https://github.com/demokratie-live/democracy-website.git
-[submodule "desktop"]
-	path = desktop
+[submodule "democracy-app.de"]
+	path = democracy-app.de
 	url = https://github.com/demokratie-live/democracy-desktop.git
+[submodule "server-admin"]
+	path = server-admin
+	url = ../democracy-admin.git
