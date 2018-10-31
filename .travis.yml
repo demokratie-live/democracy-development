@@ -29,21 +29,21 @@ matrix:
     os: linux
     script:
     - ./.travis/gitbranch.sh -d "./client" -b "origin/master" -r false
-  # server in master?
-  - if: type IN (pull_request) && branch = master
-    os: linux
-    script:
-    - ./.travis/gitbranch.sh -d "./server" -b "origin/master" -r false
-  # server-admin in master?
-  - if: type IN (pull_request) && branch = master
-    os: linux
-    script:
-    - ./.travis/gitbranch.sh -d "./server-admin" -b "origin/master" -r false
   # democracy-app.de in master?
   - if: type IN (pull_request) && branch = master
     os: linux
     script:
     - ./.travis/gitbranch.sh -d "./democracy-app.de" -b "origin/master" -r false
+  # democracy-app.de-api in master?
+  - if: type IN (pull_request) && branch = master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./democracy-app.de-api" -b "origin/master" -r false
+  # democracy-app.de-admin in master?
+  - if: type IN (pull_request) && branch = master
+    os: linux
+    script:
+    - ./.travis/gitbranch.sh -d "./democracy-app.de-admin" -b "origin/master" -r false
   # bundestag.io in master?
   - if: type IN (pull_request) && branch = master
     os: linux
