@@ -39,11 +39,6 @@ Change .env if necessary.
 yarn ~~start~~ dev
 ```
 
-### Import Data via Scraper
-```
-yarn imp
-```
-
 ### Diff scraped Data Versions
 ```
 yarn diff

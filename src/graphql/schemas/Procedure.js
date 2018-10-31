@@ -4,18 +4,29 @@ enum VoteDecision {
   YES
   ABSTINATION
   NO
+  NOTVOTED
+}
+
+enum VotingDocument {
+  mainDocument
+  recommendedDecision
 }
 
 type ProcedureCustomData {
   title: String
   voteResults: VoteResults
+  expectedVotingDate: Date
+  possibleVotingDate: Date
 }
 
 type VoteResults {
   yes: Int
   no: Int
   abstination: Int
+  notVoted: Int
   decisionText: String
+  votingDocument: VotingDocument
+  votingRecommendation: Boolean
   partyVotes: [PartyVote]
 }
 
@@ -35,12 +46,14 @@ type Deviants {
   yes: Int
   abstination: Int
   no: Int
+  notVoted: Int
 }
 
 input DeviantsInput {
   yes: Int
   abstination: Int
   no: Int
+  notVoted: Int
 }
 
 type Procedure {
@@ -50,6 +63,7 @@ type Procedure {
   type: String
   period: Int
   currentStatus: String
+  currentStatusHistory: [String]
   signature: String
   gestOrderNumber: String
   approvalRequired: [String]
@@ -63,16 +77,18 @@ type Procedure {
   importantDocuments: [Document]
   bioUpdateAt: Date
   customData: ProcedureCustomData
+  namedVote: Boolean
 }
 
 type Query {
-  getProcedure(_id: ID!): Procedure
-  procedures(offset: Int, IDs: [String!], status: [String!]): [Procedure]
+  procedure(procedureId: String!): Procedure
+  procedures(offset: Int, IDs: [String!], status: [String!], voteDate: [Boolean!], manageVoteDate: Boolean, limit: Int, offset: Int): [Procedure]
   allProcedures(offset: Int): [Procedure]
   procedureUpdates(offset: Int, period: [Int!], type: [String!]): [Procedure]
 }
 
 type Mutation {
-  saveProcedureCustomData(procedureId: String!, partyVotes: [PartyVoteInput!]!, decisionText: String!): Procedure
+  saveProcedureCustomData(procedureId: String!, partyVotes: [PartyVoteInput!]!, decisionText: String!, votingDocument: String!): Procedure @auth(requires: BACKEND) 
+  setExpectedVotingDate(procedureId: String!, expectedVotingDate: Date!): Procedure @auth(requires: BACKEND) 
 }
 `;

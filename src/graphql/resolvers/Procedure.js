@@ -1,15 +1,28 @@
 import axios from 'axios';
+import diffHistory from 'mongoose-diff-history/diffHistory';
+import { inspect } from 'util';
+
+import { mongoose } from '../../config/db';
 import CONSTANTS from '../../config/constants';
+
+import PROCEDURE_STATES from '../../config/procedureStates';
+
+const History = mongoose.model('History');
 
 const deputiesNumber = {
   19: {
     Linke: 69,
     SPD: 153,
     Grüne: 67,
+    'B90/Grüne': 67,
     CDU: 246,
+    Union: 246,
+    'CDU/CSU': 246,
     FDP: 80,
     AFD: 92,
+    AfD: 92,
     Andere: 2,
+    Fraktionslos: 2,
   },
 };
 
@@ -18,98 +31,144 @@ export default {
     procedures: (
       parent,
       {
-        IDs, period = [19], type = ['Gesetzgebung', 'Antrag'], status,
+        IDs,
+        period = [19],
+        type = ['Gesetzgebung', 'Antrag'],
+        status,
+        voteDate,
+        manageVoteDate = false,
+        limit = 99999,
+        offset = 0,
       },
       { ProcedureModel },
     ) => {
       let match = { period: { $in: period }, type: { $in: type } };
+      if (voteDate) {
+        match = {
+          ...match,
+          history: {
+            $elemMatch: {
+              decision: {
+                $elemMatch: {
+                  tenor: {
+                    $in: ['Ablehnung der Vorlage', 'Annahme der Vorlage'],
+                  },
+                },
+              },
+            },
+          },
+        };
+        return ProcedureModel.find({ ...match })
+          .sort({ createdAt: 1 })
+          .skip(offset)
+          .limit(limit);
+      }
+
+      if (manageVoteDate) {
+        match = {
+          ...match,
+          $or: [
+            {
+              history: {
+                $elemMatch: {
+                  decision: {
+                    $elemMatch: {
+                      tenor: {
+                        $in: [
+                          'Ablehnung der Vorlage',
+                          'Annahme der Vorlage',
+                          'Erklärung der Vorlage für erledigt',
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            {
+              currentStatus: { $in: PROCEDURE_STATES.COMPLETED },
+            },
+            {
+              'customData.possibleVotingDate': { $exists: true },
+            },
+          ],
+          currentStatus: { $nin: ['Zurückgezogen', 'Für erledigt erklärt'] },
+        };
+        return ProcedureModel.find({ ...match })
+          .sort({ updatedAt: 1 })
+          .skip(offset)
+          .limit(limit);
+      }
+
       if (status) {
         match = { ...match, currentStatus: { $in: status } };
       }
       if (IDs) {
         match = { ...match, procedureId: { $in: IDs } };
       }
-      return ProcedureModel.aggregate([
-        { $match: match },
-        {
-          $lookup: {
-            from: 'histories',
-            localField: '_id',
-            foreignField: 'collectionId',
-            as: 'objectHistory',
-          },
-        },
-        {
-          $addFields: {
-            bioUpdateAt: {
-              $max: '$objectHistory.createdAt',
-            },
-          },
-        },
-        { $project: { objectHistory: false } },
-      ]);
+      return ProcedureModel.find(match)
+        .skip(offset)
+        .limit(limit);
     },
 
     allProcedures: async (
       parent,
       { period = [19], type = ['Gesetzgebung', 'Antrag'] },
       { ProcedureModel },
-    ) =>
-      ProcedureModel.aggregate([
-        { $match: { period: { $in: period }, type: { $in: type } } },
-        {
-          $lookup: {
-            from: 'histories',
-            localField: '_id',
-            foreignField: 'collectionId',
-            as: 'objectHistory',
-          },
-        },
-        {
-          $addFields: {
-            bioUpdateAt: {
-              $max: '$objectHistory.createdAt',
-            },
-          },
-        },
-        { $project: { objectHistory: false } },
-      ]),
+    ) => ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
 
     procedureUpdates: async (parent, { period, type }, { ProcedureModel }) =>
-      ProcedureModel.aggregate([
-        { $match: { period: { $in: period }, type: { $in: type } } },
-        {
-          $lookup: {
-            from: 'histories',
-            localField: '_id',
-            foreignField: 'collectionId',
-            as: 'objectHistory',
-          },
-        },
-        {
-          $addFields: {
-            bioUpdateAt: {
-              $max: '$objectHistory.createdAt',
-            },
-          },
-        },
-        { $project: { objectHistory: false } },
-      ]),
+      ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
+
+    procedure: async (parent, { procedureId }, { ProcedureModel }) =>
+      ProcedureModel.findOne({ procedureId }),
   },
+
   Mutation: {
+    setExpectedVotingDate: async (
+      parent,
+      { procedureId, expectedVotingDate },
+      { ProcedureModel },
+    ) => {
+      const procedure = await ProcedureModel.findOne({ procedureId });
+      await ProcedureModel.update(
+        { procedureId },
+        {
+          $set: {
+            'customData.expectedVotingDate': new Date(expectedVotingDate),
+          },
+        },
+        { new: true },
+      );
+      axios
+        .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
+          data: {
+            procedureIds: [procedure.procedureId],
+            name: 'ChangeVoteData',
+          },
+
+          timeout: 1000 * 60 * 5,
+        })
+        .then(async response => {
+          Log.debug(inspect(response.data));
+        })
+        .catch(error => {
+          Log.error(`democracy server error: ${inspect(error)}`);
+        });
+
+      return ProcedureModel.findOne({ procedureId });
+    },
     saveProcedureCustomData: async (
       parent,
-      { procedureId, partyVotes, decisionText },
-      { ProcedureModel, user },
+      { procedureId, partyVotes, decisionText, votingDocument },
+      { ProcedureModel },
     ) => {
-      if (!user || user.role !== 'BACKEND') {
-        throw new Error('Authentication required');
-      }
       const procedure = await ProcedureModel.findOne({ procedureId });
 
       let voteResults = {
         partyVotes,
-        decisionText,
+        decisionText: decisionText.trim(),
+        votingDocument,
       };
 
       if (deputiesNumber[procedure.period]) {
@@ -118,28 +177,20 @@ export default {
           abstination: 0,
           no: 0,
         };
-        partyVotes.forEach(({ party, main, deviants }) => {
+        const partyResults = partyVotes.map(({ party, main, deviants: partyDeviants }) => {
+          const deviants = { ...partyDeviants };
           switch (main) {
             case 'YES':
-              sumResults.yes +=
-                deputiesNumber[procedure.period][party] -
-                deviants.yes -
-                deviants.abstination -
-                deviants.no;
+              deviants.yes =
+                deputiesNumber[procedure.period][party] - deviants.abstination - deviants.no;
               break;
             case 'ABSTINATION':
-              sumResults.abstination +=
-                deputiesNumber[procedure.period][party] -
-                deviants.yes -
-                deviants.abstination -
-                deviants.no;
+              deviants.abstination =
+                deputiesNumber[procedure.period][party] - deviants.yes - deviants.no;
               break;
             case 'NO':
-              sumResults.no +=
-                deputiesNumber[procedure.period][party] -
-                deviants.yes -
-                deviants.abstination -
-                deviants.no;
+              deviants.no =
+                deputiesNumber[procedure.period][party] - deviants.yes - deviants.abstination;
               break;
 
             default:
@@ -148,8 +199,33 @@ export default {
           sumResults.yes += deviants.yes;
           sumResults.abstination += deviants.abstination;
           sumResults.no += deviants.no;
+          return { party, main, deviants };
         });
-        voteResults = { ...voteResults, ...sumResults };
+
+        const votingRecommendationEntry = procedure.history.find(
+          ({ initiator }) =>
+            initiator && initiator.indexOf('Beschlussempfehlung und Bericht') !== -1,
+        );
+
+        voteResults = {
+          ...voteResults,
+          partyVotes: partyResults,
+          ...sumResults,
+        };
+
+        if (votingRecommendationEntry) {
+          switch (votingRecommendationEntry.abstract) {
+            case 'Empfehlung: Annahme der Vorlage':
+              voteResults.votingRecommendation = true;
+              break;
+            case 'Empfehlung: Ablehnung der Vorlage':
+              voteResults.votingRecommendation = false;
+              break;
+
+            default:
+              break;
+          }
+        }
       }
 
       await ProcedureModel.update(
@@ -161,15 +237,66 @@ export default {
         },
       );
 
-      axios.post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
-        data: [{period: procedure.period, types: [{type: procedure.type, changedIds: [ procedure.procedureId ]}]}],
-      }).then(async (response) => {
-        console.log(response.data);
-      }).catch((error) => {
-        console.log(`democracy server error: ${error}`);
-      });
+      axios
+        .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
+          data: {
+            procedureIds: [procedure.procedureId],
+            name: 'ChangeVoteData',
+          },
+
+          timeout: 1000 * 60 * 5,
+        })
+        .then(async response => {
+          Log.debug(inspect(response.data));
+        })
+        .catch(error => {
+          Log.error(`democracy server error: ${inspect(error)}`);
+        });
 
       return ProcedureModel.findOne({ procedureId });
+    },
+  },
+
+  Procedure: {
+    bioUpdateAt: async procedure => {
+      const h = await History.findOne({ collectionId: procedure }, { createdAt: 1 }).sort({
+        createdAt: -1,
+      });
+      if (h) {
+        return h.createdAt;
+      }
+      return null;
+    },
+
+    currentStatusHistory: async procedure => {
+      const { _id } = procedure;
+      const history = await diffHistory.getDiffs('Procedure', _id).then(histories =>
+        histories.reduce((prev, version) => {
+          const cur = prev;
+          if (version.diff.currentStatus) {
+            if (cur.length === 0) {
+              cur.push(version.diff.currentStatus[0]);
+            }
+            cur.push(version.diff.currentStatus[1]);
+          }
+          return cur;
+        }, []),
+      );
+      return history;
+    },
+    namedVote: procedure => {
+      const namedVote = procedure.history.some(h => {
+        if (h.decision) {
+          return h.decision.some(decision => {
+            if (decision.type === 'Namentliche Abstimmung') {
+              return true;
+            }
+            return false;
+          });
+        }
+        return false;
+      });
+      return namedVote;
     },
   },
 };

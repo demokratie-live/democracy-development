@@ -4,12 +4,29 @@ import ProcessDecision from './ProcessDecision';
 
 const ProcessFlowSchema = new Schema(
   {
-    procedureId: { type: String },
-    assignment: { type: String },
-    initiator: { type: String },
-    findSpot: { type: String },
-    findSpotUrl: { type: String },
-    decision: { type: [ProcessDecision], default: undefined },
+    assignment: {
+      type: String,
+      es_type: 'text',
+    },
+    initiator: {
+      type: String,
+      es_type: 'text',
+    },
+    findSpot: {
+      type: String,
+      es_type: 'text',
+    },
+    findSpotUrl: {
+      type: String,
+      es_type: 'text',
+    },
+    decision: {
+      type: [ProcessDecision],
+      default: undefined,
+      es_include_in_parent: true,
+      es_indexed: false,
+    },
+    abstract: String,
     date: { type: Date },
   },
   { _id: false },
