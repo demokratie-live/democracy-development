@@ -46,8 +46,8 @@ services:
       - 80
     restart: always
     environment:
-      VIRTUAL_HOST: ${DOMAIN_DEMOCRACY:-api.democracy-app.de}
-      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY:-api.democracy-app.de}
+      VIRTUAL_HOST: ${DOMAIN_DEMOCRACY_APP_DE_API:-api.democracy-app.de}
+      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY_APP_DE_API:-api.democracy-app.de}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/democracy
       BUNDESTAGIO_SERVER_URL: http://bundestag.io/
@@ -69,8 +69,8 @@ services:
       - 80
     restart: always
     environment:
-      VIRTUAL_HOST: ${DOMAIN_DEMOCRACY_ADMIN:-admin.democracy-app.de}
-      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY_ADMIN:-admin.democracy-app.de}
+      VIRTUAL_HOST: ${DOMAIN_DEMOCRACY_APP_DE_ADMIN:-admin.democracy-app.de}
+      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY_APP_DE_ADMIN:-admin.democracy-app.de}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       PORT: 80
     networks:
@@ -89,8 +89,8 @@ services:
       - 80
     restart: always
     environment:
-      VIRTUAL_HOST: ${DOMAIN_BUNDESTAGIO:-api.bundestag.io}
-      LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAGIO:-api.bundestag.io}
+      VIRTUAL_HOST: ${DOMAIN_BUNDESTAG_IO_API:-api.bundestag.io}
+      LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAG_IO_API:-api.bundestag.io}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/bundestagio
       DEMOCRACY_SERVER_WEBHOOK_URL: http://democracy/webhooks/bundestagio/update
@@ -112,8 +112,8 @@ services:
       - 80
     restart: always
     environment:
-      VIRTUAL_HOST: ${DOMAIN_BUNDESTAGIO_ADMIN:-admin.bundestag.io}
-      LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAGIO_ADMIN:-admin.bundestag.io}
+      VIRTUAL_HOST: ${DOMAIN_BUNDESTAG_IO_ADMIN:-admin.bundestag.io}
+      LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAG_IO_ADMIN:-admin.bundestag.io}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       PORT: 80
     networks:
@@ -132,8 +132,8 @@ services:
       - 80
     restart: always
     environment:
-      VIRTUAL_HOST: ${DOMAIN_DEMOCRACYAPPDE:-democracy-app.de}
-      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACYAPPDE:-democracy-app.de}
+      VIRTUAL_HOST: ${DOMAIN_DEMOCRACY_APP_DE:-democracy-app.de}
+      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY_APP_DE:-democracy-app.de}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       PORT: 80
     networks:
