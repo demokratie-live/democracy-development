@@ -12,16 +12,16 @@
 	url = https://github.com/demokratie-live/democracy-search
 [submodule "bundestag.io-admin"]
 	path = bundestag.io-admin
-	url = https://github.com/demokratie-live/bundestag.io-admin
+	url = ../bundestag.io-admin.git
 [submodule "docu"]
 	path = docu
 	url = https://github.com/demokratie-live/democracy-docu.git
 [submodule "democracy-deutschland.de"]
 	path = democracy-deutschland.de
-	url = https://github.com/demokratie-live/democracy-website.git
+	url = ../democracy-website.git
 [submodule "democracy-app.de"]
 	path = democracy-app.de
-	url = https://github.com/demokratie-live/democracy-desktop.git
+	url = ../democracy-desktop.git
 [submodule "server-admin"]
 	path = server-admin
 	url = ../democracy-admin.git
