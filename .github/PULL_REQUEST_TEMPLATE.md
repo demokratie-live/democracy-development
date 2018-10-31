@@ -9,18 +9,23 @@
 - [X] None
 
 ### Checklist
+<!-- Anything important to be thought of when deploying?
 - [ ] Env-Variables adjustment needed
 - [ ] Breaking/critical change
+-->
 - [X] None
 
 ### Repositories Affected
 <!-- Did you update any Submodules? -->
-- [ ] Client
-- [ ] Server
-- [ ] Bundestag.io
-- [ ] Search
-- [ ] Website
-- [ ] Docu
+- [ ] bundestag.io
+- [ ] bundestag.io-admin
+- [ ] client
+- [ ] democracy-app.de
+- [ ] democracy-app.de-api
+- [ ] democracy-app.de-admin
+- [ ] democracy-deutschland.de
+- [ ] docu
+- [ ] elasticsearch
 - [X] None
 
 ### How2Test

@@ -38,16 +38,59 @@ services:
         max-size: ${NGINX_GEN_LOG_MAX_SIZE:-2m}
         max-file: ${NGINX_GEN_LOG_MAX_FILE:-10}
 
-  bundestagio:
-    env_file: ./bundestag.io/.env
-    build: ./bundestag.io
-    container_name: bundestagio
+  democracy-app.de-api:
+    env_file: ./democracy-app.de-api/.env
+    build: ./democracy-app.de-api
+    container_name: democracy-app.de-api
     expose:
       - 80
     restart: always
     environment:
-      VIRTUAL_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
-      LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAGIO:-bundestag.io}
+      VIRTUAL_HOST: ${DOMAIN_DEMOCRACY:-api.democracy-app.de}
+      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY:-api.democracy-app.de}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
+      DB_URL: mongodb://mongodb/democracy
+      BUNDESTAGIO_SERVER_URL: http://bundestag.io/
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-elasticsearch}
+      PORT: 80
+    networks:
+      default:
+      intern:
+        aliases:
+          - "democracy-app.de-api"
+    depends_on:
+      - mongodb
+
+  democracy-app.de-admin:
+    env_file: ./democracy-app.de-admin/.env
+    build: ./democracy-app.de-admin
+    container_name: democracy-app.de-admin
+    expose:
+      - 80
+    restart: always
+    environment:
+      VIRTUAL_HOST: ${DOMAIN_DEMOCRACY_ADMIN:-admin.democracy-app.de}
+      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY_ADMIN:-admin.democracy-app.de}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
+      PORT: 80
+    networks:
+      default:
+      intern:
+        aliases:
+          - "democracy-app.de-admin"
+    depends_on:
+      - mongodb
+
+  bundestag.io-api:
+    env_file: ./bundestag.io-api/.env
+    build: ./bundestag.io-api
+    container_name: bundestag.io-api
+    expose:
+      - 80
+    restart: always
+    environment:
+      VIRTUAL_HOST: ${DOMAIN_BUNDESTAGIO:-api.bundestag.io}
+      LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAGIO:-api.bundestag.io}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/bundestagio
       DEMOCRACY_SERVER_WEBHOOK_URL: http://democracy/webhooks/bundestagio/update
@@ -57,37 +100,14 @@ services:
       default:
       intern:
         aliases:
-          - "bundestagio"
+          - "bundestag.io-api"
     depends_on:
       - mongodb
 
-  democracy:
-    env_file: ./server/.env
-    build: ./server
-    container_name: democracy
-    expose:
-      - 80
-    restart: always
-    environment:
-      VIRTUAL_HOST: ${DOMAIN_DEMOCRACY:-democracy.bundestag.io}
-      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY:-democracy.bundestag.io}
-      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
-      DB_URL: mongodb://mongodb/democracy
-      BUNDESTAGIO_SERVER_URL: http://bundestagio/graphql
-      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-elasticsearch}
-      PORT: 80
-    networks:
-      default:
-      intern:
-        aliases:
-          - "democracy"
-    depends_on:
-      - mongodb
-
-  bundestagio-admin:
-    env_file: ./admin/.env
-    build: ./admin
-    container_name: admin
+  bundestag.io-admin:
+    env_file: ./bundestag.io-admin/.env
+    build: ./bundestag.io-admin
+    container_name: bundestag.io-admin
     expose:
       - 80
     restart: always
@@ -100,29 +120,29 @@ services:
       default:
       intern:
         aliases:
-          - "admin"
+          - "bundestag.io-admin"
     depends_on:
-      - bundestagio
+      - bundestag.io-api
 
-  desktop:
-    env_file: ./desktop/.env
-    build: ./desktop
-    container_name: desktop
+  democracy-app.de:
+    env_file: ./democracy-app.de/.env
+    build: ./democracy-app.de
+    container_name: democracy-app.de
     expose:
       - 80
     restart: always
     environment:
-      VIRTUAL_HOST: ${DOMAIN_DESKTOP:-web.bundestag.io}
-      LETSENCRYPT_HOST: ${DOMAIN_DESKTOP:-web.bundestag.io}
+      VIRTUAL_HOST: ${DOMAIN_DEMOCRACYAPPDE:-democracy-app.de}
+      LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACYAPPDE:-democracy-app.de}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       PORT: 80
     networks:
       default:
       intern:
         aliases:
-          - "desktop"
+          - "democracy-app.de"
     depends_on:
-      - democracy
+      - democracy-app.de-api
 
   mongodb:
     image: mongo:3.6

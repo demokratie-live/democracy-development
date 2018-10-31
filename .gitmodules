@@ -1,24 +1,27 @@
-[submodule "server"]
-	path = server
-	url = https://github.com/demokratie-live/democracy-server
-[submodule "bundestag.io"]
-	path = bundestag.io
-	url = https://github.com/demokratie-live/bundestag.io
 [submodule "client"]
 	path = client
 	url = https://github.com/demokratie-live/democracy-client
 [submodule "elasticsearch"]
 	path = elasticsearch
 	url = https://github.com/demokratie-live/democracy-search
-[submodule "admin"]
-	path = admin
-	url = https://github.com/demokratie-live/bundestag.io-admin
+[submodule "bundestag.io-admin"]
+	path = bundestag.io-admin
+	url = ../bundestag.io-admin.git
 [submodule "docu"]
 	path = docu
 	url = https://github.com/demokratie-live/democracy-docu.git
-[submodule "website"]
-	path = website
-	url = https://github.com/demokratie-live/democracy-website.git
-[submodule "desktop"]
-	path = desktop
-	url = https://github.com/demokratie-live/democracy-desktop.git
+[submodule "democracy-deutschland.de"]
+	path = democracy-deutschland.de
+	url = ../democracy-website.git
+[submodule "democracy-app.de"]
+	path = democracy-app.de
+	url = ../democracy-desktop.git
+[submodule "democracy-app.de-api"]
+	path = democracy-app.de-api
+	url = ../democracy-server.git
+[submodule "democracy-app.de-admin"]
+	path = democracy-app.de-admin
+	url = ../democracy-admin.git
+[submodule "bundestag.io-api"]
+	path = bundestag.io-api
+	url = ../bundestag.io.git
