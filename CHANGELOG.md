@@ -1,6 +1,6 @@
 # Changelog
 
-### 0.1.x
+### 0.1.8
 
 - [Changed] better manage possible votes in admin area
 
