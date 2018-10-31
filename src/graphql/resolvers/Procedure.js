@@ -28,7 +28,7 @@ const deputiesNumber = {
 
 export default {
   Query: {
-    procedures: (
+    procedures: async (
       parent,
       {
         IDs,
@@ -94,10 +94,25 @@ export default {
           ],
           currentStatus: { $nin: ['Zurückgezogen', 'Für erledigt erklärt'] },
         };
-        return ProcedureModel.find({ ...match })
-          .sort({ updatedAt: 1 })
-          .skip(offset)
-          .limit(limit);
+        const procedures = await ProcedureModel.find({ ...match }).sort({ updatedAt: 1 });
+
+        return procedures.filter(procedure => {
+          const pVoteDate = new Date(procedure.customData.possibleVotingDate);
+          const hidePVoteDate = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
+          // Hide possibleVotingDate Procedures older than 7 days or desicion newer
+          if (
+            procedure.history.some(
+              ({ initiator, date }) =>
+                initiator.indexOf('Beschlussempfehlung und Bericht') === 0 &&
+                pVoteDate < new Date(date),
+            ) ||
+            pVoteDate < hidePVoteDate
+          ) {
+            return false;
+          }
+
+          return true;
+        });
       }
 
       if (status) {
