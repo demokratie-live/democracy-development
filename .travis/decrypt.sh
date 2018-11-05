@@ -8,13 +8,17 @@ openssl aes-256-cbc -k "$SECRET" -in ./.travis/ssh_key.enc -out ./.travis/ssh_ke
 openssl aes-256-cbc -k "$SECRET" -in ./.travis/ssh_key.pub.enc -out ./.travis/ssh_key.pub -d
 
 # Server .env
-openssl aes-256-cbc -k "$SECRET" -in ./server/.env.enc -out ./server/.env -d
-# Bundestag.io .env
-openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io/.env.enc -out ./bundestag.io/.env -d
+openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-api/.env.enc -out ./democracy-app.de-api/.env -d
+# Server-Admin .env
+openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-admin/.env.enc -out ./democracy-app.de-admin/.env -d
+
+# Bundestag.io-api .env
+openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io-api/.env.enc -out ./bundestag.io-api/.env -d
 # Bundestag.io Admin .env
-openssl aes-256-cbc -k "$SECRET" -in ./admin/.env.enc -out ./admin/.env -d
+openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io-admin/.env.enc -out ./bundestag.io-admin/.env -d
+
 # Desktop Cient .env
-openssl aes-256-cbc -k "$SECRET" -in ./desktop/.env.enc -out ./desktop/.env -d
+openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de/.env.enc -out ./democracy-app.de/.env -d
 
 # Client Store Credentials
 openssl aes-256-cbc -k "$SECRET" -in ./client/android/Google_Play_Android_Developer.json.enc -out ./client/android/Google_Play_Android_Developer.json -d
