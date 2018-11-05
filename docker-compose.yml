@@ -50,7 +50,7 @@ services:
       LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY_APP_DE_API:-api.democracy-app.de}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/democracy
-      BUNDESTAGIO_SERVER_URL: http://bundestag.io/
+      BUNDESTAGIO_SERVER_URL: http://bundestag.io-api/
       ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-elasticsearch}
       PORT: 80
     networks:
@@ -93,7 +93,7 @@ services:
       LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAG_IO_API:-api.bundestag.io}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       DB_URL: mongodb://mongodb/bundestagio
-      DEMOCRACY_SERVER_WEBHOOK_URL: http://democracy/webhooks/bundestagio/update
+      DEMOCRACY_SERVER_WEBHOOK_URL: http://democracy-app.de-api/webhooks/bundestagio/update
       ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-elasticsearch}
       PORT: 80
     networks:
