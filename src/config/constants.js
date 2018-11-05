@@ -13,7 +13,7 @@ export default {
   ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL || 'elasticsearch',
   GRAPHIQL: process.env.GRAPHIQL || false,
   GRAPHIQL_PATH: '/graphiql',
-  GRAPHQL_PATH: '/graphql',
+  GRAPHQL_PATH: '/',
   WHITELIST_DATA_SOURCES: process.env.WHITELIST_DATA_SOURCES
     ? process.env.WHITELIST_DATA_SOURCES.split(',')
     : ['::ffff:127.0.0.1', '::1'],
