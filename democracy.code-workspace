@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "server"
+		},
+		{
+			"path": "client"
+		},
+		{
+			"path": "bundestag.io"
+		}
+	]
+}
