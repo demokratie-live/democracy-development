@@ -6,22 +6,22 @@
 	url = https://github.com/demokratie-live/democracy-search
 [submodule "bundestag.io-admin"]
 	path = bundestag.io-admin
-	url = ../bundestag.io-admin.git
+	url = https://github.com/demokratie-live/bundestag.io-admin.git
 [submodule "docu"]
 	path = docu
 	url = https://github.com/demokratie-live/democracy-docu.git
 [submodule "democracy-deutschland.de"]
 	path = democracy-deutschland.de
-	url = ../democracy-website.git
+	url = https://github.com/demokratie-live/democracy-website.git
 [submodule "democracy-app.de"]
 	path = democracy-app.de
-	url = ../democracy-desktop.git
+	url = https://github.com/demokratie-live/democracy-desktop.git
 [submodule "democracy-app.de-api"]
 	path = democracy-app.de-api
-	url = ../democracy-server.git
+	url = https://github.com/demokratie-live/democracy-server.git
 [submodule "democracy-app.de-admin"]
 	path = democracy-app.de-admin
-	url = ../democracy-admin.git
+	url = https://github.com/demokratie-live/democracy-admin.git
 [submodule "bundestag.io-api"]
 	path = bundestag.io-api
-	url = ../bundestag.io.git
+	url = https://github.com/demokratie-live/bundestag.io.git
