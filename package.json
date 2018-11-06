@@ -1,0 +1,25 @@
+{
+  "name": "bt-documents",
+  "version": "0.1.0",
+  "repository": "https://github.com/demokratie-live/bt-documents.git",
+  "author": "DEMOCRACY Deutschland e.V.",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "nodemon main.ts",
+    "lint": "tslint --project tsconfig.json && yarn typecheck",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.2",
+    "nodemon": "^1.18.6",
+    "ts-node": "^7.0.1"
+  },
+  "dependencies": {
+    "@types/xml2js": "^0.4.3",
+    "@types/xmldom": "^0.1.29",
+    "typescript": "^3.1.6",
+    "xml2js": "^0.4.19",
+    "xmldom": "^0.1.27",
+    "xpath": "^0.0.27"
+  }
+}

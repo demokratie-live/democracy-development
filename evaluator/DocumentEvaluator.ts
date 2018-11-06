@@ -20,7 +20,7 @@ namespace bt_Documents_evaluator {
          * @param fileName 
          */
         constructor(fileName: string) {
-            this.readableStream = fs.createReadStream(fileName); 
+            this.readableStream = fs.createReadStream(fileName);
         }
 
         public evaluate(xPathExpression: string, callback: (speechAsJson: any[]) => void) {
@@ -30,7 +30,7 @@ namespace bt_Documents_evaluator {
                 let doc = parser.parseFromString(xml);
 
                 let nodes = xpath.select(xPathExpression, doc);
- 
+
                 let speeches: any[] = [];
                 for (const node of nodes) {
                     xml2js.parseString(
@@ -40,7 +40,7 @@ namespace bt_Documents_evaluator {
                             explicitArray: false,
                             mergeAttrs: true
                         },
-                        (err, result) =>{
+                        (err: any, result: any) => {
                             speeches = speeches.concat(result);
                         }
                     );
@@ -62,12 +62,11 @@ namespace bt_Documents_evaluator {
             let output: string;
 
             rl.on('line', (line) => {
-                if(lineCount > 2) {
+                if (lineCount > 2) {
                     output += line + '\n';
                 }
                 lineCount++;
-            }).on('close', () =>
-            {
+            }).on('close', () => {
                 callback(output);
             });
         }
@@ -77,12 +76,12 @@ namespace bt_Documents_evaluator {
      * Evaluates all speeches from an Bundestag-Plenarprotokoll.
      */
     export class DocumentSpeechEvaluator extends DocumentEvaluater {
-       
+
         /**
          * Finds all speeches from the given Bundestag-Plenarprotokoll.
          */
         public getSpeeches(callback: (speechAsJson: any[]) => void) {
-             this.evaluate("//tagesordnungspunkt/rede", callback);  
+            this.evaluate("//tagesordnungspunkt/rede", callback);
         }
     }
 
@@ -100,7 +99,7 @@ namespace bt_Documents_evaluator {
             "Hand heben",
             "zu erheben"
         ];
-        
+
         /**
          * Searching for potential votings from an Bundestag-Plenarprotokoll.
          * The underlying algorithm is only an heuristic. So the finding of all votings is not garanteed.
@@ -108,12 +107,12 @@ namespace bt_Documents_evaluator {
          * @param callback 
          */
         public getPotentialVotings(callback: (speechAsJson: any[]) => void) {
-             this.evaluate("//tagesordnungspunkt[p[" + this.getExpression() + "]]", callback);  
+            this.evaluate("//tagesordnungspunkt[p[" + this.getExpression() + "]]", callback);
         }
 
         private getExpression(): string {
             let xPathContainsExpressions = this.createXPathContainsExpressions(this.Keywords);
-            
+
             console.dir(xPathContainsExpressions);
 
             return xPathContainsExpressions.join(" or ");
@@ -122,7 +121,7 @@ namespace bt_Documents_evaluator {
         private createXPathContainsExpressions(keywords: string[]): string[] {
             let expressions: string[] = [];
             for (const keyword of keywords) {
-                expressions = expressions.concat("contains(., '" + keyword +"')");
+                expressions = expressions.concat("contains(., '" + keyword + "')");
             }
             return expressions;
         }
