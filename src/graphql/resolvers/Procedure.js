@@ -101,12 +101,13 @@ export default {
           const hidePVoteDate = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
           // Hide possibleVotingDate Procedures older than 7 days or desicion newer
           if (
-            procedure.history.some(
+            !procedure.customData.expectedVotingDate &&
+            (procedure.history.some(
               ({ initiator, date }) =>
                 initiator.indexOf('Beschlussempfehlung und Bericht') === 0 &&
                 pVoteDate < new Date(date),
             ) ||
-            pVoteDate < hidePVoteDate
+              pVoteDate < hidePVoteDate)
           ) {
             return false;
           }
