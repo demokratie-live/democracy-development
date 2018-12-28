@@ -1,7 +1,6 @@
 import xpath = require('xpath');
 import xdom = require('xmldom');
 import fs = require('fs');
-import http = require("https");
 import readline = require('readline');
 import xml2js = require('xml2js');
 
@@ -24,7 +23,6 @@ namespace bt_Documents_evaluator {
         }
 
         public evaluate(xPathExpression: string, callback: (speechAsJson: any[]) => void) {
-            //http.get("https://www.bundestag.de/blob/563398/99a2c9d4df10fcf44e67d084bf6c8f21/19046-data.xml", response => {
             this.removeXmlHeader(this.readableStream, xml => {
                 let parser = new xdom.DOMParser();
                 let doc = parser.parseFromString(xml);
@@ -48,7 +46,6 @@ namespace bt_Documents_evaluator {
 
                 callback(speeches);
             });
-            //});   
         }
 
         /**
@@ -112,8 +109,6 @@ namespace bt_Documents_evaluator {
 
         private getExpression(): string {
             let xPathContainsExpressions = this.createXPathContainsExpressions(this.Keywords);
-
-            console.dir(xPathContainsExpressions);
 
             return xPathContainsExpressions.join(" or ");
         }
