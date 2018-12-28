@@ -1,0 +1,163 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "id",
+    "p",
+    "kommentar"
+  ],
+  "properties": {
+    "id": {
+      "$id": "#/properties/id",
+      "type": "string",
+      "title": "The Id Schema",
+      "default": "",
+      "examples": [
+        "ID194600300"
+      ],
+      "pattern": "^ID[0-9]*$"
+    },
+    "p": {
+      "$id": "#/properties/p",
+      "type": "array",
+      "title": "The P Schema",
+      "items": {
+        "$id": "#/properties/p/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "_",
+          "klasse"
+        ],
+        "properties": {
+          "_": {
+            "$id": "#/properties/p/items/properties/_",
+            "type": "string",
+            "title": "The _ Schema",
+            "default": "",
+            "examples": [
+              "Dr. Stefan Ruppert (FDP):"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "klasse": {
+            "$id": "#/properties/p/items/properties/klasse",
+            "type": "string",
+            "title": "The Klasse Schema",
+            "default": "",
+            "examples": [
+              "redner"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "redner": {
+            "$id": "#/properties/p/items/properties/redner",
+            "type": "object",
+            "title": "The Redner Schema",
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "$id": "#/properties/p/items/properties/redner/properties/id",
+                "type": "string",
+                "title": "The Id Schema",
+                "default": "",
+                "examples": [
+                  "11004140"
+                ],
+                "pattern": "^(.*)$"
+              },
+              "name": {
+                "$id": "#/properties/p/items/properties/redner/properties/name",
+                "type": "object",
+                "title": "The Name Schema",
+                "required": [
+                  "vorname",
+                  "nachname"
+                ],
+                "properties": {
+                  "titel": {
+                    "$id": "#/properties/p/items/properties/redner/properties/name/properties/titel",
+                    "type": "string",
+                    "title": "The Titel Schema",
+                    "default": "",
+                    "examples": [
+                      "Dr."
+                    ],
+                    "pattern": "^(.*)$"
+                  },
+                  "vorname": {
+                    "$id": "#/properties/p/items/properties/redner/properties/name/properties/vorname",
+                    "type": "string",
+                    "title": "The Vorname Schema",
+                    "default": "",
+                    "examples": [
+                      "Stefan"
+                    ],
+                    "pattern": "^(.*)$"
+                  },
+                  "nachname": {
+                    "$id": "#/properties/p/items/properties/redner/properties/name/properties/nachname",
+                    "type": "string",
+                    "title": "The Nachname Schema",
+                    "default": "",
+                    "examples": [
+                      "Ruppert"
+                    ],
+                    "pattern": "^(.*)$"
+                  },
+                  "fraktion": {
+                    "$id": "#/properties/p/items/properties/redner/properties/name/properties/fraktion",
+                    "type": "string",
+                    "title": "The Fraktion Schema",
+                    "default": "",
+                    "examples": [
+                      "FDP"
+                    ],
+                    "pattern": "^(.*)$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "kommentar": {
+      "$id": "#/properties/kommentar",
+      "type": [ "string", "array" ],
+      "title": "The Kommentar Schema",
+      "items": {
+        "$id": "#/properties/kommentar/items",
+        "type": [ "string", "object"],
+        "title": "The Items Schema",
+        "default": "",
+        "examples": [
+          "(Beifall bei der FDP)",
+          "(Beifall bei der SPD)"
+        ],
+        "pattern": "^(.*)$"
+      }
+    },
+    "name": {
+      "$id": "#/properties/name",
+      "type": [ "string", "array"],
+      "title": "The Name Schema",
+      "items": {
+        "$id": "#/properties/name/items",
+        "type": [ "string", "array"],
+        "title": "The Items Schema",
+        "default": "",
+        "examples": [
+          "Präsident Dr. Wolfgang Schäuble:"
+        ],
+        "pattern": "^(.*)$"
+      }
+    }
+  }
+}

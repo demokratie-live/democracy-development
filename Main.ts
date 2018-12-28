@@ -1,7 +1,7 @@
 import Evaluator = require("./evaluator/DocumentEvaluator");
 import * as fs from 'fs';
 
-const srcFileName = 'data/Plenarprotokoll_19_46.xml';
+const srcFileName = 'tests/data/Plenarprotokoll_19_46.xml';
 
 // Evaluates all speeches from the given Plenarprotokoll
 let speechEvaluator = new Evaluator.DocumentSpeechEvaluator(srcFileName);
