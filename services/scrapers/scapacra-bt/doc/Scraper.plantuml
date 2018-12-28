@@ -1,0 +1,50 @@
+@startuml Scraper
+  package Scraper {
+    note top of IScraper
+      Sammelt die Daten aus verschiedenen Quellen zusammen.
+    end note
+
+    interface IScraper {
+      + JSON[]: scrape(configs: ScraperConfiguration[])
+    }
+
+    interface IScraperConfiguration<T extends IDataFormat> {
+      URI getUri()
+      IBrowser<T> getBrowser()
+      IParser<T> getParser()
+    }
+
+    IScraper "1" -> "*" IScraperConfiguration
+
+    class DipProcedureScraperConfiguration<Html> {
+      IBrowser<Html> getBrowser()
+      IParser<Html> getParser()
+    }
+
+    class PlenarProtocolSpeechScraperConfiguration<Xml> {
+      IBrowser<Xml> getBrowser()
+      IParser<Xml> getParser()
+    }
+
+    IScraperConfiguration <|-- DipProcedureScraperConfiguration
+    IScraperConfiguration <|-- PlenarProtocolSpeechScraperConfiguration
+
+    interface IDataFormat {
+    }
+
+    class Html {
+    }
+
+    class Xml {
+    }
+
+    'class Pdf {
+    '}
+
+    Html --|> IDataFormat
+    Xml --|> IDataFormat
+    'Pdf --|> IDataFormat
+    
+    IScraperConfiguration *- IDataFormat
+  }
+@enduml
