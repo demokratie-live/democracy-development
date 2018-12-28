@@ -3,3 +3,4 @@ speeches/
 votings/
 *.js
 *.d.ts
+*.svg
