@@ -4,3 +4,4 @@ votings/
 *.js
 *.d.ts
 *.svg
+package-lock.json
