@@ -2,7 +2,7 @@
   "name": "bt-documents",
   "version": "1.0.1",
   "description": "Bundestag Dokumente Scraper",
-  "main": "index.js",
+  "main": ".\\src\\Example.js",
   "author": "DEMOCRACY Deutschland e.V.",
   "homepage": "https://github.com/demokratie-live/bt-documents#readme",
   "keywords": [],
@@ -12,10 +12,10 @@
     "url": "git+https://github.com/demokratie-live/bt-documents.git"
   },
   "scripts": {
-    "dev": "nodemon main.ts",
+    "dev": "nodemon .\\src\\Example.ts",
     "lint": "tslint --project tsconfig.json && yarn typecheck",
     "typecheck": "tsc --noEmit",
-    "test": "mocha -r ts-node/register tests/**/*.test.ts"
+    "test": "mocha -r ts-node/register test/**/*.test.ts"
   },
   "bugs": {
     "url": "https://github.com/demokratie-live/bt-documents/issues"

@@ -1,12 +1,12 @@
-import { DocumentSpeechEvaluator } from '../evaluator/DocumentEvaluator';
+import { DocumentSpeechEvaluator } from '../src/evaluator/DocumentEvaluator';
 import fs = require('fs');
 import { assert } from 'chai';
 import 'mocha';
 import { Validator } from 'jsonschema';
 
 
-const srcFileName = 'tests/data/Plenarprotokoll_19_46.xml';
-const speechesJsonSchemaFileName = 'tests/schemas/speeches.schema.json';
+const srcFileName = 'test/data/Plenarprotokoll_19_46.xml';
+const speechesJsonSchemaFileName = 'test/schemas/speeches.schema.json';
 
 // Generated on: https://www.jsonschema.net/
 const speechesJsonSchmema = JSON.parse(fs.readFileSync(speechesJsonSchemaFileName, "utf8"));
