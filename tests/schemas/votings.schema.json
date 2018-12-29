@@ -5,56 +5,55 @@
     "type": "object",
     "title": "The Root Schema",
     "required": [
-      "top-id",
-      "p"
+        "top-id",
+        "p"
     ],
     "properties": {
-      "top-id": {
-        "$id": "#/properties/top-id",
-        "type": "string",
-        "title": "The Top-id Schema",
-        "default": "",
-        "examples": [
-          "Tagesordnungspunkt IV"
-        ],
-        "pattern": "^(.*)$"
-      },
-      "p": {
-        "$id": "#/properties/p",
-        "type": "array",
-        "title": "The P Schema",
-        "items": {
-          "$id": "#/properties/p/items",
-          "type": "object",
-          "title": "The Items Schema",
-          "required": [
-            "_",
-            "klasse"
-          ],
-          "properties": {
-            "_": {
-              "$id": "#/properties/p/items/properties/_",
-              "type": "string",
-              "title": "The _ Schema",
-              "default": "",
-              "examples": [
-                "Tagesordnungspunkt IV a:"
-              ],
-              "pattern": "^(.*)$"
-            },
-            "klasse": {
-              "$id": "#/properties/p/items/properties/klasse",
-              "type": "string",
-              "title": "The Klasse Schema",
-              "default": "",
-              "examples": [
-                "J"
-              ],
-              "pattern": "^(.*)$"
+        "top-id": {
+            "$id": "#/properties/top-id",
+            "type": "string",
+            "title": "The Top-id Schema",
+            "default": "",
+            "examples": [
+                "Tagesordnungspunkt IV"
+            ],
+            "pattern": "^(.*)$"
+        },
+        "p": {
+            "$id": "#/properties/p",
+            "type": "array",
+            "title": "The P Schema",
+            "items": {
+                "$id": "#/properties/p/items",
+                "type": "object",
+                "title": "The Items Schema",
+                "required": [
+                    "_",
+                    "klasse"
+                ],
+                "properties": {
+                    "_": {
+                        "$id": "#/properties/p/items/properties/_",
+                        "type": "string",
+                        "title": "The _ Schema",
+                        "default": "",
+                        "examples": [
+                            "Tagesordnungspunkt IV a:"
+                        ],
+                        "pattern": "^(.*)$"
+                    },
+                    "klasse": {
+                        "$id": "#/properties/p/items/properties/klasse",
+                        "type": "string",
+                        "title": "The Klasse Schema",
+                        "default": "",
+                        "examples": [
+                            "J"
+                        ],
+                        "pattern": "^(.*)$"
+                    }
+                }
             }
-          }
         }
-      }
     }
-  }
-  
+}
