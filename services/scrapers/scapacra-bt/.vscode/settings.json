@@ -3,6 +3,7 @@
         "**/*.d.ts": true,
         "**/*.js": true,
         "**/node_modules": true,
-        "**/out": true
+        "package-lock.json": true,
+        "yarn.lock": true
     }
 }

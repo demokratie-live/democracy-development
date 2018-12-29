@@ -1,11 +1,11 @@
-import { DocumentVotingEvaluator } from '../evaluator/DocumentEvaluator';
+import { DocumentVotingEvaluator } from '../src/evaluator/DocumentEvaluator';
 import fs = require('fs');
 import { assert } from 'chai';
 import 'mocha';
 import { Validator } from 'jsonschema';
 
-const srcFileName = 'tests/data/Plenarprotokoll_19_46.xml';
-const votingsJsonSchemaFileName = 'tests/schemas/votings.schema.json';
+const srcFileName = 'test/data/Plenarprotokoll_19_46.xml';
+const votingsJsonSchemaFileName = 'test/schemas/votings.schema.json';
 
 // Generated on: https://www.jsonschema.net/
 const votingsJsonSchmema = JSON.parse(fs.readFileSync(votingsJsonSchemaFileName, "utf8"));
