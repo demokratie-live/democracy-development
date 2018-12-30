@@ -1,0 +1,764 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="http://tempuri.org/dbtplenarprotokoll-data" elementFormDefault="qualified" targetNamespace="http://tempuri.org/dbtplenarprotokoll-data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="sub" type="xs:string" />
+  <xs:element name="sup" type="xs:string" />
+  <xs:element name="dbtplenarprotokoll">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="vorspann" />
+        <xs:element ref="sitzungsverlauf" />
+        <xs:element ref="anlagen" />
+        <xs:element ref="rednerliste" />
+      </xs:sequence>
+      <xs:attribute name="wahlperiode" type="xs:string" use="required" />
+      <xs:attribute name="sitzung-nr" type="xs:string" use="required" />
+      <xs:attribute name="sitzung-datum" type="xs:string" use="required" />
+      <xs:attribute name="sitzung-start-uhrzeit" type="xs:string" use="required" />
+      <xs:attribute name="sitzung-ende-uhrzeit" type="xs:string" use="required" />
+      <xs:attribute name="sitzung-naechste-datum" type="xs:string" use="required" />
+      <xs:attribute fixed="Berlin" name="sitzung-ort" type="xs:string" />
+      <xs:attribute fixed="Deutscher Bundestag" name="herausgeber" type="xs:string" />
+      <xs:attribute fixed="H. Heenemann GmbH  Co., Buch- und Offsetdruckerei, Bessemerstraße 83–91, 12103 Berlin, www.heenemann-druck.de" name="herstellung" type="xs:string" />
+      <xs:attribute fixed="Bundesanzeiger Verlagsgesellschaft mbH, Postfach 1 0 05 34, 50445 Köln, Telefon (02 21) 97 66 83 40, Fax (02 21) 97 66 83 44, www.betrifft-gesetze.de" name="vertrieb" type="xs:string" />
+      <xs:attribute fixed="0722-7980" name="issn" type="xs:string" />
+      <xs:attribute name="start-seitennr" type="xs:string" use="required" />
+      <xs:attribute name="version" type="xs:string" />
+      <xs:attribute name="status">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="erfasst" />
+            <xs:enumeration value="korrektur" />
+            <xs:enumeration value="freigegeben" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="kommentare" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="vorspann">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="kopfdaten" />
+        <xs:element ref="inhaltsverzeichnis" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="kopfdaten">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="plenarprotokoll-nummer" />
+        <xs:element ref="herausgeber" />
+        <xs:element ref="berichtart" />
+        <xs:element ref="sitzungstitel" />
+        <xs:element ref="veranstaltungsdaten" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="plenarprotokoll-nummer">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="wahlperiode" />
+        <xs:element ref="sitzungsnr" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="wahlperiode" type="xs:string" />
+  <xs:element name="sitzungsnr" type="xs:string" />
+  <xs:element name="herausgeber" type="xs:string" />
+  <xs:element name="berichtart" type="xs:string" />
+  <xs:element name="sitzungstitel">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="sitzungsnr" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="veranstaltungsdaten">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="ort" />
+        <xs:element ref="datum" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ort" type="xs:string" />
+  <xs:element name="datum">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="date" type="xs:string" use="required" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="inhaltsverzeichnis">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ivz-titel" />
+        <xs:choice minOccurs="1" maxOccurs="unbounded">
+          <xs:element ref="ivz-block" />
+          <xs:element ref="ivz-eintrag" />
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ivz-titel" type="xs:string" />
+  <xs:element name="ivz-block">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="ivz-block-titel" />
+        <xs:choice minOccurs="1" maxOccurs="unbounded">
+          <xs:element ref="ivz-eintrag" />
+          <xs:element ref="ivz-block" />
+          <xs:element ref="p" />
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ivz-block-titel" type="xs:string" />
+  <xs:element name="ivz-eintrag">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="ivz-eintrag-inhalt" />
+        <xs:element ref="xref" />
+        <xs:element ref="a" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ivz-eintrag-inhalt">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="redner" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="a">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="seite" />
+        <xs:element ref="seitenbereich" />
+      </xs:choice>
+      <xs:attribute name="typ">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="druckseitennummer" />
+            <xs:enumeration value="bild" />
+            <xs:enumeration value="tabelle" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:string" />
+      <xs:attribute name="name" type="xs:string" />
+      <xs:attribute name="href" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="seite" type="xs:string" />
+  <xs:element name="seitenbereich" type="xs:string" />
+  <xs:element name="xref">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="a" />
+      </xs:choice>
+      <xs:attribute name="ref-type" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="rede" />
+            <xs:enumeration value="kommentar" />
+            <xs:enumeration value="anlage" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="rid" type="xs:string" use="required" />
+      <xs:attribute name="pnr" type="xs:string" use="required" />
+      <xs:attribute name="div" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sitzungsverlauf">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="sitzungsbeginn" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="rede" />
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="tagesordnungspunkt" />
+        <xs:element minOccurs="0" maxOccurs="1" ref="sitzungsende" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sitzungsbeginn">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="p" />
+        <xs:element ref="zitat" />
+        <xs:element ref="kommentar" />
+        <xs:element ref="a" />
+        <xs:element ref="name" />
+      </xs:choice>
+      <xs:attribute name="sitzung-start-uhrzeit" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tagesordnungspunkt">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="top-titel" />
+        <xs:element ref="name" />
+        <xs:element ref="rede" />
+        <xs:element ref="p" />
+        <xs:element ref="zitat" />
+        <xs:element ref="kommentar" />
+        <xs:element ref="a" />
+      </xs:choice>
+      <xs:attribute name="top-id" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="top-titel">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="p" />
+        <xs:element ref="a" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sitzungsende">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="p" />
+        <xs:element ref="a" />
+      </xs:choice>
+      <xs:attribute name="sitzung-ende-uhrzeit" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rede">
+    <xs:complexType>
+      <xs:choice minOccurs="1" maxOccurs="unbounded">
+        <xs:element ref="name" />
+        <xs:element ref="p" />
+        <xs:element ref="kommentar" />
+        <xs:element ref="zitat" />
+        <xs:element ref="a" />
+      </xs:choice>
+      <xs:attribute name="id" type="xs:ID" use="required" />
+      <xs:attribute name="redeart">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="plenum" />
+            <xs:enumeration value="zu_protokoll" />
+            <xs:enumeration value="zu_protokoll_anlage" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="redner">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="name" />
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="name">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="titel" />
+        <xs:element ref="vorname" />
+        <xs:element ref="nachname" />
+        <xs:element ref="namenszusatz" />
+        <xs:element ref="ortszusatz" />
+        <xs:element ref="fraktion" />
+        <xs:element ref="rolle" />
+        <xs:element ref="bdland" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="titel" type="xs:string" />
+  <xs:element name="vorname" type="xs:string" />
+  <xs:element name="namenszusatz" type="xs:string" />
+  <xs:element name="nachname" type="xs:string" />
+  <xs:element name="ortszusatz" type="xs:string" />
+  <xs:element name="fraktion" type="xs:string" />
+  <xs:element name="rolle">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="rolle_lang" />
+        <xs:element ref="rolle_kurz" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rolle_lang" type="xs:string" />
+  <xs:element name="rolle_kurz" type="xs:string" />
+  <xs:element name="bdland" type="xs:string" />
+  <xs:element name="kommentar">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="p" />
+        <xs:element ref="xref" />
+        <xs:element ref="sub" />
+        <xs:element ref="sup" />
+        <xs:element ref="fussnote" />
+        <xs:element ref="a" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="p">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="redner" />
+        <xs:element ref="table" />
+        <xs:element ref="xref" />
+        <xs:element ref="sub" />
+        <xs:element ref="sup" />
+        <xs:element ref="fussnote" />
+        <xs:element ref="a" />
+      </xs:choice>
+      <xs:attribute name="klasse" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="fussnote">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="p" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="zitat">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="p" />
+        <xs:element ref="xref" />
+        <xs:element ref="sub" />
+        <xs:element ref="sup" />
+        <xs:element ref="fussnote" />
+        <xs:element ref="a" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="anlagen">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="anlagen-titel" />
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="anlage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="anlage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="anlagen-titel" />
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="anlagen-text" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="anlagen-titel">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="p" />
+        <xs:element ref="xref" />
+        <xs:element ref="sub" />
+        <xs:element ref="sup" />
+        <xs:element ref="fussnote" />
+        <xs:element ref="a" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="anlagen-text">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="p" />
+        <xs:element ref="kommentar" />
+        <xs:element ref="rede" />
+        <xs:element ref="table" />
+        <xs:element ref="zitat" />
+        <xs:element ref="xref" />
+        <xs:element ref="sub" />
+        <xs:element ref="sup" />
+        <xs:element ref="fussnote" />
+        <xs:element ref="a" />
+      </xs:choice>
+      <xs:attribute name="anlagen-typ" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rednerliste">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="redner" />
+      </xs:sequence>
+      <xs:attribute name="sitzung-datum" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="table">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="caption" />
+        <xs:choice>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="col" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="colgroup" />
+        </xs:choice>
+        <xs:element minOccurs="0" maxOccurs="1" ref="thead" />
+        <xs:element minOccurs="0" maxOccurs="1" ref="tfoot" />
+        <xs:choice>
+          <xs:element minOccurs="1" maxOccurs="unbounded" ref="tbody" />
+          <xs:element minOccurs="1" maxOccurs="unbounded" ref="tr" />
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="summary" type="xs:string" />
+      <xs:attribute name="width" type="xs:string" />
+      <xs:attribute name="border" type="xs:string" />
+      <xs:attribute name="frame">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="void" />
+            <xs:enumeration value="above" />
+            <xs:enumeration value="below" />
+            <xs:enumeration value="hsides" />
+            <xs:enumeration value="lhs" />
+            <xs:enumeration value="rhs" />
+            <xs:enumeration value="vsides" />
+            <xs:enumeration value="box" />
+            <xs:enumeration value="border" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="rules">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="none" />
+            <xs:enumeration value="groups" />
+            <xs:enumeration value="rows" />
+            <xs:enumeration value="cols" />
+            <xs:enumeration value="all" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="cellspacing" type="xs:string" />
+      <xs:attribute name="cellpadding" type="xs:string" />
+      <xs:attribute name="align">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="center" />
+            <xs:enumeration value="right" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="bgcolor" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="caption">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="align">
+            <xs:simpleType>
+              <xs:restriction base="xs:NMTOKEN">
+                <xs:enumeration value="top" />
+                <xs:enumeration value="bottom" />
+                <xs:enumeration value="left" />
+                <xs:enumeration value="right" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="thead">
+    <xs:complexType>
+      <xs:sequence minOccurs="1" maxOccurs="unbounded">
+        <xs:element ref="tr" />
+      </xs:sequence>
+      <xs:attribute name="align">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="center" />
+            <xs:enumeration value="right" />
+            <xs:enumeration value="justify" />
+            <xs:enumeration value="char" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="char" type="xs:string" />
+      <xs:attribute name="charoff" type="xs:string" />
+      <xs:attribute name="valign">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="top" />
+            <xs:enumeration value="middle" />
+            <xs:enumeration value="bottom" />
+            <xs:enumeration value="baseline" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tfoot">
+    <xs:complexType>
+      <xs:sequence minOccurs="1" maxOccurs="unbounded">
+        <xs:element ref="tr" />
+      </xs:sequence>
+      <xs:attribute name="align">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="center" />
+            <xs:enumeration value="right" />
+            <xs:enumeration value="justify" />
+            <xs:enumeration value="char" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="char" type="xs:string" />
+      <xs:attribute name="charoff" type="xs:string" />
+      <xs:attribute name="valign">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="top" />
+            <xs:enumeration value="middle" />
+            <xs:enumeration value="bottom" />
+            <xs:enumeration value="baseline" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tbody">
+    <xs:complexType>
+      <xs:sequence minOccurs="1" maxOccurs="unbounded">
+        <xs:element ref="tr" />
+      </xs:sequence>
+      <xs:attribute name="align">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="center" />
+            <xs:enumeration value="right" />
+            <xs:enumeration value="justify" />
+            <xs:enumeration value="char" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="char" type="xs:string" />
+      <xs:attribute name="charoff" type="xs:string" />
+      <xs:attribute name="valign">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="top" />
+            <xs:enumeration value="middle" />
+            <xs:enumeration value="bottom" />
+            <xs:enumeration value="baseline" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="colgroup">
+    <xs:complexType>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="col" />
+      </xs:sequence>
+      <xs:attribute default="1" name="span" type="xs:string" />
+      <xs:attribute name="width" type="xs:string" />
+      <xs:attribute name="align">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="center" />
+            <xs:enumeration value="right" />
+            <xs:enumeration value="justify" />
+            <xs:enumeration value="char" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="char" type="xs:string" />
+      <xs:attribute name="charoff" type="xs:string" />
+      <xs:attribute name="valign">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="top" />
+            <xs:enumeration value="middle" />
+            <xs:enumeration value="bottom" />
+            <xs:enumeration value="baseline" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="col">
+    <xs:complexType>
+      <xs:attribute default="1" name="span" type="xs:string" />
+      <xs:attribute name="width" type="xs:string" />
+      <xs:attribute name="align">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="center" />
+            <xs:enumeration value="right" />
+            <xs:enumeration value="justify" />
+            <xs:enumeration value="char" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="char" type="xs:string" />
+      <xs:attribute name="charoff" type="xs:string" />
+      <xs:attribute name="valign">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="top" />
+            <xs:enumeration value="middle" />
+            <xs:enumeration value="bottom" />
+            <xs:enumeration value="baseline" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tr">
+    <xs:complexType>
+      <xs:choice minOccurs="1" maxOccurs="unbounded">
+        <xs:element ref="th" />
+        <xs:element ref="td" />
+      </xs:choice>
+      <xs:attribute name="align">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="center" />
+            <xs:enumeration value="right" />
+            <xs:enumeration value="justify" />
+            <xs:enumeration value="char" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="char" type="xs:string" />
+      <xs:attribute name="charoff" type="xs:string" />
+      <xs:attribute name="valign">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="top" />
+            <xs:enumeration value="middle" />
+            <xs:enumeration value="bottom" />
+            <xs:enumeration value="baseline" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="bgcolor" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="th">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="xref" />
+        <xs:element ref="sub" />
+        <xs:element ref="sup" />
+        <xs:element ref="fussnote" />
+        <xs:element ref="a" />
+      </xs:choice>
+      <xs:attribute name="abbr" type="xs:string" />
+      <xs:attribute name="axis" type="xs:string" />
+      <xs:attribute name="headers" type="xs:IDREFS" />
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="row" />
+            <xs:enumeration value="col" />
+            <xs:enumeration value="rowgroup" />
+            <xs:enumeration value="colgroup" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute default="1" name="rowspan" type="xs:string" />
+      <xs:attribute default="1" name="colspan" type="xs:string" />
+      <xs:attribute name="align">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="center" />
+            <xs:enumeration value="right" />
+            <xs:enumeration value="justify" />
+            <xs:enumeration value="char" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="char" type="xs:string" />
+      <xs:attribute name="charoff" type="xs:string" />
+      <xs:attribute name="valign">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="top" />
+            <xs:enumeration value="middle" />
+            <xs:enumeration value="bottom" />
+            <xs:enumeration value="baseline" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="nowrap">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="nowrap" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="bgcolor" type="xs:string" />
+      <xs:attribute name="width" type="xs:string" />
+      <xs:attribute name="height" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="td">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="xref" />
+        <xs:element ref="sub" />
+        <xs:element ref="sup" />
+        <xs:element ref="fussnote" />
+        <xs:element ref="a" />
+      </xs:choice>
+      <xs:attribute name="abbr" type="xs:string" />
+      <xs:attribute name="axis" type="xs:string" />
+      <xs:attribute name="headers" type="xs:IDREFS" />
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="row" />
+            <xs:enumeration value="col" />
+            <xs:enumeration value="rowgroup" />
+            <xs:enumeration value="colgroup" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute default="1" name="rowspan" type="xs:string" />
+      <xs:attribute default="1" name="colspan" type="xs:string" />
+      <xs:attribute name="align">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="center" />
+            <xs:enumeration value="right" />
+            <xs:enumeration value="justify" />
+            <xs:enumeration value="char" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="char" type="xs:string" />
+      <xs:attribute name="charoff" type="xs:string" />
+      <xs:attribute name="valign">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="top" />
+            <xs:enumeration value="middle" />
+            <xs:enumeration value="bottom" />
+            <xs:enumeration value="baseline" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="nowrap">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="nowrap" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="bgcolor" type="xs:string" />
+      <xs:attribute name="width" type="xs:string" />
+      <xs:attribute name="height" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

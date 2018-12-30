@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--DTD für Plenar-Protokolle des Deutschen Bundestags
+
+Erstellt von: SRZ - Satz-Rechen-Zentrum Hartmann+Heenemann GmbH&Co. KG
+Bearbeitet:  Ute Mitschke
+Stand:		 19.05.2015
+
+Anzeige der DTD optimiert für XMLSpy
+
+<!DOCTYPE  dbtplenarprotokoll  SYSTEM "dbtplenarprotokoll.dtd">
+-->
+
+<!ENTITY % inline-elemente "xref | sub | sup | fussnote | a" >
+
+<!ELEMENT sub				(#PCDATA) >
+<!ELEMENT sup				(#PCDATA) >
+
+
+<!ELEMENT dbtplenarprotokoll (vorspann, sitzungsverlauf, anlagen, rednerliste) >
+<!ATTLIST dbtplenarprotokoll
+wahlperiode				CDATA		#REQUIRED
+sitzung-nr					CDATA		#REQUIRED
+sitzung-datum			CDATA		#REQUIRED		
+sitzung-start-uhrzeit	CDATA		#REQUIRED		
+sitzung-ende-uhrzeit	CDATA		#REQUIRED		
+sitzung-naechste-datum			CDATA		#REQUIRED		
+sitzung-ort					CDATA		#FIXED 	"Berlin"
+herausgeber				CDATA		#FIXED 	"Deutscher Bundestag"
+herstellung				CDATA		#FIXED 	"H. Heenemann GmbH  Co., Buch- und Offsetdruckerei, Bessemerstraße 83–91, 12103 Berlin, www.heenemann-druck.de"
+vertrieb						CDATA		#FIXED		"Bundesanzeiger Verlagsgesellschaft mbH, Postfach 1 0 05 34, 50445 Köln, Telefon (02 21) 97 66 83 40, Fax (02 21) 97 66 83 44, www.betrifft-gesetze.de"
+issn							CDATA		#FIXED		"0722-7980"
+start-seitennr				CDATA		#REQUIRED
+version						CDATA		#IMPLIED
+status						(erfasst | korrektur | freigegeben) #IMPLIED
+kommentare				CDATA		#IMPLIED
+>
+
+<!-- VORSPANN ===================================-->
+
+<!ELEMENT vorspann 		(kopfdaten, inhaltsverzeichnis) >
+
+<!ELEMENT kopfdaten	 	(plenarprotokoll-nummer, herausgeber, berichtart, sitzungstitel, veranstaltungsdaten) >
+
+<!-- "Plenarprotokoll 17/228" 1. Seite oben rechts -->
+<!ELEMENT plenarprotokoll-nummer (#PCDATA | wahlperiode | sitzungsnr )* >
+<!ELEMENT wahlperiode  (#PCDATA) >
+<!ELEMENT sitzungsnr	  (#PCDATA) >
+
+<!-- "Deutscher Bundestag" -->
+<!ELEMENT herausgeber (#PCDATA) > 
+
+<!-- "Stenografischer Bericht" -->
+<!ELEMENT berichtart	  (#PCDATA) >
+
+<!-- "228. Sitzung" -->
+<!ELEMENT sitzungstitel	  (#PCDATA | sitzungsnr)* >
+
+<!-- "Berlin, Donnerstag, den 14. März 2013" -->
+<!ELEMENT veranstaltungsdaten (#PCDATA | ort | datum)* >
+
+<!-- "Berlin" -->
+<!ELEMENT ort 			 (#PCDATA) >
+
+<!-- "Donnerstag, den 14. März 2013", Attribut date im Format TT.MM.JJJJ  -->
+<!ELEMENT 	datum		 (#PCDATA) >
+<!ATTLIST  	datum
+date				CDATA		#REQUIRED >
+
+
+<!-- INHALTSVERZEICHNIS ===============================-->
+
+<!ELEMENT 	inhaltsverzeichnis	(ivz-titel, (ivz-block | ivz-eintrag)+)>
+
+<!-- "Inhalt:" --> 
+<!ELEMENT 	ivz-titel					(#PCDATA) >
+<!ELEMENT 	ivz-block					(ivz-block-titel?, (ivz-eintrag | ivz-block | p)+) >
+<!ELEMENT		ivz-block-titel		(#PCDATA) >
+<!ELEMENT 	ivz-eintrag				(#PCDATA | ivz-eintrag-inhalt | xref | a)* >
+<!ELEMENT 	ivz-eintrag-inhalt		(#PCDATA | redner )* >
+
+
+
+<!ELEMENT a 	(#PCDATA | seite | seitenbereich)* >
+<!ATTLIST a
+  typ         (druckseitennummer | bild | tabelle)  #IMPLIED
+  id        		CDATA          #IMPLIED
+  name        	CDATA          #IMPLIED
+  href       		CDATA       	 #IMPLIED
+>
+<!ELEMENT 	seite							(#PCDATA) >
+<!ELEMENT 	seitenbereich			(#PCDATA) >
+
+<!ELEMENT 	xref (#PCDATA | a)* >
+<!ATTLIST 	xref
+ref-type 		(rede | kommentar | anlage) #REQUIRED
+rid				CDATA #REQUIRED
+pnr				CDATA #REQUIRED
+div				CDATA #IMPLIED
+>
+
+
+<!-- SITZUNGSVERLAUF =============================-->
+
+<!ELEMENT sitzungsverlauf 		(sitzungsbeginn?, rede*, tagesordnungspunkt+, sitzungsende?) >
+<!ELEMENT sitzungsbeginn 			(#PCDATA | p | zitat | kommentar | a | name)* >
+<!ATTLIST sitzungsbeginn			sitzung-start-uhrzeit				CDATA		#REQUIRED >
+
+<!ELEMENT tagesordnungspunkt	(top-titel | name | rede | p | zitat | kommentar | a)* >
+<!ATTLIST tagesordnungspunkt	top-id				CDATA		#IMPLIED >
+<!ELEMENT top-titel 					(#PCDATA | p | a)* >
+
+<!ELEMENT sitzungsende				(#PCDATA | p | a)* >
+<!ATTLIST sitzungsende				sitzung-ende-uhrzeit				CDATA		#REQUIRED >
+
+<!-- REDE =======================================-->
+<!ELEMENT rede					(name | p | kommentar | zitat | a)+ >
+<!ATTLIST    rede
+id				ID					#REQUIRED
+redeart		(plenum | zu_protokoll | zu_protokoll_anlage) #IMPLIED
+>
+
+
+<!ELEMENT redner	(name)>
+<!ATTLIST	   redner
+id		CDATA		#REQUIRED
+>
+
+<!-- NAME
+-->
+<!ELEMENT name 			(#PCDATA | titel | vorname | nachname | namenszusatz | ortszusatz | fraktion | rolle | bdland)* >
+
+<!ELEMENT titel	   			(#PCDATA) >
+<!ELEMENT vorname			(#PCDATA) >
+<!ELEMENT namenszusatz (#PCDATA) >
+<!ELEMENT nachname	   	(#PCDATA) >
+<!ELEMENT ortszusatz   	(#PCDATA) >
+<!ELEMENT fraktion			(#PCDATA) >
+<!ELEMENT rolle				(rolle_lang | rolle_kurz)* >
+<!ELEMENT rolle_lang			(#PCDATA) >
+<!ELEMENT rolle_kurz			(#PCDATA) >
+<!ELEMENT bdland			(#PCDATA) >
+
+
+<!--  Kommentar entsteht aus "K", "K-block", "K_klein" mit jedem Span   -->
+<!ELEMENT kommentar		(#PCDATA | p | %inline-elemente;)* >
+
+
+<!-- P (WIE PARAGRAF/ABSATZ)-->
+<!ELEMENT p					(#PCDATA  | redner | table | %inline-elemente;)* >
+<!ATTLIST	   p
+klasse		  CDATA		#IMPLIED
+>
+
+<!-- FUSSNOTE -->
+<!ELEMENT fussnote			(#PCDATA | p)* >
+
+<!-- ZITAT  -->
+<!ELEMENT zitat			(#PCDATA | p | %inline-elemente;)* >
+
+<!-- ANLAGEN ===================================-->
+<!ELEMENT anlagen	   (anlagen-titel?, anlage+) >
+<!ELEMENT anlage	   (anlagen-titel?, anlagen-text+) >
+<!ELEMENT anlagen-titel	   (#PCDATA | p | %inline-elemente;)* >
+<!ELEMENT anlagen-text	   (#PCDATA | p | kommentar | rede | table | zitat | %inline-elemente;)* >
+<!ATTLIST anlagen-text				anlagen-typ				CDATA		#IMPLIED >
+
+
+<!-- REDNERLISTE ===============================-->
+
+<!ELEMENT rednerliste (redner+) >
+<!ATTLIST rednerliste
+sitzung-datum			CDATA		#REQUIRED		
+>
+
+<!-- Tables ===================================-->
+
+<!ENTITY % TFrame "(void|above|below|hsides|lhs|rhs|vsides|box|border)">
+<!ENTITY % TRules "(none | groups | rows | cols | all)">
+<!ENTITY % TAlign "(left|center|right)">
+<!ENTITY % Character "CDATA">
+<!ENTITY % Number "CDATA">
+<!ENTITY % Length "CDATA">
+<!ENTITY % MultiLength "CDATA">
+<!ENTITY % MultiLengths "CDATA">
+<!ENTITY % Pixels "CDATA">
+<!ENTITY % Text "CDATA">
+<!ENTITY % Color "CDATA">
+
+<!ENTITY % cellhalign
+  "align      (left|center|right|justify|char) #IMPLIED
+   char       %Character;    #IMPLIED
+   charoff    %Length;       #IMPLIED"
+  >
+
+<!ENTITY % cellvalign
+  "valign     (top|middle|bottom|baseline) #IMPLIED"
+  >
+  
+<!ENTITY % Scope "(row|col|rowgroup|colgroup)">
+
+<!ELEMENT table
+     (caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))>
+<!ELEMENT caption  (#PCDATA)>
+<!ELEMENT thead    (tr)+>
+<!ELEMENT tfoot    (tr)+>
+<!ELEMENT tbody    (tr)+>
+<!ELEMENT colgroup (col)*>
+<!ELEMENT col      EMPTY>
+<!ELEMENT tr       (th|td)+>
+<!ELEMENT th        (#PCDATA | %inline-elemente;)*>
+<!ELEMENT td        (#PCDATA | %inline-elemente;)*>
+
+<!ATTLIST table
+  summary     %Text;         #IMPLIED
+  width       %Length;       #IMPLIED
+  border      %Pixels;       #IMPLIED
+  frame       %TFrame;       #IMPLIED
+  rules       %TRules;       #IMPLIED
+  cellspacing %Length;       #IMPLIED
+  cellpadding %Length;       #IMPLIED
+  align       %TAlign;       #IMPLIED
+  bgcolor     %Color;        #IMPLIED
+  >
+
+<!ENTITY % CAlign "(top|bottom|left|right)">
+
+<!ATTLIST caption
+  align       %CAlign;       #IMPLIED
+  >
+
+<!ATTLIST colgroup
+  span        %Number;       "1"
+  width       %MultiLength;  #IMPLIED
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST col
+  span        %Number;       "1"
+  width       %MultiLength;  #IMPLIED
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST thead
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST tfoot
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST tbody
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST tr
+  %cellhalign;
+  %cellvalign;
+  bgcolor     %Color;        #IMPLIED
+  >
+
+<!ATTLIST th
+  abbr        %Text;         #IMPLIED
+  axis        CDATA          #IMPLIED
+  headers     IDREFS         #IMPLIED
+  scope       %Scope;        #IMPLIED
+  rowspan     %Number;       "1"
+  colspan     %Number;       "1"
+  %cellhalign;
+  %cellvalign;
+  nowrap      (nowrap)       #IMPLIED
+  bgcolor     %Color;        #IMPLIED
+  width       %Pixels;       #IMPLIED
+  height      %Pixels;       #IMPLIED
+  >
+
+<!ATTLIST td
+  abbr        %Text;         #IMPLIED
+  axis        CDATA          #IMPLIED
+  headers     IDREFS         #IMPLIED
+  scope       %Scope;        #IMPLIED
+  rowspan     %Number;       "1"
+  colspan     %Number;       "1"
+  %cellhalign;
+  %cellvalign;
+  nowrap      (nowrap)       #IMPLIED
+  bgcolor     %Color;        #IMPLIED
+  width       %Pixels;       #IMPLIED
+  height      %Pixels;       #IMPLIED
+  >
+
+
