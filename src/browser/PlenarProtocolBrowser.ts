@@ -78,7 +78,7 @@ namespace Documents_Browser {
 
         private retrieveProtocolBlobUrls(): Promise<void> {
             return new Promise((resolve, reject) => {
-                let requestUrl = this.getNextRequestUrl(<URL>this.baseUrl, this.page);
+                let requestUrl = this.getNextRequestUrl(<URL>this.baseUrl, this.page++);
 
                 axios.default.get(
                     requestUrl.toString(),
