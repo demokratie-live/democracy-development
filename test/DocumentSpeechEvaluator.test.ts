@@ -1,4 +1,4 @@
-import { DocumentSpeechEvaluator } from '../src/evaluator/DocumentEvaluator';
+import { DocumentSpeechEvaluator } from '../src/parser/evaluator/DocumentSpeechEvaluator';
 import fs = require('fs');
 import { assert } from 'chai';
 import 'mocha';
@@ -12,32 +12,35 @@ const speechesJsonSchemaFileName = 'test/schemas/speeches.schema.json';
 const speechesJsonSchmema = JSON.parse(fs.readFileSync(speechesJsonSchemaFileName, "utf8"));
 
 describe('Check speeches evaluator', () => {
+    it('speeches should never be empty', (done) => {
+        let xmlReadStream = fs.createReadStream(srcFileName);
+        let speechEvaluator = new DocumentSpeechEvaluator(xmlReadStream);
 
-  it('speeches should never be empty', (done) => {
-    let speechEvaluator = new DocumentSpeechEvaluator(srcFileName);
-    
-    speechEvaluator.getSpeeches(speechesAsJson => {
-      for (const speech of speechesAsJson) {
-        assert.isNotNull(JSON.stringify(speech));
-      }
+        speechEvaluator.getSpeeches(speechesAsJson => {
+            for (const speech of speechesAsJson) {
+                assert.isNotNull(JSON.stringify(speech));
+            }
 
-      done();
+            done();
+        });
     });
-  });
 
-  it('speeches should match specified json schema', (done) => {
-    let speechEvaluator = new DocumentSpeechEvaluator(srcFileName);
-    
-    speechEvaluator.getSpeeches(speechesAsJson => {
-      for (const speech of speechesAsJson) {
-        let validator = new Validator();
+    it('speeches should match specified json schema', (done) => {
+        let xmlReadStream = fs.createReadStream(srcFileName);
+        let speechEvaluator = new DocumentSpeechEvaluator(xmlReadStream);
 
-        let validatorResult = validator.validate(speech, speechesJsonSchmema);
+        speechEvaluator.getSpeeches(speechesAsJson => {
+            assert.isNotEmpty(speechesAsJson);
 
-        assert.isTrue(validatorResult.valid, JSON.stringify(validatorResult.errors, null, 2));
-      }
+            for (const speech of speechesAsJson) {
+                let validator = new Validator();
 
-      done();
+                let validatorResult = validator.validate(speech, speechesJsonSchmema);
+
+                assert.isTrue(validatorResult.valid, JSON.stringify(validatorResult.errors, null, 2));
+            }
+
+            done();
+        });
     });
-  });
 });

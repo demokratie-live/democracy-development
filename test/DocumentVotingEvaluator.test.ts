@@ -1,4 +1,4 @@
-import { DocumentVotingEvaluator } from '../src/evaluator/DocumentEvaluator';
+import { DocumentVotingEvaluator } from '../src/parser/evaluator/DocumentVotingEvaluator';
 import fs = require('fs');
 import { assert } from 'chai';
 import 'mocha';
@@ -11,32 +11,35 @@ const votingsJsonSchemaFileName = 'test/schemas/votings.schema.json';
 const votingsJsonSchmema = JSON.parse(fs.readFileSync(votingsJsonSchemaFileName, "utf8"));
 
 describe('Check voting evaluator', () => {
+    it('votings should never be empty', (done) => {
+        let xmlReadStream = fs.createReadStream(srcFileName);
+        let votingsEvaluator = new DocumentVotingEvaluator(xmlReadStream);
 
-  it('votings should never be empty', (done) => {
-    let votingsEvaluator = new DocumentVotingEvaluator(srcFileName);
-    
-    votingsEvaluator.getPotentialVotings(votingsAsJson => {
-      for (const voting of votingsAsJson) {
-        assert.isNotNull(JSON.stringify(voting));
-      }
+        votingsEvaluator.getPotentialVotings(votingsAsJson => {
+            for (const voting of votingsAsJson) {
+                assert.isNotNull(JSON.stringify(voting));
+            }
 
-      done();
+            done();
+        });
     });
-  });
 
-  it('votings should match specified json schema', (done) => {
-    let votingsEvaluator = new DocumentVotingEvaluator(srcFileName);
-    
-    votingsEvaluator.getPotentialVotings(votingsAsJson => {
-      for (const voting of votingsAsJson) {
-        let validator = new Validator();
+    it('votings should match specified json schema', (done) => {
+        let xmlReadStream = fs.createReadStream(srcFileName);
+        let votingsEvaluator = new DocumentVotingEvaluator(xmlReadStream);
 
-        let validatorResult = validator.validate(voting, votingsJsonSchmema);
+        votingsEvaluator.getPotentialVotings(votingsAsJson => {
+            assert.isNotEmpty(votingsAsJson);
 
-        assert.isTrue(validatorResult.valid, JSON.stringify(validatorResult.errors, null, 2));
-      }
+            for (const voting of votingsAsJson) {
+                let validator = new Validator();
 
-      done();
+                let validatorResult = validator.validate(voting, votingsJsonSchmema);
+
+                assert.isTrue(validatorResult.valid, JSON.stringify(validatorResult.errors, null, 2));
+            }
+
+            done();
+        });
     });
-  });
 });
