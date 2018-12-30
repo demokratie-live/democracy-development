@@ -1,4 +1,4 @@
-import { Xml } from '../importer/Scraper';
+import { Xml } from '../browser/PlenarProtocolBrowser';
 import { ProtocolScraperConfiguration } from '../config/ProtocolScraperConfiguration';
 import { IParser } from '../importer/Parser';
 import { ProtocolVotingParser } from '../parser/ProtocolVotingParser';

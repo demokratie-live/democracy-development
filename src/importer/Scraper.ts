@@ -1,6 +1,5 @@
 import { IParser } from './Parser';
 import { IBrowser } from './Browser';
-import fs = require('fs');
 
 export = Documents_Scraper;
 
@@ -8,14 +7,7 @@ namespace Documents_Scraper {
     /**
      * Descripes a general data format.
      */
-    export interface IDataType { 
-        openStream(): NodeJS.ReadableStream;
-    }
-
-    /**
-     * Desctipes a general Xml data format.
-     */
-    export class Xml implements IDataType {
+    export abstract class DataType { 
         private xmlStream: NodeJS.ReadableStream;
 
         constructor(xmlStream: NodeJS.ReadableStream) {
@@ -30,7 +22,7 @@ namespace Documents_Scraper {
     /**
      * The scraper configuration defines an modular bundle of the source, browser and parser.
      */
-    export interface IScraperConfiguration<T extends IDataType> {
+    export interface IScraperConfiguration<T extends DataType> {
         /**
          * Retrieves the URL of the target data source.
          */
@@ -51,7 +43,7 @@ namespace Documents_Scraper {
      * A scraper executes multiple parser processes defined by scraper configurations and return their collected results over a central callback.
      */
     export class Scraper {
-        public scrape<T extends IDataType>(configs: IScraperConfiguration<T>[], callback: (json: JSON[]) => void): void{
+        public scrape<T extends DataType>(configs: IScraperConfiguration<T>[], callback: (json: JSON[]) => void): void{
             for (const config of configs) {
                 let browser = config.getBrowser();
                 let parser = config.getParser();

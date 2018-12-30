@@ -1,4 +1,4 @@
-import { Xml } from '../importer/Scraper';
+import { Xml } from '../browser/PlenarProtocolBrowser';
 import { IParser } from '../importer/Parser';
 import { DocumentSpeechEvaluator } from '../parser/evaluator/DocumentSpeechEvaluator';
 

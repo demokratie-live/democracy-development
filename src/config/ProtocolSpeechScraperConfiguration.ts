@@ -1,7 +1,7 @@
-import { Xml } from '../importer/Scraper';
 import { ProtocolScraperConfiguration } from '../config/ProtocolScraperConfiguration';
 import { IParser } from '../importer/Parser';
 import { ProtocolSpeechesParser } from '../parser/ProtocolSpeechesParser';
+import { Xml } from '../browser/PlenarProtocolBrowser';
 
 export = Documents_Config;
 
