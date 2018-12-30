@@ -1,6 +1,7 @@
-import { Xml, IScraperConfiguration } from '../importer/Scraper';
+import { IScraperConfiguration } from '../importer/Scraper';
 import { IParser } from '../importer/Parser';
 import { IBrowser } from '../importer/Browser';
+import { Xml, PlenarProtocolBrowser } from '../browser/PlenarProtocolBrowser';
 
 export = Documents_Config;
 
@@ -10,7 +11,9 @@ namespace Documents_Config {
             return new URL("https://www.bundestag.de");
         }
         public getBrowser(): IBrowser<Xml> {
-            throw new Error("Method not implemented.");
+            return new PlenarProtocolBrowser({
+                maxCount: 5
+            });
         }
 
         public abstract getParser(): IParser<Xml>;
