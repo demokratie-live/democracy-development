@@ -19,12 +19,12 @@ namespace Documents_Browser {
         /**
          * Provides the page size of the target list.  
          */
-        protected abstract getPageSize(): number;
+        public abstract getPageSize(): number;
 
         /**
          * Provides the AJAX URL path of the target list.
          */
-        protected abstract getListAjaxRequestPath(): string;
+        public abstract getListAjaxRequestPath(): string;
 
         /**
          * Creates the defined IDataType from the given stream.
@@ -35,11 +35,16 @@ namespace Documents_Browser {
         private baseUrl?: URL;
         private page: number = 0;
         private count: number = 0;
+        private endOfListReached: boolean = false;
 
         private protocolBlobUrls: URL[] = [];
 
         constructor(options: IBundestagListBrowserOptions) {
             this.maxCount = options.maxCount;
+        }
+
+        public getMaxCount(): number {
+            return this.maxCount;
         }
 
         public setUrl(baseUrl: URL): void {
@@ -57,35 +62,45 @@ namespace Documents_Browser {
         }
 
         private hasNext(count: number): boolean {
-            return count < this.maxCount;
+            return count < this.maxCount && !(this.endOfListReached && this.protocolBlobUrls.length == 0);
         }
 
         private nextFragment(): Promise<T> {
             return new Promise((resolve, reject) => {
                 if (this.protocolBlobUrls.length == 0) {
                     this.retrieveProtocolBlobUrls()
-                        .then(() => resolve(this.loadNextProtocol()))
+                        .then(() => {
+                            this.loadNextProtocol()
+                                .then(result => resolve(result))
+                                .catch(error => reject(error));
+                        })
                         .catch(error => reject(error));
                 } else {
-                    resolve(this.loadNextProtocol());
+                    this.loadNextProtocol()
+                        .then(result => resolve(result))
+                        .catch(error => reject(error));
                 }
             });
         }
 
         private loadNextProtocol(): Promise<T> {
             return new Promise((resolve, reject) => {
-                let blobUrl = this.protocolBlobUrls.pop();
+                let blobUrl = this.protocolBlobUrls.shift();
 
-                if (blobUrl == undefined) {
-                    reject(new Error("The stack with blob URLs is empty."));
-                } else {
+                if (blobUrl != undefined) {
                     axios.default.get(
                         blobUrl.toString(),
                         {
                             method: 'get',
                             responseType: 'stream'
                         })
-                        .then(response => resolve(this.createFromStream(response.data)))
+                        .then(response => {
+                            if (response.status === 200) {
+                                resolve(this.createFromStream(response.data))
+                            } else {
+                                reject(response.statusText);
+                            }
+                        })
                         .catch(error => reject(error))
                 }
             });
@@ -102,16 +117,32 @@ namespace Documents_Browser {
                         responseType: 'stream'
                     })
                     .then(response => {
-                        let evaluator = new WebsiteHrefEvaluator(response.data);
+                        if (response.status === 200) {
+                            let evaluator = new WebsiteHrefEvaluator(response.data);
 
-                        evaluator.getSources(resultsAsJson => {
-                            resultsAsJson.forEach(blobUrlPath => {
-                                let blobUrl = new URL(`${this.baseUrl}${(<string>blobUrlPath).substr(1)}`);
-                                this.protocolBlobUrls.push(blobUrl);
+                            evaluator.getSources(resultsAsJson => {
+                                if (resultsAsJson.length != this.getPageSize()) {
+                                    this.endOfListReached = true;
+                                }
+
+                                resultsAsJson.forEach(blobUrlPath => {
+                                    let urlPath = <string>blobUrlPath;
+                                    let url: URL;
+                                    // There can be full qualified urls or url paths
+                                    if (urlPath.startsWith("/blob/")) {
+                                        url = new URL(`${this.baseUrl}${(urlPath).substr(1)}`);
+                                    } else {
+                                        url = new URL(urlPath);
+                                    }
+                                    this.protocolBlobUrls.push(url);
+                                });
+
+                                resolve();
                             });
-
-                            resolve();
-                        });
+                        }
+                        else {
+                            reject(response.statusText);
+                        }
                     })
                     .catch(error => reject(error));
             });

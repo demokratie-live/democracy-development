@@ -8,7 +8,7 @@ namespace Documents_Browser {
      */
     export interface IBrowser<T extends DataType> extends IterableIterator<Promise<T>> {
         /**
-         * Extracts the data as JSON from a given data format.
+         * Sets the base URL.
          */
         setUrl(url: URL): void;
     }

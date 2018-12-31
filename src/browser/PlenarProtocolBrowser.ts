@@ -11,11 +11,11 @@ namespace Documents_Browser {
         public static readonly pageSize = 5;
         private static readonly ajaxRequestPath: string = "ajax/filterlist/de/service/opendata/-/543410";
 
-        protected getPageSize(): number {
+        public getPageSize(): number {
             return PlenarProtocolBrowser.pageSize;
         }
 
-        protected getListAjaxRequestPath(): string {
+        public getListAjaxRequestPath(): string {
             return PlenarProtocolBrowser.ajaxRequestPath;
         }
 
