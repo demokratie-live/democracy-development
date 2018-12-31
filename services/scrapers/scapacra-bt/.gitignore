@@ -1,6 +1,7 @@
 node_modules/
 speeches/
 votings/
+proposedDecisions/
 *.js
 *.d.ts
 *.svg
