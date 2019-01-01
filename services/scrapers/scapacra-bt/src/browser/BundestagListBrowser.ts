@@ -65,30 +65,20 @@ namespace Documents_Browser {
             return count < this.maxCount && !(this.endOfListReached && this.protocolBlobUrls.length == 0);
         }
 
-        private nextFragment(): Promise<T> {
-            return new Promise((resolve, reject) => {
-                if (this.protocolBlobUrls.length == 0) {
-                    this.retrieveProtocolBlobUrls()
-                        .then(() => {
-                            this.loadNextProtocol()
-                                .then(result => resolve(result))
-                                .catch(error => reject(error));
-                        })
-                        .catch(error => reject(error));
-                } else {
-                    this.loadNextProtocol()
-                        .then(result => resolve(result))
-                        .catch(error => reject(error));
-                }
-            });
+        private async nextFragment(): Promise<T> {
+            if (this.protocolBlobUrls.length == 0) {
+                await this.retrieveProtocolBlobUrls();
+            }
+
+            return this.loadNextProtocol();
         }
 
-        private loadNextProtocol(): Promise<T> {
-            return new Promise((resolve, reject) => {
+        private async loadNextProtocol(): Promise<T> {
+            return new Promise(async (resolve, reject) => {
                 let blobUrl = this.protocolBlobUrls.shift();
 
                 if (blobUrl != undefined) {
-                    axios.default.get(
+                    await axios.default.get(
                         blobUrl.toString(),
                         {
                             method: 'get',
@@ -106,11 +96,11 @@ namespace Documents_Browser {
             });
         }
 
-        private retrieveProtocolBlobUrls(): Promise<void> {
-            return new Promise((resolve, reject) => {
+        private async retrieveProtocolBlobUrls(): Promise<void> {
+            return new Promise(async (resolve, reject) => {
                 let requestUrl = this.getNextRequestUrl(<URL>this.baseUrl, this.page++);
 
-                axios.default.get(
+                await axios.default.get(
                     requestUrl.toString(),
                     {
                         method: 'get',

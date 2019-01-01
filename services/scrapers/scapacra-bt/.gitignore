@@ -1,7 +1,5 @@
 node_modules/
-speeches/
-votings/
-proposedDecisions/
+scraperResult/
 *.js
 *.d.ts
 *.svg

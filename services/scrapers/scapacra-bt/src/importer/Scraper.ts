@@ -43,7 +43,7 @@ namespace Documents_Scraper {
      * A scraper executes multiple parser processes defined by scraper configurations and return their collected results over a central callback.
      */
     export class Scraper {
-        public scrape<T extends DataType>(configs: IScraperConfiguration<T>[], callback: (json: JSON[]) => void): void{
+        public async scrape<T extends DataType>(configs: IScraperConfiguration<T>[], callback: (jsons: any[]) => void) {
             for (const config of configs) {
                 let browser = config.getBrowser();
                 let parser = config.getParser();
@@ -52,10 +52,10 @@ namespace Documents_Scraper {
                 browser.setUrl(url);
                 
                 for (const parserFragment of browser) {
-                    parserFragment.then(fragment => {
+                    await parserFragment.then(fragment => {
                         parser.parse(fragment, json => callback(json));
                     }).catch(error => {
-                        
+                        console.log(error);
                     });
                 }
             }
