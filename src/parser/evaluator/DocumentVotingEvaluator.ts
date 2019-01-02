@@ -24,8 +24,8 @@ namespace Documents_Parser_Evaluator {
          *
          * @param callback 
          */
-        public getPotentialVotings(callback: (speechAsJson: any[]) => void) {
-            this.evaluate("//tagesordnungspunkt[p[" + this.getExpression() + "]]", callback);
+        public getPotentialVotings(): Promise<any[]> {
+            return this.evaluate("//tagesordnungspunkt[p[" + this.getExpression() + "]]");
         }
 
         private getExpression(): string {

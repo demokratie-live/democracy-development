@@ -11,8 +11,8 @@ namespace Documents_Parser_Evaluator {
         /**
          * Finds all speeches from the given Bundestag-Plenarprotokoll.
          */
-        public getSpeeches(callback: (speechAsJson: any[]) => void) {
-            this.evaluate("//tagesordnungspunkt/rede", callback);
+        public getSpeeches(): Promise<any[]> {
+            return this.evaluate("//tagesordnungspunkt/rede");
         }
     }
 }
