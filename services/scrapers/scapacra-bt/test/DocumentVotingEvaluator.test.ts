@@ -11,35 +11,30 @@ const votingsJsonSchemaFileName = 'test/schemas/votings.schema.json';
 const votingsJsonSchmema = JSON.parse(fs.readFileSync(votingsJsonSchemaFileName, "utf8"));
 
 describe('Check voting evaluator', () => {
-    it('votings should never be empty', (done) => {
+    it('votings should never be empty', async () => {
         let xmlReadStream = fs.createReadStream(srcFileName);
         let votingsEvaluator = new DocumentVotingEvaluator(xmlReadStream);
 
-        votingsEvaluator.getPotentialVotings(votingsAsJson => {
-            for (const voting of votingsAsJson) {
-                assert.isNotNull(JSON.stringify(voting));
-            }
+        let votingsAsJson = await votingsEvaluator.getPotentialVotings();
 
-            done();
-        });
+        for (const voting of votingsAsJson) {
+            assert.isNotNull(JSON.stringify(voting));
+        }
     });
 
-    it('votings should match specified json schema', (done) => {
+    it('votings should match specified json schema', async () => {
         let xmlReadStream = fs.createReadStream(srcFileName);
         let votingsEvaluator = new DocumentVotingEvaluator(xmlReadStream);
 
-        votingsEvaluator.getPotentialVotings(votingsAsJson => {
-            assert.isNotEmpty(votingsAsJson);
+        let votingsAsJson = await votingsEvaluator.getPotentialVotings();
+        assert.isNotEmpty(votingsAsJson);
 
-            for (const voting of votingsAsJson) {
-                let validator = new Validator();
+        for (const voting of votingsAsJson) {
+            let validator = new Validator();
 
-                let validatorResult = validator.validate(voting, votingsJsonSchmema);
+            let validatorResult = validator.validate(voting, votingsJsonSchmema);
 
-                assert.isTrue(validatorResult.valid, JSON.stringify(validatorResult.errors, null, 2));
-            }
-
-            done();
-        });
+            assert.isTrue(validatorResult.valid, JSON.stringify(validatorResult.errors, null, 2));
+        }
     });
 });

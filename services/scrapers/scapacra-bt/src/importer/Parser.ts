@@ -10,6 +10,6 @@ namespace Documents_Parser {
         /**
          * Extracts the data as JSON from a given data format.
          */
-        parse(content: T, callback: (json: JSON[]) => void): void;
+        parse(content: T): Promise<JSON[]>;
     }
 }

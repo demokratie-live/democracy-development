@@ -12,35 +12,31 @@ const speechesJsonSchemaFileName = 'test/schemas/speeches.schema.json';
 const speechesJsonSchmema = JSON.parse(fs.readFileSync(speechesJsonSchemaFileName, "utf8"));
 
 describe('Check speeches evaluator', () => {
-    it('speeches should never be empty', (done) => {
+    it('speeches should never be empty', async () => {
         let xmlReadStream = fs.createReadStream(srcFileName);
         let speechEvaluator = new DocumentSpeechEvaluator(xmlReadStream);
 
-        speechEvaluator.getSpeeches(speechesAsJson => {
-            for (const speech of speechesAsJson) {
-                assert.isNotNull(JSON.stringify(speech));
-            }
-
-            done();
-        });
+        let speechesAsJson = await speechEvaluator.getSpeeches();
+    
+        for (const speech of speechesAsJson) {
+            assert.isNotNull(JSON.stringify(speech));
+        }
     });
 
-    it('speeches should match specified json schema', (done) => {
+    it('speeches should match specified json schema', async () => {
         let xmlReadStream = fs.createReadStream(srcFileName);
         let speechEvaluator = new DocumentSpeechEvaluator(xmlReadStream);
 
-        speechEvaluator.getSpeeches(speechesAsJson => {
-            assert.isNotEmpty(speechesAsJson);
+        let speechesAsJson = await speechEvaluator.getSpeeches();
+    
+        assert.isNotEmpty(speechesAsJson);
 
-            for (const speech of speechesAsJson) {
-                let validator = new Validator();
+        for (const speech of speechesAsJson) {
+            let validator = new Validator();
 
-                let validatorResult = validator.validate(speech, speechesJsonSchmema);
+            let validatorResult = validator.validate(speech, speechesJsonSchmema);
 
-                assert.isTrue(validatorResult.valid, JSON.stringify(validatorResult.errors, null, 2));
-            }
-
-            done();
-        });
+            assert.isTrue(validatorResult.valid, JSON.stringify(validatorResult.errors, null, 2));
+        }
     });
 });

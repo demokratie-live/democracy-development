@@ -72,21 +72,16 @@ function checkCasePageSizeGreaterThanMaxCount<T extends DataType>(createBundesta
 }
 
 async function checkBrowser<T extends DataType>(browser: BundestagListBrowser<T>): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-        browser.setUrl(baseUrl);
-        let counter = 0;
-        let promises: Promise<any>[] = [];
-        for (const fragment of browser) {
-            await fragment
-                .then(result => {
-                    assert.isNotNull(result);
-                })
-                .catch(error => reject(error));
-            promises.push(fragment);
-            counter++;
-        }
-        assert.equal(counter, browser.getMaxCount());
-        Promise.all(promises);
-        resolve();
-    });
+    browser.setUrl(baseUrl);
+    let counter = 0;
+    let promises: Promise<any>[] = [];
+    for (const fragment of browser) {
+        let result = await fragment;
+        assert.isNotNull(result);
+            
+        promises.push(fragment);
+        counter++;
+    }
+    assert.equal(counter, browser.getMaxCount());
+    Promise.all(promises);
 }

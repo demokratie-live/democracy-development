@@ -74,68 +74,62 @@ namespace Documents_Browser {
         }
 
         private async loadNextProtocol(): Promise<T> {
-            return new Promise(async (resolve, reject) => {
-                let blobUrl = this.protocolBlobUrls.shift();
+            let blobUrl = this.protocolBlobUrls.shift();
 
-                if (blobUrl != undefined) {
-                    await axios.default.get(
-                        blobUrl.toString(),
-                        {
-                            method: 'get',
-                            responseType: 'stream'
-                        })
-                        .then(response => {
-                            if (response.status === 200) {
-                                resolve(this.createFromStream(response.data))
-                            } else {
-                                reject(response.statusText);
-                            }
-                        })
-                        .catch(error => reject(error))
+            if (blobUrl == undefined) {
+                throw new Error("URL stack is empty.");
+            }
+            
+            let response = await axios.default.get(
+                blobUrl.toString(),
+                {
+                    method: 'get',
+                    responseType: 'stream'
                 }
-            });
+            );
+
+            if (response.status === 200) {
+                return this.createFromStream(response.data)
+            } else {
+                throw new Error(response.statusText);
+            }
         }
 
         private async retrieveProtocolBlobUrls(): Promise<void> {
-            return new Promise(async (resolve, reject) => {
-                let requestUrl = this.getNextRequestUrl(<URL>this.baseUrl, this.page++);
+            let requestUrl = this.getNextRequestUrl(<URL>this.baseUrl, this.page++);
 
-                await axios.default.get(
-                    requestUrl.toString(),
-                    {
-                        method: 'get',
-                        responseType: 'stream'
-                    })
-                    .then(response => {
-                        if (response.status === 200) {
-                            let evaluator = new WebsiteHrefEvaluator(response.data);
+            let response = await axios.default.get(
+                requestUrl.toString(),
+                {
+                    method: 'get',
+                    responseType: 'stream'
+                }
+            );
 
-                            evaluator.getSources(resultsAsJson => {
-                                if (resultsAsJson.length != this.getPageSize()) {
-                                    this.endOfListReached = true;
-                                }
+            if (response.status === 200) {
+                let evaluator = new WebsiteHrefEvaluator(response.data);
 
-                                resultsAsJson.forEach(blobUrlPath => {
-                                    let urlPath = <string>blobUrlPath;
-                                    let url: URL;
-                                    // There can be full qualified urls or url paths
-                                    if (urlPath.startsWith("/blob/")) {
-                                        url = new URL(`${this.baseUrl}${(urlPath).substr(1)}`);
-                                    } else {
-                                        url = new URL(urlPath);
-                                    }
-                                    this.protocolBlobUrls.push(url);
-                                });
+                let urls = await evaluator.getSources();
 
-                                resolve();
-                            });
-                        }
-                        else {
-                            reject(response.statusText);
-                        }
-                    })
-                    .catch(error => reject(error));
-            });
+                if (urls.length != this.getPageSize()) {
+                    this.endOfListReached = true;
+                }
+
+                urls.forEach(blobUrlPath => {
+                    let urlPath = <string>blobUrlPath;
+                    let url: URL;
+                    // There can be full qualified urls or url paths
+                    if (urlPath.startsWith("/blob/")) {
+                        url = new URL(`${this.baseUrl}${(urlPath).substr(1)}`);
+                    } else {
+                        url = new URL(urlPath);
+                    }
+                    this.protocolBlobUrls.push(url);
+                });
+            }
+            else {
+                throw new Error(response.statusText);
+            }
         }
 
         private getNextRequestUrl(baseUrl: URL, page: number): URL {

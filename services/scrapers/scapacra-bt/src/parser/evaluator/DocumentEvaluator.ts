@@ -27,44 +27,53 @@ namespace Documents_Parser_Evaluator {
             this.readableStream = readableStream;
         }
 
-        public evaluate(xPathExpression: string, callback: (elementsAsJson: any[]) => void) {
-            this.removeXmlHeader(this.readableStream, xml => {
-                let parser = new xdom.DOMParser();
-                let doc = parser.parseFromString(xml);
+        public async evaluate(xPathExpression: string): Promise<any[]> {
+            let xml = await this.removeXmlHeader(this.readableStream);
 
-                let nodes = xpath.select(xPathExpression, doc);
+            let parser = new xdom.DOMParser();
+            let doc = parser.parseFromString(xml);
 
-                let elements: any[] = [];
-                for (const node of nodes) {    
-                    elements = elements.concat(this.getValueFromSelectedNode(node));
-                }
+            let nodes = xpath.select(xPathExpression, doc);
 
-                callback(elements);
-            });
+            let elements: any[] = [];
+            for (const node of nodes) {
+                let value = await this.getValueFromSelectedNode(node);
+                elements = elements.concat(value);
+            }
+
+            return elements;
         }
 
-        protected getValueFromSelectedNode(node: xpath.SelectedValue): any {
-            let value: any; 
-            xml2js.parseString(node, this.xml2jsOptions, (err: any, result: any) => value = result);
-            return value;            
+        protected getValueFromSelectedNode(node: xpath.SelectedValue): Promise<any> {
+            return new Promise((resolve, reject) => {
+                xml2js.parseString(node, this.xml2jsOptions, (err: any, result: any) => {
+                    if (err == null) {
+                        resolve(result);
+                    } else {
+                        reject(err);
+                    }
+                });
+            });       
         }
 
         /**
          * Removes the stylesheet definition and doctype declarion from the xml document to
          * garentee a proper xPath evaluation.   
          */
-        private removeXmlHeader(stream: NodeJS.ReadableStream, callback: (xml: string) => void): void {
-            var rl = readline.createInterface(stream);
-            let output: string;
+        private async removeXmlHeader(stream: NodeJS.ReadableStream): Promise<string> {
+            return new Promise((resolve) => {
+                var rl = readline.createInterface(stream);
+                let output: string;
 
-            rl.on('line', (line) => {
-                let isDeclarationHeader = line.match(/^\<(\?|\!).*$/);
+                rl.on('line', (line) => {
+                    let isDeclarationHeader = line.match(/^\<(\?|\!).*$/);
 
-                if (isDeclarationHeader == null) {
-                    output += line + '\n';
-                }
-            }).on('close', () => {
-                callback(output);
+                    if (isDeclarationHeader == null) {
+                        output += line + '\n';
+                    }
+                }).on('close', () => {
+                    resolve(output);
+                });
             });
         }
     }

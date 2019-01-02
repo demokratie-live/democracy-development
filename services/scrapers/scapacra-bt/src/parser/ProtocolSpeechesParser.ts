@@ -9,12 +9,12 @@ namespace Documents_Parser {
      * This parser gets all speeches from a "Plenarprotokoll" of the german Bundestag.
      */
     export class ProtocolSpeechesParser implements IParser<Xml>{
-        public parse(content: Xml, callback: (json: JSON[]) => void): void {
+        public async parse(content: Xml): Promise<JSON[]> {
             let readableStream = content.openStream();
             
             let speechEvaluator = new DocumentSpeechEvaluator(readableStream);
             
-            speechEvaluator.getSpeeches(speechesAsJson => callback(speechesAsJson));
+            return await speechEvaluator.getSpeeches();
         }
     }
 }

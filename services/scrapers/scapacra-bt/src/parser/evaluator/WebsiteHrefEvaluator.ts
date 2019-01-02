@@ -12,8 +12,8 @@ namespace Documents_Parser_Evaluator {
         /**
          * Finds all href links from the HTML website.
          */
-        public getSources(callback: (resultAsJson: any[]) => void) {
-            this.evaluate("//a[@class='bt-link-dokument']/@href", callback);
+        public getSources(): Promise<any[]> {
+            return this.evaluate("//a[@class='bt-link-dokument']/@href");
         }
 
         protected getValueFromSelectedNode(node: xpath.SelectedValue): any {

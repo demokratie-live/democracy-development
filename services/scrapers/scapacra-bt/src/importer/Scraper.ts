@@ -52,11 +52,9 @@ namespace Documents_Scraper {
                 browser.setUrl(url);
                 
                 for (const parserFragment of browser) {
-                    await parserFragment.then(fragment => {
-                        parser.parse(fragment, json => callback(json));
-                    }).catch(error => {
-                        console.log(error);
-                    });
+                    let fragment = await parserFragment;
+                    let json = await parser.parse(fragment);
+                    callback(json);
                 }
             }
         }
