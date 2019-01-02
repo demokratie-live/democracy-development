@@ -1,5 +1,4 @@
-import { DataType } from '../importer/Scraper';
-import { IBrowser } from '../importer/Browser';
+import { DataType, IBrowser } from '../importer/Importer';
 import { URL } from 'url';
 import { WebsiteHrefEvaluator } from '../parser/evaluator/WebsiteHrefEvaluator';
 

@@ -1,5 +1,5 @@
 import { Xml } from '../browser/PlenarProtocolBrowser';
-import { IParser } from '../importer/Parser';
+import { IParser } from '../importer/Importer';
 import { DocumentVotingEvaluator } from '../parser/evaluator/DocumentVotingEvaluator';
 
 export = Documents_Parser;

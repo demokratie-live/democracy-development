@@ -1,4 +1,4 @@
-import { DataType } from '../importer/Scraper';
+import { DataType } from '../importer/Importer';
 import { BundestagListBrowser } from './BundestagListBrowser';
 
 export = Documents_Browser;

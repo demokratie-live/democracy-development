@@ -1,9 +1,6 @@
-import { IParser } from './Parser';
-import { IBrowser } from './Browser';
+export = Documents_Importer;
 
-export = Documents_Scraper;
-
-namespace Documents_Scraper {
+namespace Documents_Importer {
     /**
      * Descripes a general data format.
      */
@@ -17,6 +14,26 @@ namespace Documents_Scraper {
         public openStream(): NodeJS.ReadableStream {
             return this.xmlStream;
         }
+    }
+
+    /**
+     * The browser navigates through a document structure and retrieves the desired fragments for the parser.
+     */
+    export interface IBrowser<T extends DataType> extends IterableIterator<Promise<T>> {
+        /**
+         * Sets the base URL.
+         */
+        setUrl(url: URL): void;
+    }
+
+    /**
+     * The parser extracts the data from a defined document.
+     */
+    export interface IParser<T extends DataType> {
+        /**
+         * Extracts the data as JSON from a given data format.
+         */
+        parse(content: T): Promise<JSON[]>;
     }
 
     /**
@@ -43,7 +60,7 @@ namespace Documents_Scraper {
      * A scraper executes multiple parser processes defined by scraper configurations and return their collected results over a central callback.
      */
     export class Scraper {
-        public async scrape<T extends DataType>(configs: IScraperConfiguration<T>[], callback: (jsons: any[]) => void) {
+        public static async scrape<T extends DataType>(configs: IScraperConfiguration<T>[], callback: (jsons: any[]) => void) {
             for (const config of configs) {
                 let browser = config.getBrowser();
                 let parser = config.getParser();
