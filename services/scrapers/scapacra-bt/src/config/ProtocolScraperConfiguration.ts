@@ -1,6 +1,4 @@
-import { IScraperConfiguration } from '../importer/Scraper';
-import { IParser } from '../importer/Parser';
-import { IBrowser } from '../importer/Browser';
+import { IScraperConfiguration, IParser, IBrowser } from '../importer/Importer';
 import { URL } from 'url';
 import { Xml, PlenarProtocolBrowser } from '../browser/PlenarProtocolBrowser';
 

@@ -2,7 +2,7 @@ import { it } from 'mocha';
 import { assert } from 'chai';
 import { URL } from 'url';
 import { BundestagListBrowser, IBundestagListBrowserOptions } from '../src/browser/BundestagListBrowser';
-import { DataType } from '../src/importer/Scraper';
+import { DataType } from '../src/importer/Importer';
 
 const baseUrl = new URL("https://www.bundestag.de");
 

@@ -5,16 +5,14 @@ import { ProtocolSpeechScraperConfiguration } from '../src/config/ProtocolSpeech
 import { ProtocolVotingScraperConfiguration } from '../src/config/ProtocolVotingScraperConfiguration';
 import { ProposedDecisionScraperConfiguration } from '../src/config/ProposedDecisionScraperConfiguration';
 
-import { Scraper } from '../src/importer/Scraper';
+import { Scraper } from '../src/importer/Importer';
 
 async function scrape() {
-    let scraper = new Scraper();
-
     let options: IProtocolScraperConfigurationOptions = {
         maxCount: 2
     };
 
-    await scraper.scrape([
+    await Scraper.scrape([
         new ProtocolSpeechScraperConfiguration(options),
         new ProtocolVotingScraperConfiguration(options),
         //new ProposedDecisionScraperConfiguration()
