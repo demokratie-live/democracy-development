@@ -1,0 +1,93 @@
+@startuml Importer
+package Importer {
+  package Parser {
+    note top of IParser
+      Extrahiert die gewünschten Daten aus dem gegebenen IFile.
+    end note
+
+    interface IParser<T extends IFile> {
+      JSON parse(content: T) 
+    }
+
+    class DipProcedureDataParser<Html> {
+    }
+
+    class PlenarProtocolSpeechesParser<Xml> {
+    }
+
+    IParser <|-- DipProcedureDataParser
+    IParser <|-- PlenarProtocolSpeechesParser
+  }
+
+  package Browser {    
+    note top of IBrowser
+      Navigiert in einer Struktur und liefert die gewünschten IFile-Fragmente.  
+    end note
+    
+    interface IBrowser<T extends IFile> {
+      void load(uri: URI)
+      boolean hasNext()
+      T next()
+    }
+
+    class DipBrowser<Html> {
+    }
+
+    class PlenarProtocolBrowser<Xml> {
+    }
+
+    IBrowser <|-- DipBrowser
+    IBrowser <|-- PlenarProtocolBrowser
+  }
+
+  package Scraper {
+    note top of IScraper
+      Sammelt die Daten aus verschiedenen Quellen zusammen.
+    end note
+
+    interface IScraper {
+      + JSON[]: scrape(configs: ScraperConfiguration[])
+    }
+
+    interface IScraperConfiguration<T extends IFile> {
+      URI getUri()
+      IBrowser<T> getBrowser()
+      IParser<T> getParser()
+    }
+
+    IScraper "1" -> "*" IScraperConfiguration
+
+    class DipProcedureScraperConfiguration<Html> {
+      IBrowser<Html> getBrowser()
+      IParser<Html> getParser()
+    }
+
+    class PlenarProtocolSpeechScraperConfiguration<Xml> {
+      IBrowser<Xml> getBrowser()
+      IParser<Xml> getParser()
+    }
+
+    IScraperConfiguration <|-- DipProcedureScraperConfiguration
+    IScraperConfiguration <|-- PlenarProtocolSpeechScraperConfiguration
+
+    interface IFile {
+    }
+
+    class Html {
+    }
+
+    class Xml {
+    }
+
+    'class Pdf {
+    '}
+
+    Html --|> IFile
+    Xml --|> IFile
+    'Pdf --|> IFile
+    
+    IScraperConfiguration *- IFile
+  }
+}
+
+@enduml
