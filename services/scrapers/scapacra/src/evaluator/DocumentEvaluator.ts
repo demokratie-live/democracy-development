@@ -1,6 +1,6 @@
-import xdom = require('xmldom');
-import xml2js = require('xml2js');
-import xpath = require('xpath');
+import { DOMParser } from 'xmldom';
+import { parseString } from 'xml2js';
+import * as xpath from 'xpath';
 import readline = require('readline');
 
 export = Documents_Evaluator;
@@ -30,7 +30,7 @@ namespace Documents_Evaluator {
         public async evaluate(xPathExpression: string): Promise<any[]> {
             let xml = await this.removeXmlHeader(this.readableStream);
 
-            let parser = new xdom.DOMParser();
+            let parser = new DOMParser();
             let doc = parser.parseFromString(xml);
 
             let nodes = xpath.select(xPathExpression, doc);
@@ -46,7 +46,7 @@ namespace Documents_Evaluator {
 
         protected getValueFromSelectedNode(node: xpath.SelectedValue): Promise<any> {
             return new Promise((resolve, reject) => {
-                xml2js.parseString(node, this.xml2jsOptions, (err: any, result: any) => {
+                parseString(node, this.xml2jsOptions, (err: any, result: any) => {
                     if (err == null) {
                         resolve(result);
                     } else {

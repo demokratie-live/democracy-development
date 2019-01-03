@@ -1,6 +1,5 @@
 node_modules/
+dist/
 *.js
 *.d.ts
 *.svg
-package-lock.json
-yarn.lock
