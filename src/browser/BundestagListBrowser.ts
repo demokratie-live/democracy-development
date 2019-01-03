@@ -30,8 +30,8 @@ namespace Documents_Browser {
          */
         protected abstract createFromStream(readableStream: NodeJS.ReadableStream): T; 
 
+        private readonly baseUrl: URL = new URL("https://www.bundestag.de");
         private readonly maxCount: number;
-        private baseUrl?: URL;
         private page: number = 0;
         private count: number = 0;
         private endOfListReached: boolean = false;
@@ -44,10 +44,6 @@ namespace Documents_Browser {
 
         public getMaxCount(): number {
             return this.maxCount;
-        }
-
-        public setUrl(baseUrl: URL): void {
-            this.baseUrl = baseUrl;
         }
 
         public next(): IteratorResult<Promise<T>> {

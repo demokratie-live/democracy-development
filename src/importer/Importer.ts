@@ -20,10 +20,6 @@ namespace Documents_Importer {
      * The browser navigates through a document structure and retrieves the desired fragments for the parser.
      */
     export interface IBrowser<T extends DataType> extends IterableIterator<Promise<T>> {
-        /**
-         * Sets the base URL.
-         */
-        setUrl(url: URL): void;
     }
 
     /**
@@ -40,11 +36,6 @@ namespace Documents_Importer {
      * The scraper configuration defines an modular bundle of the source, browser and parser.
      */
     export interface IScraperConfiguration<T extends DataType> {
-        /**
-         * Retrieves the URL of the target data source.
-         */
-        getURL(): URL;
-
         /**
          * Provides the browser for this scraper configuration.
          */
@@ -64,10 +55,7 @@ namespace Documents_Importer {
             for (const config of configs) {
                 let browser = config.getBrowser();
                 let parser = config.getParser();
-                let url = config.getURL();
 
-                browser.setUrl(url);
-                
                 for (const parserFragment of browser) {
                     let fragment = await parserFragment;
                     let json = await parser.parse(fragment);
