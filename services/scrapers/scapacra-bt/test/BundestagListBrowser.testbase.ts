@@ -18,8 +18,7 @@ function checkForValidUrlGeneration<T extends DataType>(createBundestagListBrows
         let browser = createBundestagListBrowser({
             maxCount: 5
         });
-        browser.setUrl(baseUrl);
-
+        
         const urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
         for (let page = 0; page < 20; page++) {
@@ -72,7 +71,6 @@ function checkCasePageSizeGreaterThanMaxCount<T extends DataType>(createBundesta
 }
 
 async function checkBrowser<T extends DataType>(browser: BundestagListBrowser<T>): Promise<any> {
-    browser.setUrl(baseUrl);
     let counter = 0;
     let promises: Promise<any>[] = [];
     for (const fragment of browser) {

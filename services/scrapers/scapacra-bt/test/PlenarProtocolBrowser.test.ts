@@ -1,12 +1,10 @@
 import { describe, it } from 'mocha';
 import { assert } from 'chai';
-import { URL } from 'url';
 import { PlenarProtocolBrowser } from '../src/browser/PlenarProtocolBrowser';
 
 import bundestagListBrowserTest = require('./BundestagListBrowser.testbase');
 import validator = require('xsd-schema-validator');
 
-const baseUrl = new URL("https://www.bundestag.de");
 const protocolXsdSchemaFileName = 'test/schemas/dbtplenarprotokoll-data.xsd';
 
 describe('Check Bundestag protocol browser', () => {
@@ -21,8 +19,6 @@ describe('Check Bundestag protocol browser', () => {
             maxCount: 5
         });
 
-        browser.setUrl(baseUrl);
-        
         browser.next().value
             .then(result => {
                 assert.isNotNull(result);
