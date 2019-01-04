@@ -1,4 +1,4 @@
-import { DataType } from '../importer/Importer';
+import { DataType, IBrowser } from 'scapacra';
 import { BundestagListBrowser } from './BundestagListBrowser';
 
 export = Documents_Browser;

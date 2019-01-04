@@ -1,4 +1,4 @@
-import { IScraperConfiguration, IParser, IBrowser } from '../importer/Importer';
+import { IBrowser, IParser, IScraperConfiguration } from 'scapacra';
 import { URL } from 'url';
 import { Pdf, ProposedDecisionBrowser } from '../browser/ProposedDecisionBrowser';
 

@@ -1,5 +1,5 @@
 import xpath = require('xpath');
-import { DocumentEvaluater } from './DocumentEvaluator'
+import { DocumentEvaluater } from 'scapacra'
 
 export = Documents_Parser_Evaluator;
 

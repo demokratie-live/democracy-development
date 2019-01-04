@@ -1,4 +1,4 @@
-import { DataType, IBrowser } from '../importer/Importer';
+import { DataType, IBrowser } from 'scapacra';
 import { URL } from 'url';
 import { WebsiteHrefEvaluator } from '../parser/evaluator/WebsiteHrefEvaluator';
 

@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 
-import { IProtocolScraperConfigurationOptions } from '../src/config/ProtocolScraperConfiguration';
-import { ProtocolSpeechScraperConfiguration } from '../src/config/ProtocolSpeechScraperConfiguration';
-import { ProtocolVotingScraperConfiguration } from '../src/config/ProtocolVotingScraperConfiguration';
-import { ProposedDecisionScraperConfiguration } from '../src/config/ProposedDecisionScraperConfiguration';
+import { Scraper } from 'scapacra';
 
-import { Scraper } from '../src/importer/Importer';
+import { IProtocolScraperConfigurationOptions } from './src/config/ProtocolScraperConfiguration';
+import { ProtocolSpeechScraperConfiguration } from './src/config/ProtocolSpeechScraperConfiguration';
+import { ProtocolVotingScraperConfiguration } from './src/config/ProtocolVotingScraperConfiguration';
+import { ProposedDecisionScraperConfiguration } from './src/config/ProposedDecisionScraperConfiguration';
 
 async function scrape() {
     let options: IProtocolScraperConfigurationOptions = {
