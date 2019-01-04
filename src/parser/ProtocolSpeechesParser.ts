@@ -1,5 +1,5 @@
 import { Xml } from '../browser/PlenarProtocolBrowser';
-import { IParser } from '../importer/Importer';
+import { IParser } from 'scapacra';
 import { DocumentSpeechEvaluator } from '../parser/evaluator/DocumentSpeechEvaluator';
 
 export = Documents_Parser;

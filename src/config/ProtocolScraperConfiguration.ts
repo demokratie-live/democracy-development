@@ -1,5 +1,4 @@
-import { IScraperConfiguration, IParser, IBrowser } from '../importer/Importer';
-import { URL } from 'url';
+import { IBrowser, IParser, IScraperConfiguration } from 'scapacra';
 import { Xml, PlenarProtocolBrowser } from '../browser/PlenarProtocolBrowser';
 
 export = Documents_Config;
@@ -14,10 +13,6 @@ namespace Documents_Config {
 
         constructor(options: IProtocolScraperConfigurationOptions) {
             this.options = options;
-        }
-
-        public getURL(): URL {
-            return new URL("https://www.bundestag.de");
         }
         public getBrowser(): IBrowser<Xml> {
             return new PlenarProtocolBrowser({

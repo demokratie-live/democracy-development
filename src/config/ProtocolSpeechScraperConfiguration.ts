@@ -1,5 +1,5 @@
 import { ProtocolScraperConfiguration } from '../config/ProtocolScraperConfiguration';
-import { IParser } from '../importer/Importer';
+import { IParser } from 'scapacra';
 import { ProtocolSpeechesParser } from '../parser/ProtocolSpeechesParser';
 import { Xml } from '../browser/PlenarProtocolBrowser';
 
