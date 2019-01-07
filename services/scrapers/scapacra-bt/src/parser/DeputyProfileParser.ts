@@ -27,7 +27,6 @@ namespace Deputy_Parser {
             let result: any;
             const base_url: string = 'https://www.bundestag.de'
 
-            ///<div class="[\s\S]*?bt-profil-potrait[\s\S]*?">[\s\S]*?<img[\s\S]*?src="([\s\S]*?)"[\s\S]*?title="([\s\S]*?)"[\s\S]*?>[\s\S]*?<h3>([\s\S]*?)<\/h3>[\s\S]*?<div class="bt-biografie-beruf">[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?(?:<h5>Abgeordnetenbüro<\/h5>[\s\S]*?<p>([\s\S]*?)<\/p>)[\s\S]*?(?:<a title="Kontakt" href="\/service\/formular\/contactform\?mdbId=([\s\S]*?)"[\s\S]*?>)[\s\S]*?(?:<ul class="bt-linkliste">([\s\S]*?)<\/ul>)[\s\S]*?<h4>Biografie<\/h4>[\s\S]*?<div class="bt-collapse-padding-bottom">[\s\S]*?<div>([\s\S]*?)<\/div>[\s\S]*?<h4>Reden<\/h4>[\s\S]*?<ul class="bt-reden[\s\S]*?">([\s\S]*?)<\/ul>[\s\S]*?<h4>Abstimmungen<\/h4>[\s\S]*?<table class="bt-abstimmungen-table">[\s\S]*?<tbody[\s\S]*?>([\s\S]*?)<\/tbody>/gm;
             let m;
 
             //Img & Name
@@ -277,7 +276,6 @@ namespace Deputy_Parser {
             })
 
             // Speeches URL
-            let speeches: string = '';
             let speeches_url1: string = '';
             let speeches_url2: string = '';
             let speeches_url3: string = '';
@@ -304,7 +302,7 @@ namespace Deputy_Parser {
                     }
                 });
             }
-            speeches = base_url + speeches_url4 + '?' + speeches_url2 + '=' + speeches_url1 + '%23' + speeches_url3;
+            const speeches: string = base_url + speeches_url4 + '?' + speeches_url2 + '=' + speeches_url1 + '%23' + speeches_url3;
 
             // Votes URL
             let votes: string = '';
