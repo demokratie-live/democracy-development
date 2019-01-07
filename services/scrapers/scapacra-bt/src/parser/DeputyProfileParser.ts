@@ -24,7 +24,6 @@ namespace Deputy_Parser {
             const stream = content.openStream();
 
             const string = await this.readStream(stream);
-            let result: any;
             const base_url: string = 'https://www.bundestag.de'
 
             let m;
@@ -353,7 +352,7 @@ namespace Deputy_Parser {
             }
 
             const id = `${mdb_id}_${name}`.replace(/(\.|\/| |,)/g, '_');
-            result = { id, img, name, party, job, buero, links, bio, wk, wk_name, aemter, speeches, votes, publication_requirement, mdb_id };
+            const result: any = { id, img, name, party, job, buero, links, bio, wk, wk_name, aemter, speeches, votes, publication_requirement, mdb_id };
 
             return [result];
         }
