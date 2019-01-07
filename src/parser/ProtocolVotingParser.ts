@@ -11,9 +11,9 @@ namespace Documents_Parser {
     export class ProtocolVotingParser implements IParser<Xml>{
         public async parse(content: Xml): Promise<JSON[]> {
             let readableStream = content.openStream();
-            
+
             let votingEvaluator = new DocumentVotingEvaluator(readableStream);
-            
+
             return await votingEvaluator.getPotentialVotings();
         }
     }

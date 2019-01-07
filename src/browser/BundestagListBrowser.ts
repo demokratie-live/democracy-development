@@ -28,7 +28,7 @@ namespace Documents_Browser {
         /**
          * Creates the defined IDataType from the given stream.
          */
-        protected abstract createFromStream(readableStream: NodeJS.ReadableStream): T; 
+        protected abstract createFromStream(readableStream: NodeJS.ReadableStream): T;
 
         private readonly baseUrl: URL = new URL("https://www.bundestag.de");
         private readonly maxCount: number;
@@ -74,7 +74,7 @@ namespace Documents_Browser {
             if (blobUrl == undefined) {
                 throw new Error("URL stack is empty.");
             }
-            
+
             let response = await axios.default.get(
                 blobUrl.toString(),
                 {
