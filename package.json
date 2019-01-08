@@ -1,33 +1,48 @@
 {
-  "name": "bt-documents",
-  "version": "1.0.1",
-  "description": "Bundestag Dokumente Scraper",
-  "main": "index.js",
+  "name": "bt-scapacra",
+  "version": "1.0.0",
+  "description": "Bundestag scapacra",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "author": "DEMOCRACY Deutschland e.V.",
-  "homepage": "https://github.com/demokratie-live/bt-documents#readme",
+  "homepage": "https://github.com/demokratie-live/bt-scapacra#readme",
   "keywords": [],
-  "license": "ISC",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/demokratie-live/bt-documents.git"
+    "url": "git+https://github.com/demokratie-live/bt-scapacra.git"
   },
   "scripts": {
-    "dev": "nodemon main.ts",
+    "build": "tsc",
+    "dev": "nodemon .\\src\\index.ts",
     "lint": "tslint --project tsconfig.json && yarn typecheck",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "mocha -r ts-node/register test/**/*.test.ts"
   },
   "bugs": {
-    "url": "https://github.com/demokratie-live/bt-documents/issues"
+    "url": "https://github.com/demokratie-live/bt-scapacra/issues"
   },
   "devDependencies": {
-    "@types/node": "^10.12.2",
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.18",
+    "@types/xsd-schema-validator": "^0.5.4",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
     "nodemon": "^1.18.6",
-    "ts-node": "^7.0.1"
+    "ts-node": "^7.0.1",
+    "tslint": "^5.12.0",
+    "xsd-schema-validator": "^0.6.0"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/xml2js": "^0.4.3",
     "@types/xmldom": "^0.1.29",
+    "axios": "^0.18.0",
+    "jsonschema": "^1.2.4",
+    "scapacra": "https://github.com/demokratie-live/scapacra.git#master",
     "typescript": "^3.1.6",
+    "url": "^0.11.0",
     "xml2js": "^0.4.19",
     "xmldom": "^0.1.27",
     "xpath": "^0.0.27"
