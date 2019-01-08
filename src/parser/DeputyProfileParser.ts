@@ -1,4 +1,4 @@
-import { IParser } from 'scapacra';
+import { IDataPackage, IParser } from 'scapacra';
 
 import { DeputyProfile } from '../browser/DeputyProfileBrowser';
 import { DeputyProfileEvaluator } from './evaluator/DeputyProfileEvaluator';
@@ -20,8 +20,8 @@ namespace Deputy_Parser {
                 });
             });
         }
-        public async parse(content: DeputyProfile): Promise<any> {
-            const stream = content.openStream();
+        public async parse(data: IDataPackage<DeputyProfile>): Promise<IDataPackage<any>[]> {
+            const stream = data.data.openStream();
 
             const string = await this.readStream(stream);
             const base_url: string = 'https://www.bundestag.de'
@@ -354,7 +354,10 @@ namespace Deputy_Parser {
             const id = `${mdb_id}_${name}`.replace(/(\.|\/| |,)/g, '_');
             const result: any = { id, img, name, party, job, buero, links, bio, wk, wk_name, aemter, speeches, votes, publication_requirement, mdb_id };
 
-            return [result];
+            return [{
+                metadata: data.metadata,
+                data: result
+            }];
         }
     }
 }

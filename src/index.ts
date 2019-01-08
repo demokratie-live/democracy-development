@@ -16,18 +16,18 @@ async function scrape() {
 
     await Scraper.scrape([
         // new ProtocolSpeechScraperConfiguration(options),
-        // new ProtocolVotingScraperConfiguration(options),
+        new ProtocolVotingScraperConfiguration(options),
         // new ProposedDecisionScraperConfiguration()
-        new DeputyProfileScraperConfiguration()
-    ], ((jsons: any) => {
-        console.log(util.inspect(jsons, false, null, true))
-        for (const json of jsons) {
-            let id = json.id;
+        // new DeputyProfileScraperConfiguration()
+    ], ((dataPackages) => {
+        console.log(util.inspect(dataPackages, false, null, true))
+        for (const dataPackage of dataPackages) {
+            let id = dataPackage.data.id;
             if (id == null) {
-                id = json["top-id"];
+                id = dataPackage.data["top-id"];
             }
 
-            fs.writeFileSync('out/scraperResult/deputies/' + id + '.json', JSON.stringify(json));
+            fs.writeFileSync('out/scraperResult/deputies/' + id + '.json', JSON.stringify(dataPackage.data));
         }
     }));
 }

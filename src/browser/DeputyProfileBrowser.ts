@@ -1,4 +1,4 @@
-import { DataType, IBrowser } from 'scapacra';
+import { IDataPackage, DataType, IBrowser } from 'scapacra';
 
 import { URL } from 'url';
 
@@ -32,7 +32,7 @@ namespace Deputy_Browser {
 
         private deputyUrls: URL[] = [];
 
-        public next(): IteratorResult<Promise<DeputyProfile>> {
+        public next(): IteratorResult<Promise<IDataPackage<DeputyProfile>>> {
             let hasNext = this.hasNext();
             let value = this.loadNext();
 
@@ -46,7 +46,7 @@ namespace Deputy_Browser {
             return !this.loaded || this.deputyUrls.length > 1;
         }
 
-        private async loadNext(): Promise<DeputyProfile> {
+        private async loadNext(): Promise<IDataPackage<DeputyProfile>> {
             if (!this.loaded) {
                 await this.retrieveList();
                 this.loaded = true;
@@ -68,7 +68,12 @@ namespace Deputy_Browser {
             );
 
             if (response.status === 200) {
-                return new DeputyProfile(response.data)
+                return {
+                    metadata: {
+                        url: blobUrl.toString()
+                    },
+                    data: new DeputyProfile(response.data)
+                }
             } else {
                 throw new Error(response.statusText);
             }
@@ -105,7 +110,7 @@ namespace Deputy_Browser {
             }
         }
 
-        [Symbol.iterator](): IterableIterator<Promise<DeputyProfile>> {
+        [Symbol.iterator](): IterableIterator<Promise<IDataPackage<DeputyProfile>>> {
             return this;
         }
     }
