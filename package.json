@@ -1,0 +1,45 @@
+{
+  "name": "scapacra",
+  "version": "1.0.0",
+  "description": "Scapacra (Scraper Parser Crawler)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "DEMOCRACY Deutschland e.V.",
+  "homepage": "https://github.com/demokratie-live/scapacra#readme",
+  "keywords": [],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/demokratie-live/scapacra.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "link": "cd dist && npm link",
+    "dev": "nodemon .\\src\\Example.ts",
+    "lint": "tslint --project tsconfig.json && yarn typecheck",
+    "typecheck": "tsc --noEmit",
+    "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "prepare": "npm run build"
+  },
+  "bugs": {
+    "url": "https://github.com/demokratie-live/scapacra/issues"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.18",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.6",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.12.0"
+  },
+  "dependencies": {
+    "@types/xml2js": "^0.4.3",
+    "@types/xmldom": "^0.1.29",
+    "typescript": "^3.1.6",
+    "xml2js": "^0.4.19",
+    "xmldom": "^0.1.27",
+    "xpath": "0.0.27"
+  }
+}

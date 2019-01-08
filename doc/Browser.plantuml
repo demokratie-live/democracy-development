@@ -1,0 +1,22 @@
+@startuml Browser
+  package Browser {    
+    note top of IBrowser
+      Navigiert in einer Struktur und liefert die gewünschten IFile-Fragmente.  
+    end note
+    
+    interface IBrowser<T extends IFile> {
+      void load(uri: URI)
+      boolean hasNext()
+      T next()
+    }
+
+    class DipBrowser<Html> {
+    }
+
+    class PlenarProtocolBrowser<Xml> {
+    }
+
+    IBrowser <|-- DipBrowser
+    IBrowser <|-- PlenarProtocolBrowser
+  }
+@enduml
