@@ -23,7 +23,7 @@ describe('Check Bundestag protocol browser', () => {
             .then(result => {
                 assert.isNotNull(result);
 
-                validator.validateXML(result.openStream(), `${protocolXsdSchemaFileName}`, (error, result) =>{
+                validator.validateXML(result.data.openStream(), `${protocolXsdSchemaFileName}`, (error, result) =>{
                     assert.isTrue(result.valid);
                     assert.isNull(error);
                     

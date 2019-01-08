@@ -1,5 +1,7 @@
-import { DataType, IBrowser } from 'scapacra';
+import { IDataPackage, DataType, IBrowser } from 'scapacra';
+
 import { URL } from 'url';
+
 import { WebsiteHrefEvaluator } from '../parser/evaluator/WebsiteHrefEvaluator';
 
 import axios = require('axios');
@@ -46,7 +48,7 @@ namespace Documents_Browser {
             return this.maxCount;
         }
 
-        public next(): IteratorResult<Promise<T>> {
+        public next(): IteratorResult<Promise<IDataPackage<T>>> {
             let hasNext = this.hasNext(this.count++);
             let nextFragment = this.nextFragment();
 
@@ -60,7 +62,7 @@ namespace Documents_Browser {
             return count < this.maxCount && !(this.endOfListReached && this.protocolBlobUrls.length == 0);
         }
 
-        private async nextFragment(): Promise<T> {
+        private async nextFragment(): Promise<IDataPackage<T>> {
             if (this.protocolBlobUrls.length == 0) {
                 await this.retrieveProtocolBlobUrls();
             }
@@ -68,7 +70,7 @@ namespace Documents_Browser {
             return this.loadNextProtocol();
         }
 
-        private async loadNextProtocol(): Promise<T> {
+        private async loadNextProtocol(): Promise<IDataPackage<T>> {
             let blobUrl = this.protocolBlobUrls.shift();
 
             if (blobUrl == undefined) {
@@ -84,7 +86,12 @@ namespace Documents_Browser {
             );
 
             if (response.status === 200) {
-                return this.createFromStream(response.data)
+                return {
+                    metadata: {
+                        url: blobUrl.toString()
+                    },
+                    data: this.createFromStream(response.data)
+                }
             } else {
                 throw new Error(response.statusText);
             }
@@ -140,7 +147,7 @@ namespace Documents_Browser {
             return `limit=5&noFilterSet=true&offset=${offset}`;
         }
 
-        [Symbol.iterator](): IterableIterator<Promise<T>> {
+        [Symbol.iterator](): IterableIterator<Promise<IDataPackage<T>>> {
             return this;
         }
     }
