@@ -1,5 +1,7 @@
 import { DataType, IBrowser } from 'scapacra';
 
+import { URL } from 'url';
+
 import { DeputyHrefEvaluator } from '../parser/evaluator/DeputyHrefEvaluator';
 
 import axios = require('axios');
