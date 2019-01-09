@@ -125,6 +125,8 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     before_install:
+    # Allow more watched files
+    - echo fs.inotify.max_user_watches=2048000 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # do not ensure we are on any branch - this is internal
