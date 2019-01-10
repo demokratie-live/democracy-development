@@ -142,7 +142,7 @@ matrix:
     - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy internal
   - if: tag =~ -internal\+client
-    osx_image: xcode10
+    osx_image: xcode10.1
     language: objective-c
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
@@ -253,7 +253,7 @@ matrix:
     - ./.travis/discord.sh -t "Failure Alpha $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy alpha
   - if: tag =~ -alpha\+client
-    osx_image: xcode10
+    osx_image: xcode10.1
     language: objective-c
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
@@ -366,7 +366,7 @@ matrix:
     - ./.travis/discord.sh -t "Failure Beta $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy beta
   - if: tag =~ -beta\+client
-    osx_image: xcode10
+    osx_image: xcode10.1
     language: objective-c
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
@@ -480,7 +480,7 @@ matrix:
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy production
   - if: tag =~ -production\+client
-    osx_image: xcode10
+    osx_image: xcode10.1
     language: objective-c
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
