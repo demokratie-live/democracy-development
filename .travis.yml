@@ -100,7 +100,7 @@ matrix:
       components:
       - tools
       - platform-tools
-      # android 23,25,26
+      # build tools
       - build-tools-23.0.1
       - build-tools-25.0.0
       - build-tools-25.0.1
@@ -110,6 +110,7 @@ matrix:
       - build-tools-26.0.3
       - build-tools-27.0.3
       - build-tools-28.0.3
+      # android
       - android-23
       - android-25
       - android-26
@@ -211,7 +212,7 @@ matrix:
       components:
       - tools
       - platform-tools
-      # android 23,25,26
+      # build tools
       - build-tools-23.0.1
       - build-tools-25.0.0
       - build-tools-25.0.1
@@ -221,6 +222,7 @@ matrix:
       - build-tools-26.0.3
       - build-tools-27.0.3
       - build-tools-28.0.3
+      # android
       - android-23
       - android-25
       - android-26
@@ -237,7 +239,8 @@ matrix:
       - 'google-gdk-license-.+'
     before_install:
     # Allow more watched files
-    - echo fs.inotify.max_user_watches=2048000 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p    - ./.travis/decrypt.sh
+    - echo fs.inotify.max_user_watches=2048000 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+    - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the alpha/master branch
     - ./.travis/gitbranch.sh -d "./" -b "origin/alpha/master" -r true
@@ -323,7 +326,7 @@ matrix:
       components:
       - tools
       - platform-tools
-      # android 23,25,26
+      # build tools
       - build-tools-23.0.1
       - build-tools-25.0.0
       - build-tools-25.0.1
@@ -333,6 +336,7 @@ matrix:
       - build-tools-26.0.3
       - build-tools-27.0.3
       - build-tools-28.0.3
+      # android
       - android-23
       - android-25
       - android-26
@@ -436,7 +440,7 @@ matrix:
       components:
       - tools
       - platform-tools
-      # android 23,25,26
+      # build tools
       - build-tools-23.0.1
       - build-tools-25.0.0
       - build-tools-25.0.1
@@ -446,6 +450,7 @@ matrix:
       - build-tools-26.0.3
       - build-tools-27.0.3
       - build-tools-28.0.3
+      # android
       - android-23
       - android-25
       - android-26
