@@ -105,6 +105,7 @@ matrix:
       - build-tools-25.0.0
       - build-tools-25.0.1
       - build-tools-25.0.2
+      - build-tools-25.3.3
       - build-tools-26.0.1
       - build-tools-26.0.2
       - build-tools-26.0.3
@@ -217,6 +218,7 @@ matrix:
       - build-tools-25.0.0
       - build-tools-25.0.1
       - build-tools-25.0.2
+      - build-tools-25.3.3
       - build-tools-26.0.1
       - build-tools-26.0.2
       - build-tools-26.0.3
@@ -331,6 +333,7 @@ matrix:
       - build-tools-25.0.0
       - build-tools-25.0.1
       - build-tools-25.0.2
+      - build-tools-25.3.3
       - build-tools-26.0.1
       - build-tools-26.0.2
       - build-tools-26.0.3
@@ -445,6 +448,7 @@ matrix:
       - build-tools-25.0.0
       - build-tools-25.0.1
       - build-tools-25.0.2
+      - build-tools-25.3.3
       - build-tools-26.0.1
       - build-tools-26.0.2
       - build-tools-26.0.3
