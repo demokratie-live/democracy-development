@@ -23,5 +23,5 @@ fi
 cd client/${directory}
 gem update --system
 bundle install
-bundle update fastlane
+gem install fastlane --version 2.112.0
 cd ../../
