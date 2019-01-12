@@ -13,31 +13,12 @@ The framework is structured into three basic modules.
 
 ## Parser
 
+![Parser](out/doc/Parser/Parser.svg "UML of parser")
+
 ## Browser
 
-```plantuml
-@startuml Browser
-  package Browser {    
-    note top of IBrowser
-      Navigiert in einer Struktur und liefert die gewünschten IFile-Fragmente.  
-    end note
-    
-    interface IBrowser<T extends IFile> {
-      void load(uri: URI)
-      boolean hasNext()
-      T next()
-    }
-
-    class DipBrowser<Html> {
-    }
-
-    class PlenarProtocolBrowser<Xml> {
-    }
-
-    IBrowser <|-- DipBrowser
-    IBrowser <|-- PlenarProtocolBrowser
-  }
-@enduml
-```
+![Browser](out/doc/Browser/Browser.svg "UML of browser")
 
 ## Scraper
+
+![Scraper](out/doc/Scraper/Scraper.svg "UML of scraper")
