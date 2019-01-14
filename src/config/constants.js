@@ -14,6 +14,7 @@ export default {
   GRAPHIQL: process.env.GRAPHIQL || false,
   GRAPHIQL_PATH: '/graphiql',
   GRAPHQL_PATH: '/',
+  VOYAGER: process.env.VOYAGER || false,
   WHITELIST_DATA_SOURCES: process.env.WHITELIST_DATA_SOURCES
     ? process.env.WHITELIST_DATA_SOURCES.split(',')
     : ['::ffff:127.0.0.1', '::1'],

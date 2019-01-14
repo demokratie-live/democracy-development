@@ -9,11 +9,12 @@ import { createServer } from 'http';
 import { Engine } from 'apollo-engine';
 import cors from 'cors';
 import { inspect } from 'util';
+import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 
 import './services/logger';
 
 import DB from './config/db';
-import constants from './config/constants';
+import CONSTANTS from './config/constants';
 import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers';
 import { auth as authDirective } from './graphql/schemaDirectives';
@@ -56,17 +57,22 @@ const main = async () => {
   server.use(cors());
 
   // Graphiql
-  if (constants.GRAPHIQL) {
+  if (CONSTANTS.GRAPHIQL) {
     server.use(
-      constants.GRAPHIQL_PATH,
+      CONSTANTS.GRAPHIQL_PATH,
       graphiqlExpress({
-        endpointURL: constants.GRAPHQL_PATH,
+        endpointURL: CONSTANTS.GRAPHQL_PATH,
       }),
     );
   }
 
+  // VOYAGER
+  if (CONSTANTS.VOYAGER) {
+    server.use('/voyager', voyagerMiddleware({ endpointUrl: CONSTANTS.GRAPHQL_PATH }));
+  }
+
   // Graphql
-  server.use(constants.GRAPHQL_PATH, (req, res, next) => {
+  server.use(CONSTANTS.GRAPHQL_PATH, (req, res, next) => {
     graphqlExpress({
       schema,
       context: {
@@ -107,17 +113,17 @@ const main = async () => {
 
   // Create & start Server + Cron
   const graphqlServer = createServer(server);
-  graphqlServer.listen(constants.PORT, err => {
+  graphqlServer.listen(CONSTANTS.PORT, err => {
     if (err) {
       Log.error(inspect(err));
     } else {
-      Log.info(`App is listen on port: ${constants.PORT}`);
+      Log.info(`App is listen on port: ${CONSTANTS.PORT}`);
       const crons = [
         new CronJob('15 * * * *', importJob, null, true, 'Europe/Berlin', null, true),
         new CronJob('*/15 * * * *', importAgenda, null, true, 'Europe/Berlin', null, true),
         new CronJob('30 * * * *', importNamedPolls, null, true, 'Europe/Berlin', null, true),
       ];
-      if (constants.DEBUG) {
+      if (CONSTANTS.DEBUG) {
         Log.info('crons', crons.length);
       }
     }

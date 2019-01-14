@@ -50,6 +50,7 @@
     "graphql-date": "^1.0.3",
     "graphql-tag": "^2.8.0",
     "graphql-tools": "^2.20.2",
+    "graphql-voyager": "^1.0.0-rc.26",
     "http-auth": "^3.2.3",
     "isomorphic-unfetch": "^2.0.0",
     "jsondiffpatch": "^0.2.5",
