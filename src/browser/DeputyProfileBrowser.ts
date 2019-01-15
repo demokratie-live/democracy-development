@@ -57,7 +57,7 @@ namespace Deputy_Browser {
             if (blobUrl == undefined) {
                 throw new Error("URL stack is empty.");
             }
-            console.log(blobUrl.toString());
+            // console.log(blobUrl.toString());
 
             let response = await axios.default.get(
                 blobUrl.toString(),

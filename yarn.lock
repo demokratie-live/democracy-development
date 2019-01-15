@@ -1601,9 +1601,9 @@ sax@>=0.6.0, sax@^1.2.4:
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
-"scapacra@https://github.com/demokratie-live/scapacra.git#pre-release/1.0.1":
+"scapacra@https://github.com/demokratie-live/scapacra.git#master":
   version "1.0.0"
-  resolved "https://github.com/demokratie-live/scapacra.git#424cb420ba18627ae2ffe0a60d93b67cafa0547b"
+  resolved "https://github.com/demokratie-live/scapacra.git#b60ff4b95e431420606a4f77c1945fccfac6d46a"
   dependencies:
     "@types/xml2js" "^0.4.3"
     "@types/xmldom" "^0.1.29"
