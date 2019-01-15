@@ -102,7 +102,7 @@ namespace Deputy_Parser {
             }
 
             // ID
-            let mdb_id: string = '';
+            let id: string = '';
             const regex_id = /<a title="Kontakt" href="\/service\/formular\/contactform\?mdbId=(.*?)"/gm;
             while ((m = regex_id.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
@@ -113,7 +113,7 @@ namespace Deputy_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        mdb_id = match;
+                        id = match;
                     }
                 });
             }
@@ -351,8 +351,7 @@ namespace Deputy_Parser {
                 });
             }
 
-            const id = `${mdb_id}_${name}`.replace(/(\.|\/| |,)/g, '_');
-            const result: any = { id, img, name, party, job, buero, links, bio, wk, wk_name, aemter, speeches, votes, publication_requirement, mdb_id };
+            const result: any = { id, img, name, party, job, buero, links, bio, wk, wk_name, aemter, speeches, votes, publication_requirement };
 
             return [{
                 metadata: data.metadata,

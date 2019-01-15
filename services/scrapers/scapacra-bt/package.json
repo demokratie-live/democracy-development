@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon .\\src\\index.ts",
+    "dev": "nodemon .\\src\\run.ts",
     "lint": "tslint --project tsconfig.json && yarn typecheck",
     "typecheck": "tsc --noEmit",
     "test": "mocha -r ts-node/register test/**/*.test.ts"
