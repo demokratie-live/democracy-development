@@ -3,10 +3,10 @@ import Scraper from '@democracy-deutschland/bt-named-polls';
 // import moment from "moment";
 import axios from 'axios';
 
-import CONSTANTS from './config/constants';
+import CONSTANTS from './../config/constants';
 
-import Procedure from './models/Procedure';
-import NamedPolls from './models/NamedPolls';
+import Procedure from './../models/Procedure';
+import NamedPolls from './../models/NamedPolls';
 
 let procedureIds = [];
 
