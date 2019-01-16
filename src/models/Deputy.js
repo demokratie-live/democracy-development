@@ -1,5 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
-// import diffHistory from 'mongoose-diff-history/diffHistory';
+import diffHistory from 'mongoose-diff-history/diffHistory';
+
+import DeputyLink from './Schemas/DeputyLink';
+import DeputyFunctions from './Schemas/DeputyFunctions';
 
 const DeputySchema = new Schema(
   {
@@ -10,21 +13,11 @@ const DeputySchema = new Schema(
     name: { type: String, required: true },
     job: { type: String },
     office: [{ type: String }],
-    links: [
-      {
-        name: { type: String },
-        link: { type: String },
-      },
-    ],
+    links: [DeputyLink],
     biography: [{ type: String }],
     constituency: { type: String },
     constituencyName: { type: String },
-    functions: [
-      {
-        category: { type: String },
-        functions: [{ type: String }],
-      },
-    ],
+    functions: [DeputyFunctions],
     speechesURL: { type: String },
     votesURL: { type: String },
     publicationRequirement: [{ type: String }],
@@ -32,6 +25,5 @@ const DeputySchema = new Schema(
   { timestamps: true },
 );
 
-// Gives diffs for array - need index?
-// DeputySchema.plugin(diffHistory.plugin, { omit: ['updatedAt'] });
+DeputySchema.plugin(diffHistory.plugin, { omit: ['updatedAt'] });
 export default mongoose.model('Deputy', DeputySchema);

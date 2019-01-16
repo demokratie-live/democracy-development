@@ -28,11 +28,11 @@ export default async () => {
         constituencyName: dataPackage.data.wk_name,
         functions: dataPackage.data.aemter.map(({ cat, amt }) => ({
           category: cat,
-          functions: amt,
+          functions: amt.sort(),
         })),
         speechesURL: dataPackage.data.speeches,
         votesURL: dataPackage.data.votes,
-        publicationRequirement: dataPackage.data.publication_requirement,
+        publicationRequirement: dataPackage.data.publication_requirement.sort(),
       };
       // Update/Insert
       await DeputyModel.update(
