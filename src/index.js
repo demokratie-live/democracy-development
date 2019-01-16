@@ -12,7 +12,7 @@ import { inspect } from 'util';
 
 import './services/logger';
 
-import DB from './config/db';
+import DB, { mongoose } from './config/db';
 import constants from './config/constants';
 import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers';
@@ -26,6 +26,7 @@ import importDeputyProfiles from './importer/importDeputyProfiles';
 // Models
 import ProcedureModel from './models/Procedure';
 import UserModel from './models/User';
+import DeputyModel from './models/Deputy';
 
 const main = async () => {
   // Start DB Connection
@@ -77,6 +78,8 @@ const main = async () => {
         // Models
         ProcedureModel,
         UserModel,
+        DeputyModel,
+        HistoryModel: mongoose.model('History'),
       },
       tracing: true,
       cacheControl: true,
