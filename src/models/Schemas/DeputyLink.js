@@ -3,7 +3,7 @@ import { Schema } from 'mongoose';
 const DeputyLink = new Schema(
   {
     name: { type: String },
-    link: { type: String },
+    URL: { type: String },
   },
   { _id: false },
 );

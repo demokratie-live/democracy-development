@@ -2,7 +2,7 @@ export default `
 
 type DeputyLink {
   name: String
-  link: String
+  URL: String
 }
 
 type DeputyFunctions {
@@ -14,7 +14,7 @@ type Deputy {
   _id: ID!
   URL: String!
   webId: String
-  img: String
+  imgURL: String
   party: String
   name: String!
   job: String

@@ -8,7 +8,7 @@ const DeputySchema = new Schema(
   {
     URL: { type: String, required: true },
     webId: { type: String },
-    img: { type: String },
+    imgURL: { type: String },
     party: { type: String },
     name: { type: String, required: true },
     job: { type: String },
