@@ -17,22 +17,23 @@ export default async () => {
       const deputy = {
         URL: dataPackage.metadata.url,
         webId: dataPackage.data.id,
-        imgURL: dataPackage.data.img,
+        imgURL: dataPackage.data.imgURL,
         party: dataPackage.data.party,
         name: dataPackage.data.name,
         job: dataPackage.data.job,
-        office: dataPackage.data.buero,
-        links: dataPackage.data.links.map(({ name, link }) => ({ name, URL: link })),
-        biography: dataPackage.data.bio,
-        constituency: dataPackage.data.wk,
-        constituencyName: dataPackage.data.wk_name,
-        functions: dataPackage.data.aemter.map(({ cat, amt }) => ({
-          category: cat,
-          functions: amt.sort(),
+        office: dataPackage.data.office,
+        links: dataPackage.data.links,
+        biography: dataPackage.data.biography,
+        constituency: dataPackage.data.constituency,
+        constituencyName: dataPackage.data.constituencyName,
+        directCandidate: dataPackage.data.directCandidate,
+        functions: dataPackage.data.functions.map(({ category, functions }) => ({
+          category,
+          functions: functions.sort(),
         })),
-        speechesURL: dataPackage.data.speeches,
-        votesURL: dataPackage.data.votes,
-        publicationRequirement: dataPackage.data.publication_requirement.sort(),
+        speechesURL: dataPackage.data.speechesURL,
+        votesURL: dataPackage.data.votesURL,
+        publicationRequirement: dataPackage.data.publicationRequirement.sort(),
       };
       // Update/Insert
       await DeputyModel.update(

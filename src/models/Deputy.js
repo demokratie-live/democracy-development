@@ -17,6 +17,7 @@ const DeputySchema = new Schema(
     biography: [{ type: String }],
     constituency: { type: String },
     constituencyName: { type: String },
+    directCandidate: { type: Boolean },
     functions: [DeputyFunctions],
     speechesURL: { type: String },
     votesURL: { type: String },

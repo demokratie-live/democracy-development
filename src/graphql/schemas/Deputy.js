@@ -23,6 +23,7 @@ type Deputy {
   biography: [String]
   constituency: String
   constituencyName: String
+  directCandidate: Boolean,
   functions: [DeputyFunctions],
   speechesURL: String
   votesURL: String

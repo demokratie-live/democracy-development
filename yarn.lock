@@ -5799,7 +5799,7 @@ sax@>=0.6.0, sax@^1.2.4:
 
 "scapacra-bt@https://github.com/demokratie-live/scapacra-bt.git#release/1.0.1":
   version "1.0.1"
-  resolved "https://github.com/demokratie-live/scapacra-bt.git#a41c7ef582402c43e46c0bf1a9ccef5f4485b87c"
+  resolved "https://github.com/demokratie-live/scapacra-bt.git#21b0c9401aff8ff125426864d7d8fddf3e3c839d"
   dependencies:
     "@types/axios" "^0.14.0"
     "@types/xml2js" "^0.4.3"
