@@ -1,7 +1,6 @@
 import { IDataPackage, IParser } from 'scapacra';
 
 import { DeputyProfile } from '../browser/DeputyProfileBrowser';
-import { DeputyProfileEvaluator } from './evaluator/DeputyProfileEvaluator';
 
 export = Deputy_Parser;
 
