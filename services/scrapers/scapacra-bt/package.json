@@ -18,7 +18,7 @@
     "lint": "tslint --project tsconfig.json && yarn typecheck",
     "typecheck": "tsc --noEmit",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
-    "prepare": "yarn run build"
+    "prepare": "tsc"
   },
   "bugs": {
     "url": "https://github.com/demokratie-live/bt-scapacra/issues"
