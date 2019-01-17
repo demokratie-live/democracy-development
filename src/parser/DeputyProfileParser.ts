@@ -142,14 +142,14 @@ namespace Deputy_Parser {
                     regex_links.lastIndex++;
                 }
 
-                let link: any = { name: '', link: '' };
+                let link: any = { name: '', URL: '' };
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
                         link.name = match;
                     }
                     if (group === 2) {
-                        link.link = match;
+                        link.URL = match;
                         links.push(link);
                     }
                 });
