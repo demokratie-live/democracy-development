@@ -1,4 +1,4 @@
-import { IDataPackage, DataType, IBrowser } from 'scapacra';
+import { IDataPackage, DataType, IBrowser } from '@democracy-deutschland/scapacra';
 
 import { URL } from 'url';
 
@@ -57,7 +57,7 @@ namespace Deputy_Browser {
             if (blobUrl == undefined) {
                 throw new Error("URL stack is empty.");
             }
-            console.log(blobUrl.toString());
+            // console.log(blobUrl.toString());
 
             let response = await axios.default.get(
                 blobUrl.toString(),

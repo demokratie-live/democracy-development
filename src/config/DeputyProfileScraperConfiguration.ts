@@ -1,4 +1,4 @@
-import { IParser, IBrowser, IScraperConfiguration } from 'scapacra';
+import { IParser, IBrowser, IScraperConfiguration } from '@democracy-deutschland/scapacra';
 import { DeputyProfile, DeputyProfileBrowser } from '../browser/DeputyProfileBrowser';
 import { DeputyProfileParser } from '../parser/DeputyProfileParser';
 export = Deputy_Config;

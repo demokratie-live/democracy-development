@@ -1,7 +1,6 @@
-import { IDataPackage, IParser } from 'scapacra';
+import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
 
 import { DeputyProfile } from '../browser/DeputyProfileBrowser';
-import { DeputyProfileEvaluator } from './evaluator/DeputyProfileEvaluator';
 
 export = Deputy_Parser;
 
@@ -28,19 +27,19 @@ namespace Deputy_Parser {
 
             let m;
 
-            //Img & Name
-            let img: string = '';
+            //ImgURL & Name
+            let imgURL: string = '';
             let name: string = '';
-            const regex_img_name = /<div class="bt-bild-standard[\s\S]*?">[\s\S]*?<img[\s\S]*?data-img-md-normal="([\s\S]*?)"[\s\S]*?title="([\s\S]*?)"[\s\S]*?>[\s\S]*?<span class="bt-bild-info-icon">/gm;
-            while ((m = regex_img_name.exec(string)) !== null) {
+            const regex_imgURL_name = /<div class="bt-bild-standard[\s\S]*?">[\s\S]*?<img[\s\S]*?data-img-md-normal="([\s\S]*?)"[\s\S]*?title="([\s\S]*?)"[\s\S]*?>[\s\S]*?<span class="bt-bild-info-icon">/gm;
+            while ((m = regex_imgURL_name.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
-                if (m.index === regex_img_name.lastIndex) {
-                    regex_img_name.lastIndex++;
+                if (m.index === regex_imgURL_name.lastIndex) {
+                    regex_imgURL_name.lastIndex++;
                 }
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        img = base_url + match;
+                        imgURL = base_url + match;
                     }
                     if (group === 2) {
                         name = match;
@@ -84,25 +83,25 @@ namespace Deputy_Parser {
                 });
             }
 
-            // Büro
-            let buero: string[] = [];
-            const regex_buero = /<h5>Abgeordnetenbüro<\/h5>[\s\S]*?<p>([\s\S]*?)<\/p>/gm;
-            while ((m = regex_buero.exec(string)) !== null) {
+            // Office
+            let office: string[] = [];
+            const regex_office = /<h5>Abgeordnetenbüro<\/h5>[\s\S]*?<p>([\s\S]*?)<\/p>/gm;
+            while ((m = regex_office.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
-                if (m.index === regex_buero.lastIndex) {
-                    regex_buero.lastIndex++;
+                if (m.index === regex_office.lastIndex) {
+                    regex_office.lastIndex++;
                 }
 
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        buero = match.split(/<br>|<br\/>/);
+                        office = match.split(/<br>|<br\/>/);
                     }
                 });
             }
 
             // ID
-            let mdb_id: string = '';
+            let id: string = '';
             const regex_id = /<a title="Kontakt" href="\/service\/formular\/contactform\?mdbId=(.*?)"/gm;
             while ((m = regex_id.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
@@ -113,7 +112,7 @@ namespace Deputy_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        mdb_id = match;
+                        id = match;
                     }
                 });
             }
@@ -142,217 +141,239 @@ namespace Deputy_Parser {
                     regex_links.lastIndex++;
                 }
 
-                let link: any = { name: '', link: '' };
+                let link: any = { name: '', URL: '' };
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
                         link.name = match;
                     }
                     if (group === 2) {
-                        link.link = match;
+                        link.URL = match;
                         links.push(link);
                     }
                 });
             }
 
 
-            // Bio
-            let bio_sel: string = '';
-            let bio: string[] = [];
-            const regex_bio_sel = /<h4>Biografie<\/h4>[\s\S]*?<div class="bt-collapse-padding-bottom">[\s\S]*?<div>([\s\S]*?)<\/div>/gm;
-            const regex_bio = /<p>([\s\S]*?)<\/p>/gm;
-            while ((m = regex_bio_sel.exec(string)) !== null) {
+            // Biography
+            let biography_sel: string = '';
+            let biography: string[] = [];
+            const regex_biography_sel = /<h4>Biografie<\/h4>[\s\S]*?<div class="bt-collapse-padding-bottom">[\s\S]*?<div>([\s\S]*?)<\/div>/gm;
+            const regex_biography = /<p>([\s\S]*?)<\/p>/gm;
+            while ((m = regex_biography_sel.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
-                if (m.index === regex_bio_sel.lastIndex) {
-                    regex_bio_sel.lastIndex++;
+                if (m.index === regex_biography_sel.lastIndex) {
+                    regex_biography_sel.lastIndex++;
                 }
 
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        bio_sel = match;
+                        biography_sel = match;
                     }
                 });
             }
-            while ((m = regex_bio.exec(bio_sel)) !== null) {
+            while ((m = regex_biography.exec(biography_sel)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
-                if (m.index === regex_bio.lastIndex) {
-                    regex_bio.lastIndex++;
+                if (m.index === regex_biography.lastIndex) {
+                    regex_biography.lastIndex++;
                 }
 
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        bio.push(match.replace(/<\/?[^>]+(>|$)/g, ''));
+                        biography.push(match.replace(/<\/?[^>]+(>|$)/g, ''));
                     }
                 });
             }
 
-            // WK
-            let wk: string = '';
-            let wk_name: string = '';
-            const regex_wk = /<a title="Wahlkreis (\d*): (.*?)"/gm;
-            while ((m = regex_wk.exec(string)) !== null) {
+            // directCandidate
+            let directCandidate: boolean = false; // /<h4>Gewählt über Landesliste<\/h4>/
+            const regex_directCandidate = /<h4>Direkt gewählt<\/h4>/;
+            if (regex_directCandidate.exec(string) !== null) {
+                directCandidate = true;
+            }
+
+            // Constituency
+            let constituency: string = '';
+            let constituencyName: string = '';
+            const regex_constituency = /<a title="Wahlkreis (\d*): (.*?)"/gm;
+            while ((m = regex_constituency.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
-                if (m.index === regex_wk.lastIndex) {
-                    regex_wk.lastIndex++;
+                if (m.index === regex_constituency.lastIndex) {
+                    regex_constituency.lastIndex++;
                 }
 
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        wk = match;
+                        constituency = match;
                     }
                     if (group === 2) {
-                        wk_name = match;
+                        constituencyName = match;
                     }
                 });
             }
 
-            // Ämter
-            let aemter_sel: string = '';
-            let aemter_raw: string[] = [];
-            let aemter: any[] = [];
-            const regex_aemter_sel = /<div id="bt-aemter-collapse"[\s\S]*?>([\s\S]*?)<h4>Veröffentlichungspflichtige Angaben<\/h4>/gm;
-            const regex_aemter = /<h5>([\s\S]*?)<\/h5>[\s\S]*?<ul class="bt-linkliste">([\s\S]*?)<\/ul>/gm;
-            const regex_amt_raw = /<a [\s\S]*?>([\s\S]*?)<\/a>/gm;
-            const regex_amt_cat = /<h5>([\s\S]*?)<\/h5>/gm;
-            while ((m = regex_aemter_sel.exec(string)) !== null) {
+            // Functions (Ämter)
+            let functions_sel: string = '';
+            let functions_raw: string[] = [];
+            let functions: any[] = [];
+            const regex_functions_sel = /<div id="bt-aemter-collapse"[\s\S]*?>([\s\S]*?)<h4>Veröffentlichungspflichtige Angaben<\/h4>/gm;
+            const regex_functions = /<h5>([\s\S]*?)<\/h5>[\s\S]*?<ul class="bt-linkliste">([\s\S]*?)<\/ul>/gm;
+            const regex_functions_functions_raw = /<a [\s\S]*?>([\s\S]*?)<\/a>/gm;
+            const regex_functions_functions_cat = /<h5>([\s\S]*?)<\/h5>/gm;
+            while ((m = regex_functions_sel.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
-                if (m.index === regex_aemter_sel.lastIndex) {
-                    regex_aemter_sel.lastIndex++;
+                if (m.index === regex_functions_sel.lastIndex) {
+                    regex_functions_sel.lastIndex++;
                 }
 
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        aemter_sel = match;
+                        functions_sel = match;
                     }
                 });
             }
-            while ((m = regex_aemter.exec(aemter_sel)) !== null) {
+            while ((m = regex_functions.exec(functions_sel)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
-                if (m.index === regex_aemter.lastIndex) {
-                    regex_aemter.lastIndex++;
+                if (m.index === regex_functions.lastIndex) {
+                    regex_functions.lastIndex++;
                 }
 
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
-                    aemter_raw.push(match);
+                    functions_raw.push(match);
                 });
             }
-            aemter_raw.forEach((amt_raw) => {
-                let amt: any = { cat: '', amt: [] }
-                while ((m = regex_amt_cat.exec(amt_raw)) !== null) {
+            functions_raw.forEach((functions_functions_raw) => {
+                let f: any = { category: '', functions: [] }
+                while ((m = regex_functions_functions_cat.exec(functions_functions_raw)) !== null) {
                     // This is necessary to avoid infinite loops with zero-width matches
-                    if (m.index === regex_amt_cat.lastIndex) {
-                        regex_amt_cat.lastIndex++;
+                    if (m.index === regex_functions_functions_cat.lastIndex) {
+                        regex_functions_functions_cat.lastIndex++;
                     }
 
                     // The result can be accessed through the `m`-variable.
                     m.forEach((match, group) => {
                         if (group === 1) {
-                            amt.cat = match.trim();
+                            f.category = match.trim();
                         }
                     });
                 }
-                while ((m = regex_amt_raw.exec(amt_raw)) !== null) {
+                while ((m = regex_functions_functions_raw.exec(functions_functions_raw)) !== null) {
                     // This is necessary to avoid infinite loops with zero-width matches
-                    if (m.index === regex_amt_raw.lastIndex) {
-                        regex_amt_raw.lastIndex++;
+                    if (m.index === regex_functions_functions_raw.lastIndex) {
+                        regex_functions_functions_raw.lastIndex++;
                     }
 
                     // The result can be accessed through the `m`-variable.
                     m.forEach((match, group) => {
                         if (group === 1) {
-                            amt.amt.push(match.trim());
+                            f.functions.push(match.trim());
                         }
                     });
                 }
-                if (amt.cat && amt.amt.length > 0) {
-                    aemter.push(amt);
+                if (f.category && f.functions.length > 0) {
+                    functions.push(f);
                 }
             })
 
-            // Speeches URL
-            let speeches_url1: string = '';
-            let speeches_url2: string = '';
-            let speeches_url3: string = '';
-            let speeches_url4: string = '';
-            const regex_speeches = /<input type="hidden" data-fid="([\s\S]*?)" data-fpropertyfield="([\s\S]*?)" data-value="([\s\S]*?)"\/>[\s\S]*?data-url="([\s\S]*?)"/gm;
-            while ((m = regex_speeches.exec(string)) !== null) {
+            // SpeechesURL
+            let speechesURL1: string = '';
+            let speechesURL2: string = '';
+            let speechesURL3: string = '';
+            let speechesURL4: string = '';
+            const regex_speechesURL = /<input type="hidden" data-fid="([\s\S]*?)" data-fpropertyfield="([\s\S]*?)" data-value="([\s\S]*?)"\/>[\s\S]*?data-url="([\s\S]*?)"/gm;
+            while ((m = regex_speechesURL.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
-                if (m.index === regex_speeches.lastIndex) {
-                    regex_speeches.lastIndex++;
+                if (m.index === regex_speechesURL.lastIndex) {
+                    regex_speechesURL.lastIndex++;
                 }
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        speeches_url1 = match;
+                        speechesURL1 = match;
                     }
                     if (group === 2) {
-                        speeches_url2 = match;
+                        speechesURL2 = match;
                     }
                     if (group === 3) {
-                        speeches_url3 = match;
+                        speechesURL3 = match;
                     }
                     if (group === 4) {
-                        speeches_url4 = match;
+                        speechesURL4 = match;
                     }
                 });
             }
-            const speeches: string = base_url + speeches_url4 + '?' + speeches_url2 + '=' + speeches_url1 + '%23' + speeches_url3;
+            const speechesURL: string = base_url + speechesURL4 + '?' + speechesURL2 + '=' + speechesURL1 + '%23' + speechesURL3;
 
-            // Votes URL
-            let votes: string = '';
-            const regex_votes = /<div class="bt-abstimmungen-show-more bt-abstimmungen-showall">[\s\S]*?<button class="btn loadMore" type="submit" data-url="([\s\S]*?)">/gm;
-            while ((m = regex_votes.exec(string)) !== null) {
+            // VotesURL
+            let votesURL: string = '';
+            const regex_votesURL = /<div class="bt-abstimmungen-show-more bt-abstimmungen-showall">[\s\S]*?<button class="btn loadMore" type="submit" data-url="([\s\S]*?)">/gm;
+            while ((m = regex_votesURL.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
-                if (m.index === regex_votes.lastIndex) {
-                    regex_votes.lastIndex++;
+                if (m.index === regex_votesURL.lastIndex) {
+                    regex_votesURL.lastIndex++;
                 }
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        votes = base_url + match;
+                        votesURL = base_url + match;
                     }
                 });
             }
 
-            // Veröffentlichungspflichtige Angaben
-            let publication_requirement_sel: string = '';
-            let publication_requirement: any[] = [];
-            const publication_requirement_sel_regex = /<h4>Veröffentlichungspflichtige Angaben<\/h4>[\s\S]*?<ul[\s\S]*?>([\s\S]*?)<\/ul>/gm;
-            const publication_requirement_regex = /<li>([\s\S]*?)<\/li>/gm;
-            while ((m = publication_requirement_sel_regex.exec(string)) !== null) {
+            // publicationRequirement (Veröffentlichungspflichtige Angaben)
+            let publicationRequirement_sel: string = '';
+            let publicationRequirement: any[] = [];
+            const publicationRequirement_sel_regex = /<h4>Veröffentlichungspflichtige Angaben<\/h4>[\s\S]*?<ul[\s\S]*?>([\s\S]*?)<\/ul>/gm;
+            const publicationRequirement_regex = /<li>([\s\S]*?)<\/li>/gm;
+            while ((m = publicationRequirement_sel_regex.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
-                if (m.index === publication_requirement_sel_regex.lastIndex) {
-                    publication_requirement_sel_regex.lastIndex++;
-                }
-
-                // The result can be accessed through the `m`-variable.
-                m.forEach((match, group) => {
-                    if (group === 1) {
-                        publication_requirement_sel = match;
-                    }
-                });
-            }
-            while ((m = publication_requirement_regex.exec(publication_requirement_sel)) !== null) {
-                // This is necessary to avoid infinite loops with zero-width matches
-                if (m.index === publication_requirement_regex.lastIndex) {
-                    publication_requirement_regex.lastIndex++;
+                if (m.index === publicationRequirement_sel_regex.lastIndex) {
+                    publicationRequirement_sel_regex.lastIndex++;
                 }
 
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        publication_requirement.push(match.trim());
+                        publicationRequirement_sel = match;
+                    }
+                });
+            }
+            while ((m = publicationRequirement_regex.exec(publicationRequirement_sel)) !== null) {
+                // This is necessary to avoid infinite loops with zero-width matches
+                if (m.index === publicationRequirement_regex.lastIndex) {
+                    publicationRequirement_regex.lastIndex++;
+                }
+
+                // The result can be accessed through the `m`-variable.
+                m.forEach((match, group) => {
+                    if (group === 1) {
+                        publicationRequirement.push(match.trim());
                     }
                 });
             }
 
-            const id = `${mdb_id}_${name}`.replace(/(\.|\/| |,)/g, '_');
-            const result: any = { id, img, name, party, job, buero, links, bio, wk, wk_name, aemter, speeches, votes, publication_requirement, mdb_id };
+            const result: any = {
+                id,
+                imgURL,
+                name,
+                party,
+                job,
+                office,
+                links,
+                biography,
+                directCandidate,
+                constituency,
+                constituencyName,
+                functions,
+                speechesURL,
+                votesURL,
+                publicationRequirement
+            };
 
             return [{
                 metadata: data.metadata,

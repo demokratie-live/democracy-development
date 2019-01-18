@@ -1,5 +1,5 @@
 import { Xml } from '../browser/PlenarProtocolBrowser';
-import { IDataPackage, IParser } from 'scapacra';
+import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
 import { DocumentVotingEvaluator } from '../parser/evaluator/DocumentVotingEvaluator';
 
 export = Documents_Parser;
