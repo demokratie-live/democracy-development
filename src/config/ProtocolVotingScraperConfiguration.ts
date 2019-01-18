@@ -1,6 +1,6 @@
 import { Xml } from '../browser/PlenarProtocolBrowser';
 import { ProtocolScraperConfiguration } from '../config/ProtocolScraperConfiguration';
-import { IParser } from 'scapacra';
+import { IParser } from '@democracy-deutschland/scapacra';
 import { ProtocolVotingParser } from '../parser/ProtocolVotingParser';
 
 export = Documents_Config;

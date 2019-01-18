@@ -1,4 +1,4 @@
-import { IDataPackage, DataType, IBrowser } from 'scapacra';
+import { IDataPackage, DataType, IBrowser } from '@democracy-deutschland/scapacra';
 
 import { URL } from 'url';
 

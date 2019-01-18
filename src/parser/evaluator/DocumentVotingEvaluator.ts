@@ -1,4 +1,4 @@
-import { DocumentEvaluater } from 'scapacra'
+import { DocumentEvaluater } from '@democracy-deutschland/scapacra'
 
 export = Documents_Parser_Evaluator;
 

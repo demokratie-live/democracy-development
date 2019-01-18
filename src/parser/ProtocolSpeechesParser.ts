@@ -1,5 +1,5 @@
 import { Xml } from '../browser/PlenarProtocolBrowser';
-import { IDataPackage, IParser } from 'scapacra';
+import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
 import { DocumentSpeechEvaluator } from '../parser/evaluator/DocumentSpeechEvaluator';
 
 export = Documents_Parser;
@@ -11,9 +11,9 @@ namespace Documents_Parser {
     export class ProtocolSpeechesParser implements IParser<Xml>{
         public async parse(data: IDataPackage<Xml>): Promise<IDataPackage<JSON>[]> {
             let readableStream = data.data.openStream();
-            
+
             let speechEvaluator = new DocumentSpeechEvaluator(readableStream);
-            
+
             let speeches = await speechEvaluator.getSpeeches();
 
             return speeches.map(speech => {

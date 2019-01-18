@@ -1,4 +1,4 @@
-import { IBrowser, IParser, IScraperConfiguration } from 'scapacra';
+import { IBrowser, IParser, IScraperConfiguration } from '@democracy-deutschland/scapacra';
 import { URL } from 'url';
 import { Pdf, ProposedDecisionBrowser } from '../browser/ProposedDecisionBrowser';
 
