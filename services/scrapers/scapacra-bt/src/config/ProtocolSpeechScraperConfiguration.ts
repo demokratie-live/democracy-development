@@ -1,5 +1,5 @@
 import { ProtocolScraperConfiguration } from '../config/ProtocolScraperConfiguration';
-import { IParser } from 'scapacra';
+import { IParser } from '@democracy-deutschland/scapacra';
 import { ProtocolSpeechesParser } from '../parser/ProtocolSpeechesParser';
 import { Xml } from '../browser/PlenarProtocolBrowser';
 

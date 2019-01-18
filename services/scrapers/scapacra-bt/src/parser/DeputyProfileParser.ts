@@ -1,4 +1,4 @@
-import { IDataPackage, IParser } from 'scapacra';
+import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
 
 import { DeputyProfile } from '../browser/DeputyProfileBrowser';
 

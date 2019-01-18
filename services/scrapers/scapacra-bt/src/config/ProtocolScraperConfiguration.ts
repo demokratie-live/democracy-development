@@ -1,4 +1,4 @@
-import { IBrowser, IParser, IScraperConfiguration } from 'scapacra';
+import { IBrowser, IParser, IScraperConfiguration } from '@democracy-deutschland/scapacra';
 import { Xml, PlenarProtocolBrowser } from '../browser/PlenarProtocolBrowser';
 
 export = Documents_Config;

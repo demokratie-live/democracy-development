@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as util from 'util';
 
-import { Scraper } from 'scapacra';
+import { Scraper } from '@democracy-deutschland/scapacra';
 
 import {
     IProtocolScraperConfigurationOptions,

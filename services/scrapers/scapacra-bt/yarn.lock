@@ -2,6 +2,18 @@
 # yarn lockfile v1
 
 
+"@democracy-deutschland/scapacra@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra/-/scapacra-1.0.2.tgz#c15fcd7de6aa01abef13df3bb017301c48423243"
+  integrity sha512-8HLnxgF0Nf9uoln7aVA+3ND8m5LikgUBRJqRrYLO8i6HvQkZcVuh6AKPGz8IGQIXW8UVfRLaX8CFlvWHoIfQhw==
+  dependencies:
+    "@types/xml2js" "^0.4.3"
+    "@types/xmldom" "^0.1.29"
+    typescript "^3.1.6"
+    xml2js "^0.4.19"
+    xmldom "^0.1.27"
+    xpath "0.0.27"
+
 "@types/axios@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@types/axios/-/axios-0.14.0.tgz#ec2300fbe7d7dddd7eb9d3abf87999964cafce46"
@@ -1600,17 +1612,6 @@ sax@>=0.6.0, sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
-
-"scapacra@https://github.com/demokratie-live/scapacra.git#1.0.0":
-  version "1.0.0"
-  resolved "https://github.com/demokratie-live/scapacra.git#b60ff4b95e431420606a4f77c1945fccfac6d46a"
-  dependencies:
-    "@types/xml2js" "^0.4.3"
-    "@types/xmldom" "^0.1.29"
-    typescript "^3.1.6"
-    xml2js "^0.4.19"
-    xmldom "^0.1.27"
-    xpath "0.0.27"
 
 semver-diff@^2.0.0:
   version "2.1.0"
