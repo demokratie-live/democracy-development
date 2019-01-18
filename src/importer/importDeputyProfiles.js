@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
-import { Scraper } from 'scapacra';
-import { DeputyProfileScraperConfiguration } from 'scapacra-bt';
+import { Scraper } from '@democracy-deutschland/scapacra';
+import { DeputyProfileScraperConfiguration } from '@democracy-deutschland/scapacra-bt';
 
 import DeputyModel from '../models/Deputy';
 

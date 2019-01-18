@@ -147,6 +147,35 @@
     request-cookies "^1.1.0"
     x2js "^3.1.1"
 
+"@democracy-deutschland/scapacra-bt@1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra-bt/-/scapacra-bt-1.0.4.tgz#7438849fdb9168a7a2e11466a2111235aaa2978f"
+  integrity sha512-FAu/L/PNeZsRBIhefp5lttCvHAHaH64o7Yu21BeklKsCq8b6hmmGnQCyOLxWcv90Vk3xgN4ZqRJ20WN40aCW6A==
+  dependencies:
+    "@democracy-deutschland/scapacra" "1.0.2"
+    "@types/axios" "^0.14.0"
+    "@types/xml2js" "^0.4.3"
+    "@types/xmldom" "^0.1.29"
+    axios "^0.18.0"
+    jsonschema "^1.2.4"
+    typescript "^3.1.6"
+    url "^0.11.0"
+    xml2js "^0.4.19"
+    xmldom "^0.1.27"
+    xpath "^0.0.27"
+
+"@democracy-deutschland/scapacra@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra/-/scapacra-1.0.2.tgz#c15fcd7de6aa01abef13df3bb017301c48423243"
+  integrity sha512-8HLnxgF0Nf9uoln7aVA+3ND8m5LikgUBRJqRrYLO8i6HvQkZcVuh6AKPGz8IGQIXW8UVfRLaX8CFlvWHoIfQhw==
+  dependencies:
+    "@types/xml2js" "^0.4.3"
+    "@types/xmldom" "^0.1.29"
+    typescript "^3.1.6"
+    xml2js "^0.4.19"
+    xmldom "^0.1.27"
+    xpath "0.0.27"
+
 "@material-ui/icons@^1.0.0-beta.42":
   version "1.0.0-beta.42"
   resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-1.0.0-beta.42.tgz#1e0e45e8f4de533071c7e4532508fa79bf1f29d9"
@@ -5796,33 +5825,6 @@ sax@>=0.6.0, sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
-
-"scapacra-bt@https://github.com/demokratie-live/scapacra-bt.git#release/1.0.1":
-  version "1.0.1"
-  resolved "https://github.com/demokratie-live/scapacra-bt.git#21b0c9401aff8ff125426864d7d8fddf3e3c839d"
-  dependencies:
-    "@types/axios" "^0.14.0"
-    "@types/xml2js" "^0.4.3"
-    "@types/xmldom" "^0.1.29"
-    axios "^0.18.0"
-    jsonschema "^1.2.4"
-    scapacra "https://github.com/demokratie-live/scapacra.git#1.0.0"
-    typescript "^3.1.6"
-    url "^0.11.0"
-    xml2js "^0.4.19"
-    xmldom "^0.1.27"
-    xpath "^0.0.27"
-
-"scapacra@https://github.com/demokratie-live/scapacra.git#1.0.0":
-  version "1.0.0"
-  resolved "https://github.com/demokratie-live/scapacra.git#b60ff4b95e431420606a4f77c1945fccfac6d46a"
-  dependencies:
-    "@types/xml2js" "^0.4.3"
-    "@types/xmldom" "^0.1.29"
-    typescript "^3.1.6"
-    xml2js "^0.4.19"
-    xmldom "^0.1.27"
-    xpath "0.0.27"
 
 scroll@^2.0.3:
   version "2.0.3"
