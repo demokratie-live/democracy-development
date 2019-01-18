@@ -1,6 +1,6 @@
 {
   "name": "@democracy-deutschland/scapacra-bt",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Scapacra Bundestag",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -14,11 +14,12 @@
   },
   "scripts": {
     "build": "tsc",
+    "link": "cd dist && npm link",
     "dev": "nodemon .\\src\\run.ts",
     "lint": "tslint --project tsconfig.json && yarn typecheck",
     "typecheck": "tsc --noEmit",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
-    "prepare": "tsc"
+    "prepare": "npm run build"
   },
   "bugs": {
     "url": "https://github.com/demokratie-live/bt-scapacra/issues"
