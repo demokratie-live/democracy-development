@@ -100,17 +100,23 @@ matrix:
       components:
       - tools
       - platform-tools
-      # android 23,25,26
+      # build tools
       - build-tools-23.0.1
       - build-tools-25.0.0
       - build-tools-25.0.1
       - build-tools-25.0.2
+      - build-tools-25.3.3
       - build-tools-26.0.1
       - build-tools-26.0.2
       - build-tools-26.0.3
+      - build-tools-27.0.3
+      - build-tools-28.0.3
+      # android
       - android-23
       - android-25
       - android-26
+      - android-27
+      - android-28
       # extra
       - extra-android-m2repository
       - extra-google-google_play_services
@@ -121,6 +127,8 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     before_install:
+    # Allow more watched files
+    - echo fs.inotify.max_user_watches=2048000 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # do not ensure we are on any branch - this is internal
@@ -136,7 +144,7 @@ matrix:
     - ./.travis/discord.sh -t "Failure Internal $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy internal
   - if: tag =~ -internal\+client
-    osx_image: xcode9.2
+    osx_image: xcode10.1
     language: objective-c
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
@@ -205,17 +213,23 @@ matrix:
       components:
       - tools
       - platform-tools
-      # android 23,25,26
+      # build tools
       - build-tools-23.0.1
       - build-tools-25.0.0
       - build-tools-25.0.1
       - build-tools-25.0.2
+      - build-tools-25.3.3
       - build-tools-26.0.1
       - build-tools-26.0.2
       - build-tools-26.0.3
+      - build-tools-27.0.3
+      - build-tools-28.0.3
+      # android
       - android-23
       - android-25
       - android-26
+      - android-27
+      - android-28
       # extra
       - extra-android-m2repository
       - extra-google-google_play_services
@@ -226,6 +240,8 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     before_install:
+    # Allow more watched files
+    - echo fs.inotify.max_user_watches=2048000 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the alpha/master branch
@@ -242,7 +258,7 @@ matrix:
     - ./.travis/discord.sh -t "Failure Alpha $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy alpha
   - if: tag =~ -alpha\+client
-    osx_image: xcode9.2
+    osx_image: xcode10.1
     language: objective-c
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
@@ -312,17 +328,23 @@ matrix:
       components:
       - tools
       - platform-tools
-      # android 23,25,26
+      # build tools
       - build-tools-23.0.1
       - build-tools-25.0.0
       - build-tools-25.0.1
       - build-tools-25.0.2
+      - build-tools-25.3.3
       - build-tools-26.0.1
       - build-tools-26.0.2
       - build-tools-26.0.3
+      - build-tools-27.0.3
+      - build-tools-28.0.3
+      # android
       - android-23
       - android-25
       - android-26
+      - android-27
+      - android-28
       # extra
       - extra-android-m2repository
       - extra-google-google_play_services
@@ -333,6 +355,8 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     before_install:
+    # Allow more watched files
+    - echo fs.inotify.max_user_watches=2048000 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the beta/master branch
@@ -349,7 +373,7 @@ matrix:
     - ./.travis/discord.sh -t "Failure Beta $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy beta
   - if: tag =~ -beta\+client
-    osx_image: xcode9.2
+    osx_image: xcode10.1
     language: objective-c
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
@@ -419,17 +443,23 @@ matrix:
       components:
       - tools
       - platform-tools
-      # android 23,25,26
+      # build tools
       - build-tools-23.0.1
       - build-tools-25.0.0
       - build-tools-25.0.1
       - build-tools-25.0.2
+      - build-tools-25.3.3
       - build-tools-26.0.1
       - build-tools-26.0.2
       - build-tools-26.0.3
+      - build-tools-27.0.3
+      - build-tools-28.0.3
+      # android
       - android-23
       - android-25
       - android-26
+      - android-27
+      - android-28
       # extra
       - extra-android-m2repository
       - extra-google-google_play_services
@@ -440,6 +470,8 @@ matrix:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
     before_install:
+    # Allow more watched files
+    - echo fs.inotify.max_user_watches=2048000 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
     - ./.travis/decrypt.sh
     - source ./.travis/env.sh
     # ensure we are on the master branch
@@ -457,7 +489,7 @@ matrix:
     - ./.travis/discord.sh -t "Failure Production $TRAVIS_TAG" -d "[Android] Deploy Build $BUILD_NUMBER on Tag $TRAVIS_TAG failed" -c error
   # ios deploy production
   - if: tag =~ -production\+client
-    osx_image: xcode9.2
+    osx_image: xcode10.1
     language: objective-c
     xcode_project: ios/democracyclient.xcodeproj
     xcode_scheme: ios/democracyclientTests
