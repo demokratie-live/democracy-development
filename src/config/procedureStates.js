@@ -9,7 +9,7 @@ export default {
     'Einbringung beschlossen',
     'Überwiesen',
   ],
-  VOTING: ['Beschlussempfehlung liegt vor', 'Überwiesen'],
+  IN_VOTE: ['Beschlussempfehlung liegt vor', 'Überwiesen'],
   COMPLETED: [
     'Nicht abgeschlossen - Einzelheiten siehe Vorgangsablauf',
     'Erledigt durch Ablauf der Wahlperiode',
