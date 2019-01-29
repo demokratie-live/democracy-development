@@ -44,7 +44,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
           if (
             !CONSTANTS.WHITELIST_DATA_SOURCES.some(
               address =>
-                address.length > 3 && context.req.connection.remoteAddress.indexOf(address) !== -1,
+                address.length >= 3 && context.req.connection.remoteAddress.indexOf(address) !== -1,
             )
           ) {
             Log.warn(
@@ -56,7 +56,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
           }
         }
         if (!allow) {
-          throw new Error('not authorized');
+          throw new Error(`not authorized ${context.req.connection.remoteAddress}`);
         }
 
         return resolve.apply(this, args);
