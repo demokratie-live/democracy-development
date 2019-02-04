@@ -3,11 +3,13 @@ import { ProtocolSpeechScraperConfiguration } from './config/ProtocolSpeechScrap
 import { ProtocolVotingScraperConfiguration } from './config/ProtocolVotingScraperConfiguration';
 import { ProposedDecisionScraperConfiguration } from './config/ProposedDecisionScraperConfiguration';
 import { DeputyProfileScraperConfiguration } from './config/DeputyProfileScraperConfiguration';
+import { NamedPollScraperConfiguration } from './config/NamedPollScraperConfiguration';
 
 export {
     IProtocolScraperConfigurationOptions,
     ProtocolSpeechScraperConfiguration,
     ProtocolVotingScraperConfiguration,
     ProposedDecisionScraperConfiguration,
-    DeputyProfileScraperConfiguration
+    DeputyProfileScraperConfiguration,
+    NamedPollScraperConfiguration
 }

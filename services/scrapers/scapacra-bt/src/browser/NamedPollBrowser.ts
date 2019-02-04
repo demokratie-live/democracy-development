@@ -2,20 +2,21 @@ import { IDataPackage, DataType, IBrowser } from '@democracy-deutschland/scapacr
 
 import { URL } from 'url';
 
-import { DeputyHrefEvaluator } from '../parser/evaluator/DeputyHrefEvaluator';
+import { NamedPollHrefEvaluator } from '../parser/evaluator/NamedPollHrefEvaluator';
 
 import axios = require('axios');
+import { url } from 'inspector';
 
-export = Deputy_Browser;
+export = NamedPoll_Browser;
 
-namespace Deputy_Browser {
-    export class DeputyProfile extends DataType {
+namespace NamedPoll_Browser {
+    export class NamedPoll extends DataType {
     }
 
     /**
      * Abstract browser which implements the base navigation of a Bundestag document list. 
      */
-    export class DeputyProfileBrowser implements IBrowser<DeputyProfile>{
+    export class NamedPollBrowser implements IBrowser<NamedPoll>{
         /**
          * Provides the page size of the target list.  
          */
@@ -26,13 +27,15 @@ namespace Deputy_Browser {
          */
         //protected abstract createFromStream(readableStream: NodeJS.ReadableStream): DeputyProfile;
 
-        private readonly listURL: URL = new URL("https://www.bundestag.de/ajax/filterlist/de/abgeordnete/biografien/-/525246/h_e3c112579919ef960d06dbb9d0d44b67?limit=9999&view=BTBiographyList")
+        private readonly listURL: URL = new URL("https://www.bundestag.de/ajax/filterlist/de/parlament/plenum/abstimmung/-/484422/h_49f0d94cb26682ff1e9428b6de471a5b?limit=10&noFilterSet=true")
+        private readonly listURLOffset: string = '&offset=';
         private readonly baseUrl: URL = new URL("https://www.bundestag.de");
-        private loaded: boolean = false;
 
-        private deputyUrls: URL[] = [];
+        private pollUrls: URL[] = [];
+        private offset = 0;
+        private done = false;
 
-        public next(): IteratorResult<Promise<IDataPackage<DeputyProfile>>> {
+        public next(): IteratorResult<Promise<IDataPackage<NamedPoll>>> {
             let hasNext = this.hasNext();
             let value = this.loadNext();
 
@@ -43,21 +46,17 @@ namespace Deputy_Browser {
         }
 
         private hasNext(): boolean {
-            return !this.loaded || this.deputyUrls.length > 1;
+            return this.pollUrls.length > 1 || !this.done;
         }
 
-        private async loadNext(): Promise<IDataPackage<DeputyProfile>> {
-            if (!this.loaded) {
-                await this.retrieveList();
-                this.loaded = true;
-            }
+        private async loadNext(): Promise<IDataPackage<NamedPoll>> {
+            await this.retrieveMore(); // May fetch more results
 
-            let blobUrl = this.deputyUrls.shift();
+            let blobUrl = this.pollUrls.shift();
 
             if (blobUrl === undefined) {
                 throw new Error("URL stack is empty.");
             }
-            // console.log(blobUrl.toString());
 
             let response = await axios.default.get(
                 blobUrl.toString(),
@@ -72,16 +71,20 @@ namespace Deputy_Browser {
                     metadata: {
                         url: blobUrl.toString()
                     },
-                    data: new DeputyProfile(response.data)
+                    data: new NamedPoll(response.data)
                 }
             } else {
                 throw new Error(response.statusText);
             }
         }
 
-        private async retrieveList(): Promise<void> {
+        private async retrieveMore(): Promise<void> {
+            if (this.done) {
+                return; // We already retrieved everything
+            }
+            const reqURL = this.listURL.toString() + this.listURLOffset + this.offset;
             let response = await axios.default.get(
-                this.listURL.toString(),
+                reqURL,
                 {
                     method: 'get',
                     responseType: 'stream'
@@ -89,7 +92,7 @@ namespace Deputy_Browser {
             );
 
             if (response.status === 200) {
-                let evaluator = new DeputyHrefEvaluator(response.data);
+                let evaluator = new NamedPollHrefEvaluator(response.data);
 
                 let urls = await evaluator.getSources();
 
@@ -102,15 +105,19 @@ namespace Deputy_Browser {
                     } else {
                         url = new URL(urlPath);
                     }
-                    this.deputyUrls.push(url);
+                    this.pollUrls.push(url);
                 });
+                this.offset += 10;
+                if (urls.length === 0) {
+                    this.done = true;
+                }
             }
             else {
                 throw new Error(response.statusText);
             }
         }
 
-        [Symbol.iterator](): IterableIterator<Promise<IDataPackage<DeputyProfile>>> {
+        [Symbol.iterator](): IterableIterator<Promise<IDataPackage<NamedPoll>>> {
             return this;
         }
     }
