@@ -3,9 +3,9 @@ var moment = require('moment');
 
 import { NamedPoll } from '../browser/NamedPollBrowser';
 
-export = Deputy_Parser;
+export = NamedPoll_Parser;
 
-namespace Deputy_Parser {
+namespace NamedPoll_Parser {
     /**
      * This parser gets all potention fraction votings from a "Plenarprotokoll" of the german Bundestag.
      */
