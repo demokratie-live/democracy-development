@@ -4,6 +4,7 @@ import { ProtocolVotingScraperConfiguration } from './config/ProtocolVotingScrap
 import { ProposedDecisionScraperConfiguration } from './config/ProposedDecisionScraperConfiguration';
 import { DeputyProfileScraperConfiguration } from './config/DeputyProfileScraperConfiguration';
 import { NamedPollScraperConfiguration } from './config/NamedPollScraperConfiguration';
+import { NamedPollDeputyScraperConfiguration } from './config/NamedPollDeputyScraperConfiguration';
 
 export {
     IProtocolScraperConfigurationOptions,
@@ -11,5 +12,6 @@ export {
     ProtocolVotingScraperConfiguration,
     ProposedDecisionScraperConfiguration,
     DeputyProfileScraperConfiguration,
-    NamedPollScraperConfiguration
+    NamedPollScraperConfiguration,
+    NamedPollDeputyScraperConfiguration
 }
