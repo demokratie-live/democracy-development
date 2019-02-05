@@ -2,21 +2,17 @@
 
 import express from 'express';
 import { CronJob } from 'cron';
-import bodyParser from 'body-parser';
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
-import { makeExecutableSchema } from 'graphql-tools';
-import { createServer } from 'http';
-import { Engine } from 'apollo-engine';
+import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
 import { inspect } from 'util';
 
 import './services/logger';
 
 import DB, { mongoose } from './config/db';
-import constants from './config/constants';
+import CONSTANTS from './config/constants';
 import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers';
-import { auth as authDirective } from './graphql/schemaDirectives';
+import { AuthDirective } from './graphql/schemaDirectives';
 
 import importProcedures from './importer/importProcedures';
 import importAgenda from './importer/importAgenda';
@@ -36,54 +32,35 @@ const main = async () => {
 
   server.use(cors());
 
-  const schema = makeExecutableSchema({
+  // Graphql
+  const graphQlServer = new ApolloServer({
+    engine: CONSTANTS.ENGINE_API_KEY
+      ? {
+          apiKey: CONSTANTS.ENGINE_API_KEY,
+        }
+      : false,
     typeDefs,
     resolvers,
     schemaDirectives: {
-      auth: authDirective,
+      auth: AuthDirective,
     },
-  });
-
-  // Apollo Engine
-  if (process.env.ENGINE_API_KEY) {
-    const engine = new Engine({
-      engineConfig: { apiKey: process.env.ENGINE_API_KEY },
-    });
-    engine.start();
-    server.use(engine.expressMiddleware());
-  }
-
-  server.use(bodyParser.json());
-
-  server.use(cors());
-
-  // Graphiql
-  if (constants.GRAPHIQL) {
-    server.use(
-      constants.GRAPHIQL_PATH,
-      graphiqlExpress({
-        endpointURL: constants.GRAPHQL_PATH,
-      }),
-    );
-  }
-
-  // Graphql
-  server.use(constants.GRAPHQL_PATH, (req, res, next) => {
-    graphqlExpress({
-      schema,
-      context: {
-        req,
-        res,
-        user: req.user,
-        // Models
-        ProcedureModel,
-        UserModel,
-        DeputyModel,
-        HistoryModel: mongoose.model('History'),
-      },
-      tracing: true,
-      cacheControl: true,
-    })(req, res, next);
+    playground: CONSTANTS.GRAPHIQL
+      ? {
+          endpoint: CONSTANTS.GRAPHQL_PATH,
+        }
+      : false,
+    context: ({ req, res }) => ({
+      // Connection
+      req,
+      res,
+      // user
+      user: req.user,
+      // Models
+      ProcedureModel,
+      UserModel,
+      DeputyModel,
+      HistoryModel: mongoose.model('History'),
+    }),
   });
 
   server.get('/search', (req, res) => {
@@ -110,22 +87,24 @@ const main = async () => {
   });
 
   // Create & start Server + Cron
-  const graphqlServer = createServer(server);
-  graphqlServer.listen(constants.PORT, err => {
-    if (err) {
-      Log.error(inspect(err));
-    } else {
-      Log.info(`App is listen on port: ${constants.PORT}`);
-      const crons = [
-        new CronJob('15 * * * *', importProcedures, null, true, 'Europe/Berlin', null, true),
-        new CronJob('*/15 * * * *', importAgenda, null, true, 'Europe/Berlin', null, true),
-        new CronJob('30 * * * *', importNamedPolls, null, true, 'Europe/Berlin', null, true),
-        new CronJob('30 * * * *', importDeputyProfiles, null, true, 'Europe/Berlin', null, true),
-      ];
-      if (constants.DEBUG) {
-        Log.info('crons', crons.length);
-      }
+  graphQlServer.applyMiddleware({
+    app: server,
+    path: CONSTANTS.GRAPHQL_PATH,
+  });
+
+  server.listen({ port: CONSTANTS.PORT }, () => {
+    Log.info(`App is listen on port: ${CONSTANTS.PORT}`);
+    const crons = [
+      new CronJob('15 * * * *', importProcedures, null, true, 'Europe/Berlin', null, true),
+      new CronJob('*/15 * * * *', importAgenda, null, true, 'Europe/Berlin', null, true),
+      new CronJob('30 * * * *', importNamedPolls, null, true, 'Europe/Berlin', null, true),
+      new CronJob('30 * * * *', importDeputyProfiles, null, true, 'Europe/Berlin', null, true),
+    ];
+    if (CONSTANTS.DEBUG) {
+      Log.info('crons', crons.length);
     }
+
+    console.log(`🚀 Server ready at http://localhost:${CONSTANTS.PORT}${CONSTANTS.GRAPHQL_PATH}`);
   });
 };
 

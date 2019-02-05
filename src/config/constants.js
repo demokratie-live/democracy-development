@@ -11,7 +11,8 @@ export default {
     },
   },
   ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL || 'elasticsearch',
-  GRAPHIQL: process.env.GRAPHIQL || false,
+  ENGINE_API_KEY: process.env.ENGINE_API_KEY || null,
+  GRAPHIQL: process.env.GRAPHIQL === 'true' || false,
   GRAPHIQL_PATH: '/graphiql',
   GRAPHQL_PATH: '/',
   WHITELIST_DATA_SOURCES: process.env.WHITELIST_DATA_SOURCES
