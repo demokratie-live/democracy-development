@@ -1,54 +1,90 @@
-import Scraper from '@democracy-deutschland/bt-named-polls';
+import _ from 'lodash';
+import { Scraper } from '@democracy-deutschland/scapacra';
+import { NamedPollScraperConfiguration } from '@democracy-deutschland/scapacra-bt';
 
-// import moment from "moment";
-import axios from 'axios';
+import Procedure from '../models/Procedure';
 
-import CONSTANTS from './../config/constants';
+export default async () => {
+  console.log('START NAMED POLLS SCRAPER');
+  await Scraper.scrape([new NamedPollScraperConfiguration()], dataPackages => {
+    dataPackages.map(async dataPackage => {
+      let procedureId = null;
+      // TODO unify
+      // currently the dip21 scraper returns document urls like so:
+      // "http://dipbt.bundestag.de:80/dip21/btd/19/010/1901038.pdf
+      // The named poll scraper returns them like so:
+      // http://dip21.bundestag.de/dip21/btd/19/010/1901038.pdf
+      const findSpotUrls = dataPackage.data.documents.map(document =>
+        document.replace('http://dip21.bundestag.de/', 'http://dipbt.bundestag.de:80/'),
+      );
 
-import Procedure from './../models/Procedure';
-import NamedPolls from './../models/NamedPolls';
+      // Find matching Procedures
+      let procedures = await Procedure.find({
+        'history.findSpotUrl': { $all: findSpotUrls },
+        'history.decision.type': 'Namentliche Abstimmung',
+      });
 
-let procedureIds = [];
+      // Do we have to many macthes? Try to narrow down to one
+      if (procedures.length > 1) {
+        Log.warn(`Named Polls Scraper need to use comment on: ${dataPackage.metadata.url}`);
+        procedures = await Procedure.find({
+          'history.findSpotUrl': { $all: findSpotUrls },
+          'history.decision.type': 'Namentliche Abstimmung',
+          'history.decision.comment': new RegExp(
+            `.*?${dataPackage.data.votes.all.yes}:${dataPackage.data.votes.all.no}:${
+              dataPackage.data.votes.all.abstain
+            }.*?`,
+          ),
+        });
+      }
 
-const checkDocuments = async data => {
-  process.stdout.write('n');
-  const { id, title, date, documents, voteResults } = data;
+      // We did not find anything, Exclude Entschließungsantrag
+      if (
+        procedures.length === 0 &&
+        dataPackage.data.title.indexOf('Entschließungsantrag') === -1
+      ) {
+        Log.error(`Named Polls Scraper no match on: ${dataPackage.metadata.url}`);
+      }
 
-  const summarized = {
-    yes: 0,
-    no: 0,
-    abstination: 0,
-    notVoted: 0,
-  };
+      // We have exactly one match and can assign the procedureId
+      if (procedures.length === 1) {
+        [{ procedureId }] = procedures;
+      }
 
-  Object.keys(voteResults).forEach(key => {
-    summarized.yes += parseInt(voteResults[key].Ja, 10);
-    summarized.no += parseInt(voteResults[key].Nein, 10);
-    summarized.abstination += parseInt(voteResults[key].Enthalten, 10);
-    summarized.notVoted += parseInt(voteResults[key].Nicht, 10);
+      // Construct Database object
+      const namedPoll = {
+        procedureId,
+        URL: dataPackage.metadata.url,
+        webId: dataPackage.data.id,
+        date: dataPackage.data.date,
+        title: dataPackage.data.title,
+        description: dataPackage.data.description,
+        detailedDescription: dataPackage.data.detailedDescription,
+        documents: dataPackage.data.documents,
+        deputyVotesURL: dataPackage.data.deputyVotesURL,
+        membersVoted: dataPackage.data.membersVoted,
+        votes: dataPackage.data.votes,
+        plenarProtocolURL: dataPackage.data.plenarProtocolURL,
+        media: dataPackage.data.media,
+        speeches: dataPackage.data.speeches,
+      };
+
+      // Update/Insert
+      await NamedPollModel.update(
+        { webId: namedPoll.webId },
+        { $set: _.pickBy(namedPoll) },
+        { upsert: true },
+      );
+
+      return null;
+    });
   });
-
-  await NamedPolls.findOneAndUpdate(
-    { pollId: id },
-    {
-      pollId: id,
-      title,
-      date,
-      documents,
-      ...summarized,
-      voteResults: Object.keys(voteResults).map(key => ({
-        party: key,
-        yes: voteResults[key].Ja,
-        no: voteResults[key].Nein,
-        abstination: voteResults[key].Enthalten,
-        notVoted: voteResults[key].Nicht,
-      })),
-    },
-    {
-      upsert: true,
-    },
-  );
+  console.log('FINISH NAMED POLLS SCRAPER');
 };
+
+/* import Scraper from '@democracy-deutschland/bt-named-polls';
+
+import NamedPolls from './../models/NamedPolls';
 
 const matchWithProcedure = async ({ documents, yes, abstination, no, notVoted, voteResults }) => {
   const procedures = await Procedure.find({
@@ -171,57 +207,4 @@ const matchWithProcedure = async ({ documents, yes, abstination, no, notVoted, v
     });
   }
 };
-
-const syncWithDemocracy = async () => {
-  console.log('NamedPolls: syncWithDemocracy');
-
-  const polls = await NamedPolls.find();
-
-  await Promise.all(polls.map(poll => matchWithProcedure(poll)));
-
-  await axios
-    .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
-      data: { procedureIds: [...new Set(procedureIds)], name: 'NamedPolls' },
-      timeout: 1000 * 60 * 5,
-    })
-    .then(async response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.log(`democracy server error: ${error}`);
-    });
-  console.log('FINISH NAMED POLL SCRAPER');
-  procedureIds = [];
-};
-
-const scraper = new Scraper();
-export default async () => {
-  console.log('START NAMED POLL SCRAPER');
-  let startId = 1;
-  const lastNamedPoll = await NamedPolls.findOne({}, { pollId: 1 }).sort({
-    pollId: -1,
-  });
-
-  // Scrape one time a day all named polls
-  if (lastNamedPoll) {
-    const lastFullScrapeObj = await NamedPolls.findOne({}, { updatedAt: 1 }).sort({
-      updatedAt: 1,
-    });
-
-    const lastFullScrape = new Date(lastFullScrapeObj.updatedAt);
-    // Do your operations
-    const curDate = new Date();
-    const hours = (curDate.getTime() - lastFullScrape.getTime()) / 1000 / 60 / 60;
-    startId = hours < 24 ? lastNamedPoll.pollId : startId;
-  }
-
-  scraper
-    .scrape({
-      startId,
-      onData: checkDocuments,
-      onFinish: syncWithDemocracy,
-    })
-    .catch(error => {
-      console.error('ERROR: Named Polls', error);
-    });
-};
+*/
