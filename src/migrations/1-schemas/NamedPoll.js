@@ -1,6 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 
-const NamedPollsSchema = new Schema(
+const NamedPollSchema = new Schema(
   {
     pollId: { type: Number, index: true, unique: true },
     title: String,
@@ -23,4 +23,4 @@ const NamedPollsSchema = new Schema(
   { timestamps: true },
 );
 
-export default mongoose.model('NamedPolls', NamedPollsSchema);
+export default NamedPollSchema;

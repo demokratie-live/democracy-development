@@ -2,7 +2,8 @@ import axios from 'axios';
 import diffHistory from 'mongoose-diff-history/diffHistory';
 import { inspect } from 'util';
 
-import { mongoose } from '../../config/db';
+// import { mongoose } from '../../config/db';
+import mongoose from 'mongoose';
 import CONSTANTS from '../../config/constants';
 
 import PROCEDURE_STATES from '../../config/procedureStates';

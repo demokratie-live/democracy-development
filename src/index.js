@@ -1,132 +1,80 @@
 /* eslint-disable no-console */
 
 import express from 'express';
-import { CronJob } from 'cron';
 import bodyParser from 'body-parser';
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
-import { makeExecutableSchema } from 'graphql-tools';
 import { createServer } from 'http';
-import { Engine } from 'apollo-engine';
 import cors from 'cors';
 import { inspect } from 'util';
 
+// *****************************************************************
+// IMPORTANT - you cannot include any models before migrating the DB
+// *****************************************************************
+
+// Allow global Log
 import './services/logger';
 
-import DB, { mongoose } from './config/db';
-import constants from './config/constants';
-import typeDefs from './graphql/schemas';
-import resolvers from './graphql/resolvers';
-import { auth as authDirective } from './graphql/schemaDirectives';
+import CONSTANTS from './config/constants';
 
-import importProcedures from './importer/importProcedures';
-import importAgenda from './importer/importAgenda';
-import importNamedPolls from './importer/importNamedPolls';
-import importDeputyProfiles from './importer/importDeputyProfiles';
-
-// Models
-import ProcedureModel from './models/Procedure';
-import UserModel from './models/User';
-import DeputyModel from './models/Deputy';
+import connectDB from './services/mongoose';
+import migrateDB from './services/migration';
+import apolloEngine from './services/apolloEngine';
+import graphiql from './services/graphiql';
 
 const main = async () => {
-  // Start DB Connection
-  await DB();
+  // Connect to DB - this keeps the process running
+  // IMPORTANT - This is done before any Model is registered
+  await connectDB();
 
+  // Migrate DB if required - can exit the process
+  // IMPORTANT - you cannot include any models before finishing this
+  //   else every schema including an index will be created in the database
+  //   even tho is is quite retarded it is the way it is
+  await migrateDB();
+
+  // Express Server
   const server = express();
 
+  // Cors
   server.use(cors());
 
-  const schema = makeExecutableSchema({
-    typeDefs,
-    resolvers,
-    schemaDirectives: {
-      auth: authDirective,
-    },
-  });
-
-  // Apollo Engine
-  if (process.env.ENGINE_API_KEY) {
-    const engine = new Engine({
-      engineConfig: { apiKey: process.env.ENGINE_API_KEY },
-    });
-    engine.start();
-    server.use(engine.expressMiddleware());
-  }
-
+  // Bodyparser
   server.use(bodyParser.json());
 
-  server.use(cors());
+  // Graphql
+  // Here several Models are included for graphql
+  // if that did not happen in the migration
+  const graphql = require('./services/graphql'); // eslint-disable-line global-require
+  server.use(CONSTANTS.GRAPHQL_PATH, graphql);
 
-  // Graphiql
-  if (constants.GRAPHIQL) {
-    server.use(
-      constants.GRAPHIQL_PATH,
-      graphiqlExpress({
-        endpointURL: constants.GRAPHQL_PATH,
-      }),
-    );
+  // Search
+  // Procedure Model is included
+  const search = require('./services/search'); // eslint-disable-line global-require
+  server.get('/search', search);
+
+  // Apollo Engine
+  if (CONSTANTS.ENGINE_API_KEY) {
+    server.use(apolloEngine);
   }
 
-  // Graphql
-  server.use(constants.GRAPHQL_PATH, (req, res, next) => {
-    graphqlExpress({
-      schema,
-      context: {
-        req,
-        res,
-        user: req.user,
-        // Models
-        ProcedureModel,
-        UserModel,
-        DeputyModel,
-        HistoryModel: mongoose.model('History'),
-      },
-      tracing: true,
-      cacheControl: true,
-    })(req, res, next);
-  });
+  // Graphiql
+  if (CONSTANTS.GRAPHIQL_PATH) {
+    server.use(CONSTANTS.GRAPHIQL_PATH, graphiql());
+  }
 
-  server.get('/search', (req, res) => {
-    ProcedureModel.search(
-      {
-        function_score: {
-          query: {
-            multi_match: {
-              query: req.query.s,
-              fields: ['title^3', 'tags^2.5', 'abstract^2'],
-              fuzziness: 'AUTO',
-              prefix_length: 2,
-            },
-          },
-        },
-      },
-      (err, result) => {
-        if (err) {
-          Log.error(inspect(err));
-        }
-        res.send(result);
-      },
-    );
-  });
-
-  // Create & start Server + Cron
+  // Create & start Server
   const graphqlServer = createServer(server);
-  graphqlServer.listen(constants.PORT, err => {
+  graphqlServer.listen(CONSTANTS.PORT, err => {
     if (err) {
       Log.error(inspect(err));
     } else {
-      Log.info(`App is listen on port: ${constants.PORT}`);
-      const crons = [
-        new CronJob('15 * * * *', importProcedures, null, true, 'Europe/Berlin', null, true),
-        new CronJob('*/15 * * * *', importAgenda, null, true, 'Europe/Berlin', null, true),
-        new CronJob('30 * * * *', importNamedPolls, null, true, 'Europe/Berlin', null, true),
-        new CronJob('30 * * * *', importDeputyProfiles, null, true, 'Europe/Berlin', null, true),
-      ];
-      if (constants.DEBUG) {
-        Log.info('crons', crons.length);
-      }
+      Log.info(`App is listen on port: ${CONSTANTS.PORT}`);
     }
   });
+
+  // Start CronJobs (Bundestag Importer)
+  // Serveral Models are included
+  const cronJobs = require('./services/cronJobs'); // eslint-disable-line global-require
+  cronJobs();
 };
 
 // Async Wrapping Function

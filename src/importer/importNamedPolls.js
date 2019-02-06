@@ -3,6 +3,7 @@ import { Scraper } from '@democracy-deutschland/scapacra';
 import { NamedPollScraperConfiguration } from '@democracy-deutschland/scapacra-bt';
 
 import Procedure from '../models/Procedure';
+import NamedPoll from '../models/NamedPoll';
 
 export default async () => {
   console.log('START NAMED POLLS SCRAPER');
@@ -70,7 +71,7 @@ export default async () => {
       };
 
       // Update/Insert
-      await NamedPollModel.update(
+      await NamedPoll.update(
         { webId: namedPoll.webId },
         { $set: _.pickBy(namedPoll) },
         { upsert: true },

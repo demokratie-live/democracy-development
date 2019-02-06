@@ -8,12 +8,13 @@ import FileLogger from 'log';
 import axios from 'axios';
 import moment from 'moment';
 import { inspect } from 'util';
+import mongoose from 'mongoose';
 
 import CONSTANTS from './../config/constants';
 
 import Procedure from './../models/Procedure';
 import CronJobModel from './../models/CronJob';
-import { mongoose } from './../config/db';
+// import { mongoose } from './../config/db';
 
 const log = new FileLogger('error', fs.createWriteStream('error-import.log'));
 

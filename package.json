@@ -11,14 +11,16 @@
     "lint": "eslint . --ext js,jsx",
     "build": "babel ./ -d dist -s --ignore node_modules,dist",
     "serve": "node dist/src/index.js",
-    "diffs": "babel-node src/diffs.js"
+    "diffs": "babel-node src/diffs.js",
+    "migrations:migrate": "node -r dotenv/config -r babel-register src/migrations/scripts/migrate.js",
+    "migrations:create": "node -r dotenv/config -r babel-register src/migrations/scripts/create.js"
   },
   "dependencies": {
     "@democracy-deutschland/bt-agenda": "0.5.0-1",
     "@democracy-deutschland/bt-named-polls": "0.1.1-0",
     "@democracy-deutschland/dip21-scraper": "0.1.6",
     "@democracy-deutschland/scapacra": "1.0.2",
-    "@democracy-deutschland/scapacra-bt": "1.0.5",
+    "@democracy-deutschland/scapacra-bt": "1.0.6",
     "@material-ui/icons": "^1.0.0-beta.42",
     "apollo-cache-inmemory": "^1.1.12",
     "apollo-client": "^2.2.8",
@@ -62,6 +64,7 @@
     "material-ui": "^1.0.0-beta.41",
     "merge-graphql-schemas": "^1.5.0",
     "moment": "^2.21.0",
+    "mongodb-migrations": "^0.8.5",
     "mongoosastic": "^4.4.1",
     "mongoose": "^5.0.3",
     "mongoose-diff-history": "^1.2.0",

@@ -11,8 +11,8 @@ export default {
     },
   },
   ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL || 'elasticsearch',
-  GRAPHIQL: process.env.GRAPHIQL || false,
-  GRAPHIQL_PATH: '/graphiql',
+  // GRAPHIQL: process.env.GRAPHIQL || false,
+  GRAPHIQL_PATH: process.env.GRAPHIQL_PATH || false, // '/graphiql',
   GRAPHQL_PATH: '/',
   WHITELIST_DATA_SOURCES: process.env.WHITELIST_DATA_SOURCES
     ? process.env.WHITELIST_DATA_SOURCES.split(',')
@@ -24,4 +24,5 @@ export default {
     DISCORD_WEBHOOK: process.env.LOGGING_DISCORD_WEBHOOK || false,
     MONGO: process.env.LOGGING_MONGO || false,
   },
+  ENGINE_API_KEY: process.env.ENGINE_API_KEY || false,
 };

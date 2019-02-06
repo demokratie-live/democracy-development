@@ -1,9 +1,6 @@
-import mongoose from 'mongoose';
 import { inspect } from 'util';
-
-import CONSTANTS from './constants';
-
-mongoose.Promise = global.Promise;
+import mongoose from 'mongoose';
+import CONSTANTS from './../../config/constants';
 
 export default async () => {
   // Mongo Debug
@@ -30,5 +27,3 @@ export default async () => {
     throw e;
   });
 };
-
-export { mongoose };
