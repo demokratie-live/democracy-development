@@ -27,10 +27,35 @@ namespace Documents_Evaluator {
             this.readableStream = readableStream;
         }
 
+        protected xmlDOMErrorCallback(msg: String): void {
+            console.log(`[xmldom error]: ${msg}`);
+        }
+        protected xmlDOMFatalErrorCallback(msg: String): void {
+            console.log(`[xmldom error]: ${msg}`);
+        }
+        protected xmlDOMWarningCallback(msg: String): void {
+            console.log(`[xmldom warning]: ${msg}`);
+        }
+
+
         public async evaluate(xPathExpression: string): Promise<any[]> {
             let xml = await this.removeXmlHeader(this.readableStream);
 
-            let parser = new DOMParser();
+            let parser = new DOMParser({
+                /**
+                 * locator is always need for error position info
+                 */
+                locator: {},
+                /**
+                 * you can override the errorHandler for xml parser
+                 * @link http://www.saxproject.org/apidoc/org/xml/sax/ErrorHandler.html
+                 */
+                errorHandler: {
+                    warning: this.xmlDOMWarningCallback,
+                    error: this.xmlDOMErrorCallback,
+                    fatalError: this.xmlDOMFatalErrorCallback
+                }
+            });
             let doc = parser.parseFromString(xml);
 
             let nodes = xpath.select(xPathExpression, doc);
@@ -53,7 +78,7 @@ namespace Documents_Evaluator {
                         reject(err);
                     }
                 });
-            });       
+            });
         }
 
         /**
