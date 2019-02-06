@@ -20,5 +20,11 @@ namespace Documents_Parser_Evaluator {
             let attr = <Attr>node;
             return attr.value;
         }
+
+        /*
+        protected xmlDOMErrorCallback(msg: String) {
+            return;
+        }
+        */
     }
 }

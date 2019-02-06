@@ -23,7 +23,8 @@ async function scrape() {
         // new ProtocolVotingScraperConfiguration(options),
         // new ProposedDecisionScraperConfiguration()
         // new DeputyProfileScraperConfiguration()
-        new NamedPollDeputyScraperConfiguration()
+        new NamedPollScraperConfiguration()
+        // new NamedPollDeputyScraperConfiguration()
     ], ((dataPackages) => {
         console.log(util.inspect(dataPackages, false, null, true))
         for (const dataPackage of dataPackages) {

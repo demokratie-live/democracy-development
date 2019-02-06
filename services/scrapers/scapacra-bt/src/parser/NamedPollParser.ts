@@ -61,7 +61,9 @@ namespace NamedPoll_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        date = moment(match, 'DD MMM YYYY', 'de').toDate();
+                        // utc: ignore any timezone conversion
+                        // since we work on days not on hours this should have no sideeffect
+                        date = moment.utc(match, 'DD MMM YYYY', 'de').toDate();
                     }
                     if (group === 2) {
                         title = match;
@@ -100,9 +102,8 @@ namespace NamedPoll_Parser {
                 });
             }
 
-            // membersVoted, ResultAll
-            let membersVoted: string = '';
-            let resultAll: any = { yes: null, no: null, abstain: null, na: null };// TODO Typescript
+            // totalVoted, ResultAll
+            let resultAll: { total: string | null, yes: string | null, no: string | null, abstain: string | null, na: string | null } = { total: null, yes: null, no: null, abstain: null, na: null };
             let resultAll_sel: string = '';
             const regex_membersVotedResultAll = /<h3>Gesamtergebnis, (.*?) Mitglieder<\/h3>[\s\S]*?<ul class="bt-chart-legend">([\s\S]*?)<\/ul>/gm;
             const regex_ResultAll = /<li class="bt-legend-ja"><span>(.*?)<\/span>[\s\S]*?<li class="bt-legend-nein"><span>(.*?)<\/span>[\s\S]*?<li class="bt-legend-enthalten"><span>(.*?)<\/span>[\s\S]*?<li class="bt-legend-na"><span>(.*?)<\/span>[\s\S]*?/gm;
@@ -114,7 +115,7 @@ namespace NamedPoll_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        membersVoted = match;
+                        resultAll.total = match;
                     }
                     if (group === 2) {
                         resultAll_sel = match;
@@ -271,17 +272,18 @@ namespace NamedPoll_Parser {
             }
 
             let speeches: any = []; // TODO Typescript
-            const regex_speeches = /<div class="col-xs-4 col-sm-3 col-md-6 bt-teaser">[\s\S]*?<a title="(.*?)" href="(.*?)"[\s\S]*?<img[\s\S]*?data-img-md-normal="(.*?)"[\s\S]*?class="img-responsive"\/>[\s\S]*?<h3>(.*?)<\/h3>[\s\S]*?<p class="bt-person-fraktion">(.*?)<\/p>[\s\S]*?<\/div>[\s\S]*?<\/div>[\s\S]*?<\/a>[\s\S]*?<\/div>/gm;
+            const regex_speeches = /<div class="col-xs-4 col-sm-3 col-md-6 bt-teaser">[\s\S]*?<a title="(.*?)" href="(.*?)"[\s\S]*?<img[\s\S]*?data-img-md-normal="(.*?)"[\s\S]*?class="img-responsive"\/>[\s\S]*?<h3>(.*?)<\/h3>[\s\S]*?<p class="bt-person-(.*?)">(.*?)<\/p>[\s\S]*?<\/div>[\s\S]*?<\/div>[\s\S]*?<\/a>[\s\S]*?<\/div>/gm;
             while ((m = regex_speeches.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
                 if (m.index === regex_speeches.lastIndex) {
                     regex_speeches.lastIndex++;
                 }
-                let speech = { deputy: '', mediathekURL: '', deputyImgURL: '', party: '' }
+                let speech: { deputyName: string | null, deputyImgURL: string | null, mediathekURL: string | null, function: string | null, party: string | null } = { deputyName: null, deputyImgURL: null, mediathekURL: null, function: null, party: null }
+                let personType: string | null = null;
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        speech.deputy = match;
+                        speech.deputyName = match;
                     }
                     if (group === 2) {
                         speech.mediathekURL = base_url + match;
@@ -290,7 +292,14 @@ namespace NamedPoll_Parser {
                         speech.deputyImgURL = base_url + match;
                     }
                     if (group === 5) {
-                        speech.party = match;
+                        personType = match;
+                    }
+                    if (group === 6) {
+                        if (personType === 'funktion') {
+                            speech.function = match;
+                        } else {
+                            speech.party = match;
+                        }
                     }
                 });
                 speeches.push(speech);
@@ -298,7 +307,12 @@ namespace NamedPoll_Parser {
 
             return [{
                 metadata: data.metadata,
-                data: { id, date, title, description, detailedDescription, documents, deputyVotesURL, membersVoted, resultAll, partyVotes, plenarProtocolURL, media: { iTunesURL, mediathekURL, videoURLs }, speeches }
+                data: {
+                    id, date, title, description, detailedDescription, documents, deputyVotesURL, votes: {
+                        all: resultAll,
+                        party: partyVotes,
+                    }, plenarProtocolURL, media: { iTunesURL, mediathekURL, videoURLs }, speeches
+                }
             }];
         }
     }
