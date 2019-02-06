@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@democracy-deutschland/scapacra@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra/-/scapacra-1.0.2.tgz#c15fcd7de6aa01abef13df3bb017301c48423243"
-  integrity sha512-8HLnxgF0Nf9uoln7aVA+3ND8m5LikgUBRJqRrYLO8i6HvQkZcVuh6AKPGz8IGQIXW8UVfRLaX8CFlvWHoIfQhw==
+"@democracy-deutschland/scapacra@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra/-/scapacra-1.0.3.tgz#3f23ce13686cc416891c00b34b32f25da67441e8"
+  integrity sha512-SQN9A+/390ujbF7W08IIhVKeGr4kSAZUloZYIpjo98itlt80n9XQ4QvchKI6rWVNuIyJTOnwgdu6Ty0LVshEQg==
   dependencies:
     "@types/xml2js" "^0.4.3"
     "@types/xmldom" "^0.1.29"

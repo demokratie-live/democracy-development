@@ -1,6 +1,6 @@
 {
   "name": "@democracy-deutschland/scapacra-bt",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Scapacra Bundestag",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -37,7 +37,7 @@
     "xsd-schema-validator": "^0.6.0"
   },
   "dependencies": {
-    "@democracy-deutschland/scapacra": "1.0.2",
+    "@democracy-deutschland/scapacra": "1.0.3",
     "@types/axios": "^0.14.0",
     "@types/xml2js": "^0.4.3",
     "@types/xmldom": "^0.1.29",

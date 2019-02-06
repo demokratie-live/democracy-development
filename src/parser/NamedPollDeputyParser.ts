@@ -88,6 +88,7 @@ namespace NamedPollDeputy_Parser {
             let deputies: any = [];
             const regex_deputySel = /<div class="bt-slide-content">([\s\S]*?)<\/a>[\s\S]*?<\/div>[\s\S]*?<\/div>/gm;
             const regex_deputy = /<a href="(.*?)\?subview=na"[\s\S]*?<img[\s\S]*?data-img-md-normal="(.*?)"[\s\S]*?<div class="bt-teaser-person-text" data-bundesland="(.*?)"[\s\S]*?<h3>(.*?)<\/h3>[\s\S]*?<p class="bt-person-fraktion">(.*?)<\/p>[\s\S]*?<p class="bt-person-abstimmung bt-abstimmung-(.*?)">(.*?)<\/p>/gm;
+            const regex_deputyId = /https:\/\/www\.bundestag\.de\/abgeordnete\/.*\/(\d+)/gm;
             while ((m = regex_deputySel.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
                 if (m.index === regex_deputySel.lastIndex) {
@@ -96,21 +97,39 @@ namespace NamedPollDeputy_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 0) { //full match
-                        let deputy: {
-                            URL: string | null, imgURL: string | null, state: string | null, name: string | null, party: string | null, vote: string | null
-                        } = { URL: null, imgURL: null, state: null, name: null, party: null, vote: null };
-                        while ((m = regex_deputy.exec(match)) !== null) {
+                        let n;
+                        while ((n = regex_deputy.exec(match)) !== null) {
                             // This is necessary to avoid infinite loops with zero-width matches
-                            if (m.index === regex_deputy.lastIndex) {
+                            if (n.index === regex_deputy.lastIndex) {
                                 regex_deputy.lastIndex++;
                             }
-                            // The result can be accessed through the `m`-variable.
-                            m.forEach((match2, group2) => {
+                            let deputy: {
+                                id: string | null, URL: string | null, imgURL: string | null, state: string | null, name: string | null, party: string | null, vote: string | null
+                            } = { id: null, URL: null, imgURL: null, state: null, name: null, party: null, vote: null };
+                            // The result can be accessed through the `n`-variable.
+                            n.forEach((match2, group2) => {
                                 if (group2 === 1) {
-                                    deputy.URL = match2 ? base_url + match2 : null;
+                                    if (match2) {
+                                        deputy.URL = match2.indexOf('http') !== -1 ? match2 : base_url + match2;
+                                        let o;
+                                        while ((o = regex_deputyId.exec(deputy.URL)) !== null) {
+                                            // This is necessary to avoid infinite loops with zero-width matches
+                                            if (o.index === regex_deputyId.lastIndex) {
+                                                regex_deputyId.lastIndex++;
+                                            }
+                                            // The result can be accessed through the `o`-variable.
+                                            o.forEach((match3, group3) => {
+                                                if (group3 === 1) {
+                                                    deputy.id = match3;
+                                                }
+                                            });
+                                        }
+                                    }
                                 }
                                 if (group2 === 2) {
-                                    deputy.imgURL = match2 ? base_url + match2 : null;
+                                    if (match2) {
+                                        deputy.imgURL = match2.indexOf('http') !== -1 ? match2 : base_url + match2;
+                                    }
                                 }
                                 if (group2 === 3) {
                                     deputy.state = match2;
