@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { Scraper } from '@democracy-deutschland/scapacra';
 import { NamedPollScraperConfiguration } from '@democracy-deutschland/scapacra-bt';
 
@@ -71,11 +70,7 @@ export default async () => {
       };
 
       // Update/Insert
-      await NamedPoll.update(
-        { webId: namedPoll.webId },
-        { $set: _.pickBy(namedPoll) },
-        { upsert: true },
-      );
+      await NamedPoll.update({ webId: namedPoll.webId }, { ...namedPoll }, { upsert: true });
 
       // Update Procedure Custom Data
       // TODO This should not be the way we handle this

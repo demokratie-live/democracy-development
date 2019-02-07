@@ -7,7 +7,7 @@ import NamedPollMedia from './NamedPoll/Media';
 
 const NamedPollSchema = new Schema(
   {
-    URL: { type: String, required: true, unique: true, index: true },
+    URL: { type: String, default: null },
     webId: { type: String, required: true, unique: true, index: true },
     procedureId: { type: String, default: null },
     date: { type: Date },
