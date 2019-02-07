@@ -6,8 +6,8 @@ import DeputyFunctions from './Deputy/Functions';
 
 const DeputySchema = new Schema(
   {
-    URL: { type: String, required: true, unique: true },
-    webId: { type: String, required: true, unique: true },
+    URL: { type: String, required: true, unique: true, index: true },
+    webId: { type: String, required: true, unique: true, index: true },
     imgURL: { type: String },
     party: { type: String },
     name: { type: String, required: true },

@@ -44,7 +44,7 @@ export default async () => {
         procedures.length === 0 &&
         dataPackage.data.title.indexOf('Entschließungsantrag') === -1
       ) {
-        Log.error(`Named Polls Scraper no match on: ${dataPackage.metadata.url}`);
+        Log.warn(`Named Polls Scraper no match on: ${dataPackage.metadata.url}`);
       }
 
       // We have exactly one match and can assign the procedureId
@@ -76,6 +76,93 @@ export default async () => {
         { $set: _.pickBy(namedPoll) },
         { upsert: true },
       );
+
+      // Update Procedure Custom Data
+      // TODO This should not be the way we handle this
+      const { votes } = dataPackage.data;
+      if (procedureId) {
+        const customData = {
+          voteResults: {
+            partyVotes: votes.parties.map(partyVote => {
+              const main = [
+                {
+                  decision: 'YES',
+                  value: partyVote.votes.yes,
+                },
+                {
+                  decision: 'NO',
+                  value: partyVote.votes.no,
+                },
+                {
+                  decision: 'ABSTINATION',
+                  value: partyVote.votes.abstain,
+                },
+                {
+                  decision: 'NOTVOTED',
+                  value: partyVote.votes.na,
+                },
+              ].reduce(
+                (prev, { decision, value }) => {
+                  if (prev.value < value) {
+                    return { decision, value };
+                  }
+                  return prev;
+                },
+                { value: 0 },
+              );
+              return {
+                deviants: {
+                  yes: partyVote.votes.yes || 0,
+                  abstination: partyVote.votes.abstain || 0,
+                  no: partyVote.votes.no || 0,
+                  notVoted: partyVote.votes.na || 0,
+                },
+                party: partyVote.name,
+                main: main.decision,
+              };
+            }),
+            yes: votes.all.yes || 0,
+            abstination: votes.all.abstain || 0,
+            no: votes.all.no || 0,
+            notVoted: votes.all.na || 0,
+          },
+        };
+
+        // TODO WTF?
+        const [{ history }] = procedures;
+        const namedHistoryEntry = history
+          .find(
+            ({ decision }) =>
+              decision && decision.find(({ type }) => type === 'Namentliche Abstimmung'),
+          )
+          .decision.find(({ type }) => type === 'Namentliche Abstimmung');
+
+        const votingRecommendationEntry = history.find(
+          ({ initiator }) =>
+            initiator && initiator.indexOf('Beschlussempfehlung und Bericht') !== -1,
+        );
+
+        customData.voteResults.votingDocument =
+          namedHistoryEntry.comment.indexOf('Annahme der Beschlussempfehlung auf Ablehnung') !== -1
+            ? 'recommendedDecision'
+            : 'mainDocument';
+
+        if (votingRecommendationEntry) {
+          switch (votingRecommendationEntry.abstract) {
+            case 'Empfehlung: Annahme der Vorlage':
+              customData.voteResults.votingRecommendation = true;
+              break;
+            case 'Empfehlung: Ablehnung der Vorlage':
+              customData.voteResults.votingRecommendation = false;
+              break;
+
+            default:
+              break;
+          }
+        }
+
+        await Procedure.findOneAndUpdate({ procedureId }, { customData });
+      }
 
       return null;
     });

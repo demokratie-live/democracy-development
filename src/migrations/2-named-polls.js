@@ -10,8 +10,14 @@ module.exports.up = async function (done) { // eslint-disable-line
     // rename collection
     await this.db.collection('namedpolls').rename('old_namedpolls');
 
+    // Remove Model from Mongoose if needed
+    if (mongoose.connection.models.NamedPoll) {
+      delete mongoose.connection.models.NamedPoll;
+    }
+
     // Since NamedPoll has an index the collection is autocreated
-    mongoose.model('NamedPoll', NamedPollSchema);
+    const NamedPolls = mongoose.model('NamedPoll', NamedPollSchema);
+    await NamedPolls.ensureIndexes();
     done();
   } catch (err) {
     done(err);

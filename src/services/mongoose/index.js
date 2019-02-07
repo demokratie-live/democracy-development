@@ -1,5 +1,10 @@
 import { inspect } from 'util';
 import mongoose from 'mongoose';
+
+/*
+  THIS FILE AND ALL IMPORTS ARE NOT ALLOWED TO INCLUDE ANY MONGOOSE MODELS
+  See index.js for more info
+*/
 import CONSTANTS from './../../config/constants';
 
 export default async () => {

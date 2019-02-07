@@ -1,3 +1,7 @@
+/*
+  THIS FILE AND ALL IMPORTS ARE NOT ALLOWED TO INCLUDE ANY MONGOOSE MODELS
+  See index.js for more info
+*/
 export default {
   PORT: process.env.PORT || 3100,
   DB_URL: process.env.DB_URL || 'mongodb://localhost:27020/bundestagio',

@@ -1,62 +1,29 @@
 import { Schema } from 'mongoose';
+import diffHistory from 'mongoose-diff-history/diffHistory';
+
+import NamedPollVotes from './NamedPoll/Votes';
+import NamedPollSpeech from './NamedPoll/Speech';
+import NamedPollMedia from './NamedPoll/Media';
 
 const NamedPollSchema = new Schema(
   {
     URL: { type: String, required: true, unique: true, index: true },
-    webId: { type: String, required: true, unique: true },
+    webId: { type: String, required: true, unique: true, index: true },
+    procedureId: { type: String, default: null },
     date: { type: Date },
     title: { type: String },
     description: { type: String },
-    detailedDescription: { type: String }, // TODO trim " \n    243. Sitzung vom 29.06.2017, TOP 16 Bundeswehreinsatz im Libanon (UNIFIL)"
+    detailedDescription: { type: String },
     documents: [{ type: String }],
     deputyVotesURL: { type: String },
     plenarProtocolURL: { type: String },
-    votes: {
-      // TODO subdocuments
-      all: {
-        // TODO move total up to unify
-        total: { type: String }, // TODO rename members
-        yes: { type: String },
-        no: { type: String },
-        abstain: { type: String },
-        na: { type: String },
-      },
-      party: [
-        {
-          name: { type: String },
-          members: { type: String },
-          votes: {
-            yes: { type: String },
-            no: { type: String },
-            abstain: { type: String },
-            na: { type: String },
-          },
-        },
-      ],
-    },
-    media: {
-      // TODO subdocuments
-      iTunesURL: { type: String },
-      mediathekURL: { type: String },
-      videoURLs: [
-        {
-          URL: { type: String },
-          type: { type: String },
-        },
-      ],
-    },
-    speeches: [
-      // TODO subdocuments
-      {
-        deputyName: { type: String },
-        deputyImgURL: { type: String },
-        mediathekURL: { type: String },
-        function: { type: String },
-        party: { type: String },
-      },
-    ],
+    votes: NamedPollVotes,
+    media: NamedPollMedia,
+    speeches: [NamedPollSpeech],
   },
   { timestamps: true },
 );
+
+NamedPollSchema.plugin(diffHistory.plugin, { omit: ['updatedAt'] });
 
 export default NamedPollSchema;

@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import express from 'express';
 import bodyParser from 'body-parser';
 import { createServer } from 'http';
@@ -10,15 +8,13 @@ import { inspect } from 'util';
 // IMPORTANT - you cannot include any models before migrating the DB
 // *****************************************************************
 
+import CONSTANTS from './config/constants';
+
 // Allow global Log
 import './services/logger';
 
-import CONSTANTS from './config/constants';
-
 import connectDB from './services/mongoose';
 import migrateDB from './services/migration';
-import apolloEngine from './services/apolloEngine';
-import graphiql from './services/graphiql';
 
 const main = async () => {
   // Connect to DB - this keeps the process running
@@ -53,12 +49,16 @@ const main = async () => {
 
   // Apollo Engine
   if (CONSTANTS.ENGINE_API_KEY) {
+    // No Models are included at current time - just to be sure
+    const apolloEngine = require('./services/apolloEngine'); // eslint-disable-line global-require
     server.use(apolloEngine);
   }
 
   // Graphiql
   if (CONSTANTS.GRAPHIQL_PATH) {
-    server.use(CONSTANTS.GRAPHIQL_PATH, graphiql());
+    // No Models are included at current time - just to be sure
+    const graphiql = require('./services/graphiql'); // eslint-disable-line global-require
+    server.use(CONSTANTS.GRAPHIQL_PATH, graphiql);
   }
 
   // Create & start Server
