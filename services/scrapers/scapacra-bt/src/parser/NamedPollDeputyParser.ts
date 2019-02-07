@@ -46,8 +46,9 @@ namespace NamedPollDeputy_Parser {
                 }
             }
 
-            let membersVoted: string = '';
+            let resultAll: { total: Number | null, yes: Number | null, no: Number | null, abstain: Number | null, na: Number | null } = { total: null, yes: null, no: null, abstain: null, na: null };// TODO Typescript
             const regex_membersVoted = /<h3> (.*?) Mitglieder<\/h3>/gm;
+            const regex_ResultAll = /<ul class="bt-chart-legend">[\s\S]*?<li class="bt-legend-ja"><span>(.*?)<\/span>[\s\S]*?<li class="bt-legend-nein"><span>(.*?)<\/span>[\s\S]*?<li class="bt-legend-enthalten"><span>(.*?)<\/span>[\s\S]*?<li class="bt-legend-na"><span>(.*?)<\/span>/gm;
             while ((m = regex_membersVoted.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
                 if (m.index === regex_membersVoted.lastIndex) {
@@ -56,13 +57,10 @@ namespace NamedPollDeputy_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        membersVoted = match;
+                        resultAll.total = parseInt(match, 10) || null;
                     }
                 });
             }
-
-            let resultAll: any = { yes: null, no: null, abstain: null, na: null };// TODO Typescript
-            const regex_ResultAll = /<ul class="bt-chart-legend">[\s\S]*?<li class="bt-legend-ja"><span>(.*?)<\/span>[\s\S]*?<li class="bt-legend-nein"><span>(.*?)<\/span>[\s\S]*?<li class="bt-legend-enthalten"><span>(.*?)<\/span>[\s\S]*?<li class="bt-legend-na"><span>(.*?)<\/span>/gm;
             while ((m = regex_ResultAll.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
                 if (m.index === regex_ResultAll.lastIndex) {
@@ -71,16 +69,16 @@ namespace NamedPollDeputy_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        resultAll.yes = match;
+                        resultAll.yes = parseInt(match, 10) || null;
                     }
                     if (group === 2) {
-                        resultAll.no = match;
+                        resultAll.no = parseInt(match, 10) || null;
                     }
                     if (group === 3) {
-                        resultAll.abstain = match;
+                        resultAll.abstain = parseInt(match, 10) || null;
                     }
                     if (group === 4) {
-                        resultAll.na = match;
+                        resultAll.na = parseInt(match, 10) || null;
                     }
                 });
             }
@@ -153,7 +151,7 @@ namespace NamedPollDeputy_Parser {
 
             return [{
                 metadata: data.metadata,
-                data: { id, membersVoted, resultAll, deputies }
+                data: { id, votes: { all: resultAll, deputies } }
             }];
         }
     }
