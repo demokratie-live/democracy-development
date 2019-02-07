@@ -103,7 +103,7 @@ namespace NamedPoll_Parser {
             }
 
             // totalVoted, ResultAll
-            let resultAll: { total: string | null, yes: string | null, no: string | null, abstain: string | null, na: string | null } = { total: null, yes: null, no: null, abstain: null, na: null };
+            let resultAll: { total: Number | null, yes: Number | null, no: Number | null, abstain: Number | null, na: Number | null } = { total: null, yes: null, no: null, abstain: null, na: null };
             let resultAll_sel: string = '';
             const regex_membersVotedResultAll = /<h3>Gesamtergebnis, (.*?) Mitglieder<\/h3>[\s\S]*?<ul class="bt-chart-legend">([\s\S]*?)<\/ul>/gm;
             const regex_ResultAll = /<li class="bt-legend-ja"><span>(.*?)<\/span>[\s\S]*?<li class="bt-legend-nein"><span>(.*?)<\/span>[\s\S]*?<li class="bt-legend-enthalten"><span>(.*?)<\/span>[\s\S]*?<li class="bt-legend-na"><span>(.*?)<\/span>[\s\S]*?/gm;
@@ -115,7 +115,7 @@ namespace NamedPoll_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        resultAll.total = match;
+                        resultAll.total = parseInt(match, 10) || null;
                     }
                     if (group === 2) {
                         resultAll_sel = match;
@@ -130,16 +130,16 @@ namespace NamedPoll_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        resultAll.yes = match;
+                        resultAll.yes = parseInt(match, 10) || null;
                     }
                     if (group === 2) {
-                        resultAll.no = match;
+                        resultAll.no = parseInt(match, 10) || null;
                     }
                     if (group === 3) {
-                        resultAll.abstain = match;
+                        resultAll.abstain = parseInt(match, 10) || null;
                     }
                     if (group === 4) {
-                        resultAll.na = match;
+                        resultAll.na = parseInt(match, 10) || null;
                     }
                 });
             }
@@ -153,14 +153,14 @@ namespace NamedPoll_Parser {
                 if (m.index === regex_partyVotes.lastIndex) {
                     regex_partyVotes.lastIndex++;
                 }
-                let currentParty: { name: string | null, members: string | null, votes: { yes: string | null, no: string | null, abstain: string | null, na: string | null } } = { name: null, members: null, votes: { yes: null, no: null, abstain: null, na: null } };
+                let currentParty: { name: string | null, votes: { total: Number | null, yes: Number | null, no: Number | null, abstain: Number | null, na: Number | null } } = { name: null, votes: { total: null, yes: null, no: null, abstain: null, na: null } };
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
                         currentParty.name = match;
                     }
                     if (group === 2) {
-                        currentParty.members = match;
+                        currentParty.votes.total = parseInt(match, 10) || null;
                     }
                     if (group === 3) {
                         let n;
@@ -172,16 +172,16 @@ namespace NamedPoll_Parser {
                             // The result can be accessed through the `n`-variable.
                             n.forEach((match2, group2) => {
                                 if (group2 === 1) {
-                                    currentParty.votes.yes = match2;
+                                    currentParty.votes.yes = parseInt(match2, 10) || null;
                                 }
                                 if (group2 === 2) {
-                                    currentParty.votes.no = match2;
+                                    currentParty.votes.no = parseInt(match2, 10) || null;
                                 }
                                 if (group2 === 3) {
-                                    currentParty.votes.abstain = match2;
+                                    currentParty.votes.abstain = parseInt(match2, 10) || null;
                                 }
                                 if (group2 === 4) {
-                                    currentParty.votes.na = match2;
+                                    currentParty.votes.na = parseInt(match2, 10) || null;
                                 }
                             });
                         }
@@ -231,13 +231,13 @@ namespace NamedPoll_Parser {
                     regex_videoURLs.lastIndex++;
                 }
                 // The result can be accessed through the `m`-variable.
-                let video: { URL: string | null, type: string | null } = { URL: null, type: null };
+                let video: { URL: string | null, description: string | null } = { URL: null, description: null };
                 m.forEach((match, group) => {
                     if (group === 1) {
                         video.URL = match;
                     }
                     if (group === 2) {
-                        video.type = match;
+                        video.description = match;
                     }
                 });
                 videoURLs.push(video);
@@ -266,7 +266,7 @@ namespace NamedPoll_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        detailedDescription = match;
+                        detailedDescription = match.trim();
                     }
                 });
             }
