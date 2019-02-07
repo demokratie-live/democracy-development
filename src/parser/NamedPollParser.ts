@@ -310,7 +310,7 @@ namespace NamedPoll_Parser {
                 data: {
                     id, date, title, description, detailedDescription, documents, deputyVotesURL, votes: {
                         all: resultAll,
-                        party: partyVotes,
+                        parties: partyVotes,
                     }, plenarProtocolURL, media: { iTunesURL, mediathekURL, videoURLs }, speeches
                 }
             }];
