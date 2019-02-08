@@ -2,6 +2,8 @@
 import diffHistory from 'mongoose-diff-history/diffHistory';
 import fs from 'fs-extra';
 
+import './services/logger';
+
 import DB, { mongoose } from './config/db';
 import Procedure from './models/Procedure';
 

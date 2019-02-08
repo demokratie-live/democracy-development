@@ -3,10 +3,10 @@ import moment from 'moment';
 import axios from 'axios';
 import { inspect } from 'util';
 
-import CONSTANTS from './config/constants';
+import CONSTANTS from './../config/constants';
 
-import Procedure from './models/Procedure';
-import Agenda from './models/Agenda';
+import Procedure from './../models/Procedure';
+import Agenda from './../models/Agenda';
 
 let procedureIds = [];
 
