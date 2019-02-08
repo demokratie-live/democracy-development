@@ -44,6 +44,7 @@ const main = async () => {
     schemaDirectives: {
       auth: AuthDirective,
     },
+    introspection: CONSTANTS.GRAPHIQL,
     playground: CONSTANTS.GRAPHIQL
       ? {
           endpoint: CONSTANTS.GRAPHQL_PATH,
