@@ -1,6 +1,6 @@
-import CONSTANTS from './src/config/constants';
+import CONFIG from './src/config';
 
 export default {
   directory: 'src/migrations',
-  url: CONSTANTS.DB_URL,
+  url: CONFIG.DB_URL,
 };

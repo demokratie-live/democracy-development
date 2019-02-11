@@ -5,7 +5,7 @@ import Procedure from '../models/Procedure';
 import NamedPoll from '../models/NamedPoll';
 
 export default async () => {
-  console.log('START NAMED POLLS SCRAPER');
+  Log.info('START NAMED POLLS SCRAPER');
   await Scraper.scrape([new NamedPollScraperConfiguration()], dataPackages => {
     dataPackages.map(async dataPackage => {
       let procedureId = null;
@@ -162,7 +162,7 @@ export default async () => {
       return null;
     });
   });
-  console.log('FINISH NAMED POLLS SCRAPER');
+  Log.info('FINISH NAMED POLLS SCRAPER');
 };
 
 /* import Scraper from '@democracy-deutschland/bt-named-polls';

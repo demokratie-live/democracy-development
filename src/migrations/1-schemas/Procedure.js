@@ -6,7 +6,7 @@ import ProcessFlow from './Procedure/ProcessFlow';
 import Document from './Procedure/Document';
 import PartyVotes from './Procedure/PartyVotes';
 
-import constants from '../../config/constants';
+import CONFIG from '../../config';
 
 const ProcedureSchema = new Schema(
   {
@@ -110,6 +110,6 @@ const ProcedureSchema = new Schema(
 );
 
 ProcedureSchema.plugin(diffHistory.plugin, { omit: ['updatedAt'] });
-ProcedureSchema.plugin(mongoosastic, { host: constants.ELASTICSEARCH_URL });
+ProcedureSchema.plugin(mongoosastic, { host: CONFIG.ELASTICSEARCH_URL });
 
 export default ProcedureSchema;

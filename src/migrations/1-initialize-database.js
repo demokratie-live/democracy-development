@@ -25,6 +25,8 @@ module.exports.up = async function (done) { // eslint-disable-line
     await Procedures.ensureIndexes();
     const Users = mongoose.model('User', UserSchema);
     await Users.ensureIndexes();
+    const Histories = mongoose.model('History');
+    await Histories.ensureIndexes();
     done();
   } catch (err) {
     done(err);

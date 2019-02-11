@@ -1,12 +1,11 @@
 import mongoose from 'mongoose';
-import { inspect } from 'util';
 import ProcedureSchema from './../migrations/1-schemas/Procedure';
 
 const Procedure = mongoose.model('Procedure', ProcedureSchema);
 
 Procedure.createMapping({}, err => {
   if (err) {
-    Log.error(`Procedure.createMapping ${inspect(err)}`);
+    Log.error(`[Elastic Search] Procedure.createMapping ${JSON.stringify(err)}`);
     return err;
   }
   const stream = Procedure.synchronize();
@@ -21,7 +20,7 @@ Procedure.createMapping({}, err => {
       resolve();
     });
     stream.on('error', err2 => {
-      Log.error('ERROR Elastic: ', err2);
+      Log.error('[Elastic Search] ', err2);
       reject();
     });
   });

@@ -2,6 +2,8 @@
 import { Schema } from 'mongoose';
 import jwt from 'jsonwebtoken';
 
+import CONFIG from './../../config';
+
 const UserSchema = new Schema(
   {
     email: { type: String, required: true, unique: true },
@@ -17,7 +19,7 @@ UserSchema.methods = {
       {
         _id: this._id,
       },
-      process.env.AUTH_JWT_SECRET,
+      CONFIG.AUTH_JWT_SECRET,
     );
     res.cookie('token', token);
     return token;

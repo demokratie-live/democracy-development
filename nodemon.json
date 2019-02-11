@@ -1,5 +1,5 @@
 {
-  "verbose": true,
+  "verbose": false,
   "ignore": [
     "node_modules"
   ],

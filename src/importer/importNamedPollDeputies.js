@@ -4,7 +4,7 @@ import { NamedPollDeputyScraperConfiguration } from '@democracy-deutschland/scap
 import NamedPoll from '../models/NamedPoll';
 
 export default async () => {
-  console.log('START NAMED POLL DEPUTIES SCRAPER');
+  Log.info('START NAMED POLL DEPUTIES SCRAPER');
   await Scraper.scrape([new NamedPollDeputyScraperConfiguration()], dataPackages => {
     dataPackages.map(async dataPackage => {
       // Construct Database object
@@ -29,5 +29,5 @@ export default async () => {
       return null;
     });
   });
-  console.log('FINISH NAMED POLL DEPUTIES SCRAPER');
+  Log.info('FINISH NAMED POLL DEPUTIES SCRAPER');
 };

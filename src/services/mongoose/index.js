@@ -5,24 +5,24 @@ import mongoose from 'mongoose';
   THIS FILE AND ALL IMPORTS ARE NOT ALLOWED TO INCLUDE ANY MONGOOSE MODELS
   See index.js for more info
 */
-import CONSTANTS from './../../config/constants';
+import CONFIG from './../../config';
 
 export default async () => {
   // Mongo Debug
-  if (CONSTANTS.LOGGING.MONGO) {
+  if (CONFIG.LOGGING_MONGO) {
     mongoose.set('debug', (...rest) => {
-      Log[CONSTANTS.LOGGING.MONGO](inspect(rest));
+      Log[CONFIG.LOGGING_MONGO](inspect(rest));
     });
   }
 
   // Connect
   try {
     await mongoose.connect(
-      CONSTANTS.DB_URL,
+      CONFIG.DB_URL,
       {},
     );
   } catch (err) {
-    await mongoose.createConnection(CONSTANTS.DB_URL, {});
+    await mongoose.createConnection(CONFIG.DB_URL, {});
   }
 
   // Open

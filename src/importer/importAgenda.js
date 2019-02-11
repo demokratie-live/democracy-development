@@ -3,7 +3,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { inspect } from 'util';
 
-import CONSTANTS from './../config/constants';
+import CONFIG from './../config';
 
 import Procedure from './../models/Procedure';
 import Agenda from './../models/Agenda';
@@ -96,7 +96,7 @@ const checkDocuments = async data => {
 const syncWithDemocracy = async () => {
   if (procedureIds.length > 0) {
     await axios
-      .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
+      .post(`${CONFIG.DEMOCRACY_WEBHOOKS_UPDATE_PROCEDURES}`, {
         data: { procedureIds: [...new Set(procedureIds)], name: 'Agenda' },
         timeout: 1000 * 60 * 5,
       })
@@ -104,7 +104,7 @@ const syncWithDemocracy = async () => {
         Log.debug(inspect(response.data));
       })
       .catch(error => {
-        Log.error(`democracy server error: ${inspect(error)}`);
+        Log.error(`[DEMOCRACY Server] ${error}`);
       });
     procedureIds = [];
   }

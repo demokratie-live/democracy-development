@@ -6,7 +6,7 @@ import DiscordLogger from 'winston-discord';
   See index.js for more info
 */
 
-import CONSTANTS from '../../config/constants';
+import CONFIG from '../../config';
 
 const alignedWithColorsAndTime = winston.format.combine(
   winston.format.colorize(),
@@ -36,20 +36,20 @@ const alignedWithTime = winston.format.combine(
 
 const transports = [
   new winston.transports.Console({
-    level: CONSTANTS.LOGGING.CONSOLE,
+    level: CONFIG.LOGGING_CONSOLE,
     format: alignedWithColorsAndTime,
   }),
   new winston.transports.File({
     filename: 'logs/combined.log',
-    level: CONSTANTS.LOGGING.FILE,
+    level: CONFIG.LOGGING_FILE,
     format: alignedWithTime,
   }),
 ];
-if (CONSTANTS.LOGGING.DISCORD && CONSTANTS.LOGGING.DISCORD_WEBHOOK) {
+if (CONFIG.LOGGING_DISCORD && CONFIG.LOGGING_DISCORD_WEBHOOK) {
   transports.push(
     new DiscordLogger({
-      webhooks: CONSTANTS.LOGGING.DISCORD_WEBHOOK,
-      level: CONSTANTS.LOGGING.DISCORD,
+      webhooks: CONFIG.LOGGING_DISCORD_WEBHOOK,
+      level: CONFIG.LOGGING_DISCORD,
       inline: { server: 'Bundestag.io' },
     }),
   );

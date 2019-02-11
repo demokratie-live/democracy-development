@@ -8,7 +8,7 @@ import { inspect } from 'util';
 // IMPORTANT - you cannot include any models before migrating the DB
 // *****************************************************************
 
-import CONSTANTS from './config/constants';
+import CONFIG from './config';
 
 // Allow global Log
 import './services/logger';
@@ -39,9 +39,9 @@ const main = async () => {
   // Graphiql Playground
   // Here several Models are included for graphql
   // This must be registered before graphql since it binds on / (default)
-  if (CONSTANTS.PLAYGROUND_PATH) {
+  if (CONFIG.GRAPHIQL_PATH) {
     const graphiql = require('./services/graphiql'); // eslint-disable-line global-require
-    graphiql.applyMiddleware({ app: server, path: CONSTANTS.PLAYGROUND_PATH });
+    graphiql.applyMiddleware({ app: server, path: CONFIG.GRAPHIQL_PATH });
   }
 
   // Search
@@ -53,15 +53,15 @@ const main = async () => {
   // Graphql
   // Here several Models are included for graphql
   const graphql = require('./services/graphql'); // eslint-disable-line global-require
-  graphql.applyMiddleware({ app: server, path: CONSTANTS.GRAPHQL_PATH });
+  graphql.applyMiddleware({ app: server, path: CONFIG.GRAPHQL_PATH });
 
   // Create & start Server
   const graphqlServer = createServer(server);
-  graphqlServer.listen(CONSTANTS.PORT, err => {
+  graphqlServer.listen(CONFIG.PORT, err => {
     if (err) {
       Log.error(inspect(err));
     } else {
-      Log.warn(`🚀 Server ready at http://localhost:${CONSTANTS.PORT}${CONSTANTS.GRAPHQL_PATH}`);
+      Log.warn(`🚀 Server ready at http://localhost:${CONFIG.PORT}${CONFIG.GRAPHQL_PATH}`);
     }
   });
 

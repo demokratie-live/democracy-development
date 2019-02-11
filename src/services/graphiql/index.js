@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { ApolloServer } from 'apollo-server-express';
 
 import typeDefs from './../../graphql/schemas';
@@ -9,6 +8,7 @@ import schemaDirectives from './../../graphql/schemaDirectives';
 import ProcedureModel from './../../models/Procedure';
 import UserModel from './../../models/User';
 import DeputyModel from './../../models/Deputy';
+import HistoryModel from './../../models/History';
 
 const graphiql = new ApolloServer({
   engine: false,
@@ -27,7 +27,7 @@ const graphiql = new ApolloServer({
     ProcedureModel,
     UserModel,
     DeputyModel,
-    HistoryModel: mongoose.model('History'),
+    HistoryModel,
   }),
 });
 
