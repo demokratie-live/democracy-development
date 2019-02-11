@@ -1,8 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { createServer } from 'http';
 import cors from 'cors';
-import { inspect } from 'util';
 
 // *****************************************************************
 // IMPORTANT - you cannot include any models before migrating the DB
@@ -55,11 +53,10 @@ const main = async () => {
   const graphql = require('./services/graphql'); // eslint-disable-line global-require
   graphql.applyMiddleware({ app: server, path: CONFIG.GRAPHQL_PATH });
 
-  // Create & start Server
-  const graphqlServer = createServer(server);
-  graphqlServer.listen(CONFIG.PORT, err => {
+  // Start Server
+  server.listen({ port: CONFIG.PORT }, err => {
     if (err) {
-      Log.error(inspect(err));
+      Log.error(err);
     } else {
       Log.warn(`🚀 Server ready at http://localhost:${CONFIG.PORT}${CONFIG.GRAPHQL_PATH}`);
     }

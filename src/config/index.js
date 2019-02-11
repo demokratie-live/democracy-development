@@ -30,6 +30,7 @@ const optionalConfigs = {
   GRAPHQL_PATH: process.env.GRAPHQL_PATH || '/',
   GRAPHIQL_PATH: process.env.GRAPHIQL_PATH || false,
   ENGINE_API_KEY: process.env.ENGINE_API_KEY || null,
+  ENGINE_DEBUG_MODE: process.env.ENGINE_DEBUG_MODE === 'true',
   // Logging
   LOGGING_CONSOLE: process.env.LOGGING_CONSOLE || false,
   LOGGING_FILE: process.env.LOGGING_FILE || false,

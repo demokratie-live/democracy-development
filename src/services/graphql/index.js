@@ -15,6 +15,9 @@ const graphql = new ApolloServer({
   engine: CONFIG.ENGINE_API_KEY
     ? {
         apiKey: CONFIG.ENGINE_API_KEY,
+        // Send params and headers to engine
+        privateVariables: !CONFIG.ENGINE_DEBUG_MODE,
+        privateHeaders: !CONFIG.ENGINE_DEBUG_MODE,
       }
     : false,
   typeDefs,
