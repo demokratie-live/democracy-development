@@ -36,30 +36,24 @@ const main = async () => {
   // Bodyparser
   server.use(bodyParser.json());
 
-  // Graphql
+  // Graphiql Playground
   // Here several Models are included for graphql
-  // if that did not happen in the migration
-  const graphql = require('./services/graphql'); // eslint-disable-line global-require
-  server.use(CONSTANTS.GRAPHQL_PATH, graphql);
+  // This must be registered before graphql since it binds on / (default)
+  if (CONSTANTS.PLAYGROUND_PATH) {
+    const graphiql = require('./services/graphiql'); // eslint-disable-line global-require
+    graphiql.applyMiddleware({ app: server, path: CONSTANTS.PLAYGROUND_PATH });
+  }
 
   // Search
   // Procedure Model is included
+  // This must be registered before graphql since it binds on / (default)
   const search = require('./services/search'); // eslint-disable-line global-require
   server.get('/search', search);
 
-  // Apollo Engine
-  if (CONSTANTS.ENGINE_API_KEY) {
-    // No Models are included at current time - just to be sure
-    const apolloEngine = require('./services/apolloEngine'); // eslint-disable-line global-require
-    server.use(apolloEngine);
-  }
-
-  // Graphiql
-  if (CONSTANTS.GRAPHIQL_PATH) {
-    // No Models are included at current time - just to be sure
-    const graphiql = require('./services/graphiql'); // eslint-disable-line global-require
-    server.use(CONSTANTS.GRAPHIQL_PATH, graphiql);
-  }
+  // Graphql
+  // Here several Models are included for graphql
+  const graphql = require('./services/graphql'); // eslint-disable-line global-require
+  graphql.applyMiddleware({ app: server, path: CONSTANTS.GRAPHQL_PATH });
 
   // Create & start Server
   const graphqlServer = createServer(server);
@@ -67,7 +61,7 @@ const main = async () => {
     if (err) {
       Log.error(inspect(err));
     } else {
-      Log.info(`App is listen on port: ${CONSTANTS.PORT}`);
+      Log.warn(`🚀 Server ready at http://localhost:${CONSTANTS.PORT}${CONSTANTS.GRAPHQL_PATH}`);
     }
   });
 

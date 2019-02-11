@@ -1,5 +1,5 @@
-import auth from './auth';
+import AuthDirective from './auth';
 
-export default { auth };
+export default { auth: AuthDirective };
 
-export { auth };
+export { AuthDirective };
