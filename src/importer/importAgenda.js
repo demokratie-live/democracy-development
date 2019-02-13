@@ -36,7 +36,7 @@ const checkDocuments = async data => {
             });
             if (procedures.length > 0) {
               const promisesUpdate = procedures.map(
-                async ({ procedureId, currentStatus, history }) => {
+                async ({ procedureId, currentStatus, history, customData }) => {
                   const recomendetDecisionDocument = history.find(
                     doc =>
                       doc.initiator &&
@@ -47,9 +47,11 @@ const checkDocuments = async data => {
                     false;
 
                   if (
-                    (currentStatus === 'Beschlussempfehlung liegt vor' ||
+                    customData.expectedVotingDate !== dateTime &&
+                    ((currentStatus === 'Beschlussempfehlung liegt vor' ||
                       currentStatus === 'Überwiesen') &&
-                    (recomendetDecisionDocumentDate && recomendetDecisionDocumentDate <= dateTime)
+                      (recomendetDecisionDocumentDate &&
+                        recomendetDecisionDocumentDate <= dateTime))
                   ) {
                     await Procedure.findOneAndUpdate(
                       {
@@ -65,8 +67,9 @@ const checkDocuments = async data => {
                     });
                     return true;
                   } else if (
-                    currentStatus === 'Beschlussempfehlung liegt vor' ||
-                    currentStatus === 'Überwiesen'
+                    customData.possibleVotingDate !== dateTime &&
+                    (currentStatus === 'Beschlussempfehlung liegt vor' ||
+                      currentStatus === 'Überwiesen')
                   ) {
                     await Procedure.findOneAndUpdate(
                       {

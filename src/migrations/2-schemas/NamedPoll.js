@@ -26,5 +26,7 @@ const NamedPollSchema = new Schema(
 
 NamedPollSchema.plugin(diffHistory.plugin, { omit: ['updatedAt'] });
 NamedPollSchema.index({ createdAt: 1 });
+NamedPollSchema.index({ webId: 1, 'votes.parties.name': 1 }, { unique: true });
+NamedPollSchema.index({ webId: 1, 'votes.deputies.webId': 1 }, { unique: true });
 
 export default NamedPollSchema;

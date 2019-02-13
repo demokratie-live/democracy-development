@@ -102,13 +102,43 @@ export default async () => {
         plenarProtocolURL: dataPackage.data.plenarProtocolURL,
         media: dataPackage.data.media,
         speeches: dataPackage.data.speeches,
-        // If we dont set this manually the remaining fields will be overwriten = deleted
-        'votes.all': dataPackage.data.votes.all,
-        'votes.parties': dataPackage.data.votes.parties,
       };
 
+      // We need this for nested document votes.all -> to prevent update/history generation
+      // This is retarded - but what u can do? ¯\_(ツ)_/¯
+      // Find NamedPoll
+      const existingNamedPoll = await NamedPoll.findOne({ webId: namedPoll.webId });
+      if (existingNamedPoll && existingNamedPoll.votes && existingNamedPoll.votes.all) {
+        if (existingNamedPoll.votes.all.total !== dataPackage.data.votes.all.total) {
+          namedPoll['votes.all.total'] = dataPackage.data.votes.all.total;
+        }
+        if (existingNamedPoll.votes.all.yes !== dataPackage.data.votes.all.yes) {
+          namedPoll['votes.all.yes'] = dataPackage.data.votes.all.yes;
+        }
+        if (existingNamedPoll.votes.all.no !== dataPackage.data.votes.all.no) {
+          namedPoll['votes.all.no'] = dataPackage.data.votes.all.no;
+        }
+        if (existingNamedPoll.votes.all.abstain !== dataPackage.data.votes.all.abstain) {
+          namedPoll['votes.all.abstain'] = dataPackage.data.votes.all.abstain;
+        }
+        if (existingNamedPoll.votes.all.na !== dataPackage.data.votes.all.na) {
+          namedPoll['votes.all.na'] = dataPackage.data.votes.all.na;
+        }
+      } else {
+        namedPoll['votes.all'] = dataPackage.data.votes.all;
+      }
+
       // Update/Insert
-      await NamedPoll.update({ webId: namedPoll.webId }, { $set: namedPoll }, { upsert: true });
+      await NamedPoll.update(
+        { webId: namedPoll.webId },
+        {
+          $set: namedPoll,
+          $addToSet: {
+            'votes.parties': dataPackage.data.votes.parties,
+          },
+        },
+        { upsert: true },
+      );
 
       // Update Procedure Custom Data
       // TODO This should not be the way we handle this

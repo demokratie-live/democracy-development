@@ -3,7 +3,8 @@ export default {
     namedPoll: async (parent, { webId }, { NamedPollModel }) => NamedPollModel.findOne({ webId }),
 
     namedPolls: async (parent, { limit = 99, offset = 0 }, { NamedPollModel }) =>
-      NamedPollModel.find({}, {}, { sort: { createdAt: 1 }, skip: offset, limit }),
+      // Even tho the index for createdAt is set - the memory limit is reached - therefore no sort
+      NamedPollModel.find({}, {}, { /* sort: { createdAt: 1 }, */ skip: offset, limit }),
 
     namedPollUpdates: async (
       parent,
@@ -26,7 +27,8 @@ export default {
           $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
         },
         {},
-        { sort: { createdAt: 1 }, skip: offset, limit },
+        // Even tho the index for createdAt is set - the memory limit is reached - therefore no sort
+        { /* sort: { createdAt: 1 }, */ skip: offset, limit },
       );
       return {
         beforeCount,

@@ -21,7 +21,7 @@ export default async () => {
       await NamedPoll.update(
         { webId: namedPollWebId },
         {
-          $set: {
+          $addToSet: {
             'votes.deputies': deputies,
           },
         },
