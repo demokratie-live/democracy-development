@@ -25,5 +25,6 @@ const NamedPollSchema = new Schema(
 );
 
 NamedPollSchema.plugin(diffHistory.plugin, { omit: ['updatedAt'] });
+NamedPollSchema.index({ createdAt: 1 });
 
 export default NamedPollSchema;

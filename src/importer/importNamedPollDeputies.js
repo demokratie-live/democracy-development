@@ -8,19 +8,21 @@ export default async () => {
   await Scraper.scrape([new NamedPollDeputyScraperConfiguration()], dataPackages => {
     dataPackages.map(async dataPackage => {
       // Construct Database object
-      const namedPoll = {
-        webId: dataPackage.data.id,
-        votes: {
-          deputies: dataPackage.data.votes.deputies,
-        },
-      };
+      const namedPollWebId = dataPackage.data.id;
+      // Add webId field, Remove id field
+      const deputies = dataPackage.data.votes.deputies.map(deputy => {
+        const dep = deputy;
+        dep.webId = dep.id;
+        delete dep.id;
+        return dep;
+      });
 
       // Update/Insert
       await NamedPoll.update(
-        { webId: namedPoll.webId },
+        { webId: namedPollWebId },
         {
           $set: {
-            'votes.deputies': namedPoll.votes.deputies,
+            'votes.deputies': deputies,
           },
         },
         { upsert: true },

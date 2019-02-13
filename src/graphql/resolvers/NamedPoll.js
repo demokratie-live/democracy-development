@@ -1,27 +1,27 @@
 export default {
   Query: {
-    deputy: async (parent, { webId }, { DeputyModel }) => DeputyModel.findOne({ webId }),
+    namedPoll: async (parent, { webId }, { NamedPollModel }) => NamedPollModel.findOne({ webId }),
 
-    deputies: async (parent, { limit = 99, offset = 0 }, { DeputyModel }) =>
-      DeputyModel.find({}, {}, { sort: { createdAt: 1 }, skip: offset, limit }),
+    namedPolls: async (parent, { limit = 99, offset = 0 }, { NamedPollModel }) =>
+      NamedPollModel.find({}, {}, { sort: { createdAt: 1 }, skip: offset, limit }),
 
-    deputyUpdates: async (
+    namedPollUpdates: async (
       parent,
       { since, limit = 99, offset = 0 },
-      { DeputyModel, HistoryModel },
+      { NamedPollModel, HistoryModel },
     ) => {
-      const beforeCount = await DeputyModel.count({ createdAt: { $lte: since } });
-      const afterCount = await DeputyModel.count({});
+      const beforeCount = await NamedPollModel.count({ createdAt: { $lte: since } });
+      const afterCount = await NamedPollModel.count({});
       const changed = await HistoryModel.aggregate([
         {
           $match: {
-            collectionName: 'Deputy',
+            collectionName: 'NamedPoll',
             createdAt: { $gt: since },
           },
         },
         { $group: { _id: '$collectionId' } },
       ]);
-      const deputies = await DeputyModel.find(
+      const namedPolls = await NamedPollModel.find(
         {
           $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
         },
@@ -33,7 +33,7 @@ export default {
         afterCount,
         newCount: afterCount - beforeCount,
         changedCount: changed.length,
-        deputies,
+        namedPolls,
       };
     },
   },

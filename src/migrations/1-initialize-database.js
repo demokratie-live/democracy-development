@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import utils from 'mongoose/lib/utils';
 
 import DeputySchema from './1-schemas/Deputy';
 import NamedPollSchema from './1-schemas/NamedPoll';
@@ -12,9 +11,9 @@ module.exports.up = async function (done) { // eslint-disable-line
   // Why do we have to catch here - makes no sense!
   try {
     // Agendas have no index therefore we need to create the collection manually
-    await this.db.createCollection(utils.toCollectionName('Agenda'));
+    await this.db.createCollection('agendas');
     // CronJobs have no index therefore we need to create the collection manually
-    await this.db.createCollection(utils.toCollectionName('CronJob'));
+    await this.db.createCollection('cronjobs');
 
     // The following models do have indexes and the coresponding collection will be created
     const Deputies = mongoose.model('Deputy', DeputySchema);

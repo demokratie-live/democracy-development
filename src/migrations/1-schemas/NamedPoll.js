@@ -23,4 +23,6 @@ const NamedPollSchema = new Schema(
   { timestamps: true },
 );
 
+NamedPollSchema.index({ createdAt: 1 });
+
 export default NamedPollSchema;

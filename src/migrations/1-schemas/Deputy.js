@@ -27,4 +27,7 @@ const DeputySchema = new Schema(
 );
 
 DeputySchema.plugin(diffHistory.plugin, { omit: ['updatedAt'] });
+
+DeputySchema.index({ createdAt: 1 });
+
 export default DeputySchema;

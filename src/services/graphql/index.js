@@ -9,6 +9,7 @@ import schemaDirectives from './../../graphql/schemaDirectives';
 import ProcedureModel from './../../models/Procedure';
 import UserModel from './../../models/User';
 import DeputyModel from './../../models/Deputy';
+import NamedPollModel from './../../models/NamedPoll';
 import HistoryModel from './../../models/History';
 
 const graphql = new ApolloServer({
@@ -35,6 +36,7 @@ const graphql = new ApolloServer({
     ProcedureModel,
     UserModel,
     DeputyModel,
+    NamedPollModel,
     HistoryModel,
   }),
 });

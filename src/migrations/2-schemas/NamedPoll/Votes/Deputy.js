@@ -2,7 +2,7 @@ import { Schema } from 'mongoose';
 
 const NamedPollVotesDeputy = new Schema(
   {
-    id: { type: String },
+    webId: { type: String, required: true },
     URL: { type: String },
     imgURL: { type: String },
     state: { type: String },

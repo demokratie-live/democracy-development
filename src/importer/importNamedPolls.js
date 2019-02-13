@@ -18,31 +18,67 @@ export default async () => {
         document.replace('http://dip21.bundestag.de/', 'http://dipbt.bundestag.de:80/'),
       );
 
-      // Find matching Procedures
-      let procedures = await Procedure.find({
+      // Find matching Procedures - using harsh criteria
+      // To validate:
+      /*
+        // Multimatches/Unmatched
+        db.getCollection('namedpolls').aggregate([
+            {
+                $group: {
+                    _id: '$procedureId',
+                    count: {$sum: 1}
+                }
+            },
+            {
+                $match: {
+                    count: {$ne: 1.0}
+                }
+            }
+        ])
+
+        // Exact matches
+        db.getCollection('namedpolls').aggregate([
+            {
+                $group: {
+                    _id: '$procedureId',
+                    count: {$sum: 1}
+                }
+            },
+            {
+                $match: {
+                    count: {$eq: 1.0}
+                }
+            },
+            {
+                $group: {
+                    _id: 'count',
+                    count: {$sum: 1}
+                }
+            }
+        ])
+      */
+      const procedures = await Procedure.find({
         'history.findSpotUrl': { $all: findSpotUrls },
-        'history.decision.type': 'Namentliche Abstimmung',
+        'history.decision': {
+          $elemMatch: {
+            type: 'Namentliche Abstimmung',
+            tenor: { $not: /.*?Änderungsantrag.*?/ },
+            comment: new RegExp(
+              `.*?${dataPackage.data.votes.all.yes}:${dataPackage.data.votes.all.no}:${
+                dataPackage.data.votes.all.abstain
+              }.*?`,
+            ),
+          },
+        },
       });
 
-      // Do we have to many macthes? Try to narrow down to one
+      // We did find too many
       if (procedures.length > 1) {
-        Log.warn(`Named Polls Scraper need to use comment on: ${dataPackage.metadata.url}`);
-        procedures = await Procedure.find({
-          'history.findSpotUrl': { $all: findSpotUrls },
-          'history.decision.type': 'Namentliche Abstimmung',
-          'history.decision.comment': new RegExp(
-            `.*?${dataPackage.data.votes.all.yes}:${dataPackage.data.votes.all.no}:${
-              dataPackage.data.votes.all.abstain
-            }.*?`,
-          ),
-        });
+        Log.error(`Named Polls Scraper duplicate match on: ${dataPackage.metadata.url}`);
       }
 
-      // We did not find anything, Exclude Entschließungsantrag
-      if (
-        procedures.length === 0 &&
-        dataPackage.data.title.indexOf('Entschließungsantrag') === -1
-      ) {
+      // We did not find anything
+      if (procedures.length === 0) {
         Log.warn(`Named Polls Scraper no match on: ${dataPackage.metadata.url}`);
       }
 
@@ -63,14 +99,16 @@ export default async () => {
         documents: dataPackage.data.documents,
         deputyVotesURL: dataPackage.data.deputyVotesURL,
         membersVoted: dataPackage.data.membersVoted,
-        votes: dataPackage.data.votes,
         plenarProtocolURL: dataPackage.data.plenarProtocolURL,
         media: dataPackage.data.media,
         speeches: dataPackage.data.speeches,
+        // If we dont set this manually the remaining fields will be overwriten = deleted
+        'votes.all': dataPackage.data.votes.all,
+        'votes.parties': dataPackage.data.votes.parties,
       };
 
       // Update/Insert
-      await NamedPoll.update({ webId: namedPoll.webId }, { ...namedPoll }, { upsert: true });
+      await NamedPoll.update({ webId: namedPoll.webId }, { $set: namedPoll }, { upsert: true });
 
       // Update Procedure Custom Data
       // TODO This should not be the way we handle this
@@ -162,6 +200,26 @@ export default async () => {
       return null;
     });
   });
+
+  // Validate Data - find duplicate matches which is an error!
+  const duplicateMatches = await NamedPoll.aggregate([
+    {
+      $group: {
+        _id: '$procedureId',
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $match: {
+        count: { $ne: 1.0 },
+        _id: { $ne: null },
+      },
+    },
+  ]);
+  if (duplicateMatches) {
+    Log.error(`Duplicate Matches on: ${JSON.stringify(duplicateMatches)}`);
+  }
+
   Log.info('FINISH NAMED POLLS SCRAPER');
 };
 
