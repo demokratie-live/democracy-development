@@ -96,7 +96,7 @@ const checkDocuments = async data => {
 const syncWithDemocracy = async () => {
   if (procedureIds.length > 0) {
     await axios
-      .post(`${CONFIG.DEMOCRACY_WEBHOOKS_UPDATE_PROCEDURES}`, {
+      .post(`${CONFIG.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
         data: { procedureIds: [...new Set(procedureIds)], name: 'Agenda' },
         timeout: 1000 * 60 * 5,
       })

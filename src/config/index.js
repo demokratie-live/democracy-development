@@ -20,9 +20,9 @@ const recommendedConfigs = {
   // TODO remove this - no webhook - use pull model
   DEMOCRACY_SERVER_WEBHOOK_URL:
     process.env.DEMOCRACY_SERVER_WEBHOOK_URL || 'http://localhost:3000/webhooks/bundestagio/update',
-  DEMOCRACY_WEBHOOKS_UPDATE_PROCEDURES:
+  /* DEMOCRACY_WEBHOOKS_UPDATE_PROCEDURES:
     process.env.DEMOCRACY_WEBHOOKS_UPDATE_PROCEDURES ||
-    'http://democracy/webhooks/bundestagio/updateProcedures',
+    'http://localhost:3000/webhooks/bundestagio/updateProcedures', */
 };
 
 const optionalConfigs = {

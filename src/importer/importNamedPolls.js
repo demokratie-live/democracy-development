@@ -216,7 +216,7 @@ export default async () => {
       },
     },
   ]);
-  if (duplicateMatches) {
+  if (duplicateMatches.length !== 0) {
     Log.error(`Duplicate Matches on: ${JSON.stringify(duplicateMatches)}`);
   }
 
