@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 
 // *****************************************************************
 // IMPORTANT - you cannot include any models before migrating the DB
@@ -47,6 +48,11 @@ const main = async () => {
   // This must be registered before graphql since it binds on / (default)
   const search = require('./services/search'); // eslint-disable-line global-require
   server.get('/search', search);
+
+  // VOYAGER
+  if (CONFIG.VOYAGER) {
+    server.use('/voyager', voyagerMiddleware({ endpointUrl: CONFIG.GRAPHQL_PATH }));
+  }
 
   // Graphql
   // Here several Models are included for graphql
