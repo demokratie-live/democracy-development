@@ -46,6 +46,7 @@ type NamedPollVotes {
   all: NamedPollVotesVotes
   parties: [NamedPollVotesParty]
   deputies: [NamedPollDeputy]
+  inverseVoteDirection: Boolean
 }
 
 type NamedPoll {

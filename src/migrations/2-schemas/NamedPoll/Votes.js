@@ -9,6 +9,7 @@ const NamedPollVotes = new Schema(
     all: NamedPollVotesVotes,
     parties: [NamedPollVotesParty],
     deputies: [NamedPollVotesDeputy],
+    inverseVoteDirection: { type: Boolean },
   },
   { _id: false },
 );

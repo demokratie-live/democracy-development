@@ -128,18 +128,6 @@ export default async () => {
         namedPoll['votes.all'] = dataPackage.data.votes.all;
       }
 
-      // Update/Insert
-      await NamedPoll.update(
-        { webId: namedPoll.webId },
-        {
-          $set: namedPoll,
-          $addToSet: {
-            'votes.parties': dataPackage.data.votes.parties,
-          },
-        },
-        { upsert: true },
-      );
-
       // Update Procedure Custom Data
       // TODO This should not be the way we handle this
       const { votes } = dataPackage.data;
@@ -191,7 +179,7 @@ export default async () => {
           },
         };
 
-        // TODO WTF?
+        // Determin Vote Direction
         const [{ history }] = procedures;
         const namedHistoryEntry = history
           .find(
@@ -225,7 +213,31 @@ export default async () => {
         }
 
         await Procedure.findOneAndUpdate({ procedureId }, { customData });
+
+        // Define inverseVoteDirection on NamedPoll
+        const inverseVoteDirection =
+          customData.voteResults.votingDocument === 'recommendedDecision' &&
+          customData.voteResults.votingRecommendation === false;
+        if (
+          !existingNamedPoll ||
+          !existingNamedPoll.votes ||
+          !(existingNamedPoll.votes.inverseVoteDirection === inverseVoteDirection)
+        ) {
+          namedPoll['votes.inverseVoteDirection'] = inverseVoteDirection;
+        }
       }
+
+      // Update/Insert
+      await NamedPoll.update(
+        { webId: namedPoll.webId },
+        {
+          $set: namedPoll,
+          $addToSet: {
+            'votes.parties': dataPackage.data.votes.parties,
+          },
+        },
+        { upsert: true },
+      );
 
       return null;
     });
