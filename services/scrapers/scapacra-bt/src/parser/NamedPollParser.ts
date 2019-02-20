@@ -115,7 +115,7 @@ namespace NamedPoll_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        resultAll.total = parseInt(match, 10) || null;
+                        resultAll.total = parseInt(match, 10) || 0;
                     }
                     if (group === 2) {
                         resultAll_sel = match;
@@ -130,16 +130,16 @@ namespace NamedPoll_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        resultAll.yes = parseInt(match, 10) || null;
+                        resultAll.yes = parseInt(match, 10) || 0;
                     }
                     if (group === 2) {
-                        resultAll.no = parseInt(match, 10) || null;
+                        resultAll.no = parseInt(match, 10) || 0;
                     }
                     if (group === 3) {
-                        resultAll.abstain = parseInt(match, 10) || null;
+                        resultAll.abstain = parseInt(match, 10) || 0;
                     }
                     if (group === 4) {
-                        resultAll.na = parseInt(match, 10) || null;
+                        resultAll.na = parseInt(match, 10) || 0;
                     }
                 });
             }
@@ -160,7 +160,7 @@ namespace NamedPoll_Parser {
                         currentParty.name = match;
                     }
                     if (group === 2) {
-                        currentParty.votes.total = parseInt(match, 10) || null;
+                        currentParty.votes.total = parseInt(match, 10) || 0;
                     }
                     if (group === 3) {
                         let n;
@@ -172,16 +172,16 @@ namespace NamedPoll_Parser {
                             // The result can be accessed through the `n`-variable.
                             n.forEach((match2, group2) => {
                                 if (group2 === 1) {
-                                    currentParty.votes.yes = parseInt(match2, 10) || null;
+                                    currentParty.votes.yes = parseInt(match2, 10) || 0;
                                 }
                                 if (group2 === 2) {
-                                    currentParty.votes.no = parseInt(match2, 10) || null;
+                                    currentParty.votes.no = parseInt(match2, 10) || 0;
                                 }
                                 if (group2 === 3) {
-                                    currentParty.votes.abstain = parseInt(match2, 10) || null;
+                                    currentParty.votes.abstain = parseInt(match2, 10) || 0;
                                 }
                                 if (group2 === 4) {
-                                    currentParty.votes.na = parseInt(match2, 10) || null;
+                                    currentParty.votes.na = parseInt(match2, 10) || 0;
                                 }
                             });
                         }
