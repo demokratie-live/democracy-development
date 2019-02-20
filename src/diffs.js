@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 
 import './services/logger';
 
-import DB, { mongoose } from './config/db';
+import DB, { mongoose } from './services/mongoose';
 import Procedure from './models/Procedure';
 
 (async () => {

@@ -3,10 +3,7 @@ export default {
     deputy: async (parent, { webId }, { DeputyModel }) => DeputyModel.findOne({ webId }),
 
     deputies: async (parent, { limit = 99, offset = 0 }, { DeputyModel }) =>
-      DeputyModel.find({})
-        .sort({ createdAt: 1 })
-        .skip(offset)
-        .limit(limit),
+      DeputyModel.find({}, {}, { sort: { createdAt: 1 }, skip: offset, limit }),
 
     deputyUpdates: async (
       parent,
@@ -24,12 +21,13 @@ export default {
         },
         { $group: { _id: '$collectionId' } },
       ]);
-      const deputies = await DeputyModel.find({
-        $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
-      })
-        .sort({ createdAt: 1 })
-        .skip(offset)
-        .limit(limit);
+      const deputies = await DeputyModel.find(
+        {
+          $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
+        },
+        {},
+        { sort: { createdAt: 1 }, skip: offset, limit },
+      );
       return {
         beforeCount,
         afterCount,

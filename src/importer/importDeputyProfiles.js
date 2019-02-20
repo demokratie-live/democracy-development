@@ -1,12 +1,10 @@
-import _ from 'lodash';
-
 import { Scraper } from '@democracy-deutschland/scapacra';
 import { DeputyProfileScraperConfiguration } from '@democracy-deutschland/scapacra-bt';
 
 import DeputyModel from '../models/Deputy';
 
 export default async () => {
-  console.log('START DEPUTY PROFILES SCRAPER');
+  Log.info('START DEPUTY PROFILES SCRAPER');
   await Scraper.scrape([new DeputyProfileScraperConfiguration()], dataPackages => {
     dataPackages.map(async dataPackage => {
       // Ignore those which have no webid (ausgeschieden)
@@ -36,13 +34,9 @@ export default async () => {
         publicationRequirement: dataPackage.data.publicationRequirement.sort(),
       };
       // Update/Insert
-      await DeputyModel.update(
-        { webId: deputy.webId },
-        { $set: _.pickBy(deputy) },
-        { upsert: true },
-      );
+      await DeputyModel.update({ webId: deputy.webId }, { $set: deputy }, { upsert: true });
       return null;
     });
   });
-  console.log('FINISH DEPUTY PROFILES SCRAPER');
+  Log.info('FINISH DEPUTY PROFILES SCRAPER');
 };

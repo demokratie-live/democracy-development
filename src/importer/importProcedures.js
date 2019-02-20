@@ -7,13 +7,12 @@ import fs from 'fs-extra';
 import FileLogger from 'log';
 import axios from 'axios';
 import moment from 'moment';
-import { inspect } from 'util';
 
-import CONSTANTS from './../config/constants';
+import CONFIG from './../config';
 
 import Procedure from './../models/Procedure';
 import CronJobModel from './../models/CronJob';
-import { mongoose } from './../config/db';
+import History from './../models/History';
 
 const log = new FileLogger('error', fs.createWriteStream('error-import.log'));
 
@@ -196,7 +195,6 @@ const logError = ({ error }) => {
 };
 
 const cronTask = async () => {
-  const History = mongoose.model('History');
   if (!cronIsRunning) {
     cronIsRunning = true;
     cronStart = Date.now();
@@ -218,16 +216,12 @@ const cronTask = async () => {
     global.Log.info(`### Start Cronjob ${moment(cronStart).format()}`);
     // get old Scrape Data for cache
     pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
-    let selectPeriods = ['Alle'];
-    if (process.env.PERIODS) {
-      selectPeriods = process.env.PERIODS.split(',');
-    }
     // Do the scrape
     await scraper
       .scrape({
         // settings
         browserStackSize: 5,
-        selectPeriods,
+        selectPeriods: CONFIG.PERIODS,
         selectOperationTypes: ['100', '500'],
         logUpdateSearchProgress,
         logStartDataProgress,
@@ -302,7 +296,7 @@ const cronTask = async () => {
 
         // Send Data to Hook
         axios
-          .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
+          .post(`${CONFIG.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
             data: groups,
           })
           .then(async () => {
@@ -321,7 +315,7 @@ const cronTask = async () => {
             );
           })
           .catch(error => {
-            Log.error(`democracy server error: ${inspect(error)}`);
+            Log.error(`[DEMOCRACY Server] ${error}`);
           });
 
         Log.info('#####FINISH####');

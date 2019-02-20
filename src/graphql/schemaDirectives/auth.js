@@ -4,7 +4,7 @@
 import { SchemaDirectiveVisitor } from 'graphql-tools';
 import { defaultFieldResolver } from 'graphql';
 
-import CONSTANTS from '../../config/constants';
+import CONFIG from '../../config';
 
 class AuthDirective extends SchemaDirectiveVisitor {
   visitObject(type) {
@@ -42,7 +42,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
         let allow = true;
         if (requiredRole === 'BACKEND') {
           if (
-            !CONSTANTS.WHITELIST_DATA_SOURCES.some(
+            !CONFIG.WHITELIST_DATA_SOURCES.some(
               address =>
                 address.length >= 3 && context.req.connection.remoteAddress.indexOf(address) !== -1,
             )

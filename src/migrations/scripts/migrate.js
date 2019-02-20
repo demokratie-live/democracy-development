@@ -1,0 +1,3 @@
+import { migrate } from './';
+
+migrate();

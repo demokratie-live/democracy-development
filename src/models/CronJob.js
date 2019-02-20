@@ -1,13 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
-
-const CronJobSchema = new Schema(
-  {
-    name: String,
-    lastStartDate: Date,
-    lastErrorDate: Date,
-    lastFinishDate: Date,
-  },
-  { timestamps: true },
-);
+import mongoose from 'mongoose';
+import CronJobSchema from './../migrations/1-schemas/CronJob';
 
 export default mongoose.model('CronJob', CronJobSchema);

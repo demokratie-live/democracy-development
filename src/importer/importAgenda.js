@@ -3,7 +3,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { inspect } from 'util';
 
-import CONSTANTS from './../config/constants';
+import CONFIG from './../config';
 
 import Procedure from './../models/Procedure';
 import Agenda from './../models/Agenda';
@@ -11,89 +11,95 @@ import Agenda from './../models/Agenda';
 let procedureIds = [];
 
 const checkDocuments = async data => {
-  await Promise.all(
-    data.map(async ({ rows, year, week, meeting, date, ...rest }) => {
-      await Agenda.findOneAndUpdate(
-        { year, week, meeting },
-        { rows, year, week, meeting, date: new Date(date), ...rest },
-        {
-          upsert: true,
-        },
-      );
-      await Promise.all(
-        rows.map(async ({ dateTime, topicDocuments: documents, status }) => {
-          const igonreDocs = status
-            .filter(stat => stat.indexOf('Überweisung') === 0)
-            .map(stat => stat.match(/(\d{1,3}\/\d{1,10})/g));
+  if (data) {
+    await Promise.all(
+      data.map(async ({ rows, year, week, meeting, date, ...rest }) => {
+        await Agenda.findOneAndUpdate(
+          { year, week, meeting },
+          { rows, year, week, meeting, date: new Date(date), ...rest },
+          {
+            upsert: true,
+          },
+        );
+        await Promise.all(
+          rows.map(async ({ dateTime, topicDocuments: documents, status }) => {
+            const igonreDocs = status
+              .filter(stat => stat.indexOf('Überweisung') === 0)
+              .map(stat => stat.match(/(\d{1,3}\/\d{1,10})/g));
 
-          if (igonreDocs.length > 0) {
-            return;
-          }
+            if (igonreDocs.length > 0) {
+              return;
+            }
 
-          const procedures = await Procedure.find({
-            'importantDocuments.number': { $in: documents },
-          });
-          if (procedures.length > 0) {
-            const promisesUpdate = procedures.map(
-              async ({ procedureId, currentStatus, history }) => {
-                const recomendetDecisionDocument = history.find(
-                  doc =>
-                    doc.initiator && doc.initiator.indexOf('Beschlussempfehlung und Bericht') === 0,
-                );
-                const recomendetDecisionDocumentDate =
-                  (recomendetDecisionDocument && new Date(recomendetDecisionDocument.date)) ||
-                  false;
+            const procedures = await Procedure.find({
+              'importantDocuments.number': { $in: documents },
+            });
+            if (procedures.length > 0) {
+              const promisesUpdate = procedures.map(
+                async ({ procedureId, currentStatus, history, customData }) => {
+                  const recomendetDecisionDocument = history.find(
+                    doc =>
+                      doc.initiator &&
+                      doc.initiator.indexOf('Beschlussempfehlung und Bericht') === 0,
+                  );
+                  const recomendetDecisionDocumentDate =
+                    (recomendetDecisionDocument && new Date(recomendetDecisionDocument.date)) ||
+                    false;
 
-                if (
-                  (currentStatus === 'Beschlussempfehlung liegt vor' ||
-                    currentStatus === 'Überwiesen') &&
-                  (recomendetDecisionDocumentDate && recomendetDecisionDocumentDate <= dateTime)
-                ) {
-                  await Procedure.findOneAndUpdate(
-                    {
-                      procedureId,
-                    },
-                    {
-                      $set: { 'customData.expectedVotingDate': dateTime },
-                    },
-                  ).then(datas => {
-                    if (datas) {
-                      procedureIds.push(procedureId);
-                    }
-                  });
-                  return true;
-                } else if (
-                  currentStatus === 'Beschlussempfehlung liegt vor' ||
-                  currentStatus === 'Überwiesen'
-                ) {
-                  await Procedure.findOneAndUpdate(
-                    {
-                      procedureId,
-                    },
-                    {
-                      $set: { 'customData.possibleVotingDate': dateTime },
-                    },
-                  ).then(datas => {
-                    if (datas) {
-                      procedureIds.push(procedureId);
-                    }
-                  });
-                }
-                return false;
-              },
-            );
-            await Promise.all(promisesUpdate);
-          }
-        }),
-      );
-    }),
-  );
+                  if (
+                    customData.expectedVotingDate !== dateTime &&
+                    ((currentStatus === 'Beschlussempfehlung liegt vor' ||
+                      currentStatus === 'Überwiesen') &&
+                      (recomendetDecisionDocumentDate &&
+                        recomendetDecisionDocumentDate <= dateTime))
+                  ) {
+                    await Procedure.findOneAndUpdate(
+                      {
+                        procedureId,
+                      },
+                      {
+                        $set: { 'customData.expectedVotingDate': dateTime },
+                      },
+                    ).then(datas => {
+                      if (datas) {
+                        procedureIds.push(procedureId);
+                      }
+                    });
+                    return true;
+                  } else if (
+                    customData.possibleVotingDate !== dateTime &&
+                    (currentStatus === 'Beschlussempfehlung liegt vor' ||
+                      currentStatus === 'Überwiesen')
+                  ) {
+                    await Procedure.findOneAndUpdate(
+                      {
+                        procedureId,
+                      },
+                      {
+                        $set: { 'customData.possibleVotingDate': dateTime },
+                      },
+                    ).then(datas => {
+                      if (datas) {
+                        procedureIds.push(procedureId);
+                      }
+                    });
+                  }
+                  return false;
+                },
+              );
+              await Promise.all(promisesUpdate);
+            }
+          }),
+        );
+      }),
+    );
+  }
 };
 
 const syncWithDemocracy = async () => {
   if (procedureIds.length > 0) {
     await axios
-      .post(`${CONSTANTS.DEMOCRACY.WEBHOOKS.UPDATE_PROCEDURES}`, {
+      .post(`${CONFIG.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
         data: { procedureIds: [...new Set(procedureIds)], name: 'Agenda' },
         timeout: 1000 * 60 * 5,
       })
@@ -101,7 +107,7 @@ const syncWithDemocracy = async () => {
         Log.debug(inspect(response.data));
       })
       .catch(error => {
-        Log.error(`democracy server error: ${inspect(error)}`);
+        Log.error(`[DEMOCRACY Server] ${error}`);
       });
     procedureIds = [];
   }
