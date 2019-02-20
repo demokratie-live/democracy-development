@@ -79,7 +79,7 @@ export default async () => {
 
       // We did not find anything
       if (procedures.length === 0) {
-        Log.warn(`Named Polls Scraper no match on: ${dataPackage.metadata.url}`);
+        Log.info(`Named Polls Scraper no match on: ${dataPackage.metadata.url}`);
       }
 
       // We have exactly one match and can assign the procedureId
