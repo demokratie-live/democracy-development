@@ -8,7 +8,7 @@ export default {
 
     namedPollUpdates: async (
       parent,
-      { since, limit = 99, offset = 0 },
+      { since, limit = 99, offset = 0, associated = true },
       { NamedPollModel, HistoryModel },
     ) => {
       const beforeCount = await NamedPollModel.count({ createdAt: { $lte: since } });
@@ -22,10 +22,20 @@ export default {
         },
         { $group: { _id: '$collectionId' } },
       ]);
+
+      // Build find query for namedPolls
+      const namedPollsFindQuery = {
+        $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
+      };
+
+      // if only return accociated polls do filter
+      // without, the api return polls without procedureId
+      if (associated) {
+        namedPollsFindQuery.procedureId = { $ne: null };
+      }
+
       const namedPolls = await NamedPollModel.find(
-        {
-          $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
-        },
+        namedPollsFindQuery,
         {},
         // Even tho the index for createdAt is set - the memory limit is reached - therefore no sort
         { /* sort: { createdAt: 1 }, */ skip: offset, limit },

@@ -77,6 +77,6 @@ type NamedPollUpdate {
 type Query {
   namedPoll(webId: String!): NamedPoll
   namedPolls(limit: Int, offset: Int): [NamedPoll]
-  namedPollUpdates(since: Date!, limit: Int, offset: Int): NamedPollUpdate
+  namedPollUpdates(since: Date!, limit: Int, offset: Int, associated: Boolean): NamedPollUpdate
 }
 `;
