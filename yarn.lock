@@ -173,10 +173,10 @@
     request-cookies "^1.1.0"
     x2js "^3.1.1"
 
-"@democracy-deutschland/scapacra-bt@1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra-bt/-/scapacra-bt-1.0.13.tgz#c888afda254421d14eac1b3db5dff3b6b09633db"
-  integrity sha512-nmb6y6l8pHvc3ETztgI6QZIvxOOxXNdSaiwysskwbO4FABUlPHJfhNvcnKJ1qEqUD8zfRXk+RffGVdYls86zjQ==
+"@democracy-deutschland/scapacra-bt@1.0.15":
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra-bt/-/scapacra-bt-1.0.15.tgz#1f9c638bbf412232770a5b70e33db1c4aa9bdd87"
+  integrity sha512-m9MKNgyi4DMoCRgF+YHukPzfwteOWd8JOJkibWYNJPMuwR20CgOgf21k6u+GSbH6NesjaOO92xK6AMdwAcriSg==
   dependencies:
     "@democracy-deutschland/scapacra" "1.0.3"
     "@types/axios" "^0.14.0"
