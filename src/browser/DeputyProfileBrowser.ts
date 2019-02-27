@@ -26,11 +26,12 @@ namespace Deputy_Browser {
          */
         //protected abstract createFromStream(readableStream: NodeJS.ReadableStream): DeputyProfile;
 
-        private readonly listURL: URL = new URL("https://www.bundestag.de/ajax/filterlist/de/abgeordnete/biografien/-/525246/h_e3c112579919ef960d06dbb9d0d44b67?limit=9999&view=BTBiographyList")
-        private readonly baseUrl: URL = new URL("https://www.bundestag.de");
+        private readonly findListURL: string = "https://www.bundestag.de/abgeordnete/biografien";
+        private readonly listQueryURL: string = "?limit=9999&view=BTBiographyList";
+        private readonly baseUrl: string = "https://www.bundestag.de";
         private loaded: boolean = false;
 
-        private deputyUrls: URL[] = [];
+        private deputyUrls: string[] = [];
 
         public next(): IteratorResult<Promise<IDataPackage<DeputyProfile>>> {
             let hasNext = this.hasNext();
@@ -60,7 +61,7 @@ namespace Deputy_Browser {
             // console.log(blobUrl.toString());
 
             let response = await axios.default.get(
-                blobUrl.toString(),
+                blobUrl,
                 {
                     method: 'get',
                     responseType: 'stream'
@@ -70,7 +71,7 @@ namespace Deputy_Browser {
             if (response.status === 200) {
                 return {
                     metadata: {
-                        url: blobUrl.toString()
+                        url: blobUrl
                     },
                     data: new DeputyProfile(response.data)
                 }
@@ -80,33 +81,67 @@ namespace Deputy_Browser {
         }
 
         private async retrieveList(): Promise<void> {
+            // Get the ListURL
+            let listURL = this.baseUrl;
+            let moreURL = this.baseUrl; // unused
             let response = await axios.default.get(
-                this.listURL.toString(),
+                this.findListURL,
+                {
+                    method: 'get',
+                    responseType: 'blob'
+                }
+            );
+            if (response.status === 200) {
+                const regex_dataLoader = /data-dataloader-url="(.*?)"[\s\S]*?data-dataloader-url="(.*?)"/gm;
+                let m;
+                while ((m = regex_dataLoader.exec(response.data)) !== null) {
+                    // This is necessary to avoid infinite loops with zero-width matches
+                    if (m.index === regex_dataLoader.lastIndex) {
+                        regex_dataLoader.lastIndex++;
+                    }
+                    // The result can be accessed through the `m`-variable.
+                    m.forEach((match, group) => {
+                        if (group === 1) {
+                            listURL += match + this.listQueryURL;
+                        }
+                        if (group === 1) {
+                            moreURL += match;
+                        }
+                    });
+                }
+            }
+            else {
+                throw new Error(response.statusText);
+            }
+
+            // Get the list
+            let responseList = await axios.default.get(
+                listURL,
                 {
                     method: 'get',
                     responseType: 'stream'
                 }
             );
 
-            if (response.status === 200) {
-                let evaluator = new DeputyHrefEvaluator(response.data);
+            if (responseList.status === 200) {
+                let evaluator = new DeputyHrefEvaluator(responseList.data);
 
                 let urls = await evaluator.getSources();
 
                 urls.forEach((blobUrlPath: any) => {
                     let urlPath = <string>blobUrlPath;
-                    let url: URL;
+                    let url: string;
                     // There can be full qualified urls or url paths
                     if (urlPath.startsWith("/")) {
-                        url = new URL(`${this.baseUrl}${(urlPath).substr(1)}`);
+                        url = `${this.baseUrl}${urlPath}`;
                     } else {
-                        url = new URL(urlPath);
+                        url = urlPath;
                     }
                     this.deputyUrls.push(url);
                 });
             }
             else {
-                throw new Error(response.statusText);
+                throw new Error(responseList.statusText);
             }
         }
 
