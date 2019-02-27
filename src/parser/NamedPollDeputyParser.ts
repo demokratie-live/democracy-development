@@ -57,7 +57,7 @@ namespace NamedPollDeputy_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        resultAll.total = parseInt(match, 10) || null;
+                        resultAll.total = parseInt(match, 10) || 0;
                     }
                 });
             }
@@ -69,16 +69,16 @@ namespace NamedPollDeputy_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        resultAll.yes = parseInt(match, 10) || null;
+                        resultAll.yes = parseInt(match, 10) || 0;
                     }
                     if (group === 2) {
-                        resultAll.no = parseInt(match, 10) || null;
+                        resultAll.no = parseInt(match, 10) || 0;
                     }
                     if (group === 3) {
-                        resultAll.abstain = parseInt(match, 10) || null;
+                        resultAll.abstain = parseInt(match, 10) || 0;
                     }
                     if (group === 4) {
-                        resultAll.na = parseInt(match, 10) || null;
+                        resultAll.na = parseInt(match, 10) || 0;
                     }
                 });
             }

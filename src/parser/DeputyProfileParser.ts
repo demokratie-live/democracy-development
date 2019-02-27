@@ -27,7 +27,7 @@ namespace Deputy_Parser {
 
             let m;
 
-            //ImgURL & Name
+            // ImgURL & Name
             let imgURL: string = '';
             let name: string = '';
             const regex_imgURL_name = /<div class="bt-bild-standard[\s\S]*?">[\s\S]*?<img[\s\S]*?data-img-md-normal="([\s\S]*?)"[\s\S]*?title="([\s\S]*?)"[\s\S]*?>[\s\S]*?<span class="bt-bild-info-icon">/gm;
@@ -43,6 +43,22 @@ namespace Deputy_Parser {
                     }
                     if (group === 2) {
                         name = match;
+                    }
+                });
+            }
+
+            // ImgCopyright
+            let imgCopyright: string = '';
+            const regex_imgCopyright = /<div class="bt-bild-info-text">[\s\S]*?<p>&copy;&nbsp;(.*?)<\/p>/gm;
+            while ((m = regex_imgCopyright.exec(string)) !== null) {
+                // This is necessary to avoid infinite loops with zero-width matches
+                if (m.index === regex_imgCopyright.lastIndex) {
+                    regex_imgCopyright.lastIndex++;
+                }
+                // The result can be accessed through the `m`-variable.
+                m.forEach((match, group) => {
+                    if (group === 1) {
+                        imgCopyright = match;
                     }
                 });
             }
@@ -377,6 +393,7 @@ namespace Deputy_Parser {
             const result: any = {
                 id,
                 imgURL,
+                imgCopyright,
                 name,
                 party,
                 job,

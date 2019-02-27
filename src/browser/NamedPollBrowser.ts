@@ -27,11 +27,12 @@ namespace NamedPoll_Browser {
          */
         //protected abstract createFromStream(readableStream: NodeJS.ReadableStream): DeputyProfile;
 
-        private readonly listURL: URL = new URL("https://www.bundestag.de/ajax/filterlist/de/parlament/plenum/abstimmung/-/484422/h_49f0d94cb26682ff1e9428b6de471a5b?limit=10&noFilterSet=true")
-        private readonly listURLOffset: string = '&offset=';
-        private readonly baseUrl: URL = new URL("https://www.bundestag.de");
+        private readonly findListURL: string = "https://www.bundestag.de/abstimmung";
+        private listURL: string | null = null; // Will be determined on runtime
+        private readonly listURLQuery: string = '?limit=10&noFilterSet=true&offset=';
+        private readonly baseUrl: string = "https://www.bundestag.de";
 
-        private pollUrls: URL[] = [];
+        private pollUrls: string[] = [];
         private offset = 0;
         private done = false;
 
@@ -69,7 +70,7 @@ namespace NamedPoll_Browser {
             if (response.status === 200) {
                 return {
                     metadata: {
-                        url: blobUrl.toString()
+                        url: blobUrl
                     },
                     data: new NamedPoll(response.data)
                 }
@@ -79,10 +80,45 @@ namespace NamedPoll_Browser {
         }
 
         private async retrieveMore(): Promise<void> {
-            if (this.done) {
-                return; // We already retrieved everything
+            // We did not find the ListURL yet
+            let moreURL: string = ''; // unused
+            if (!this.listURL) {
+                let response = await axios.default.get(
+                    this.findListURL,
+                    {
+                        method: 'get',
+                        responseType: 'blob'
+                    }
+                );
+                if (response.status === 200) {
+                    const regex_dataLoader = /data-dataloader-url="(.*?)"[\s\S]*?data-dataloader-url="(.*?)"/gm;
+                    let m;
+                    while ((m = regex_dataLoader.exec(response.data)) !== null) {
+                        // This is necessary to avoid infinite loops with zero-width matches
+                        if (m.index === regex_dataLoader.lastIndex) {
+                            regex_dataLoader.lastIndex++;
+                        }
+                        // The result can be accessed through the `m`-variable.
+                        m.forEach((match, group) => {
+                            if (group === 1) {
+                                this.listURL = this.baseUrl + match;
+                            }
+                            if (group === 1) {
+                                moreURL = match;
+                            }
+                        });
+                    }
+                }
+                else {
+                    throw new Error(response.statusText);
+                }
             }
-            const reqURL = this.listURL.toString() + this.listURLOffset + this.offset;
+
+            // Did we already retrieved everything from the List?
+            if (this.done) {
+                return;
+            }
+            const reqURL = this.listURL + this.listURLQuery + this.offset;
             let response = await axios.default.get(
                 reqURL,
                 {
@@ -98,12 +134,12 @@ namespace NamedPoll_Browser {
 
                 urls.forEach((blobUrlPath: any) => {
                     let urlPath = <string>blobUrlPath;
-                    let url: URL;
+                    let url: string;
                     // There can be full qualified urls or url paths
                     if (urlPath.startsWith("/")) {
-                        url = new URL(`${this.baseUrl}${(urlPath).substr(1)}`);
+                        url = `${this.baseUrl}${urlPath}`;
                     } else {
-                        url = new URL(urlPath);
+                        url = urlPath;
                     }
                     this.pollUrls.push(url);
                 });
