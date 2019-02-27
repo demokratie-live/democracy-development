@@ -86,7 +86,7 @@ namespace NamedPollDeputy_Parser {
             let deputies: any = [];
             const regex_deputySel = /<div class="bt-slide-content">([\s\S]*?)<\/a>[\s\S]*?<\/div>[\s\S]*?<\/div>/gm;
             const regex_deputy = /<a href="(.*?)\?subview=na"[\s\S]*?<img[\s\S]*?data-img-md-normal="(.*?)"[\s\S]*?<div class="bt-teaser-person-text" data-bundesland="(.*?)"[\s\S]*?<h3>(.*?)<\/h3>[\s\S]*?<p class="bt-person-fraktion">(.*?)<\/p>[\s\S]*?<p class="bt-person-abstimmung bt-abstimmung-(.*?)">/gm;
-            const regex_deputyId = /https:\/\/www\.bundestag\.de\/abgeordnete\/.*-(\d+)/gm;
+            const regex_deputyId = /https:\/\/www\.bundestag\.de\/.*?(\d+)/gm;
             while ((m = regex_deputySel.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
                 if (m.index === regex_deputySel.lastIndex) {
