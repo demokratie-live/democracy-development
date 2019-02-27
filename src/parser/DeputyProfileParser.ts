@@ -119,7 +119,7 @@ namespace Deputy_Parser {
             // ID
             let id: string = '';
             if (data.metadata.url) {
-                const regex_id = /https:\/\/www\.bundestag\.de\/abgeordnete\/.*\/(\d+)/gm;
+                const regex_id = /https:\/\/www\.bundestag\.de\/abgeordnete\/.*-(\d+)/gm;
                 while ((m = regex_id.exec(data.metadata.url)) !== null) {
                     // This is necessary to avoid infinite loops with zero-width matches
                     if (m.index === regex_id.lastIndex) {
@@ -133,7 +133,8 @@ namespace Deputy_Parser {
                         }
                     });
                 }
-            } else {
+            }
+            if (!id) {
                 const regex_id = /<a title="Kontakt" href="\/service\/formular\/contactform\?mdbId=(.*?)"/gm;
                 while ((m = regex_id.exec(string)) !== null) {
                     // This is necessary to avoid infinite loops with zero-width matches
