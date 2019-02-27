@@ -20,7 +20,7 @@
     "@democracy-deutschland/bt-named-polls": "0.1.1-0",
     "@democracy-deutschland/dip21-scraper": "0.1.6",
     "@democracy-deutschland/scapacra": "1.0.3",
-    "@democracy-deutschland/scapacra-bt": "1.0.10",
+    "@democracy-deutschland/scapacra-bt": "1.0.12",
     "@material-ui/icons": "^1.0.0-beta.42",
     "apollo-cache-inmemory": "^1.1.12",
     "apollo-client": "^2.2.8",
