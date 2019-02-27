@@ -22,7 +22,7 @@ async function scrape() {
         // new ProtocolSpeechScraperConfiguration(options),
         // new ProtocolVotingScraperConfiguration(options),
         // new ProposedDecisionScraperConfiguration()
-        // new DeputyProfileScraperConfiguration()
+        //new DeputyProfileScraperConfiguration()
         // new NamedPollScraperConfiguration()
         new NamedPollDeputyScraperConfiguration()
     ], ((dataPackages) => {
