@@ -9,21 +9,43 @@ export default async () => {
     await Scraper.scrape([new NamedPollDeputyScraperConfiguration()], dataPackages => {
       dataPackages.map(async dataPackage => {
         // Construct Database object
-        const namedPollWebId = dataPackage.data.id;
+        const namedPoll = { webId: dataPackage.data.id };
         // Add webId field, Remove id field
-        const deputies = dataPackage.data.votes.deputies.map(deputy => {
+        const deputies = dataPackage.data.votes.deputies.reduce((accumulator, deputy) => {
+          // Remove deputies without an id;
+          if (!deputy.id) {
+            return accumulator;
+          }
           const dep = deputy;
           dep.webId = dep.id;
           delete dep.id;
-          return dep;
-        });
+          return [...accumulator, dep];
+        }, []);
 
         // Update/Insert
-        await NamedPoll.updateOne(
-          { webId: namedPollWebId },
-          { $set: { 'votes.deputies': deputies } },
-        );
+        const existingNamedPoll = await NamedPoll.findOne({ webId: namedPoll.webId });
 
+        // votes.deputies
+        if (
+          !existingNamedPoll ||
+          !existingNamedPoll.votes ||
+          !(JSON.stringify(existingNamedPoll.votes.deputies) === JSON.stringify(deputies))
+        ) {
+          namedPoll['votes.deputies'] = deputies;
+        }
+
+        // Update/Insert
+        await NamedPoll.findOneAndUpdate(
+          { webId: namedPoll.webId },
+          { $set: namedPoll },
+          { upsert: true },
+        );
+        /* 
+        await NamedPoll.findOneAndUpdate(
+          { webId: namedPollWebId },
+          { $addToSet: { 'votes.deputies': { $each: deputies } } },
+        );
+        */
         return null;
       });
     });

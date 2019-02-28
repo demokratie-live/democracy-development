@@ -229,15 +229,22 @@ export default async () => {
           }
         }
 
+        // votes.parties
+        if (
+          !existingNamedPoll ||
+          !existingNamedPoll.votes ||
+          !(
+            JSON.stringify(existingNamedPoll.votes.parties) ===
+            JSON.stringify(dataPackage.data.votes.parties)
+          )
+        ) {
+          namedPoll['votes.parties'] = dataPackage.data.votes.parties;
+        }
+
         // Update/Insert
-        await NamedPoll.updateOne(
+        await NamedPoll.findOneAndUpdate(
           { webId: namedPoll.webId },
-          {
-            $set: {
-              ...namedPoll,
-              'votes.parties': dataPackage.data.votes.parties,
-            },
-          },
+          { $set: namedPoll },
           { upsert: true },
         );
 
