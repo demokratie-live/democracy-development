@@ -19,14 +19,9 @@ export default async () => {
         });
 
         // Update/Insert
-        await NamedPoll.update(
+        await NamedPoll.updateOne(
           { webId: namedPollWebId },
-          {
-            $addToSet: {
-              'votes.deputies': deputies,
-            },
-          },
-          { upsert: true },
+          { $set: { 'votes.deputies': deputies } },
         );
 
         return null;

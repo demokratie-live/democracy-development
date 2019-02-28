@@ -230,11 +230,11 @@ export default async () => {
         }
 
         // Update/Insert
-        await NamedPoll.update(
+        await NamedPoll.updateOne(
           { webId: namedPoll.webId },
           {
-            $set: namedPoll,
-            $addToSet: {
+            $set: {
+              ...namedPoll,
               'votes.parties': dataPackage.data.votes.parties,
             },
           },
