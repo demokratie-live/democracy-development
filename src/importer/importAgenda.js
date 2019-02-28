@@ -47,7 +47,8 @@ const checkDocuments = async data => {
                     false;
 
                   if (
-                    customData.expectedVotingDate !== dateTime &&
+                    ((dateTime && !customData.expectedVotingDate) ||
+                      customData.expectedVotingDate.getTime() !== dateTime.getTime()) &&
                     ((currentStatus === 'Beschlussempfehlung liegt vor' ||
                       currentStatus === 'Überwiesen') &&
                       (recomendetDecisionDocumentDate &&
@@ -67,7 +68,8 @@ const checkDocuments = async data => {
                     });
                     return true;
                   } else if (
-                    customData.possibleVotingDate !== dateTime &&
+                    ((dateTime && !customData.possibleVotingDate) ||
+                      customData.possibleVotingDate.getTime() !== dateTime.getTime()) &&
                     (currentStatus === 'Beschlussempfehlung liegt vor' ||
                       currentStatus === 'Überwiesen')
                   ) {
