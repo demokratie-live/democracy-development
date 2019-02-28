@@ -22,7 +22,6 @@ export default async () => {
           return [...accumulator, dep];
         }, []);
 
-        // Update/Insert
         const existingNamedPoll = await NamedPoll.findOne({ webId: namedPoll.webId });
 
         // votes.deputies
@@ -40,12 +39,7 @@ export default async () => {
           { $set: namedPoll },
           { upsert: true },
         );
-        /* 
-        await NamedPoll.findOneAndUpdate(
-          { webId: namedPollWebId },
-          { $addToSet: { 'votes.deputies': { $each: deputies } } },
-        );
-        */
+
         return null;
       });
     });
