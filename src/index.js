@@ -29,6 +29,10 @@ const main = async () => {
   // Express Server
   const server = express();
 
+  if (process.env.EXPRESS_STATUS === 'true') {
+    server.use(require('express-status-monitor')()); // eslint-disable-line global-require
+  }
+
   // Cors
   server.use(cors());
 
