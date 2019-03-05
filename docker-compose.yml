@@ -45,6 +45,10 @@ services:
     expose:
       - 80
     restart: always
+    logging:
+      options:
+        max-size: ${DEMOCRACY_APP_DE_API_LOG_MAX_SIZE:-2m}
+        max-file: ${DEMOCRACY_APP_DE_API_LOG_MAX_FILE:-10}
     environment:
       VIRTUAL_HOST: ${DOMAIN_DEMOCRACY_APP_DE_API:-api.democracy-app.de}
       LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY_APP_DE_API:-api.democracy-app.de}
@@ -68,6 +72,10 @@ services:
     expose:
       - 80
     restart: always
+    logging:
+      options:
+        max-size: ${DEMOCRACY_APP_DE_ADMIN_LOG_MAX_SIZE:-2m}
+        max-file: ${DEMOCRACY_APP_DE_ADMIN_LOG_MAX_FILE:-10}
     environment:
       VIRTUAL_HOST: ${DOMAIN_DEMOCRACY_APP_DE_ADMIN:-admin.democracy-app.de}
       LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY_APP_DE_ADMIN:-admin.democracy-app.de}
@@ -88,6 +96,10 @@ services:
     expose:
       - 80
     restart: always
+    logging:
+      options:
+        max-size: ${BUNDESTAG_IO_API_LOG_MAX_SIZE:-2m}
+        max-file: ${BUNDESTAG_IO_API_LOG_MAX_FILE:-10}
     environment:
       VIRTUAL_HOST: ${DOMAIN_BUNDESTAG_IO_API:-api.bundestag.io}
       LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAG_IO_API:-api.bundestag.io}
@@ -111,6 +123,10 @@ services:
     expose:
       - 80
     restart: always
+    logging:
+      options:
+        max-size: ${BUNDESTAG_IO_ADMIN_LOG_MAX_SIZE:-2m}
+        max-file: ${BUNDESTAG_IO_ADMIN_LOG_MAX_FILE:-10}
     environment:
       VIRTUAL_HOST: ${DOMAIN_BUNDESTAG_IO_ADMIN:-admin.bundestag.io}
       LETSENCRYPT_HOST: ${DOMAIN_BUNDESTAG_IO_ADMIN:-admin.bundestag.io}
@@ -131,6 +147,10 @@ services:
     expose:
       - 80
     restart: always
+    logging:
+      options:
+        max-size: ${DEMOCRACY_APP_DE_LOG_MAX_SIZE:-2m}
+        max-file: ${DEMOCRACY_APP_DE_LOG_MAX_FILE:-10}
     environment:
       VIRTUAL_HOST: ${DOMAIN_DEMOCRACY_APP_DE:-democracy-app.de}
       LETSENCRYPT_HOST: ${DOMAIN_DEMOCRACY_APP_DE:-democracy-app.de}
@@ -148,6 +168,10 @@ services:
     image: mongo:3.6
     container_name: mongodb
     restart: always
+    logging:
+      options:
+        max-size: ${MONGODB_LOG_MAX_SIZE:-2m}
+        max-file: ${MONGODB_LOG_MAX_FILE:-10}
     networks:
       default:
       intern:
