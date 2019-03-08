@@ -28,7 +28,7 @@ const recommendedConfigs = {
 const optionalConfigs = {
   // Default Values given
   GRAPHQL_PATH: process.env.GRAPHQL_PATH || '/',
-  GRAPHIQL_PATH: process.env.GRAPHIQL_PATH || false,
+  GRAPHIQL: process.env.GRAPHIQL || false,
   ENGINE_API_KEY: process.env.ENGINE_API_KEY || null,
   ENGINE_DEBUG_MODE: process.env.ENGINE_DEBUG_MODE === 'true',
   VOYAGER: process.env.VOYAGER || false,
