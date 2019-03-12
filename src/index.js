@@ -29,6 +29,10 @@ const main = async () => {
   // Express Server
   const server = express();
 
+  if (process.env.EXPRESS_STATUS === 'true') {
+    server.use(require('express-status-monitor')()); // eslint-disable-line global-require
+  }
+
   // Cors
   server.use(cors());
 
@@ -38,9 +42,9 @@ const main = async () => {
   // Graphiql Playground
   // Here several Models are included for graphql
   // This must be registered before graphql since it binds on / (default)
-  if (CONFIG.GRAPHIQL_PATH) {
+  if (CONFIG.GRAPHIQL) {
     const graphiql = require('./services/graphiql'); // eslint-disable-line global-require
-    graphiql.applyMiddleware({ app: server, path: CONFIG.GRAPHIQL_PATH });
+    graphiql.applyMiddleware({ app: server, path: CONFIG.GRAPHIQL });
   }
 
   // Search
