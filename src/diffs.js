@@ -2,7 +2,9 @@
 import diffHistory from 'mongoose-diff-history/diffHistory';
 import fs from 'fs-extra';
 
-import DB, { mongoose } from './config/db';
+import './services/logger';
+
+import DB, { mongoose } from './services/mongoose';
 import Procedure from './models/Procedure';
 
 (async () => {

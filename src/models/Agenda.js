@@ -1,17 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
-
-const AgendaSchema = new Schema(
-  {
-    date: Date,
-    week: Number,
-    year: Number,
-    meeting: Number,
-    previousYear: Number,
-    previousWeek: Number,
-    nextYear: Number,
-    nextWeek: Number,
-  },
-  { timestamps: true },
-);
+import mongoose from 'mongoose';
+import AgendaSchema from './../migrations/1-schemas/Agenda';
 
 export default mongoose.model('Agenda', AgendaSchema);

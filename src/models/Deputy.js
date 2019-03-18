@@ -1,12 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
+import DeputySchema from './../migrations/1-schemas/Deputy';
 
-const FractionSchema = new Schema(
-  {
-    name: { type: String, required: true },
-    period: { type: String, required: true },
-    parties: [{ type: Schema.Types.ObjectId, ref: 'Party' }],
-  },
-  { timestamps: true },
-);
-
-export default mongoose.model('Fraction', FractionSchema);
+export default mongoose.model('Deputy', DeputySchema);

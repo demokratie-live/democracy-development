@@ -2,12 +2,10 @@ import axios from 'axios';
 import diffHistory from 'mongoose-diff-history/diffHistory';
 import { inspect } from 'util';
 
-import { mongoose } from '../../config/db';
-import CONSTANTS from '../../config/constants';
-
+import CONFIG from '../../config';
 import PROCEDURE_STATES from '../../config/procedureStates';
 
-const History = mongoose.model('History');
+import History from '../../models/History';
 
 const deputiesNumber = {
   19: {
@@ -157,7 +155,7 @@ export default {
         { new: true },
       );
       axios
-        .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
+        .post(`${CONFIG.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
           data: {
             procedureIds: [procedure.procedureId],
             name: 'ChangeVoteData',
@@ -169,7 +167,7 @@ export default {
           Log.debug(inspect(response.data));
         })
         .catch(error => {
-          Log.error(`democracy server error: ${inspect(error)}`);
+          Log.error(`[DEMOCRACY Server] ${error}`);
         });
 
       return ProcedureModel.findOne({ procedureId });
@@ -254,7 +252,7 @@ export default {
       );
 
       axios
-        .post(`${CONSTANTS.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
+        .post(`${CONFIG.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
           data: {
             procedureIds: [procedure.procedureId],
             name: 'ChangeVoteData',
