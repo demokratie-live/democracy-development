@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.9
+
+- [Added] env settings for cronjobs
+
 ### 0.1.8
 
 - [Changed] better manage possible votes in admin area
