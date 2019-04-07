@@ -68,7 +68,9 @@ const main = async () => {
     if (err) {
       Log.error(err);
     } else {
-      Log.warn(`🚀 Server ready at http://localhost:${CONFIG.PORT}${CONFIG.GRAPHQL_PATH}`);
+      Log.warn(
+        `🚀  Bundestag.io Server ready at http://localhost:${CONFIG.PORT}${CONFIG.GRAPHQL_PATH}`,
+      );
     }
   });
 

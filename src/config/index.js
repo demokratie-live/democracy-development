@@ -2,6 +2,7 @@
   THIS FILE AND ALL IMPORTS ARE NOT ALLOWED TO INCLUDE ANY MONGOOSE MODELS
   See index.js for more info
 */
+import cronjobConfig from './cronjobConfig';
 
 const requiredConfigs = {
   // No default Values
@@ -23,6 +24,7 @@ const recommendedConfigs = {
   /* DEMOCRACY_WEBHOOKS_UPDATE_PROCEDURES:
     process.env.DEMOCRACY_WEBHOOKS_UPDATE_PROCEDURES ||
     'http://localhost:3000/webhooks/bundestagio/updateProcedures', */
+  ...cronjobConfig,
 };
 
 const optionalConfigs = {
@@ -40,29 +42,8 @@ const optionalConfigs = {
   LOGGING_MONGO: process.env.LOGGING_MONGO || false,
 };
 
-const cronregex = new RegExp(
-  /^(\*|([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])|\*\/([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])) (\*|([0-9]|1[0-9]|2[0-3])|\*\/([0-9]|1[0-9]|2[0-3])) (\*|([1-9]|1[0-9]|2[0-9]|3[0-1])|\*\/([1-9]|1[0-9]|2[0-9]|3[0-1])) (\*|([1-9]|1[0-2])|\*\/([1-9]|1[0-2])) (\*|([0-6])|\*\/([0-6]))$/,
-);
-const cronjobConfigx = {
-  CRON_START_ON_INIT: process.env.CRON_START_ON_INIT === 'true',
-  CRON_PROCEDURES: cronregex.test(process.env.CRON_PROCEDURES)
-    ? process.env.CRON_PROCEDURES
-    : false,
-  CRON_AGENDA: cronregex.test(process.env.CRON_AGENDA) ? process.env.CRON_AGENDA : false,
-  CRON_NAMED_POLLS: cronregex.test(process.env.CRON_NAMED_POLLS)
-    ? process.env.CRON_NAMED_POLLS
-    : false,
-  CRON_NAMED_POLLS_DEPUTIES: cronregex.test(process.env.CRON_NAMED_POLLS_DEPUTIES)
-    ? process.env.CRON_NAMED_POLLS_DEPUTIES
-    : false,
-  CRON_DEPUTY_PROFILES: cronregex.test(process.env.CRON_DEPUTY_PROFILES)
-    ? process.env.CRON_DEPUTY_PROFILES
-    : false,
-};
-
 export default {
   ...requiredConfigs,
   ...recommendedConfigs,
   ...optionalConfigs,
-  ...cronjobConfigx,
 };
