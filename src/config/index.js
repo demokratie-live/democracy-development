@@ -24,7 +24,6 @@ const recommendedConfigs = {
   /* DEMOCRACY_WEBHOOKS_UPDATE_PROCEDURES:
     process.env.DEMOCRACY_WEBHOOKS_UPDATE_PROCEDURES ||
     'http://localhost:3000/webhooks/bundestagio/updateProcedures', */
-  ...cronjobConfig,
 };
 
 const optionalConfigs = {
@@ -42,8 +41,10 @@ const optionalConfigs = {
   LOGGING_MONGO: process.env.LOGGING_MONGO || false,
 };
 
+// Merge and export Configs
 export default {
   ...requiredConfigs,
   ...recommendedConfigs,
+  ...cronjobConfig,
   ...optionalConfigs,
 };
