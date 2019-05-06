@@ -44,7 +44,7 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 
 DEMOCRACY Deutschland wurde über Startnext für einen Prototyp finanziert. Selbstverständlich planen wir darüber hinaus.
 
-Daher haben wir eine Roadmap entwickelt, was wir wann erreichen möchten: [Roadmap](https://github.com/demokratie-live/democracy-app/wiki/Roadmap)
+Daher haben wir eine Roadmap entwickelt, was wir wann erreichen möchten: [Roadmap](https://www.democracy-deutschland.de/#!engineering)
  
  ## Zentrale Architektur Fragen:
 
