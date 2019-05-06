@@ -48,7 +48,7 @@ Daher haben wir eine Roadmap entwickelt, was wir wann erreichen möchten: [Roadm
  
  ## Zentrale Architektur Fragen:
 
-![v1_architektur](https://github.com/demokratie-live/demokratie-app/blob/master/doc/diagram/Server-Client%20Architektur.png)
+![v1_architektur](https://github.com/demokratie-live/democracy-assets/blob/master/diagram/Server-Client%20Architektur.png)
    
 ## Entwicklung & Werkzeuge
 
