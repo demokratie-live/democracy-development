@@ -4,6 +4,7 @@ services:
     environment:
       VIRTUAL_HOST: bundestag.io-api.local
       PERIODS: "19"
+      LOGGING_DISCORD_WEBHOOK: "false"
     entrypoint:
       - yarn
       - dev
@@ -19,6 +20,7 @@ services:
   democracy-app.de-api:
     environment:
       VIRTUAL_HOST: democracy-app.de-api.local
+      LOGGING_DISCORD_WEBHOOK: "false"
     entrypoint:
       - yarn
       - dev
@@ -89,5 +91,5 @@ services:
   mongodb:
     ports:
       - 27020:27017
-    volumes:
-      - /usr/local/mongodb:/data/db
+    # volumes:
+    #   - /usr/local/mongodb:/data/db
