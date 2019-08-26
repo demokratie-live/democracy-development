@@ -55,7 +55,7 @@ services:
       - ./bundestag.io-admin/:/app/
       - /app/.next
       - /app/node_modules/
-    restart: "always"
+    restart: "no"
     depends_on:
       - bundestag.io-api
 
