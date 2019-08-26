@@ -1,17 +1,18 @@
-version: '3'
+version: "3"
 services:
   bundestag.io-api:
     environment:
       VIRTUAL_HOST: bundestag.io-api.local
-      PERIODS: '19'
+      PERIODS: "19"
     entrypoint:
       - yarn
       - dev
     ports:
       - 3100:80
     volumes:
-       - ./bundestag.io-api:/app
-    restart: 'no'
+      - ./bundestag.io-api:/app
+      - /app/node_modules/
+    restart: "no"
     depends_on:
       - mongodb
 
@@ -24,8 +25,9 @@ services:
     ports:
       - 3000:80
     volumes:
-       - ./democracy-app.de-api/:/app/
-    restart: 'no'
+      - ./democracy-app.de-api/:/app/
+      - /app/node_modules/
+    restart: "no"
     depends_on:
       - mongodb
 
@@ -35,9 +37,10 @@ services:
     ports:
       - 3200:80
     volumes:
-       - ./democracy-app.de-admin/:/app/
-       - /app/.next
-    restart: 'always'
+      - ./democracy-app.de-admin/:/app/
+      - /app/.next
+      - /app/node_modules/
+    restart: "always"
     depends_on:
       - mongodb
 
@@ -45,13 +48,27 @@ services:
     environment:
       VIRTUAL_HOST: bundestag.io-admin.local
     ports:
-      - 3200:80
+      - 3300:80
     volumes:
-       - ./bundestag.io-admin/:/app/
-       - /app/.next
-    restart: 'always'
+      - ./bundestag.io-admin/:/app/
+      - /app/.next
+      - /app/node_modules/
+    restart: "always"
     depends_on:
-      - bundestag.io
+      - bundestag.io-api
+
+  democracy-app.de:
+    environment:
+      VIRTUAL_HOST: democracy-app.de.local
+    ports:
+      - 3400:80
+    volumes:
+      - ./democracy-app.de/:/app/
+      - /app/.next
+      - /app/node_modules/
+    restart: "always"
+    depends_on:
+      - democracy-app.de-api
 
   # elasticsearch:
   #   image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
@@ -62,7 +79,7 @@ services:
   #     default:
   #     intern:
   #       aliases:
-  #         - "elasticsearch" 
+  #         - "elasticsearch"
   #   ports:
   #     - 9200:9200
   #     - 9300:9300
