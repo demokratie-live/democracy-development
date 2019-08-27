@@ -3,8 +3,10 @@ services:
   bundestag.io-api:
     environment:
       VIRTUAL_HOST: bundestag.io-api.local
+      NODE_ENV: "dev"
       PERIODS: "19"
       LOGGING_DISCORD_WEBHOOK: "false"
+      CRON_PROCEDURES: "0 0 * * *"
     entrypoint:
       - yarn
       - dev
@@ -20,6 +22,7 @@ services:
   democracy-app.de-api:
     environment:
       VIRTUAL_HOST: democracy-app.de-api.local
+      NODE_ENV: "dev"
       LOGGING_DISCORD_WEBHOOK: "false"
     entrypoint:
       - yarn
@@ -33,27 +36,15 @@ services:
     depends_on:
       - mongodb
 
-  democracy-app.de-admin:
-    environment:
-      VIRTUAL_HOST: democracy-app.de-admin.local
-    ports:
-      - 3200:80
-    volumes:
-      - ./democracy-app.de-admin/:/app/
-      - /app/.next
-      - /app/node_modules/
-    restart: "always"
-    depends_on:
-      - mongodb
-
   bundestag.io-admin:
     environment:
       VIRTUAL_HOST: bundestag.io-admin.local
+      NODE_ENV: "dev"
     ports:
       - 3300:80
     volumes:
       - ./bundestag.io-admin/:/app/
-      - /app/.next
+      # - /app/.next
       - /app/node_modules/
     restart: "no"
     depends_on:
@@ -62,15 +53,39 @@ services:
   democracy-app.de:
     environment:
       VIRTUAL_HOST: democracy-app.de.local
+      NODE_ENV: "dev"
+      GRAPHQL_URL: "http://localhost:3000"
+      GRAPHQL_URL_SERVER: "http://democracy-app.de-api"
     ports:
       - 3400:80
+    entrypoint:
+      - yarn
+      - dev
     volumes:
       - ./democracy-app.de/:/app/
-      - /app/.next
+      # - /app/.next
       - /app/node_modules/
     restart: "always"
     depends_on:
       - democracy-app.de-api
+
+  democracy-app.de-admin:
+    environment:
+      VIRTUAL_HOST: democracy-app.de-admin.local
+      NODE_ENV: "dev"
+      GRAPHQL_URL: democracy-app.de-api
+    ports:
+      - 3200:80
+    entrypoint:
+      - yarn
+      - dev
+    volumes:
+      - ./democracy-app.de-admin/:/app/
+      # - /app/.next
+      - /app/node_modules/
+    restart: "always"
+    depends_on:
+      - mongodb
 
   # elasticsearch:
   #   image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
