@@ -1,10 +1,10 @@
 import { IParser, IBrowser, IScraperConfiguration } from '@democracy-deutschland/scapacra';
-import { DeputyProfile, DeputyProfileBrowser } from '../browser/DeputyProfileBrowser';
-import { DeputyProfileParser } from '../parser/DeputyProfileParser';
-export = Deputy_Config;
+import { DeputyProfile, DeputyProfileBrowser } from './DeputyProfileBrowser';
+import { DeputyProfileParser } from './DeputyProfileParser';
+export = Scraper;
 
-namespace Deputy_Config {
-    export class DeputyProfileScraperConfiguration implements IScraperConfiguration<DeputyProfile> {
+namespace Scraper {
+    export class DeputyProfileScraper implements IScraperConfiguration<DeputyProfile> {
 
         public getBrowser(): IBrowser<DeputyProfile> {
             return new DeputyProfileBrowser();

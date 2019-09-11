@@ -1,10 +1,10 @@
 import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
 
-import { DeputyProfile } from '../browser/DeputyProfileBrowser';
+import { DeputyProfile } from './DeputyProfileBrowser';
 
-export = Deputy_Parser;
+export = Parser;
 
-namespace Deputy_Parser {
+namespace Parser {
     /**
      * This parser gets all potention fraction votings from a "Plenarprotokoll" of the german Bundestag.
      */
@@ -30,7 +30,7 @@ namespace Deputy_Parser {
             // ImgURL & Name
             let imgURL: string = '';
             let name: string = '';
-            const regex_imgURL_name = /<div class="bt-bild-standard[\s\S]*?">[\s\S]*?<img[\s\S]*?data-img-md-normal="([\s\S]*?)"[\s\S]*?title="([\s\S]*?)"[\s\S]*?>[\s\S]*?<span class="bt-bild-info-icon">/gm;
+            const regex_imgURL_name = /<div class="bt-bild-standard[\s\S]*?">[\s\S]*?<img[\s\S]*?data-img-md-normal="([\s\S]*?)"[\s\S]*?title="([\s\S]*?)[,"][\s\S]*?>[\s\S]*?<span class="bt-bild-info-icon">/gm;
             while ((m = regex_imgURL_name.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
                 if (m.index === regex_imgURL_name.lastIndex) {

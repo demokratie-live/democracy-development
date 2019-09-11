@@ -1,6 +1,6 @@
 import { Xml } from '../browser/PlenarProtocolBrowser';
 import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
-import { DocumentSpeechEvaluator } from '../parser/evaluator/DocumentSpeechEvaluator';
+import { DocumentSpeechEvaluator } from './evaluator/DocumentSpeechEvaluator';
 
 export = Documents_Parser;
 

@@ -1,19 +1,19 @@
 import xpath = require('xpath');
 import { DocumentEvaluater } from '@democracy-deutschland/scapacra'
 
-export = Documents_Parser_Evaluator;
+export = Evaluator;
 
-namespace Documents_Parser_Evaluator {
+namespace Evaluator {
     /**
      * Evaluates all href attributes from html list.
      */
-    export class DeputyHrefEvaluator extends DocumentEvaluater {
+    export class NamedPollHrefEvaluator extends DocumentEvaluater {
 
         /**
          * Finds all href links from the HTML website.
          */
         public getSources(): Promise<any[]> {
-            return this.evaluate("//a[@class='bt-open-in-overlay']/@href");
+            return this.evaluate("//a/@href");
         }
 
         protected getValueFromSelectedNode(node: xpath.SelectedValue): any {

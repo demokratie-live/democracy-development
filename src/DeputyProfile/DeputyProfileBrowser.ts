@@ -2,13 +2,13 @@ import { IDataPackage, DataType, IBrowser } from '@democracy-deutschland/scapacr
 
 import { URL } from 'url';
 
-import { DeputyHrefEvaluator } from '../parser/evaluator/DeputyHrefEvaluator';
+import { DeputyHrefEvaluator } from './DeputyHrefEvaluator';
 
 import axios = require('axios');
 
-export = Deputy_Browser;
+export = Browser;
 
-namespace Deputy_Browser {
+namespace Browser {
     export class DeputyProfile extends DataType {
     }
 
