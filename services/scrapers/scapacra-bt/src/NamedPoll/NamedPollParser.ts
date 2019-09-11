@@ -1,11 +1,11 @@
 import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
 var moment = require('moment');
 
-import { NamedPoll } from '../browser/NamedPollBrowser';
+import { NamedPoll } from './NamedPollBrowser';
 
-export = NamedPoll_Parser;
+export = Parser;
 
-namespace NamedPoll_Parser {
+namespace Parser {
     /**
      * This parser gets all potention fraction votings from a "Plenarprotokoll" of the german Bundestag.
      */

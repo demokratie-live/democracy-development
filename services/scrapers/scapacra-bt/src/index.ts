@@ -1,17 +1,17 @@
-import { IProtocolScraperConfigurationOptions } from './config/ProtocolScraperConfiguration';
-import { ProtocolSpeechScraperConfiguration } from './config/ProtocolSpeechScraperConfiguration';
-import { ProtocolVotingScraperConfiguration } from './config/ProtocolVotingScraperConfiguration';
-import { ProposedDecisionScraperConfiguration } from './config/ProposedDecisionScraperConfiguration';
-import { DeputyProfileScraperConfiguration } from './config/DeputyProfileScraperConfiguration';
-import { NamedPollScraperConfiguration } from './config/NamedPollScraperConfiguration';
-import { NamedPollDeputyScraperConfiguration } from './config/NamedPollDeputyScraperConfiguration';
+/*import { IProtocolScraperConfigurationOptions } from './unused/config/ProtocolScraperConfiguration';
+import { ProtocolSpeechScraperConfiguration } from './unused/config/ProtocolSpeechScraperConfiguration';
+import { ProtocolVotingScraperConfiguration } from './unused/config/ProtocolVotingScraperConfiguration';
+import { ProposedDecisionScraperConfiguration } from './unused/config/ProposedDecisionScraperConfiguration';*/
+import { DeputyProfileScraper } from './DeputyProfile/DeputyProfileScraper';
+import { NamedPollScraper } from './NamedPoll/NamedPollScraper';
+import { NamedPollDeputyScraper } from './NamedPollDeputy/NamedPollDeputyScraper';
 
 export {
-    IProtocolScraperConfigurationOptions,
+    /*IProtocolScraperConfigurationOptions,
     ProtocolSpeechScraperConfiguration,
     ProtocolVotingScraperConfiguration,
-    ProposedDecisionScraperConfiguration,
-    DeputyProfileScraperConfiguration,
-    NamedPollScraperConfiguration,
-    NamedPollDeputyScraperConfiguration
+    ProposedDecisionScraperConfiguration,*/
+    DeputyProfileScraper,
+    NamedPollScraper,
+    NamedPollDeputyScraper
 }

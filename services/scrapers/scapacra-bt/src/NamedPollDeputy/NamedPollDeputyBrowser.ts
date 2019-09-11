@@ -2,14 +2,14 @@ import { IDataPackage, DataType, IBrowser } from '@democracy-deutschland/scapacr
 
 import { URL } from 'url';
 
-import { NamedPollHrefEvaluator } from '../parser/evaluator/NamedPollHrefEvaluator';
+import { NamedPollHrefEvaluator } from '../NamedPoll/NamedPollHrefEvaluator';
 
 import axios = require('axios');
 import { url } from 'inspector';
 
-export = NamedPollDeputy_Browser;
+export = Browser;
 
-namespace NamedPollDeputy_Browser {
+namespace Browser {
     export class NamedPollDeputies extends DataType {
     }
 
