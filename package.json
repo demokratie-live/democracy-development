@@ -16,10 +16,11 @@
     "build": "tsc",
     "link": "cd dist && npm link",
     "dev": "nodemon ./src/run.ts",
+    "start": "node ./dist/run.js",
     "lint": "tslint --project tsconfig.json && yarn typecheck",
     "typecheck": "tsc --noEmit",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
-    "prepare": "npm run build"
+    "prepare": "yarn build"
   },
   "bugs": {
     "url": "https://github.com/demokratie-live/bt-scapacra/issues"
