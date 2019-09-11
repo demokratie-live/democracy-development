@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc",
     "link": "cd dist && npm link",
-    "dev": "nodemon .\\src\\run.ts",
+    "dev": "nodemon ./src/run.ts",
     "lint": "tslint --project tsconfig.json && yarn typecheck",
     "typecheck": "tsc --noEmit",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
