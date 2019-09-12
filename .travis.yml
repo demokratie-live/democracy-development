@@ -13,6 +13,8 @@ matrix:
     - yarn build
     script:
     - yarn test
+    after_script:
+    - echo "SUCCESS: Finished Test-Build"
   # DeputyProfiles - Cron
   - os: linux #if: TRAVIS_EVENT_TYPE IN (cron)
     language: node_js
@@ -29,3 +31,4 @@ matrix:
     after_script:
     - cd ./out/DeputyProfiles
     - git push origin:master
+    - echo "SUCCESS: Scraped DeputyProfiles & Pushed to Git"
