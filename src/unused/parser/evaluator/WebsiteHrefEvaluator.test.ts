@@ -2,7 +2,7 @@ import fs = require('fs');
 import 'mocha';
 
 import { assert } from 'chai';
-import { WebsiteHrefEvaluator } from '../src/parser/evaluator/WebsiteHrefEvaluator';
+import { WebsiteHrefEvaluator } from './WebsiteHrefEvaluator';
 
 const srcFileName = 'test/data/Plenarprotokoll_list.htm';
 const urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
