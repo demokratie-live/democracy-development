@@ -24,19 +24,20 @@ matrix:
     - yarn install
     before_script:
     - yarn build
-    - git clone https://github.com/bundestag/DeputyProfiles ./out/DeputyProfiles/
-    # Prepare push
+    # Prepare git
     - openssl aes-256-cbc -k "$travis_key_password" -d -md sha256 -a -in ./.travis/travis_key.enc -out ./travis_key
     - echo "Host github.com" > ~/.ssh/config
     - echo "  IdentityFile  $(pwd)/travis_key" >> ~/.ssh/config
     - chmod 400 travis_key
     - echo "github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==" > ~/.ssh/known_hosts 
+    # Clone git
+    - git clone git@github.com:bundestag/DeputyProfiles.git ./out/DeputyProfiles/
     script:
     - yarn start DeputyProfile ./out/DeputyProfiles
     #- yarn start NamedPoll ./out/NamedPolls
     #- yarn start NamedPollDeputy ./out/NamedPollDeputies
     after_script:
     - cd ./out/DeputyProfiles
-    - git commit -a -m 'Travis ${TRAVIS_BUILD_NUMBER} update'
+    - git commit -a -m "Travis $TRAVIS_BUILD_NUMBER update"
     - git push
-    - echo "SUCCESS: Scraped DeputyProfiles & Pushed to Git"
+    - echo "SUCCESS Scraped DeputyProfiles & Pushed to Git"
