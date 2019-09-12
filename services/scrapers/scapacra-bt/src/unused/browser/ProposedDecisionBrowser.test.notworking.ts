@@ -1,5 +1,5 @@
 import { describe } from 'mocha';
-import { ProposedDecisionBrowser } from '../src/browser/ProposedDecisionBrowser';
+import { ProposedDecisionBrowser } from './ProposedDecisionBrowser';
 
 import bundestagListBrowserTest = require('./BundestagListBrowser.testbase');
 

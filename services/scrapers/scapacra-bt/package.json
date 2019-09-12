@@ -19,7 +19,7 @@
     "start": "node ./dist/run.js",
     "lint": "tslint --project tsconfig.json && yarn typecheck",
     "typecheck": "tsc --noEmit",
-    "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "test": "mocha -r ts-node/register src/**/*.test.ts",
     "prepare": "yarn build"
   },
   "bugs": {

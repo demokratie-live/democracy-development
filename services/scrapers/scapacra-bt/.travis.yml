@@ -23,7 +23,7 @@ matrix:
     - yarn install
     before_script:
     - yarn build
-    - git clone https://github.com/bundestag/DeputyProfiles ./out/DeputyProfile/
+    - git clone https://github.com/bundestag/DeputyProfiles ./out/DeputyProfiles/
     script:
     - yarn start DeputyProfile ./out/DeputyProfiles
     #- yarn start NamedPoll ./out/NamedPolls
