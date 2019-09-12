@@ -1,5 +1,6 @@
 env:
   global:
+    - secure: "SipMyYuxp088L7/YsW81BIJXgw3SmymTgl7GU2quTfpPEqraJEZhhB81V3fBMW47xvBHzjgCWeoMVySG4tJMBxLrkqHLN085qcGOBT/CcWcNMvenVhmac4XcYY0hxUwST5F5KCgNsG+I0w9XPe//Fl09883ndRxvtaCl0wLWLeCGICe5hx9/jfAdFbwgAAmu43mMk0BjGJFoJRzLPNrProvjeVbGEAEKsFTYYgxHnW1S4IHu2hFlrL+698PcCDM0ynR4Ov2YY6nKHHnyX/6S5cRXmbKalu85a+1/pxdFeci1UQfaYP2ecM3UjV+x6B+Ndg/ThnPXjbhzIKK8WiKxYywx2MvG6bORP6bMSzDzefYfgnQf/Eh1YYJoG5+P3MLzSszQf8E7C1j/RuRusmdO2A9V68fRIlQrUteKz/Q1ComQkNsPePBh+oTuZpL0jFeGUYlQ+5bwjH7pPw1a4OG9kvZXcwqzZJOEbspLUoQJL2m9AJI6LHr1Qfp6Pm44LPfO8JU7Z+Q9qxVqIUm8z4JYPVmJhBJiEDa/YmrRvABxbvGfRBbBCYlbXMV3bKBZZ+HnpJkSC6xTJXbjZv2uWAUy7rOkG4WPui8MiBaLQPh/8LPHL8XTTwAfIdhALzX40+LQXXYDz+3AZaO2d4v9AZ6cMLBXJClG126BR04JYEqBEqA="
 matrix:
   # sudo: required
   include:
@@ -24,12 +25,18 @@ matrix:
     before_script:
     - yarn build
     - git clone https://github.com/bundestag/DeputyProfiles ./out/DeputyProfiles/
+    # Prepare push
+    - openssl aes-256-cbc -k "$travis_key_password" -d -md sha256 -a -in ./.travis/travis_key.enc -out ./travis_key
+    - echo "Host github.com" > ~/.ssh/config
+    - echo "  IdentityFile  $(pwd)/travis_key" >> ~/.ssh/config
+    - chmod 400 travis_key
+    - echo "github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==" > ~/.ssh/known_hosts 
     script:
     - yarn start DeputyProfile ./out/DeputyProfiles
     #- yarn start NamedPoll ./out/NamedPolls
     #- yarn start NamedPollDeputy ./out/NamedPollDeputies
     after_script:
     - cd ./out/DeputyProfiles
-    - git commit -a -m "Travis ${TRAVIS_BUILD_NUMBER} update"
+    - git commit -a -m 'Travis ${TRAVIS_BUILD_NUMBER} update'
     - git push
     - echo "SUCCESS: Scraped DeputyProfiles & Pushed to Git"
