@@ -31,5 +31,5 @@ matrix:
     after_script:
     - cd ./out/DeputyProfiles
     - git commit -a -m "Travis ${TRAVIS_BUILD_NUMBER} update"
-    - git push master origin:master
+    - git push
     - echo "SUCCESS: Scraped DeputyProfiles & Pushed to Git"
