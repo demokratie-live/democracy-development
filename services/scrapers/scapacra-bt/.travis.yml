@@ -30,5 +30,6 @@ matrix:
     #- yarn start NamedPollDeputy ./out/NamedPollDeputies
     after_script:
     - cd ./out/DeputyProfiles
-    - git push origin:master
+    - git commit -a -m "Travis ${TRAVIS_BUILD_NUMBER} update"
+    - git push master origin:master
     - echo "SUCCESS: Scraped DeputyProfiles & Pushed to Git"
