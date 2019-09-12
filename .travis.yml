@@ -1,0 +1,31 @@
+env:
+  global:
+matrix:
+  # sudo: required
+  include:
+  # test
+  - os: linux
+    language: node_js
+    node_js: 12
+    install:
+    - yarn install
+    before_script:
+    - yarn build
+    script:
+    - yarn test
+  # DeputyProfiles - Cron
+  - os: linux #if: TRAVIS_EVENT_TYPE IN (cron)
+    language: node_js
+    node_js: 12
+    install:
+    - yarn install
+    before_script:
+    - yarn build
+    - git clone https://github.com/bundestag/DeputyProfiles ./out/DeputyProfile/
+    script:
+    - yarn start DeputyProfile ./out/DeputyProfiles
+    #- yarn start NamedPoll ./out/NamedPolls
+    #- yarn start NamedPollDeputy ./out/NamedPollDeputies
+    after_script:
+    - cd ./out/DeputyProfiles
+    - git push origin:master
