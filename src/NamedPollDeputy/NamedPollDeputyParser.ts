@@ -1,11 +1,11 @@
 import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
 var moment = require('moment');
 
-import { NamedPollDeputies } from '../browser/NamedPollDeputyBrowser';
+import { NamedPollDeputies } from './NamedPollDeputyBrowser';
 
-export = NamedPollDeputy_Parser;
+export = Parser;
 
-namespace NamedPollDeputy_Parser {
+namespace Parser {
     /**
      * This parser gets all potention fraction votings from a "Plenarprotokoll" of the german Bundestag.
      */
@@ -13,8 +13,9 @@ namespace NamedPollDeputy_Parser {
         private async readStream(stream: NodeJS.ReadableStream): Promise<string> {
             return new Promise((resolve) => {
                 let string: string = '';
-                stream.on('data', function (buffer) {
-                    string += buffer.toString();
+                stream.setEncoding('utf8');
+                stream.on('data', function (buffer: String) {
+                    string += buffer;
                 }).on('end', () => {
                     resolve(string);
                 });

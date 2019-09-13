@@ -1,11 +1,11 @@
 import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
 var moment = require('moment');
 
-import { NamedPoll } from '../browser/NamedPollBrowser';
+import { NamedPoll } from './NamedPollBrowser';
 
-export = NamedPoll_Parser;
+export = Parser;
 
-namespace NamedPoll_Parser {
+namespace Parser {
     /**
      * This parser gets all potention fraction votings from a "Plenarprotokoll" of the german Bundestag.
      */
@@ -13,8 +13,9 @@ namespace NamedPoll_Parser {
         private async readStream(stream: NodeJS.ReadableStream): Promise<string> {
             return new Promise((resolve) => {
                 let string: string = '';
-                stream.on('data', function (buffer) {
-                    string += buffer.toString();
+                stream.setEncoding('utf8');
+                stream.on('data', function (buffer: String) {
+                    string += buffer;
                 }).on('end', () => {
                     resolve(string);
                 });
@@ -51,7 +52,7 @@ namespace NamedPoll_Parser {
             let title: string = '';
             let description: string = '';
             let documents: string[] = [];
-            const regex_dateTitleDescription = /<article [\s\S]*?>[\s\S]*?<h3>[\s\S]*?<span class="bt-dachzeile">([\s\S]*?)<\/span>[\s\S]*?<br\/>([\s\S]*?)<\/h3>[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?<\/article>/gm;
+            const regex_dateTitleDescription = /<article [\s\S]*?>[\s\S]*?<h3 class="[\s\S]*?">[\s\S]*?<span class="bt-dachzeile">([\s\S]*?)<\/span>[\s\S]*?<br\/>([\s\S]*?)<\/h3>[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?<\/article>/gm;
             const regex_documents = /href="(.*?)"/gm;
             while ((m = regex_dateTitleDescription.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
@@ -85,7 +86,6 @@ namespace NamedPoll_Parser {
                     }
                 });
             }
-
             //deputy votes url
             let deputyVotesURL: string = '';
             const regex_deputyVotesURL = /data-dataloader-url="(.*?)"/gm;
@@ -143,7 +143,6 @@ namespace NamedPoll_Parser {
                     }
                 });
             }
-
             // Party Votes
             let partyVotes: any = []; // TODO Typescript
             const regex_partyVotes = /<div class="bt-teaser-chart-solo" data-value="(.*)?">[\s\S]*?<h4 class="bt-chart-fraktion">[\s\S]*?<span>(.*?)Mitglieder<\/span>[\s\S]*?<\/h4>[\s\S]*?<div class="bt-teaser-text-chart">[\s\S]*?<ul class="bt-chart-legend">([\s\S]*?)<\/ul>/gm;
@@ -257,7 +256,8 @@ namespace NamedPoll_Parser {
 
             // Detailed description
             let detailedDescription: string = '';
-            const regex_detailedDescription = /<i class="icon-docs"><\/i><\/button>[\s\S]*?<\/div>[\s\S]*?<\/fieldset>[\s\S]*?<\/form>[\s\S]*?<\/div>[\s\S]*?<\/div>[\s\S]*?<\/div>[\s\S]*?<\/div>[\s\S]*?<\/div>[\s\S]*?<h4>([\s\S]*?)<\/h4>[\s\S]*?<p>[\s\S]*?<\/p>/gm;
+            let topTitle: string = '';
+            const regex_detailedDescription = /<i class="icon-docs"><\/i><\/button>[\s\S]*?<\/div>[\s\S]*?<\/fieldset>[\s\S]*?<\/form>[\s\S]*?<\/div>[\s\S]*?<\/div>[\s\S]*?<\/div>[\s\S]*?<\/div>[\s\S]*?<\/div>[\s\S]*?<h4 class="[\s\S]*?">([\s\S]*?)<\/h4>[\s\S]*?<p>([\s\S]*?)<\/p>/gm;
             while ((m = regex_detailedDescription.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
                 if (m.index === regex_detailedDescription.lastIndex) {
@@ -266,6 +266,9 @@ namespace NamedPoll_Parser {
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
+                        topTitle = match.trim();
+                    }
+                    if (group === 2) {
                         detailedDescription = match.trim();
                     }
                 });
@@ -308,7 +311,7 @@ namespace NamedPoll_Parser {
             return [{
                 metadata: data.metadata,
                 data: {
-                    id, date, title, description, detailedDescription, documents, deputyVotesURL, votes: {
+                    id, date, title, topTitle, description, detailedDescription, documents, deputyVotesURL, votes: {
                         all: resultAll,
                         parties: partyVotes,
                     }, plenarProtocolURL, media: { iTunesURL, mediathekURL, videoURLs }, speeches

@@ -1,8 +1,8 @@
 import { it } from 'mocha';
 import { assert } from 'chai';
 import { URL } from 'url';
-import { BundestagListBrowser, IBundestagListBrowserOptions } from '../src/browser/BundestagListBrowser';
-import { DataType } from 'scapacra';
+import { BundestagListBrowser, IBundestagListBrowserOptions } from './BundestagListBrowser';
+import { DataType } from '@democracy-deutschland/scapacra';
 
 const baseUrl = new URL("https://www.bundestag.de");
 

@@ -1,10 +1,10 @@
 import { IParser, IBrowser, IScraperConfiguration } from '@democracy-deutschland/scapacra';
-import { NamedPoll, NamedPollBrowser } from '../browser/NamedPollBrowser';
-import { NamedPollParser } from '../parser/NamedPollParser';
-export = Deputy_Config;
+import { NamedPoll, NamedPollBrowser } from './NamedPollBrowser';
+import { NamedPollParser } from './NamedPollParser';
+export = Scraper;
 
-namespace Deputy_Config {
-    export class NamedPollScraperConfiguration implements IScraperConfiguration<NamedPoll> {
+namespace Scraper {
+    export class NamedPollScraper implements IScraperConfiguration<NamedPoll> {
 
         public getBrowser(): IBrowser<NamedPoll> {
             return new NamedPollBrowser();

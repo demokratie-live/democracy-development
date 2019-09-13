@@ -1,4 +1,4 @@
-import { DocumentSpeechEvaluator } from '../src/parser/evaluator/DocumentSpeechEvaluator';
+import { DocumentSpeechEvaluator } from './DocumentSpeechEvaluator';
 import fs = require('fs');
 import { assert } from 'chai';
 import 'mocha';

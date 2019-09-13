@@ -1,6 +1,6 @@
 import { describe, it } from 'mocha';
 import { assert } from 'chai';
-import { PlenarProtocolBrowser } from '../src/browser/PlenarProtocolBrowser';
+import { PlenarProtocolBrowser } from './PlenarProtocolBrowser';
 
 import bundestagListBrowserTest = require('./BundestagListBrowser.testbase');
 import validator = require('xsd-schema-validator');
@@ -20,7 +20,7 @@ describe('Check Bundestag protocol browser', () => {
         });
 
         browser.next().value
-            .then(result => {
+            .then((result:any) => {
                 assert.isNotNull(result);
 
                 validator.validateXML(result.data.openStream(), `${protocolXsdSchemaFileName}`, (error, result) =>{
@@ -30,6 +30,6 @@ describe('Check Bundestag protocol browser', () => {
                     done();
                 });
             })
-            .catch(error => done(error));  
+            .catch((error:any) => done(error));  
     });
 });

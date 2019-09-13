@@ -1,38 +1,46 @@
 import * as fs from 'fs';
-import * as util from 'util';
 
-import { Scraper } from '@democracy-deutschland/scapacra';
+import { Scraper,IScraperConfiguration } from '@democracy-deutschland/scapacra';
 
 import {
-    IProtocolScraperConfigurationOptions,
-    ProtocolSpeechScraperConfiguration,
-    ProtocolVotingScraperConfiguration,
-    ProposedDecisionScraperConfiguration,
-    DeputyProfileScraperConfiguration,
-    NamedPollScraperConfiguration,
-    NamedPollDeputyScraperConfiguration
+    DeputyProfileScraper,
+    NamedPollScraper,
+    NamedPollDeputyScraper
 } from './';
 
-async function scrape() {
-    let options: IProtocolScraperConfigurationOptions = {
-        maxCount: 2
-    };
-
-    await Scraper.scrape([
-        // new ProtocolSpeechScraperConfiguration(options),
-        // new ProtocolVotingScraperConfiguration(options),
-        // new ProposedDecisionScraperConfiguration()
-        //new DeputyProfileScraperConfiguration()
-        // new NamedPollScraperConfiguration()
-        new NamedPollDeputyScraperConfiguration()
-    ], ((dataPackages) => {
-        console.log(util.inspect(dataPackages, false, null, true))
-        for (const dataPackage of dataPackages) {
-            let id = dataPackage.data.id;
-            const file_id = `${dataPackage.data.id}_${dataPackage.data.name}`.replace(/(\.|\/| |,)/g, '_');
-            fs.writeFileSync('out/scraperResult/namedPolls/deputies/' + file_id + '.json', JSON.stringify(dataPackage));
-        }
-    }));
+enum AvailableScrapers {
+    DeputyProfile = 'DeputyProfile',
+    NamedPollScraper = 'NamedPoll',
+    NamedPollDeputyScraper = 'NamedPollDeputy',
 }
 
-scrape().then(c => { });
+async function scrape(dataset: String,out: String = './out') {
+
+    let scraper: IScraperConfiguration<any> | null = null;
+    switch(dataset){
+        case AvailableScrapers.DeputyProfile:
+            scraper = new DeputyProfileScraper();
+            break;
+        case AvailableScrapers.NamedPollScraper:
+            scraper = new NamedPollScraper();
+            break;
+        case AvailableScrapers.NamedPollDeputyScraper:
+            scraper = new NamedPollDeputyScraper();
+            break;
+        default:
+            console.log('Please select a valid option as dataset:');
+            console.log(AvailableScrapers);
+            break;
+    }
+    if(scraper){
+        await Scraper.scrape([scraper], ((dataPackages) => {
+            for (const dataPackage of dataPackages) {
+                let id = dataPackage.data.id;
+                fs.writeFileSync(`${out}/${id}.json`, JSON.stringify(dataPackage, null, 2));
+                console.log(`Found ${id} - ${out}/${id}.json`)
+            }
+        }))
+    };
+}
+
+scrape(process.argv[2],process.argv[3]).then(c => { });

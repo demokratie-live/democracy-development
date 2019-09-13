@@ -1,4 +1,4 @@
-import { DocumentVotingEvaluator } from '../src/parser/evaluator/DocumentVotingEvaluator';
+import { DocumentVotingEvaluator } from './DocumentVotingEvaluator';
 import fs = require('fs');
 import { assert } from 'chai';
 import 'mocha';
