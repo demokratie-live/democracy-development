@@ -313,6 +313,7 @@ namespace Parser {
                     functions.push(f);
                 }
             })
+            functions = functions.sort();
 
             // SpeechesURL
             let speechesURL1: string = '';
