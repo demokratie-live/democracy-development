@@ -13,8 +13,9 @@ namespace Parser {
         private async readStream(stream: NodeJS.ReadableStream): Promise<string> {
             return new Promise((resolve) => {
                 let string: string = '';
-                stream.on('data', function (buffer) {
-                    string += buffer.toString();
+                stream.setEncoding('utf8');
+                stream.on('data', function (buffer: String) {
+                    string += buffer;
                 }).on('end', () => {
                     resolve(string);
                 });
