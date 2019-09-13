@@ -310,10 +310,10 @@ namespace Parser {
                     });
                 }
                 if (f.category && f.functions.length > 0) {
+                    f.functions = f.functions.sort();
                     functions.push(f);
                 }
             })
-            functions = functions.sort();
 
             // SpeechesURL
             let speechesURL1: string = '';
