@@ -1,5 +1,5 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
-import { NamedPollScraperConfiguration } from '@democracy-deutschland/scapacra-bt';
+import { NamedPollScraper } from '@democracy-deutschland/scapacra-bt';
 
 import Procedure from '../models/Procedure';
 import NamedPoll from '../models/NamedPoll';
@@ -7,7 +7,7 @@ import NamedPoll from '../models/NamedPoll';
 export default async () => {
   Log.info('START NAMED POLLS SCRAPER');
   try {
-    await Scraper.scrape([new NamedPollScraperConfiguration()], dataPackages => {
+    await Scraper.scrape([new NamedPollScraper()], dataPackages => {
       dataPackages.map(async dataPackage => {
         let procedureId = null;
         // TODO unify
