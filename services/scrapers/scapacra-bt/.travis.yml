@@ -35,6 +35,7 @@ matrix:
     script:
     # Scrape
     - yarn start DeputyProfile ./out/DeputyProfiles/data
+    after_script:
     # Push to Git
     - cd ./out/DeputyProfiles
     - git commit -a -m "Travis $TRAVIS_BUILD_NUMBER update"
@@ -62,6 +63,7 @@ matrix:
     script:
     # Scrape
     - yarn start NamedPoll ./out/NamedPolls/data
+    after_script:
     # Push to Git
     - cd ./out/NamedPolls
     - git commit -a -m "Travis $TRAVIS_BUILD_NUMBER update"
@@ -89,6 +91,7 @@ matrix:
     script:
     # Scrape
     - yarn start NamedPollDeputy ./out/NamedPollDeputies/data
+    after_script:
     # Push to Git
     - cd ./out/NamedPollDeputies
     - git commit -a -m "Travis $TRAVIS_BUILD_NUMBER update"
