@@ -37,7 +37,7 @@ namespace Browser {
         private offset = 0;
         private done = false;
 
-        public next(): IteratorResult<Promise<IDataPackage<NamedPollDeputies>>> {
+        public async next(): Promise<IteratorResult<Promise<IDataPackage<NamedPollDeputies>>>> {
             let hasNext = this.hasNext();
             let value = this.loadNext();
 
@@ -164,7 +164,7 @@ namespace Browser {
             }
         }
 
-        [Symbol.iterator](): IterableIterator<Promise<IDataPackage<NamedPollDeputies>>> {
+        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<IDataPackage<NamedPollDeputies>>> {
             return this;
         }
     }
