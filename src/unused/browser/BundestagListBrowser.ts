@@ -48,7 +48,7 @@ namespace Documents_Browser {
             return this.maxCount;
         }
 
-        public next(): IteratorResult<Promise<IDataPackage<T>>> {
+        public async next(): Promise<IteratorResult<Promise<IDataPackage<T>>>> {
             let hasNext = this.hasNext(this.count++);
             let nextFragment = this.nextFragment();
 
@@ -147,7 +147,7 @@ namespace Documents_Browser {
             return `limit=5&noFilterSet=true&offset=${offset}`;
         }
 
-        [Symbol.iterator](): IterableIterator<Promise<IDataPackage<T>>> {
+        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<IDataPackage<T>>> {
             return this;
         }
     }

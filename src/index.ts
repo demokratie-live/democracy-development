@@ -5,6 +5,7 @@ import { ProposedDecisionScraperConfiguration } from './unused/config/ProposedDe
 import { DeputyProfileScraper } from './DeputyProfile/DeputyProfileScraper';
 import { NamedPollScraper } from './NamedPoll/NamedPollScraper';
 import { NamedPollDeputyScraper } from './NamedPollDeputy/NamedPollDeputyScraper';
+import { ConferenceWeekDetailScraper } from './ConferenceWeekDetail/ConferenceWeekDetailScraper';
 
 export {
     /*IProtocolScraperConfigurationOptions,
@@ -13,5 +14,6 @@ export {
     ProposedDecisionScraperConfiguration,*/
     DeputyProfileScraper,
     NamedPollScraper,
-    NamedPollDeputyScraper
+    NamedPollDeputyScraper,
+    ConferenceWeekDetailScraper
 }

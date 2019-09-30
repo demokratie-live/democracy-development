@@ -12,14 +12,14 @@ describe('Check Bundestag protocol browser', () => {
         return new PlenarProtocolBrowser(options);    
     });
 
-    it('Protocol blob request should return an valid xml (works only online)', function(done) {
+    it('Protocol blob request should return an valid xml (works only online)', async function(done) {
         this.timeout(0);
 
         let browser = new PlenarProtocolBrowser({
             maxCount: 5
         });
 
-        browser.next().value
+        (await browser.next()).value
             .then((result:any) => {
                 assert.isNotNull(result);
 

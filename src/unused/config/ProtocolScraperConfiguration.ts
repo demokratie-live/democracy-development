@@ -1,4 +1,4 @@
-import { IBrowser, IParser, IScraperConfiguration } from '@democracy-deutschland/scapacra';
+import { IBrowser, IParser, IScraper } from '@democracy-deutschland/scapacra';
 import { Xml, PlenarProtocolBrowser } from '../browser/PlenarProtocolBrowser';
 
 export = Documents_Config;
@@ -8,7 +8,7 @@ namespace Documents_Config {
         maxCount: number;
     }
 
-    export abstract class ProtocolScraperConfiguration implements IScraperConfiguration<Xml> {
+    export abstract class ProtocolScraperConfiguration implements IScraper<Xml> {
         private options: IProtocolScraperConfigurationOptions;
 
         constructor(options: IProtocolScraperConfigurationOptions) {
