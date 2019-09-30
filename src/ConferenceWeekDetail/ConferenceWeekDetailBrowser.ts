@@ -28,7 +28,10 @@ namespace Browser {
 
         public async next(): Promise<IteratorResult<Promise<IDataPackage<ConferenceWeekDetails>>>> {
             if (!this.currentYear || !this.currentWeek) {
-                throw new Error("URL stack is empty.");
+                return {
+                    done: true,
+                    value: null
+                }
             }
 
             const url = this.buildURL(this.currentYear,this.currentWeek)
@@ -62,18 +65,19 @@ namespace Browser {
                         }
                     });
                 }
-                let result =    {   metadata: {
+                let result =    Promise.resolve({
+                                    metadata: {
                                         url,
                                         description: `${this.currentYear}_${this.currentWeek}`
                                     },
                                     data: new ConferenceWeekDetails(response.data)
-                                };
+                                });
                 
                 this.currentYear = nextYear;
                 this.currentWeek = nextWeek;
                 
                 return {
-                    done: !nextYear || !nextWeek,
+                    done: false,
                     value: result
                 }
             } else {
