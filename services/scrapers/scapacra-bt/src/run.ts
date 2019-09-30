@@ -1,22 +1,24 @@
 import * as fs from 'fs';
 
-import { Scraper,IScraperConfiguration } from '@democracy-deutschland/scapacra';
+import { Scraper, IScraper } from '@democracy-deutschland/scapacra';
 
 import {
     DeputyProfileScraper,
     NamedPollScraper,
-    NamedPollDeputyScraper
+    NamedPollDeputyScraper,
+    ConferenceWeekDetailScraper
 } from './';
 
 enum AvailableScrapers {
     DeputyProfile = 'DeputyProfile',
     NamedPollScraper = 'NamedPoll',
     NamedPollDeputyScraper = 'NamedPollDeputy',
+    ConferenceWeekDetailScraper = 'ConferenceWeekDetail'
 }
 
 async function scrape(dataset: String,out: String = './out') {
 
-    let scraper: IScraperConfiguration<any> | null = null;
+    let scraper: IScraper<any> | null = null;
     switch(dataset){
         case AvailableScrapers.DeputyProfile:
             scraper = new DeputyProfileScraper();
@@ -26,6 +28,9 @@ async function scrape(dataset: String,out: String = './out') {
             break;
         case AvailableScrapers.NamedPollDeputyScraper:
             scraper = new NamedPollDeputyScraper();
+            break;
+        case AvailableScrapers.ConferenceWeekDetailScraper:
+            scraper = new ConferenceWeekDetailScraper();
             break;
         default:
             console.log('Please select a valid option as dataset:');
@@ -40,6 +45,7 @@ async function scrape(dataset: String,out: String = './out') {
                 console.log(`Found ${id} - ${out}/${id}.json`)
             }
         }))
+        console.log(`Finished: ${dataset}`)
     };
 }
 

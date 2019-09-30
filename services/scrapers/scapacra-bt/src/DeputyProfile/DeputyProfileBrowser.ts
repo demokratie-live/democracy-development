@@ -33,7 +33,7 @@ namespace Browser {
 
         private deputyUrls: string[] = [];
 
-        public next(): IteratorResult<Promise<IDataPackage<DeputyProfile>>> {
+        public async next(): Promise<IteratorResult<Promise<IDataPackage<DeputyProfile>>>> {
             let hasNext = this.hasNext();
             let value = this.loadNext();
 
@@ -145,7 +145,7 @@ namespace Browser {
             }
         }
 
-        [Symbol.iterator](): IterableIterator<Promise<IDataPackage<DeputyProfile>>> {
+        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<IDataPackage<DeputyProfile>>> {
             return this;
         }
     }
