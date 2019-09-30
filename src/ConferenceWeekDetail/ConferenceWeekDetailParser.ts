@@ -82,7 +82,7 @@ namespace Parser {
                     if (group === 3) {
                         const sessionData: string = match;
                         let n;
-                        const regex_tops = /<tr>[\s\S]*?<td data-th="Uhrzeit"><p>([\s\S]*?)<\/p><\/td>[\s\S]*?<td data-th="TOP"><p>([\s\S]*?)<\/p><\/td>[\s\S]*?<td data-th="Thema">[\s\S]*?<div class="bt-documents-description">([\s\S]*?)<\/div>[\s\S]*?<\/td>[\s\S]*?<td data-th="Status\/ Abstimmung">[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?<\/td>[\s\S]*?<\/tr>/gm
+                        const regex_tops = /<tr>[\s\S]*?<td data-th="Uhrzeit"><p>([\s\S]*?)<\/p><\/td>[\s\S]*?<td data-th="TOP"><p>([\s\S]*?)<\/p><\/td>[\s\S]*?<td data-th="Thema">[\s\S]*?<div class="bt-documents-description">([\s\S]*?)<\/div>[\s\S]*?<\/td>[\s\S]*?<td data-th="Status\/ Abstimmung">([\s\S]*?)[\s\S]*?<\/td>[\s\S]*?<\/tr>/gm
                         while ((n = regex_tops.exec(sessionData)) !== null) {
                             // This is necessary to avoid infinite loops with zero-width matches
                             if (n.index === regex_tops.lastIndex) {
@@ -150,6 +150,20 @@ namespace Parser {
                                 }
                                 if (group === 4) {
                                     let statusText = match.trim();
+                                    let o;
+                                    const regex_topTopic = /<p>([\s\S]*?)<\/p>/gm;
+                                    while ((o = regex_topTopic.exec(statusText)) !== null) {
+                                        // This is necessary to avoid infinite loops with zero-width matches
+                                        if (o.index === regex_topTopic.lastIndex) {
+                                            regex_topTopic.lastIndex++;
+                                        }
+                                        // The result can be accessed through the `m`-variable.
+                                        o.forEach((match, group) => {
+                                            if (group === 1) {
+                                                statusText = match.trim();
+                                            }
+                                        })
+                                    }
                                     let stati = statusText.split('<br />');
                                     stati.forEach(line => {
                                         if(line !== ""){
