@@ -1,11 +1,11 @@
-import { IBrowser, IParser, IScraperConfiguration } from '@democracy-deutschland/scapacra';
+import { IBrowser, IParser, IScraper } from '@democracy-deutschland/scapacra';
 import { URL } from 'url';
 import { Pdf, ProposedDecisionBrowser } from '../browser/ProposedDecisionBrowser';
 
 export = Documents_Config;
 
 namespace Documents_Config {
-    export class ProposedDecisionScraperConfiguration implements IScraperConfiguration<Pdf> {
+    export class ProposedDecisionScraperConfiguration implements IScraper<Pdf> {
         public getURL(): URL {
             return new URL("https://www.bundestag.de");
         }
