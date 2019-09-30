@@ -2,6 +2,7 @@ import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
 var moment = require('moment');
 
 import { ConferenceWeekDetails } from './ConferenceWeekDetailBrowser';
+import { exists } from 'fs';
 
 export = Parser;
 
@@ -61,18 +62,19 @@ namespace Parser {
                 });
             }
 
-            let sessions: {date: string | null, session: string | null, tops: {time: string | null, top: string | null, topic: string | null, status: string | null}[]}[] = []
+            let sessions: {date: Date | null, dateText: string | null, session: string | null, tops: {time: Date | null, top: string | null, topic: { lines: string[], documents: string[]}[], status: {line: string, documents: string[]}[]}[]}[] = []
             const regex_DateSession = /<caption>[\s\S]*?<div class="bt-conference-title">([\s\S]*?)\((\d*)\. Sitzung\)<\/div>[\s\S]*?<\/caption>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/gm;
             while ((m = regex_DateSession.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
                 if (m.index === regex_DateSession.lastIndex) {
                     regex_DateSession.lastIndex++;
                 }
-                let session: {date: string | null, session: string | null, tops: {time: string | null, top: string | null, topic: string | null, status: string | null}[]} = {date: null, session: null, tops: []};
+                let session: {date: Date | null, dateText: string | null, session: string | null, tops: {time: Date | null, top: string | null, topic: { lines: string[], documents: string[]}[], status: {line: string, documents: string[]}[]}[]} = {date: null, dateText: null, session: null, tops: []};
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
-                        session.date = match;
+                        session.dateText = match.trim();
+                        session.date = moment.utc(session.dateText, 'DD MMM YYYY', 'de').toDate();
                     }
                     if (group === 2) {
                         session.session = match;
@@ -86,20 +88,20 @@ namespace Parser {
                             if (n.index === regex_tops.lastIndex) {
                                 regex_tops.lastIndex++;
                             }
-                            let top: {time: string | null, top: string | null, topic: string | null, status: string | null} = {time: null, top: null, topic: null, status: null};
+                            let top: {time: Date | null, top: string | null, topic: { lines: string[], documents: string[]}[], status: {line: string, documents: string[]}[]} = {time: null, top: null, topic: [], status: []};
                             // The result can be accessed through the `m`-variable.
                             n.forEach((match, group) => {
                                 if (group === 1) {
-                                    top.time = match.trim();
+                                    top.time = moment.utc(`${session.dateText} ${match.trim()}`, 'DD MMM YYYY HH:mm', 'de').toDate();
                                 }
                                 if (group === 2) {
                                     top.top = match.trim();
                                 }
                                 if (group === 3) {
-                                    top.topic = match.trim();
+                                    let topic: string = match.trim();
                                     let o;
                                     const regex_topTopic = /<p>([\s\S]*?)<\/p>/gm;
-                                    while ((o = regex_topTopic.exec(match.trim())) !== null) {
+                                    while ((o = regex_topTopic.exec(topic)) !== null) {
                                         // This is necessary to avoid infinite loops with zero-width matches
                                         if (o.index === regex_topTopic.lastIndex) {
                                             regex_topTopic.lastIndex++;
@@ -107,20 +109,75 @@ namespace Parser {
                                         // The result can be accessed through the `m`-variable.
                                         o.forEach((match, group) => {
                                             if (group === 1) {
-                                                top.topic = match.trim();
+                                                topic = match.trim();
                                             }
                                         })
                                     }
+                                    let topicLines = topic.split('<br/>');
+                                    let topicPart: { lines: string[], documents: string[]} = {lines: [], documents: []};
+                                    const regex_newTopicPart = /^(ZP )?(\d{1,2})?\.?\S?\)/gm;
+                                    topicLines.forEach(line => {
+                                        if( topicPart.lines.length !== 0 &&
+                                            (   line === "" ||
+                                                line.match(regex_newTopicPart) !== null)){
+                                            top.topic.push(topicPart);
+                                            topicPart = {lines: [], documents: []};
+                                            if(line !== ""){
+                                                topicPart.lines.push(line.trim());
+                                            }
+                                        } else {
+                                            topicPart.lines.push(line.trim());
+                                        }
+
+                                        let p;
+                                        const regex_documents = /href="([\s\S]*?)"/gm
+                                        while ((p = regex_documents.exec(line)) !== null) {
+                                            // This is necessary to avoid infinite loops with zero-width matches
+                                            if (p.index === regex_documents.lastIndex) {
+                                                regex_documents.lastIndex++;
+                                            }
+                                            // The result can be accessed through the `m`-variable.
+                                            p.forEach((match, group) => {
+                                                if (group === 1) {
+                                                    topicPart.documents.push(match);
+                                                }
+                                            })
+                                        }
+                                    });
+                                    if(topicPart.lines.length > 0){
+                                        top.topic.push(topicPart);
+                                    }
                                 }
                                 if (group === 4) {
-                                    top.status = match.trim();
+                                    let statusText = match.trim();
+                                    let stati = statusText.split('<br />');
+                                    stati.forEach(line => {
+                                        if(line !== ""){
+                                            let status: {line: string, documents: string[]} = {line, documents: []};
+                                            let q;
+                                            const regex_documents = /href="([\s\S]*?)"/gm
+                                            while ((q = regex_documents.exec(line)) !== null) {
+                                                // This is necessary to avoid infinite loops with zero-width matches
+                                                if (q.index === regex_documents.lastIndex) {
+                                                    regex_documents.lastIndex++;
+                                                }
+                                                // The result can be accessed through the `m`-variable.
+                                                q.forEach((match, group) => {
+                                                    if (group === 1) {
+                                                        status.documents.push(match);
+                                                    }
+                                                })
+                                            }
+                                            top.status.push(status);
+                                        }
+                                    })
                                     session.tops.push(top);
-                                    top = {time: null, top: null, topic: null, status: null};
+                                    top = {time: null, top: null, topic: [], status: []};
                                 }
                             });
                         }
                         sessions.push(session);
-                        session = {date: null, session: null, tops: []};
+                        session = {date: null, dateText: null, session: null, tops: []};
                     }
                 });
             }
