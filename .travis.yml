@@ -40,7 +40,7 @@ matrix:
     after_script:
     # Push to Git
     - cd ./out/DeputyProfiles
-    - git add -a
+    - git add -A
     - git commit -a -m "Travis $TRAVIS_BUILD_NUMBER update"
     - git push
     after_failure:
@@ -70,7 +70,7 @@ matrix:
     after_script:
     # Push to Git
     - cd ./out/NamedPolls
-    - git add -a
+    - git add -A
     - git commit -a -m "Travis $TRAVIS_BUILD_NUMBER update"
     - git push
     after_failure:
@@ -100,7 +100,7 @@ matrix:
     after_script:
     # Push to Git
     - cd ./out/NamedPollDeputies
-    - git add -a
+    - git add -A
     - git commit -a -m "Travis $TRAVIS_BUILD_NUMBER update"
     - git push
     after_failure:
@@ -130,7 +130,7 @@ matrix:
     after_script:
     # Push to Git
     - cd ./out/ConferenceWeekDetails
-    - git add -a
+    - git add -A
     - git commit -a -m "Travis $TRAVIS_BUILD_NUMBER update"
     - git push
     after_failure:
