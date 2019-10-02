@@ -23,20 +23,16 @@ namespace Parser {
     export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails>{
         public async parse(data: IDataPackage<ConferenceWeekDetails>): Promise<IDataPackage<any>[]> {
             const string: string = <string>(<unknown> data.data.openStream());
-            
-            let thisYear: Number | null = null;
-            let thisWeek: Number | null = null;
-            if(data.metadata.description){
-                thisYear = parseInt(data.metadata.description.split('_')[0]);
-                thisWeek = parseInt(data.metadata.description.split('_')[1]);
-            }
 
             let m;
 
             let lastYear: Number | null = null;
             let lastWeek: Number | null = null;
+            let thisYear: Number | null = null;
+            let thisWeek: Number | null = null;
             let nextYear: Number | null = null;
             let nextWeek: Number | null = null;
+            let id: string = data.metadata.description ? data.metadata.description : 'no_id';
             const regex_YearsWeeks = /data-previousyear="(\d*)" data-previousweeknumber="(\d*)" data-nextyear="(\d*)" data-nextweeknumber="(\d*)"/gm
             while ((m = regex_YearsWeeks.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
@@ -73,6 +69,14 @@ namespace Parser {
                     if (group === 1) {
                         session.dateText = match.trim();
                         session.date = moment.utc(session.dateText, 'DD MMM YYYY', 'de').toDate();
+
+                        if(session.date){
+                            thisYear = session.date.getFullYear();
+                            thisWeek = moment(session.date).week();
+                            if(thisWeek){
+                                id = `${thisYear}_${thisWeek.toString().padStart(2,'0')}`
+                            }
+                        }
                     }
                     if (group === 2) {
                         session.session = match;
@@ -215,7 +219,7 @@ namespace Parser {
             return [{
                 metadata: data.metadata,
                 data: {
-                    id: data.metadata.description,
+                    id,
                     previous: {
                         year: lastYear,
                         week: lastWeek,
