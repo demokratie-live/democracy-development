@@ -13,6 +13,7 @@ namespace Parser {
     type Top = {    time: Date | null,
                     top: string | null,
                     heading: string | null,
+                    article: string | null,
                     topic:  Topic[],
                     status: Status[]}
     type Topic = {  lines: string[],
@@ -90,7 +91,7 @@ namespace Parser {
                             if (n.index === regex_tops.lastIndex) {
                                 regex_tops.lastIndex++;
                             }
-                            let top: Top = {time: null, top: null, heading: null, topic: [], status: []};
+                            let top: Top = {time: null, top: null, heading: null, article: null, topic: [], status: []};
                             // The result can be accessed through the `m`-variable.
                             n.forEach((match, group) => {
                                 if (group === 1) {
@@ -102,6 +103,7 @@ namespace Parser {
                                 if (group === 3) {
                                     let topic: string = match.trim();
                                     let o;
+
                                     const regex_topHeading = /<a href="#" class="bt-top-collapser collapser collapsed"[\s\S]*?>([\s\S]*?)<\/a>/gm
                                     while ((o = regex_topHeading.exec(topic)) !== null) {
                                         // This is necessary to avoid infinite loops with zero-width matches
@@ -112,6 +114,20 @@ namespace Parser {
                                         o.forEach((match, group) => {
                                             if (group === 1) {
                                                 top.heading = match.trim();
+                                            }
+                                        })
+                                    }
+
+                                    const regex_article = /<button[\s\S]*?data-url="([\s\S]*?)">/gm
+                                    while ((o = regex_article.exec(topic)) !== null) {
+                                        // This is necessary to avoid infinite loops with zero-width matches
+                                        if (o.index === regex_article.lastIndex) {
+                                            regex_article.lastIndex++;
+                                        }
+                                        // The result can be accessed through the `m`-variable.
+                                        o.forEach((match, group) => {
+                                            if (group === 1) {
+                                                top.article = `https://www.bundestag.de${match}`;
                                             }
                                         })
                                     }
@@ -206,7 +222,7 @@ namespace Parser {
                                         }
                                     })
                                     session.tops.push(top);
-                                    top = {time: null, top: null, heading: null, topic: [], status: []};
+                                    top = {time: null, top: null, heading: null, article: null, topic: [], status: []};
                                 }
                             });
                         }
