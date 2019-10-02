@@ -1,13 +1,5 @@
 import { IDataPackage, DataType, IBrowser } from '@democracy-deutschland/scapacra';
 import axios = require('axios');
-import { resolve } from 'path';
-
-// import { URL } from 'url';
-
-// import { NamedPollHrefEvaluator } from '../NamedPoll/NamedPollHrefEvaluator';
-
-
-// import { url } from 'inspector';
 
 export = Browser;
 
@@ -72,7 +64,7 @@ namespace Browser {
                                     },
                                     data: new ConferenceWeekDetails(response.data)
                                 });
-                
+
                 this.currentYear = nextYear;
                 this.currentWeek = nextWeek;
                 

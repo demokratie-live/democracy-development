@@ -22,6 +22,46 @@ namespace Parser {
                 });
             });
         }
+
+        private isVote(topic:string, heading:string | null):Boolean | null {
+            /*
+            These Rules will move to BIO
+
+            Erste Beratung = NEIN
+            ——
+            // Beratung des Antrags = JA , es sei denn TOP ‚Überweisungen im vereinfachten Verfahren‘ = NEIN
+            Beratung des Antrags = NEIN
+            ——
+            Beratung der Beschlussempfehlung = JA
+            Zweite und dritte Beratung = JA
+            */
+            /*if(topic.search(/Beratung des Antrags/i) !== -1){
+                if(heading && heading.search(/Überweisungen im vereinfachten Verfahren/i) !== -1){
+                    return true;
+                } else {
+                    return false;
+                }
+                
+            }*/
+            if(topic.search(/Beratung des Antrags/i) !== -1){
+                if(heading && heading.search(/Abschließende Beratung ohne Aussprache/i) !== -1){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            if(topic.search(/Erste Beratung/i) !== -1){
+                return false;
+            }
+            if(topic.search(/Beratung der Beschlussempfehlung/i) !== -1){
+                return true;
+            }
+            if(topic.search(/Zweite und dritte Beratung/i) !== -1){
+                return true;
+            }
+            return null
+        }
+
         public async parse(data: IDataPackage<ConferenceWeekDetails>): Promise<IDataPackage<any>[]> {
             const string: string = <string>(<unknown> data.data.openStream());
             
@@ -62,14 +102,14 @@ namespace Parser {
                 });
             }
 
-            let sessions: {date: Date | null, dateText: string | null, session: string | null, tops: {time: Date | null, top: string | null, topic: { lines: string[], documents: string[]}[], status: {line: string, documents: string[]}[]}[]}[] = []
+            let sessions: {date: Date | null, dateText: string | null, session: string | null, tops: {time: Date | null, top: string | null, heading: string | null, topic: { lines: string[], documents: string[], isVote: Boolean | null}[], status: {line: string, documents: string[]}[]}[]}[] = []
             const regex_DateSession = /<caption>[\s\S]*?<div class="bt-conference-title">([\s\S]*?)\((\d*)\. Sitzung\)<\/div>[\s\S]*?<\/caption>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/gm;
             while ((m = regex_DateSession.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
                 if (m.index === regex_DateSession.lastIndex) {
                     regex_DateSession.lastIndex++;
                 }
-                let session: {date: Date | null, dateText: string | null, session: string | null, tops: {time: Date | null, top: string | null, topic: { lines: string[], documents: string[]}[], status: {line: string, documents: string[]}[]}[]} = {date: null, dateText: null, session: null, tops: []};
+                let session: {date: Date | null, dateText: string | null, session: string | null, tops: {time: Date | null, top: string | null, heading: string | null, topic: { lines: string[], documents: string[], isVote: Boolean | null}[], status: {line: string, documents: string[]}[]}[]} = {date: null, dateText: null, session: null, tops: []};
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
@@ -88,7 +128,7 @@ namespace Parser {
                             if (n.index === regex_tops.lastIndex) {
                                 regex_tops.lastIndex++;
                             }
-                            let top: {time: Date | null, top: string | null, topic: { lines: string[], documents: string[]}[], status: {line: string, documents: string[]}[]} = {time: null, top: null, topic: [], status: []};
+                            let top: {time: Date | null, top: string | null, heading: string | null, topic: { lines: string[], documents: string[], isVote: Boolean | null}[], status: {line: string, documents: string[]}[]} = {time: null, top: null, heading: null, topic: [], status: []};
                             // The result can be accessed through the `m`-variable.
                             n.forEach((match, group) => {
                                 if (group === 1) {
@@ -100,6 +140,20 @@ namespace Parser {
                                 if (group === 3) {
                                     let topic: string = match.trim();
                                     let o;
+                                    const regex_topHeading = /<a href="#" class="bt-top-collapser collapser collapsed"[\s\S]*?>([\s\S]*?)<\/a>/gm
+                                    while ((o = regex_topHeading.exec(topic)) !== null) {
+                                        // This is necessary to avoid infinite loops with zero-width matches
+                                        if (o.index === regex_topHeading.lastIndex) {
+                                            regex_topHeading.lastIndex++;
+                                        }
+                                        // The result can be accessed through the `m`-variable.
+                                        o.forEach((match, group) => {
+                                            if (group === 1) {
+                                                top.heading = match.trim();
+                                            }
+                                        })
+                                    }
+
                                     const regex_topTopic = /<p>([\s\S]*?)<\/p>/gm;
                                     while ((o = regex_topTopic.exec(topic)) !== null) {
                                         // This is necessary to avoid infinite loops with zero-width matches
@@ -114,19 +168,23 @@ namespace Parser {
                                         })
                                     }
                                     let topicLines = topic.split('<br/>');
-                                    let topicPart: { lines: string[], documents: string[]} = {lines: [], documents: []};
+                                    let topicPart: { lines: string[], documents: string[], isVote: Boolean | null} = {lines: [], documents: [], isVote: null};
+
                                     const regex_newTopicPart = /^(ZP )?(\d{1,2})?\.?\S?\)/gm;
                                     topicLines.forEach(line => {
                                         if( topicPart.lines.length !== 0 &&
                                             (   line === "" ||
                                                 line.match(regex_newTopicPart) !== null)){
+                                            topicPart.isVote = this.isVote(topicPart.lines.join(' '),top.heading);
                                             top.topic.push(topicPart);
-                                            topicPart = {lines: [], documents: []};
+                                            topicPart = {lines: [], documents: [], isVote: null};
                                             if(line !== ""){
                                                 topicPart.lines.push(line.trim());
                                             }
                                         } else {
-                                            topicPart.lines.push(line.trim());
+                                            if(line !== ""){
+                                                topicPart.lines.push(line.trim());
+                                            }
                                         }
 
                                         let p;
@@ -144,7 +202,9 @@ namespace Parser {
                                             })
                                         }
                                     });
+
                                     if(topicPart.lines.length > 0){
+                                        topicPart.isVote = this.isVote(topicPart.lines.join(' '),top.heading);
                                         top.topic.push(topicPart);
                                     }
                                 }
@@ -186,7 +246,7 @@ namespace Parser {
                                         }
                                     })
                                     session.tops.push(top);
-                                    top = {time: null, top: null, topic: [], status: []};
+                                    top = {time: null, top: null, heading: null, topic: [], status: []};
                                 }
                             });
                         }
