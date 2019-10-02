@@ -15,7 +15,7 @@ namespace Browser {
         private currentWeek: Number | null = 8;
 
         private buildURL(year: Number, week: Number): string{
-            return `https://www.bundestag.de/apps/plenar/plenar/conferenceweekDetail.form?year=${year}&week=${week}`
+            return `https://www.bundestag.de/apps/plenar/plenar/conferenceweekDetail.form?limit=1&year=${year}&week=${week}`
         }
 
         public async next(): Promise<IteratorResult<Promise<IDataPackage<ConferenceWeekDetails>>>> {
