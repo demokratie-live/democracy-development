@@ -2,66 +2,25 @@ import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
 var moment = require('moment');
 
 import { ConferenceWeekDetails } from './ConferenceWeekDetailBrowser';
-import { exists } from 'fs';
 
 export = Parser;
 
 namespace Parser {
-    /**
-     * This parser gets all potention fraction votings from a "Plenarprotokoll" of the german Bundestag.
-     */
+    type Session = {date: Date | null,
+                    dateText: string | null,
+                    session: string | null,
+                    tops: Top[]}
+    type Top = {    time: Date | null,
+                    top: string | null,
+                    heading: string | null,
+                    topic:  Topic[],
+                    status: Status[]}
+    type Topic = {  lines: string[],
+                    documents: string[]}
+    type Status = { line: string,
+                    documents: string[]}
+
     export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails>{
-        private async readStream(stream: NodeJS.ReadableStream): Promise<string> {
-            return new Promise((resolve) => {
-                let string: string = '';
-                stream.setEncoding('utf8');
-                stream.on('data', function (buffer: String) {
-                    string += buffer;
-                }).on('end', () => {
-                    resolve(string);
-                });
-            });
-        }
-
-        private isVote(topic:string, heading:string | null):Boolean | null {
-            /*
-            These Rules will move to BIO
-
-            Erste Beratung = NEIN
-            ——
-            // Beratung des Antrags = JA , es sei denn TOP ‚Überweisungen im vereinfachten Verfahren‘ = NEIN
-            Beratung des Antrags = NEIN
-            ——
-            Beratung der Beschlussempfehlung = JA
-            Zweite und dritte Beratung = JA
-            */
-            /*if(topic.search(/Beratung des Antrags/i) !== -1){
-                if(heading && heading.search(/Überweisungen im vereinfachten Verfahren/i) !== -1){
-                    return true;
-                } else {
-                    return false;
-                }
-                
-            }*/
-            if(topic.search(/Beratung des Antrags/i) !== -1){
-                if(heading && heading.search(/Abschließende Beratung ohne Aussprache/i) !== -1){
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            if(topic.search(/Erste Beratung/i) !== -1){
-                return false;
-            }
-            if(topic.search(/Beratung der Beschlussempfehlung/i) !== -1){
-                return true;
-            }
-            if(topic.search(/Zweite und dritte Beratung/i) !== -1){
-                return true;
-            }
-            return null
-        }
-
         public async parse(data: IDataPackage<ConferenceWeekDetails>): Promise<IDataPackage<any>[]> {
             const string: string = <string>(<unknown> data.data.openStream());
             
@@ -71,7 +30,6 @@ namespace Parser {
                 thisYear = parseInt(data.metadata.description.split('_')[0]);
                 thisWeek = parseInt(data.metadata.description.split('_')[1]);
             }
-                
 
             let m;
 
@@ -102,14 +60,14 @@ namespace Parser {
                 });
             }
 
-            let sessions: {date: Date | null, dateText: string | null, session: string | null, tops: {time: Date | null, top: string | null, heading: string | null, topic: { lines: string[], documents: string[], isVote: Boolean | null}[], status: {line: string, documents: string[]}[]}[]}[] = []
+            let sessions: Session[] = []
             const regex_DateSession = /<caption>[\s\S]*?<div class="bt-conference-title">([\s\S]*?)\((\d*)\. Sitzung\)<\/div>[\s\S]*?<\/caption>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/gm;
             while ((m = regex_DateSession.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
                 if (m.index === regex_DateSession.lastIndex) {
                     regex_DateSession.lastIndex++;
                 }
-                let session: {date: Date | null, dateText: string | null, session: string | null, tops: {time: Date | null, top: string | null, heading: string | null, topic: { lines: string[], documents: string[], isVote: Boolean | null}[], status: {line: string, documents: string[]}[]}[]} = {date: null, dateText: null, session: null, tops: []};
+                let session: Session = {date: null, dateText: null, session: null, tops: []};
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
@@ -128,7 +86,7 @@ namespace Parser {
                             if (n.index === regex_tops.lastIndex) {
                                 regex_tops.lastIndex++;
                             }
-                            let top: {time: Date | null, top: string | null, heading: string | null, topic: { lines: string[], documents: string[], isVote: Boolean | null}[], status: {line: string, documents: string[]}[]} = {time: null, top: null, heading: null, topic: [], status: []};
+                            let top: Top = {time: null, top: null, heading: null, topic: [], status: []};
                             // The result can be accessed through the `m`-variable.
                             n.forEach((match, group) => {
                                 if (group === 1) {
@@ -168,16 +126,15 @@ namespace Parser {
                                         })
                                     }
                                     let topicLines = topic.split('<br/>');
-                                    let topicPart: { lines: string[], documents: string[], isVote: Boolean | null} = {lines: [], documents: [], isVote: null};
+                                    let topicPart: Topic = {lines: [], documents: []};
 
                                     const regex_newTopicPart = /^(ZP )?(\d{1,2})?\.?\S?\)/gm;
                                     topicLines.forEach(line => {
                                         if( topicPart.lines.length !== 0 &&
                                             (   line === "" ||
                                                 line.match(regex_newTopicPart) !== null)){
-                                            topicPart.isVote = this.isVote(topicPart.lines.join(' '),top.heading);
                                             top.topic.push(topicPart);
-                                            topicPart = {lines: [], documents: [], isVote: null};
+                                            topicPart = {lines: [], documents: []};
                                             if(line !== ""){
                                                 topicPart.lines.push(line.trim());
                                             }
@@ -204,7 +161,6 @@ namespace Parser {
                                     });
 
                                     if(topicPart.lines.length > 0){
-                                        topicPart.isVote = this.isVote(topicPart.lines.join(' '),top.heading);
                                         top.topic.push(topicPart);
                                     }
                                 }
