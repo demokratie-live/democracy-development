@@ -1,6 +1,6 @@
 {
   "name": "@democracy-deutschland/scapacra-bt",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "Scapacra Bundestag",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
