@@ -2,43 +2,38 @@ import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
 var moment = require('moment');
 
 import { ConferenceWeekDetails } from './ConferenceWeekDetailBrowser';
-import { exists } from 'fs';
 
 export = Parser;
 
 namespace Parser {
-    /**
-     * This parser gets all potention fraction votings from a "Plenarprotokoll" of the german Bundestag.
-     */
+    type Session = {date: Date | null,
+                    dateText: string | null,
+                    session: string | null,
+                    tops: Top[]}
+    type Top = {    time: Date | null,
+                    top: string | null,
+                    heading: string | null,
+                    article: string | null,
+                    topic:  Topic[],
+                    status: Status[]}
+    type Topic = {  lines: string[],
+                    documents: string[]}
+    type Status = { line: string,
+                    documents: string[]}
+
     export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails>{
-        private async readStream(stream: NodeJS.ReadableStream): Promise<string> {
-            return new Promise((resolve) => {
-                let string: string = '';
-                stream.setEncoding('utf8');
-                stream.on('data', function (buffer: String) {
-                    string += buffer;
-                }).on('end', () => {
-                    resolve(string);
-                });
-            });
-        }
         public async parse(data: IDataPackage<ConferenceWeekDetails>): Promise<IDataPackage<any>[]> {
             const string: string = <string>(<unknown> data.data.openStream());
-            
-            let thisYear: Number | null = null;
-            let thisWeek: Number | null = null;
-            if(data.metadata.description){
-                thisYear = parseInt(data.metadata.description.split('_')[0]);
-                thisWeek = parseInt(data.metadata.description.split('_')[1]);
-            }
-                
 
             let m;
 
             let lastYear: Number | null = null;
             let lastWeek: Number | null = null;
+            let thisYear: Number | null = null;
+            let thisWeek: Number | null = null;
             let nextYear: Number | null = null;
             let nextWeek: Number | null = null;
+            let id: string = data.metadata.description ? data.metadata.description : 'no_id';
             const regex_YearsWeeks = /data-previousyear="(\d*)" data-previousweeknumber="(\d*)" data-nextyear="(\d*)" data-nextweeknumber="(\d*)"/gm
             while ((m = regex_YearsWeeks.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
@@ -62,19 +57,27 @@ namespace Parser {
                 });
             }
 
-            let sessions: {date: Date | null, dateText: string | null, session: string | null, tops: {time: Date | null, top: string | null, topic: { lines: string[], documents: string[]}[], status: {line: string, documents: string[]}[]}[]}[] = []
+            let sessions: Session[] = []
             const regex_DateSession = /<caption>[\s\S]*?<div class="bt-conference-title">([\s\S]*?)\((\d*)\. Sitzung\)<\/div>[\s\S]*?<\/caption>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/gm;
             while ((m = regex_DateSession.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
                 if (m.index === regex_DateSession.lastIndex) {
                     regex_DateSession.lastIndex++;
                 }
-                let session: {date: Date | null, dateText: string | null, session: string | null, tops: {time: Date | null, top: string | null, topic: { lines: string[], documents: string[]}[], status: {line: string, documents: string[]}[]}[]} = {date: null, dateText: null, session: null, tops: []};
+                let session: Session = {date: null, dateText: null, session: null, tops: []};
                 // The result can be accessed through the `m`-variable.
                 m.forEach((match, group) => {
                     if (group === 1) {
                         session.dateText = match.trim();
                         session.date = moment.utc(session.dateText, 'DD MMM YYYY', 'de').toDate();
+
+                        if(session.date){
+                            thisYear = session.date.getFullYear();
+                            thisWeek = moment(session.date).week();
+                            if(thisWeek){
+                                id = `${thisYear}_${thisWeek.toString().padStart(2,'0')}`
+                            }
+                        }
                     }
                     if (group === 2) {
                         session.session = match;
@@ -82,13 +85,13 @@ namespace Parser {
                     if (group === 3) {
                         const sessionData: string = match;
                         let n;
-                        const regex_tops = /<tr>[\s\S]*?<td data-th="Uhrzeit"><p>([\s\S]*?)<\/p><\/td>[\s\S]*?<td data-th="TOP"><p>([\s\S]*?)<\/p><\/td>[\s\S]*?<td data-th="Thema">[\s\S]*?<div class="bt-documents-description">([\s\S]*?)<\/div>[\s\S]*?<\/td>[\s\S]*?<td data-th="Status\/ Abstimmung">([\s\S]*?)[\s\S]*?<\/td>[\s\S]*?<\/tr>/gm
+                        const regex_tops = /<tr>[\s\S]*?<td data-th="Uhrzeit"><p>([\s\S]*?)<\/p><\/td>[\s\S]*?<td data-th="TOP"><p>([\s\S]*?)<\/p><\/td>[\s\S]*?<td data-th="Thema">[\s\S]*?<div class="bt-documents-description">([\s\S]*?)<\/div>[\s\S]*?<\/td>[\s\S]*?<td data-th="Status\/ Abstimmung">([\s\S]*?)<\/td>[\s\S]*?<\/tr>/gm
                         while ((n = regex_tops.exec(sessionData)) !== null) {
                             // This is necessary to avoid infinite loops with zero-width matches
                             if (n.index === regex_tops.lastIndex) {
                                 regex_tops.lastIndex++;
                             }
-                            let top: {time: Date | null, top: string | null, topic: { lines: string[], documents: string[]}[], status: {line: string, documents: string[]}[]} = {time: null, top: null, topic: [], status: []};
+                            let top: Top = {time: null, top: null, heading: null, article: null, topic: [], status: []};
                             // The result can be accessed through the `m`-variable.
                             n.forEach((match, group) => {
                                 if (group === 1) {
@@ -100,6 +103,35 @@ namespace Parser {
                                 if (group === 3) {
                                     let topic: string = match.trim();
                                     let o;
+
+                                    const regex_topHeading = /<a href="#" class="bt-top-collapser collapser collapsed"[\s\S]*?>([\s\S]*?)<\/a>/gm
+                                    while ((o = regex_topHeading.exec(topic)) !== null) {
+                                        // This is necessary to avoid infinite loops with zero-width matches
+                                        if (o.index === regex_topHeading.lastIndex) {
+                                            regex_topHeading.lastIndex++;
+                                        }
+                                        // The result can be accessed through the `m`-variable.
+                                        o.forEach((match, group) => {
+                                            if (group === 1) {
+                                                top.heading = match.trim();
+                                            }
+                                        })
+                                    }
+
+                                    const regex_article = /<button[\s\S]*?data-url="([\s\S]*?)">/gm
+                                    while ((o = regex_article.exec(topic)) !== null) {
+                                        // This is necessary to avoid infinite loops with zero-width matches
+                                        if (o.index === regex_article.lastIndex) {
+                                            regex_article.lastIndex++;
+                                        }
+                                        // The result can be accessed through the `m`-variable.
+                                        o.forEach((match, group) => {
+                                            if (group === 1) {
+                                                top.article = `https://www.bundestag.de${match}`;
+                                            }
+                                        })
+                                    }
+
                                     const regex_topTopic = /<p>([\s\S]*?)<\/p>/gm;
                                     while ((o = regex_topTopic.exec(topic)) !== null) {
                                         // This is necessary to avoid infinite loops with zero-width matches
@@ -114,7 +146,8 @@ namespace Parser {
                                         })
                                     }
                                     let topicLines = topic.split('<br/>');
-                                    let topicPart: { lines: string[], documents: string[]} = {lines: [], documents: []};
+                                    let topicPart: Topic = {lines: [], documents: []};
+
                                     const regex_newTopicPart = /^(ZP )?(\d{1,2})?\.?\S?\)/gm;
                                     topicLines.forEach(line => {
                                         if( topicPart.lines.length !== 0 &&
@@ -126,7 +159,9 @@ namespace Parser {
                                                 topicPart.lines.push(line.trim());
                                             }
                                         } else {
-                                            topicPart.lines.push(line.trim());
+                                            if(line !== ""){
+                                                topicPart.lines.push(line.trim());
+                                            }
                                         }
 
                                         let p;
@@ -144,6 +179,7 @@ namespace Parser {
                                             })
                                         }
                                     });
+
                                     if(topicPart.lines.length > 0){
                                         top.topic.push(topicPart);
                                     }
@@ -186,7 +222,7 @@ namespace Parser {
                                         }
                                     })
                                     session.tops.push(top);
-                                    top = {time: null, top: null, topic: [], status: []};
+                                    top = {time: null, top: null, heading: null, article: null, topic: [], status: []};
                                 }
                             });
                         }
@@ -199,7 +235,7 @@ namespace Parser {
             return [{
                 metadata: data.metadata,
                 data: {
-                    id: data.metadata.description,
+                    id,
                     previous: {
                         year: lastYear,
                         week: lastWeek,

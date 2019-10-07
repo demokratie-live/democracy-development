@@ -1,13 +1,5 @@
 import { IDataPackage, DataType, IBrowser } from '@democracy-deutschland/scapacra';
 import axios = require('axios');
-import { resolve } from 'path';
-
-// import { URL } from 'url';
-
-// import { NamedPollHrefEvaluator } from '../NamedPoll/NamedPollHrefEvaluator';
-
-
-// import { url } from 'inspector';
 
 export = Browser;
 
@@ -23,7 +15,7 @@ namespace Browser {
         private currentWeek: Number | null = 8;
 
         private buildURL(year: Number, week: Number): string{
-            return `https://www.bundestag.de/apps/plenar/plenar/conferenceweekDetail.form?year=${year}&week=${week}`
+            return `https://www.bundestag.de/apps/plenar/plenar/conferenceweekDetail.form?limit=1&year=${year}&week=${week}`
         }
 
         public async next(): Promise<IteratorResult<Promise<IDataPackage<ConferenceWeekDetails>>>> {
@@ -72,7 +64,7 @@ namespace Browser {
                                     },
                                     data: new ConferenceWeekDetails(response.data)
                                 });
-                
+
                 this.currentYear = nextYear;
                 this.currentWeek = nextWeek;
                 
