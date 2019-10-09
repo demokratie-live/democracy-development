@@ -173,12 +173,12 @@
     request-cookies "^1.1.0"
     x2js "^3.1.1"
 
-"@democracy-deutschland/scapacra-bt@1.0.17":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra-bt/-/scapacra-bt-1.0.17.tgz#2bc97b76b4f6cfee8c7ee8b93bdd8180aead132e"
-  integrity sha512-bPGLA2BqWnHoUGTaP+K8WIxsmq790a65yWe4Oyqi1m/PXTBYW8QkhnZDFEPv53k+B3qUJdJBVwb7pVIxZR7kvA==
+"@democracy-deutschland/scapacra-bt@1.0.23":
+  version "1.0.23"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra-bt/-/scapacra-bt-1.0.23.tgz#391c71137354315ae47fdf93b9d0143757d8a47f"
+  integrity sha512-KUT2TH4SjalyC2oSqE5jTqrF5Uwbp1VEKIMX+xRvy/TUnwmdTsBXUBGIEfuXuTxDh24T4MRsyXioPewzUSgLsQ==
   dependencies:
-    "@democracy-deutschland/scapacra" "1.0.3"
+    "@democracy-deutschland/scapacra" "1.0.4"
     "@types/axios" "^0.14.0"
     "@types/xml2js" "^0.4.5"
     "@types/xmldom" "^0.1.29"
@@ -191,15 +191,15 @@
     xmldom "^0.1.27"
     xpath "^0.0.27"
 
-"@democracy-deutschland/scapacra@1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra/-/scapacra-1.0.3.tgz#3f23ce13686cc416891c00b34b32f25da67441e8"
-  integrity sha512-SQN9A+/390ujbF7W08IIhVKeGr4kSAZUloZYIpjo98itlt80n9XQ4QvchKI6rWVNuIyJTOnwgdu6Ty0LVshEQg==
+"@democracy-deutschland/scapacra@1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra/-/scapacra-1.0.4.tgz#da85c81eafff38eff090e00d5d620adf87b4bb1a"
+  integrity sha512-suqvSYoztCioZSmq5k/xBYk61q+MgeQmqtY5xBAEbvGDEP2lSZQ20JAnzj89Z0IGuNieO7GcEfsPdazAuIMKNw==
   dependencies:
-    "@types/xml2js" "^0.4.3"
+    "@types/xml2js" "^0.4.5"
     "@types/xmldom" "^0.1.29"
-    typescript "^3.1.6"
-    xml2js "^0.4.19"
+    typescript "^3.6.3"
+    xml2js "^0.4.22"
     xmldom "^0.1.27"
     xpath "0.0.27"
 
@@ -555,14 +555,6 @@
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@types/ws/-/ws-6.0.1.tgz#ca7a3f3756aa12f62a0a62145ed14c6db25d5a28"
   integrity sha512-EzH8k1gyZ4xih/MaZTXwT2xOkPiIMSrhQ9b8wrlX88L0T02eYsddatQlwVFlEPyEqV0ChpdpNnE51QPH6NVT4Q==
-  dependencies:
-    "@types/events" "*"
-    "@types/node" "*"
-
-"@types/xml2js@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@types/xml2js/-/xml2js-0.4.3.tgz#2f41bfc74d5a4022511721f872ed395a210ad3b7"
-  integrity sha512-Pv2HGRE4gWLs31In7nsyXEH4uVVsd0HNV9i2dyASvtDIlOtSTr1eczPLDpdEuyv5LWH5LT20GIXwPjkshKWI1g==
   dependencies:
     "@types/events" "*"
     "@types/node" "*"
@@ -7746,11 +7738,6 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.1.6:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.1.tgz#6de14e1db4b8a006ac535e482c8ba018c55f750b"
-  integrity sha512-cTmIDFW7O0IHbn1DPYjkiebHxwtCMU+eTy30ZtJNBPF9j2O1ITu5XH2YnBeVRKWHqF+3JQwWJv0Q0aUgX8W7IA==
-
 typescript@^3.6.3:
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.3.tgz#fea942fabb20f7e1ca7164ff626f1a9f3f70b4da"
@@ -8117,14 +8104,6 @@ xdg-basedir@^3.0.0:
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-3.0.0.tgz#496b2cc109eca8dbacfe2dc72b603c17c5870ad4"
   integrity sha1-SWsswQnsqNus/i3HK2A8F8WHCtQ=
 
-xml2js@^0.4.19:
-  version "0.4.19"
-  resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.19.tgz#686c20f213209e94abf0d1bcf1efaa291c7827a7"
-  integrity sha512-esZnJZJOiJR9wWKMyuvSE1y6Dq5LCuJanqhxslH2bxM6duahNZ+HMpCLhBQGZkbX6xRf8x1Y2eJlgt2q3qo49Q==
-  dependencies:
-    sax ">=0.6.0"
-    xmlbuilder "~9.0.1"
-
 xml2js@^0.4.22:
   version "0.4.22"
   resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.22.tgz#4fa2d846ec803237de86f30aa9b5f70b6600de02"
@@ -8138,11 +8117,6 @@ xmlbuilder@~11.0.0:
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-11.0.1.tgz#be9bae1c8a046e76b31127726347d0ad7002beb3"
   integrity sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==
-
-xmlbuilder@~9.0.1:
-  version "9.0.7"
-  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
-  integrity sha1-Ey7mPS7FVlxVfiD0wi35rKaGsQ0=
 
 xmldom@^0.1.19, xmldom@^0.1.27:
   version "0.1.27"

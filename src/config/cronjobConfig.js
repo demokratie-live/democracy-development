@@ -5,7 +5,7 @@ export default {
   CRON_PROCEDURES: cronregex.test(process.env.CRON_PROCEDURES)
     ? process.env.CRON_PROCEDURES
     : false,
-  CRON_AGENDA: cronregex.test(process.env.CRON_AGENDA) ? process.env.CRON_AGENDA : false,
+  CRON_CONFERENCEWEEKDETAILS: cronregex.test(process.env.CRON_CONFERENCEWEEKDETAILS) ? process.env.CRON_CONFERENCEWEEKDETAILS : false,
   CRON_NAMED_POLLS: cronregex.test(process.env.CRON_NAMED_POLLS)
     ? process.env.CRON_NAMED_POLLS
     : false,
