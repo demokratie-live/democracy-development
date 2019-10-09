@@ -5,15 +5,15 @@ import Session from './ConferenceWeekDetail/Session';
 
 const ConferenceWeekDetailSchema = new Schema(
   {
-    URL:          { type: String, default: null },
-    id:           { type: String, required: true, unique: true, index: true },
-    previousYear: { type: Number, default: null},
-    previousWeek: { type: Number, default: null},
-    thisYear:     { type: Number, required: true},
-    thisWeek:     { type: Number, required: true},
-    nextYear:     { type: Number, default: null},
-    nextWeek:     { type: Number, default: null},
-    sessions:     [ Session ]
+    URL: { type: String, default: null },
+    id: { type: String, required: true, unique: true, index: true },
+    previousYear: { type: Number, default: null },
+    previousWeek: { type: Number, default: null },
+    thisYear: { type: Number, required: true },
+    thisWeek: { type: Number, required: true },
+    nextYear: { type: Number, default: null },
+    nextWeek: { type: Number, default: null },
+    sessions: [Session],
   },
   { timestamps: true },
 );
