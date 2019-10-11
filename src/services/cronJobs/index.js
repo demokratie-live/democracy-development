@@ -3,7 +3,7 @@ import { CronJob } from 'cron';
 import CONFIG from '../../config';
 
 import importProcedures from './../../importer/importProcedures';
-import importAgenda from './../../importer/importAgenda';
+import importConferenceWeekDetails from './../../importer/importConferenceWeekDetails';
 import importNamedPolls from './../../importer/importNamedPolls';
 import importNamedPollDeputies from './../../importer/importNamedPollDeputies';
 import importDeputyProfiles from './../../importer/importDeputyProfiles';
@@ -28,12 +28,12 @@ const cronJobs = () => {
     Log.warn('Cronjob "Procedures" disabled');
   }
 
-  // Agenda
-  if (CONFIG.CRON_AGENDA) {
+  // ConferenceWeekDetails
+  if (CONFIG.CRON_CONFERENCEWEEKDETAILS) {
     jobs.push(
       new CronJob(
-        CONFIG.CRON_AGENDA,
-        importAgenda,
+        CONFIG.CRON_CONFERENCEWEEKDETAILS,
+        importConferenceWeekDetails,
         null,
         true,
         'Europe/Berlin',
@@ -41,9 +41,9 @@ const cronJobs = () => {
         CONFIG.CRON_START_ON_INIT,
       ),
     );
-    Log.info('Cronjob "Agenda" registered');
+    Log.info('Cronjob "ConferenceWeekDetails" registered');
   } else {
-    Log.warn('Cronjob "Agenda" disabled');
+    Log.warn('Cronjob "ConferenceWeekDetails" disabled');
   }
 
   // Named Polls
