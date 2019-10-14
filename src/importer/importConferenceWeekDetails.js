@@ -136,7 +136,7 @@ export default async () => {
                       // TODO remove this
                       // This might not be 100% accurate(pushes to many), but we will remove it anyway
                       if (topic.isVote) {
-                        procedureIds.push(topic.procedureIds);
+                        procedureIds.concat(topic.procedureIds);
                       }
                       timeProcedure(topic.isVote, topic.documents, top.time);
                       return topic;
