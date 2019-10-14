@@ -5,7 +5,7 @@ const Procedure = mongoose.model('Procedure', ProcedureSchema);
 
 Procedure.createMapping({}, err => {
   if (err) {
-    Log.error(`[Elastic Search] Procedure.createMapping ${JSON.stringify(err)}`);
+    Log.error(`Elastic Search: Procedure.createMapping ${JSON.stringify(err)}`);
     return err;
   }
   const stream = Procedure.synchronize();
@@ -20,7 +20,7 @@ Procedure.createMapping({}, err => {
       resolve();
     });
     stream.on('error', err2 => {
-      Log.error('[Elastic Search] ', err2);
+      Log.error('Elastic Search: ', err2);
       reject();
     });
   });
