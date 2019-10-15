@@ -10,7 +10,7 @@
     "dev": "nodemon -L -e js,graphql src/index.js --exec \"node --require dotenv/config --require babel-register\"",
     "lint": "eslint . --ext js,jsx",
     "build": "babel ./ -d dist -s --ignore node_modules,dist",
-    "serve": "node dist/src/index.js",
+    "serve": "node --max_old_space_size=4096 dist/src/index.js",
     "diffs": "babel-node src/diffs.js",
     "migrations:migrate": "node -r dotenv/config -r babel-register src/migrations/scripts/migrate.js",
     "migrations:create": "node -r dotenv/config -r babel-register src/migrations/scripts/create.js"
