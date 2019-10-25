@@ -1,12 +1,12 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
-import { NamedPollDeputyScraperConfiguration } from '@democracy-deutschland/scapacra-bt';
+import { NamedPollDeputyScraper } from '@democracy-deutschland/scapacra-bt';
 
 import NamedPoll from '../models/NamedPoll';
 
 export default async () => {
   Log.info('START NAMED POLL DEPUTIES SCRAPER');
   try {
-    await Scraper.scrape([new NamedPollDeputyScraperConfiguration()], dataPackages => {
+    await Scraper.scrape([new NamedPollDeputyScraper()], dataPackages => {
       dataPackages.map(async dataPackage => {
         // Construct Database object
         const namedPoll = { webId: dataPackage.data.id };

@@ -1,12 +1,12 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
-import { DeputyProfileScraperConfiguration } from '@democracy-deutschland/scapacra-bt';
+import { DeputyProfileScraper } from '@democracy-deutschland/scapacra-bt';
 
 import DeputyModel from '../models/Deputy';
 
 export default async () => {
   Log.info('START DEPUTY PROFILES SCRAPER');
   try {
-    await Scraper.scrape([new DeputyProfileScraperConfiguration()], dataPackages => {
+    await Scraper.scrape([new DeputyProfileScraper()], dataPackages => {
       dataPackages.map(async dataPackage => {
         // Ignore those which have no webid (ausgeschieden)
         if (!dataPackage.data.id) {
@@ -26,10 +26,7 @@ export default async () => {
           constituency: dataPackage.data.constituency,
           constituencyName: dataPackage.data.constituencyName,
           directCandidate: dataPackage.data.directCandidate,
-          functions: dataPackage.data.functions.map(({ category, functions }) => ({
-            category,
-            functions: functions.sort(),
-          })),
+          functions: dataPackage.data.functions,
           speechesURL: dataPackage.data.speechesURL,
           votesURL: dataPackage.data.votesURL,
           publicationRequirement: dataPackage.data.publicationRequirement.sort(),
