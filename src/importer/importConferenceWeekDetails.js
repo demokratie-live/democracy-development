@@ -156,7 +156,7 @@ export default async () => {
       });
     });
     // TODO remove this
-    await syncWithDemocracy(procedureIds);
+    // await syncWithDemocracy(procedureIds);
   } catch (error) {
     Log.error(`Conference Week Detail Scraper failed ${error.message}`);
   }
