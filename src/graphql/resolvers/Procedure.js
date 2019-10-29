@@ -1,8 +1,5 @@
-import axios from 'axios';
 import diffHistory from 'mongoose-diff-history/diffHistory';
-import { inspect } from 'util';
 
-import CONFIG from '../../config';
 import PROCEDURE_STATES from '../../config/procedureStates';
 
 import History from '../../models/History';
@@ -133,7 +130,7 @@ export default {
 
     procedureUpdates: async (
       parent,
-      { since, limit = 99, offset = 0},
+      { since, limit = 99, offset = 0 },
       { ProcedureModel, HistoryModel },
     ) => {
       const beforeCount = await ProcedureModel.count({ createdAt: { $lte: since } });
@@ -178,7 +175,6 @@ export default {
       { procedureId, expectedVotingDate },
       { ProcedureModel },
     ) => {
-      const procedure = await ProcedureModel.findOne({ procedureId });
       await ProcedureModel.update(
         { procedureId },
         {

@@ -5,14 +5,12 @@ import Scraper from '@democracy-deutschland/dip21-scraper';
 import prettyMs from 'pretty-ms';
 import fs from 'fs-extra';
 import FileLogger from 'log';
-import axios from 'axios';
 import moment from 'moment';
 
 import CONFIG from './../config';
 
 import Procedure from './../models/Procedure';
 import CronJobModel from './../models/CronJob';
-import History from './../models/History';
 
 const log = new FileLogger('error', fs.createWriteStream('error-import.log'));
 
