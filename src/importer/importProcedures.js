@@ -198,7 +198,7 @@ const cronTask = async () => {
   if (!cronIsRunning) {
     cronIsRunning = true;
     cronStart = Date.now();
-    const cron = await CronJobModel.findOneAndUpdate(
+    await CronJobModel.findOneAndUpdate(
       {
         name: 'import-procedures',
       },
@@ -240,83 +240,19 @@ const cronTask = async () => {
         liveScrapeStates: ['Beschlussempfehlung liegt vor', 'Überwiesen'],
       })
       .then(async () => {
-        // empty query for initial webhook
-        const query = cron.lastFinishDate ? { createdAt: { $gte: cron.lastFinishDate } } : {};
-
-        // Find updated procedures
-        const histories = await History.find(query, { collectionId: 1 }).then(h =>
-          h.map(p => p.collectionId),
+        await CronJobModel.update(
+          {
+            name: 'import-procedures',
+          },
+          {
+            $set: {
+              lastFinishDate: Date.now(),
+            },
+          },
+          {
+            upsert: true,
+          },
         );
-        const procedures = await Procedure.find(
-          { _id: { $in: histories } },
-          // { updatedAt: { $gte: cronStart } },
-          { procedureId: 1, type: 1, period: 1 },
-        );
-
-        // Find Counts per Period & Type before Cronstart
-        let groups = await Procedure.aggregate([
-          {
-            // Filter by updatedAt
-            $project: {
-              period: 1,
-              type: 1,
-              cond: { $lt: ['$updatedAt', cronStart] },
-            },
-          },
-          {
-            // Group by Period & Type
-            $group: {
-              _id: { period: '$period', type: '$type' },
-              count: { $sum: 1 },
-            },
-          },
-          {
-            // Group by Period
-            $group: {
-              _id: '$_id.period',
-              types: { $push: { type: '$_id.type', countBefore: '$count' } },
-            },
-          },
-          {
-            // Rename _id Field to period
-            $project: { _id: 0, period: '$_id', types: 1 },
-          },
-        ]);
-
-        // Loop through Groups and Types - assign changed IDs
-        groups = groups.map(group => {
-          const types = group.types.map(type => {
-            const changedIds = procedures
-              .filter(p => p.period === group.period && p.type === type.type)
-              .map(v => v.procedureId);
-            return { ...type, changedIds };
-          });
-          return { ...group, types };
-        });
-
-        // Send Data to Hook
-        axios
-          .post(`${CONFIG.DEMOCRACY_SERVER_WEBHOOK_URL}`, {
-            data: groups,
-          })
-          .then(async () => {
-            await CronJobModel.update(
-              {
-                name: 'import-procedures',
-              },
-              {
-                $set: {
-                  lastFinishDate: Date.now(),
-                },
-              },
-              {
-                upsert: true,
-              },
-            );
-          })
-          .catch(error => {
-            Log.error(`[DEMOCRACY Server] ${error}`);
-          });
 
         Log.info('#####FINISH####');
       })

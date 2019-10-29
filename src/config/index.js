@@ -18,12 +18,6 @@ const recommendedConfigs = {
     ? process.env.WHITELIST_DATA_SOURCES.split(',')
     : ['::ffff:127.0.0.1', '::1'],
   PERIODS: process.env.PERIODS ? process.env.PERIODS.split(',') : ['Alle'],
-  // TODO remove this - no webhook - use pull model
-  DEMOCRACY_SERVER_WEBHOOK_URL:
-    process.env.DEMOCRACY_SERVER_WEBHOOK_URL || 'http://localhost:3000/webhooks/bundestagio/update',
-  /* DEMOCRACY_WEBHOOKS_UPDATE_PROCEDURES:
-    process.env.DEMOCRACY_WEBHOOKS_UPDATE_PROCEDURES ||
-    'http://localhost:3000/webhooks/bundestagio/updateProcedures', */
 };
 
 const optionalConfigs = {

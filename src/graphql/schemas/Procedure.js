@@ -80,11 +80,19 @@ type Procedure {
   namedVote: Boolean
 }
 
+type ProcedureUpdate {
+  beforeCount: Int!
+  afterCount: Int!
+  newCount: Int
+  changedCount: Int
+  procedures: [Procedure]
+}
+
 type Query {
   procedure(procedureId: String!): Procedure
   procedures(offset: Int, IDs: [String!], status: [String!], voteDate: [Boolean!], manageVoteDate: Boolean, limit: Int, offset: Int): [Procedure]
   allProcedures(offset: Int): [Procedure]
-  procedureUpdates(offset: Int, period: [Int!], type: [String!]): [Procedure]
+  procedureUpdates(since: Date!, limit: Int, offset: Int): ProcedureUpdate
 }
 
 type Mutation {

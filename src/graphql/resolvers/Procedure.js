@@ -131,8 +131,42 @@ export default {
       { ProcedureModel },
     ) => ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
 
-    procedureUpdates: async (parent, { period, type }, { ProcedureModel }) =>
-      ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
+    procedureUpdates: async (
+      parent,
+      { since, limit = 99, offset = 0},
+      { ProcedureModel, HistoryModel },
+    ) => {
+      const beforeCount = await ProcedureModel.count({ createdAt: { $lte: since } });
+      const afterCount = await ProcedureModel.count({});
+      const changed = await HistoryModel.aggregate([
+        {
+          $match: {
+            collectionName: 'Procedure',
+            createdAt: { $gt: since },
+          },
+        },
+        { $group: { _id: '$collectionId' } },
+      ]);
+
+      // Build find query for namedPolls
+      const proceduresFindQuery = {
+        $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
+      };
+
+      const procedures = await ProcedureModel.find(
+        proceduresFindQuery,
+        {},
+        // Even tho the index for createdAt is set - the memory limit is reached - therefore no sort
+        { /* sort: { createdAt: 1 }, */ skip: offset, limit },
+      );
+      return {
+        beforeCount,
+        afterCount,
+        newCount: afterCount - beforeCount,
+        changedCount: changed.length,
+        procedures,
+      };
+    },
 
     procedure: async (parent, { procedureId }, { ProcedureModel }) =>
       ProcedureModel.findOne({ procedureId }),
@@ -154,22 +188,6 @@ export default {
         },
         { new: true },
       );
-      axios
-        .post(`${CONFIG.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
-          data: {
-            procedureIds: [procedure.procedureId],
-            name: 'ChangeVoteData',
-          },
-
-          timeout: 1000 * 60 * 5,
-        })
-        .then(async response => {
-          Log.debug(inspect(response.data));
-        })
-        .catch(error => {
-          Log.error(`[DEMOCRACY Server] ${error}`);
-        });
-
       return ProcedureModel.findOne({ procedureId });
     },
     saveProcedureCustomData: async (
@@ -250,23 +268,6 @@ export default {
           },
         },
       );
-
-      axios
-        .post(`${CONFIG.DEMOCRACY_SERVER_WEBHOOK_URL}Procedures`, {
-          data: {
-            procedureIds: [procedure.procedureId],
-            name: 'ChangeVoteData',
-          },
-
-          timeout: 1000 * 60 * 5,
-        })
-        .then(async response => {
-          Log.debug(inspect(response.data));
-        })
-        .catch(error => {
-          Log.error(`democracy server error: ${inspect(error)}`);
-        });
-
       return ProcedureModel.findOne({ procedureId });
     },
   },
