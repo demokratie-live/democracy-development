@@ -76,7 +76,7 @@ const timeProcedure = async (isVote, documents, time) => {
           },
         },
         // with current Status Beschlussempfehlung or Überwiesen
-        currentStatus: { $in: ['Beschlussempfehlung liegt vor', 'Überwiesen'] },
+        // currentStatus: { $in: ['Beschlussempfehlung liegt vor', 'Überwiesen'] }, // We removed this rule, since it seems no longer nessecary
         // Update only when needed
         'customData.expectedVotingDate': { $ne: time },
       },
