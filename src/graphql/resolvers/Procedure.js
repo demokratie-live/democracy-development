@@ -301,7 +301,7 @@ export default {
           return h.decision.some(decision => {
             if (
               decision.type === 'Namentliche Abstimmung' &&
-              decision.tenor.find(/.*?Änderungsantrag.*?/) === -1
+              decision.tenor.search(/.*?Änderungsantrag.*?/) === -1
             ) {
               return true;
             }
