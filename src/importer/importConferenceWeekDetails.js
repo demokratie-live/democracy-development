@@ -58,33 +58,33 @@ const getProcedureIds = async documents => {
 
 // eslint-disable-next-line no-shadow
 const timeProcedure = async (isVote, documents, time) => {
-  if (isVote) {
-    // TODO unify
-    // currently the dip21 scraper returns document urls like so:
-    // "http://dipbt.bundestag.de:80/dip21/btd/19/010/1901038.pdf
-    // The named poll scraper returns them like so:
-    // http://dip21.bundestag.de/dip21/btd/19/010/1901038.pdf
-    const docs = documents.map(document =>
-      document.replace('http://dip21.bundestag.de/', 'http://dipbt.bundestag.de:80/'),
-    );
-    await ProcedureModel.update(
-      {
-        // Find Procedures matching any of the given Documents, excluding Beschlussempfehlung
-        importantDocuments: {
-          $elemMatch: {
-            $and: [{ url: { $in: docs } }, { type: { $ne: 'Beschlussempfehlung und Bericht' } }],
-          },
+  // Either set voting date to time or null - this keeps this self correcting
+  const expectedVotingDate = isVote ? time : null;
+  // TODO unify
+  // currently the dip21 scraper returns document urls like so:
+  // "http://dipbt.bundestag.de:80/dip21/btd/19/010/1901038.pdf
+  // The named poll scraper returns them like so:
+  // http://dip21.bundestag.de/dip21/btd/19/010/1901038.pdf
+  const docs = documents.map(document =>
+    document.replace('http://dip21.bundestag.de/', 'http://dipbt.bundestag.de:80/'),
+  );
+  await ProcedureModel.update(
+    {
+      // Find Procedures matching any of the given Documents, excluding Beschlussempfehlung
+      importantDocuments: {
+        $elemMatch: {
+          $and: [{ url: { $in: docs } }, { type: { $ne: 'Beschlussempfehlung und Bericht' } }],
         },
-        // with current Status Beschlussempfehlung or Überwiesen
-        currentStatus: { $in: ['Beschlussempfehlung liegt vor', 'Überwiesen'] },
-        // Update only when needed
-        'customData.expectedVotingDate': { $ne: time },
       },
-      {
-        $set: { 'customData.expectedVotingDate': time },
-      },
-    );
-  }
+      // with current Status Beschlussempfehlung or Überwiesen
+      // currentStatus: { $in: ['Beschlussempfehlung liegt vor', 'Überwiesen'] }, // We removed this rule, since it seems no longer nessecary
+      // Update only when needed
+      'customData.expectedVotingDate': { $ne: expectedVotingDate },
+    },
+    {
+      $set: { 'customData.expectedVotingDate': expectedVotingDate },
+    },
+  );
 };
 
 export default async () => {

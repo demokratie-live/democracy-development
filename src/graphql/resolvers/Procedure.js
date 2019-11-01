@@ -83,15 +83,15 @@ export default {
             {
               currentStatus: { $in: PROCEDURE_STATES.COMPLETED },
             },
-            {
+            /* {
               'customData.possibleVotingDate': { $exists: true },
-            },
+            }, */
           ],
           currentStatus: { $nin: ['Zurückgezogen', 'Für erledigt erklärt'] },
         };
-        const procedures = await ProcedureModel.find({ ...match }).sort({ updatedAt: 1 });
+        return ProcedureModel.find({ ...match }).sort({ updatedAt: 1 });
 
-        return procedures.filter(procedure => {
+        /* return procedures.filter(procedure => {
           const pVoteDate = new Date(procedure.customData.possibleVotingDate);
           const hidePVoteDate = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
           // Hide possibleVotingDate Procedures older than 7 days or desicion newer
@@ -108,7 +108,7 @@ export default {
           }
 
           return true;
-        });
+        }); */
       }
 
       if (status) {
@@ -299,7 +299,10 @@ export default {
       const namedVote = procedure.history.some(h => {
         if (h.decision) {
           return h.decision.some(decision => {
-            if (decision.type === 'Namentliche Abstimmung') {
+            if (
+              decision.type === 'Namentliche Abstimmung' &&
+              decision.tenor.search(/.*?Änderungsantrag.*?/) === -1
+            ) {
               return true;
             }
             return false;
