@@ -15,7 +15,7 @@ const isVote = (topic, heading) => {
   Zweite und dritte Beratung = JA
   */
   if (topic.search(/Beratung des Antrags/i) !== -1) {
-    if (heading && heading.search(/Abschließende Beratung ohne Aussprache/i) !== -1) {
+    if (heading && heading.search(/Abschließende Beratung(en)? ohne Aussprache/i) !== -1) {
       return true;
     }
     return false;
