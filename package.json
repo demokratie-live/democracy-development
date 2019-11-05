@@ -39,7 +39,7 @@
     "xsd-schema-validator": "^0.6.0"
   },
   "dependencies": {
-    "@democracy-deutschland/scapacra": "1.0.5",
+    "@democracy-deutschland/scapacra": "1.0.6",
     "@types/axios": "^0.14.0",
     "@types/xml2js": "^0.4.5",
     "@types/xmldom": "^0.1.29",

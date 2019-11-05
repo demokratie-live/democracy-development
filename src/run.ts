@@ -38,7 +38,7 @@ async function scrape(dataset: String,out: String = './out') {
             break;
     }
     if(scraper){
-        await Scraper.scrape(scraper, ((dataPackage) => {
+        await Scraper.scrape(scraper, (async (dataPackage) => {
             if(!dataPackage){
                 console.log('Error: Got empty DataPackage')
             } else {
