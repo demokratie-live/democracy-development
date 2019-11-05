@@ -1,5 +1,5 @@
 import { IBrowser, IParser, IScraper } from '@democracy-deutschland/scapacra';
-import { Xml, PlenarProtocolBrowser } from '../browser/PlenarProtocolBrowser';
+import { PlenarProtocolData, PlenarProtocolMeta, PlenarProtocolBrowser } from '../browser/PlenarProtocolBrowser';
 
 export = Documents_Config;
 
@@ -8,18 +8,18 @@ namespace Documents_Config {
         maxCount: number;
     }
 
-    export abstract class ProtocolScraperConfiguration implements IScraper<Xml> {
+    export abstract class ProtocolScraperConfiguration implements IScraper<PlenarProtocolData,PlenarProtocolMeta> {
         private options: IProtocolScraperConfigurationOptions;
 
         constructor(options: IProtocolScraperConfigurationOptions) {
             this.options = options;
         }
-        public getBrowser(): IBrowser<Xml> {
+        public getBrowser(): IBrowser<PlenarProtocolData,PlenarProtocolMeta> {
             return new PlenarProtocolBrowser({
                 maxCount: this.options.maxCount
             });
         }
 
-        public abstract getParser(): IParser<Xml>;
+        public abstract getParser(): IParser<PlenarProtocolData,PlenarProtocolMeta>;
     }
 }

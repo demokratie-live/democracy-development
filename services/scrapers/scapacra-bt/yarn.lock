@@ -18,10 +18,10 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@democracy-deutschland/scapacra@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra/-/scapacra-1.0.4.tgz#da85c81eafff38eff090e00d5d620adf87b4bb1a"
-  integrity sha512-suqvSYoztCioZSmq5k/xBYk61q+MgeQmqtY5xBAEbvGDEP2lSZQ20JAnzj89Z0IGuNieO7GcEfsPdazAuIMKNw==
+"@democracy-deutschland/scapacra@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra/-/scapacra-1.0.5.tgz#227bd00f5ed6b0f13f63da17b076534c7b16ffd2"
+  integrity sha512-9U/Z2vsfQBvu+2ul/JpafFnrIyh9dSDxcA5wrzDHcH8YVsb7/mzlDcE7tKMPl+ZVm9z2HH5Liobx0hDZWWTlTA==
   dependencies:
     "@types/xml2js" "^0.4.5"
     "@types/xmldom" "^0.1.29"

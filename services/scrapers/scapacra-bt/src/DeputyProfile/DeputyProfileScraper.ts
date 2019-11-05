@@ -1,16 +1,16 @@
 import { IParser, IBrowser, IScraper } from '@democracy-deutschland/scapacra';
-import { DeputyProfile, DeputyProfileBrowser } from './DeputyProfileBrowser';
+import { DeputyProfileData, DeputyProfileMeta, DeputyProfileBrowser } from './DeputyProfileBrowser';
 import { DeputyProfileParser } from './DeputyProfileParser';
 export = Scraper;
 
 namespace Scraper {
-    export class DeputyProfileScraper implements IScraper<DeputyProfile> {
+    export class DeputyProfileScraper implements IScraper<DeputyProfileData,DeputyProfileMeta> {
 
-        public getBrowser(): IBrowser<DeputyProfile> {
+        public getBrowser(): IBrowser<DeputyProfileData,DeputyProfileMeta> {
             return new DeputyProfileBrowser();
         }
 
-        public getParser(): IParser<DeputyProfile> {
+        public getParser(): IParser<DeputyProfileData,DeputyProfileMeta> {
             return new DeputyProfileParser();
         };
     }

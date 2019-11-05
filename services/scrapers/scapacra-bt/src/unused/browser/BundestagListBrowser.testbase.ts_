@@ -2,18 +2,17 @@ import { it } from 'mocha';
 import { assert } from 'chai';
 import { URL } from 'url';
 import { BundestagListBrowser, IBundestagListBrowserOptions } from './BundestagListBrowser';
-import { DataType } from '@democracy-deutschland/scapacra';
 
 const baseUrl = new URL("https://www.bundestag.de");
 
-export function checkBundestagListBrowser<T extends DataType>(createBundestagListBrowser: (options: IBundestagListBrowserOptions) => BundestagListBrowser<T>) {
-    checkForValidUrlGeneration<T>(createBundestagListBrowser);
-    checkCasePageSizeEqualsMaxCount<T>(createBundestagListBrowser);
-    checkCasePageSizeLessThanMaxCount<T>(createBundestagListBrowser);
-    checkCasePageSizeGreaterThanMaxCount<T>(createBundestagListBrowser);
+export function checkBundestagListBrowser<D,M>(createBundestagListBrowser: (options: IBundestagListBrowserOptions) => BundestagListBrowser<D,M>) {
+    checkForValidUrlGeneration<D,M>(createBundestagListBrowser);
+    checkCasePageSizeEqualsMaxCount<D,M>(createBundestagListBrowser);
+    checkCasePageSizeLessThanMaxCount<D,M>(createBundestagListBrowser);
+    checkCasePageSizeGreaterThanMaxCount<D,M>(createBundestagListBrowser);
 }
 
-function checkForValidUrlGeneration<T extends DataType>(createBundestagListBrowser: (options: IBundestagListBrowserOptions) => BundestagListBrowser<T>) {
+function checkForValidUrlGeneration<D,M>(createBundestagListBrowser: (options: IBundestagListBrowserOptions) => BundestagListBrowser<D,M>) {
     it('Generated URL should always be valid for every page offset', () => {
         let browser = createBundestagListBrowser({
             maxCount: 5
@@ -31,46 +30,46 @@ function checkForValidUrlGeneration<T extends DataType>(createBundestagListBrows
     });
 }
 
-function checkCasePageSizeEqualsMaxCount<T extends DataType>(createBundestagListBrowser: (options: IBundestagListBrowserOptions) => BundestagListBrowser<T>) {
+function checkCasePageSizeEqualsMaxCount<D,M>(createBundestagListBrowser: (options: IBundestagListBrowserOptions) => BundestagListBrowser<D,M>) {
     let browser = createBundestagListBrowser({ maxCount: 0 });
     browser = createBundestagListBrowser({ maxCount: browser.getPageSize() })
 
     it(`should work with maxCount(${browser.getMaxCount()}) == pageSize(${browser.getPageSize()}) (works online only)`, function (done) {
         this.timeout(0);
 
-        checkBrowser<T>(browser)
+        checkBrowser<D,M>(browser)
             .then(() => done())
             .catch(error => done(error));
     });
 }
 
-function checkCasePageSizeLessThanMaxCount<T extends DataType>(createBundestagListBrowser: (options: IBundestagListBrowserOptions) => BundestagListBrowser<T>) {
+function checkCasePageSizeLessThanMaxCount<D,M>(createBundestagListBrowser: (options: IBundestagListBrowserOptions) => BundestagListBrowser<D,M>) {
     let browser = createBundestagListBrowser({ maxCount: 0 });
     browser = createBundestagListBrowser({ maxCount: browser.getPageSize()-1 })
 
     it(`should work with maxCount(${browser.getMaxCount()}) < pageSize(${browser.getPageSize()}) (works online only)`, function (done) {
         this.timeout(0);
 
-        checkBrowser<T>(browser)
+        checkBrowser<D,M>(browser)
             .then(() => done())
             .catch(error => done(error));
     });
 }
 
-function checkCasePageSizeGreaterThanMaxCount<T extends DataType>(createBundestagListBrowser: (options: IBundestagListBrowserOptions) => BundestagListBrowser<T>) {
+function checkCasePageSizeGreaterThanMaxCount<D,M>(createBundestagListBrowser: (options: IBundestagListBrowserOptions) => BundestagListBrowser<D,M>) {
     let browser = createBundestagListBrowser({ maxCount: 0 });
     browser = createBundestagListBrowser({ maxCount: browser.getPageSize()+1 })
 
     it(`should work with maxCount(${browser.getMaxCount()}) > pageSize(${browser.getPageSize()}) (works online only)`, function (done) {
         this.timeout(0);
 
-        checkBrowser<T>(browser)
+        checkBrowser<D,M>(browser)
             .then(() => done())
             .catch(error => done(error));
     });
 }
 
-async function checkBrowser<T extends DataType>(browser: BundestagListBrowser<T>): Promise<any> {
+async function checkBrowser<D,M>(browser: BundestagListBrowser<D,M>): Promise<any> {
     let counter = 0;
     let promises: Promise<any>[] = [];
     for await (const fragment of browser) {

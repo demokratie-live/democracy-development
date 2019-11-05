@@ -1,7 +1,7 @@
-import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
+import { DataPackage, IParser } from '@democracy-deutschland/scapacra';
 var moment = require('moment');
 
-import { NamedPollDeputies } from './NamedPollDeputyBrowser';
+import { NamedPollDeputiesData, NamedPollDeputiesMeta } from './NamedPollDeputyBrowser';
 
 export = Parser;
 
@@ -9,7 +9,7 @@ namespace Parser {
     /**
      * This parser gets all potention fraction votings from a "Plenarprotokoll" of the german Bundestag.
      */
-    export class NamedPollDeputyParser implements IParser<NamedPollDeputies>{
+    export class NamedPollDeputyParser implements IParser<NamedPollDeputiesData,NamedPollDeputiesMeta>{
         private async readStream(stream: NodeJS.ReadableStream): Promise<string> {
             return new Promise((resolve) => {
                 let string: string = '';
@@ -21,19 +21,17 @@ namespace Parser {
                 });
             });
         }
-        public async parse(data: IDataPackage<NamedPollDeputies>): Promise<IDataPackage<any>[]> {
-            const stream = data.data.openStream();
-
-            const string = await this.readStream(stream);
+        public async parse(data: DataPackage<NamedPollDeputiesData,NamedPollDeputiesMeta>): Promise<DataPackage<Object,Object>> {
+            const string = data.data ? await this.readStream(data.data) : '';
             const base_url: string = 'https://www.bundestag.de'
 
             let m;
 
             //id
             let id: string | null = null;
-            if (data.metadata.url) {
+            if (data.meta && data.meta.url) {
                 const regex_id = /id=(.*)/gm;
-                while ((m = regex_id.exec(data.metadata.url)) !== null) {
+                while ((m = regex_id.exec(data.meta.url)) !== null) {
                     // This is necessary to avoid infinite loops with zero-width matches
                     if (m.index === regex_id.lastIndex) {
                         regex_id.lastIndex++;
@@ -150,10 +148,7 @@ namespace Parser {
 
             }
 
-            return [{
-                metadata: data.metadata,
-                data: { id, votes: { all: resultAll, deputies } }
-            }];
+            return new DataPackage<Object,Object>({ id, votes: { all: resultAll, deputies } },data.meta);
         }
     }
 }
