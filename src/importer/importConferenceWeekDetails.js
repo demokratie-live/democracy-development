@@ -94,7 +94,7 @@ export default async () => {
       dataPackages.map(async dataPackage => {
         // Construct Database object
         const ConferenceWeekDetail = {
-          URL: dataPackage.metadata.url,
+          URL: dataPackage.meta.url,
           id: dataPackage.data.id,
           previousYear: dataPackage.data.previous.year,
           previousWeek: dataPackage.data.previous.week,

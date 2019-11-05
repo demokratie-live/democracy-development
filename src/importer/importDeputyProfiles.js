@@ -14,7 +14,7 @@ export default async () => {
         }
         // Construct Database object
         const deputy = {
-          URL: dataPackage.metadata.url,
+          URL: dataPackage.meta.url,
           webId: dataPackage.data.id,
           imgURL: dataPackage.data.imgURL,
           party: dataPackage.data.party,

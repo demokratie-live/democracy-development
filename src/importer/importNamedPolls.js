@@ -80,13 +80,13 @@ export default async () => {
           // We did find too many
           if (procedures.length > 1) {
             Log.error(
-              `Named Polls Scraper duplicate Procedure match on: ${dataPackage.metadata.url}`,
+              `Named Polls Scraper duplicate Procedure match on: ${dataPackage.meta.url}`,
             );
           }
 
           // We did not find anything
           if (procedures.length === 0) {
-            Log.warn(`Named Polls Scraper no Procedure match on: ${dataPackage.metadata.url}`);
+            Log.warn(`Named Polls Scraper no Procedure match on: ${dataPackage.meta.url}`);
           }
 
           // We have exactly one match and can assign the procedureId
@@ -97,7 +97,7 @@ export default async () => {
           // Construct Database object
           const namedPoll = {
             procedureId,
-            URL: dataPackage.metadata.url,
+            URL: dataPackage.meta.url,
             webId: dataPackage.data.id,
             date: dataPackage.data.date,
             title: dataPackage.data.title,
@@ -289,130 +289,3 @@ export default async () => {
 
   Log.info('FINISH NAMED POLLS SCRAPER');
 };
-
-/* import Scraper from '@democracy-deutschland/bt-named-polls';
-
-import NamedPolls from './../models/NamedPolls';
-
-const matchWithProcedure = async ({ documents, yes, abstination, no, notVoted, voteResults }) => {
-  const procedures = await Procedure.find({
-    period: 19,
-    'importantDocuments.number': { $in: documents },
-  });
-
-  const matchedProcedures = procedures.filter(procedure =>
-    procedure.history.find(
-      ({ decision }) =>
-        decision &&
-        decision.find(({ type, comment }) => {
-          try {
-            if (type === 'Namentliche Abstimmung') {
-              return (
-                comment.match(/\d{1,3}:\d{1,3}:\d{1,3}/)[0] === `${yes}:${no}:${abstination}` ||
-                comment.match(/\d{1,3}:\d{1,3}:\d{1,3}/)[0] === `${yes}:${abstination}:${no}`
-              );
-            }
-          } catch (error) {
-            return false;
-          }
-          return false;
-        }),
-    ),
-  );
-
-  // console.log(matchedProcedures.map(({ procedureId }) => procedureId));
-  if (matchedProcedures.length > 0) {
-    const customData = {
-      voteResults: {
-        partyVotes: voteResults.map(partyVote => {
-          const main = [
-            {
-              decision: 'YES',
-              value: partyVote.yes,
-            },
-            {
-              decision: 'ABSTINATION',
-              value: partyVote.abstination,
-            },
-            {
-              decision: 'NO',
-              value: partyVote.no,
-            },
-            {
-              decision: 'NOTVOTED',
-              value: partyVote.notVoted,
-            },
-          ].reduce(
-            (prev, { decision, value }) => {
-              if (prev.value < value) {
-                return { decision, value };
-              }
-              return prev;
-            },
-            { value: 0 },
-          );
-
-          return {
-            deviants: {
-              yes: partyVote.yes,
-              abstination: partyVote.abstination,
-              no: partyVote.no,
-              notVoted: partyVote.notVoted,
-            },
-            party: partyVote.party,
-            main: main.decision,
-          };
-        }),
-        yes,
-        abstination,
-        no,
-        notVoted,
-      },
-    };
-
-    // console.log(util.inspect(customData, false, null));
-
-    await matchedProcedures.map(async ({ procedureId, history }) => {
-      const namedHistoryEntry = history
-        .find(
-          ({ decision }) =>
-            decision && decision.find(({ type }) => type === 'Namentliche Abstimmung'),
-        )
-        .decision.find(({ type }) => type === 'Namentliche Abstimmung');
-      const votingRecommendationEntry = history.find(
-        ({ initiator }) => initiator && initiator.indexOf('Beschlussempfehlung und Bericht') !== -1,
-      );
-
-      customData.voteResults.votingDocument =
-        namedHistoryEntry.comment.indexOf('Annahme der Beschlussempfehlung auf Ablehnung') !== -1
-          ? 'recommendedDecision'
-          : 'mainDocument';
-
-      if (votingRecommendationEntry) {
-        switch (votingRecommendationEntry.abstract) {
-          case 'Empfehlung: Annahme der Vorlage':
-            customData.voteResults.votingRecommendation = true;
-            break;
-          case 'Empfehlung: Ablehnung der Vorlage':
-            customData.voteResults.votingRecommendation = false;
-            break;
-
-          default:
-            break;
-        }
-      }
-
-      procedureIds.push(procedureId);
-      await Procedure.findOneAndUpdate(
-        { procedureId },
-        {
-          customData,
-        },
-        {
-          // returnNewDocument: true
-        },
-      );
-    });
-  }
-};
-*/
