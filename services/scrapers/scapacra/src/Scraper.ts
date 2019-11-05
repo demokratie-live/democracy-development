@@ -12,14 +12,14 @@ export class Scraper {
      * @param scrapers  Bundle of scraper configurations with information about the IBrowser and IParser combination to be executed.  
      * @param callback  Callback lambda for retrieving the scraper results.
      */
-    public static async scrape<D,M>(scraper: IScraper<D,M>, callback: (data: DataPackage<Object,Object> | null) => void) {
+    public static async scrape<D,M>(scraper: IScraper<D,M>, callback: (data: DataPackage<Object,Object> | null) => Promise<void>) {
         let browser = scraper.getBrowser();
         let parser = scraper.getParser();
 
         for await (const parserFragment of browser) {
             const fragment = await parserFragment;
             const json = await parser.parse(fragment);
-            callback(json);
+            await callback(json);
             json.free();
             fragment.free();
         }
