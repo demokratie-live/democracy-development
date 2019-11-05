@@ -18,7 +18,7 @@ enum AvailableScrapers {
 
 async function scrape(dataset: String,out: String = './out') {
 
-    let scraper: IScraper<any> | null = null;
+    let scraper: IScraper<any,any> | null = null;
     switch(dataset){
         case AvailableScrapers.DeputyProfile:
             scraper = new DeputyProfileScraper();
@@ -38,9 +38,11 @@ async function scrape(dataset: String,out: String = './out') {
             break;
     }
     if(scraper){
-        await Scraper.scrape([scraper], ((dataPackages) => {
-            for (const dataPackage of dataPackages) {
-                let id = dataPackage.data.id;
+        await Scraper.scrape(scraper, ((dataPackage) => {
+            if(!dataPackage){
+                console.log('Error: Got empty DataPackage')
+            } else {
+                let id = dataPackage.data ? (<any>dataPackage.data).id : 'no_id';
                 fs.writeFileSync(`${out}/${id}.json`, JSON.stringify(dataPackage, null, 2));
                 console.log(`Found ${id} - ${out}/${id}.json`)
             }

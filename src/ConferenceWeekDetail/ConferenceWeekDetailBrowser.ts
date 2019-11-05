@@ -1,16 +1,20 @@
-import { IDataPackage, DataType, IBrowser } from '@democracy-deutschland/scapacra';
+import { DataPackage, IBrowser } from '@democracy-deutschland/scapacra';
 import axios = require('axios');
 
 export = Browser;
 
 namespace Browser {
-    export class ConferenceWeekDetails extends DataType {
-    }
+    export type ConferenceWeekDetailsData = string;
+    export type ConferenceWeekDetailsMeta = {
+        url: string,
+        currentYear: Number;
+        currentWeek: Number;
+    };
 
     /**
      * Abstract browser which implements the base navigation of a Bundestag document list. 
      */
-    export class ConferenceWeekDetailBrowser implements IBrowser<ConferenceWeekDetails>{
+    export class ConferenceWeekDetailBrowser implements IBrowser<ConferenceWeekDetailsData,ConferenceWeekDetailsMeta>{
         private currentYear: Number | null = 2014;
         private currentWeek: Number | null = 8;
 
@@ -18,7 +22,7 @@ namespace Browser {
             return `https://www.bundestag.de/apps/plenar/plenar/conferenceweekDetail.form?limit=1&year=${year}&week=${week}`
         }
 
-        public async next(): Promise<IteratorResult<Promise<IDataPackage<ConferenceWeekDetails>>>> {
+        public async next(): Promise<IteratorResult<Promise<DataPackage<ConferenceWeekDetailsData,ConferenceWeekDetailsMeta>>>> {
             if (!this.currentYear || !this.currentWeek) {
                 return {
                     done: true,
@@ -57,14 +61,12 @@ namespace Browser {
                         }
                     });
                 }
-                let result =    Promise.resolve({
-                                    metadata: {
-                                        url,
-                                        description: `${this.currentYear}_${this.currentWeek}`
-                                    },
-                                    data: new ConferenceWeekDetails(response.data)
-                                });
-
+                let result = Promise.resolve(new DataPackage<ConferenceWeekDetailsData,ConferenceWeekDetailsMeta>(response.data,{
+                    url,
+                    currentYear: this.currentYear,
+                    currentWeek: this.currentWeek
+                }));
+                
                 this.currentYear = nextYear;
                 this.currentWeek = nextWeek;
                 
@@ -77,7 +79,7 @@ namespace Browser {
             }
         }
 
-        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<IDataPackage<ConferenceWeekDetails>>> {
+        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<DataPackage<ConferenceWeekDetailsData,ConferenceWeekDetailsMeta>>> {
             return this;
         }
     }

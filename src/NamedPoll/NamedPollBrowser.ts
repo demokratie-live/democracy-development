@@ -1,4 +1,4 @@
-import { IDataPackage, DataType, IBrowser } from '@democracy-deutschland/scapacra';
+import { DataPackage, IBrowser } from '@democracy-deutschland/scapacra';
 
 import { URL } from 'url';
 
@@ -10,13 +10,15 @@ import { url } from 'inspector';
 export = Browser;
 
 namespace Browser {
-    export class NamedPoll extends DataType {
-    }
+    export type NamedPollData = NodeJS.ReadableStream;
+    export type NamedPollMeta = {
+        url: string
+    };
 
     /**
      * Abstract browser which implements the base navigation of a Bundestag document list. 
      */
-    export class NamedPollBrowser implements IBrowser<NamedPoll>{
+    export class NamedPollBrowser implements IBrowser<NamedPollData,NamedPollMeta>{
         /**
          * Provides the page size of the target list.  
          */
@@ -36,7 +38,7 @@ namespace Browser {
         private offset = 0;
         private done = false;
 
-        public async next(): Promise<IteratorResult<Promise<IDataPackage<NamedPoll>>>> {
+        public async next(): Promise<IteratorResult<Promise<DataPackage<NamedPollData,NamedPollMeta>>>> {
             let hasNext = this.hasNext();
             let value = this.loadNext();
 
@@ -50,7 +52,7 @@ namespace Browser {
             return this.pollUrls.length > 1 || !this.done;
         }
 
-        private async loadNext(): Promise<IDataPackage<NamedPoll>> {
+        private async loadNext(): Promise<DataPackage<NamedPollData,NamedPollMeta>> {
             await this.retrieveMore(); // May fetch more results
 
             let blobUrl = this.pollUrls.shift();
@@ -68,12 +70,7 @@ namespace Browser {
             );
 
             if (response.status === 200) {
-                return {
-                    metadata: {
-                        url: blobUrl
-                    },
-                    data: new NamedPoll(response.data)
-                }
+                return new DataPackage<NamedPollData,NamedPollMeta>(response.data,{url: blobUrl})
             } else {
                 throw new Error(response.statusText);
             }
@@ -153,7 +150,7 @@ namespace Browser {
             }
         }
 
-        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<IDataPackage<NamedPoll>>> {
+        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<DataPackage<NamedPollData,NamedPollMeta>>> {
             return this;
         }
     }

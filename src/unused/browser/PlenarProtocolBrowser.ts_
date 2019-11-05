@@ -1,13 +1,15 @@
-import { DataType, IBrowser } from '@democracy-deutschland/scapacra';
+import { IBrowser } from '@democracy-deutschland/scapacra';
 import { BundestagListBrowser } from './BundestagListBrowser';
 
 export = Documents_Browser;
 
 namespace Documents_Browser {
-    export class Xml extends DataType {
-    }
+    export type PlenarProtocolData = NodeJS.ReadableStream;
+    export type PlenarProtocolMeta = {
+        url: string
+    };
 
-    export class PlenarProtocolBrowser extends BundestagListBrowser<Xml>{
+    export class PlenarProtocolBrowser extends BundestagListBrowser<PlenarProtocolData,PlenarProtocolMeta>{
         public static readonly pageSize = 5;
         private static readonly ajaxRequestPath: string = "ajax/filterlist/de/service/opendata/-/543410";
 
@@ -19,8 +21,8 @@ namespace Documents_Browser {
             return PlenarProtocolBrowser.ajaxRequestPath;
         }
 
-        protected createFromStream(readableStream: NodeJS.ReadableStream): Xml {
-            return new Xml(readableStream);
+        protected createFromStream(readableStream: NodeJS.ReadableStream): PlenarProtocolData {
+            return readableStream;
         }
     }
 }

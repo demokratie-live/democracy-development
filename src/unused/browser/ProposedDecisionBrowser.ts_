@@ -1,13 +1,15 @@
-import { DataType, IBrowser } from '@democracy-deutschland/scapacra';
+import { IBrowser } from '@democracy-deutschland/scapacra';
 import { BundestagListBrowser } from './BundestagListBrowser';
 
 export = Documents_Browser;
 
 namespace Documents_Browser {
-    export class Pdf extends DataType {
+    export type ProposedDecisionData = NodeJS.ReadableStream;
+    export type ProposedDecisionMeta = {
+        url: string
     }
 
-    export class ProposedDecisionBrowser extends BundestagListBrowser<Pdf>{
+    export class ProposedDecisionBrowser extends BundestagListBrowser<ProposedDecisionData,ProposedDecisionMeta>{
         public static readonly pageSize = 10;
         private static readonly ajaxRequestPath: string = "ajax/filterlist/de/ausschuesse/a03/berichte/-/549888";
 
@@ -19,8 +21,8 @@ namespace Documents_Browser {
             return ProposedDecisionBrowser.ajaxRequestPath;
         }
 
-        protected createFromStream(readableStream: NodeJS.ReadableStream): Pdf {
-            return new Pdf(readableStream);
+        protected createFromStream(readableStream: NodeJS.ReadableStream): ProposedDecisionData {
+            return readableStream;
         }
     }
 }

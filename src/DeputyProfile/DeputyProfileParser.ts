@@ -1,6 +1,6 @@
-import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
+import { DataPackage, IParser } from '@democracy-deutschland/scapacra';
 
-import { DeputyProfile } from './DeputyProfileBrowser';
+import { DeputyProfileData, DeputyProfileMeta } from './DeputyProfileBrowser';
 
 export = Parser;
 
@@ -8,7 +8,7 @@ namespace Parser {
     /**
      * This parser gets all potention fraction votings from a "Plenarprotokoll" of the german Bundestag.
      */
-    export class DeputyProfileParser implements IParser<DeputyProfile>{
+    export class DeputyProfileParser implements IParser<DeputyProfileData,DeputyProfileMeta>{
         private async readStream(stream: NodeJS.ReadableStream): Promise<string> {
             return new Promise((resolve) => {
                 let string: string = '';
@@ -20,10 +20,8 @@ namespace Parser {
                 });
             });
         }
-        public async parse(data: IDataPackage<DeputyProfile>): Promise<IDataPackage<any>[]> {
-            const stream = data.data.openStream();
-
-            const string = await this.readStream(stream);
+        public async parse(data: DataPackage<DeputyProfileData,DeputyProfileMeta>): Promise<DataPackage<Object,Object>> {
+            const string = data.data ? await this.readStream(data.data) : '';
             const base_url: string = 'https://www.bundestag.de'
 
             let m;
@@ -119,9 +117,9 @@ namespace Parser {
 
             // ID
             let id: string = '';
-            if (data.metadata.url) {
+            if (data.meta && data.meta.url) {
                 const regex_id = /https:\/\/www\.bundestag\.de\/abgeordnete\/.*-(\d+)/gm;
-                while ((m = regex_id.exec(data.metadata.url)) !== null) {
+                while ((m = regex_id.exec(data.meta.url)) !== null) {
                     // This is necessary to avoid infinite loops with zero-width matches
                     if (m.index === regex_id.lastIndex) {
                         regex_id.lastIndex++;
@@ -412,10 +410,7 @@ namespace Parser {
                 publicationRequirement
             };
 
-            return [{
-                metadata: data.metadata,
-                data: result
-            }];
+            return new DataPackage<Object,Object>(result,data.meta);
         }
     }
 }

@@ -1,0 +1,24 @@
+import { PlenarProtocolData, PlenarProtocolMeta } from '../browser/PlenarProtocolBrowser';
+import { DataPackage, IParser } from '@democracy-deutschland/scapacra';
+import { DocumentVotingEvaluator } from './evaluator/DocumentVotingEvaluator';
+
+export = Documents_Parser;
+
+namespace Documents_Parser {
+    /**
+     * This parser gets all potention fraction votings from a "Plenarprotokoll" of the german Bundestag.
+     */
+    export class ProtocolVotingParser implements IParser<PlenarProtocolData,PlenarProtocolMeta>{
+        public async parse(data: DataPackage<PlenarProtocolData,PlenarProtocolMeta>): Promise<DataPackage<Object,Object>> {
+            let votings = null;
+
+            if(data.data){
+                let votingEvaluator = new DocumentVotingEvaluator(data.data);
+
+                votings = await votingEvaluator.getPotentialVotings();
+            }
+
+            return new DataPackage<Object,Object>(votings,data.meta);
+        }
+    }
+}

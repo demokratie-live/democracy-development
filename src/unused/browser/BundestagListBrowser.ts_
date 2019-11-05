@@ -1,4 +1,4 @@
-import { IDataPackage, DataType, IBrowser } from '@democracy-deutschland/scapacra';
+import { DataPackage, IBrowser } from '@democracy-deutschland/scapacra';
 
 import { URL } from 'url';
 
@@ -16,7 +16,7 @@ namespace Documents_Browser {
     /**
      * Abstract browser which implements the base navigation of a Bundestag document list. 
      */
-    export abstract class BundestagListBrowser<T extends DataType> implements IBrowser<T>{
+    export abstract class BundestagListBrowser<any,any> implements IBrowser<any,any>{
         /**
          * Provides the page size of the target list.  
          */
@@ -30,7 +30,7 @@ namespace Documents_Browser {
         /**
          * Creates the defined IDataType from the given stream.
          */
-        protected abstract createFromStream(readableStream: NodeJS.ReadableStream): T;
+        protected abstract createFromStream(readableStream: NodeJS.ReadableStream): any;
 
         private readonly baseUrl: URL = new URL("https://www.bundestag.de");
         private readonly maxCount: number;
@@ -48,7 +48,7 @@ namespace Documents_Browser {
             return this.maxCount;
         }
 
-        public async next(): Promise<IteratorResult<Promise<IDataPackage<T>>>> {
+        public async next(): Promise<IteratorResult<Promise<DataPackage<any,any>>>> {
             let hasNext = this.hasNext(this.count++);
             let nextFragment = this.nextFragment();
 
@@ -62,7 +62,7 @@ namespace Documents_Browser {
             return count < this.maxCount && !(this.endOfListReached && this.protocolBlobUrls.length == 0);
         }
 
-        private async nextFragment(): Promise<IDataPackage<T>> {
+        private async nextFragment(): Promise<DataPackage<any,any>> {
             if (this.protocolBlobUrls.length == 0) {
                 await this.retrieveProtocolBlobUrls();
             }
@@ -70,7 +70,7 @@ namespace Documents_Browser {
             return this.loadNextProtocol();
         }
 
-        private async loadNextProtocol(): Promise<IDataPackage<T>> {
+        private async loadNextProtocol(): Promise<DataPackage<any,any>> {
             let blobUrl = this.protocolBlobUrls.shift();
 
             if (blobUrl == undefined) {
@@ -86,12 +86,9 @@ namespace Documents_Browser {
             );
 
             if (response.status === 200) {
-                return {
-                    metadata: {
-                        url: blobUrl.toString()
-                    },
-                    data: this.createFromStream(response.data)
-                }
+                return new DataPackage<any,any>(this.createFromStream(response.data),{
+                    url: blobUrl.toString()
+                });
             } else {
                 throw new Error(response.statusText);
             }
@@ -147,7 +144,7 @@ namespace Documents_Browser {
             return `limit=5&noFilterSet=true&offset=${offset}`;
         }
 
-        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<IDataPackage<T>>> {
+        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<DataPackage<any,any>>> {
             return this;
         }
     }
