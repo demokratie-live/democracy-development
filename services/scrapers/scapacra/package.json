@@ -1,6 +1,6 @@
 {
   "name": "@democracy-deutschland/scapacra",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Scapacra (Scraper Parser Crawler)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
