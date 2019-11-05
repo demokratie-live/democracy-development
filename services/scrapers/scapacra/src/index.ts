@@ -1,6 +1,4 @@
-export { IDataPackage } from './IDataPackage';
-export { IMetadata } from './IMetadata';
-export { DataType } from './DataType';
+export { DataPackage } from './DataPackage';
 export { IBrowser } from './IBrowser';
 export { IParser } from './IParser';
 export { IScraper } from './IScraper';

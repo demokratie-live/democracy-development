@@ -1,11 +1,11 @@
-import { DataType } from './DataType';
-import { IDataPackage } from './IDataPackage';
+// import { DataType } from './DataType';
+import { DataPackage } from './DataPackage';
 /**
  * The parser extracts the data from a defined document.
  */
-export interface IParser<T extends DataType> {
+export interface IParser<D,M> {
     /**
      * Extracts the data as JSON from a given data format.
      */
-    parse(data: IDataPackage<T>): Promise<IDataPackage<JSON>[]>;
+    parse(data: DataPackage<D,M>): Promise<DataPackage<Object,Object>>;
 }

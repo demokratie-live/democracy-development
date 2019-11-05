@@ -1,17 +1,16 @@
-import { DataType } from './DataType';
 import { IBrowser } from './IBrowser';
 import { IParser } from './IParser';
 /**
  * The scraper configuration defines an modular bundle of the source, browser and parser.
  */
-export interface IScraper<T extends DataType> {
+export interface IScraper<D,M> {
     /**
      * Provides the browser for this scraper configuration.
      */
-    getBrowser(): IBrowser<T>;
+    getBrowser(): IBrowser<D,M>;
 
     /**
      * Provides the parser for this scraper configuration.
      */
-    getParser(): IParser<T>;
+    getParser(): IParser<D,M>;
 }
