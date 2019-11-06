@@ -10,10 +10,10 @@ openssl aes-256-cbc -k "$SECRET" -in ./.travis/ssh_key.pub.enc -out ./.travis/ss
 # democracy-app.de-api .env
 openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-api/.env.enc -out ./democracy-app.de-api/.env -d -md md5
 # democracy-app.de-admin .env
-openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-admin/.env.enc -out ./democracy-app.de-admin/.env -d
+openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-admin/.env.enc -out ./democracy-app.de-admin/.env -d -md sha256
 
 # bundestag.io-api .env
-openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io-api/.env.enc -out ./bundestag.io-api/.env -d
+openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io-api/.env.enc -out ./bundestag.io-api/.env -d -md sha256
 # bundestag.io-admin .env
 openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io-admin/.env.enc -out ./bundestag.io-admin/.env -d -md md5
 
