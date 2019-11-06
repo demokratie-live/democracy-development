@@ -141,7 +141,7 @@ services:
       - bundestag.io-api
 
   democracy-app.de:
-    #env_file: ./democracy-app.de/.env
+    env_file: ./democracy-app.de/.env
     build: ./democracy-app.de
     container_name: democracy-app.de
     expose:
