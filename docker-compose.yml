@@ -117,7 +117,7 @@ services:
       - mongodb
 
   bundestag.io-admin:
-    env_file: ./bundestag.io-admin/.env
+    #env_file: ./bundestag.io-admin/.env
     build: ./bundestag.io-admin
     container_name: bundestag.io-admin
     expose:
@@ -141,7 +141,7 @@ services:
       - bundestag.io-api
 
   democracy-app.de:
-    env_file: ./democracy-app.de/.env
+    #env_file: ./democracy-app.de/.env
     build: ./democracy-app.de
     container_name: democracy-app.de
     expose:
