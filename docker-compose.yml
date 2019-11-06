@@ -39,7 +39,7 @@ services:
         max-file: ${NGINX_GEN_LOG_MAX_FILE:-10}
 
   democracy-app.de-api:
-    #env_file: ./democracy-app.de-api/.env
+    env_file: ./democracy-app.de-api/.env
     build: ./democracy-app.de-api
     container_name: democracy-app.de-api
     expose:
