@@ -15,7 +15,7 @@ const isVote = (topic, heading) => {
   Zweite und dritte Beratung = JA
   */
   if (topic.search(/Beratung des Antrags/i) !== -1) {
-    if (heading && heading.search(/Abschließende Beratung ohne Aussprache/i) !== -1) {
+    if (heading && heading.search(/Abschließende Beratung(en)? ohne Aussprache/i) !== -1) {
       return true;
     }
     return false;
@@ -90,44 +90,42 @@ const timeProcedure = async (isVote, documents, time) => {
 export default async () => {
   Log.info('START CONFERENCE WEEK DETAIL SCRAPER');
   try {
-    await Scraper.scrape([new ConferenceWeekDetailScraper()], dataPackages => {
-      dataPackages.map(async dataPackage => {
-        // Construct Database object
-        const ConferenceWeekDetail = {
-          URL: dataPackage.metadata.url,
-          id: dataPackage.data.id,
-          previousYear: dataPackage.data.previous.year,
-          previousWeek: dataPackage.data.previous.week,
-          thisYear: dataPackage.data.this.year,
-          thisWeek: dataPackage.data.this.week,
-          nextYear: dataPackage.data.next.year,
-          nextWeek: dataPackage.data.next.week,
-          sessions: await Promise.all(
-            dataPackage.data.sessions.map(async session => ({
-              ...session,
-              tops: await Promise.all(
-                session.tops.map(async top => ({
-                  ...top,
-                  topic: await Promise.all(
-                    top.topic.map(async topic => {
-                      topic.isVote = isVote(topic.lines.join(' '), topic.heading); // eslint-disable-line no-param-reassign
-                      topic.procedureIds = await getProcedureIds(topic.documents); // eslint-disable-line no-param-reassign
-                      timeProcedure(topic.isVote, topic.documents, top.time);
-                      return topic;
-                    }),
-                  ),
-                })),
-              ),
-            })),
-          ),
-        };
-        // Update/Insert
-        await ConferenceWeekDetailModel.update(
-          { id: ConferenceWeekDetail.id },
-          { $set: ConferenceWeekDetail },
-          { upsert: true },
-        );
-      });
+    await Scraper.scrape(new ConferenceWeekDetailScraper(), async dataPackage => {
+      // Construct Database object
+      const ConferenceWeekDetail = {
+        URL: dataPackage.meta.url,
+        id: dataPackage.data.id,
+        previousYear: dataPackage.data.previous.year,
+        previousWeek: dataPackage.data.previous.week,
+        thisYear: dataPackage.data.this.year,
+        thisWeek: dataPackage.data.this.week,
+        nextYear: dataPackage.data.next.year,
+        nextWeek: dataPackage.data.next.week,
+        sessions: await Promise.all(
+          dataPackage.data.sessions.map(async session => ({
+            ...session,
+            tops: await Promise.all(
+              session.tops.map(async top => ({
+                ...top,
+                topic: await Promise.all(
+                  top.topic.map(async topic => {
+                    topic.isVote = isVote(topic.lines.join(' '), topic.heading); // eslint-disable-line no-param-reassign
+                    topic.procedureIds = await getProcedureIds(topic.documents); // eslint-disable-line no-param-reassign
+                    timeProcedure(topic.isVote, topic.documents, top.time);
+                    return topic;
+                  }),
+                ),
+              })),
+            ),
+          })),
+        ),
+      };
+      // Update/Insert
+      await ConferenceWeekDetailModel.update(
+        { id: ConferenceWeekDetail.id },
+        { $set: ConferenceWeekDetail },
+        { upsert: true },
+      );
     });
   } catch (error) {
     Log.error(`Conference Week Detail Scraper failed ${error.message}`);
