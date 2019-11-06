@@ -39,7 +39,7 @@ services:
         max-file: ${NGINX_GEN_LOG_MAX_FILE:-10}
 
   democracy-app.de-api:
-    env_file: ./democracy-app.de-api/.env
+    #env_file: ./democracy-app.de-api/.env
     build: ./democracy-app.de-api
     container_name: democracy-app.de-api
     expose:
@@ -66,7 +66,7 @@ services:
       - mongodb
 
   democracy-app.de-admin:
-    env_file: ./democracy-app.de-admin/.env
+    #env_file: ./democracy-app.de-admin/.env
     build: ./democracy-app.de-admin
     container_name: democracy-app.de-admin
     expose:
@@ -90,7 +90,7 @@ services:
       - mongodb
 
   bundestag.io-api:
-    env_file: ./bundestag.io-api/.env
+    #env_file: ./bundestag.io-api/.env
     build: ./bundestag.io-api
     container_name: bundestag.io-api
     expose:
@@ -117,7 +117,7 @@ services:
       - mongodb
 
   bundestag.io-admin:
-    env_file: ./bundestag.io-admin/.env
+    #env_file: ./bundestag.io-admin/.env
     build: ./bundestag.io-admin
     container_name: bundestag.io-admin
     expose:
@@ -141,7 +141,7 @@ services:
       - bundestag.io-api
 
   democracy-app.de:
-    env_file: ./democracy-app.de/.env
+    #env_file: ./democracy-app.de/.env
     build: ./democracy-app.de
     container_name: democracy-app.de
     expose:
