@@ -1,4 +1,4 @@
-import { IDataPackage, DataType, IBrowser } from '@democracy-deutschland/scapacra';
+import { DataPackage, IBrowser } from '@democracy-deutschland/scapacra';
 
 import { URL } from 'url';
 
@@ -9,13 +9,15 @@ import axios = require('axios');
 export = Browser;
 
 namespace Browser {
-    export class DeputyProfile extends DataType {
-    }
+    export type DeputyProfileData = NodeJS.ReadableStream;
+    export type DeputyProfileMeta = {
+        url: string
+    };
 
     /**
      * Abstract browser which implements the base navigation of a Bundestag document list. 
      */
-    export class DeputyProfileBrowser implements IBrowser<DeputyProfile>{
+    export class DeputyProfileBrowser implements IBrowser<DeputyProfileData,DeputyProfileMeta>{
         /**
          * Provides the page size of the target list.  
          */
@@ -33,7 +35,7 @@ namespace Browser {
 
         private deputyUrls: string[] = [];
 
-        public async next(): Promise<IteratorResult<Promise<IDataPackage<DeputyProfile>>>> {
+        public async next(): Promise<IteratorResult<Promise<DataPackage<DeputyProfileData,DeputyProfileMeta>>>> {
             let hasNext = this.hasNext();
             let value = this.loadNext();
 
@@ -47,7 +49,7 @@ namespace Browser {
             return !this.loaded || this.deputyUrls.length > 1;
         }
 
-        private async loadNext(): Promise<IDataPackage<DeputyProfile>> {
+        private async loadNext(): Promise<DataPackage<DeputyProfileData,DeputyProfileMeta>> {
             if (!this.loaded) {
                 await this.retrieveList();
                 this.loaded = true;
@@ -69,12 +71,7 @@ namespace Browser {
             );
 
             if (response.status === 200) {
-                return {
-                    metadata: {
-                        url: blobUrl
-                    },
-                    data: new DeputyProfile(response.data)
-                }
+                return new DataPackage<DeputyProfileData,DeputyProfileMeta>(response.data,{url: blobUrl});
             } else {
                 throw new Error(response.statusText);
             }
@@ -145,7 +142,7 @@ namespace Browser {
             }
         }
 
-        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<IDataPackage<DeputyProfile>>> {
+        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<DataPackage<DeputyProfileData,DeputyProfileMeta>>> {
             return this;
         }
     }

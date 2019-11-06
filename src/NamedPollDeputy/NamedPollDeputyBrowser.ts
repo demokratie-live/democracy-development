@@ -1,4 +1,4 @@
-import { IDataPackage, DataType, IBrowser } from '@democracy-deutschland/scapacra';
+import { DataPackage, IBrowser } from '@democracy-deutschland/scapacra';
 
 import { URL } from 'url';
 
@@ -10,13 +10,15 @@ import { url } from 'inspector';
 export = Browser;
 
 namespace Browser {
-    export class NamedPollDeputies extends DataType {
-    }
+    export type NamedPollDeputiesData = NodeJS.ReadableStream
+    export type NamedPollDeputiesMeta = {
+        url: string
+    };
 
     /**
      * Abstract browser which implements the base navigation of a Bundestag document list. 
      */
-    export class NamedPollDeputyBrowser implements IBrowser<NamedPollDeputies>{
+    export class NamedPollDeputyBrowser implements IBrowser<NamedPollDeputiesData,NamedPollDeputiesMeta>{
         /**
          * Provides the page size of the target list.  
          */
@@ -37,7 +39,7 @@ namespace Browser {
         private offset = 0;
         private done = false;
 
-        public async next(): Promise<IteratorResult<Promise<IDataPackage<NamedPollDeputies>>>> {
+        public async next(): Promise<IteratorResult<Promise<DataPackage<NamedPollDeputiesData,NamedPollDeputiesMeta>>>> {
             let hasNext = this.hasNext();
             let value = this.loadNext();
 
@@ -51,7 +53,7 @@ namespace Browser {
             return this.pollUrls.length > 1 || !this.done;
         }
 
-        private async loadNext(): Promise<IDataPackage<NamedPollDeputies>> {
+        private async loadNext(): Promise<DataPackage<NamedPollDeputiesData,NamedPollDeputiesMeta>> {
             await this.retrieveMore(); // May fetch more results
 
             let blobUrl = this.pollUrls.shift();
@@ -69,12 +71,7 @@ namespace Browser {
             );
 
             if (response.status === 200) {
-                return {
-                    metadata: {
-                        url: blobUrl
-                    },
-                    data: new NamedPollDeputies(response.data)
-                }
+                return new DataPackage<NamedPollDeputiesData,NamedPollDeputiesMeta>(response.data,{url: blobUrl});
             } else {
                 throw new Error(response.statusText);
             }
@@ -164,7 +161,7 @@ namespace Browser {
             }
         }
 
-        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<IDataPackage<NamedPollDeputies>>> {
+        [Symbol.asyncIterator](): AsyncIterableIterator<Promise<DataPackage<NamedPollDeputiesData,NamedPollDeputiesMeta>>> {
             return this;
         }
     }

@@ -1,0 +1,24 @@
+import { PlenarProtocolData, PlenarProtocolMeta } from '../browser/PlenarProtocolBrowser';
+import { DataPackage, IParser } from '@democracy-deutschland/scapacra';
+import { DocumentSpeechEvaluator } from './evaluator/DocumentSpeechEvaluator';
+
+export = Documents_Parser;
+
+namespace Documents_Parser {
+    /**
+     * This parser gets all speeches from a "Plenarprotokoll" of the german Bundestag.
+     */
+    export class ProtocolSpeechesParser implements IParser<PlenarProtocolData,PlenarProtocolMeta>{
+        public async parse(data: DataPackage<PlenarProtocolData,PlenarProtocolMeta>): Promise<DataPackage<Object,Object>> {
+            let speeches = null;
+
+            if(data.data){
+                let speechEvaluator = new DocumentSpeechEvaluator(data.data);
+
+                speeches = await speechEvaluator.getSpeeches();
+            }
+
+            return new DataPackage<Object,Object>(speeches,data.meta);
+        }
+    }
+}

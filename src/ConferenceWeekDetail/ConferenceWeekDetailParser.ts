@@ -1,7 +1,7 @@
-import { IDataPackage, IParser } from '@democracy-deutschland/scapacra';
+import { DataPackage, IParser } from '@democracy-deutschland/scapacra';
 var moment = require('moment');
 
-import { ConferenceWeekDetails } from './ConferenceWeekDetailBrowser';
+import { ConferenceWeekDetailsData, ConferenceWeekDetailsMeta } from './ConferenceWeekDetailBrowser';
 
 export = Parser;
 
@@ -21,9 +21,10 @@ namespace Parser {
     type Status = { line: string,
                     documents: string[]}
 
-    export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails>{
-        public async parse(data: IDataPackage<ConferenceWeekDetails>): Promise<IDataPackage<any>[]> {
-            const string: string = <string>(<unknown> data.data.openStream());
+    export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetailsData,ConferenceWeekDetailsMeta>{
+        public async parse(data: DataPackage<ConferenceWeekDetailsData,ConferenceWeekDetailsMeta>): Promise<DataPackage<Object,Object>> {
+            const d = data.getData();
+            const string: string = d ? d : '';
 
             let m;
 
@@ -33,7 +34,7 @@ namespace Parser {
             let thisWeek: Number | null = null;
             let nextYear: Number | null = null;
             let nextWeek: Number | null = null;
-            let id: string = data.metadata.description ? data.metadata.description : 'no_id';
+            let id: string = data.meta && data.meta.currentYear && data.meta.currentWeek ? `${data.meta.currentYear}_${data.meta.currentWeek}` : 'no_id';
             const regex_YearsWeeks = /data-previousyear="(\d*)" data-previousweeknumber="(\d*)" data-nextyear="(\d*)" data-nextweeknumber="(\d*)"/gm
             while ((m = regex_YearsWeeks.exec(string)) !== null) {
                 // This is necessary to avoid infinite loops with zero-width matches
@@ -232,9 +233,8 @@ namespace Parser {
                 });
             }
 
-            return [{
-                metadata: data.metadata,
-                data: {
+            return new DataPackage<Object,Object>(
+                {
                     id,
                     previous: {
                         year: lastYear,
@@ -250,7 +250,8 @@ namespace Parser {
                     },
                     sessions
                 },
-            }];
+                data.getMeta()
+            );
         }
     }
 }
