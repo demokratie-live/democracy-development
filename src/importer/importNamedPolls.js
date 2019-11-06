@@ -58,9 +58,7 @@ export default async () => {
       ])
       */
       // Only match those which are not an Änderungsantrag
-      if (
-        dataPackage.data.title.search(/Änderungsantrag|Entschließungsantrag|Einspruch/i) === -1
-      ) {
+      if (dataPackage.data.title.search(/Änderungsantrag|Entschließungsantrag|Einspruch/i) === -1) {
         const procedures = await Procedure.find({
           'history.findSpotUrl': { $all: findSpotUrls },
           'history.decision': {
@@ -78,9 +76,7 @@ export default async () => {
 
         // We did find too many
         if (procedures.length > 1) {
-          Log.error(
-            `Named Polls Scraper duplicate Procedure match on: ${dataPackage.meta.url}`,
-          );
+          Log.error(`Named Polls Scraper duplicate Procedure match on: ${dataPackage.meta.url}`);
         }
 
         // We did not find anything
