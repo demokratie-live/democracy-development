@@ -23,10 +23,11 @@ const isVote = (topic, heading) => {
   if (topic.search(/Erste Beratung/i) !== -1) {
     return false;
   }
-  if (topic.search(/Beratung der Beschlussempfehlung/i) !== -1) {
-    return true;
-  }
-  if (topic.search(/Zweite und dritte Beratung/i) !== -1) {
+  if (
+    topic.search(/Beratung der Beschlussempfehlung/i) !== -1 ||
+    topic.search(/Zweite und dritte Beratung/i) !== -1 ||
+    topic.search(/Zweite Beratung und Schlussabstimmung/i) !== -1
+  ) {
     return true;
   }
   return null;
