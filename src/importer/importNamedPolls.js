@@ -154,8 +154,7 @@ export default async () => {
         );
 
         customData.voteResults.votingDocument =
-          namedHistoryEntry.comment.indexOf('Annahme der Beschlussempfehlung auf Ablehnung') !==
-          -1
+          namedHistoryEntry.comment.indexOf('Annahme der Beschlussempfehlung auf Ablehnung') !== -1
             ? 'recommendedDecision'
             : 'mainDocument';
 
