@@ -184,7 +184,7 @@ volumes:
 
 networks:
   default:
-    internal:
-      name: ${NETWORK:-nginx-proxy}
+    name: ${NETWORK:-nginx-proxy}
+    internal: true
   intern: 
     driver: bridge
