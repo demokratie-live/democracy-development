@@ -57,40 +57,10 @@ const getProcedureIds = async documents => {
   return procedures.map(p => p.procedureId);
 };
 
-// eslint-disable-next-line no-shadow
-const timeProcedure = async (isVote, documents, time) => {
-  // Either set voting date to time or null - this keeps this self correcting
-  const expectedVotingDate = isVote ? time : null;
-  // TODO unify
-  // currently the dip21 scraper returns document urls like so:
-  // "http://dipbt.bundestag.de:80/dip21/btd/19/010/1901038.pdf
-  // The named poll scraper returns them like so:
-  // http://dip21.bundestag.de/dip21/btd/19/010/1901038.pdf
-  const docs = documents.map(document =>
-    document.replace('http://dip21.bundestag.de/', 'http://dipbt.bundestag.de:80/'),
-  );
-  await ProcedureModel.update(
-    {
-      // Find Procedures matching any of the given Documents, excluding Beschlussempfehlung
-      importantDocuments: {
-        $elemMatch: {
-          $and: [{ url: { $in: docs } }, { type: { $ne: 'Beschlussempfehlung und Bericht' } }],
-        },
-      },
-      // with current Status Beschlussempfehlung or Überwiesen
-      // currentStatus: { $in: ['Beschlussempfehlung liegt vor', 'Überwiesen'] }, // We removed this rule, since it seems no longer nessecary
-      // Update only when needed
-      'customData.expectedVotingDate': { $ne: expectedVotingDate },
-    },
-    {
-      $set: { 'customData.expectedVotingDate': expectedVotingDate },
-    },
-  );
-};
-
 export default async () => {
   Log.info('START CONFERENCE WEEK DETAIL SCRAPER');
   try {
+    let voteDates = []
     await Scraper.scrape(new ConferenceWeekDetailScraper(), async dataPackage => {
       // Construct Database object
       const ConferenceWeekDetail = {
@@ -112,7 +82,10 @@ export default async () => {
                   top.topic.map(async topic => {
                     topic.isVote = isVote(topic.lines.join(' '), topic.heading); // eslint-disable-line no-param-reassign
                     topic.procedureIds = await getProcedureIds(topic.documents); // eslint-disable-line no-param-reassign
-                    timeProcedure(topic.isVote, topic.documents, top.time);
+                    // Save VoteDates to update them at the end when the correct values are present
+                    topic.procedureIds.map((procedureId)=>{
+                      voteDates[procedureId] = {procedureId, voteDate: topic.isVote ? top.time : null};
+                    })
                     return topic;
                   }),
                 ),
@@ -126,6 +99,15 @@ export default async () => {
         { id: ConferenceWeekDetail.id },
         { $set: ConferenceWeekDetail },
         { upsert: true },
+      );
+    });
+    // Update Procedure VoteDates
+    voteDates.map(async (procedureUpdate)=>{
+      await ProcedureModel.update(
+        { procedureId: procedureUpdate.procedureId,
+          // Update only when needed
+          voteDate: { $ne: procedureUpdate.voteDate }, },
+        { $set: {voteDate: procedureUpdate.voteDate } }
       );
     });
   } catch (error) {

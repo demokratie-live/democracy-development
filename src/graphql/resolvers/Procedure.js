@@ -84,7 +84,7 @@ export default {
               currentStatus: { $in: PROCEDURE_STATES.COMPLETED },
             },
             {
-              'customData.expectedVotingDate': { $lte: new Date() },
+              'voteDate': { $lte: new Date() },
             },
           ],
           currentStatus: { $nin: ['Zurückgezogen', 'Für erledigt erklärt'] },
@@ -151,22 +151,6 @@ export default {
   },
 
   Mutation: {
-    setExpectedVotingDate: async (
-      parent,
-      { procedureId, expectedVotingDate },
-      { ProcedureModel },
-    ) => {
-      await ProcedureModel.update(
-        { procedureId },
-        {
-          $set: {
-            'customData.expectedVotingDate': new Date(expectedVotingDate),
-          },
-        },
-        { new: true },
-      );
-      return ProcedureModel.findOne({ procedureId });
-    },
     saveProcedureCustomData: async (
       parent,
       { procedureId, partyVotes, decisionText, votingDocument },
