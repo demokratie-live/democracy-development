@@ -80,7 +80,7 @@ export default async () => {
                 ...top,
                 topic: await Promise.all(
                   top.topic.map(async topic => {
-                    topic.isVote = isVote(topic.lines.join(' '), topic.heading); // eslint-disable-line no-param-reassign
+                    topic.isVote = isVote(topic.lines.join(' '), top.heading); // eslint-disable-line no-param-reassign
                     topic.procedureIds = await getProcedureIds(topic.documents); // eslint-disable-line no-param-reassign
                     // Save VoteDates to update them at the end when the correct values are present
                     topic.procedureIds.map((procedureId)=>{
