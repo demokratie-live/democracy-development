@@ -84,7 +84,7 @@ export default {
               currentStatus: { $in: PROCEDURE_STATES.COMPLETED },
             },
             {
-              'voteDate': { $lte: new Date() },
+              voteDate: { $lte: new Date() },
             },
           ],
           currentStatus: { $nin: ['Zurückgezogen', 'Für erledigt erklärt'] },

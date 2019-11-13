@@ -60,7 +60,7 @@ const getProcedureIds = async documents => {
 export default async () => {
   Log.info('START CONFERENCE WEEK DETAIL SCRAPER');
   try {
-    let voteDates = []
+    const voteDates = [];
     await Scraper.scrape(new ConferenceWeekDetailScraper(), async dataPackage => {
       // Construct Database object
       const ConferenceWeekDetail = {
@@ -83,9 +83,12 @@ export default async () => {
                     topic.isVote = isVote(topic.lines.join(' '), top.heading); // eslint-disable-line no-param-reassign
                     topic.procedureIds = await getProcedureIds(topic.documents); // eslint-disable-line no-param-reassign
                     // Save VoteDates to update them at the end when the correct values are present
-                    topic.procedureIds.map((procedureId)=>{
-                      voteDates[procedureId] = {procedureId, voteDate: topic.isVote ? top.time : null};
-                    })
+                    topic.procedureIds.forEach(procedureId => {
+                      voteDates[procedureId] = {
+                        procedureId,
+                        voteDate: topic.isVote ? top.time : null,
+                      };
+                    });
                     return topic;
                   }),
                 ),
@@ -102,12 +105,14 @@ export default async () => {
       );
     });
     // Update Procedure VoteDates
-    voteDates.map(async (procedureUpdate)=>{
+    voteDates.map(async procedureUpdate => {
       await ProcedureModel.update(
-        { procedureId: procedureUpdate.procedureId,
+        {
+          procedureId: procedureUpdate.procedureId,
           // Update only when needed
-          voteDate: { $ne: procedureUpdate.voteDate }, },
-        { $set: {voteDate: procedureUpdate.voteDate } }
+          voteDate: { $ne: procedureUpdate.voteDate },
+        },
+        { $set: { voteDate: procedureUpdate.voteDate } },
       );
     });
   } catch (error) {

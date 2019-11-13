@@ -16,19 +16,26 @@ module.exports.up = async function (done) { // eslint-disable-line
     const procedures = this.db.collection('procedures');
 
     const proceduresCursor = procedures.find();
+    // eslint-disable-next-line no-await-in-loop
     while (await proceduresCursor.hasNext()) {
-      const procedure = await proceduresCursor.next();
-      if(procedure.customData){
-        if(procedure.customData.expectedVotingDate || procedure.customData.expectedVotingDate === null){
+      const procedure = await proceduresCursor.next(); // eslint-disable-line no-await-in-loop
+      if (procedure.customData) {
+        if (
+          procedure.customData.expectedVotingDate ||
+          procedure.customData.expectedVotingDate === null
+        ) {
           procedure.voteDate = procedure.customData.expectedVotingDate;
           delete procedure.customData.expectedVotingDate;
         }
-        if(procedure.customData.possibleVotingDate || procedure.customData.possibleVotingDate === null){
+        if (
+          procedure.customData.possibleVotingDate ||
+          procedure.customData.possibleVotingDate === null
+        ) {
           delete procedure.customData.possibleVotingDate;
         }
-        await procedures.save(procedure);
+        await procedures.save(procedure); // eslint-disable-line no-await-in-loop
       }
-    };
+    }
 
     // Load new models
     mongoose.model('Procedure', ProcedureSchema);
