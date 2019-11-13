@@ -56,7 +56,11 @@ const getProcedureIds = async documents => {
       // Find Procedures matching any of the given Documents, excluding Beschlussempfehlung
       importantDocuments: {
         $elemMatch: {
-          $and: [{ url: { $in: docs } }, { type: { $ne: 'Beschlussempfehlung und Bericht' } }],
+          $and: [
+            // Match at least one Document
+            { url: { $in: docs } },
+            // which is not Beschlussempfehlung und Bericht || Beschlussempfehlung
+            { type: { $nin: ['Beschlussempfehlung und Bericht', 'Beschlussempfehlung'] } }],
         },
       },
     },
