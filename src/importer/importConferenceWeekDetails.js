@@ -34,7 +34,8 @@ const isVote = (topic, heading, documents, status) => {
   if (
     topic.search(/Beratung der Beschlussempfehlung/i) !== -1 ||
     topic.search(/Zweite und dritte Beratung/i) !== -1 ||
-    topic.search(/Zweite Beratung und Schlussabstimmung/i) !== -1
+    topic.search(/Zweite Beratung und Schlussabstimmung/i) !== -1 ||
+    topic.search(/Dritte Beratung/i !== -1)
   ) {
     return true;
   }
@@ -92,10 +93,13 @@ export default async () => {
                     topic.procedureIds = await getProcedureIds(topic.documents); // eslint-disable-line no-param-reassign
                     // Save VoteDates to update them at the end when the correct values are present
                     topic.procedureIds.forEach(procedureId => {
-                      voteDates[procedureId] = {
-                        procedureId,
-                        voteDate: topic.isVote ? top.time : null,
-                      };
+                      // Override voteDate only if there is none set or we would override it by a new date
+                      if(!voteDates[procedureId] || !voteDates[procedureId].voteDate || topic.isVote === true){
+                        voteDates[procedureId] = {
+                          procedureId,
+                          voteDate: topic.isVote ? top.time : null,
+                        };
+                      }
                     });
                     return topic;
                   }),
