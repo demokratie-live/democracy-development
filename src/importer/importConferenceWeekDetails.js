@@ -4,7 +4,7 @@ import { ConferenceWeekDetailScraper } from '@democracy-deutschland/scapacra-bt'
 import ConferenceWeekDetailModel from '../models/ConferenceWeekDetail';
 import ProcedureModel from '../models/Procedure';
 
-const isVote = (topic, heading) => {
+const isVote = (topic, heading, documents, status) => {
   /*
   Erste Beratung = NEIN
   ——
@@ -18,6 +18,14 @@ const isVote = (topic, heading) => {
     if (heading && heading.search(/Abschließende Beratung(en)? ohne Aussprache/i) !== -1) {
       return true;
     }
+    if(status && status.find((s)=>{
+      if(s.documents.sort().join(',') === documents.sort().join(',') &&
+      s.line.search(/Antrag[\s\S]*?(angenommen|beschlossen|abgelehnt|ablehnen)/i) !== -1){
+        return true;
+      }
+    })){
+      return true;
+    } 
     return false;
   }
   if (topic.search(/Erste Beratung/i) !== -1) {
@@ -80,7 +88,7 @@ export default async () => {
                 ...top,
                 topic: await Promise.all(
                   top.topic.map(async topic => {
-                    topic.isVote = isVote(topic.lines.join(' '), top.heading); // eslint-disable-line no-param-reassign
+                    topic.isVote = isVote(topic.lines.join(' '), top.heading,topic.documents,top.status); // eslint-disable-line no-param-reassign
                     topic.procedureIds = await getProcedureIds(topic.documents); // eslint-disable-line no-param-reassign
                     // Save VoteDates to update them at the end when the correct values are present
                     topic.procedureIds.forEach(procedureId => {
