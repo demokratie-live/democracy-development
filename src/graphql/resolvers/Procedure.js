@@ -83,32 +83,13 @@ export default {
             {
               currentStatus: { $in: PROCEDURE_STATES.COMPLETED },
             },
-            /* {
-              'customData.possibleVotingDate': { $exists: true },
-            }, */
+            {
+              voteDate: { $lte: new Date() },
+            },
           ],
           currentStatus: { $nin: ['Zurückgezogen', 'Für erledigt erklärt'] },
         };
         return ProcedureModel.find({ ...match }).sort({ updatedAt: 1 });
-
-        /* return procedures.filter(procedure => {
-          const pVoteDate = new Date(procedure.customData.possibleVotingDate);
-          const hidePVoteDate = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
-          // Hide possibleVotingDate Procedures older than 7 days or desicion newer
-          if (
-            !procedure.customData.expectedVotingDate &&
-            (procedure.history.some(
-              ({ initiator, date }) =>
-                initiator.indexOf('Beschlussempfehlung und Bericht') === 0 &&
-                pVoteDate < new Date(date),
-            ) ||
-              pVoteDate < hidePVoteDate)
-          ) {
-            return false;
-          }
-
-          return true;
-        }); */
       }
 
       if (status) {
@@ -170,22 +151,6 @@ export default {
   },
 
   Mutation: {
-    setExpectedVotingDate: async (
-      parent,
-      { procedureId, expectedVotingDate },
-      { ProcedureModel },
-    ) => {
-      await ProcedureModel.update(
-        { procedureId },
-        {
-          $set: {
-            'customData.expectedVotingDate': new Date(expectedVotingDate),
-          },
-        },
-        { new: true },
-      );
-      return ProcedureModel.findOne({ procedureId });
-    },
     saveProcedureCustomData: async (
       parent,
       { procedureId, partyVotes, decisionText, votingDocument },
