@@ -19,7 +19,8 @@ const isVote = (topic, heading, documents, status) => {
       return true;
     }
     if(status && status.find((s)=>{
-      if(s.documents.sort().join(',') === documents.sort().join(',') &&
+      //if(s.documents.sort().join(',') === documents.sort().join(',') &&
+      if(s.documents.some(l => documents.includes(l)) &&
       s.line.search(/Antrag[\s\S]*?(angenommen|beschlossen|abgelehnt|ablehnen)/i) !== -1){
         return true;
       }
