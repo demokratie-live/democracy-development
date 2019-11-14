@@ -11,6 +11,7 @@ import UserModel from './../../models/User';
 import DeputyModel from './../../models/Deputy';
 import NamedPollModel from './../../models/NamedPoll';
 import HistoryModel from './../../models/History';
+import ConferenceWeekDetailModel from './../../models/ConferenceWeekDetail';
 
 const graphql = new ApolloServer({
   engine: CONFIG.ENGINE_API_KEY
@@ -38,6 +39,7 @@ const graphql = new ApolloServer({
     DeputyModel,
     NamedPollModel,
     HistoryModel,
+    ConferenceWeekDetailModel,
   }),
 });
 
