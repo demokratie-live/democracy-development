@@ -36,7 +36,7 @@ const isVote = (topic, heading, documents, status) => {
     topic.search(/Beratung der Beschlussempfehlung/i) !== -1 ||
     topic.search(/Zweite und dritte Beratung/i) !== -1 ||
     topic.search(/Zweite Beratung und Schlussabstimmung/i) !== -1 ||
-    topic.search(/Dritte Beratung/i !== -1)
+    topic.search(/Dritte Beratung/i) !== -1
   ) {
     return true;
   }
