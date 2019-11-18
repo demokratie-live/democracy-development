@@ -1,6 +1,8 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
 import { NamedPollScraper } from '@democracy-deutschland/scapacra-bt';
 
+import PROCEDURE_DEFITIONS from '../definitions/procedure';
+
 import Procedure from '../models/Procedure';
 import NamedPoll from '../models/NamedPoll';
 
@@ -26,8 +28,8 @@ export default async () => {
           'history.findSpotUrl': { $all: findSpotUrls },
           'history.decision': {
             $elemMatch: {
-              type: 'Namentliche Abstimmung',
-              tenor: { $not: /.*?Änderungsantrag.*?/ },
+              type: PROCEDURE_DEFITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG,
+              tenor: { $not: PROCEDURE_DEFITIONS.HISTORY.DECISION.TENOR.FIND_AENDERUNGSANTRAG },
             },
           },
         });
@@ -144,26 +146,26 @@ export default async () => {
         const namedHistoryEntry = history
           .find(
             ({ decision }) =>
-              decision && decision.find(({ type }) => type === 'Namentliche Abstimmung'),
+              decision && decision.find(({ type }) => type === PROCEDURE_DEFITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG),
           )
-          .decision.find(({ type }) => type === 'Namentliche Abstimmung');
+          .decision.find(({ type }) => type === PROCEDURE_DEFITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG);
 
         const votingRecommendationEntry = history.find(
           ({ initiator }) =>
-            initiator && initiator.indexOf('Beschlussempfehlung und Bericht') !== -1,
+            initiator && initiator.search(PROCEDURE_DEFITIONS.HISTORY.INITIATOR.FIND_BESCHLUSSEMPFEHLUNG_BERICHT) !== -1,
         );
 
         customData.voteResults.votingDocument =
-          namedHistoryEntry.comment.indexOf('Annahme der Beschlussempfehlung auf Ablehnung') !== -1
+          namedHistoryEntry.comment.search(PROCEDURE_DEFITIONS.HISTORY.DECISION.COMMENT.FIND_BESCHLUSSEMPFEHLUNG_ABLEHNUNG) !== -1
             ? 'recommendedDecision'
             : 'mainDocument';
 
         if (votingRecommendationEntry) {
           switch (votingRecommendationEntry.abstract) {
-            case 'Empfehlung: Annahme der Vorlage':
+            case PROCEDURE_DEFITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME:
               customData.voteResults.votingRecommendation = true;
               break;
-            case 'Empfehlung: Ablehnung der Vorlage':
+            case PROCEDURE_DEFITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG:
               customData.voteResults.votingRecommendation = false;
               break;
 

@@ -1,6 +1,8 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
 import { ConferenceWeekDetailScraper } from '@democracy-deutschland/scapacra-bt';
 
+import PROCEDURE_DEFITIONS from '../definitions/procedure';
+
 import ConferenceWeekDetailModel from '../models/ConferenceWeekDetail';
 import ProcedureModel from '../models/Procedure';
 
@@ -47,7 +49,7 @@ const getProcedureIds = async documents => {
       // Find Procedures matching any of the given Documents, excluding Beschlussempfehlung
       importantDocuments: {
         $elemMatch: {
-          $and: [{ url: { $in: docs } }, { type: { $ne: 'Beschlussempfehlung und Bericht' } }],
+          $and: [{ url: { $in: docs } }, { type: { $ne: PROCEDURE_DEFITIONS.IMPORTANT_DOCUMENTS.TYPE.BESCHLUSSEMPFEHLUNG_BERICHT } }],
         },
       },
     },

@@ -8,6 +8,7 @@ import FileLogger from 'log';
 import moment from 'moment';
 
 import CONFIG from './../config';
+import PROCEDURE_STATES from './../config/procedureStates';
 
 import Procedure from './../models/Procedure';
 import CronJobModel from './../models/CronJob';
@@ -235,7 +236,7 @@ const cronTask = async () => {
         // cache(link skip logic)
         // doScrape
         type: 'html',
-        liveScrapeStates: ['Beschlussempfehlung liegt vor', 'Überwiesen'],
+        liveScrapeStates: PROCEDURE_STATES.IN_VOTE,
       })
       .then(async () => {
         await CronJobModel.update(
