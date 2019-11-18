@@ -1,7 +1,7 @@
 import diffHistory from 'mongoose-diff-history/diffHistory';
 
 import PROCEDURE_STATES from '../../config/procedureStates';
-import PROCEDURE_DEFITIONS from '../../definitions/procedure';
+import PROCEDURE_DEFINITIONS from '../../definitions/procedure';
 
 import History from '../../models/History';
 
@@ -29,7 +29,7 @@ export default {
       {
         IDs,
         period = [19],
-        type = [PROCEDURE_DEFITIONS.TYPE.GESETZGEBUNG,PROCEDURE_DEFITIONS.TYPE.ANTRAG],
+        type = [PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG,PROCEDURE_DEFINITIONS.TYPE.ANTRAG],
         status,
         voteDate,
         manageVoteDate = false,
@@ -47,7 +47,7 @@ export default {
               decision: {
                 $elemMatch: {
                   tenor: {
-                    $in: [PROCEDURE_DEFITIONS.HISTORY.DECISION.TENOR.VORLAGE_ABLEHNUNG, PROCEDURE_DEFITIONS.HISTORY.DECISION.TENOR.VORLAGE_ANNAHME],
+                    $in: [PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ABLEHNUNG, PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ANNAHME],
                   },
                 },
               },
@@ -71,9 +71,9 @@ export default {
                     $elemMatch: {
                       tenor: {
                         $in: [
-                          PROCEDURE_DEFITIONS.HISTORY.DECISION.TENOR.VORLAGE_ABLEHNUNG,
-                          PROCEDURE_DEFITIONS.HISTORY.DECISION.TENOR.VORLAGE_ANNAHME,
-                          PROCEDURE_DEFITIONS.HISTORY.DECISION.TENOR.VORLAGE_ERLEDIGT
+                          PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ABLEHNUNG,
+                          PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ANNAHME,
+                          PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ERLEDIGT
                         ],
                       },
                     },
@@ -88,7 +88,7 @@ export default {
               voteDate: { $lte: new Date() },
             },
           ],
-          currentStatus: { $nin: [PROCEDURE_DEFITIONS.STATUS.ZURUECKGEZOGEN,  PROCEDURE_DEFITIONS.STATUS.ERLEDIGT] },
+          currentStatus: { $nin: [PROCEDURE_DEFINITIONS.STATUS.ZURUECKGEZOGEN,  PROCEDURE_DEFINITIONS.STATUS.ERLEDIGT] },
         };
         return ProcedureModel.find({ ...match }).sort({ updatedAt: 1 });
       }
@@ -106,7 +106,7 @@ export default {
 
     allProcedures: async (
       parent,
-      { period = [19], type = [PROCEDURE_DEFITIONS.TYPE.GESETZGEBUNG, PROCEDURE_DEFITIONS.TYPE.ANTRAG] },
+      { period = [19], type = [PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG, PROCEDURE_DEFINITIONS.TYPE.ANTRAG] },
       { ProcedureModel },
     ) => ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
 
@@ -198,7 +198,7 @@ export default {
 
         const votingRecommendationEntry = procedure.history.find(
           ({ initiator }) =>
-            initiator && initiator.search(PROCEDURE_DEFITIONS.HISTORY.INITIATOR.FIND_BESCHLUSSEMPFEHLUNG_BERICHT) !== -1,
+            initiator && initiator.search(PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.FIND_BESCHLUSSEMPFEHLUNG_BERICHT) !== -1,
         );
 
         voteResults = {
@@ -209,10 +209,10 @@ export default {
 
         if (votingRecommendationEntry) {
           switch (votingRecommendationEntry.abstract) {
-            case PROCEDURE_DEFITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME:
+            case PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME:
               voteResults.votingRecommendation = true;
               break;
-            case PROCEDURE_DEFITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG:
+            case PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG:
               voteResults.votingRecommendation = false;
               break;
 
@@ -266,8 +266,8 @@ export default {
         if (h.decision) {
           return h.decision.some(decision => {
             if (
-              decision.type === PROCEDURE_DEFITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG &&
-              decision.tenor.search(PROCEDURE_DEFITIONS.HISTORY.DECISION.TENOR.FIND_AENDERUNGSANTRAG) === -1
+              decision.type === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG &&
+              decision.tenor.search(PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.FIND_AENDERUNGSANTRAG) === -1
             ) {
               return true;
             }
