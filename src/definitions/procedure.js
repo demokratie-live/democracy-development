@@ -70,7 +70,11 @@ export default {
             RUECKNAHME_VORLAGE: 'Rücknahme der Vorlage',
             // Search
             FIND_BESCHLUSSEMPFEHLUNG_BERICHT: /Beschlussempfehlung und Bericht/i,
-        }
+        },
+        FINDSPOT: {
+            // Search
+            FIND_BT_PLENARPROTOKOLL: /BT-Plenarprotokoll/i,
+        },
     },
     IMPORTANT_DOCUMENTS: {
         TYPE: {
