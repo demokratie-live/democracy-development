@@ -10,5 +10,5 @@ export default {
     HEADING: {
         // Search
         FIND_ABSCHLIESSENDE_BERATUNG: /Abschließende Beratung(en)? ohne Aussprache/i,
-    }
+    },
 }

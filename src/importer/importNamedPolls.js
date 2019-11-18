@@ -2,6 +2,7 @@ import { Scraper } from '@democracy-deutschland/scapacra';
 import { NamedPollScraper } from '@democracy-deutschland/scapacra-bt';
 
 import PROCEDURE_DEFINITIONS from '../definitions/procedure';
+import NAMEDPOLL_DEFINITIONS from '../definitions/namedPoll';
 
 import Procedure from '../models/Procedure';
 import NamedPoll from '../models/NamedPoll';
@@ -22,7 +23,7 @@ export default async () => {
 
       let procedures;
       // Only match those which are not an Änderungsantrag
-      if (dataPackage.data.title.search(/Änderungsantrag|Entschließungsantrag|Einspruch/i) === -1) {
+      if (dataPackage.data.title.search(NAMEDPOLL_DEFINITIONS.TITLE.FIND_AENDERUNGSANTRAG_OR_ENTSCHLIESSUNGSANTRAG_OR_EINSPRUCH) === -1) {
         // Find matching Procedures
         procedures = await Procedure.find({
           'history.findSpotUrl': { $all: findSpotUrls },
