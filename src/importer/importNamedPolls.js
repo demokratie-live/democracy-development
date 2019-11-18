@@ -23,7 +23,11 @@ export default async () => {
 
       let procedures;
       // Only match those which are not an Änderungsantrag
-      if (dataPackage.data.title.search(NAMEDPOLL_DEFINITIONS.TITLE.FIND_AENDERUNGSANTRAG_OR_ENTSCHLIESSUNGSANTRAG_OR_EINSPRUCH) === -1) {
+      if (
+        dataPackage.data.title.search(
+          NAMEDPOLL_DEFINITIONS.TITLE.FIND_AENDERUNGSANTRAG_OR_ENTSCHLIESSUNGSANTRAG_OR_EINSPRUCH,
+        ) === -1
+      ) {
         // Find matching Procedures
         procedures = await Procedure.find({
           'history.findSpotUrl': { $all: findSpotUrls },
@@ -147,17 +151,29 @@ export default async () => {
         const namedHistoryEntry = history
           .find(
             ({ decision }) =>
-              decision && decision.find(({ type }) => type === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG),
+              decision &&
+              decision.find(
+                ({ type }) =>
+                  type === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG,
+              ),
           )
-          .decision.find(({ type }) => type === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG);
+          .decision.find(
+            ({ type }) =>
+              type === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG,
+          );
 
         const votingRecommendationEntry = history.find(
           ({ initiator }) =>
-            initiator && initiator.search(PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.FIND_BESCHLUSSEMPFEHLUNG_BERICHT) !== -1,
+            initiator &&
+            initiator.search(
+              PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.FIND_BESCHLUSSEMPFEHLUNG_BERICHT,
+            ) !== -1,
         );
 
         customData.voteResults.votingDocument =
-          namedHistoryEntry.comment.search(PROCEDURE_DEFINITIONS.HISTORY.DECISION.COMMENT.FIND_BESCHLUSSEMPFEHLUNG_ABLEHNUNG) !== -1
+          namedHistoryEntry.comment.search(
+            PROCEDURE_DEFINITIONS.HISTORY.DECISION.COMMENT.FIND_BESCHLUSSEMPFEHLUNG_ABLEHNUNG,
+          ) !== -1
             ? 'recommendedDecision'
             : 'mainDocument';
 
