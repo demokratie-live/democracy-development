@@ -65,6 +65,9 @@ export default {
             EMPFEHLUNG_VORLAGE_ABLEHNUNG: 'Empfehlung: Ablehnung der Vorlage',
         },
         INITIATOR: {
+            RUECKNAHME_AMTLICH: 'Amtliche Mitteilung: Rücknahme',
+            RUECKNAHME: 'Rücknahme',
+            RUECKNAHME_VORLAGE: 'Rücknahme der Vorlage',
             // Search
             FIND_BESCHLUSSEMPFEHLUNG_BERICHT: /Beschlussempfehlung und Bericht/i,
         }
