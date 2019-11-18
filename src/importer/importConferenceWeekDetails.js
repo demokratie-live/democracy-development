@@ -1,7 +1,8 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
 import { ConferenceWeekDetailScraper } from '@democracy-deutschland/scapacra-bt';
 
-import PROCEDURE_DEFITIONS from '../definitions/procedure';
+import PROCEDURE_DEFINITIONS from '../definitions/procedure';
+import CONFERENCEWEEKDETAIL_DEFINITIONS from '../definitions/conferenceWeekDetail';
 
 import ConferenceWeekDetailModel from '../models/ConferenceWeekDetail';
 import ProcedureModel from '../models/Procedure';
@@ -16,19 +17,19 @@ const isVote = (topic, heading) => {
   Beratung der Beschlussempfehlung = JA
   Zweite und dritte Beratung = JA
   */
-  if (topic.search(/Beratung des Antrags/i) !== -1) {
-    if (heading && heading.search(/Abschließende Beratung(en)? ohne Aussprache/i) !== -1) {
+  if (topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_BERATUNG_ANTRAG) !== -1) {
+    if (heading && heading.search(CONFERENCEWEEKDETAIL_DEFINITIONS.HEADING.FIND_ABSCHLIESSENDE_BERATUNG) !== -1) {
       return true;
     }
     return false;
   }
-  if (topic.search(/Erste Beratung/i) !== -1) {
+  if (topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_ERSTE_BERATUNG) !== -1) {
     return false;
   }
   if (
-    topic.search(/Beratung der Beschlussempfehlung/i) !== -1 ||
-    topic.search(/Zweite und dritte Beratung/i) !== -1 ||
-    topic.search(/Zweite Beratung und Schlussabstimmung/i) !== -1
+    topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_BERATUNG_BESCHLUSSEMPFEHLUNG) !== -1 ||
+    topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_ZWEITE_DRITTE_BERATUNG) !== -1 ||
+    topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_ZWEITE_BERATUNG_SCHLUSSABSTIMMUNG) !== -1
   ) {
     return true;
   }
@@ -49,7 +50,7 @@ const getProcedureIds = async documents => {
       // Find Procedures matching any of the given Documents, excluding Beschlussempfehlung
       importantDocuments: {
         $elemMatch: {
-          $and: [{ url: { $in: docs } }, { type: { $ne: PROCEDURE_DEFITIONS.IMPORTANT_DOCUMENTS.TYPE.BESCHLUSSEMPFEHLUNG_BERICHT } }],
+          $and: [{ url: { $in: docs } }, { type: { $ne: PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE.BESCHLUSSEMPFEHLUNG_BERICHT } }],
         },
       },
     },
