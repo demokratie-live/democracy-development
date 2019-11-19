@@ -20,8 +20,11 @@ export default async () => {
 
       let procedures;
       // Only match those which are not an Änderungsantrag
-      if (dataPackage.data.title.search(/Änderungsantrag|Entschließungsantrag|Einspruch/i) === -1 &&
-          dataPackage.data.description.search(/Änderungsantrag|Entschließungsantrag|Einspruch/i) === -1) {
+      if (
+        dataPackage.data.title.search(/Änderungsantrag|Entschließungsantrag|Einspruch/i) === -1 &&
+        dataPackage.data.description.search(/Änderungsantrag|Entschließungsantrag|Einspruch/i) ===
+          -1
+      ) {
         // Find matching Procedures
         procedures = await Procedure.find({
           'history.findSpotUrl': { $all: findSpotUrls },
