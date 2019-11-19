@@ -78,7 +78,7 @@ TODO
 
 ## Contributing
 
-Anyone and everyone is welcome to [contribute](CONTRIBUTING.md). Start by checking out the list of
+Anyone and everyone is welcome to [contribute](https://github.com/demokratie-live/democracy-client/blob/master/CONTRIBUTING.md). Start by checking out the list of
 [open issues](https://github.com/demokratie-live/democracy-development/issues).
 
 ## License
