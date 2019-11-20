@@ -3,6 +3,7 @@ import diffHistory from 'mongoose-diff-history/diffHistory';
 import PROCEDURE_STATES from '../../config/procedureStates';
 
 import History from '../../models/History';
+import ConferenceWeekDetail from '../../models/ConferenceWeekDetail';
 
 const deputiesNumber = {
   19: {
@@ -277,5 +278,17 @@ export default {
       });
       return namedVote;
     },
+    sessions: async procedure => {
+      return await ConferenceWeekDetail.aggregate([
+          {$unwind:"$sessions"},
+          {$addFields: {session: "$sessions"}},
+          {$project: {sessions: 0}},
+          {$unwind:"$session.tops"},
+          {$addFields: {'session.top': "$session.tops"}},
+          {$project: {'session.tops': 0}},
+          {$unwind:"$session.top.topic"},
+          {$match:{"session.top.topic.procedureIds": procedure.procedureId}},
+      ]);
+    }
   },
 };
