@@ -77,6 +77,7 @@ type Procedure {
   customData: ProcedureCustomData
   namedVote: Boolean
   voteDate: Date
+  voteEnd: Date
 }
 
 type ProcedureUpdate {
