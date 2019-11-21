@@ -58,7 +58,6 @@ services:
       ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-elasticsearch}
       PORT: 80
     networks:
-      default:
       intern:
         aliases:
           - "democracy-app.de-api"
@@ -82,7 +81,6 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       PORT: 80
     networks:
-      default:
       intern:
         aliases:
           - "democracy-app.de-admin"
@@ -109,7 +107,6 @@ services:
       ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-elasticsearch}
       PORT: 80
     networks:
-      default:
       intern:
         aliases:
           - "bundestag.io-api"
@@ -133,7 +130,6 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       PORT: 80
     networks:
-      default:
       intern:
         aliases:
           - "bundestag.io-admin"
@@ -157,7 +153,6 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       PORT: 80
     networks:
-      default:
       intern:
         aliases:
           - "democracy-app.de"
@@ -173,7 +168,6 @@ services:
         max-size: ${MONGODB_LOG_MAX_SIZE:-2m}
         max-file: ${MONGODB_LOG_MAX_FILE:-10}
     networks:
-      default:
       intern:
         aliases:
           - "mongodb"
@@ -183,7 +177,5 @@ volumes:
 
 
 networks:
-  default:
-    internal: true
   intern: 
     driver: bridge
