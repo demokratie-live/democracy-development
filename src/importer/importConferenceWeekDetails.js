@@ -4,7 +4,7 @@ import { ConferenceWeekDetailScraper } from '@democracy-deutschland/scapacra-bt'
 import ConferenceWeekDetailModel from '../models/ConferenceWeekDetail';
 import ProcedureModel from '../models/Procedure';
 
-const isVote = (topic, heading) => {
+const isVote = (topic, heading, documents, status) => {
   /*
   Erste Beratung = NEIN
   ——
@@ -18,6 +18,21 @@ const isVote = (topic, heading) => {
     if (heading && heading.search(/Abschließende Beratung(en)? ohne Aussprache/i) !== -1) {
       return true;
     }
+    if (
+      status &&
+      status.find(s => {
+        // if(s.documents.sort().join(',') === documents.sort().join(',') &&
+        if (
+          s.documents.some(l => documents.includes(l)) &&
+          s.line.search(/Antrag[\s\S]*?(angenommen|beschlossen|abgelehnt|ablehnen)/i) !== -1
+        ) {
+          return true;
+        }
+        return false;
+      })
+    ) {
+      return true;
+    }
     return false;
   }
   if (topic.search(/Erste Beratung/i) !== -1) {
@@ -26,7 +41,8 @@ const isVote = (topic, heading) => {
   if (
     topic.search(/Beratung der Beschlussempfehlung/i) !== -1 ||
     topic.search(/Zweite und dritte Beratung/i) !== -1 ||
-    topic.search(/Zweite Beratung und Schlussabstimmung/i) !== -1
+    topic.search(/Zweite Beratung und Schlussabstimmung/i) !== -1 ||
+    topic.search(/Dritte Beratung/i) !== -1
   ) {
     return true;
   }
@@ -47,7 +63,12 @@ const getProcedureIds = async documents => {
       // Find Procedures matching any of the given Documents, excluding Beschlussempfehlung
       importantDocuments: {
         $elemMatch: {
-          $and: [{ url: { $in: docs } }, { type: { $ne: 'Beschlussempfehlung und Bericht' } }],
+          $and: [
+            // Match at least one Document
+            { url: { $in: docs } },
+            // which is not Beschlussempfehlung und Bericht || Beschlussempfehlung
+            { type: { $nin: ['Beschlussempfehlung und Bericht', 'Beschlussempfehlung'] } },
+          ],
         },
       },
     },
@@ -80,14 +101,27 @@ export default async () => {
                 ...top,
                 topic: await Promise.all(
                   top.topic.map(async topic => {
-                    topic.isVote = isVote(topic.lines.join(' '), top.heading); // eslint-disable-line no-param-reassign
+                    // eslint-disable-next-line no-param-reassign
+                    topic.isVote = isVote(
+                      topic.lines.join(' '),
+                      top.heading,
+                      topic.documents,
+                      top.status,
+                    );
                     topic.procedureIds = await getProcedureIds(topic.documents); // eslint-disable-line no-param-reassign
                     // Save VoteDates to update them at the end when the correct values are present
                     topic.procedureIds.forEach(procedureId => {
-                      voteDates[procedureId] = {
-                        procedureId,
-                        voteDate: topic.isVote ? top.time : null,
-                      };
+                      // Override voteDate only if there is none set or we would override it by a new date
+                      if (
+                        !voteDates[procedureId] ||
+                        !voteDates[procedureId].voteDate ||
+                        topic.isVote === true
+                      ) {
+                        voteDates[procedureId] = {
+                          procedureId,
+                          voteDate: topic.isVote ? top.time : null,
+                        };
+                      }
                     });
                     return topic;
                   }),
