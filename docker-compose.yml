@@ -21,6 +21,7 @@ services:
         max-file: ${NGINX_WEB_LOG_MAX_FILE:-10}
     networks:
       default:
+      intern:
 
   nginx-gen:
     image: jwilder/docker-gen
