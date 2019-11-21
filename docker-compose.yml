@@ -20,7 +20,6 @@ services:
         max-size: ${NGINX_WEB_LOG_MAX_SIZE:-4m}
         max-file: ${NGINX_WEB_LOG_MAX_FILE:-10}
     networks:
-      intern:
       default:
 
   nginx-gen:
@@ -61,6 +60,7 @@ services:
       ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-elasticsearch}
       PORT: 80
     networks:
+      default:
       intern:
         aliases:
           - "democracy-app.de-api"
@@ -84,6 +84,7 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       PORT: 80
     networks:
+      default:
       intern:
         aliases:
           - "democracy-app.de-admin"
@@ -110,6 +111,7 @@ services:
       ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-elasticsearch}
       PORT: 80
     networks:
+      default:
       intern:
         aliases:
           - "bundestag.io-api"
@@ -133,6 +135,7 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       PORT: 80
     networks:
+      default:
       intern:
         aliases:
           - "bundestag.io-admin"
@@ -156,6 +159,7 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-contact@democracy-deutschland.de}
       PORT: 80
     networks:
+      default:
       intern:
         aliases:
           - "democracy-app.de"
