@@ -144,17 +144,17 @@ export default async () => {
                     // Save VoteDates to update them at the end when the correct values are present
                     topic.procedureIds.forEach(procedureId => {
                       // Override voteDate only if there is none set or we would override it by a new date
-                      /* if (
-                         	!voteDates[procedureId] ||
-                        	!voteDates[procedureId].voteDate ||
-                        	topic.isVote === true
-                      	  ) { */
-                      voteDates[procedureId] = {
-                        procedureId,
-                        voteDate: topic.isVote ? top.time : null,
-                        voteEnd: null,
-                      };
-                      // };
+                      if (
+                        !voteDates[procedureId] ||
+                        !voteDates[procedureId].voteDate ||
+                        topic.isVote === true
+                      ) {
+                        voteDates[procedureId] = {
+                          procedureId,
+                          voteDate: topic.isVote ? top.time : null,
+                          voteEnd: null,
+                        };
+                      }
                     });
                     // Remember last procedureIds to save voteEnd Date
                     lastProcedureIds = lastProcedureIds.concat(topic.procedureIds);
