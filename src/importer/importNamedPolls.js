@@ -1,6 +1,9 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
 import { NamedPollScraper } from '@democracy-deutschland/scapacra-bt';
 
+import PROCEDURE_DEFINITIONS from '../definitions/procedure';
+import NAMEDPOLL_DEFINITIONS from '../definitions/namedPoll';
+
 import Procedure from '../models/Procedure';
 import NamedPoll from '../models/NamedPoll';
 
@@ -21,8 +24,10 @@ export default async () => {
       let procedures;
       // Only match those which are not an Änderungsantrag
       if (
-        dataPackage.data.title.search(/Änderungsantrag|Entschließungsantrag|Einspruch/i) === -1 &&
-        dataPackage.data.description.search(/Änderungsantrag|Entschließungsantrag|Einspruch/i) ===
+        dataPackage.data.title.search(
+          NAMEDPOLL_DEFINITIONS.TITLE.FIND_AENDERUNGSANTRAG_OR_ENTSCHLIESSUNGSANTRAG_OR_EINSPRUCH,
+        ) === -1 &&
+        dataPackage.data.description.search(NAMEDPOLL_DEFINITIONS.TITLE.FIND_AENDERUNGSANTRAG_OR_ENTSCHLIESSUNGSANTRAG_OR_EINSPRUCH) ===
           -1
       ) {
         // Find matching Procedures
@@ -30,8 +35,8 @@ export default async () => {
           'history.findSpotUrl': { $all: findSpotUrls },
           'history.decision': {
             $elemMatch: {
-              type: 'Namentliche Abstimmung',
-              tenor: { $not: /.*?Änderungsantrag.*?/ },
+              type: PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG,
+              tenor: { $not: PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.FIND_AENDERUNGSANTRAG },
             },
           },
         });
@@ -148,26 +153,38 @@ export default async () => {
         const namedHistoryEntry = history
           .find(
             ({ decision }) =>
-              decision && decision.find(({ type }) => type === 'Namentliche Abstimmung'),
+              decision &&
+              decision.find(
+                ({ type }) =>
+                  type === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG,
+              ),
           )
-          .decision.find(({ type }) => type === 'Namentliche Abstimmung');
+          .decision.find(
+            ({ type }) =>
+              type === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG,
+          );
 
         const votingRecommendationEntry = history.find(
           ({ initiator }) =>
-            initiator && initiator.indexOf('Beschlussempfehlung und Bericht') !== -1,
+            initiator &&
+            initiator.search(
+              PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.FIND_BESCHLUSSEMPFEHLUNG_BERICHT,
+            ) !== -1,
         );
 
         customData.voteResults.votingDocument =
-          namedHistoryEntry.comment.indexOf('Annahme der Beschlussempfehlung auf Ablehnung') !== -1
+          namedHistoryEntry.comment.search(
+            PROCEDURE_DEFINITIONS.HISTORY.DECISION.COMMENT.FIND_BESCHLUSSEMPFEHLUNG_ABLEHNUNG,
+          ) !== -1
             ? 'recommendedDecision'
             : 'mainDocument';
 
         if (votingRecommendationEntry) {
           switch (votingRecommendationEntry.abstract) {
-            case 'Empfehlung: Annahme der Vorlage':
+            case PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME:
               customData.voteResults.votingRecommendation = true;
               break;
-            case 'Empfehlung: Ablehnung der Vorlage':
+            case PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG:
               customData.voteResults.votingRecommendation = false;
               break;
 
