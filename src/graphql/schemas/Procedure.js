@@ -1,15 +1,5 @@
 export default `
 
-type ConferenceWeekDetailSessionTopTopic {
-  lines: [String]
-  documents: [String],
-  isVote: Boolean
-  procedureIds: [String]
-}
-type ConferenceWeekDetailSessionTopStatus {
-  line: String
-  documents: [String]
-}
 type FilteredConferenceWeekDetailSessionTop {
   time: Date
   top: String
