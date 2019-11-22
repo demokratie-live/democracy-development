@@ -1,5 +1,41 @@
 export default `
 
+type ConferenceWeekDetailSessionTopTopic {
+  lines: [String]
+  documents: [String],
+  isVote: Boolean
+  procedureIds: [String]
+}
+type ConferenceWeekDetailSessionTopStatus {
+  line: String
+  documents: [String]
+}
+type FilteredConferenceWeekDetailSessionTop {
+  time: Date
+  top: String
+  heading: String
+  article: String
+  topic: ConferenceWeekDetailSessionTopTopic
+  status: [ConferenceWeekDetailSessionTopStatus]
+}
+type FilteredConferenceWeekDetailSession {
+  date: Date
+  dateText: String
+  session: String
+  top: FilteredConferenceWeekDetailSessionTop
+}
+type FilteredConferenceWeekDetail {
+  URL: String
+  id: String!
+  previousYear: Int
+  previousWeek: Int
+  thisYear: Int!
+  thisWeek: Int!
+  nextYear: Int
+  nextWeek: Int
+  session: FilteredConferenceWeekDetailSession
+}
+
 enum VoteDecision {
   YES
   ABSTINATION
@@ -77,6 +113,8 @@ type Procedure {
   customData: ProcedureCustomData
   namedVote: Boolean
   voteDate: Date
+  voteEnd: Date
+  sessions: [FilteredConferenceWeekDetail]
 }
 
 type ProcedureUpdate {
