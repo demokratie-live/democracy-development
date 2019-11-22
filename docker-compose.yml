@@ -25,7 +25,7 @@ services:
 
   nginx-gen:
     image: jwilder/docker-gen
-    command: -notify-sighup ${NGINX_WEB:-nginx-web} -watch /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
+    command: -notify-sighup ${NGINX_WEB:-nginx-web} -watch -wait 10s:45s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
     container_name: ${DOCKER_GEN:-nginx-gen}
     restart: always
     volumes:
