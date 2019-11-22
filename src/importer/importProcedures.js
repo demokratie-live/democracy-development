@@ -163,9 +163,9 @@ const saveProcedure = async ({ procedureData }) => {
 let linksSum = 0;
 let startDate;
 
-/*const logUpdateSearchProgress = ({ hasError }) => {
+/* const logUpdateSearchProgress = ({ hasError }) => {
   process.stdout.write(hasError ? 'e' : '.');
-};*/
+}; */
 
 const logStartDataProgress = async ({ sum }) => {
   startDate = new Date();
@@ -218,12 +218,12 @@ const cronTask = async () => {
         browserStackSize: 5,
         selectPeriods: CONFIG.PERIODS,
         selectOperationTypes: ['100', '500'],
-        logUpdateSearchProgress: ()=>{},
+        logUpdateSearchProgress: () => {},
         logStartDataProgress,
-        logStopDataProgress: ()=>{} /* () => {
+        logStopDataProgress: () => {} /* () => {
           process.stdout.write('\n');
         } */,
-        logUpdateDataProgress: ()=>{},
+        logUpdateDataProgress: () => {},
         // log
         logFinished,
         logError,
