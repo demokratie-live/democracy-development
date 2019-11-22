@@ -12,11 +12,6 @@ import Procedure from './../models/Procedure';
 import CronJobModel from './../models/CronJob';
 
 const scraper = new Scraper();
-let pastScrapeData = null; // eslint-disable-line
-// const procedureStatusWhitelist = [
-//   "Überwiesen",
-//   "Beschlussempfehlung liegt vor"
-// ];
 let cronIsRunning = false;
 let cronStart = null;
 
@@ -70,15 +65,6 @@ const saveProcedure = async ({ procedureData }) => {
     return flow;
   });
 
-  /* let approvalRequired;
-  if (procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT) {
-    if (!_.isArray(procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT)) {
-      approvalRequired = [procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT];
-    } else {
-      approvalRequired = procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT;
-    }
-  } */
-
   const procedureObj = {
     procedureId: procedureData.vorgangId || undefined,
     type: procedureData.VORGANG.VORGANGSTYP || undefined,
@@ -114,74 +100,19 @@ const saveProcedure = async ({ procedureData }) => {
   );
 };
 
-// const doScrape = ({ data }) => {
-//   const parts = data.date.match(/(\d+)/g);
-//   const dipDate = new Date(Date.UTC(parts[2], parts[1] - 1, parts[0]));
-
-//   let scrapeData = pastScrapeData.find(
-//     ({ procedureId }) => procedureId === data.id
-//   );
-//   if (!scrapeData) {
-//     scrapeData = { updatedAt: 0 };
-//   }
-//   const scrapeDate = new Date(scrapeData.updatedAt);
-
-//   const timeSpanDib = new Date() - dipDate;
-//   const timeSpanScrape = new Date() - scrapeDate;
-
-//   const oneDay = 1000 * 60 * 60 * 24;
-//   const oneWeek = oneDay * 7;
-//   const oneMonth = oneDay * 31;
-//   const oneYear = oneDay * 365;
-
-//   // TIME SCRAPE
-//   if (
-//     // always scrape when dib_date is after last scrape_date
-//     dipDate > scrapeDate ||
-//     // always scrape last 3 Months
-//     timeSpanDib < 3 * oneMonth ||
-//     // always scrape when last scrape_date is one month old
-//     timeSpanScrape > oneMonth ||
-//     // always scrape when last scrape_date is one day old and dib is up to 1 year old
-//     (timeSpanScrape > oneDay && timeSpanDib < oneYear) ||
-//     // always scrape when last scrape_date is one week old and dib is up to 4 year old
-//     (timeSpanScrape > oneWeek && timeSpanDib < 4 * oneYear)
-//   ) {
-//     return true;
-//   }
-
-//   // STATUS SCRAPE -> Whitelist
-//   if (
-//     procedureStatusWhitelist.find(white => white === scrapeData.currentStatus)
-//   ) {
-//     return true;
-//   }
-
-//   return false;
-// };
-
 let linksSum = 0;
 let startDate;
 
-/* const logUpdateSearchProgress = ({ hasError }) => {
-  process.stdout.write(hasError ? 'e' : '.');
-}; */
-
 const logStartDataProgress = async ({ sum }) => {
   startDate = new Date();
-  // process.stdout.write('\n');
   linksSum = sum;
-  Log.info(`STARTED PROCEDURE DATA SCRAPER - ${startDate} - ${linksSum} Links found`);
+  Log.info(`STARTED PROCEDURE SCRAPER DATA - ${startDate} - ${linksSum} Links found`);
 };
-
-/* const logUpdateDataProgress = ({ hasError }) => {
-  process.stdout.write(hasError ? 'e' : '.');
-}; */
 
 const logFinished = () => {
   const end = Date.now();
   const elapsed = end - cronStart;
-  Log.info(`FINISHED PROCEDURE SCRAPER - ${prettyMs(_.toInteger(elapsed))}`);
+  Log.info(`FINISHED PROCEDURE SCRAPER DATA - ${prettyMs(_.toInteger(elapsed))}`);
   cronIsRunning = false;
 };
 
@@ -209,8 +140,6 @@ const cronTask = async () => {
       },
     );
     Log.info(`STARTED PROCEDURE SCRAPER - ${moment(cronStart).format()}`);
-    // get old Scrape Data for cache
-    pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
     // Do the scrape
     await scraper
       .scrape({
@@ -220,9 +149,7 @@ const cronTask = async () => {
         selectOperationTypes: ['100', '500'],
         logUpdateSearchProgress: () => {},
         logStartDataProgress,
-        logStopDataProgress: () => {} /* () => {
-          process.stdout.write('\n');
-        } */,
+        logStopDataProgress: () => {},
         logUpdateDataProgress: () => {},
         // log
         logFinished,
@@ -249,7 +176,7 @@ const cronTask = async () => {
           },
         );
 
-        Log.info('#####FINISH####');
+        Log.info(`FINISHED PROCEDURE SCRAPER`);
       })
       .catch(async error => {
         Log.error(error);
