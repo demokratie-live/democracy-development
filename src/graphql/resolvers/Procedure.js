@@ -296,17 +296,16 @@ export default {
       });
       return namedVote;
     },
-    sessions: async procedure => {
-      return await ConferenceWeekDetail.aggregate([
-          {$unwind:"$sessions"},
-          {$addFields: {session: "$sessions"}},
-          {$project: {sessions: 0}},
-          {$unwind:"$session.tops"},
-          {$addFields: {'session.top': "$session.tops"}},
-          {$project: {'session.tops': 0}},
-          {$unwind:"$session.top.topic"},
-          {$match:{"session.top.topic.procedureIds": procedure.procedureId}},
-      ]);
-    }
+    sessions: async procedure =>
+      ConferenceWeekDetail.aggregate([
+        { $unwind: '$sessions' },
+        { $addFields: { session: '$sessions' } },
+        { $project: { sessions: 0 } },
+        { $unwind: '$session.tops' },
+        { $addFields: { 'session.top': '$session.tops' } },
+        { $project: { 'session.tops': 0 } },
+        { $unwind: '$session.top.topic' },
+        { $match: { 'session.top.topic.procedureIds': procedure.procedureId } },
+      ]),
   },
 };

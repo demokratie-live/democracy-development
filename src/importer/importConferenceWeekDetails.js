@@ -79,7 +79,7 @@ const getProcedureIds = async documents => {
                 $nin: [
                   PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE.BESCHLUSSEMPFEHLUNG_BERICHT,
                   PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE.BESCHLUSSEMPFEHLUNG,
-				  PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE.BERICHT,
+                  PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE.BERICHT,
                 ],
               },
             },
@@ -110,61 +110,63 @@ export default async () => {
         nextYear: dataPackage.data.next.year,
         nextWeek: dataPackage.data.next.week,
         sessions: await dataPackage.data.sessions.reduce(async (pSession, session) => {
-            const resultSession = await pSession;
-            resultSession.push({
-              ...session,
-              tops: await session.tops.reduce(async (pTop, top) => {
-                  // Await for last result
-                  const resultTop = await pTop;
-                  // correct Time
-                  // TODO move to scraper? Since the scraper construct this data in a date form it might be wise to do it correctly there (?)
-                  if(resultTop.length){
-                    const lastTop = resultTop[resultTop.length - 1];
-                    if(lastTop && lastTop.time.getUTCHours() > top.time.getUTCHours()) {
-                      top.time.setDate(top.time.getDate() + 1)
-                    }
-                  }
-                  // Write VoteEnd Date
-                  lastProcedureIds.forEach(procedureId => {
-                    if (voteDates[procedureId].voteDate && voteDates[procedureId].voteDate <= top.time) {
-                      voteDates[procedureId].voteEnd = top.time;
-                    }
-                  });
-                  lastProcedureIds = [];
-                  // Append current result
-                  resultTop.push({
-                    ...top,
-                    topic: await Promise.all(
-                      top.topic.map(async topic => {
-                        topic.isVote = isVote(topic.lines.join(' '), top.heading); // eslint-disable-line no-param-reassign
-                        topic.procedureIds = await getProcedureIds(topic.documents); // eslint-disable-line no-param-reassign
-                        // Save VoteDates to update them at the end when the correct values are present
-                        topic.procedureIds.forEach(procedureId => {
-                          // Override voteDate only if there is none set or we would override it by a new date
-                          /*if (
+          const resultSession = await pSession;
+          resultSession.push({
+            ...session,
+            tops: await session.tops.reduce(async (pTop, top) => {
+              // Await for last result
+              const resultTop = await pTop;
+              // correct Time
+              // TODO move to scraper? Since the scraper construct this data in a date form it might be wise to do it correctly there (?)
+              if (resultTop.length) {
+                const lastTop = resultTop[resultTop.length - 1];
+                if (lastTop && lastTop.time.getUTCHours() > top.time.getUTCHours()) {
+                  top.time.setDate(top.time.getDate() + 1);
+                }
+              }
+              // Write VoteEnd Date
+              lastProcedureIds.forEach(procedureId => {
+                if (
+                  voteDates[procedureId].voteDate &&
+                  voteDates[procedureId].voteDate <= top.time
+                ) {
+                  voteDates[procedureId].voteEnd = top.time;
+                }
+              });
+              lastProcedureIds = [];
+              // Append current result
+              resultTop.push({
+                ...top,
+                topic: await Promise.all(
+                  top.topic.map(async topic => {
+                    topic.isVote = isVote(topic.lines.join(' '), top.heading); // eslint-disable-line no-param-reassign
+                    topic.procedureIds = await getProcedureIds(topic.documents); // eslint-disable-line no-param-reassign
+                    // Save VoteDates to update them at the end when the correct values are present
+                    topic.procedureIds.forEach(procedureId => {
+                      // Override voteDate only if there is none set or we would override it by a new date
+                      /* if (
                          	!voteDates[procedureId] ||
                         	!voteDates[procedureId].voteDate ||
                         	topic.isVote === true
-                      	  ) {*/
-                          	voteDates[procedureId] = {
-                              procedureId,
-                              voteDate: topic.isVote ? top.time : null,
-                              voteEnd: null,
-                            };
-                          //};
-                        });
-                        // Remember last procedureIds to save voteEnd Date
-                        lastProcedureIds = lastProcedureIds.concat(topic.procedureIds);
-                        return topic;
-                      }),
-                    ),
-                  });
-                  return resultTop;
-                },[]),
-            });
-            return resultSession;
-          }
-        ,[]),
+                      	  ) { */
+                      voteDates[procedureId] = {
+                        procedureId,
+                        voteDate: topic.isVote ? top.time : null,
+                        voteEnd: null,
+                      };
+                      // };
+                    });
+                    // Remember last procedureIds to save voteEnd Date
+                    lastProcedureIds = lastProcedureIds.concat(topic.procedureIds);
+                    return topic;
+                  }),
+                ),
+              });
+              return resultTop;
+            }, []),
+          });
+          return resultSession;
+        }, []),
       };
       // Update/Insert
       await ConferenceWeekDetailModel.update(
@@ -180,14 +182,16 @@ export default async () => {
           procedureId: procedureUpdate.procedureId,
           // Update only when needed
           $or: [
-            {voteDate: {$ne: procedureUpdate.voteDate }},
-            {voteEnd: {$ne: procedureUpdate.voteEnd}},
+            { voteDate: { $ne: procedureUpdate.voteDate } },
+            { voteEnd: { $ne: procedureUpdate.voteEnd } },
           ],
         },
-        { $set: { 
-          voteDate: procedureUpdate.voteDate,
-          voteEnd: procedureUpdate.voteEnd
-        } },
+        {
+          $set: {
+            voteDate: procedureUpdate.voteDate,
+            voteEnd: procedureUpdate.voteEnd,
+          },
+        },
       );
     });
   } catch (error) {
