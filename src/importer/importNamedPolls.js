@@ -27,8 +27,10 @@ export default async () => {
         dataPackage.data.title.search(
           NAMEDPOLL_DEFINITIONS.TITLE.FIND_AENDERUNGSANTRAG_OR_ENTSCHLIESSUNGSANTRAG_OR_EINSPRUCH,
         ) === -1 &&
-        dataPackage.data.description.search(NAMEDPOLL_DEFINITIONS.TITLE.FIND_AENDERUNGSANTRAG_OR_ENTSCHLIESSUNGSANTRAG_OR_EINSPRUCH) ===
-          -1
+        dataPackage.data.description.search(
+          NAMEDPOLL_DEFINITIONS.DESCRIPTION
+            .FIND_AENDERUNGSANTRAG_OR_ENTSCHLIESSUNGSANTRAG_OR_EINSPRUCH,
+        ) === -1
       ) {
         // Find matching Procedures
         procedures = await Procedure.find({

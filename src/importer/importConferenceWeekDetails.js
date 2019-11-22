@@ -30,7 +30,7 @@ const isVote = (topic, heading, documents, status) => {
         // if(s.documents.sort().join(',') === documents.sort().join(',') &&
         if (
           s.documents.some(l => documents.includes(l)) &&
-          s.line.search(/Antrag[\s\S]*?(angenommen|beschlossen|abgelehnt|ablehnen)/i) !== -1
+          s.line.search(CONFERENCEWEEKDETAIL_DEFINITIONS.STATUS.FIND_ANTRAG_COMPLETED) !== -1
         ) {
           return true;
         }
@@ -49,9 +49,7 @@ const isVote = (topic, heading, documents, status) => {
     topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_ZWEITE_DRITTE_BERATUNG) !== -1 ||
     topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_ZWEITE_BERATUNG_SCHLUSSABSTIMMUNG) !==
       -1 ||
-      // /Dritte Beratung/i
-    topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_DRITTE_BERATUNG) !==
-      -1
+    topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_DRITTE_BERATUNG) !== -1
   ) {
     return true;
   }
@@ -73,13 +71,15 @@ const getProcedureIds = async documents => {
       importantDocuments: {
         $elemMatch: {
           $and: [
-			// Match at least one Document
+            // Match at least one Document
             { url: { $in: docs } },
             // which is not Beschlussempfehlung und Bericht || Beschlussempfehlung
             {
               type: {
-              // 'Beschlussempfehlung'
-                $nin: [PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE.BESCHLUSSEMPFEHLUNG_BERICHT,PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE.BESCHLUSSEMPFEHLUNG],
+                $nin: [
+                  PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE.BESCHLUSSEMPFEHLUNG_BERICHT,
+                  PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE.BESCHLUSSEMPFEHLUNG,
+                ],
               },
             },
           ],

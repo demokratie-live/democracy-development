@@ -80,6 +80,7 @@ export default {
   IMPORTANT_DOCUMENTS: {
     TYPE: {
       BESCHLUSSEMPFEHLUNG_BERICHT: 'Beschlussempfehlung und Bericht',
+      BESCHLUSSEMPFEHLUNG: 'Beschlussempfehlung', // TODO
     },
   },
 };
