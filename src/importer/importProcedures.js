@@ -3,8 +3,6 @@
 import _ from 'lodash';
 import Scraper from '@democracy-deutschland/dip21-scraper';
 import prettyMs from 'pretty-ms';
-import fs from 'fs-extra';
-import FileLogger from 'log';
 import moment from 'moment';
 
 import CONFIG from './../config';
@@ -12,8 +10,6 @@ import PROCEDURE_STATES from './../config/procedureStates';
 
 import Procedure from './../models/Procedure';
 import CronJobModel from './../models/CronJob';
-
-const log = new FileLogger('error', fs.createWriteStream('error-import.log'));
 
 const scraper = new Scraper();
 let pastScrapeData = null; // eslint-disable-line
@@ -167,30 +163,30 @@ const saveProcedure = async ({ procedureData }) => {
 let linksSum = 0;
 let startDate;
 
-const logUpdateSearchProgress = ({ hasError }) => {
+/*const logUpdateSearchProgress = ({ hasError }) => {
   process.stdout.write(hasError ? 'e' : '.');
-};
+};*/
 
 const logStartDataProgress = async ({ sum }) => {
   startDate = new Date();
-  process.stdout.write('\n');
+  // process.stdout.write('\n');
   linksSum = sum;
-  Log.info(`Started at ${startDate} - ${linksSum} Links found`);
+  Log.info(`STARTED PROCEDURE DATA SCRAPER - ${startDate} - ${linksSum} Links found`);
 };
 
-const logUpdateDataProgress = ({ hasError }) => {
+/* const logUpdateDataProgress = ({ hasError }) => {
   process.stdout.write(hasError ? 'e' : '.');
-};
+}; */
 
 const logFinished = () => {
   const end = Date.now();
   const elapsed = end - cronStart;
-  Log.info(`### Finish Cronjob! Time: ${prettyMs(_.toInteger(elapsed))}`);
+  Log.info(`FINISHED PROCEDURE SCRAPER - ${prettyMs(_.toInteger(elapsed))}`);
   cronIsRunning = false;
 };
 
 const logError = ({ error }) => {
-  log.error(error);
+  Log.error(error);
 };
 
 const cronTask = async () => {
@@ -212,7 +208,7 @@ const cronTask = async () => {
         new: true,
       },
     );
-    global.Log.info(`### Start Cronjob ${moment(cronStart).format()}`);
+    Log.info(`STARTED PROCEDURE SCRAPER - ${moment(cronStart).format()}`);
     // get old Scrape Data for cache
     pastScrapeData = await Procedure.find({}, { procedureId: 1, updatedAt: 1, currentStatus: 1 });
     // Do the scrape
@@ -222,12 +218,12 @@ const cronTask = async () => {
         browserStackSize: 5,
         selectPeriods: CONFIG.PERIODS,
         selectOperationTypes: ['100', '500'],
-        logUpdateSearchProgress,
+        logUpdateSearchProgress: ()=>{},
         logStartDataProgress,
-        logStopDataProgress: () => {
+        logStopDataProgress: ()=>{} /* () => {
           process.stdout.write('\n');
-        },
-        logUpdateDataProgress,
+        } */,
+        logUpdateDataProgress: ()=>{},
         // log
         logFinished,
         logError,
