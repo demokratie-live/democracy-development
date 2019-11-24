@@ -7,17 +7,17 @@ openssl aes-256-cbc -k "$SECRET" -in ./.travis/.env.travis.enc -out ./.travis/.e
 openssl aes-256-cbc -k "$SECRET" -in ./.travis/ssh_key.enc -out ./.travis/ssh_key -d -md md5
 openssl aes-256-cbc -k "$SECRET" -in ./.travis/ssh_key.pub.enc -out ./.travis/ssh_key.pub -d -md md5
 
-# Server .env
+# democracy-app.de-api .env
 openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-api/.env.enc -out ./democracy-app.de-api/.env -d -md md5
-# Server-Admin .env
-openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-admin/.env.enc -out ./democracy-app.de-admin/.env -d -md md5
+# democracy-app.de-admin .env
+openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-admin/.env.enc -out ./democracy-app.de-admin/.env -d -md sha256
 
-# Bundestag.io-api .env
-openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io-api/.env.enc -out ./bundestag.io-api/.env -d -md md5
-# Bundestag.io Admin .env
+# bundestag.io-api .env
+openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io-api/.env.enc -out ./bundestag.io-api/.env -d -md sha256
+# bundestag.io-admin .env
 openssl aes-256-cbc -k "$SECRET" -in ./bundestag.io-admin/.env.enc -out ./bundestag.io-admin/.env -d -md md5
 
-# Desktop Cient .env
+# democracy-app.de .env
 openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de/.env.enc -out ./democracy-app.de/.env -d -md md5
 
 # Client Store Credentials

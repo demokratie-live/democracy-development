@@ -19,10 +19,13 @@ services:
       options:
         max-size: ${NGINX_WEB_LOG_MAX_SIZE:-4m}
         max-file: ${NGINX_WEB_LOG_MAX_FILE:-10}
+    networks:
+      default:
+      intern:
 
   nginx-gen:
     image: jwilder/docker-gen
-    command: -notify-sighup ${NGINX_WEB:-nginx-web} -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
+    command: -notify-sighup ${NGINX_WEB:-nginx-web} -watch /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
     container_name: ${DOCKER_GEN:-nginx-gen}
     restart: always
     volumes:
@@ -173,7 +176,6 @@ services:
         max-size: ${MONGODB_LOG_MAX_SIZE:-2m}
         max-file: ${MONGODB_LOG_MAX_FILE:-10}
     networks:
-      default:
       intern:
         aliases:
           - "mongodb"
@@ -183,8 +185,5 @@ volumes:
 
 
 networks:
-  default:
-    external:
-      name: ${NETWORK:-nginx-proxy}
   intern: 
     driver: bridge
