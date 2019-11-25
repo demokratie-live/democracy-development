@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import ProcedureSchema from './../migrations/5-schemas/Procedure';
+import ProcedureSchema from './../migrations/6-schemas/Procedure';
 
 const Procedure = mongoose.model('Procedure', ProcedureSchema);
 

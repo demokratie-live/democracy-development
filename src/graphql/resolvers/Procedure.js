@@ -1,8 +1,10 @@
 import diffHistory from 'mongoose-diff-history/diffHistory';
 
 import PROCEDURE_STATES from '../../config/procedureStates';
+import PROCEDURE_DEFINITIONS from '../../definitions/procedure';
 
 import History from '../../models/History';
+import ConferenceWeekDetail from '../../models/ConferenceWeekDetail';
 
 const deputiesNumber = {
   19: {
@@ -28,7 +30,7 @@ export default {
       {
         IDs,
         period = [19],
-        type = ['Gesetzgebung', 'Antrag'],
+        type = [PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG, PROCEDURE_DEFINITIONS.TYPE.ANTRAG],
         status,
         voteDate,
         manageVoteDate = false,
@@ -46,7 +48,10 @@ export default {
               decision: {
                 $elemMatch: {
                   tenor: {
-                    $in: ['Ablehnung der Vorlage', 'Annahme der Vorlage'],
+                    $in: [
+                      PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ABLEHNUNG,
+                      PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ANNAHME,
+                    ],
                   },
                 },
               },
@@ -70,9 +75,9 @@ export default {
                     $elemMatch: {
                       tenor: {
                         $in: [
-                          'Ablehnung der Vorlage',
-                          'Annahme der Vorlage',
-                          'Erklärung der Vorlage für erledigt',
+                          PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ABLEHNUNG,
+                          PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ANNAHME,
+                          PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ERLEDIGT,
                         ],
                       },
                     },
@@ -87,7 +92,12 @@ export default {
               voteDate: { $lte: new Date() },
             },
           ],
-          currentStatus: { $nin: ['Zurückgezogen', 'Für erledigt erklärt'] },
+          currentStatus: {
+            $nin: [
+              PROCEDURE_DEFINITIONS.STATUS.ZURUECKGEZOGEN,
+              PROCEDURE_DEFINITIONS.STATUS.ERLEDIGT,
+            ],
+          },
         };
         return ProcedureModel.find({ ...match }).sort({ updatedAt: 1 });
       }
@@ -105,7 +115,10 @@ export default {
 
     allProcedures: async (
       parent,
-      { period = [19], type = ['Gesetzgebung', 'Antrag'] },
+      {
+        period = [19],
+        type = [PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG, PROCEDURE_DEFINITIONS.TYPE.ANTRAG],
+      },
       { ProcedureModel },
     ) => ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
 
@@ -197,7 +210,10 @@ export default {
 
         const votingRecommendationEntry = procedure.history.find(
           ({ initiator }) =>
-            initiator && initiator.indexOf('Beschlussempfehlung und Bericht') !== -1,
+            initiator &&
+            initiator.search(
+              PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.FIND_BESCHLUSSEMPFEHLUNG_BERICHT,
+            ) !== -1,
         );
 
         voteResults = {
@@ -208,10 +224,10 @@ export default {
 
         if (votingRecommendationEntry) {
           switch (votingRecommendationEntry.abstract) {
-            case 'Empfehlung: Annahme der Vorlage':
+            case PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME:
               voteResults.votingRecommendation = true;
               break;
-            case 'Empfehlung: Ablehnung der Vorlage':
+            case PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG:
               voteResults.votingRecommendation = false;
               break;
 
@@ -265,8 +281,11 @@ export default {
         if (h.decision) {
           return h.decision.some(decision => {
             if (
-              decision.type === 'Namentliche Abstimmung' &&
-              decision.tenor.search(/.*?Änderungsantrag.*?/) === -1
+              decision.type ===
+                PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG &&
+              decision.tenor.search(
+                PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.FIND_AENDERUNGSANTRAG,
+              ) === -1
             ) {
               return true;
             }
@@ -277,5 +296,16 @@ export default {
       });
       return namedVote;
     },
+    sessions: async procedure =>
+      ConferenceWeekDetail.aggregate([
+        { $unwind: '$sessions' },
+        { $addFields: { session: '$sessions' } },
+        { $project: { sessions: 0 } },
+        { $unwind: '$session.tops' },
+        { $addFields: { 'session.top': '$session.tops' } },
+        { $project: { 'session.tops': 0 } },
+        { $unwind: '$session.top.topic' },
+        { $match: { 'session.top.topic.procedureIds': procedure.procedureId } },
+      ]),
   },
 };
