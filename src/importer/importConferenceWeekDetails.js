@@ -188,7 +188,13 @@ export default async () => {
           procedureId: procedureUpdate.procedureId,
           // Update only when needed
           $or: [
-            { voteDate: { $ne: procedureUpdate.voteDate } },
+            {
+              $and: [
+                { voteDate: { $ne: procedureUpdate.voteDate } },
+                // Make sure we do not override date from procedureScraper
+                { voteDate: { $lt: procedureUpdate.voteDate } },
+              ],
+            },
             { voteEnd: { $ne: procedureUpdate.voteEnd } },
           ],
         },

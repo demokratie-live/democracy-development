@@ -7,6 +7,7 @@ import moment from 'moment';
 
 import CONFIG from './../config';
 import PROCEDURE_STATES from './../config/procedureStates';
+import PROCEDURE_DEFINITIONS from './../definitions/procedure';
 
 import Procedure from './../models/Procedure';
 import CronJobModel from './../models/CronJob';
@@ -32,6 +33,7 @@ const ensureArray = element => {
 };
 
 const saveProcedure = async ({ procedureData }) => {
+  // Transform History
   const process = _.isArray(procedureData.VORGANGSABLAUF.VORGANGSPOSITION)
     ? procedureData.VORGANGSABLAUF.VORGANGSPOSITION
     : [procedureData.VORGANGSABLAUF.VORGANGSPOSITION];
@@ -65,6 +67,39 @@ const saveProcedure = async ({ procedureData }) => {
     return flow;
   });
 
+  // Find old Procedure
+  const oldProcedure = await Procedure.findOne({ procedureId: procedureData.vorgangId });
+
+  // take old voteDate if present (can come from ConferenceWeekDetails Scraper)
+  let voteDate = oldProcedure ? oldProcedure.voteDate : null;
+  // Conditions on which Procedure is voted upon
+  const btWithDecisions = history.filter(
+    ({ initiator, decision }) =>
+      // Beschluss liegt vor
+      // TODO: decision should not be an array
+      (decision &&
+        decision.find(
+          ({ tenor }) =>
+            tenor === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ABLEHNUNG ||
+            tenor === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ANNAHME ||
+            tenor === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ERLEDIGT ||
+            tenor === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.AUSSCHUSSFASSUNG_ANNAHME,
+        )) ||
+      // Zurückgezogen
+      initiator === PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.RUECKNAHME_AMTLICH ||
+      initiator === PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.RUECKNAHME ||
+      initiator === PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.RUECKNAHME_VORLAGE,
+  );
+  // Did we find a marker for voted Procedure?
+  if (btWithDecisions.length > 0) {
+    // Do not override the more accurate date form ConferenceWeekDetails Scraper
+    const historyDate = new Date(btWithDecisions.pop().date);
+    if (voteDate < historyDate) {
+      voteDate = historyDate;
+    }
+  }
+
+  // Construct Procedure Object
   const procedureObj = {
     procedureId: procedureData.vorgangId || undefined,
     type: procedureData.VORGANG.VORGANGSTYP || undefined,
@@ -87,8 +122,10 @@ const saveProcedure = async ({ procedureData }) => {
       url: doc.DRS_LINK,
     })),
     history,
+    voteDate,
   };
 
+  // Write to DB
   await Procedure.update(
     {
       procedureId: procedureObj.procedureId,
