@@ -154,7 +154,7 @@ const logFinished = () => {
 };
 
 const logError = ({ error }) => {
-  Log.error(error);
+  Log.error(`PROCEDURE SCRAPER ERROR: ${JSON.stringify(error)}`);
 };
 
 const cronTask = async () => {
@@ -216,7 +216,7 @@ const cronTask = async () => {
         Log.info(`FINISHED PROCEDURE SCRAPER`);
       })
       .catch(async error => {
-        Log.error(error);
+        Log.error(`PROCEDURE SCRAPER ERROR: ${JSON.stringify(error)}`);
         logFinished();
         await CronJobModel.update(
           {
