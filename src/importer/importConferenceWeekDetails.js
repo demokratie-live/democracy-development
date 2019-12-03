@@ -116,14 +116,6 @@ export default async () => {
             tops: await session.tops.reduce(async (pTop, top) => {
               // Await for last result
               const resultTop = await pTop;
-              // correct Time
-              // TODO move to scraper? Since the scraper construct this data in a date form it might be wise to do it correctly there (?)
-              if (resultTop.length) {
-                const lastTop = resultTop[resultTop.length - 1];
-                if (lastTop && lastTop.time.getUTCHours() > top.time.getUTCHours()) {
-                  top.time.setDate(top.time.getDate() + 1);
-                }
-              }
               // Write VoteEnd Date
               lastProcedureIds.forEach(procedureId => {
                 if (
