@@ -5,9 +5,9 @@ import Scraper from '@democracy-deutschland/dip21-scraper';
 import prettyMs from 'pretty-ms';
 import moment from 'moment';
 
+import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 import CONFIG from './../config';
 import PROCEDURE_STATES from './../config/procedureStates';
-import PROCEDURE_DEFINITIONS from './../definitions/procedure';
 
 import Procedure from './../models/Procedure';
 import CronJobModel from './../models/CronJob';

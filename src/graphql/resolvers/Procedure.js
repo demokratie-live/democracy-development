@@ -1,7 +1,7 @@
 import diffHistory from 'mongoose-diff-history/diffHistory';
 
+import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 import PROCEDURE_STATES from '../../config/procedureStates';
-import PROCEDURE_DEFINITIONS from '../../definitions/procedure';
 
 import History from '../../models/History';
 import ConferenceWeekDetail from '../../models/ConferenceWeekDetail';

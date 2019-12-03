@@ -1,8 +1,10 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
 import { ConferenceWeekDetailScraper } from '@democracy-deutschland/scapacra-bt';
 
-import PROCEDURE_DEFINITIONS from '../definitions/procedure';
-import CONFERENCEWEEKDETAIL_DEFINITIONS from '../definitions/conferenceWeekDetail';
+import {
+  PROCEDURE as PROCEDURE_DEFINITIONS,
+  CONFERENCEWEEKDETAIL as CONFERENCEWEEKDETAIL_DEFINITIONS,
+} from '@democracy-deutschland/bundestag.io-definitions';
 
 import ConferenceWeekDetailModel from '../models/ConferenceWeekDetail';
 import ProcedureModel from '../models/Procedure';
