@@ -21,7 +21,7 @@ export default {
         },
         { $group: { _id: '$collectionId' } },
       ]);
-      const changed = changedQ.map(({_id})=> _id)
+      const changed = changedQ.map(({ _id }) => _id);
       const deputies = await DeputyModel.find(
         {
           $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],

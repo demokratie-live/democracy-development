@@ -22,7 +22,7 @@ export default {
         },
         { $group: { _id: '$collectionId' } },
       ]);
-      const changed = changedQ.map(({_id})=> _id)
+      const changed = changedQ.map(({ _id }) => _id);
 
       // Build find query for namedPolls
       const namedPollsFindQuery = {

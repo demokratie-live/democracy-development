@@ -6,17 +6,18 @@ import PROCEDURE_DEFINITIONS from '../../definitions/procedure';
 import History from '../../models/History';
 import ConferenceWeekDetail from '../../models/ConferenceWeekDetail';
 
-const arrayUnique = (array) => {
-  var a = array.concat();
-  for(var i=0; i<a.length; ++i) {
-      for(var j=i+1; j<a.length; ++j) {
-          if(a[i].equals(a[j]))
-              a.splice(j--, 1);
-      }
+const arrayUnique = array => {
+  const a = array.concat();
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < a.length; ++i) {
+    // eslint-disable-next-line no-plusplus
+    for (let j = i + 1; j < a.length; ++j) {
+      if (a[i].equals(a[j])) a.splice(j--, 1); // eslint-disable-line no-plusplus
+    }
   }
 
   return a;
-}
+};
 
 const deputiesNumber = {
   19: {
@@ -150,7 +151,7 @@ export default {
         },
         { $group: { _id: '$collectionId' } },
       ]);
-      const updatedProcedures = updatedProceduresQ.map(({_id})=> _id)
+      const updatedProcedures = updatedProceduresQ.map(({ _id }) => _id);
 
       // Also take changed session info into account
       const updatedSessionsQ = await HistoryModel.aggregate([
@@ -161,10 +162,10 @@ export default {
           },
         },
         { $group: { _id: '$collectionId' } },
-      ])
-      const updatedSessions = updatedSessionsQ.map(({_id})=> _id)
+      ]);
+      const updatedSessions = updatedSessionsQ.map(({ _id }) => _id);
       const changedSessionsQ = await ConferenceWeekDetailModel.aggregate([
-        { $match: { $or: [{createdAt: { $gt: since } },{_id: {$in: updatedSessions}}]} },
+        { $match: { $or: [{ createdAt: { $gt: since } }, { _id: { $in: updatedSessions } }] } },
         { $unwind: '$sessions' },
         { $addFields: { session: '$sessions' } },
         { $project: { sessions: 0 } },
@@ -174,23 +175,20 @@ export default {
         { $unwind: '$session.top.topic' },
         { $unwind: '$session.top.topic.procedureIds' },
         { $addFields: { procedureId: '$session.top.topic.procedureIds' } },
-        { $project: { procedureId: 1}}
+        { $project: { procedureId: 1 } },
       ]);
-      const changedSessions = changedSessionsQ.map(({procedureId})=> procedureId)
+      const changedSessions = changedSessionsQ.map(({ procedureId }) => procedureId);
       const updatedProcedureSessionsQ = await ProcedureModel.aggregate([
-        { $match: {procedureId: {$in: changedSessions}} },
-        { $project: { _id: 1}}
+        { $match: { procedureId: { $in: changedSessions } } },
+        { $project: { _id: 1 } },
       ]);
-      const updatedProcedureSessions = updatedProcedureSessionsQ.map(({_id})=> _id)
+      const updatedProcedureSessions = updatedProcedureSessionsQ.map(({ _id }) => _id);
 
       const changed = arrayUnique(updatedProcedures.concat(updatedProcedureSessions));
 
       // Build find query for procedures
       const proceduresFindQuery = {
-        $or: [
-          { createdAt: { $gt: since } },
-          { _id: { $in: changed } },
-        ],
+        $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
       };
 
       const procedures = await ProcedureModel.find(
