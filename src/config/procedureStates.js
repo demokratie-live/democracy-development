@@ -1,4 +1,4 @@
-import PROCEDURE_DEFINITIONS from './../definitions/procedure';
+import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 
 export default {
   PREPARATION: [

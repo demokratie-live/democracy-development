@@ -1,8 +1,10 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
 import { ConferenceWeekDetailScraper } from '@democracy-deutschland/scapacra-bt';
 
-import PROCEDURE_DEFINITIONS from '../definitions/procedure';
-import CONFERENCEWEEKDETAIL_DEFINITIONS from '../definitions/conferenceWeekDetail';
+import {
+  PROCEDURE as PROCEDURE_DEFINITIONS,
+  CONFERENCEWEEKDETAIL as CONFERENCEWEEKDETAIL_DEFINITIONS,
+} from '@democracy-deutschland/bundestag.io-definitions';
 
 import ConferenceWeekDetailModel from '../models/ConferenceWeekDetail';
 import ProcedureModel from '../models/Procedure';
@@ -116,14 +118,6 @@ export default async () => {
             tops: await session.tops.reduce(async (pTop, top) => {
               // Await for last result
               const resultTop = await pTop;
-              // correct Time
-              // TODO move to scraper? Since the scraper construct this data in a date form it might be wise to do it correctly there (?)
-              if (resultTop.length) {
-                const lastTop = resultTop[resultTop.length - 1];
-                if (lastTop && lastTop.time.getUTCHours() > top.time.getUTCHours()) {
-                  top.time.setDate(top.time.getDate() + 1);
-                }
-              }
               // Write VoteEnd Date
               lastProcedureIds.forEach(procedureId => {
                 if (
@@ -188,7 +182,13 @@ export default async () => {
           procedureId: procedureUpdate.procedureId,
           // Update only when needed
           $or: [
-            { voteDate: { $ne: procedureUpdate.voteDate } },
+            {
+              $and: [
+                { voteDate: { $ne: procedureUpdate.voteDate } },
+                // Make sure we do not override date from procedureScraper
+                { voteDate: { $lt: procedureUpdate.voteDate } },
+              ],
+            },
             { voteEnd: { $ne: procedureUpdate.voteEnd } },
           ],
         },

@@ -12,7 +12,7 @@ export default {
     ) => {
       const beforeCount = await DeputyModel.count({ createdAt: { $lte: since } });
       const afterCount = await DeputyModel.count({});
-      const changed = await HistoryModel.aggregate([
+      const changedQ = await HistoryModel.aggregate([
         {
           $match: {
             collectionName: 'Deputy',
@@ -21,6 +21,7 @@ export default {
         },
         { $group: { _id: '$collectionId' } },
       ]);
+      const changed = changedQ.map(({ _id }) => _id);
       const deputies = await DeputyModel.find(
         {
           $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],

@@ -13,7 +13,7 @@ export default {
     ) => {
       const beforeCount = await NamedPollModel.count({ createdAt: { $lte: since } });
       const afterCount = await NamedPollModel.count({});
-      const changed = await HistoryModel.aggregate([
+      const changedQ = await HistoryModel.aggregate([
         {
           $match: {
             collectionName: 'NamedPoll',
@@ -22,6 +22,7 @@ export default {
         },
         { $group: { _id: '$collectionId' } },
       ]);
+      const changed = changedQ.map(({ _id }) => _id);
 
       // Build find query for namedPolls
       const namedPollsFindQuery = {

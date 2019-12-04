@@ -153,6 +153,13 @@
     striptags "^3.1.1"
     x2js "^3.1.1"
 
+"@democracy-deutschland/bundestag.io-definitions@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bundestag.io-definitions/-/bundestag.io-definitions-1.0.0.tgz#9b54a141cf9cf99a0f572ad6e213bf28ac37f6b8"
+  integrity sha512-xj3lh1iX4uUz7IH5/CfEV+uPrwdwn6We/OtjqRgROJid+0RYwIxdSlwzYZ3b/FCMZanL2+IypxJgZVvaSFI4sw==
+  dependencies:
+    typescript "^3.7.2"
+
 "@democracy-deutschland/dip21-scraper@0.1.6":
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.6.tgz#aea1c6ae5e08eb8040d8cf756490ee86a39a15e9"
@@ -173,10 +180,10 @@
     request-cookies "^1.1.0"
     x2js "^3.1.1"
 
-"@democracy-deutschland/scapacra-bt@1.0.25":
-  version "1.0.25"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra-bt/-/scapacra-bt-1.0.25.tgz#0f6ece1875305549bfd564f7ef721c3695f335ff"
-  integrity sha512-jaRw9MztnZvEBm9N4Xvcg+4qDTXgZcifeam39x1JJjSYmQzzgb9WDoG6JR9kubPBLLOGyMX++yKcZIm0gncKfA==
+"@democracy-deutschland/scapacra-bt@1.0.26":
+  version "1.0.26"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra-bt/-/scapacra-bt-1.0.26.tgz#3e58706a036622f501935a844df3c85910f8cc4a"
+  integrity sha512-gclxNCl44w2trNAm/WWPih6MrZ7n42oypjbbAX787gRyWyNntlfx3/GZlkB/EAM3Wst66fAp9TElE6XTtlZkjw==
   dependencies:
     "@democracy-deutschland/scapacra" "1.0.6"
     "@types/axios" "^0.14.0"
@@ -7742,6 +7749,11 @@ typescript@^3.6.3:
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.3.tgz#fea942fabb20f7e1ca7164ff626f1a9f3f70b4da"
   integrity sha512-N7bceJL1CtRQ2RiG0AQME13ksR7DiuQh/QehubYcghzv20tnh+MQnQIuJddTmsbqYj+dztchykemz0zFzlvdQw==
+
+typescript@^3.7.2:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.2.tgz#27e489b95fa5909445e9fef5ee48d81697ad18fb"
+  integrity sha512-ml7V7JfiN2Xwvcer+XAf2csGO1bPBdRbFCkYBczNZggrBZ9c7G3riSUeJmqEU5uOtXNPMhE3n+R4FA/3YOAWOQ==
 
 ua-parser-js@^0.7.18, ua-parser-js@^0.7.9:
   version "0.7.19"

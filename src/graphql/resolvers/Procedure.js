@@ -1,10 +1,23 @@
 import diffHistory from 'mongoose-diff-history/diffHistory';
 
+import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 import PROCEDURE_STATES from '../../config/procedureStates';
-import PROCEDURE_DEFINITIONS from '../../definitions/procedure';
 
 import History from '../../models/History';
 import ConferenceWeekDetail from '../../models/ConferenceWeekDetail';
+
+const arrayUnique = array => {
+  const a = array.concat();
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < a.length; ++i) {
+    // eslint-disable-next-line no-plusplus
+    for (let j = i + 1; j < a.length; ++j) {
+      if (a[i].equals(a[j])) a.splice(j--, 1); // eslint-disable-line no-plusplus
+    }
+  }
+
+  return a;
+};
 
 const deputiesNumber = {
   19: {
@@ -125,11 +138,11 @@ export default {
     procedureUpdates: async (
       parent,
       { since, limit = 99, offset = 0 },
-      { ProcedureModel, HistoryModel },
+      { ProcedureModel, HistoryModel, ConferenceWeekDetailModel },
     ) => {
       const beforeCount = await ProcedureModel.count({ createdAt: { $lte: since } });
       const afterCount = await ProcedureModel.count({});
-      const changed = await HistoryModel.aggregate([
+      const updatedProceduresQ = await HistoryModel.aggregate([
         {
           $match: {
             collectionName: 'Procedure',
@@ -138,8 +151,42 @@ export default {
         },
         { $group: { _id: '$collectionId' } },
       ]);
+      const updatedProcedures = updatedProceduresQ.map(({ _id }) => _id);
 
-      // Build find query for namedPolls
+      // Also take changed session info into account
+      const updatedSessionsQ = await HistoryModel.aggregate([
+        {
+          $match: {
+            collectionName: 'ConferenceWeekDetail',
+            createdAt: { $gt: since },
+          },
+        },
+        { $group: { _id: '$collectionId' } },
+      ]);
+      const updatedSessions = updatedSessionsQ.map(({ _id }) => _id);
+      const changedSessionsQ = await ConferenceWeekDetailModel.aggregate([
+        { $match: { $or: [{ createdAt: { $gt: since } }, { _id: { $in: updatedSessions } }] } },
+        { $unwind: '$sessions' },
+        { $addFields: { session: '$sessions' } },
+        { $project: { sessions: 0 } },
+        { $unwind: '$session.tops' },
+        { $addFields: { 'session.top': '$session.tops' } },
+        { $project: { 'session.tops': 0 } },
+        { $unwind: '$session.top.topic' },
+        { $unwind: '$session.top.topic.procedureIds' },
+        { $addFields: { procedureId: '$session.top.topic.procedureIds' } },
+        { $project: { procedureId: 1 } },
+      ]);
+      const changedSessions = changedSessionsQ.map(({ procedureId }) => procedureId);
+      const updatedProcedureSessionsQ = await ProcedureModel.aggregate([
+        { $match: { procedureId: { $in: changedSessions } } },
+        { $project: { _id: 1 } },
+      ]);
+      const updatedProcedureSessions = updatedProcedureSessionsQ.map(({ _id }) => _id);
+
+      const changed = arrayUnique(updatedProcedures.concat(updatedProcedureSessions));
+
+      // Build find query for procedures
       const proceduresFindQuery = {
         $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
       };
@@ -305,7 +352,10 @@ export default {
         { $addFields: { 'session.top': '$session.tops' } },
         { $project: { 'session.tops': 0 } },
         { $unwind: '$session.top.topic' },
-        { $match: { 'session.top.topic.procedureIds': procedure.procedureId } },
+        { $unwind: '$session.top.topic.procedureIds' },
+        { $addFields: { 'session.top.topic.procedureId': '$session.top.topic.procedureIds' } },
+        { $project: { 'session.top.topic.procedureIds': 0 } },
+        { $match: { 'session.top.topic.procedureId': procedure.procedureId } },
       ]),
   },
 };

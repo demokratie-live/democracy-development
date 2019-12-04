@@ -1,8 +1,10 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
 import { NamedPollScraper } from '@democracy-deutschland/scapacra-bt';
 
-import PROCEDURE_DEFINITIONS from '../definitions/procedure';
-import NAMEDPOLL_DEFINITIONS from '../definitions/namedPoll';
+import {
+  PROCEDURE as PROCEDURE_DEFINITIONS,
+  NAMEDPOLL as NAMEDPOLL_DEFINITIONS,
+} from '@democracy-deutschland/bundestag.io-definitions';
 
 import Procedure from '../models/Procedure';
 import NamedPoll from '../models/NamedPoll';
