@@ -87,6 +87,8 @@ namespace Parser {
                         const sessionData: string = match;
                         let n;
                         const regex_tops = /<tr>[\s\S]*?<td data-th="Uhrzeit"><p>([\s\S]*?)<\/p><\/td>[\s\S]*?<td data-th="TOP"><p>([\s\S]*?)<\/p><\/td>[\s\S]*?<td data-th="Thema">[\s\S]*?<div class="bt-documents-description">([\s\S]*?)<\/div>[\s\S]*?<\/td>[\s\S]*?<td data-th="Status\/ Abstimmung">([\s\S]*?)<\/td>[\s\S]*?<\/tr>/gm
+                        let lastTopTime: Date | null = null;
+                        let newDay: Boolean = false;
                         while ((n = regex_tops.exec(sessionData)) !== null) {
                             // This is necessary to avoid infinite loops with zero-width matches
                             if (n.index === regex_tops.lastIndex) {
@@ -97,6 +99,15 @@ namespace Parser {
                             n.forEach((match, group) => {
                                 if (group === 1) {
                                     top.time = moment.utc(`${session.dateText} ${match.trim()}`, 'DD MMM YYYY HH:mm', 'de').toDate();
+                                    // Determin if the session is spanning into the new Day
+                                    if (top.time && lastTopTime && lastTopTime.getUTCHours() > top.time.getUTCHours()) {
+                                        newDay = true;
+                                    }
+                                    // If a new Day is detected just increase day by one for each following top
+                                    if(top.time && newDay){
+                                        top.time.setDate(top.time.getDate() + 1);
+                                    }
+                                    lastTopTime = top.time
                                 }
                                 if (group === 2) {
                                     top.top = match.trim();
