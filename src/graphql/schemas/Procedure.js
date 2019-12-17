@@ -1,11 +1,18 @@
 export default `
 
+type FilteredConferenceWeekDetailSessionTopTopic {
+  lines: [String]
+  documents: [String],
+  isVote: Boolean
+  procedureId: String
+}
+
 type FilteredConferenceWeekDetailSessionTop {
   time: Date
   top: String
   heading: String
   article: String
-  topic: ConferenceWeekDetailSessionTopTopic
+  topic: FilteredConferenceWeekDetailSessionTopTopic
   status: [ConferenceWeekDetailSessionTopStatus]
 }
 type FilteredConferenceWeekDetailSession {
