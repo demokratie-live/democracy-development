@@ -3,8 +3,18 @@ import { DeputyProfileScraper } from '@democracy-deutschland/scapacra-bt';
 
 import DeputyModel from '../models/Deputy';
 
+import { getCron, setCronStart, setCronSuccess, setCronError } from './../services/cronJobs/tools';
+
+export const CRON_NAME = 'DeputyProfiles';
+
 export default async () => {
-  Log.info('START DEPUTY PROFILES SCRAPER');
+  const startDate = new Date();
+  const cron = await getCron({ name: CRON_NAME });
+  if (cron.running) {
+    Log.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
+    return;
+  }
+  await setCronStart({ name: CRON_NAME, startDate });
   try {
     await Scraper.scrape(new DeputyProfileScraper(), async dataPackage => {
       // Ignore those which have no webid (ausgeschieden)
@@ -35,7 +45,7 @@ export default async () => {
       return null;
     });
   } catch (error) {
-    Log.error(`Deputy Profiles Scraper failed ${error.message}`);
+    await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
   }
-  Log.info('FINISH DEPUTY PROFILES SCRAPER');
+  await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
 };

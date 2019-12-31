@@ -3,7 +3,6 @@
 import _ from 'lodash';
 import Scraper from '@democracy-deutschland/dip21-scraper';
 import prettyMs from 'pretty-ms';
-import moment from 'moment';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 import CONFIG from './../config';
@@ -12,8 +11,11 @@ import PROCEDURE_STATES from './../config/procedureStates';
 import Procedure from './../models/Procedure';
 import CronJobModel from './../models/CronJob';
 
+import { getCron, setCronStart, setCronSuccess, setCronError } from './../services/cronJobs/tools';
+
+export const CRON_NAME = 'Procedures';
+
 const scraper = new Scraper();
-let cronIsRunning = false;
 let cronStart = null;
 
 const parseDate = input => {
@@ -143,96 +145,69 @@ let startDate;
 const logStartDataProgress = async ({ sum }) => {
   startDate = new Date();
   linksSum = sum;
-  Log.info(`STARTED PROCEDURE SCRAPER DATA - ${startDate} - ${linksSum} Links found`);
+  Log.info(`[Cronjob][${CRON_NAME}] Data-Process started - ${startDate} - ${linksSum} Links found`);
 };
 
 const logFinished = () => {
   const end = Date.now();
   const elapsed = end - cronStart;
-  Log.info(`FINISHED PROCEDURE SCRAPER DATA - ${prettyMs(_.toInteger(elapsed))}`);
-  cronIsRunning = false;
+  Log.info(`[Cronjob][${CRON_NAME}] Data-Process finished - ${prettyMs(_.toInteger(elapsed))}`);
 };
 
 const logError = ({ error }) => {
-  Log.error(`PROCEDURE SCRAPER ERROR: ${JSON.stringify(error)}`);
+  Log.error(`[Cronjob][${CRON_NAME}] error: ${JSON.stringify(error)}`);
 };
 
 const cronTask = async () => {
-  if (!cronIsRunning) {
-    cronIsRunning = true;
-    cronStart = Date.now();
-    await CronJobModel.findOneAndUpdate(
-      {
-        name: 'import-procedures',
-      },
-      {
-        $set: {
-          name: 'import-procedures',
-          lastStartDate: cronStart,
-        },
-      },
-      {
-        upsert: true,
-        new: true,
-      },
-    );
-    Log.info(`STARTED PROCEDURE SCRAPER - ${moment(cronStart).format()}`);
-    // Do the scrape
-    await scraper
-      .scrape({
-        // settings
-        browserStackSize: 5,
-        selectPeriods: CONFIG.PERIODS,
-        selectOperationTypes: ['100', '500'],
-        logUpdateSearchProgress: () => {},
-        logStartDataProgress,
-        logStopDataProgress: () => {},
-        logUpdateDataProgress: () => {},
-        // log
-        logFinished,
-        logError,
-        // data
-        outScraperData: saveProcedure,
-        // cache(link skip logic)
-        // doScrape
-        type: 'html',
-        liveScrapeStates: PROCEDURE_STATES.IN_VOTE,
-      })
-      .then(async () => {
-        await CronJobModel.update(
-          {
-            name: 'import-procedures',
-          },
-          {
-            $set: {
-              lastFinishDate: Date.now(),
-            },
-          },
-          {
-            upsert: true,
-          },
-        );
-
-        Log.info(`FINISHED PROCEDURE SCRAPER`);
-      })
-      .catch(async error => {
-        Log.error(`PROCEDURE SCRAPER ERROR: ${JSON.stringify(error)}`);
-        logFinished();
-        await CronJobModel.update(
-          {
-            name: 'import-procedures',
-          },
-          {
-            $set: {
-              lastErrorDate: Date.now(),
-            },
-          },
-          {
-            upsert: true,
-          },
-        );
-      });
+  cronStart = new Date();
+  const cron = await getCron({ name: CRON_NAME });
+  if (cron.running) {
+    Log.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
+    return;
   }
+  await setCronStart({ name: CRON_NAME, startDate: cronStart });
+  // Do the scrape
+  await scraper
+    .scrape({
+      // settings
+      browserStackSize: 5,
+      selectPeriods: CONFIG.PERIODS,
+      selectOperationTypes: ['100', '500'],
+      logUpdateSearchProgress: () => {},
+      logStartDataProgress,
+      logStopDataProgress: () => {},
+      logUpdateDataProgress: () => {},
+      // log
+      logFinished,
+      logError,
+      // data
+      outScraperData: saveProcedure,
+      // cache(link skip logic)
+      // doScrape
+      type: 'html',
+      liveScrapeStates: PROCEDURE_STATES.IN_VOTE,
+    })
+    .then(async () => {
+      await CronJobModel.update(
+        {
+          name: 'import-procedures',
+        },
+        {
+          $set: {
+            lastFinishDate: Date.now(),
+          },
+        },
+        {
+          upsert: true,
+        },
+      );
+
+      await setCronSuccess({ name: CRON_NAME, successStartDate: cronStart });
+    })
+    .catch(async error => {
+      await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
+      logFinished();
+    });
 };
 
 export default cronTask;

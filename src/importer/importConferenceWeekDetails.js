@@ -9,6 +9,10 @@ import {
 import ConferenceWeekDetailModel from '../models/ConferenceWeekDetail';
 import ProcedureModel from '../models/Procedure';
 
+import { getCron, setCronStart, setCronSuccess, setCronError } from './../services/cronJobs/tools';
+
+export const CRON_NAME = 'ConferenceWeekDetails';
+
 const isVote = (topic, heading, documents, status) => {
   /*
   Erste Beratung = NEIN
@@ -96,7 +100,13 @@ const getProcedureIds = async documents => {
 };
 
 export default async () => {
-  Log.info('START CONFERENCE WEEK DETAIL SCRAPER');
+  const startDate = new Date();
+  const cron = await getCron({ name: CRON_NAME });
+  if (cron.running) {
+    Log.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
+    return;
+  }
+  await setCronStart({ name: CRON_NAME, startDate });
   try {
     const voteDates = [];
     let lastProcedureIds = [];
@@ -201,7 +211,7 @@ export default async () => {
       );
     });
   } catch (error) {
-    Log.error(`Conference Week Detail Scraper failed ${error.message}`);
+    await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
   }
-  Log.info('FINISH CONFERENCE WEEK DETAIL SCRAPER');
+  await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
 };

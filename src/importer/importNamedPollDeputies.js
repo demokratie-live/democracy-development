@@ -3,8 +3,18 @@ import { NamedPollDeputyScraper } from '@democracy-deutschland/scapacra-bt';
 
 import NamedPoll from '../models/NamedPoll';
 
+import { getCron, setCronStart, setCronSuccess, setCronError } from './../services/cronJobs/tools';
+
+export const CRON_NAME = 'NamedPollsDeputies';
+
 export default async () => {
-  Log.info('START NAMED POLL DEPUTIES SCRAPER');
+  const startDate = new Date();
+  const cron = await getCron({ name: CRON_NAME });
+  if (cron.running) {
+    Log.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
+    return;
+  }
+  await setCronStart({ name: CRON_NAME, startDate });
   try {
     await Scraper.scrape(new NamedPollDeputyScraper(), async dataPackage => {
       // Construct Database object
@@ -42,7 +52,7 @@ export default async () => {
       return null;
     });
   } catch (error) {
-    Log.error(`Named Poll Deputies Scraper failed ${error.message}`);
+    await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
   }
-  Log.info('FINISH NAMED POLL DEPUTIES SCRAPER');
+  await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
 };
