@@ -2,11 +2,21 @@ import { CronJob } from 'cron';
 
 import CONFIG from '../../config';
 
-import importProcedures, {CRON_NAME as CRON_NAME_PROCEDURES} from './../../importer/importProcedures';
-import importConferenceWeekDetails, {CRON_NAME as CRON_NAME_CONFERENCE_WEEK_DETAILS} from './../../importer/importConferenceWeekDetails';
-import importNamedPolls, {CRON_NAME as CRON_NAME_NAMED_POLLS} from './../../importer/importNamedPolls';
-import importNamedPollDeputies, {CRON_NAME as CRON_NAME_NAMED_POLLS_DEPUTIES} from './../../importer/importNamedPollDeputies';
-import importDeputyProfiles, {CRON_NAME as CRON_NAME_DEPUTY_PROFILES} from './../../importer/importDeputyProfiles';
+import importProcedures, {
+  CRON_NAME as CRON_NAME_PROCEDURES,
+} from './../../importer/importProcedures';
+import importConferenceWeekDetails, {
+  CRON_NAME as CRON_NAME_CONFERENCE_WEEK_DETAILS,
+} from './../../importer/importConferenceWeekDetails';
+import importNamedPolls, {
+  CRON_NAME as CRON_NAME_NAMED_POLLS,
+} from './../../importer/importNamedPolls';
+import importNamedPollDeputies, {
+  CRON_NAME as CRON_NAME_NAMED_POLLS_DEPUTIES,
+} from './../../importer/importNamedPollDeputies';
+import importDeputyProfiles, {
+  CRON_NAME as CRON_NAME_DEPUTY_PROFILES,
+} from './../../importer/importDeputyProfiles';
 
 import { resetCronRunningState } from './tools';
 

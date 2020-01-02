@@ -2,14 +2,14 @@ import { CronTime } from 'cron';
 
 import CronJobModel from '../../models/CronJob';
 
-export const testCronTime = (time) => {
+export const testCronTime = time => {
   try {
-    new CronTime(time)
-  } catch(e){
-    return false
+    const p = new CronTime(time); // eslint-disable-line no-unused-vars
+  } catch (e) {
+    return false;
   }
-  return true
-}
+  return true;
+};
 
 export const getCron = async ({ name }) => {
   const cronjob = await CronJobModel.findOne({ name });
@@ -65,7 +65,7 @@ export const setCronError = async ({
 };
 
 export const resetCronSuccessStartDate = async () => {
-  const CRON_NAME = 'resetCronSuccessStartDate'
+  const CRON_NAME = 'resetCronSuccessStartDate';
   const startDate = new Date();
   const cron = await getCron({ name: CRON_NAME });
   if (cron.running) {
@@ -75,6 +75,6 @@ export const resetCronSuccessStartDate = async () => {
   await setCronStart({ name: CRON_NAME, startDate });
   await CronJobModel.updateMany({}, { lastSuccessStartDate: new Date(0) });
   await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
-}
+};
 
 export const resetCronRunningState = async () => CronJobModel.updateMany({}, { running: false });
