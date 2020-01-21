@@ -8,7 +8,7 @@ openssl aes-256-cbc -k "$SECRET" -in ./.travis/ssh_key.enc -out ./.travis/ssh_ke
 openssl aes-256-cbc -k "$SECRET" -in ./.travis/ssh_key.pub.enc -out ./.travis/ssh_key.pub -d -md md5
 
 # democracy-app.de-api .env
-openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-api/.env.enc -out ./democracy-app.de-api/.env -d -md md5
+openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-api/.env.enc -out ./democracy-app.de-api/.env -d -md sha256
 # democracy-app.de-admin .env
 openssl aes-256-cbc -k "$SECRET" -in ./democracy-app.de-admin/.env.enc -out ./democracy-app.de-admin/.env -d -md sha256
 
