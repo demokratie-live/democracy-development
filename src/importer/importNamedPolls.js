@@ -9,8 +9,18 @@ import {
 import Procedure from '../models/Procedure';
 import NamedPoll from '../models/NamedPoll';
 
+import { getCron, setCronStart, setCronSuccess, setCronError } from './../services/cronJobs/tools';
+
+export const CRON_NAME = 'NamedPolls';
+
 export default async () => {
-  Log.info('START NAMED POLLS SCRAPER');
+  const startDate = new Date();
+  const cron = await getCron({ name: CRON_NAME });
+  if (cron.running) {
+    Log.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
+    return;
+  }
+  await setCronStart({ name: CRON_NAME, startDate });
   try {
     await Scraper.scrape(new NamedPollScraper(), async dataPackage => {
       let procedureId = null;
@@ -47,12 +57,14 @@ export default async () => {
 
         // We did find too many
         if (procedures.length > 1) {
-          Log.error(`Named Polls Scraper duplicate Procedure match on: ${dataPackage.meta.url}`);
+          Log.error(
+            `[Cronjob][${CRON_NAME}] duplicate Procedure match on: ${dataPackage.meta.url}`,
+          );
         }
 
         // We did not find anything
         if (procedures.length === 0) {
-          Log.warn(`Named Polls Scraper no Procedure match on: ${dataPackage.meta.url}`);
+          Log.warn(`[Cronjob][${CRON_NAME}] no Procedure match on: ${dataPackage.meta.url}`);
         }
 
         // We have exactly one match and can assign the procedureId
@@ -252,15 +264,14 @@ export default async () => {
       // TODO clarify this should be an error - matching should be better
       duplicateMatches.forEach(duplicate => {
         Log.error(
-          `Duplicate Matches(${duplicate.count}) on procedureId ${
+          `[Cronjob][${CRON_NAME}] Duplicate Matches(${duplicate.count}) on procedureId ${
             duplicate._id // eslint-disable-line no-underscore-dangle
           } for NamedPolls: ${duplicate.namedpolls.join(',')}`,
         );
       });
     }
   } catch (error) {
-    Log.error(`Named Polls Scraper failed ${error.message}`);
+    await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
   }
-
-  Log.info('FINISH NAMED POLLS SCRAPER');
+  await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
 };
