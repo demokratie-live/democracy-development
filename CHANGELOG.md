@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.10
+
+- [Fix] Dip21-Scraper (update)
+
 ### 0.1.9
 
 - [Added] env settings for cronjobs
