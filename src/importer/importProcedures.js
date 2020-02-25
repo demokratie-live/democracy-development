@@ -184,7 +184,7 @@ const cronTask = async () => {
       outScraperData: saveProcedure,
       // cache(link skip logic)
       // doScrape
-      type: 'html',
+      scrapeType: 'html',
       liveScrapeStates: PROCEDURE_STATES.IN_VOTE,
     })
     .then(async () => {
