@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.11
+
+- [Fix] call Dip21-Scraper with correct html option
+
 ### 0.1.10
 
 - [Fix] Dip21-Scraper (update)
