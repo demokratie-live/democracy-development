@@ -160,10 +160,10 @@
   dependencies:
     typescript "^3.7.2"
 
-"@democracy-deutschland/dip21-scraper@0.1.7":
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.7.tgz#486bd7b19a8849f11bbf25f76cff0361b3294c8d"
-  integrity sha512-ceCNfkEnvd90Ak5ArYVi0O2Jlfh4/gqfAUJ90ipy4YmIgs7o1TMZFRf5cAkqY1/7Ukenksnc1CkiHiSfdRpzTw==
+"@democracy-deutschland/dip21-scraper@0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.8.tgz#a6279e716e79ed0b738aa15b6ec7f9a510f912c4"
+  integrity sha512-Pu3V/6m8ALVuu1j4+4rpC+97wOkPMAB0vcPojyMKjNYnwcLKLaLPEciAiqd+Iubm6NSQwIfzfMj/K3QEMAFNTg==
   dependencies:
     chalk "^2.3.1"
     colors "^1.1.2"
@@ -178,7 +178,6 @@
     pretty-ms "^3.1.0"
     request "^2.83.0"
     request-cookies "^1.1.0"
-    user-agents "^1.0.539"
     x2js "^3.1.1"
 
 "@democracy-deutschland/scapacra-bt@1.0.26":
@@ -2828,11 +2827,6 @@ detect-indent@^4.0.0:
   dependencies:
     repeating "^2.0.0"
 
-detect-indent@~6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/detect-indent/-/detect-indent-6.0.0.tgz#0abd0f549f69fc6659a254fe96786186b6f528fd"
-  integrity sha512-oSyFlqaTHCItVRGK5RmrmjB+CmaMOW7IaNA/kdxqhoa6d17j/5ce9O9eWXmV/KEdRwqpQA+Vqe8a8Bsybu4YnA==
-
 detect-libc@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
@@ -2853,11 +2847,6 @@ dicer@0.3.0:
   integrity sha512-MdceRRWqltEG2dZqO769g27N/3PXfcKl04VhYnBlo2YhH7zPi88VebsjTKclaOyiuMaGU72hTfw3VkUitGcVCA==
   dependencies:
     streamsearch "0.1.2"
-
-docopt@~0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/docopt/-/docopt-0.6.2.tgz#b28e9e2220da5ec49f7ea5bb24a47787405eeb11"
-  integrity sha1-so6eIiDaXsSffqW7JKR3h0Be6xE=
 
 doctrine@1.5.0:
   version "1.5.0"
@@ -2883,15 +2872,6 @@ dom-walk@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/dom-walk/-/dom-walk-0.1.1.tgz#672226dc74c8f799ad35307df936aba11acd6018"
   integrity sha1-ZyIm3HTI95mtNTB9+TaroRrNYBg=
-
-dot-json@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/dot-json/-/dot-json-1.2.0.tgz#16f62bbb15b0b834f5c8de299cfb9e4d494f2ac1"
-  integrity sha512-4bEM7KHFl/U9gAI5nIvU0/fwVzNnE713K339vcxAMtxd2D9mZP6o65UwlcXigJL4rfk90UM0J+D7IPIFYZMQ8Q==
-  dependencies:
-    detect-indent "~6.0.0"
-    docopt "~0.6.2"
-    underscore-keypath "~0.0.22"
 
 dot-prop@^4.1.0:
   version "4.2.0"
@@ -5152,7 +5132,7 @@ locate-path@^2.0.0:
     p-locate "^2.0.0"
     path-exists "^3.0.0"
 
-lodash.clonedeep@4.5.0, lodash.clonedeep@^4.5.0:
+lodash.clonedeep@4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
   integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
@@ -7800,18 +7780,6 @@ undefsafe@^2.0.2:
   dependencies:
     debug "^2.2.0"
 
-underscore-keypath@~0.0.22:
-  version "0.0.22"
-  resolved "https://registry.yarnpkg.com/underscore-keypath/-/underscore-keypath-0.0.22.tgz#48a528392bb6efc424be1caa56da4b5faccf264d"
-  integrity sha1-SKUoOSu278QkvhyqVtpLX6zPJk0=
-  dependencies:
-    underscore "*"
-
-underscore@*:
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.2.tgz#0c8d6f536d6f378a5af264a72f7bec50feb7cf2f"
-  integrity sha512-D39qtimx0c1fI3ya1Lnhk3E9nONswSKhnffBI0gME9C99fYOkNi04xs8K6pePLhvl1frbDemkaBQ5ikWllR2HQ==
-
 underscore@~1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.6.0.tgz#8b38b10cacdef63337b8b24e4ff86d45aea529a8"
@@ -7922,14 +7890,6 @@ use@^3.1.0:
   integrity sha512-6UJEQM/L+mzC3ZJNM56Q4DFGLX/evKGRg15UJHGB9X5j5Z3AFbgZvjUh2yq/UJUY4U5dh7Fal++XbNg1uzpRAw==
   dependencies:
     kind-of "^6.0.2"
-
-user-agents@^1.0.539:
-  version "1.0.539"
-  resolved "https://registry.yarnpkg.com/user-agents/-/user-agents-1.0.539.tgz#25b7b680f5333e68f70050b0bd096f93720d071f"
-  integrity sha512-947vN0g6m2KJhc0baw9rokevdzJDTQL7DLlXm9v3wQ6imN2flLm3npr+IolWgjQSswhP9ltxavCUq3L0xxAllA==
-  dependencies:
-    dot-json "^1.2.0"
-    lodash.clonedeep "^4.5.0"
 
 user-home@^1.1.1:
   version "1.1.1"

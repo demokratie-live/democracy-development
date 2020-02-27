@@ -6,7 +6,7 @@ import prettyMs from 'pretty-ms';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 import CONFIG from './../config';
-import PROCEDURE_STATES from './../config/procedureStates';
+// import PROCEDURE_STATES from './../config/procedureStates';
 
 import Procedure from './../models/Procedure';
 import CronJobModel from './../models/CronJob';
@@ -170,7 +170,7 @@ const cronTask = async () => {
   await scraper
     .scrape({
       // settings
-      browserStackSize: 5,
+      browserStackSize: 1,
       selectPeriods: CONFIG.PERIODS,
       selectOperationTypes: ['100', '500'],
       logUpdateSearchProgress: () => {},
@@ -185,7 +185,7 @@ const cronTask = async () => {
       // cache(link skip logic)
       // doScrape
       scrapeType: 'html',
-      liveScrapeStates: PROCEDURE_STATES.IN_VOTE,
+      // liveScrapeStates: PROCEDURE_STATES.IN_VOTE,
     })
     .then(async () => {
       await CronJobModel.update(

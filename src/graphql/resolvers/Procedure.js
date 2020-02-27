@@ -80,6 +80,7 @@ export default {
       if (manageVoteDate) {
         match = {
           ...match,
+          'customData.voteResults.yes': { $not: { $gte: 1 } },
           $or: [
             {
               history: {
