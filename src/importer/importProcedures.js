@@ -6,7 +6,7 @@ import prettyMs from 'pretty-ms';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 import CONFIG from './../config';
-import PROCEDURE_STATES from './../config/procedureStates';
+// import PROCEDURE_STATES from './../config/procedureStates';
 
 import Procedure from './../models/Procedure';
 import CronJobModel from './../models/CronJob';
