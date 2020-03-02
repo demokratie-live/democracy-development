@@ -12,5 +12,8 @@
         "**/ios": true,
         "**/android": true,
         "**/.next": true
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
     }
 }
