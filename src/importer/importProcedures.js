@@ -170,7 +170,7 @@ const cronTask = async () => {
   await scraper
     .scrape({
       // settings
-      browserStackSize: 1,
+      browserStackSize: 2,
       selectPeriods: CONFIG.PERIODS,
       selectOperationTypes: ['100', '500'],
       logUpdateSearchProgress: () => {},
@@ -184,7 +184,7 @@ const cronTask = async () => {
       outScraperData: saveProcedure,
       // cache(link skip logic)
       // doScrape
-      scrapeType: 'html',
+      // scrapeType: 'html',
       // liveScrapeStates: PROCEDURE_STATES.IN_VOTE,
     })
     .then(async () => {
