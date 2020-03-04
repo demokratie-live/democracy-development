@@ -256,7 +256,7 @@ export default {
           return { party, main, deviants };
         });
 
-        const votingRecommendationEntry = procedure.history.find(
+        const votingRecommendationEntrys = procedure.history.filter(
           ({ initiator }) =>
             initiator &&
             initiator.search(
@@ -270,7 +270,7 @@ export default {
           ...sumResults,
         };
 
-        if (votingRecommendationEntry) {
+        votingRecommendationEntrys.forEach(votingRecommendationEntry => {
           switch (votingRecommendationEntry.abstract) {
             case PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME:
               voteResults.votingRecommendation = true;
@@ -282,7 +282,7 @@ export default {
             default:
               break;
           }
-        }
+        });
       }
 
       await ProcedureModel.update(

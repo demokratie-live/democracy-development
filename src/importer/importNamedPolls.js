@@ -180,7 +180,7 @@ export default async () => {
               type === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG,
           );
 
-        const votingRecommendationEntry = history.find(
+        const votingRecommendationEntrys = history.filter(
           ({ initiator }) =>
             initiator &&
             initiator.search(
@@ -195,7 +195,7 @@ export default async () => {
             ? 'recommendedDecision'
             : 'mainDocument';
 
-        if (votingRecommendationEntry) {
+        votingRecommendationEntrys.forEach(votingRecommendationEntry => {
           switch (votingRecommendationEntry.abstract) {
             case PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME:
               customData.voteResults.votingRecommendation = true;
@@ -207,7 +207,7 @@ export default async () => {
             default:
               break;
           }
-        }
+        });
 
         await Procedure.findOneAndUpdate({ procedureId }, { customData });
 
