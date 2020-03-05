@@ -196,16 +196,18 @@ export default async () => {
             : 'mainDocument';
 
         votingRecommendationEntrys.forEach(votingRecommendationEntry => {
-          switch (votingRecommendationEntry.abstract) {
-            case PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME:
-              customData.voteResults.votingRecommendation = true;
-              break;
-            case PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG:
-              customData.voteResults.votingRecommendation = false;
-              break;
-
-            default:
-              break;
+          if (
+            votingRecommendationEntry.abstract.search(
+              PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME,
+            ) !== -1
+          ) {
+            customData.voteResults.votingRecommendation = true;
+          } else if (
+            votingRecommendationEntry.abstract.search(
+              PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG,
+            ) !== -1
+          ) {
+            customData.voteResults.votingRecommendation = false;
           }
         });
 

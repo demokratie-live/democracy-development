@@ -1,6 +1,6 @@
 {
   "name": "bundestag.io",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "main": "src/index.js",
   "author": "Ulf Gebhardt",
   "license": "Apache2",
