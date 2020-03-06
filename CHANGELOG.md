@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.12
+
+- [Fix] Toggle vote results for recomended decision
+
 ### 0.1.11
 
 - [Fix] call Dip21-Scraper with correct html option
