@@ -160,10 +160,10 @@
   dependencies:
     typescript "^3.7.2"
 
-"@democracy-deutschland/dip21-scraper@0.1.8":
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.8.tgz#a6279e716e79ed0b738aa15b6ec7f9a510f912c4"
-  integrity sha512-Pu3V/6m8ALVuu1j4+4rpC+97wOkPMAB0vcPojyMKjNYnwcLKLaLPEciAiqd+Iubm6NSQwIfzfMj/K3QEMAFNTg==
+"@democracy-deutschland/dip21-scraper@0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.9.tgz#cb127ee6f0b44de11187541888c020c90c589deb"
+  integrity sha512-wQRDmrmGWKGSrK5fSNR0N8975GcCbydovp5waU13haHJd4L9OqVh2OVqzvbbVrlABkPLpFK2QtZ3T2obIxf/ng==
   dependencies:
     chalk "^2.3.1"
     colors "^1.1.2"

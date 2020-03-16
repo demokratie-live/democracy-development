@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.13
+
+- [Fix] update dip21 scraper to handle different base urls
+
 ### 0.1.12
 
 - [Fix] Toggle vote results for recomended decision
