@@ -15,7 +15,7 @@ import { getCron, setCronStart, setCronSuccess, setCronError } from './../servic
 
 export const CRON_NAME = 'Procedures';
 
-const scraper = new Scraper();
+const scraper = new Scraper({ baseUrl: 'dip21.bundestag.de' });
 let cronStart = null;
 
 const parseDate = input => {
@@ -184,7 +184,7 @@ const cronTask = async () => {
       outScraperData: saveProcedure,
       // cache(link skip logic)
       // doScrape
-      // scrapeType: 'html',
+      scrapeType: 'html',
       // liveScrapeStates: PROCEDURE_STATES.IN_VOTE,
     })
     .then(async () => {
