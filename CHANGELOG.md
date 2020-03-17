@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.14
+
+- [Fix] add base url for dip21 scraper + use html version
+
 ### 0.1.13
 
 - [Fix] update dip21 scraper to handle different base urls
