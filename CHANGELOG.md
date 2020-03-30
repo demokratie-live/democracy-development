@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.15
+
+- [Fix] improve performance for procedureUpdates
+
 ### 0.1.14
 
 - [Fix] add base url for dip21 scraper + use html version

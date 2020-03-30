@@ -2,22 +2,10 @@ import diffHistory from 'mongoose-diff-history/diffHistory';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 import PROCEDURE_STATES from '../../config/procedureStates';
+import { uniq } from 'lodash';
 
 import History from '../../models/History';
 import ConferenceWeekDetail from '../../models/ConferenceWeekDetail';
-
-const arrayUnique = array => {
-  const a = array.concat();
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < a.length; ++i) {
-    // eslint-disable-next-line no-plusplus
-    for (let j = i + 1; j < a.length; ++j) {
-      if (a[i].equals(a[j])) a.splice(j--, 1); // eslint-disable-line no-plusplus
-    }
-  }
-
-  return a;
-};
 
 const deputiesNumber = {
   19: {
@@ -185,8 +173,7 @@ export default {
       ]);
       const updatedProcedureSessions = updatedProcedureSessionsQ.map(({ _id }) => _id);
 
-      const changed = arrayUnique(updatedProcedures.concat(updatedProcedureSessions));
-
+      const changed = uniq([...updatedProcedures], ...updatedProcedureSessions);
       // Build find query for procedures
       const proceduresFindQuery = {
         $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
