@@ -126,7 +126,7 @@ type Query {
   procedure(procedureId: String!): Procedure
   procedures(offset: Int, IDs: [String!], status: [String!], voteDate: [Boolean!], manageVoteDate: Boolean, limit: Int, offset: Int): [Procedure]
   allProcedures(offset: Int): [Procedure]
-  procedureUpdates(since: Date!, limit: Int, offset: Int): ProcedureUpdate
+  procedureUpdates(since: Date!, limit: Int, offset: Int, periods: [Int!], types: [String!]): ProcedureUpdate
 }
 
 type Mutation {

@@ -126,11 +126,20 @@ export default {
 
     procedureUpdates: async (
       parent,
-      { since, limit = 99, offset = 0 },
+      { since, limit = 99, offset = 0, periods, types },
       { ProcedureModel, HistoryModel, ConferenceWeekDetailModel },
     ) => {
-      const beforeCount = await ProcedureModel.count({ createdAt: { $lte: since } });
-      const afterCount = await ProcedureModel.count({});
+      const periodMatch = periods ? { period: { $in: periods } } : {};
+      const typesMatch = types ? { type: { $in: types } } : {};
+      const beforeCount = await ProcedureModel.count({
+        createdAt: { $lte: since },
+        ...periodMatch,
+        ...typesMatch,
+      });
+      const afterCount = await ProcedureModel.count({
+        ...periodMatch,
+        ...typesMatch,
+      });
       const updatedProceduresQ = await HistoryModel.aggregate([
         {
           $match: {
@@ -177,6 +186,8 @@ export default {
       // Build find query for procedures
       const proceduresFindQuery = {
         $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
+        ...periodMatch,
+        ...typesMatch,
       };
 
       const procedures = await ProcedureModel.find(
