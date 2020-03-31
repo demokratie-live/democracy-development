@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.16
+
+- [Fix] saving not named voteResults
+
 ### 0.1.15
 
 - [Fix] improve performance for procedureUpdates
