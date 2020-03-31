@@ -258,18 +258,20 @@ export default {
         };
 
         votingRecommendationEntrys.forEach(votingRecommendationEntry => {
-          if (
-            votingRecommendationEntry.abstract.search(
-              PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME,
-            ) !== -1
-          ) {
-            voteResults.votingRecommendation = true;
-          } else if (
-            votingRecommendationEntry.abstract.search(
-              PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG,
-            ) !== -1
-          ) {
-            voteResults.votingRecommendation = false;
+          if (votingRecommendationEntry.abstract) {
+            if (
+              votingRecommendationEntry.abstract.search(
+                PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME,
+              ) !== -1
+            ) {
+              voteResults.votingRecommendation = true;
+            } else if (
+              votingRecommendationEntry.abstract.search(
+                PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG,
+              ) !== -1
+            ) {
+              voteResults.votingRecommendation = false;
+            }
           }
         });
       }
