@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.17
+
+- [Fix] Upgrade @democracy-deutschland/bundestag.io-definitions to fix toggle named poll
+
 ### 0.1.16
 
 - [Fix] saving not named voteResults
