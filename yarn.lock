@@ -153,10 +153,10 @@
     striptags "^3.1.1"
     x2js "^3.1.1"
 
-"@democracy-deutschland/bundestag.io-definitions@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bundestag.io-definitions/-/bundestag.io-definitions-1.0.1.tgz#404672beb5b13b85f1110f428a1786bd78c1874e"
-  integrity sha512-UJ9tkcilKyxEFqbs3VfdvXUAxo9Nat8Zl+1/MePt20LoR30wcAYX3vENFxLC3ADAzJytFXz5NvTQP87xcT4JnA==
+"@democracy-deutschland/bundestag.io-definitions@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bundestag.io-definitions/-/bundestag.io-definitions-1.0.2.tgz#5703052449ec618d60b58f46e2f18a8330630739"
+  integrity sha512-wdUnAuvN39xv+RvZWu/uWJWHOt1iDjFqFjE+5EaOBeEex6bmXpNiRCFVK25V9FfSXptjusj3FXxj2N4s5sqVKw==
   dependencies:
     typescript "^3.7.2"
 
