@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.18
+
+- [Fix] fix named polls matching
+
 ### 0.1.17
 
 - [Fix] Upgrade @democracy-deutschland/bundestag.io-definitions to fix toggle named poll
