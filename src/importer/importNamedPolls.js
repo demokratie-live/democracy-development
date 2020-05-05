@@ -1,5 +1,6 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
 import { NamedPollScraper } from '@democracy-deutschland/scapacra-bt';
+import url from 'url';
 
 import {
   PROCEDURE as PROCEDURE_DEFINITIONS,
@@ -29,9 +30,14 @@ export default async () => {
       // "http://dipbt.bundestag.de:80/dip21/btd/19/010/1901038.pdf
       // The named poll scraper returns them like so:
       // http://dip21.bundestag.de/dip21/btd/19/010/1901038.pdf
-      const findSpotUrls = dataPackage.data.documents.map(document =>
-        document.replace('http://dip21.bundestag.de/', 'http://dipbt.bundestag.de:80/'),
-      );
+      const findSpotUrls = dataPackage.data.documents.map(document => {
+        return {
+          'history.findSpotUrl': {
+            $regex: `.*${url.parse(document).path}.*`,
+          },
+        };
+        return document.replace('http://dip21.bundestag.de/', 'http://dipbt.bundestag.de:80/');
+      });
 
       let procedures;
       // Only match those which are not an Änderungsantrag
@@ -46,7 +52,7 @@ export default async () => {
       ) {
         // Find matching Procedures
         procedures = await Procedure.find({
-          'history.findSpotUrl': { $all: findSpotUrls },
+          $and: findSpotUrls,
           'history.decision': {
             $elemMatch: {
               type: PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG,
