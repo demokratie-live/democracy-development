@@ -36,9 +36,10 @@ const ensureArray = element => {
 
 const saveProcedure = async ({ procedureData }) => {
   // Transform History
-  const process = _.isArray(procedureData.VORGANGSABLAUF.VORGANGSPOSITION)
+  let process = _.isArray(procedureData.VORGANGSABLAUF.VORGANGSPOSITION)
     ? procedureData.VORGANGSABLAUF.VORGANGSPOSITION
     : [procedureData.VORGANGSABLAUF.VORGANGSPOSITION];
+  process = process.filter(e => e);
   const history = process.map(e => {
     const flow = {
       assignment: e.ZUORDNUNG.trim(),
