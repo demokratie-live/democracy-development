@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bundestagio-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bundestagio
+  template:
+    metadata:
+      labels:
+        app: bundestagio
+    spec:
+      containers:
+        - name: bundestagio
+          image: mananruck/bundestagio
+          env:
+            - name: DB_URL
+              value: "mongodb://democracy-mongo-srv:27017/bundestagio"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bundestagio-srv
+spec:
+  selector:
+    app: bundestagio
+  ports:
+    - name: bundestagio
+      protocol: TCP
+      port: 3100
+      targetPort: 3100

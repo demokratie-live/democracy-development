@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bundestagio-admin-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bundestagio-admin
+  template:
+    metadata:
+      labels:
+        app: bundestagio-admin
+    spec:
+      containers:
+        - name: bundestagio-admin
+          image: mananruck/bundestagio-admin
+          env:
+            - name: BUNDESTAGIO_SERVER_URL
+              value: "http://bundestagio-srv:3100/"
+            - name: BUNDESTAGIO_SERVER_URL_CLIENT
+              value: "http://democracy.develop/"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bundestagio-admin-srv
+spec:
+  selector:
+    app: bundestagio-admin
+  ports:
+    - name: bundestagio-admin
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

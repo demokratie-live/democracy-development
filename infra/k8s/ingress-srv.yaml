@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+    - host: democracy.develop
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: bundestagio-srv
+              servicePort: 3100
+    - host: bio-admin.develop
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: bundestagio-admin-srv
+              servicePort: 3000

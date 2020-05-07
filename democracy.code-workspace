@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "path": "bundestag.io-api"
+    },
+    {
+      "path": "bundestag.io-admin"
+    },
+    {
+      "path": "infra"
+    }
+  ],
+  "settings": {}
+}
