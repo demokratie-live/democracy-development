@@ -1,14 +1,15 @@
-FROM node:12.11.1
+FROM node:alpine
 
 # TMP - Yarn fix
 RUN mkdir -p /opt/yarn/bin && ln -s /opt/yarn/yarn-v1.5.1/bin/yarn /opt/yarn/bin/yarn
 
-WORKDIR /app
+# install git
+RUN apk update && apk upgrade && \
+    apk add --no-cache git
 
+WORKDIR /app
+COPY package.json .
+RUN npm install --only=prod
 COPY . .
 
-RUN yarn install
-
-RUN yarn build
-
-ENTRYPOINT [ "yarn", "serve" ]
+ENTRYPOINT [ "npm", "run", "dev" ]
