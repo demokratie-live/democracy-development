@@ -21,3 +21,10 @@ spec:
             backend:
               serviceName: bundestagio-admin-srv
               servicePort: 3000
+    - host: democracy.develop
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: democracy-api-srv
+              servicePort: 3000

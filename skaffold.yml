@@ -16,6 +16,14 @@ build:
         manual:
           - src: "src/**/*.js"
             dest: .
+    - image: mananruck/democracy-api
+      context: democracy-app.de-api
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.js"
+            dest: .
     - image: mananruck/bundestagio-admin
       context: bundestag.io-admin
       docker:

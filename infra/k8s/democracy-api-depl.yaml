@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democracy-api-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: democracy-api
+  template:
+    metadata:
+      labels:
+        app: democracy-api
+    spec:
+      containers:
+        - name: democracy-api
+          image: mananruck/democracy-api
+          env:
+            - name: DB_URL
+              value: "mongodb://democracy-mongo-srv:27017/democracy"
+            - name: BUNDESTAGIO_SERVER_URL
+              value: "http://bundestagio-srv:3100/"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: democracy-api-srv
+spec:
+  selector:
+    app: democracy-api
+  ports:
+    - name: democracy-api
+      protocol: TCP
+      port: 3100
+      targetPort: 3100

@@ -12,9 +12,16 @@ spec:
       labels:
         app: democracy-mongo
     spec:
+      volumes:
+        - name: mongo-storage
+          persistentVolumeClaim:
+            claimName: mongo-persistent-volume-claim
       containers:
         - name: democracy-mongo
           image: mongo
+          volumeMounts:
+            - name: mongo-storage
+              mountPath: /data/db
 ---
 apiVersion: v1
 kind: Service
