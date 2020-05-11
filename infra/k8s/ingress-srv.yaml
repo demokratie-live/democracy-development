@@ -28,3 +28,10 @@ spec:
             backend:
               serviceName: democracy-api-srv
               servicePort: 3000
+    - host: democracy-app.develop
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: democracy-app-srv
+              servicePort: 3000
