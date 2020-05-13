@@ -2,10 +2,12 @@ import diffHistory from 'mongoose-diff-history/diffHistory';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 import PROCEDURE_STATES from '../../config/procedureStates';
+import CONFIG from '../../config';
 import { uniq } from 'lodash';
 
 import History from '../../models/History';
 import ConferenceWeekDetail from '../../models/ConferenceWeekDetail';
+import importProcedures from '../../importer/importProcedures';
 
 const deputiesNumber = {
   19: {
@@ -210,6 +212,16 @@ export default {
   },
 
   Mutation: {
+    scrapeProcedures: async (parent, { key }) => {
+      if (CONFIG.RUN_SCRAPER_KEY.length < 10) {
+        return false;
+      }
+      if (CONFIG.RUN_SCRAPER_KEY !== key) {
+        return false;
+      }
+      importProcedures();
+      return true;
+    },
     saveProcedureCustomData: async (
       parent,
       { procedureId, partyVotes, decisionText, votingDocument },
