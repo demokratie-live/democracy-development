@@ -32,3 +32,11 @@ build:
         manual:
           - src: "**/*.js"
             dest: .
+    - image: mananruck/democracy-app
+      context: democracy-app.de
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "**/*.js"
+            dest: .

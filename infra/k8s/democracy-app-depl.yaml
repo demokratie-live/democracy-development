@@ -17,9 +17,9 @@ spec:
           image: mananruck/democracy-app
           env:
             - name: GRAPHQL_URL
-              value: "http://democracy-api-srv:3000/"
+              value: "http://democracy-api.develop/"
             - name: GRAPHQL_URL_SERVER
-              value: "http://democracy.develop/"
+              value: "http://democracy-api-srv:3000/"
 ---
 apiVersion: v1
 kind: Service

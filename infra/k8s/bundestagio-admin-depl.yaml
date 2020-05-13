@@ -19,7 +19,7 @@ spec:
             - name: BUNDESTAGIO_SERVER_URL
               value: "http://bundestagio-srv:3100/"
             - name: BUNDESTAGIO_SERVER_URL_CLIENT
-              value: "http://democracy.develop/"
+              value: "http://bundestagio.develop/"
 ---
 apiVersion: v1
 kind: Service
