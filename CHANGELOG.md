@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.19
+
+- [Add] start procedure scraper mutation
+
 ### 0.1.18
 
 - [Fix] fix named polls matching
