@@ -133,10 +133,10 @@
     striptags "^3.1.1"
     x2js "^3.1.1"
 
-"@democracy-deutschland/bt-named-polls@0.1.1-0":
-  version "0.1.1-0"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bt-named-polls/-/bt-named-polls-0.1.1-0.tgz#8dc9e2e7cb6feb51c4d0d0592820ad46e529c7b4"
-  integrity sha512-mlXKc+dd4mtWydrWPx1tydlaKSCBAjp09isWLVr3jpLnTigr2DWq4vjR+HO/1YlI0aLl/eJ5cFQlsKAhTAjoiA==
+"@democracy-deutschland/bt-named-polls@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bt-named-polls/-/bt-named-polls-1.0.0.tgz#4bea44ac28a385469704ef632301d46ba920e2a8"
+  integrity sha512-DKY0xvz+IJLLsP173QjSH79ABQMIkMNL+Yth/nbJadgnM7K4YrZjhqfxVvdONBGf4Bk9J1525VF8FMXpULETfg==
   dependencies:
     chalk "^2.3.1"
     colors "^1.1.2"
