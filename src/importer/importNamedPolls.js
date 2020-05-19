@@ -30,14 +30,16 @@ export default async () => {
       // "http://dipbt.bundestag.de:80/dip21/btd/19/010/1901038.pdf
       // The named poll scraper returns them like so:
       // http://dip21.bundestag.de/dip21/btd/19/010/1901038.pdf
-      const findSpotUrls = dataPackage.data.documents.map(document => {
-        return {
-          'history.findSpotUrl': {
-            $regex: `.*${url.parse(document).path}.*`,
-          },
-        };
-        return document.replace('http://dip21.bundestag.de/', 'http://dipbt.bundestag.de:80/');
-      });
+      const findSpotUrls = dataPackage.data.documents.map(document => ({
+        'history.findSpotUrl': {
+          $regex: `.*${url.parse(document).path}.*`,
+        },
+      }));
+
+      if (findSpotUrls.length === 0) {
+        Log.error(`[Cronjob][${CRON_NAME}] no documents on poll ${dataPackage.data.id}`);
+        return;
+      }
 
       let procedures;
       // Only match those which are not an Änderungsantrag
