@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.20
+
+- [Fix] Upgrade named poll scraper
+
 ### 0.1.19
 
 - [Add] start procedure scraper mutation
