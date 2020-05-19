@@ -30,14 +30,16 @@ export default async () => {
       // "http://dipbt.bundestag.de:80/dip21/btd/19/010/1901038.pdf
       // The named poll scraper returns them like so:
       // http://dip21.bundestag.de/dip21/btd/19/010/1901038.pdf
-      const findSpotUrls = dataPackage.data.documents.map(document => {
-        return {
-          'history.findSpotUrl': {
-            $regex: `.*${url.parse(document).path}.*`,
-          },
-        };
-        return document.replace('http://dip21.bundestag.de/', 'http://dipbt.bundestag.de:80/');
-      });
+      const findSpotUrls = dataPackage.data.documents.map(document => ({
+        'history.findSpotUrl': {
+          $regex: `.*${url.parse(document).path}.*`,
+        },
+      }));
+
+      if (findSpotUrls.length === 0) {
+        Log.warn(`[Cronjob][${CRON_NAME}] no documents on poll ${dataPackage.data.id}`);
+        return;
+      }
 
       let procedures;
       // Only match those which are not an Änderungsantrag
@@ -202,18 +204,20 @@ export default async () => {
             : 'mainDocument';
 
         votingRecommendationEntrys.forEach(votingRecommendationEntry => {
-          if (
-            votingRecommendationEntry.abstract.search(
-              PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME,
-            ) !== -1
-          ) {
-            customData.voteResults.votingRecommendation = true;
-          } else if (
-            votingRecommendationEntry.abstract.search(
-              PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG,
-            ) !== -1
-          ) {
-            customData.voteResults.votingRecommendation = false;
+          if (votingRecommendationEntry.abstract) {
+            if (
+              votingRecommendationEntry.abstract.search(
+                PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME,
+              ) !== -1
+            ) {
+              customData.voteResults.votingRecommendation = true;
+            } else if (
+              votingRecommendationEntry.abstract.search(
+                PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG,
+              ) !== -1
+            ) {
+              customData.voteResults.votingRecommendation = false;
+            }
           }
         });
 
@@ -278,8 +282,8 @@ export default async () => {
         );
       });
     }
+    await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
   } catch (error) {
     await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
   }
-  await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
 };
