@@ -37,7 +37,7 @@ export default async () => {
       }));
 
       if (findSpotUrls.length === 0) {
-        Log.error(`[Cronjob][${CRON_NAME}] no documents on poll ${dataPackage.data.id}`);
+        Log.warn(`[Cronjob][${CRON_NAME}] no documents on poll ${dataPackage.data.id}`);
         return;
       }
 
@@ -204,18 +204,20 @@ export default async () => {
             : 'mainDocument';
 
         votingRecommendationEntrys.forEach(votingRecommendationEntry => {
-          if (
-            votingRecommendationEntry.abstract.search(
-              PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME,
-            ) !== -1
-          ) {
-            customData.voteResults.votingRecommendation = true;
-          } else if (
-            votingRecommendationEntry.abstract.search(
-              PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG,
-            ) !== -1
-          ) {
-            customData.voteResults.votingRecommendation = false;
+          if (votingRecommendationEntry.abstract) {
+            if (
+              votingRecommendationEntry.abstract.search(
+                PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME,
+              ) !== -1
+            ) {
+              customData.voteResults.votingRecommendation = true;
+            } else if (
+              votingRecommendationEntry.abstract.search(
+                PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG,
+              ) !== -1
+            ) {
+              customData.voteResults.votingRecommendation = false;
+            }
           }
         });
 
@@ -280,8 +282,8 @@ export default async () => {
         );
       });
     }
+    await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
   } catch (error) {
     await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
   }
-  await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
 };
