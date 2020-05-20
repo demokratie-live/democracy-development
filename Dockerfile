@@ -1,11 +1,4 @@
-FROM node:alpine
-
-# TMP - Yarn fix
-RUN mkdir -p /opt/yarn/bin && ln -s /opt/yarn/yarn-v1.5.1/bin/yarn /opt/yarn/bin/yarn
-
-# install git
-RUN apk update && apk upgrade && \
-    apk add --no-cache git
+FROM node:12
 
 WORKDIR /app
 COPY package.json .
