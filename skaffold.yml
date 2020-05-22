@@ -40,3 +40,8 @@ build:
         manual:
           - src: "**/*.js"
             dest: .
+portForward:
+  - resourceType: Deployment
+    resourceName: democracy-mongo-depl
+    port: 27017
+    localPort: 27018
