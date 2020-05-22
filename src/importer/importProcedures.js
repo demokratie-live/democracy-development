@@ -36,9 +36,12 @@ const ensureArray = element => {
 
 const saveProcedure = async ({ procedureData }) => {
   // Transform History
-  let process = _.isArray(procedureData.VORGANGSABLAUF.VORGANGSPOSITION)
-    ? procedureData.VORGANGSABLAUF.VORGANGSPOSITION
-    : [procedureData.VORGANGSABLAUF.VORGANGSPOSITION];
+  let process = [];
+  if (procedureData.VORGANGSABLAUF) {
+    process = _.isArray(procedureData.VORGANGSABLAUF.VORGANGSPOSITION)
+      ? procedureData.VORGANGSABLAUF.VORGANGSPOSITION
+      : [procedureData.VORGANGSABLAUF.VORGANGSPOSITION];
+  }
   // TODO check why some e are undefined
   process = process.filter(e => e);
   const history = process.map(e => {
