@@ -17,7 +17,7 @@ build:
         manual:
           - src: "src/**/*.js"
             dest: .
-    - image: mananruck/democracy-api
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-api
       context: democracy-app.de-api
       docker:
         dockerfile: Dockerfile
