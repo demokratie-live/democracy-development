@@ -1,3 +1,6 @@
+.git
 node_modules
-files/*
-error-import.log
+logs
+.env*
+dist
+*.log
