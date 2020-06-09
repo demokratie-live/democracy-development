@@ -9,10 +9,10 @@ build:
   local:
     push: false
   artifacts:
-    - image: mananruck/bundestagio
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api
       context: bundestag.io-api
       docker:
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile.dev
       sync:
         manual:
           - src: "src/**/*.js"
@@ -25,7 +25,7 @@ build:
         manual:
           - src: "src/**/*.js"
             dest: .
-    - image: mananruck/bundestagio-admin
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-admin
       context: bundestag.io-admin
       docker:
         dockerfile: Dockerfile
@@ -33,7 +33,7 @@ build:
         manual:
           - src: "**/*.js"
             dest: .
-    - image: mananruck/democracy-app
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-app
       context: democracy-app.de
       docker:
         dockerfile: Dockerfile.dev

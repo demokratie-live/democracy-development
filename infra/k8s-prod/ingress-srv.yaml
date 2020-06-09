@@ -21,6 +21,13 @@ spec:
             backend:
               serviceName: democracy-app-srv
               servicePort: 3000
+    - host: kubernetes.api.bundestag.io
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: bundestagio-srv
+              servicePort: 3100
 ---
 apiVersion: v1
 kind: Service
