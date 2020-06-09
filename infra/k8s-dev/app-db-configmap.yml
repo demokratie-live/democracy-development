@@ -4,3 +4,4 @@ metadata:
   name: app-config
 data:
   MONGO_DB_URL: "mongodb://democracy-mongo-srv:27017/democracy"
+  NODE_ENV: "development"
