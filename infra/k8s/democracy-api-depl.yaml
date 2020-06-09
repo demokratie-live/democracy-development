@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: democracy-api
-          image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-api:0.0.4
+          image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-api:0.0.5
           env:
             - name: DB_URL
               valueFrom:
