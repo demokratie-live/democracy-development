@@ -20,6 +20,7 @@ spec:
                 name: bio-api-config
             - secretRef:
                 name: bio-admin-login
+                optional: true
           env:
             - name: BUNDESTAGIO_SERVER_URL
               value: "http://bundestagio-srv:3100/"
