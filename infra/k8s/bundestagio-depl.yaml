@@ -20,7 +20,10 @@ spec:
                 name: bio-api-config
           env:
             - name: DB_URL
-              value: "mongodb://democracy-mongo-srv:27017/bundestagio"
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: MONGO_DB_URL_BUNDESTAG
       imagePullSecrets:
         - name: regcred
 ---

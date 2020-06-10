@@ -3,5 +3,6 @@ kind: ConfigMap
 metadata:
   name: app-config
 data:
-  MONGO_DB_URL: "mongodb://democracy-mongo-srv:27017/democracy"
+  MONGO_DB_URL_DEMOCRACY: "mongodb://mongo-0.mongo,mongo-1.mongo/democracy?replicaSet=rs0"
+  MONGO_DB_URL_BUNDESTAG: "mongodb://mongo-0.mongo,mongo-1.mongo/bundestagio?replicaSet=rs0"
   NODE_ENV: "production"
