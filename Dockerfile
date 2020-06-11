@@ -30,4 +30,6 @@ COPY . .
 COPY --from=BUILD_IMAGE /app/dist ./dist
 COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
 
+ENV NODE_ENV=production
+
 ENTRYPOINT [ "yarn", "start" ]
