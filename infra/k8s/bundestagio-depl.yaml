@@ -15,6 +15,16 @@ spec:
       containers:
         - name: bundestagio
           image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api:0.0.2
+          livenessProbe:
+            httpGet:
+              path: /.well-known/apollo/server-health
+              port: 3100
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /.well-known/apollo/server-health
+              port: 3100
+            initialDelaySeconds: 15
           envFrom:
             - configMapRef:
                 name: bio-api-config
