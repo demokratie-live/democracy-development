@@ -3,6 +3,10 @@ kind: ConfigMap
 metadata:
   name: democracy-api-config
 data:
+  DB_URL: "mongodb://mongo-0.mongo,mongo-1.mongo/democracy?replicaSet=rs0"
+  BUNDESTAGIO_SERVER_URL: "http://bundestagio-srv:3100/"
+  STAGE: "internal"
+  DEBUG: "false"
   GRAPHIQL: "true"
   NODE_ENV: "production"
   # Scraper settings

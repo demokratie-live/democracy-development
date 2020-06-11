@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-config
-data:
-  MONGO_DB_URL_DEMOCRACY: "mongodb://democracy-mongo-srv:27017/democracy"
-  MONGO_DB_URL_BUNDESTAG: "mongodb://democracy-mongo-srv:27017/bundestagio"
-  NODE_ENV: "development"
-  API_GRAPHQL_URL: "http://democracy-api.develop/"

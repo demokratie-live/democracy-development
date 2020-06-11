@@ -14,24 +14,10 @@ spec:
     spec:
       containers:
         - name: democracy-api
-          image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-api:0.0.6
+          image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-api:0.0.7
           envFrom:
             - configMapRef:
                 name: democracy-api-config
-          env:
-            - name: DB_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: app-config
-                  key: MONGO_DB_URL_DEMOCRACY
-            - name: BUNDESTAGIO_SERVER_URL
-              value: "http://bundestagio-srv:3100/"
-            - name: STAGE
-              value: internal
-            - name: DEBUG
-              value: "true"
-            - name: GRAPHIQL
-              value: "true"
       imagePullSecrets:
         - name: regcred
 ---

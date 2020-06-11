@@ -14,21 +14,13 @@ spec:
     spec:
       containers:
         - name: bundestagio-admin
-          image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-admin:0.0.3
+          image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-admin:0.0.4
           envFrom:
             - configMapRef:
-                name: bio-api-config
+                name: bio-admin-config
             - secretRef:
                 name: bio-admin-login
                 optional: true
-          env:
-            - name: BUNDESTAGIO_SERVER_URL
-              value: "http://bundestagio-srv:3100/"
-            - name: NODE_ENV
-              valueFrom:
-                configMapKeyRef:
-                  name: app-config
-                  key: NODE_ENV
       imagePullSecrets:
         - name: regcred
 ---

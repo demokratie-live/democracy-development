@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: bio-admin-config
 data:
-  BUNDESTAGIO_SERVER_URL_CLIENT: "http://kubernetes.api.bundestag.io/"
+  BUNDESTAGIO_SERVER_URL_CLIENT: "https://kubernetes.api.bundestag.io/"
+  BUNDESTAGIO_SERVER_URL: "http://bundestagio-srv:3100/"

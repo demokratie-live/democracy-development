@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: bio-api-config
 data:
+  DB_URL: "mongodb://democracy-mongo-srv:27017/bundestagio"
   AUTH_JWT_SECRET: "CHANGE_ME"
   PERIODS: "19"
   # GraphQL
@@ -12,7 +13,7 @@ data:
   NODE_ENV: "development"
   SCRAPER_USER_AGEND: "LOCAL-DEVELOPER"
   # Scraper settings
-  CRON_START_ON_INIT: "true"
+  CRON_START_ON_INIT: "false"
   CRON_PROCEDURES: "0 3 * * *"
   CRON_CONFERENCEWEEKDETAILS: "*/15 * * * *"
   CRON_NAMED_POLLS: "15 3 * * *"

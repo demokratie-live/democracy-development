@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: bio-api-config
 data:
+  DB_URL: "mongodb://mongo-0.mongo,mongo-1.mongo/bundestagio?replicaSet=rs0"
   PERIODS: "19"
   # GraphQL
   GRAPHQL_PATH: "/"

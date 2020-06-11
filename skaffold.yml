@@ -23,7 +23,7 @@ build:
         dockerfile: Dockerfile.dev
       sync:
         manual:
-          - src: "src/**/*.js"
+          - src: "src/**/*.ts"
             dest: .
     - image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-admin
       context: bundestag.io-admin
