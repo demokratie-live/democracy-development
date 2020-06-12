@@ -15,6 +15,10 @@ spec:
       containers:
         - name: democracy-mongo
           image: mongo
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
 ---
 apiVersion: v1
 kind: Service

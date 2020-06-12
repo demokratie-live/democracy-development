@@ -27,6 +27,10 @@ spec:
           volumeMounts:
             - name: mongo-volume
               mountPath: /data/db
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
   volumeClaimTemplates:
     - metadata:
         name: mongo-volume
