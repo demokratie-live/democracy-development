@@ -104,7 +104,7 @@ namespace Parser {
           if (group === 3) {
             const sessionData: string = match;
             let n;
-            const regex_tops = /<tr>[\s\S]*?<td data-th="Uhrzeit">\s*<p>([\s\S]*?)<\/p><\/td>[\s\S]*?<td data-th="TOP"><p>([\s\S]*?)<\/p><\/td>[\s\S]*?<td data-th="Thema">[\s\S]*?<div class="bt-documents-description">([\s\S]*?)<\/div>[\s\S]*?<\/td>[\s\S]*?<td data-th="Status\/ Abstimmung">([\s\S]*?)<\/td>[\s\S]*?<\/tr>/gm;
+            const regex_tops = /<tr>[\s\S]*?<td data-th="Uhrzeit">[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?<td data-th="TOP">[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?<td data-th="Thema">[\s\S]*?<div class="bt-documents-description">([\s\S]*?)<\/div>[\s\S]*?<\/td>[\s\S]*?<td data-th="Status\/ Abstimmung">([\s\S]*?)<\/td>[\s\S]*?<\/tr>/gm;
             let lastTopTime: Date | null = null;
             let newDay: Boolean = false;
             while ((n = regex_tops.exec(sessionData)) !== null) {
