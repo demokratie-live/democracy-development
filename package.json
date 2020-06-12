@@ -22,7 +22,7 @@
     "@democracy-deutschland/bundestag.io-definitions": "1.0.2",
     "@democracy-deutschland/dip21-scraper": "0.1.9",
     "@democracy-deutschland/scapacra": "1.0.6",
-    "@democracy-deutschland/scapacra-bt": "1.0.27",
+    "@democracy-deutschland/scapacra-bt": "1.0.28",
     "@material-ui/icons": "^1.0.0-beta.42",
     "apollo-cache-inmemory": "^1.1.12",
     "apollo-client": "^2.2.8",
