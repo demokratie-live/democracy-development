@@ -28,6 +28,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: democracy-api-config
+            - secretRef:
+                name: democracy-api-jwt
+                optional: true
       imagePullSecrets:
         - name: regcred
 ---

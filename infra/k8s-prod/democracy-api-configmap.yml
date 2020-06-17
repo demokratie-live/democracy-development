@@ -15,3 +15,6 @@ data:
   CRON_NAMED_POLLS: "*/15 * * * *"
   CRON_DEPUTY_PROFILES: "*/15 * * * *"
   CRON_SHEDULE_BIO_RESYNC: "55 3 * */1 *"
+  # JWT
+  AUTH_JWT_TTL: "1m"
+  AUTH_JWT_REFRESH_TTL: "5m"

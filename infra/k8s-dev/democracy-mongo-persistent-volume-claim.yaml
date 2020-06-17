@@ -3,21 +3,21 @@ kind: PersistentVolumeClaim
 metadata:
   name: mongo-persistent-volume-claim
 spec:
-  storageClassName: manual
+  storageClassName: hostpath
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 3Gi
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: democracy-mognodb-volume
 spec:
-  storageClassName: manual
+  storageClassName: hostpath
   capacity:
-    storage: 3Gi
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
