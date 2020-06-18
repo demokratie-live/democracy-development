@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bundestagio
-          image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api:0.0.4
+          image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api:0.0.5
           livenessProbe:
             httpGet:
               path: /.well-known/apollo/server-health
