@@ -1,0 +1,449 @@
+apiVersion: v1
+data:
+  BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
+  BUNDESTAGIO_SERVER_URL_CLIENT: https://kubernetes.api.bundestag.io/
+kind: ConfigMap
+metadata:
+  name: bio-admin-config-dcc85tcm7f
+---
+apiVersion: v1
+data:
+  CRON_CONFERENCEWEEKDETAILS: '*/15 * * * *'
+  CRON_DEPUTY_PROFILES: 0 4 * * *
+  CRON_NAMED_POLLS: 15 3 * * *
+  CRON_NAMED_POLLS_DEPUTIES: 45 3 * * *
+  CRON_PROCEDURES: 0 3 * * *
+  CRON_START_ON_INIT: "true"
+  DB_URL: mongodb://mongo-0.mongo/bundestagio
+  GRAPHIQL: /graphiql
+  GRAPHQL_PATH: /
+  NODE_ENV: production
+  PERIODS: "19"
+  SCRAPER_USER_AGEND: DEMOCRACY-NEW-SERVER
+  VOYAGER: "true"
+kind: ConfigMap
+metadata:
+  name: bio-api-config-627b78g4g2
+---
+apiVersion: v1
+data:
+  AUTH_JWT_REFRESH_TTL: 5m
+  AUTH_JWT_TTL: 1m
+  BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
+  CRON_DEPUTY_PROFILES: '*/15 * * * *'
+  CRON_NAMED_POLLS: '*/15 * * * *'
+  CRON_PROCEDURES: 0 */1 * * *
+  CRON_SHEDULE_BIO_RESYNC: 55 3 * */1 *
+  CRON_START_ON_INIT: "true"
+  DB_URL: mongodb://mongo-0.mongo/democracy
+  DEBUG: "false"
+  GRAPHIQL: "true"
+  NODE_ENV: production
+  STAGE: internal
+kind: ConfigMap
+metadata:
+  name: democracy-api-config-k4667ck466
+---
+apiVersion: v1
+data:
+  GRAPHQL_URL: https://kubernetes.api.democracy-app.de
+  GRAPHQL_URL_SERVER: http://democracy-api-srv:3000/
+kind: ConfigMap
+metadata:
+  name: democracy-app-config-fkm5c2gfg8
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
+    service.beta.kubernetes.io/do-loadbalancer-hostname: kubernetes.api.democracy-app.de
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/version: 0.32.0
+    helm.sh/chart: ingress-nginx-2.0.3
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+spec:
+  externalTrafficPolicy: Local
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: https
+  selector:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bundestagio-admin-srv
+spec:
+  ports:
+  - name: bundestagio-admin
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: bundestagio-admin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bundestagio-srv
+spec:
+  ports:
+  - name: bundestagio
+    port: 3100
+    protocol: TCP
+    targetPort: 3100
+  selector:
+    app: bundestagio
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: democracy-api-srv
+spec:
+  ports:
+  - name: democracy-api
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: democracy-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: democracy-app-srv
+spec:
+  ports:
+  - name: democracy-app
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: democracy-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: mongo
+  name: mongo
+spec:
+  clusterIP: None
+  ports:
+  - name: mongo
+    port: 27017
+    targetPort: 27017
+  selector:
+    app: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats-srv
+spec:
+  ports:
+  - name: client
+    port: 4222
+    protocol: TCP
+    targetPort: 4222
+  - name: monitoring
+    port: 8222
+    protocol: TCP
+    targetPort: 8222
+  selector:
+    app: nats
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bundestagio-admin-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bundestagio-admin
+  template:
+    metadata:
+      labels:
+        app: bundestagio-admin
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: bio-admin-config-dcc85tcm7f
+        - secretRef:
+            name: bio-admin-login
+            optional: true
+        image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-admin:0.0.4
+        name: bundestagio-admin
+        resources:
+          limits:
+            cpu: 100m
+            memory: 150Mi
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bundestagio-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bundestagio
+  template:
+    metadata:
+      labels:
+        app: bundestagio
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: bio-api-config-627b78g4g2
+        image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api:0.0.4
+        livenessProbe:
+          httpGet:
+            path: /.well-known/apollo/server-health
+            port: 3100
+          initialDelaySeconds: 180
+          periodSeconds: 30
+        name: bundestagio
+        readinessProbe:
+          httpGet:
+            path: /.well-known/apollo/server-health
+            port: 3100
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 300m
+            memory: 500Mi
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democracy-api-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: democracy-api
+  template:
+    metadata:
+      labels:
+        app: democracy-api
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: democracy-api-config-k4667ck466
+        - secretRef:
+            name: democracy-api-secrets
+            optional: true
+        image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-api:0.0.9
+        livenessProbe:
+          httpGet:
+            path: /.well-known/apollo/server-health
+            port: 3000
+          periodSeconds: 180
+        name: democracy-api
+        readinessProbe:
+          httpGet:
+            path: /.well-known/apollo/server-health
+            port: 3000
+          initialDelaySeconds: 15
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democracy-app-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: democracy-app
+  template:
+    metadata:
+      labels:
+        app: democracy-app
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: democracy-app-config-fkm5c2gfg8
+        image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-app:0.0.6
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 180
+          timeoutSeconds: 10
+        name: democracy-app
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          periodSeconds: 15
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 300Mi
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nats
+  template:
+    metadata:
+      labels:
+        app: nats
+    spec:
+      containers:
+      - args:
+        - -p
+        - "4222"
+        - -m
+        - "8222"
+        - -hbi
+        - 5s
+        - -hbt
+        - 5s
+        - -hbf
+        - "2"
+        - -SD
+        - -cid
+        - ticketing
+        image: nats-streaming:0.17.0
+        name: nats
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  serviceName: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - image: mongo
+        name: mongo
+        ports:
+        - containerPort: 27017
+        resources:
+          limits:
+            cpu: 500m
+            memory: 2Gi
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongo-volume
+      terminationGracePeriodSeconds: 10
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-volume
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+  namespace: cert-manager
+spec:
+  acme:
+    email: contact@democracy-deutschland.de
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  name: ingress-service
+spec:
+  rules:
+  - host: kubernetes.api.democracy-app.de
+    http:
+      paths:
+      - backend:
+          serviceName: democracy-api-srv
+          servicePort: 3000
+        path: /?(.*)
+  - host: kubernetes.app.democracy-app.de
+    http:
+      paths:
+      - backend:
+          serviceName: democracy-app-srv
+          servicePort: 3000
+        path: /?(.*)
+  - host: kubernetes.api.bundestag.io
+    http:
+      paths:
+      - backend:
+          serviceName: bundestagio-srv
+          servicePort: 3100
+        path: /?(.*)
+  - host: kubernetes.admin.bundestag.io
+    http:
+      paths:
+      - backend:
+          serviceName: bundestagio-admin-srv
+          servicePort: 3000
+        path: /?(.*)
+  tls:
+  - hosts:
+    - kubernetes.api.democracy-app.de
+    - kubernetes.app.democracy-app.de
+    - kubernetes.api.bundestag.io
+    - kubernetes.admin.bundestag.io
+    secretName: democracy-tls

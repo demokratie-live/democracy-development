@@ -1,0 +1,387 @@
+apiVersion: v1
+data:
+  BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
+  BUNDESTAGIO_SERVER_URL_CLIENT: http://bundestagio.develop/
+kind: ConfigMap
+metadata:
+  name: bio-admin-config-52t2h245cg
+---
+apiVersion: v1
+data:
+  AUTH_JWT_SECRET: CHANGE_ME
+  CRON_CONFERENCEWEEKDETAILS: '*/15 * * * *'
+  CRON_DEPUTY_PROFILES: 0 4 * * *
+  CRON_NAMED_POLLS: 15 3 * * *
+  CRON_NAMED_POLLS_DEPUTIES: 45 3 * * *
+  CRON_PROCEDURES: 0 3 * * *
+  CRON_START_ON_INIT: "false"
+  DB_URL: mongodb://democracy-mongo-srv:27017/bundestagio
+  GRAPHIQL: /graphiql
+  GRAPHQL_PATH: /
+  NODE_ENV: development
+  PERIODS: "19"
+  SCRAPER_USER_AGEND: LOCAL-DEVELOPER
+  VOYAGER: "true"
+kind: ConfigMap
+metadata:
+  name: bio-api-config-b9fbd5t7m9
+---
+apiVersion: v1
+data:
+  BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
+  CRON_DEPUTY_PROFILES: '*/15 * * * *'
+  CRON_NAMED_POLLS: '*/15 * * * *'
+  CRON_PROCEDURES: 0 */1 * * *
+  CRON_SHEDULE_BIO_RESYNC: 55 3 * */1 *
+  CRON_START_ON_INIT: "true"
+  DB_URL: mongodb://democracy-mongo-srv:27017/democracy
+  DEBUG: "true"
+  GRAPHIQL: "true"
+  NODE_ENV: development
+  STAGE: internal
+kind: ConfigMap
+metadata:
+  name: democracy-api-config-85gt54cf69
+---
+apiVersion: v1
+data:
+  GRAPHQL_URL: http://democracy-api.develop/
+  GRAPHQL_URL_SERVER: http://democracy-api-srv:3000/
+kind: ConfigMap
+metadata:
+  name: democracy-app-config-k4876hmgg9
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bundestagio-admin-srv
+spec:
+  ports:
+  - name: bundestagio-admin
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: bundestagio-admin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bundestagio-srv
+spec:
+  ports:
+  - name: bundestagio
+    port: 3100
+    protocol: TCP
+    targetPort: 3100
+  selector:
+    app: bundestagio
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: democracy-api-srv
+spec:
+  ports:
+  - name: democracy-api
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: democracy-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: democracy-app-srv
+spec:
+  ports:
+  - name: democracy-app
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: democracy-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: democracy-mongo-srv
+spec:
+  ports:
+  - name: db
+    port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    app: democracy-mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats-srv
+spec:
+  ports:
+  - name: client
+    port: 4222
+    protocol: TCP
+    targetPort: 4222
+  - name: monitoring
+    port: 8222
+    protocol: TCP
+    targetPort: 8222
+  selector:
+    app: nats
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bundestagio-admin-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bundestagio-admin
+  template:
+    metadata:
+      labels:
+        app: bundestagio-admin
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: bio-admin-config-52t2h245cg
+        - secretRef:
+            name: bio-admin-login
+            optional: true
+        image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-admin:0.0.4
+        name: bundestagio-admin
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bundestagio-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bundestagio
+  template:
+    metadata:
+      labels:
+        app: bundestagio
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: bio-api-config-b9fbd5t7m9
+        image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api:0.0.4
+        livenessProbe:
+          httpGet:
+            path: /.well-known/apollo/server-health
+            port: 3100
+          initialDelaySeconds: 180
+          periodSeconds: 30
+        name: bundestagio
+        readinessProbe:
+          httpGet:
+            path: /.well-known/apollo/server-health
+            port: 3100
+          initialDelaySeconds: 30
+          periodSeconds: 10
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democracy-api-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: democracy-api
+  template:
+    metadata:
+      labels:
+        app: democracy-api
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: democracy-api-config-85gt54cf69
+        - secretRef:
+            name: democracy-api-jwt
+            optional: true
+        image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-api:0.0.8
+        livenessProbe:
+          httpGet:
+            path: /.well-known/apollo/server-health
+            port: 3000
+          periodSeconds: 180
+        name: democracy-api
+        readinessProbe:
+          httpGet:
+            path: /.well-known/apollo/server-health
+            port: 3000
+          initialDelaySeconds: 15
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democracy-app-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: democracy-app
+  template:
+    metadata:
+      labels:
+        app: democracy-app
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: democracy-app-config-k4876hmgg9
+        image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-app:0.0.6
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 180
+          timeoutSeconds: 10
+        name: democracy-app
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          periodSeconds: 15
+          timeoutSeconds: 10
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democracy-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: democracy-mongo
+  template:
+    metadata:
+      labels:
+        app: democracy-mongo
+    spec:
+      containers:
+      - image: mongo
+        name: democracy-mongo
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongo-storage
+      volumes:
+      - name: mongo-storage
+        persistentVolumeClaim:
+          claimName: mongo-persistent-volume-claim
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nats
+  template:
+    metadata:
+      labels:
+        app: nats
+    spec:
+      containers:
+      - args:
+        - -p
+        - "4222"
+        - -m
+        - "8222"
+        - -hbi
+        - 5s
+        - -hbt
+        - 5s
+        - -hbf
+        - "2"
+        - -SD
+        - -cid
+        - ticketing
+        image: nats-streaming:0.17.0
+        name: nats
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  name: ingress-service
+spec:
+  rules:
+  - host: bundestagio.develop
+    http:
+      paths:
+      - backend:
+          serviceName: bundestagio-srv
+          servicePort: 3100
+        path: /?(.*)
+  - host: bio-admin.develop
+    http:
+      paths:
+      - backend:
+          serviceName: bundestagio-admin-srv
+          servicePort: 3000
+        path: /?(.*)
+  - host: democracy-api.develop
+    http:
+      paths:
+      - backend:
+          serviceName: democracy-api-srv
+          servicePort: 3000
+        path: /?(.*)
+  - host: democracy-app.develop
+    http:
+      paths:
+      - backend:
+          serviceName: democracy-app-srv
+          servicePort: 3000
+        path: /?(.*)
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: democracy-mognodb-volume
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /tmp/democracy-mongodb-volume
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: hostpath
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-persistent-volume-claim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: hostpath

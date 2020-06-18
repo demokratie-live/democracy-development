@@ -1,0 +1,15 @@
+{
+  "name": "democracy-development",
+  "version": "0.2.0",
+  "main": "index.js",
+  "repository": "https://github.com/demokratie-live/democracy-development.git",
+  "author": "Manuel Ruck <m.ruck@democracy-deutschland.de>",
+  "license": "Apache2",
+  "scripts": {
+    "dev": "yarn dev:build && skaffold dev --port-forward --status-check=false",
+    "dev:build": "kustomize build ./infra/kustomize/overlays/local > infra/local.yaml",
+    "build:k8s:dev": "kustomize build ./infra/kustomize/overlays/dev > infra/dev.yaml",
+    "build:k8s:internal": "kustomize build ./infra/kustomize/overlays/internal > infra/internal.yaml",
+    "build:k8s:alpha": "kustomize build ./infra/kustomize/overlays/alpha > infra/alpha.yaml"
+  }
+}

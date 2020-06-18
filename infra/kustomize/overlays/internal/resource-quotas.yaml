@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: democracy-internal-resources
+spec:
+  hard:
+    requests.cpu: 500m
+    requests.memory: 1000m
+    limits.cpu: 700m
+    limits.memory: 500Mi

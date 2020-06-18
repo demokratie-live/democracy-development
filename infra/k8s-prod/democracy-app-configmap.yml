@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: democracy-app-config
-data:
-  GRAPHQL_URL: "https://internal.api.democracy-app.de"
-  GRAPHQL_URL_SERVER: "http://democracy-api-srv:3000/"

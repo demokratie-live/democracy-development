@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - kubernetes.api.democracy-app.de
+        - kubernetes.app.democracy-app.de
+        - kubernetes.api.bundestag.io
+        - kubernetes.admin.bundestag.io
+      secretName: democracy-tls
+  rules:
+    - host: kubernetes.api.democracy-app.de
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: democracy-api-srv
+              servicePort: 3000
+    - host: kubernetes.app.democracy-app.de
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: democracy-app-srv
+              servicePort: 3000
+    - host: kubernetes.api.bundestag.io
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: bundestagio-srv
+              servicePort: 3100
+    - host: kubernetes.admin.bundestag.io
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: bundestagio-admin-srv
+              servicePort: 3000
