@@ -13,7 +13,7 @@ import CONFIG from './config';
 import './services/logger';
 
 import connectDB from './services/mongoose';
-import migrateDB from './services/migration';
+// import migrateDB from './services/migration';
 
 const main = async () => {
   // Connect to DB - this keeps the process running
@@ -24,7 +24,7 @@ const main = async () => {
   // IMPORTANT - you cannot include any models before finishing this
   //   else every schema including an index will be created in the database
   //   even tho is is quite retarded it is the way it is
-  await migrateDB();
+  // await migrateDB();
 
   // Express Server
   const server = express();
