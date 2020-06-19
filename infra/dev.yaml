@@ -295,7 +295,7 @@ spec:
       - envFrom:
         - configMapRef:
             name: democracy-app-config-fkm5c2gfg8
-        image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-app:0.0.6
+        image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-web-app:0.0.3-dev
         livenessProbe:
           httpGet:
             path: /

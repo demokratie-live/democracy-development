@@ -10,6 +10,7 @@ spec:
     spec:
       containers:
         - name: democracy-app
+          image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-web-app:0.0.3-dev
           resources:
             limits:
               memory: "300Mi"

@@ -4,6 +4,17 @@ metadata:
   name: democracy-internal
 ---
 apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: democracy-internal-resources
+spec:
+  hard:
+    limits.cpu: 700m
+    limits.memory: 500Mi
+    requests.cpu: 500m
+    requests.memory: 1000m
+---
+apiVersion: v1
 data:
   BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
   BUNDESTAGIO_SERVER_URL_CLIENT: https://interenal.api.bundestag.io/
@@ -238,7 +249,7 @@ spec:
       - envFrom:
         - configMapRef:
             name: bio-api-config-627b78g4g2
-        image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api:0.0.4
+        image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api:0.0.5
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
@@ -325,7 +336,7 @@ spec:
       - envFrom:
         - configMapRef:
             name: democracy-app-config-9db2mt67kb
-        image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-app:0.0.6
+        image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-web-app:0.0.3-dev
         livenessProbe:
           httpGet:
             path: /
@@ -481,4 +492,26 @@ spec:
     - internal.api.democracy-app.de
     - internal.democracy-app.de
     - internal.api.bundestag.io
+    secretName: democracy-tls
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  name: ingress-monitoring-service
+  namespace: monitoring
+spec:
+  rules:
+  - host: monitoring.democracy-app.de
+    http:
+      paths:
+      - backend:
+          serviceName: monitoring-grafana
+          servicePort: 80
+        path: /?(.*)
+  tls:
+  - hosts:
+    - monitoring.democracy-app.de
     secretName: democracy-tls
