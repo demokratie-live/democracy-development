@@ -177,7 +177,7 @@ spec:
       - envFrom:
         - configMapRef:
             name: bio-api-config-b9fbd5t7m9
-        image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api:0.0.4
+        image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api:0.0.5
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
@@ -213,9 +213,9 @@ spec:
         - configMapRef:
             name: democracy-api-config-85gt54cf69
         - secretRef:
-            name: democracy-api-jwt
+            name: democracy-api-secrets
             optional: true
-        image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-api:0.0.8
+        image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-api:0.0.9
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
@@ -321,6 +321,24 @@ spec:
         - ticketing
         image: nats-streaming:0.17.0
         name: nats
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  name: ingress-service
+  namespace: monitoring
+spec:
+  rules:
+  - host: monitoring.develop
+    http:
+      paths:
+      - backend:
+          serviceName: monitoring-grafana
+          servicePort: 80
+        path: /?(.*)
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress

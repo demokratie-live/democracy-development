@@ -4,3 +4,4 @@ resources:
   - democracy-mongo-depl.yaml
   - democracy-mongo-persistent-volume-claim.yaml
   - ingress-srv.yaml
+  - ingress-monitoring.yaml

@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - ingress.yaml
   - ssl-prod-issuer.yaml
+  - ingress-monitoring.yaml
