@@ -189,7 +189,7 @@ spec:
         - secretRef:
             name: bio-admin-login
             optional: true
-        image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-admin:0.0.4
+        image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.0-dev
         name: bundestagio-admin
         resources:
           limits:
@@ -216,7 +216,7 @@ spec:
       - envFrom:
         - configMapRef:
             name: bio-api-config-627b78g4g2
-        image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api:0.0.5
+        image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.20-dev
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
@@ -258,7 +258,7 @@ spec:
         - secretRef:
             name: democracy-api-secrets
             optional: true
-        image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-api:0.0.9
+        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.0-dev
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
@@ -295,7 +295,7 @@ spec:
       - envFrom:
         - configMapRef:
             name: democracy-app-config-fkm5c2gfg8
-        image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-web-app:0.0.3-dev
+        image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.0.3-dev
         livenessProbe:
           httpGet:
             path: /
