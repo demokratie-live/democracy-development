@@ -19,7 +19,9 @@ export default async () => {
   try {
     await mongoose.connect(
       CONFIG.DB_URL,
-      {},
+      {
+        reconnectTries: 86400,
+      },
     );
   } catch (err) {
     await mongoose.createConnection(CONFIG.DB_URL, {});
