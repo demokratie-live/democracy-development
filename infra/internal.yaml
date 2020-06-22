@@ -4,23 +4,12 @@ metadata:
   name: democracy-internal
 ---
 apiVersion: v1
-kind: ResourceQuota
-metadata:
-  name: democracy-internal-resources
-spec:
-  hard:
-    limits.cpu: 700m
-    limits.memory: 500Mi
-    requests.cpu: 500m
-    requests.memory: 1000m
----
-apiVersion: v1
 data:
   BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
-  BUNDESTAGIO_SERVER_URL_CLIENT: https://interenal.api.bundestag.io/
+  BUNDESTAGIO_SERVER_URL_CLIENT: https://internal.api.bundestag.io/
 kind: ConfigMap
 metadata:
-  name: bio-admin-config-dt59md787t
+  name: bio-admin-config-6tkkh97m68
   namespace: democracy-internal
 ---
 apiVersion: v1
@@ -214,16 +203,28 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: bio-admin-config-dt59md787t
+            name: bio-admin-config-6tkkh97m68
         - secretRef:
             name: bio-admin-login
             optional: true
-        image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-admin:0.0.4
+        image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.1-dev
+        livenessProbe:
+          httpGet:
+            path: /health-check
+            port: 3000
+          initialDelaySeconds: 180
+          timeoutSeconds: 10
         name: bundestagio-admin
+        readinessProbe:
+          httpGet:
+            path: /health-check
+            port: 3000
+          periodSeconds: 15
+          timeoutSeconds: 10
         resources:
           limits:
-            cpu: 100m
-            memory: 150Mi
+            cpu: 1000m
+            memory: 500Mi
           requests:
             cpu: 100m
             memory: 150Mi
@@ -249,7 +250,7 @@ spec:
       - envFrom:
         - configMapRef:
             name: bio-api-config-627b78g4g2
-        image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api:0.0.5
+        image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.22-dev
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
@@ -295,7 +296,7 @@ spec:
         - secretRef:
             name: democracy-api-secrets
             optional: true
-        image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-api:0.0.9
+        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.0-dev
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
@@ -336,7 +337,7 @@ spec:
       - envFrom:
         - configMapRef:
             name: democracy-app-config-9db2mt67kb
-        image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-web-app:0.0.3-dev
+        image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.0.3-dev
         livenessProbe:
           httpGet:
             path: /
@@ -492,6 +493,7 @@ spec:
     - internal.api.democracy-app.de
     - internal.democracy-app.de
     - internal.api.bundestag.io
+    - internal.admin.bundestag.io
     secretName: democracy-tls
 ---
 apiVersion: extensions/v1beta1

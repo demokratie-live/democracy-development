@@ -10,7 +10,6 @@ spec:
     spec:
       containers:
         - name: bundestagio-admin
-          image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.0-dev
           resources:
             limits:
               memory: "150Mi"

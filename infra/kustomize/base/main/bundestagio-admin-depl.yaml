@@ -14,7 +14,19 @@ spec:
     spec:
       containers:
         - name: bundestagio-admin
-          image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-admin:0.0.4
+          image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.1-dev
+          livenessProbe:
+            httpGet:
+              path: /health-check
+              port: 3000
+            initialDelaySeconds: 180
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health-check
+              port: 3000
+            timeoutSeconds: 10
+            periodSeconds: 15
           envFrom:
             - configMapRef:
                 name: bio-admin-config

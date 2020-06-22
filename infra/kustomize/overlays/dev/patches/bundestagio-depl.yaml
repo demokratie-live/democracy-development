@@ -10,8 +10,10 @@ spec:
     spec:
       containers:
         - name: bundestagio
-          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.20-dev
           resources:
+            requests:
+              memory: "300Mi"
+              cpu: "200m"
             limits:
-              memory: "500Mi"
-              cpu: "300m"
+              memory: "400Mi"
+              cpu: "250m"

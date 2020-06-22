@@ -8,3 +8,4 @@ patches:
   - bundestagio-admin-depl.yaml
   - democracy-api-depl.yaml
   - democracy-app-depl.yaml
+  - mongo-statefulset.yaml
