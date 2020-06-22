@@ -42,10 +42,8 @@ class AuthDirective extends SchemaDirectiveVisitor {
         let allow = true;
         if (requiredRole === 'BACKEND') {
           if (
-            !CONFIG.WHITELIST_DATA_SOURCES.some(
-              address =>
-                address.length >= 3 && context.req.connection.remoteAddress.indexOf(address) !== -1,
-            )
+            !context.req.headers['bio-auth-token'] ||
+            context.req.headers['bio-auth-token'] !== process.env.BIO_EDIT_TOKEN
           ) {
             Log.warn(
               `Connection to Bio blocked from ${
