@@ -12,6 +12,9 @@ spec:
         - name: democracy-app
           image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.0.3-dev
           resources:
+            requests:
+              memory: "100M"
+              cpu: "50m"
             limits:
-              memory: "300Mi"
-              cpu: "500m"
+              memory: "300M"
+              cpu: "200m"

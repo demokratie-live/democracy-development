@@ -230,11 +230,11 @@ spec:
           timeoutSeconds: 10
         resources:
           limits:
-            cpu: 1000m
-            memory: 500Mi
-          requests:
             cpu: 100m
-            memory: 150Mi
+            memory: 500M
+          requests:
+            cpu: 30m
+            memory: 100M
       imagePullSecrets:
       - name: regcred
 ---
@@ -276,11 +276,11 @@ spec:
           periodSeconds: 10
         resources:
           limits:
-            cpu: 300m
-            memory: 500Mi
+            cpu: 1000m
+            memory: 500M
           requests:
-            cpu: 300m
-            memory: 500Mi
+            cpu: 50m
+            memory: 150M
       imagePullSecrets:
       - name: regcred
 ---
@@ -321,10 +321,10 @@ spec:
         resources:
           limits:
             cpu: 1000m
-            memory: 1000Mi
+            memory: 1000M
           requests:
             cpu: 500m
-            memory: 500Mi
+            memory: 500M
       imagePullSecrets:
       - name: regcred
 ---
@@ -363,11 +363,11 @@ spec:
           timeoutSeconds: 10
         resources:
           limits:
-            cpu: 500m
-            memory: 300Mi
+            cpu: 200m
+            memory: 300M
           requests:
-            cpu: 500m
-            memory: 300Mi
+            cpu: 50m
+            memory: 100M
       imagePullSecrets:
       - name: regcred
 ---
