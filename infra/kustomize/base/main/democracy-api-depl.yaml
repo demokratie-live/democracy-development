@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: democracy-api
-          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.1-dev
+          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.3-dev
           livenessProbe:
             httpGet:
               path: /.well-known/apollo/server-health
@@ -25,6 +25,7 @@ spec:
               path: /.well-known/apollo/server-health
               port: 3000
             initialDelaySeconds: 15
+          # ENVS
           envFrom:
             - configMapRef:
                 name: democracy-api-config

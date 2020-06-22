@@ -4,15 +4,11 @@ deploy:
   kubectl:
     manifests:
       - infra/local.yaml
-# deploy:
-#   kustomize:
-#     paths:
-#       - infra/kustomize/overlays/local
 build:
   local:
     push: false
   artifacts:
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-api
+    - image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io
       context: bundestag.io-api
       docker:
         dockerfile: Dockerfile.dev
@@ -20,7 +16,7 @@ build:
         manual:
           - src: "src/**/*.js"
             dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-api
+    - image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server
       context: democracy-app.de-api
       docker:
         dockerfile: Dockerfile.dev
@@ -28,7 +24,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/test-bundestag-admin
+    - image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin
       context: bundestag.io-admin
       docker:
         dockerfile: Dockerfile.dev
@@ -36,7 +32,7 @@ build:
         manual:
           - src: "**/*.js"
             dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/test-democracy-app
+    - image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop
       context: democracy-app.de
       docker:
         dockerfile: Dockerfile.dev
