@@ -7,3 +7,4 @@ bases:
 
 resources:
   - namespace.yaml
+  # - resource-quotas.yaml

@@ -11,6 +11,9 @@ spec:
       containers:
         - name: democracy-api
           resources:
-            limits:
-              memory: "500Mi"
+            requests:
+              memory: "500M"
               cpu: "500m"
+            limits:
+              memory: "1000M"
+              cpu: "1000m"

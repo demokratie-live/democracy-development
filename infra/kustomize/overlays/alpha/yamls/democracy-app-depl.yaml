@@ -12,5 +12,8 @@ spec:
         - name: democracy-app
           resources:
             limits:
-              memory: "300Mi"
-              cpu: "500m"
+              memory: "300M"
+              cpu: "200m"
+            requests:
+              memory: "100M"
+              cpu: "50m"

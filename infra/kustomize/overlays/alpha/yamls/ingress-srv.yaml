@@ -10,7 +10,7 @@ spec:
   tls:
     - hosts:
         - alpha.api.democracy-app.de
-        - alpha.app.democracy-app.de
+        - alpha.democracy-app.de
         - alpha.api.bundestag.io
         - alpha.admin.bundestag.io
       secretName: democracy-tls
@@ -22,7 +22,7 @@ spec:
             backend:
               serviceName: democracy-api-srv
               servicePort: 3000
-    - host: alpha.app.democracy-app.de
+    - host: alpha.democracy-app.de
       http:
         paths:
           - path: /?(.*)

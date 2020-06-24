@@ -11,6 +11,9 @@ spec:
       containers:
         - name: bundestagio
           resources:
+            requests:
+              memory: "150M"
+              cpu: "50m"
             limits:
-              memory: "500Mi"
-              cpu: "300m"
+              memory: "500M"
+              cpu: "1000m"
