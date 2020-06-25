@@ -15,7 +15,7 @@ data:
   CRON_NAMED_POLLS: 15 3 * * *
   CRON_NAMED_POLLS_DEPUTIES: 45 3 * * *
   CRON_PROCEDURES: 0 3 * * *
-  CRON_START_ON_INIT: "false"
+  CRON_START_ON_INIT: "true"
   DB_URL: mongodb://democracy-mongo-srv:27017/bundestagio
   GRAPHIQL: /graphiql
   GRAPHQL_PATH: /
@@ -25,16 +25,16 @@ data:
   VOYAGER: "true"
 kind: ConfigMap
 metadata:
-  name: bio-api-config-b9fbd5t7m9
+  name: bio-api-config-gch45274gk
 ---
 apiVersion: v1
 data:
   BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
   CRON_DEPUTY_PROFILES: '*/15 * * * *'
   CRON_NAMED_POLLS: '*/15 * * * *'
-  CRON_PROCEDURES: 0 */1 * * *
+  CRON_PROCEDURES: '*/5 * * * *'
   CRON_SHEDULE_BIO_RESYNC: 55 3 * */1 *
-  CRON_START_ON_INIT: "true"
+  CRON_START_ON_INIT: "false"
   DB_URL: mongodb://democracy-mongo-srv:27017/democracy
   DEBUG: "true"
   GRAPHIQL: "true"
@@ -42,15 +42,15 @@ data:
   STAGE: internal
 kind: ConfigMap
 metadata:
-  name: democracy-api-config-85gt54cf69
+  name: democracy-api-config-2268bg56ht
 ---
 apiVersion: v1
 data:
-  GRAPHQL_URL: http://democracy-api.develop/
+  GRAPHQL_URL: http://internal.api.democracy-app.de/
   GRAPHQL_URL_SERVER: http://democracy-api-srv:3000/
 kind: ConfigMap
 metadata:
-  name: democracy-app-config-k4876hmgg9
+  name: democracy-app-config-h8g9mcm726
 ---
 apiVersion: v1
 kind: Service
@@ -192,7 +192,7 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: bio-api-config-b9fbd5t7m9
+            name: bio-api-config-gch45274gk
         - secretRef:
             name: bundestag-result-edit-token
             optional: true
@@ -230,7 +230,7 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: democracy-api-config-85gt54cf69
+            name: democracy-api-config-2268bg56ht
         - secretRef:
             name: democracy-api-secrets
             optional: true
@@ -266,14 +266,8 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: democracy-app-config-k4876hmgg9
+            name: democracy-app-config-h8g9mcm726
         image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.0.3-dev
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 3000
-          initialDelaySeconds: 180
-          timeoutSeconds: 10
         name: democracy-app
         readinessProbe:
           httpGet:
@@ -382,7 +376,7 @@ spec:
           serviceName: bundestagio-admin-srv
           servicePort: 3000
         path: /?(.*)
-  - host: democracy-api.develop
+  - host: internal.api.democracy-app.de
     http:
       paths:
       - backend:

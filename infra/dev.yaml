@@ -279,7 +279,7 @@ spec:
         - secretRef:
             name: democracy-api-secrets
             optional: true
-        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.3-dev
+        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.7-dev
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
