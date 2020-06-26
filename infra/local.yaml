@@ -271,8 +271,8 @@ spec:
           httpGet:
             path: /
             port: 3000
-          periodSeconds: 15
-          timeoutSeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 30
       imagePullSecrets:
       - name: regcred
 ---

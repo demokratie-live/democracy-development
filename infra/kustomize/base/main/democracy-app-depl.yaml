@@ -25,8 +25,8 @@ spec:
             httpGet:
               path: /
               port: 3000
-            timeoutSeconds: 10
-            periodSeconds: 15
+            timeoutSeconds: 30
+            periodSeconds: 30
           envFrom:
             - configMapRef:
                 name: democracy-app-config
