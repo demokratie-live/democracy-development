@@ -49,9 +49,9 @@ export interface ProcedureUpdates_procedureUpdates_procedures_customData_voteRes
 
 export interface ProcedureUpdates_procedureUpdates_procedures_customData_voteResults {
   __typename: "VoteResults";
-  yes: number | null;
-  no: number | null;
-  abstination: number | null;
+  yes: number;
+  no: number;
+  abstination: number;
   notVoted: number | null;
   decisionText: string | null;
   votingDocument: VotingDocument | null;

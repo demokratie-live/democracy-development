@@ -1,5 +1,5 @@
 import mongoConnect from "./mongoose";
-import _, { extendWith } from "lodash";
+import _ from "lodash";
 import moment from "moment";
 import { forEachSeries } from "p-iteration";
 
@@ -9,15 +9,17 @@ import { PROCEDURE as PROCEDURE_DEFINITIONS } from "@democracy-deutschland/bunde
 // GraphQL
 import createClient from "./graphql/client";
 import getProcedureUpdates from "./graphql/queries/getProcedureUpdates";
-
-// Models
 import {
   ProcedureModel,
+  VoteSelection,
+  getCron,
+  setCronStart,
+  setCronSuccess,
+  setCronError,
   quePushsOutcome,
   convertPartyName,
   IProcedure,
   PartyVotes,
-  VoteSelection,
   ProcedureDocument,
 } from "@democracy-deutschland/democracy-common";
 
@@ -30,6 +32,21 @@ import {
 import { VoteDecision } from "./__generated__/globalTypes";
 
 export const CRON_NAME = "Procedures";
+
+/* const deputiesNumber = {
+  8: 518,
+  9: 519,
+  10: 520,
+  11: 663,
+  12: 662,
+  13: 672,
+  14: 665,
+  15: 601,
+  16: 611,
+  17: 620,
+  18: 630,
+  19: 709,
+}; */
 
 const notEmpty = <TValue>(
   value: TValue | null | undefined
@@ -87,110 +104,100 @@ const importProcedures = async (
       bIoProcedure.customData.voteResults.abstination ||
       bIoProcedure.customData.voteResults.no)
   ) {
-    if (
-      bIoProcedure.customData.voteResults.yes &&
-      bIoProcedure.customData.voteResults.abstination &&
-      bIoProcedure.customData.voteResults.no
-    ) {
-      voteResults = {
-        yes: bIoProcedure.customData.voteResults.yes,
-        abstination: bIoProcedure.customData.voteResults.abstination,
-        no: bIoProcedure.customData.voteResults.no,
-        notVoted: nullToUndefined(bIoProcedure.customData.voteResults.notVoted),
-        decisionText: nullToUndefined(
-          bIoProcedure.customData.voteResults.decisionText
-        ),
-        namedVote: nullToUndefined(bIoProcedure.namedVote),
-        partyVotes: [],
-      };
+    voteResults = {
+      yes: bIoProcedure.customData.voteResults.yes,
+      abstination: bIoProcedure.customData.voteResults.abstination,
+      no: bIoProcedure.customData.voteResults.no,
+      notVoted: nullToUndefined(bIoProcedure.customData.voteResults.notVoted),
+      decisionText: nullToUndefined(
+        bIoProcedure.customData.voteResults.decisionText
+      ),
+      namedVote: nullToUndefined(bIoProcedure.namedVote),
+      partyVotes: [],
+    };
 
-      if (bIoProcedure.customData.voteResults.partyVotes) {
-        voteResults.partyVotes = bIoProcedure.customData.voteResults.partyVotes.reduce<
-          PartyVotes[]
-        >((pre, partyVote) => {
-          if (partyVote) {
-            let mainDecision: VoteSelection;
-            const { main, party, ...rest } = partyVote;
-            switch (main) {
-              case VoteDecision.YES:
-                mainDecision = VoteSelection.Yes;
-                break;
-              case VoteDecision.ABSTINATION:
-                mainDecision = VoteSelection.Abstination;
-                break;
-              case VoteDecision.NO:
-                mainDecision = VoteSelection.No;
-                break;
-              default:
-                mainDecision = VoteSelection.Notvoted;
-            }
-            let deviants: PartyVotes["deviants"] | undefined;
-            if (
-              rest.deviants &&
-              rest.deviants.yes &&
-              rest.deviants.abstination &&
-              rest.deviants.no
-            ) {
-              deviants = {
-                yes: rest.deviants.yes,
-                abstination: rest.deviants.abstination,
-                no: rest.deviants.no,
-                notVoted: rest.deviants.notVoted,
+    if (bIoProcedure.customData.voteResults.partyVotes) {
+      voteResults.partyVotes = bIoProcedure.customData.voteResults.partyVotes.reduce<
+        PartyVotes[]
+      >((pre, partyVote) => {
+        if (partyVote) {
+          let mainDecision: VoteSelection;
+          const { main, party, ...rest } = partyVote;
+          switch (main) {
+            case VoteDecision.YES:
+              mainDecision = VoteSelection.Yes;
+              break;
+            case VoteDecision.ABSTINATION:
+              mainDecision = VoteSelection.Abstination;
+              break;
+            case VoteDecision.NO:
+              mainDecision = VoteSelection.No;
+              break;
+            default:
+              mainDecision = VoteSelection.Notvoted;
+          }
+          let deviants: PartyVotes["deviants"] | undefined;
+          if (
+            rest.deviants &&
+            rest.deviants.yes &&
+            rest.deviants.abstination &&
+            rest.deviants.no
+          ) {
+            deviants = {
+              yes: rest.deviants.yes,
+              abstination: rest.deviants.abstination,
+              no: rest.deviants.no,
+              notVoted: rest.deviants.notVoted,
+            };
+          }
+
+          if (!deviants) {
+            return pre;
+          }
+
+          const result: PartyVotes = {
+            ...rest,
+            _id: false,
+            party: convertPartyName(party),
+            main: mainDecision,
+            deviants,
+          };
+          return [...pre, result];
+        }
+        return pre;
+      }, []);
+
+      // toggle votingData (Yes & No) if needed
+      if (
+        bIoProcedure.customData.voteResults.votingDocument ===
+          "recommendedDecision" &&
+        bIoProcedure.customData.voteResults.votingRecommendation === false
+      ) {
+        voteResults = {
+          ...voteResults,
+          yes: voteResults.no,
+          no: voteResults.yes,
+          partyVotes: voteResults.partyVotes.map(
+            ({ main, deviants, ...rest }) => {
+              let mainDecision = main;
+              if (main !== "ABSTINATION") {
+                mainDecision =
+                  main === VoteSelection.Yes
+                    ? VoteSelection.No
+                    : VoteSelection.Yes;
+              }
+              return {
+                ...rest,
+                main: mainDecision,
+                deviants: {
+                  ...deviants,
+                  yes: deviants.no,
+                  no: deviants.yes,
+                },
               };
             }
-
-            if (!deviants) {
-              return pre;
-            }
-
-            const result: PartyVotes = {
-              ...rest,
-              _id: false,
-              party: convertPartyName(party),
-              main: mainDecision,
-              deviants,
-            };
-            return [...pre, result];
-          }
-          return pre;
-        }, []);
-
-        // toggle votingData (Yes & No) if needed
-        if (
-          bIoProcedure.customData.voteResults.votingDocument ===
-            "recommendedDecision" &&
-          bIoProcedure.customData.voteResults.votingRecommendation === false
-        ) {
-          voteResults = {
-            ...voteResults,
-            yes: voteResults.no,
-            no: voteResults.yes,
-            partyVotes: voteResults.partyVotes.map(
-              ({ main, deviants, ...rest }) => {
-                let mainDecision = main;
-                if (main !== "ABSTINATION") {
-                  mainDecision =
-                    main === VoteSelection.Yes
-                      ? VoteSelection.No
-                      : VoteSelection.Yes;
-                }
-                let devariantsToggled = deviants;
-                if (deviants) {
-                  devariantsToggled = {
-                    ...deviants,
-                    yes: deviants.no,
-                    no: deviants.yes,
-                  };
-                }
-                return {
-                  ...rest,
-                  main: mainDecision,
-                  deviants: devariantsToggled,
-                };
-              }
-            ),
-          };
-        }
+          ),
+        };
       }
     }
   }
@@ -268,20 +275,29 @@ const importProcedures = async (
   });
 };
 
-export const start = async () => {
+const start = async () => {
   // New SuccessStartDate
   const startDate = new Date();
+  const cron = await getCron({ name: CRON_NAME });
+  if (cron.running) {
+    console.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
+    return;
+  }
+  await setCronStart({ name: CRON_NAME, startDate });
   // Last SuccessStartDate
   let since: Date = new Date("1900");
+  if (cron.lastSuccessStartDate) {
+    since = new Date(cron.lastSuccessStartDate);
+  }
 
   // Query Bundestag.io
-  const client = createClient();
-  const limit = 50;
-  let offset = 0;
-  let done = false;
-  while (!done) {
-    // fetch
-    try {
+  try {
+    const client = createClient();
+    const limit = 50;
+    let offset = 0;
+    let done = false;
+    while (!done) {
+      // fetch
       const {
         errors,
         data: { procedureUpdates },
@@ -322,20 +338,16 @@ export const start = async () => {
           offset += limit;
         }
       } else {
-        console.error(CRON_NAME, JSON.stringify(errors));
+        await setCronError({ name: CRON_NAME, error: JSON.stringify(errors) });
       }
-    } catch (error) {
-      console.error(error);
     }
+    // Update Cron - Success
+    await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
+  } catch (error) {
+    console.error(error);
+    // If address is not reachable the query will throw
+    await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
   }
-  // Update Cron - Success
-  const endDate = new Date();
-  console.info("succeded", {
-    name: CRON_NAME,
-    successStartDate: startDate,
-    successEndDate: endDate,
-    duration: (endDate.getTime() - startDate.getTime()) / 1000 / 60,
-  });
 };
 
 (async () => {

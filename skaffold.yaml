@@ -40,6 +40,22 @@ build:
         manual:
           - src: "**/*.js"
             dest: .
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls
+      context: ./services/cron-jobs/sync-named-polls
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures
+      context: ./services/cron-jobs/sync-procedures
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
 portForward:
   - resourceType: Deployment
     resourceName: democracy-mongo-depl
