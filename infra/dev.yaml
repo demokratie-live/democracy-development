@@ -8,12 +8,7 @@ metadata:
 ---
 apiVersion: v1
 data:
-  CRON_CONFERENCEWEEKDETAILS: '*/15 * * * *'
-  CRON_DEPUTY_PROFILES: 0 4 * * *
-  CRON_NAMED_POLLS: 15 3 * * *
-  CRON_NAMED_POLLS_DEPUTIES: 45 3 * * *
-  CRON_PROCEDURES: 0 3 * * *
-  CRON_START_ON_INIT: "true"
+  CRON_START_ON_INIT: "false"
   DB_URL: mongodb://mongo-0.mongo/bundestagio
   GRAPHIQL: /graphiql
   GRAPHQL_PATH: /
@@ -23,17 +18,12 @@ data:
   VOYAGER: "true"
 kind: ConfigMap
 metadata:
-  name: bio-api-config-627b78g4g2
+  name: bio-api-config-m6k77c6mg9
 ---
 apiVersion: v1
 data:
-  AUTH_JWT_REFRESH_TTL: 5m
-  AUTH_JWT_TTL: 1m
   BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
-  CRON_DEPUTY_PROFILES: '*/15 * * * *'
-  CRON_NAMED_POLLS: '*/15 * * * *'
-  CRON_SHEDULE_BIO_RESYNC: 55 3 * */1 *
-  CRON_START_ON_INIT: "true"
+  CRON_START_ON_INIT: "false"
   DB_URL: mongodb://mongo-0.mongo/democracy
   DEBUG: "false"
   GRAPHIQL: "true"
@@ -41,7 +31,7 @@ data:
   STAGE: internal
 kind: ConfigMap
 metadata:
-  name: democracy-api-config-5f5ff24cm5
+  name: democracy-api-config-mhb8452gc4
 ---
 apiVersion: v1
 data:
@@ -197,6 +187,7 @@ spec:
             path: /health-check
             port: 3000
           initialDelaySeconds: 180
+          periodSeconds: 600
           timeoutSeconds: 10
         name: bundestagio-admin
         readinessProbe:
@@ -229,7 +220,7 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: bio-api-config-627b78g4g2
+            name: bio-api-config-m6k77c6mg9
         - secretRef:
             name: bundestag-result-edit-token
             optional: true
@@ -274,11 +265,11 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: democracy-api-config-5f5ff24cm5
+            name: democracy-api-config-mhb8452gc4
         - secretRef:
             name: democracy-api-secrets
             optional: true
-        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.7-dev
+        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.8-dev
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
@@ -324,14 +315,16 @@ spec:
             path: /
             port: 3000
           initialDelaySeconds: 180
-          timeoutSeconds: 10
+          periodSeconds: 600
+          timeoutSeconds: 30
         name: democracy-app
         readinessProbe:
           httpGet:
             path: /
             port: 3000
-          periodSeconds: 15
-          timeoutSeconds: 10
+          initialDelaySeconds: 180
+          periodSeconds: 60
+          timeoutSeconds: 60
         resources:
           limits:
             cpu: 200m
@@ -418,6 +411,34 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
+  name: democracy-sync-named-polls-cronjob
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-mhb8452gc4
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-mhb8452gc4
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls:0.1.2
+            name: democracy-sync-named-polls
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: 30 */1 * * *
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
   name: democracy-sync-procedures-cronjob
 spec:
   jobTemplate:
@@ -430,13 +451,13 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: democracy-api-config-5f5ff24cm5
+                  name: democracy-api-config-mhb8452gc4
             - name: BUNDESTAGIO_SERVER_URL
               valueFrom:
                 configMapKeyRef:
                   key: BUNDESTAGIO_SERVER_URL
-                  name: democracy-api-config-5f5ff24cm5
-            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.0
+                  name: democracy-api-config-mhb8452gc4
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.2
             name: democracy-sync-procedures
           imagePullSecrets:
           - name: regcred

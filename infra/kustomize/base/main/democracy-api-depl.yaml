@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: democracy-api
-          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.7-dev
+          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.8-dev
           livenessProbe:
             httpGet:
               path: /.well-known/apollo/server-health

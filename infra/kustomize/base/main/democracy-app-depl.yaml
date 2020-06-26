@@ -20,13 +20,15 @@ spec:
               path: /
               port: 3000
             initialDelaySeconds: 180
-            timeoutSeconds: 600
+            timeoutSeconds: 30
+            periodSeconds: 600
           readinessProbe:
             httpGet:
               path: /
               port: 3000
-            timeoutSeconds: 30
-            periodSeconds: 30
+            initialDelaySeconds: 180
+            timeoutSeconds: 60
+            periodSeconds: 60
           envFrom:
             - configMapRef:
                 name: democracy-app-config

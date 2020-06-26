@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: democracy-sync-named-polls-cronjob
 spec:
-  schedule: "11 */1 * * *"
+  schedule: "30 */1 * * *"
   jobTemplate:
     spec:
       template:
