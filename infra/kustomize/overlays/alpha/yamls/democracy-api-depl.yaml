@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: democracy-api-depl
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: democracy-api

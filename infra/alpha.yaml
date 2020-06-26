@@ -14,7 +14,7 @@ metadata:
 ---
 apiVersion: v1
 data:
-  CRON_CONFERENCEWEEKDETAILS: '* */1 * * *'
+  CRON_CONFERENCEWEEKDETAILS: '*/30 * * * *'
   CRON_DEPUTY_PROFILES: 0 4 * * *
   CRON_NAMED_POLLS: 15 3 * * *
   CRON_NAMED_POLLS_DEPUTIES: 45 3 * * *
@@ -29,7 +29,7 @@ data:
   VOYAGER: "true"
 kind: ConfigMap
 metadata:
-  name: bio-api-config-k5g629h6f4
+  name: bio-api-config-2c7g4kf25b
   namespace: democracy-alpha
 ---
 apiVersion: v1
@@ -256,7 +256,7 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: bio-api-config-k5g629h6f4
+            name: bio-api-config-2c7g4kf25b
         - secretRef:
             name: bundestag-result-edit-token
             optional: true

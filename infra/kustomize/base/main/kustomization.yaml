@@ -6,3 +6,4 @@ resources:
   - democracy-api-depl.yaml
   - democracy-app-depl.yaml
   - nats-depl.yaml
+  - democracy-sync-procedures-job.yaml

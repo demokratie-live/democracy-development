@@ -10,12 +10,7 @@ metadata:
 apiVersion: v1
 data:
   AUTH_JWT_SECRET: CHANGE_ME
-  CRON_CONFERENCEWEEKDETAILS: '*/15 * * * *'
-  CRON_DEPUTY_PROFILES: 0 4 * * *
-  CRON_NAMED_POLLS: 15 3 * * *
-  CRON_NAMED_POLLS_DEPUTIES: 45 3 * * *
-  CRON_PROCEDURES: 0 3 * * *
-  CRON_START_ON_INIT: "true"
+  CRON_START_ON_INIT: "false"
   DB_URL: mongodb://democracy-mongo-srv:27017/bundestagio
   GRAPHIQL: /graphiql
   GRAPHQL_PATH: /
@@ -25,15 +20,11 @@ data:
   VOYAGER: "true"
 kind: ConfigMap
 metadata:
-  name: bio-api-config-gch45274gk
+  name: bio-api-config-b9m4dc95m9
 ---
 apiVersion: v1
 data:
   BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
-  CRON_DEPUTY_PROFILES: '*/15 * * * *'
-  CRON_NAMED_POLLS: '*/15 * * * *'
-  CRON_PROCEDURES: '*/5 * * * *'
-  CRON_SHEDULE_BIO_RESYNC: 55 3 * */1 *
   CRON_START_ON_INIT: "false"
   DB_URL: mongodb://democracy-mongo-srv:27017/democracy
   DEBUG: "true"
@@ -42,7 +33,7 @@ data:
   STAGE: internal
 kind: ConfigMap
 metadata:
-  name: democracy-api-config-2268bg56ht
+  name: democracy-api-config-mg5b2dd2d5
 ---
 apiVersion: v1
 data:
@@ -192,7 +183,7 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: bio-api-config-gch45274gk
+            name: bio-api-config-b9m4dc95m9
         - secretRef:
             name: bundestag-result-edit-token
             optional: true
@@ -230,11 +221,11 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: democracy-api-config-2268bg56ht
+            name: democracy-api-config-mg5b2dd2d5
         - secretRef:
             name: democracy-api-secrets
             optional: true
-        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.4-dev
+        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.7-dev
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
@@ -268,6 +259,12 @@ spec:
         - configMapRef:
             name: democracy-app-config-h8g9mcm726
         image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.0.3-dev
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 180
+          timeoutSeconds: 10
         name: democracy-app
         readinessProbe:
           httpGet:
@@ -334,6 +331,34 @@ spec:
         - ticketing
         image: nats-streaming:0.17.0
         name: nats
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: democracy-sync-procedures-job
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-mg5b2dd2d5
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-mg5b2dd2d5
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.0
+            name: democracy-sync-procedures
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: '*/5 * * * *'
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
