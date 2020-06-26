@@ -1,5 +1,5 @@
 import { Schema, Document } from "mongoose";
-import { Timestamps } from "models/timestamp";
+import { Timestamps } from "../timestamp";
 
 export interface Phone extends Document, Timestamps {
   phoneHash: string;

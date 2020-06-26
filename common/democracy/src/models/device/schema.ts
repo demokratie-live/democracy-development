@@ -1,7 +1,8 @@
 import { Schema, Document, Types } from "mongoose";
 import { IProcedure } from "../procedure/schema";
+import { Timestamps } from "../timestamp";
 
-export interface Device extends Document {
+export interface Device extends Document, Timestamps {
   deviceHash: string;
   pushTokens: {
     token: string;
