@@ -21,6 +21,7 @@ spec:
               port: 3000
             initialDelaySeconds: 180
             timeoutSeconds: 10
+            periodSeconds: 600
           readinessProbe:
             httpGet:
               path: /health-check
