@@ -269,7 +269,7 @@ spec:
         - secretRef:
             name: democracy-api-secrets
             optional: true
-        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.8-dev
+        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.9-dev
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
@@ -310,7 +310,21 @@ spec:
         - configMapRef:
             name: democracy-app-config-fkm5c2gfg8
         image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.0.3-dev
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 180
+          periodSeconds: 600
+          timeoutSeconds: 30
         name: democracy-app
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 180
+          periodSeconds: 60
+          timeoutSeconds: 60
         resources:
           limits:
             cpu: 200m
@@ -399,6 +413,7 @@ kind: CronJob
 metadata:
   name: democracy-sync-named-polls-cronjob
 spec:
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
@@ -427,6 +442,7 @@ kind: CronJob
 metadata:
   name: democracy-sync-procedures-cronjob
 spec:
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
@@ -443,12 +459,12 @@ spec:
                 configMapKeyRef:
                   key: BUNDESTAGIO_SERVER_URL
                   name: democracy-api-config-mhb8452gc4
-            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.5
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.6
             name: democracy-sync-procedures
           imagePullSecrets:
           - name: regcred
           restartPolicy: Never
-  schedule: 10 */1 * * *
+  schedule: '*/10 * * * *'
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer

@@ -4,6 +4,7 @@ metadata:
   name: democracy-sync-named-polls-cronjob
 spec:
   schedule: "30 */1 * * *"
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:

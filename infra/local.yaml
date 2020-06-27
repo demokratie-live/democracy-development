@@ -37,11 +37,11 @@ metadata:
 ---
 apiVersion: v1
 data:
-  GRAPHQL_URL: http://internal.api.democracy-app.de/
+  GRAPHQL_URL: http://democracy-api.develop/
   GRAPHQL_URL_SERVER: http://democracy-api-srv:3000/
 kind: ConfigMap
 metadata:
-  name: democracy-app-config-h8g9mcm726
+  name: democracy-app-config-k4876hmgg9
 ---
 apiVersion: v1
 kind: Service
@@ -150,20 +150,7 @@ spec:
             name: bundestag-result-edit-token
             optional: true
         image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.2-dev
-        livenessProbe:
-          httpGet:
-            path: /health-check
-            port: 3000
-          initialDelaySeconds: 180
-          periodSeconds: 600
-          timeoutSeconds: 10
         name: bundestagio-admin
-        readinessProbe:
-          httpGet:
-            path: /health-check
-            port: 3000
-          periodSeconds: 15
-          timeoutSeconds: 10
       imagePullSecrets:
       - name: regcred
 ---
@@ -189,19 +176,7 @@ spec:
             name: bundestag-result-edit-token
             optional: true
         image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.23-dev
-        livenessProbe:
-          httpGet:
-            path: /.well-known/apollo/server-health
-            port: 3100
-          initialDelaySeconds: 60
-          periodSeconds: 30
         name: bundestagio
-        readinessProbe:
-          httpGet:
-            path: /.well-known/apollo/server-health
-            port: 3100
-          initialDelaySeconds: 30
-          periodSeconds: 10
       imagePullSecrets:
       - name: regcred
 ---
@@ -226,18 +201,8 @@ spec:
         - secretRef:
             name: democracy-api-secrets
             optional: true
-        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.8-dev
-        livenessProbe:
-          httpGet:
-            path: /.well-known/apollo/server-health
-            port: 3000
-          periodSeconds: 180
+        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.9-dev
         name: democracy-api
-        readinessProbe:
-          httpGet:
-            path: /.well-known/apollo/server-health
-            port: 3000
-          initialDelaySeconds: 15
       imagePullSecrets:
       - name: regcred
 ---
@@ -258,7 +223,7 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: democracy-app-config-h8g9mcm726
+            name: democracy-app-config-k4876hmgg9
         image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.0.3-dev
         name: democracy-app
       imagePullSecrets:
@@ -326,6 +291,7 @@ kind: CronJob
 metadata:
   name: democracy-sync-named-polls-cronjob
 spec:
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
@@ -354,6 +320,7 @@ kind: CronJob
 metadata:
   name: democracy-sync-procedures-cronjob
 spec:
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
@@ -370,12 +337,12 @@ spec:
                 configMapKeyRef:
                   key: BUNDESTAGIO_SERVER_URL
                   name: democracy-api-config-mg5b2dd2d5
-            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.5
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.6
             name: democracy-sync-procedures
           imagePullSecrets:
           - name: regcred
           restartPolicy: Never
-  schedule: 10 */1 * * *
+  schedule: '*/10 * * * *'
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress

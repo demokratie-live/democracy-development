@@ -1,7 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 bases:
   - ../../base/local
-  - ../../base/main
 kind: Kustomization
 configMapGenerator:
   - name: bio-admin-config
