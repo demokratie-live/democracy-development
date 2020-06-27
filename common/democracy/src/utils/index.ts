@@ -1,4 +1,4 @@
 export * from "./procedureStates";
-export * from "./quePushNotifications";
+export * from "./queuePushNotifications";
 export * from "./convertPartyName";
 export * from "./cronjobs";

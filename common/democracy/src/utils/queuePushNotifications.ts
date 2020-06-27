@@ -9,7 +9,7 @@ import {
   PUSH_CATEGORY,
 } from "../models";
 
-export const quePushs = async ({
+export const queuePushs = async ({
   type,
   category,
   title,
@@ -102,7 +102,7 @@ export const quePushsOutcome = async (procedureId: string) => {
       ? "Offizielles Ergebnis zu Deiner Abstimmung"
       : "Offizielles Ergebnis zur Abstimmung";
     const message = procedure.title;
-    await quePushs({
+    await queuePushs({
       type: PUSH_TYPE.PROCEDURE,
       category: PUSH_CATEGORY.OUTCOME,
       title,

@@ -1,5 +1,8 @@
 import ProcedureSchema, { IProcedure, PartyVotes } from "./schema";
-import { model } from "mongoose";
+import { model, Model } from "mongoose";
 
-export const ProcedureModel = model<IProcedure>("Procedure", ProcedureSchema);
+export const ProcedureModel = model<IProcedure>(
+  "Procedure",
+  ProcedureSchema
+) as Model<IProcedure, {}>;
 export { ProcedureSchema, IProcedure, PartyVotes };
