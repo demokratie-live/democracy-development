@@ -27,4 +27,4 @@ jobs:
           registry: docker.pkg.github.com
           repository: ${{ github.repository }}/sync-named-polls
           path: ./services/cron-jobs/sync-named-polls
-          tags: ${{ steps.package-version.outputs.version }}, latest
+          tags: ${{ steps.package-version.outputs.version }}

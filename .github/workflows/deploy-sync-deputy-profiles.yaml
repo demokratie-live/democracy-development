@@ -27,4 +27,4 @@ jobs:
           registry: docker.pkg.github.com
           repository: ${{ github.repository }}/sync-deputy-profiles
           path: ./services/cron-jobs/sync-deputy-profiles
-          tags: ${{ steps.package-version.outputs.version }}, latest
+          tags: ${{ steps.package-version.outputs.version }}
