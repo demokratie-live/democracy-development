@@ -1,0 +1,29 @@
+name: deploy-auth
+
+on:
+  push:
+    # branches:
+    #   - master
+    paths:
+      - "services/cron-jobs/sync-deputy-profiles/**"
+
+jobs:
+  build:
+    name: Build & Push Docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Read package.json
+        uses: tyankatsu0105/read-package-version-actions@v1
+        id: package-version
+        with:
+          path: "./services/cron-jobs/sync-deputy-profiles/package.json"
+
+      - uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/sync-deputy-profiles
+          tags: ${{ steps.package-version.outputs.version }}, latest
