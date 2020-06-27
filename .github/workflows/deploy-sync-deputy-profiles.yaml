@@ -4,8 +4,8 @@ on:
   push:
     # branches:
     #   - master
-    paths:
-      - "services/cron-jobs/sync-deputy-profiles/**"
+    # paths:
+    #   - "services/cron-jobs/sync-deputy-profiles/**"
 
 jobs:
   build:
