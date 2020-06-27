@@ -124,9 +124,9 @@ const importProcedures = async (
           let deviants: PartyVotes["deviants"] | undefined;
           if (
             rest.deviants &&
-            rest.deviants.yes &&
-            rest.deviants.abstination &&
-            rest.deviants.no
+            rest.deviants.yes !== null &&
+            rest.deviants.abstination !== null &&
+            rest.deviants.no !== null
           ) {
             deviants = {
               yes: rest.deviants.yes,
