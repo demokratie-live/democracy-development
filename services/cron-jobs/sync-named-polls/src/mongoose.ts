@@ -1,6 +1,7 @@
 import { mongoose } from "@democracy-deutschland/democracy-common";
 
 export default async () => {
+  mongoose.set("useFindAndModify", false);
   // Mongo Debug
   mongoose.set("debug", () => {
     return true;

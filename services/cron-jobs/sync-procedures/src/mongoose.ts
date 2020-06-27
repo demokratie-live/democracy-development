@@ -1,6 +1,7 @@
 import { mongoose } from "@democracy-deutschland/democracy-common";
 
 export default async () => {
+  mongoose.set("useFindAndModify", false);
   // Mongo Debug
   mongoose.set("debug", () => {
     return true;
@@ -18,11 +19,11 @@ export default async () => {
   }
 
   // Open
-  mongoose.connection
-    .once("open", () => console.info("MongoDB is running"))
-    .on("error", (e: Error) => {
-      // Unknown if this ends up in main - therefore we log here
-      console.error(e.stack);
-      throw e;
-    });
+  const db = mongoose.connection;
+  db.once("open", () => console.info("MongoDB is running"));
+  db.on("error", (e: Error) => {
+    // Unknown if this ends up in main - therefore we log here
+    console.error(e.stack);
+    throw e;
+  });
 };

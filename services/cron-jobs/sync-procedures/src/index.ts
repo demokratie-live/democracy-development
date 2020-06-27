@@ -33,21 +33,6 @@ import { VoteDecision } from "./__generated__/globalTypes";
 
 export const CRON_NAME = "Procedures";
 
-/* const deputiesNumber = {
-  8: 518,
-  9: 519,
-  10: 520,
-  11: 663,
-  12: 662,
-  13: 672,
-  14: 665,
-  15: 601,
-  16: 611,
-  17: 620,
-  18: 630,
-  19: 709,
-}; */
-
 const notEmpty = <TValue>(
   value: TValue | null | undefined
 ): value is TValue => {
@@ -289,6 +274,7 @@ const start = async () => {
   if (cron.lastSuccessStartDate) {
     since = new Date(cron.lastSuccessStartDate);
   }
+  let counter = 0;
 
   // Query Bundestag.io
   try {
@@ -319,6 +305,7 @@ const start = async () => {
         const { procedures } = procedureUpdates;
 
         if (procedures) {
+          counter += procedures.length;
           // handle results
           await forEachSeries(procedures, async (data) => {
             if (
@@ -343,6 +330,7 @@ const start = async () => {
     }
     // Update Cron - Success
     await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
+    console.log(`synced items: ${counter}`);
   } catch (error) {
     console.error(error);
     // If address is not reachable the query will throw
@@ -363,6 +351,7 @@ const start = async () => {
     );
   }
   await mongoConnect();
+  console.log("procedures", await ProcedureModel.countDocuments({}));
   await start();
   process.exit(0);
 })();

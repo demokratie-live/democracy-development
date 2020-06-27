@@ -24,13 +24,14 @@ const start = async () => {
   // New SuccessStartDate
   const startDate = new Date();
   const cron = await getCron({ name: CRON_NAME });
+  let counter = 0;
   if (cron.running) {
     console.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
     return;
   }
   await setCronStart({ name: CRON_NAME, startDate });
   // Last SuccessStartDate
-  let since = new Date();
+  let since = new Date(1970);
   if (cron.lastSuccessStartDate) {
     since = new Date(cron.lastSuccessStartDate);
   }
@@ -57,9 +58,11 @@ const start = async () => {
           query: getNamedPollUpdates,
           variables: { since, limit, offset, associated },
         });
+
       if (namedPollUpdates) {
         const { namedPolls } = namedPollUpdates;
         if (namedPolls) {
+          counter += namedPolls.length;
           // handle results
           await forEachSeries(namedPolls, (data) => {
             // procedureId is not necessarily present
@@ -70,10 +73,14 @@ const start = async () => {
                   let decision;
                   switch (voteData.vote) {
                     case "ja":
-                      decision = data.votes.inverseVoteDirection ? VoteSelection.No : VoteSelection.Yes;
+                      decision = data.votes.inverseVoteDirection
+                        ? VoteSelection.No
+                        : VoteSelection.Yes;
                       break;
                     case "nein":
-                      decision = data.votes.inverseVoteDirection ? VoteSelection.Yes : VoteSelection.No;
+                      decision = data.votes.inverseVoteDirection
+                        ? VoteSelection.Yes
+                        : VoteSelection.No;
                       break;
                     case "na":
                       decision = VoteSelection.Notvoted;
@@ -136,6 +143,7 @@ const start = async () => {
     }
     // Update Cron - Success
     await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
+    console.log(`synced items: ${counter}`);
   } catch (error) {
     console.error(error);
     // If address is not reachable the query will throw
@@ -156,6 +164,7 @@ const start = async () => {
     );
   }
   await mongoConnect();
+  console.log("deputies", await DeputyModel.countDocuments({}));
   await start();
   process.exit(0);
 })();
