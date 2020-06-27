@@ -18,4 +18,4 @@ spec:
               path: /.well-known/apollo/server-health
               port: 3100
             periodSeconds: 10
-            initialDelaySeconds: 30
+            initialDelaySeconds: 10

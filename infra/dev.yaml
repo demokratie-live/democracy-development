@@ -8,7 +8,12 @@ metadata:
 ---
 apiVersion: v1
 data:
-  CRON_START_ON_INIT: "false"
+  CRON_CONFERENCEWEEKDETAILS: '*/15 * * * *'
+  CRON_DEPUTY_PROFILES: 0 4 * * *
+  CRON_NAMED_POLLS: 15 3 * * *
+  CRON_NAMED_POLLS_DEPUTIES: 45 3 * * *
+  CRON_PROCEDURES: 0 3 * * *
+  CRON_START_ON_INIT: "true"
   DB_URL: mongodb://mongo-0.mongo/bundestagio
   GRAPHIQL: /graphiql
   GRAPHQL_PATH: /
@@ -18,7 +23,7 @@ data:
   VOYAGER: "true"
 kind: ConfigMap
 metadata:
-  name: bio-api-config-m6k77c6mg9
+  name: bio-api-config-627b78g4g2
 ---
 apiVersion: v1
 data:
@@ -220,7 +225,7 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: bio-api-config-m6k77c6mg9
+            name: bio-api-config-627b78g4g2
         - secretRef:
             name: bundestag-result-edit-token
             optional: true
@@ -236,7 +241,7 @@ spec:
           httpGet:
             path: /.well-known/apollo/server-health
             port: 3100
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
         resources:
           limits:
@@ -411,6 +416,35 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
+  name: democracy-sync-deputy-profiles-cronjob
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-mhb8452gc4
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-mhb8452gc4
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-deputy-profiles:0.1.1
+            name: democracy-sync-deputy-profiles
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: 3-59/10 * * * *
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
   name: democracy-sync-named-polls-cronjob
 spec:
   concurrencyPolicy: Forbid
@@ -430,7 +464,7 @@ spec:
                 configMapKeyRef:
                   key: BUNDESTAGIO_SERVER_URL
                   name: democracy-api-config-mhb8452gc4
-            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls:0.1.4
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls:0.1.5
             name: democracy-sync-named-polls
           imagePullSecrets:
           - name: regcred
@@ -459,7 +493,7 @@ spec:
                 configMapKeyRef:
                   key: BUNDESTAGIO_SERVER_URL
                   name: democracy-api-config-mhb8452gc4
-            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.6
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.7
             name: democracy-sync-procedures
           imagePullSecrets:
           - name: regcred

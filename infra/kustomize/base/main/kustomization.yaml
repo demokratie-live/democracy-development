@@ -8,3 +8,4 @@ resources:
   - nats-depl.yaml
   - democracy-sync-procedures-cronjob.yaml
   - democracy-sync-named-polls-cronjob.yaml
+  - democracy-sync-deputy-profiles.yaml
