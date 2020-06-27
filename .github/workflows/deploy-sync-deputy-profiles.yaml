@@ -18,7 +18,7 @@ jobs:
         uses: tyankatsu0105/read-package-version-actions@v1
         id: package-version
         with:
-          path: "./services/cron-jobs/sync-deputy-profiles/package.json"
+          path: "./services/cron-jobs/sync-deputy-profiles"
 
       - uses: docker/build-push-action@v1
         with:
