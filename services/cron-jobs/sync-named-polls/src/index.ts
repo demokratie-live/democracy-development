@@ -148,6 +148,7 @@ const start = async () => {
     console.error(error);
     // If address is not reachable the query will throw
     await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
+    throw error;
   }
 };
 

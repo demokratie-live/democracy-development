@@ -1,15 +1,15 @@
-name: Build & Push Docker – sync-deputy-profiles
+name: Build & Push Docker – sync-procedures
 
 on:
   push:
     paths:
-      - "services/cron-jobs/sync-deputy-profiles/**"
+      - "services/cron-jobs/sync-procedures/**"
     # branches:
     #   - master
 
 jobs:
   build:
-    name: Build & Push Docker – sync-deputy-profiles
+    name: Build & Push Docker – sync-procedures
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,13 +18,13 @@ jobs:
         uses: tyankatsu0105/read-package-version-actions@v1
         id: package-version
         with:
-          path: "./services/cron-jobs/sync-deputy-profiles"
+          path: "./services/cron-jobs/sync-procedures"
 
       - uses: docker/build-push-action@v1
         with:
           username: ${{ github.actor }}
           password: ${{ github.token }}
           registry: docker.pkg.github.com
-          repository: ${{ github.repository }}/sync-deputy-profiles
-          path: ./services/cron-jobs/sync-deputy-profiles
+          repository: ${{ github.repository }}/sync-procedures
+          path: ./services/cron-jobs/sync-procedures
           tags: ${{ steps.package-version.outputs.version }}, latest
