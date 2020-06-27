@@ -45,7 +45,7 @@ export const queuePushs = async ({
   return true;
 };
 
-export const quePushsOutcome = async (procedureId: string) => {
+export const queuePushsOutcome = async (procedureId: string) => {
   /*
   Offizielles Ergebnis zu Deiner Abstimmung
   Lorem Ipsum Titel
