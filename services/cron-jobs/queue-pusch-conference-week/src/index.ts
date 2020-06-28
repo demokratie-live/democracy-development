@@ -20,7 +20,7 @@ const start = async () => {
   (Sonntag vor Sitzungswoche, alle)
   */
 
-  const CRON_NAME = "quePushsConferenceWeek";
+  const CRON_NAME = "queuePushsConferenceWeek";
   const startDate = new Date();
   const cron = await getCron({ name: CRON_NAME });
   let counter = 0;

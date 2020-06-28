@@ -10,3 +10,4 @@ resources:
   - democracy-sync-named-polls-cronjob.yaml
   - democracy-sync-deputy-profiles.yaml
   - queue-pusch-conference-week.yaml
+  - queue-pusch-vote-conference-week.yaml
