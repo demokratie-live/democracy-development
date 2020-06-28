@@ -8,7 +8,7 @@ metadata:
 ---
 apiVersion: v1
 data:
-  CRON_CONFERENCEWEEKDETAILS: "*/15 * * * *"
+  CRON_CONFERENCEWEEKDETAILS: '*/15 * * * *'
   CRON_DEPUTY_PROFILES: 0 4 * * *
   CRON_NAMED_POLLS: 15 3 * * *
   CRON_NAMED_POLLS_DEPUTIES: 45 3 * * *
@@ -28,7 +28,6 @@ metadata:
 apiVersion: v1
 data:
   BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
-  CRON_START_ON_INIT: "false"
   DB_URL: mongodb://mongo-0.mongo/democracy
   DEBUG: "false"
   GRAPHIQL: "true"
@@ -36,7 +35,7 @@ data:
   STAGE: internal
 kind: ConfigMap
 metadata:
-  name: democracy-api-config-mhb8452gc4
+  name: democracy-api-config-5t96mf6gdg
 ---
 apiVersion: v1
 data:
@@ -64,14 +63,14 @@ metadata:
 spec:
   externalTrafficPolicy: Local
   ports:
-    - name: http
-      port: 80
-      protocol: TCP
-      targetPort: http
-    - name: https
-      port: 443
-      protocol: TCP
-      targetPort: https
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: https
   selector:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
@@ -84,10 +83,10 @@ metadata:
   name: bundestagio-admin-srv
 spec:
   ports:
-    - name: bundestagio-admin
-      port: 3000
-      protocol: TCP
-      targetPort: 3000
+  - name: bundestagio-admin
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
   selector:
     app: bundestagio-admin
 ---
@@ -97,10 +96,10 @@ metadata:
   name: bundestagio-srv
 spec:
   ports:
-    - name: bundestagio
-      port: 3100
-      protocol: TCP
-      targetPort: 3100
+  - name: bundestagio
+    port: 3100
+    protocol: TCP
+    targetPort: 3100
   selector:
     app: bundestagio
 ---
@@ -110,10 +109,10 @@ metadata:
   name: democracy-api-srv
 spec:
   ports:
-    - name: democracy-api
-      port: 3000
-      protocol: TCP
-      targetPort: 3000
+  - name: democracy-api
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
   selector:
     app: democracy-api
 ---
@@ -123,10 +122,10 @@ metadata:
   name: democracy-app-srv
 spec:
   ports:
-    - name: democracy-app
-      port: 3000
-      protocol: TCP
-      targetPort: 3000
+  - name: democracy-app
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
   selector:
     app: democracy-app
 ---
@@ -139,9 +138,9 @@ metadata:
 spec:
   clusterIP: None
   ports:
-    - name: mongo
-      port: 27017
-      targetPort: 27017
+  - name: mongo
+    port: 27017
+    targetPort: 27017
   selector:
     app: mongo
 ---
@@ -151,14 +150,14 @@ metadata:
   name: nats-srv
 spec:
   ports:
-    - name: client
-      port: 4222
-      protocol: TCP
-      targetPort: 4222
-    - name: monitoring
-      port: 8222
-      protocol: TCP
-      targetPort: 8222
+  - name: client
+    port: 4222
+    protocol: TCP
+    targetPort: 4222
+  - name: monitoring
+    port: 8222
+    protocol: TCP
+    targetPort: 8222
   selector:
     app: nats
 ---
@@ -177,36 +176,36 @@ spec:
         app: bundestagio-admin
     spec:
       containers:
-        - envFrom:
-            - configMapRef:
-                name: bio-admin-config-dcc85tcm7f
-            - secretRef:
-                name: bio-admin-login
-                optional: true
-            - secretRef:
-                name: bundestag-result-edit-token
-                optional: true
-          image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.2-dev
-          livenessProbe:
-            httpGet:
-              path: /health-check
-              port: 3000
-            initialDelaySeconds: 180
-            periodSeconds: 600
-            timeoutSeconds: 10
-          name: bundestagio-admin
-          readinessProbe:
-            httpGet:
-              path: /health-check
-              port: 3000
-            periodSeconds: 15
-            timeoutSeconds: 10
-          resources:
-            limits:
-              cpu: 100m
-              memory: 150M
+      - envFrom:
+        - configMapRef:
+            name: bio-admin-config-dcc85tcm7f
+        - secretRef:
+            name: bio-admin-login
+            optional: true
+        - secretRef:
+            name: bundestag-result-edit-token
+            optional: true
+        image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.2-dev
+        livenessProbe:
+          httpGet:
+            path: /health-check
+            port: 3000
+          initialDelaySeconds: 180
+          periodSeconds: 600
+          timeoutSeconds: 10
+        name: bundestagio-admin
+        readinessProbe:
+          httpGet:
+            path: /health-check
+            port: 3000
+          periodSeconds: 15
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 100m
+            memory: 150M
       imagePullSecrets:
-        - name: regcred
+      - name: regcred
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -223,35 +222,35 @@ spec:
         app: bundestagio
     spec:
       containers:
-        - envFrom:
-            - configMapRef:
-                name: bio-api-config-627b78g4g2
-            - secretRef:
-                name: bundestag-result-edit-token
-                optional: true
-          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.23-dev
-          livenessProbe:
-            httpGet:
-              path: /.well-known/apollo/server-health
-              port: 3100
-            initialDelaySeconds: 60
-            periodSeconds: 30
-          name: bundestagio
-          readinessProbe:
-            httpGet:
-              path: /.well-known/apollo/server-health
-              port: 3100
-            initialDelaySeconds: 10
-            periodSeconds: 10
-          resources:
-            limits:
-              cpu: 250m
-              memory: 400M
-            requests:
-              cpu: 50m
-              memory: 150M
+      - envFrom:
+        - configMapRef:
+            name: bio-api-config-627b78g4g2
+        - secretRef:
+            name: bundestag-result-edit-token
+            optional: true
+        image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.23-dev
+        livenessProbe:
+          httpGet:
+            path: /.well-known/apollo/server-health
+            port: 3100
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        name: bundestagio
+        readinessProbe:
+          httpGet:
+            path: /.well-known/apollo/server-health
+            port: 3100
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 250m
+            memory: 400M
+          requests:
+            cpu: 50m
+            memory: 150M
       imagePullSecrets:
-        - name: regcred
+      - name: regcred
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -268,33 +267,33 @@ spec:
         app: democracy-api
     spec:
       containers:
-        - envFrom:
-            - configMapRef:
-                name: democracy-api-config-mhb8452gc4
-            - secretRef:
-                name: democracy-api-secrets
-                optional: true
-          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.12-dev
-          livenessProbe:
-            httpGet:
-              path: /.well-known/apollo/server-health
-              port: 3000
-            periodSeconds: 180
-          name: democracy-api
-          readinessProbe:
-            httpGet:
-              path: /.well-known/apollo/server-health
-              port: 3000
-            initialDelaySeconds: 15
-          resources:
-            limits:
-              cpu: 1000m
-              memory: 300M
-            requests:
-              cpu: 300m
-              memory: 200M
+      - envFrom:
+        - configMapRef:
+            name: democracy-api-config-5t96mf6gdg
+        - secretRef:
+            name: democracy-api-secrets
+            optional: true
+        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.13-dev
+        livenessProbe:
+          httpGet:
+            path: /.well-known/apollo/server-health
+            port: 3000
+          periodSeconds: 180
+        name: democracy-api
+        readinessProbe:
+          httpGet:
+            path: /.well-known/apollo/server-health
+            port: 3000
+          initialDelaySeconds: 15
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 300M
+          requests:
+            cpu: 300m
+            memory: 200M
       imagePullSecrets:
-        - name: regcred
+      - name: regcred
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -311,34 +310,34 @@ spec:
         app: democracy-app
     spec:
       containers:
-        - envFrom:
-            - configMapRef:
-                name: democracy-app-config-fkm5c2gfg8
-          image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.0.3-dev
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 3000
-            initialDelaySeconds: 180
-            periodSeconds: 600
-            timeoutSeconds: 30
-          name: democracy-app
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 3000
-            initialDelaySeconds: 180
-            periodSeconds: 60
-            timeoutSeconds: 60
-          resources:
-            limits:
-              cpu: 200m
-              memory: 300M
-            requests:
-              cpu: 50m
-              memory: 100M
+      - envFrom:
+        - configMapRef:
+            name: democracy-app-config-fkm5c2gfg8
+        image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.0.3-dev
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 180
+          periodSeconds: 600
+          timeoutSeconds: 30
+        name: democracy-app
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 180
+          periodSeconds: 60
+          timeoutSeconds: 60
+        resources:
+          limits:
+            cpu: 200m
+            memory: 300M
+          requests:
+            cpu: 50m
+            memory: 100M
       imagePullSecrets:
-        - name: regcred
+      - name: regcred
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -355,22 +354,22 @@ spec:
         app: nats
     spec:
       containers:
-        - args:
-            - -p
-            - "4222"
-            - -m
-            - "8222"
-            - -hbi
-            - 5s
-            - -hbt
-            - 5s
-            - -hbf
-            - "2"
-            - -SD
-            - -cid
-            - ticketing
-          image: nats-streaming:0.17.0
-          name: nats
+      - args:
+        - -p
+        - "4222"
+        - -m
+        - "8222"
+        - -hbi
+        - 5s
+        - -hbt
+        - 5s
+        - -hbf
+        - "2"
+        - -SD
+        - -cid
+        - ticketing
+        image: nats-streaming:0.17.0
+        name: nats
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -388,30 +387,30 @@ spec:
         app: mongo
     spec:
       containers:
-        - image: mongo
-          name: mongo
-          ports:
-            - containerPort: 27017
-          resources:
-            limits:
-              cpu: 1500m
-              memory: 2G
-            requests:
-              cpu: 500m
-              memory: 350M
-          volumeMounts:
-            - mountPath: /data/db
-              name: mongo-volume
+      - image: mongo
+        name: mongo
+        ports:
+        - containerPort: 27017
+        resources:
+          limits:
+            cpu: 1500m
+            memory: 2G
+          requests:
+            cpu: 500m
+            memory: 350M
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongo-volume
       terminationGracePeriodSeconds: 10
   volumeClaimTemplates:
-    - metadata:
-        name: mongo-volume
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
+  - metadata:
+      name: mongo-volume
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -424,21 +423,21 @@ spec:
       template:
         spec:
           containers:
-            - env:
-                - name: DB_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      key: DB_URL
-                      name: democracy-api-config-mhb8452gc4
-                - name: BUNDESTAGIO_SERVER_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-mhb8452gc4
-              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-deputy-profiles:0.1.2
-              name: democracy-sync-deputy-profiles
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-5t96mf6gdg
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-5t96mf6gdg
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-deputy-profiles:0.1.2
+            name: democracy-sync-deputy-profiles
           imagePullSecrets:
-            - name: regcred
+          - name: regcred
           restartPolicy: Never
   schedule: 3-59/10 * * * *
 ---
@@ -453,21 +452,21 @@ spec:
       template:
         spec:
           containers:
-            - env:
-                - name: DB_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      key: DB_URL
-                      name: democracy-api-config-mhb8452gc4
-                - name: BUNDESTAGIO_SERVER_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-mhb8452gc4
-              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls:0.1.6
-              name: democracy-sync-named-polls
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-5t96mf6gdg
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-5t96mf6gdg
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls:0.1.6
+            name: democracy-sync-named-polls
           imagePullSecrets:
-            - name: regcred
+          - name: regcred
           restartPolicy: Never
   schedule: 5-59/10 * * * *
 ---
@@ -482,23 +481,58 @@ spec:
       template:
         spec:
           containers:
-            - env:
-                - name: DB_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      key: DB_URL
-                      name: democracy-api-config-mhb8452gc4
-                - name: BUNDESTAGIO_SERVER_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-mhb8452gc4
-              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.8
-              name: democracy-sync-procedures
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-5t96mf6gdg
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-5t96mf6gdg
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.8
+            name: democracy-sync-procedures
           imagePullSecrets:
-            - name: regcred
+          - name: regcred
           restartPolicy: Never
-  schedule: "*/10 * * * *"
+  schedule: '*/10 * * * *'
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: push-send-queued-cronjob
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-5t96mf6gdg
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-5t96mf6gdg
+            envFrom:
+            - configMapRef:
+                name: push-notifications-config
+            - secretRef:
+                name: push-notifications-secrets
+                optional: true
+            image: docker.pkg.github.com/demokratie-live/democracy-development/push-send-queued:0.1.1
+            name: push-send-queued
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: '*/5 7-22 * * *'
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -511,21 +545,21 @@ spec:
       template:
         spec:
           containers:
-            - env:
-                - name: DB_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      key: DB_URL
-                      name: democracy-api-config-mhb8452gc4
-                - name: BUNDESTAGIO_SERVER_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-mhb8452gc4
-              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week:0.1.1
-              name: queue-pushs-conference-week
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-5t96mf6gdg
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-5t96mf6gdg
+            image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week:0.1.2
+            name: queue-pushs-conference-week
           imagePullSecrets:
-            - name: regcred
+          - name: regcred
           restartPolicy: Never
   schedule: 0 14 * * SUN
 ---
@@ -540,21 +574,21 @@ spec:
       template:
         spec:
           containers:
-            - env:
-                - name: DB_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      key: DB_URL
-                      name: democracy-api-config-mhb8452gc4
-                - name: BUNDESTAGIO_SERVER_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-mhb8452gc4
-              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-conference-week:0.1.1
-              name: queue-pushs-vote-conference-week
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-5t96mf6gdg
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-5t96mf6gdg
+            image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-conference-week:0.1.1
+            name: queue-pushs-vote-conference-week
           imagePullSecrets:
-            - name: regcred
+          - name: regcred
           restartPolicy: Never
   schedule: 0 4 * * MON-FRI
 ---
@@ -569,23 +603,52 @@ spec:
       template:
         spec:
           containers:
-            - env:
-                - name: DB_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      key: DB_URL
-                      name: democracy-api-config-mhb8452gc4
-                - name: BUNDESTAGIO_SERVER_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-mhb8452gc4
-              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100:0.1.1
-              name: queue-pushs-vote-top-100
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-5t96mf6gdg
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-5t96mf6gdg
+            image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100:0.1.1
+            name: queue-pushs-vote-top-100
           imagePullSecrets:
-            - name: regcred
+          - name: regcred
           restartPolicy: Never
   schedule: 0 4 * * MON-FRI
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: shedule-bio-resync-cronjob
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-5t96mf6gdg
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-5t96mf6gdg
+            image: docker.pkg.github.com/demokratie-live/democracy-development/shedule-bio-resync:0.1.0
+            name: shedule-bio-resync
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: 55 3 * */1 *
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
@@ -599,9 +662,9 @@ spec:
       name: letsencrypt-prod
     server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
-      - http01:
-          ingress:
-            class: nginx
+    - http01:
+        ingress:
+          class: nginx
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -613,17 +676,17 @@ metadata:
   namespace: monitoring
 spec:
   rules:
-    - host: monitoring.democracy-app.de
-      http:
-        paths:
-          - backend:
-              serviceName: monitoring-grafana
-              servicePort: 80
-            path: /?(.*)
+  - host: monitoring.democracy-app.de
+    http:
+      paths:
+      - backend:
+          serviceName: monitoring-grafana
+          servicePort: 80
+        path: /?(.*)
   tls:
-    - hosts:
-        - monitoring.democracy-app.de
-      secretName: democracy-tls
+  - hosts:
+    - monitoring.democracy-app.de
+    secretName: democracy-tls
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -635,38 +698,38 @@ metadata:
   name: ingress-service
 spec:
   rules:
-    - host: kubernetes.api.democracy-app.de
-      http:
-        paths:
-          - backend:
-              serviceName: democracy-api-srv
-              servicePort: 3000
-            path: /?(.*)
-    - host: kubernetes.app.democracy-app.de
-      http:
-        paths:
-          - backend:
-              serviceName: democracy-app-srv
-              servicePort: 3000
-            path: /?(.*)
-    - host: kubernetes.api.bundestag.io
-      http:
-        paths:
-          - backend:
-              serviceName: bundestagio-srv
-              servicePort: 3100
-            path: /?(.*)
-    - host: kubernetes.admin.bundestag.io
-      http:
-        paths:
-          - backend:
-              serviceName: bundestagio-admin-srv
-              servicePort: 3000
-            path: /?(.*)
+  - host: kubernetes.api.democracy-app.de
+    http:
+      paths:
+      - backend:
+          serviceName: democracy-api-srv
+          servicePort: 3000
+        path: /?(.*)
+  - host: kubernetes.app.democracy-app.de
+    http:
+      paths:
+      - backend:
+          serviceName: democracy-app-srv
+          servicePort: 3000
+        path: /?(.*)
+  - host: kubernetes.api.bundestag.io
+    http:
+      paths:
+      - backend:
+          serviceName: bundestagio-srv
+          servicePort: 3100
+        path: /?(.*)
+  - host: kubernetes.admin.bundestag.io
+    http:
+      paths:
+      - backend:
+          serviceName: bundestagio-admin-srv
+          servicePort: 3000
+        path: /?(.*)
   tls:
-    - hosts:
-        - kubernetes.api.democracy-app.de
-        - kubernetes.app.democracy-app.de
-        - kubernetes.api.bundestag.io
-        - kubernetes.admin.bundestag.io
-      secretName: democracy-tls
+  - hosts:
+    - kubernetes.api.democracy-app.de
+    - kubernetes.app.democracy-app.de
+    - kubernetes.api.bundestag.io
+    - kubernetes.admin.bundestag.io
+    secretName: democracy-tls
