@@ -12,4 +12,5 @@ resources:
   - queue-pushs-conference-week.yaml
   - queue-pushs-vote-conference-week.yaml
   - queue-pushs-vote-top-100.yaml
+  - shedule-bio-resync.yaml
   - push-send-queued.yaml
