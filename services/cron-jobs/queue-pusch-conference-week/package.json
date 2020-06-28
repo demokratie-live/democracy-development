@@ -1,6 +1,6 @@
 {
   "name": "queue-pusch-conference-week",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
@@ -13,8 +13,9 @@
     "apollo:codegen": "apollo client:codegen --target typescript --globalTypesFile=./src/__generated__/globalTypes.ts"
   },
   "dependencies": {
-    "@democracy-deutschland/democracy-common": "^0.2.5",
-    "moment": "^2.27.0"
+    "@democracy-deutschland/democracy-common": "^0.2.7",
+    "moment": "^2.27.0",
+    "mongoose": "^5.9.20"
   },
   "devDependencies": {
     "apollo": "^2.28.3",

@@ -16,7 +16,7 @@ import {
   setCronStart,
   setCronSuccess,
   setCronError,
-  quePushsOutcome,
+  queuePushsOutcome,
   convertPartyName,
   IProcedure,
   PartyVotes,
@@ -239,7 +239,7 @@ const importProcedures = async (
           importProcedure.procedureId &&
           (!oldProcedure || !oldProcedure.voteResults)
         ) {
-          await quePushsOutcome(importProcedure.procedureId);
+          await queuePushsOutcome(importProcedure.procedureId);
           // We have different values for VoteResult
         } else if (
           importProcedure.procedureId &&
@@ -253,7 +253,7 @@ const importProcedures = async (
               importProcedure.voteResults.notVoted !==
                 oldProcedure.voteResults.notVoted))
         ) {
-          await quePushsOutcome(importProcedure.procedureId);
+          await queuePushsOutcome(importProcedure.procedureId);
         }
       }
     }

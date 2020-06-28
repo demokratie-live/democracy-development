@@ -4,7 +4,7 @@
   "main": "index.js",
   "repository": "https://github.com/demokratie-live/democracy-development.git",
   "author": "Manuel Ruck <m.ruck@democracy-deutschland.de>",
-  "license": "Apache2",
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "yarn build:k8s:local && skaffold dev --port-forward --status-check=false",
     "build:k8s:local": "kustomize build ./infra/kustomize/overlays/local > infra/local.yaml",
