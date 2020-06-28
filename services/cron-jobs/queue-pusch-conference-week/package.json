@@ -13,7 +13,7 @@
     "apollo:codegen": "apollo client:codegen --target typescript --globalTypesFile=./src/__generated__/globalTypes.ts"
   },
   "dependencies": {
-    "@democracy-deutschland/democracy-common": "^0.2.1",
+    "@democracy-deutschland/democracy-common": "^0.2.3",
     "moment": "^2.27.0"
   },
   "devDependencies": {
