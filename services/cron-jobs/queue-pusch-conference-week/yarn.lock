@@ -92,16 +92,17 @@
   dependencies:
     typescript "^3.7.2"
 
-"@democracy-deutschland/democracy-common@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/democracy-common/-/democracy-common-0.2.3.tgz#5b907977b2477aab7bfb3dfcaa5fe0f1ad932938"
-  integrity sha512-OpSMraA9zxHOdnNS2yUWbt7Fvyopv3Yy7fIkxsklAaGtBIf9OVYM5DAUA3R9LeE0zynXgqNzFZf3lHRmDKpi5w==
+"@democracy-deutschland/democracy-common@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/democracy-common/-/democracy-common-0.2.5.tgz#8bbc0d3a5a679cd735fa5fe575bdf87e84113729"
+  integrity sha512-8wm9mYYlQKPKyeSy++jDKmD2qZs9vvn2V7zX9iyJp1nNN85hyStW5jSP3s32To2IQijZOJyJJ9U09qWssW8hUw==
   dependencies:
     "@democracy-deutschland/bundestag.io-definitions" "^1.0.2"
     "@types/cron" "^1.7.2"
     cron "^1.8.2"
     mongoose "^5.9.20"
     ts-mongoose "^0.0.21"
+    ts-unused-exports "^6.2.1"
 
 "@endemolshinegroup/cosmiconfig-typescript-loader@^1.0.0":
   version "1.0.2"

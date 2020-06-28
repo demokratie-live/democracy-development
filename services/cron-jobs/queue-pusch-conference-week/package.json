@@ -2,7 +2,7 @@
   "name": "queue-pusch-conference-week",
   "version": "0.1.0",
   "main": "build/index.js",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "ts-node-dev ./src/index",
     "lint": "yarn lint:ts && yarn lint:exports",
@@ -13,7 +13,7 @@
     "apollo:codegen": "apollo client:codegen --target typescript --globalTypesFile=./src/__generated__/globalTypes.ts"
   },
   "dependencies": {
-    "@democracy-deutschland/democracy-common": "^0.2.3",
+    "@democracy-deutschland/democracy-common": "^0.2.5",
     "moment": "^2.27.0"
   },
   "devDependencies": {
