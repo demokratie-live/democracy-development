@@ -96,7 +96,7 @@ export const setCronError = async ({
 };
 
 export const resetCronSuccessStartDate = async () => {
-  const CRON_NAME = "SheduleBIOResync";
+  const CRON_NAME = "SheduleBioResync";
   const startDate = new Date();
   const cron = await getCron({ name: CRON_NAME });
   if (cron.running) {

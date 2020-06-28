@@ -58,16 +58,16 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pusch-conference-week
-      context: ./services/cron-jobs/queue-pusch-conference-week
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week
+      context: ./services/cron-jobs/queue-pushs-conference-week
       docker:
         dockerfile: Dockerfile.dev
       sync:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pusch-vote-conference-week
-      context: ./services/cron-jobs/queue-pusch-vote-conference-week
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-conference-week
+      context: ./services/cron-jobs/queue-pushs-vote-conference-week
       docker:
         dockerfile: Dockerfile.dev
       sync:

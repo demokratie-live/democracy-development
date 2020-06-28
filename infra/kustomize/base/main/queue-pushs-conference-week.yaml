@@ -1,9 +1,9 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: queue-pusch-vote-conference-week-cronjob
+  name: queue-pushs-conference-week-cronjob
 spec:
-  schedule: "0 4 * * MON-FRI"
+  schedule: "0 14 * * SUN"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
@@ -11,8 +11,8 @@ spec:
         spec:
           restartPolicy: Never
           containers:
-            - name: queue-pusch-vote-conference-week
-              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pusch-vote-conference-week:0.1.0
+            - name: queue-pushs-conference-week
+              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week:0.1.2
               env:
                 - name: DB_URL
                   valueFrom:
