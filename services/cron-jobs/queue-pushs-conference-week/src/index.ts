@@ -54,16 +54,15 @@ const start = async () => {
     []
   );
 
-  counter += tokens.length;
-
   // Only send Message if at least one vote & one token is found
   if (tokens.length > 0 && procedureIds.length > 0) {
+    counter += tokens.length;
     const title = "Kommende Woche ist Sitzungswoche!";
     const message =
       procedureIds.length === 1
         ? `Es wartet 1 spannendes Thema auf Dich. Viel Spaß beim Abstimmen.`
         : `Es warten ${procedureIds.length} spannende Themen auf Dich. Viel Spaß beim Abstimmen.`;
-    queuePushs({
+    await queuePushs({
       type: PUSH_TYPE.PROCEDURE_BULK,
       category: PUSH_CATEGORY.CONFERENCE_WEEK,
       title,
