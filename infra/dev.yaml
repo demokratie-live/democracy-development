@@ -614,7 +614,7 @@ spec:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
                       name: democracy-api-config-5t96mf6gdg
-              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100:0.1.1
+              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100:0.1.2
               name: queue-pushs-vote-top-100
           imagePullSecrets:
             - name: regcred

@@ -131,7 +131,7 @@ const start = async () => {
         const time = new Date();
         time.setHours(9 + Math.round(Math.random() * 9));
         // Send Pushs
-        queuePushs({
+        await queuePushs({
           type: PUSH_TYPE.PROCEDURE,
           category: PUSH_CATEGORY.TOP100,
           title: `TOP 100 - #${topId}: Jetzt Abstimmen!`,

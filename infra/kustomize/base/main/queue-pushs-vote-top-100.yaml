@@ -12,7 +12,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: queue-pushs-vote-top-100
-              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100:0.1.1
+              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100:0.1.2
               env:
                 - name: DB_URL
                   valueFrom:
