@@ -12,3 +12,4 @@ resources:
   - queue-pusch-conference-week.yaml
   - queue-pusch-vote-conference-week.yaml
   - queue-pushs-vote-top-100.yaml
+  - push-send-queued.yaml

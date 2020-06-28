@@ -1,0 +1,28 @@
+{
+  "name": "push-send-queued",
+  "version": "0.1.0",
+  "main": "build/index.js",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "ts-node-dev ./src/index",
+    "lint": "yarn lint:ts && yarn lint:exports",
+    "lint:ts": "tsc --noEmit",
+    "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
+    "build": "tsc",
+    "start": "node ./build/index.js",
+    "apollo:codegen": "apollo client:codegen --target typescript --globalTypesFile=./src/__generated__/globalTypes.ts"
+  },
+  "dependencies": {
+    "@democracy-deutschland/democracy-common": "^0.2.7",
+    "apn": "^2.2.0",
+    "node-gcm": "^1.0.2",
+    "p-iteration": "^1.1.8"
+  },
+  "devDependencies": {
+    "@types/node-gcm": "^1.0.0",
+    "apollo": "^2.28.3",
+    "ts-node-dev": "^1.0.0-pre.49",
+    "ts-unused-exports": "^6.2.1",
+    "typescript": "^3.9.5"
+  }
+}

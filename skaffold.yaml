@@ -74,8 +74,16 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/push-send-queued
       context: ./services/cron-jobs/queue-pushs-vote-top-100
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/push-send-queued
+      context: ./services/cron-jobs/push-send-queued
       docker:
         dockerfile: Dockerfile.dev
       sync:

@@ -15,3 +15,6 @@ configMapGenerator:
   - name: democracy-app-config
     envs:
       - democracy-app.env
+  - name: push-notifications-config
+    envs:
+      - push-notifications.env
