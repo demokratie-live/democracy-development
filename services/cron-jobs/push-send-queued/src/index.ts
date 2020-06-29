@@ -170,13 +170,10 @@ const start = async () => {
     }
   );
   await Promise.all(sentPushs);
-  console.info("### Push counter", sentPushs.length);
 
   if (sentPushs.length > 0) {
     console.info(`[PUSH] Sent ${sentPushs.length} Pushs`);
   }
-
-  console.log(`sent push's: ${sentPushs.length}`);
 
   await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
 };
