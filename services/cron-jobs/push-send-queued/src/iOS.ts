@@ -7,18 +7,15 @@ export const push = ({
   message,
   payload,
   token,
-  callback,
 }: {
   title: string;
   message: string;
   payload: any;
   token: string;
-  callback: (response: apn.Responses) => void;
-}) => {
+}): Promise<apn.Responses> => {
   // Check if Sending Interface is present
   if (!apnProvider) {
-    console.error("ERROR: apnProvider not present");
-    return;
+    throw new Error("ERROR: apnProvider not present");
   }
 
   // Construct Data Object
@@ -32,7 +29,7 @@ export const push = ({
   data.payload = payload;
 
   // Do the sending
-  apnProvider.send(data, token).then((response) => {
-    callback(response);
+  return new Promise((resolve) => {
+    apnProvider!.send(data, token).then(resolve);
   });
 };

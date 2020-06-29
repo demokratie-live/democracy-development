@@ -6,18 +6,15 @@ export const push = async ({
   message,
   payload,
   token,
-  callback,
 }: {
   title: string;
   message: string;
   payload: any;
   token: string;
-  callback: (err: any, resJson: IResponseBody) => void;
-}) => {
+}): Promise<gcm.IResponseBody> => {
   // Check if Sending Interface is present
   if (!gcmProvider) {
-    console.error("ERROR: gcmProvider not present");
-    return;
+    throw new Error("ERROR: gcmProvider not present");
   }
 
   // Construct Data Object
@@ -29,5 +26,12 @@ export const push = async ({
     },
   });
 
-  gcmProvider.send(gcmMessage, token, callback);
+  return new Promise((resolve, reject) => {
+    gcmProvider!.send(gcmMessage, token, (error, response) => {
+      if (error) {
+        reject({ error, response });
+      }
+      resolve(response);
+    });
+  });
 };

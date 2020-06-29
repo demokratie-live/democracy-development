@@ -1,5 +1,5 @@
 import mongoConnect from "./mongoose";
-import { mapSeries } from "p-iteration";
+import apn from "apn";
 
 import {
   ProcedureModel,
@@ -75,85 +75,77 @@ const start = async () => {
         procedureIds,
       };
       // Send Pushs
-      let job: Promise<void>;
       switch (os) {
         case PUSH_OS.ANDROID:
-          await pushAndroid({
+          const response = await pushAndroid({
             title,
             message,
             payload,
             token,
-            callback: async (err, response) => {
-              if (err || response.success !== 1 || response.failure !== 0) {
-                // Write failure to Database
-                await PushNotificationModel.update(
-                  { _id },
-                  { $set: { failure: JSON.stringify({ err, response }) } }
-                );
-                // Remove broken Push tokens
-                if (
-                  response.results &&
-                  response.results[0].error === "NotRegistered"
-                ) {
-                  await DeviceModel.update(
-                    {},
-                    { $pull: { pushTokens: { token, os: PUSH_OS.ANDROID } } },
-                    { multi: true }
-                  );
-                  console.warn(`[PUSH] Android failure - removig token`);
-                } else {
-                  console.error(
-                    `[PUSH] Android failure ${JSON.stringify({
-                      token,
-                      err,
-                      response,
-                    })}`
-                  );
-                }
-              }
-            },
+          }).catch(async ({ error, response }) => {
+            await PushNotificationModel.update(
+              { _id },
+              { $set: { failure: JSON.stringify({ error, response }) } }
+            );
+            if (
+              response.results &&
+              response.results[0].error === "NotRegistered"
+            ) {
+              await DeviceModel.update(
+                {},
+                { $pull: { pushTokens: { token, os: PUSH_OS.ANDROID } } },
+                { multi: true }
+              );
+              console.warn(`[PUSH] Android failure - removig token`);
+            } else {
+              console.error(
+                `[PUSH] Android failure ${JSON.stringify({
+                  token,
+                  error,
+                  response,
+                })}`
+              );
+            }
           });
           break;
         case PUSH_OS.IOS:
-          await pushIOS({
+          const { sent, failed } = await pushIOS({
             title,
             message,
             payload,
             token,
-            callback: async ({ sent, failed }) => {
-              console.info(
-                JSON.stringify({ type: "apnProvider.send", sent, failed })
-              );
-              if (sent.length === 0 && failed.length !== 0) {
-                // Write failure to Database
-                await PushNotificationModel.update(
-                  { _id },
-                  { $set: { failure: JSON.stringify({ failed }) } }
-                );
-                // Remove broken Push tokens
-                if (
-                  failed[0].response &&
-                  (failed[0].response.reason === "DeviceTokenNotForTopic" ||
-                    failed[0].response.reason === "BadDeviceToken")
-                ) {
-                  await DeviceModel.update(
-                    {},
-                    { $pull: { pushTokens: { token, os: PUSH_OS.IOS } } },
-                    { multi: true }
-                  );
-                  console.warn(`[PUSH] IOS failure - removig token`);
-                } else {
-                  console.error(
-                    `[PUSH] IOS failure ${JSON.stringify({
-                      token,
-                      sent,
-                      failed,
-                    })}`
-                  );
-                }
-              }
-            },
           });
+          console.info(
+            JSON.stringify({ type: "apnProvider.send", sent, failed })
+          );
+          if (sent.length === 0 && failed.length !== 0) {
+            // Write failure to Database
+            await PushNotificationModel.update(
+              { _id },
+              { $set: { failure: JSON.stringify({ failed }) } }
+            );
+            // Remove broken Push tokens
+            if (
+              failed[0].response &&
+              (failed[0].response.reason === "DeviceTokenNotForTopic" ||
+                failed[0].response.reason === "BadDeviceToken")
+            ) {
+              await DeviceModel.update(
+                {},
+                { $pull: { pushTokens: { token, os: PUSH_OS.IOS } } },
+                { multi: true }
+              );
+              console.warn(`[PUSH] IOS failure - removig token`);
+            } else {
+              console.error(
+                `[PUSH] IOS failure ${JSON.stringify({
+                  token,
+                  sent,
+                  failed,
+                })}`
+              );
+            }
+          }
           break;
         default:
           console.error(`[PUSH] unknown Token-OS`);
