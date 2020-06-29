@@ -53,8 +53,7 @@ const start = async () => {
   }
 
   // send all pushs in there
-  const sentPushs = await mapSeries(
-    pushs,
+  const sentPushs = await pushs.map(
     async ({
       _id,
       type,
@@ -76,6 +75,7 @@ const start = async () => {
         procedureIds,
       };
       // Send Pushs
+      let job: Promise<void>;
       switch (os) {
         case PUSH_OS.ANDROID:
           await pushAndroid({
@@ -169,6 +169,7 @@ const start = async () => {
       return _id;
     }
   );
+  await Promise.all(sentPushs);
   console.info("### Push counter", sentPushs.length);
 
   if (sentPushs.length > 0) {
