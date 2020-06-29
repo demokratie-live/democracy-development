@@ -151,7 +151,7 @@ const start = async () => {
           console.error(`[PUSH] unknown Token-OS`);
       }
       // Set sent = true
-      await PushNotificationModel.update(
+      await PushNotificationModel.updateOne(
         { _id },
         { $set: { sent: true } }
       ).then(() => {
