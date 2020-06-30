@@ -52,6 +52,14 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/import-conference-week-details
+      context: ./services/cron-jobs/import-conference-week-details
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
     - image: docker.pkg.github.com/demokratie-live/democracy-development/push-send-queued
       context: ./services/cron-jobs/push-send-queued
       docker:

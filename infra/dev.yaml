@@ -8,10 +8,6 @@ metadata:
 ---
 apiVersion: v1
 data:
-  CRON_CONFERENCEWEEKDETAILS: "*/15 * * * *"
-  CRON_DEPUTY_PROFILES: 0 4 * * *
-  CRON_NAMED_POLLS: 15 3 * * *
-  CRON_NAMED_POLLS_DEPUTIES: 45 3 * * *
   CRON_START_ON_INIT: "false"
   DB_URL: mongodb://mongo-0.mongo/bundestagio
   GRAPHIQL: /graphiql
@@ -22,7 +18,7 @@ data:
   VOYAGER: "true"
 kind: ConfigMap
 metadata:
-  name: bio-api-config-ctbft95k25
+  name: bio-api-config-m6k77c6mg9
 ---
 apiVersion: v1
 data:
@@ -46,11 +42,11 @@ metadata:
 ---
 apiVersion: v1
 data:
-  PERIODS: "19"
+  PERIODS: "[19]"
   SCRAPER_USER_AGEND: DEMOCRACY_DEV
 kind: ConfigMap
 metadata:
-  name: import-procedures-config-95dk9db6hc
+  name: import-procedures-config-74d995bc22
 ---
 apiVersion: v1
 kind: Service
@@ -231,11 +227,11 @@ spec:
       containers:
         - envFrom:
             - configMapRef:
-                name: bio-api-config-ctbft95k25
+                name: bio-api-config-m6k77c6mg9
             - secretRef:
                 name: bundestag-result-edit-token
                 optional: true
-          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.23-dev
+          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.24-dev
           livenessProbe:
             httpGet:
               path: /.well-known/apollo/server-health
@@ -522,10 +518,10 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: bio-api-config-ctbft95k25
+                      name: bio-api-config-m6k77c6mg9
               envFrom:
                 - configMapRef:
-                    name: import-procedures-config-95dk9db6hc
+                    name: import-procedures-config-74d995bc22
               image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.1
               name: import-procedures
           imagePullSecrets:
