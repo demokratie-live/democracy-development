@@ -2,7 +2,7 @@ FROM node:12-alpine AS BUILD_IMAGE
 
 # install next-optimized-images requirements
 RUN apk --no-cache update \ 
-    && apk --no-cache add curl bash \
+    && apk --no-cache add curl bash git \
     &&  rm -fr /var/cache/apk/*
 
 # install node-prune (https://github.com/tj/node-prune)
