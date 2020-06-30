@@ -1,6 +1,6 @@
 {
   "name": "bundestag.io",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "main": "built/index.js",
   "author": "Ulf Gebhardt",
   "license": "Apache2",
@@ -32,6 +32,7 @@
     "lodash": "^4.17.10",
     "merge-graphql-schemas": "^1.5.0",
     "mongoose-diff-history": "^2.1.0",
+    "omit-deep": "^0.3.0",
     "winston": "^3.0.0",
     "winston-mongodb": "^5.0.1"
   },
