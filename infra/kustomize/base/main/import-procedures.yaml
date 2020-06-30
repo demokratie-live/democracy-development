@@ -1,0 +1,34 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: import-procedures-cronjob
+spec:
+  schedule: "*/5 5-20 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: import-procedures
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.0
+              envFrom:
+                - configMapRef:
+                    name: push-notifications-config
+                - secretRef:
+                    name: push-notifications-secrets
+                    optional: true
+              env:
+                - name: DB_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: democracy-api-config
+                      key: DB_URL
+                - name: BUNDESTAGIO_SERVER_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: democracy-api-config
+                      key: BUNDESTAGIO_SERVER_URL
+          imagePullSecrets:
+            - name: regcred

@@ -16,7 +16,7 @@ build:
         dockerfile: Dockerfile.dev
       sync:
         manual:
-          - src: "src/**/*.js"
+          - src: "src/**/*.{js,ts}"
             dest: .
     - image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server
       context: democracy-app.de-api
@@ -44,6 +44,14 @@ build:
             dest: .
 
     # services / cron-jobs
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures
+      context: ./services/cron-jobs/import-procedures
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
     - image: docker.pkg.github.com/demokratie-live/democracy-development/push-send-queued
       context: ./services/cron-jobs/push-send-queued
       docker:
@@ -52,8 +60,8 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pusch-conference-week
-      context: ./services/cron-jobs/queue-pusch-conference-week
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week
+      context: ./services/cron-jobs/queue-pushs-conference-week
       docker:
         dockerfile: Dockerfile.dev
       sync:

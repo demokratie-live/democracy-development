@@ -14,3 +14,4 @@ resources:
   - queue-pushs-vote-top-100.yaml
   - shedule-bio-resync.yaml
   - push-send-queued.yaml
+  - import-procedures.yaml
