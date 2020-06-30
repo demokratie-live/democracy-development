@@ -3,4 +3,4 @@ diffs/*
 *.log
 .env*
 !.env.example
-/dist/*
+built
