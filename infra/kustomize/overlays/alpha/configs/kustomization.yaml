@@ -17,5 +17,8 @@ configMapGenerator:
   - name: push-notifications-config
     envs:
       - push-notifications.env
+  - name: import-procedures-config
+    envs:
+      - import-procedures.env
 
 namespace: democracy-alpha

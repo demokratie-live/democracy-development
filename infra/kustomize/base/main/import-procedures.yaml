@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: import-procedures-cronjob
 spec:
-  schedule: "*/5 5-20 * * *"
+  schedule: "0 1 * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
@@ -12,23 +12,15 @@ spec:
           restartPolicy: Never
           containers:
             - name: import-procedures
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.0
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.1
               envFrom:
                 - configMapRef:
-                    name: push-notifications-config
-                - secretRef:
-                    name: push-notifications-secrets
-                    optional: true
+                    name: import-procedures-config
               env:
                 - name: DB_URL
                   valueFrom:
                     configMapKeyRef:
-                      name: democracy-api-config
+                      name: bio-api-config
                       key: DB_URL
-                - name: BUNDESTAGIO_SERVER_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      name: democracy-api-config
-                      key: BUNDESTAGIO_SERVER_URL
           imagePullSecrets:
             - name: regcred

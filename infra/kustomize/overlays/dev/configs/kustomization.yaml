@@ -14,3 +14,6 @@ configMapGenerator:
   - name: democracy-app-config
     envs:
       - democracy-app.env
+  - name: import-procedures-config
+    envs:
+      - import-procedures.env

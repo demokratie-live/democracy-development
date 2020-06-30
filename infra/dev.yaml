@@ -12,8 +12,7 @@ data:
   CRON_DEPUTY_PROFILES: 0 4 * * *
   CRON_NAMED_POLLS: 15 3 * * *
   CRON_NAMED_POLLS_DEPUTIES: 45 3 * * *
-  CRON_PROCEDURES: 0 3 * * *
-  CRON_START_ON_INIT: "true"
+  CRON_START_ON_INIT: "false"
   DB_URL: mongodb://mongo-0.mongo/bundestagio
   GRAPHIQL: /graphiql
   GRAPHQL_PATH: /
@@ -23,7 +22,7 @@ data:
   VOYAGER: "true"
 kind: ConfigMap
 metadata:
-  name: bio-api-config-627b78g4g2
+  name: bio-api-config-ctbft95k25
 ---
 apiVersion: v1
 data:
@@ -44,6 +43,14 @@ data:
 kind: ConfigMap
 metadata:
   name: democracy-app-config-fkm5c2gfg8
+---
+apiVersion: v1
+data:
+  PERIODS: "19"
+  SCRAPER_USER_AGEND: DEMOCRACY_DEV
+kind: ConfigMap
+metadata:
+  name: import-procedures-config-95dk9db6hc
 ---
 apiVersion: v1
 kind: Service
@@ -224,7 +231,7 @@ spec:
       containers:
         - envFrom:
             - configMapRef:
-                name: bio-api-config-627b78g4g2
+                name: bio-api-config-ctbft95k25
             - secretRef:
                 name: bundestag-result-edit-token
                 optional: true
@@ -502,6 +509,33 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
+  name: import-procedures-cronjob
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - env:
+                - name: DB_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      key: DB_URL
+                      name: bio-api-config-ctbft95k25
+              envFrom:
+                - configMapRef:
+                    name: import-procedures-config-95dk9db6hc
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.1
+              name: import-procedures
+          imagePullSecrets:
+            - name: regcred
+          restartPolicy: Never
+  schedule: 0 1 * * *
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
   name: push-send-queued-cronjob
 spec:
   concurrencyPolicy: Forbid
@@ -532,7 +566,7 @@ spec:
           imagePullSecrets:
             - name: regcred
           restartPolicy: Never
-  schedule: "*/5 7-22 * * *"
+  schedule: "*/5 5-20 * * *"
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -561,7 +595,7 @@ spec:
           imagePullSecrets:
             - name: regcred
           restartPolicy: Never
-  schedule: 0 14 * * SUN
+  schedule: 0 12 * * SUN
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -590,7 +624,7 @@ spec:
           imagePullSecrets:
             - name: regcred
           restartPolicy: Never
-  schedule: 0 4 * * MON-FRI
+  schedule: 0 2 * * MON-FRI
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -619,7 +653,7 @@ spec:
           imagePullSecrets:
             - name: regcred
           restartPolicy: Never
-  schedule: 0 4 * * MON-FRI
+  schedule: 0 2 * * MON-FRI
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -648,7 +682,7 @@ spec:
           imagePullSecrets:
             - name: regcred
           restartPolicy: Never
-  schedule: 55 3 * */1 *
+  schedule: 55 2 * */1 *
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
