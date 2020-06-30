@@ -14,7 +14,7 @@ metadata:
 ---
 apiVersion: v1
 data:
-  CRON_CONFERENCEWEEKDETAILS: '*/30 * * * *'
+  CRON_CONFERENCEWEEKDETAILS: '* */1 * * *'
   CRON_DEPUTY_PROFILES: 0 4 * * *
   CRON_NAMED_POLLS: 15 3 * * *
   CRON_NAMED_POLLS_DEPUTIES: 45 3 * * *
@@ -29,7 +29,7 @@ data:
   VOYAGER: "true"
 kind: ConfigMap
 metadata:
-  name: bio-api-config-2c7g4kf25b
+  name: bio-api-config-k5g629h6f4
   namespace: democracy-alpha
 ---
 apiVersion: v1
@@ -37,14 +37,6 @@ data:
   AUTH_JWT_REFRESH_TTL: 5m
   AUTH_JWT_TTL: 1m
   BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
-  CRON_DEPUTY_PROFILES: '* */1 * * *'
-  CRON_NAMED_POLLS: '* */1 * * *'
-  CRON_PROCEDURES: '* */1 * * *'
-  CRON_QUE_PUSHS_CONFERENCE_WEEK: 0 14 * * SUN
-  CRON_QUE_PUSHS_VOTE_CONFERENCE_WEEK: 0 4 * * MON-FRI
-  CRON_QUE_PUSHS_VOTE_TOP100: 0 4 * * MON-FRI
-  CRON_SEND_QUED_PUSHS: '*/5 7-22 * * *'
-  CRON_SHEDULE_BIO_RESYNC: 55 3 * */1 *
   CRON_START_ON_INIT: "false"
   DB_URL: mongodb://mongo-0.mongo,mongo-1.mongo,mongo-2.mongo/democracy?replicaSet=rs0
   DEBUG: "false"
@@ -55,7 +47,7 @@ data:
   STAGE: alpha
 kind: ConfigMap
 metadata:
-  name: democracy-api-config-bccktmk6hf
+  name: democracy-api-config-k9h87hccg6
   namespace: democracy-alpha
 ---
 apiVersion: v1
@@ -65,6 +57,15 @@ data:
 kind: ConfigMap
 metadata:
   name: democracy-app-config-7kdb79k6b4
+  namespace: democracy-alpha
+---
+apiVersion: v1
+data:
+  APN_TOPIC: de.democracy-deutschland.clientapp.alpha
+  APPLE_TEAMID: A4B84UJD7M
+kind: ConfigMap
+metadata:
+  name: push-notifications-config-t7tdktm6f6
   namespace: democracy-alpha
 ---
 apiVersion: v1
@@ -220,6 +221,7 @@ spec:
             path: /health-check
             port: 3000
           initialDelaySeconds: 180
+          periodSeconds: 600
           timeoutSeconds: 10
         name: bundestagio-admin
         readinessProbe:
@@ -256,7 +258,7 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: bio-api-config-2c7g4kf25b
+            name: bio-api-config-k5g629h6f4
         - secretRef:
             name: bundestag-result-edit-token
             optional: true
@@ -272,7 +274,7 @@ spec:
           httpGet:
             path: /.well-known/apollo/server-health
             port: 3100
-          initialDelaySeconds: 30
+          initialDelaySeconds: 10
           periodSeconds: 10
         resources:
           limits:
@@ -302,11 +304,11 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: democracy-api-config-bccktmk6hf
+            name: democracy-api-config-k9h87hccg6
         - secretRef:
             name: democracy-api-secrets
             optional: true
-        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.7-dev
+        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.13-dev
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
@@ -353,14 +355,16 @@ spec:
             path: /
             port: 3000
           initialDelaySeconds: 180
-          timeoutSeconds: 10
+          periodSeconds: 600
+          timeoutSeconds: 30
         name: democracy-app
         readinessProbe:
           httpGet:
             path: /
             port: 3000
-          periodSeconds: 15
-          timeoutSeconds: 10
+          initialDelaySeconds: 180
+          periodSeconds: 60
+          timeoutSeconds: 60
         resources:
           limits:
             cpu: 200m
@@ -450,6 +454,252 @@ spec:
       resources:
         requests:
           storage: 5Gi
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: democracy-sync-deputy-profiles-cronjob
+  namespace: democracy-alpha
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-k9h87hccg6
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-k9h87hccg6
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-deputy-profiles:0.1.2
+            name: democracy-sync-deputy-profiles
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: 3-59/10 * * * *
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: democracy-sync-named-polls-cronjob
+  namespace: democracy-alpha
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-k9h87hccg6
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-k9h87hccg6
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls:0.1.6
+            name: democracy-sync-named-polls
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: 5-59/10 * * * *
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: democracy-sync-procedures-cronjob
+  namespace: democracy-alpha
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-k9h87hccg6
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-k9h87hccg6
+            image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.8
+            name: democracy-sync-procedures
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: '*/10 * * * *'
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: push-send-queued-cronjob
+  namespace: democracy-alpha
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-k9h87hccg6
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-k9h87hccg6
+            envFrom:
+            - configMapRef:
+                name: push-notifications-config-t7tdktm6f6
+            - secretRef:
+                name: push-notifications-secrets
+                optional: true
+            image: docker.pkg.github.com/demokratie-live/democracy-development/push-send-queued:0.1.4
+            name: push-send-queued
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: '*/5 7-22 * * *'
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: queue-pushs-conference-week-cronjob
+  namespace: democracy-alpha
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-k9h87hccg6
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-k9h87hccg6
+            image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week:0.1.3
+            name: queue-pushs-conference-week
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: 0 14 * * SUN
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: queue-pushs-vote-conference-week-cronjob
+  namespace: democracy-alpha
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-k9h87hccg6
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-k9h87hccg6
+            image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-conference-week:0.1.1
+            name: queue-pushs-vote-conference-week
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: 0 4 * * MON-FRI
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: queue-pushs-vote-top-100-cronjob
+  namespace: democracy-alpha
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-k9h87hccg6
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-k9h87hccg6
+            image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100:0.1.2
+            name: queue-pushs-vote-top-100
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: 0 4 * * MON-FRI
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: shedule-bio-resync-cronjob
+  namespace: democracy-alpha
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URL
+                  name: democracy-api-config-k9h87hccg6
+            - name: BUNDESTAGIO_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: BUNDESTAGIO_SERVER_URL
+                  name: democracy-api-config-k9h87hccg6
+            image: docker.pkg.github.com/demokratie-live/democracy-development/shedule-bio-resync:0.1.0
+            name: shedule-bio-resync
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: Never
+  schedule: 55 3 * */1 *
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer

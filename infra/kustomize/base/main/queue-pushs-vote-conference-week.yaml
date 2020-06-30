@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: queue-pushs-vote-conference-week-cronjob
 spec:
-  schedule: "0 4 * * MON-FRI"
+  schedule: "0 2 * * MON-FRI"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:

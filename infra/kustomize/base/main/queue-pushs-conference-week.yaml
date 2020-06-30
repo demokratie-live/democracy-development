@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: queue-pushs-conference-week-cronjob
 spec:
-  schedule: "0 14 * * SUN"
+  schedule: "0 12 * * SUN"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:

@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: shedule-bio-resync-cronjob
 spec:
-  schedule: "55 3 * */1 *"
+  schedule: "55 2 * */1 *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
