@@ -4,13 +4,12 @@
 import { SchemaDirectiveVisitor } from 'graphql-tools';
 import { defaultFieldResolver } from 'graphql';
 
-import CONFIG from '../../config';
-
 class AuthDirective extends SchemaDirectiveVisitor {
   visitObject(type) {
     this.ensureFieldsWrapped(type);
     type._requiredAuthRole = this.args.requires;
   }
+
   // Visitor methods for nested types like fields and arguments
   // also receive a details object that provides information about
   // the parent and grandparent types.
@@ -26,7 +25,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
 
     const fields = objectType.getFields();
 
-    Object.keys(fields).forEach(fieldName => {
+    Object.keys(fields).forEach((fieldName) => {
       const field = fields[fieldName];
       const { resolve = defaultFieldResolver } = field;
       field.resolve = async (...args) => {
@@ -46,9 +45,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
             context.req.headers['bio-auth-token'] !== process.env.BIO_EDIT_TOKEN
           ) {
             Log.warn(
-              `Connection to Bio blocked from ${
-                context.req.connection.remoteAddress
-              } for role 'BACKEND'`,
+              `Connection to Bio blocked from ${context.req.connection.remoteAddress} for role 'BACKEND'`,
             );
             allow = false;
           }

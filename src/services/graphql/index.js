@@ -1,17 +1,20 @@
 import { ApolloServer } from 'apollo-server-express';
-import CONFIG from './../../config';
-
-import typeDefs from './../../graphql/schemas';
-import resolvers from './../../graphql/resolvers';
-import schemaDirectives from './../../graphql/schemaDirectives';
 
 // Models
-import ProcedureModel from './../../models/Procedure';
-import UserModel from './../../models/User';
-import DeputyModel from './../../models/Deputy';
-import NamedPollModel from './../../models/NamedPoll';
-import HistoryModel from './../../models/History';
-import ConferenceWeekDetailModel from './../../models/ConferenceWeekDetail';
+import {
+  ProcedureModel,
+  UserModel,
+  DeputyModel,
+  NamedPollModel,
+  HistoryModel,
+  ConferenceWeekDetailModel,
+} from '@democracy-deutschland/bundestagio-common';
+
+import CONFIG from '../../config';
+
+import typeDefs from '../../graphql/schemas';
+import resolvers from '../../graphql/resolvers';
+import schemaDirectives from '../../graphql/schemaDirectives';
 
 const graphql = new ApolloServer({
   engine: CONFIG.ENGINE_API_KEY

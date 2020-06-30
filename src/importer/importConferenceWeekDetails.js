@@ -6,10 +6,14 @@ import {
   CONFERENCEWEEKDETAIL as CONFERENCEWEEKDETAIL_DEFINITIONS,
 } from '@democracy-deutschland/bundestag.io-definitions';
 
-import ConferenceWeekDetailModel from '../models/ConferenceWeekDetail';
-import ProcedureModel from '../models/Procedure';
-
-import { getCron, setCronStart, setCronSuccess, setCronError } from './../services/cronJobs/tools';
+import {
+  ConferenceWeekDetailModel,
+  ProcedureModel,
+  getCron,
+  setCronStart,
+  setCronSuccess,
+  setCronError,
+} from '@democracy-deutschland/bundestagio-common';
 
 export const CRON_NAME = 'ConferenceWeekDetails';
 
@@ -32,10 +36,10 @@ const isVote = (topic, heading, documents, status) => {
     }
     if (
       status &&
-      status.find(s => {
+      status.find((s) => {
         // if(s.documents.sort().join(',') === documents.sort().join(',') &&
         if (
-          s.documents.some(l => documents.includes(l)) &&
+          s.documents.some((l) => documents.includes(l)) &&
           s.line.search(CONFERENCEWEEKDETAIL_DEFINITIONS.STATUS.FIND_ANTRAG_COMPLETED) !== -1
         ) {
           return true;
@@ -62,13 +66,13 @@ const isVote = (topic, heading, documents, status) => {
   return null;
 };
 
-const getProcedureIds = async documents => {
+const getProcedureIds = async (documents) => {
   // TODO unify
   // currently the dip21 scraper returns document urls like so:
   // "http://dipbt.bundestag.de:80/dip21/btd/19/010/1901038.pdf
   // The named poll scraper returns them like so:
   // http://dip21.bundestag.de/dip21/btd/19/010/1901038.pdf
-  const docs = documents.map(document =>
+  const docs = documents.map((document) =>
     document.replace('http://dip21.bundestag.de/', 'http://dipbt.bundestag.de:80/'),
   );
   const procedures = await ProcedureModel.find(
@@ -96,7 +100,7 @@ const getProcedureIds = async documents => {
     { procedureId: 1 },
   );
 
-  return procedures.map(p => p.procedureId);
+  return procedures.map((p) => p.procedureId);
 };
 
 export default async () => {
@@ -110,7 +114,7 @@ export default async () => {
   try {
     const voteDates = [];
     let lastProcedureIds = [];
-    await Scraper.scrape(new ConferenceWeekDetailScraper(), async dataPackage => {
+    await Scraper.scrape(new ConferenceWeekDetailScraper(), async (dataPackage) => {
       // Construct Database object
       const ConferenceWeekDetail = {
         URL: dataPackage.meta.url,
@@ -129,7 +133,7 @@ export default async () => {
               // Await for last result
               const resultTop = await pTop;
               // Write VoteEnd Date
-              lastProcedureIds.forEach(procedureId => {
+              lastProcedureIds.forEach((procedureId) => {
                 if (
                   voteDates[procedureId].voteDate &&
                   voteDates[procedureId].voteDate <= top.time
@@ -142,7 +146,7 @@ export default async () => {
               resultTop.push({
                 ...top,
                 topic: await Promise.all(
-                  top.topic.map(async topic => {
+                  top.topic.map(async (topic) => {
                     // eslint-disable-next-line no-param-reassign
                     topic.isVote = isVote(
                       topic.lines.join(' '),
@@ -152,7 +156,7 @@ export default async () => {
                     );
                     topic.procedureIds = await getProcedureIds(topic.documents); // eslint-disable-line no-param-reassign
                     // Save VoteDates to update them at the end when the correct values are present
-                    topic.procedureIds.forEach(procedureId => {
+                    topic.procedureIds.forEach((procedureId) => {
                       // Override voteDate only if there is none set or we would override it by a new date
                       if (
                         !voteDates[procedureId] ||
@@ -186,7 +190,7 @@ export default async () => {
       );
     });
     // Update Procedure VoteDates
-    voteDates.map(async procedureUpdate => {
+    voteDates.map(async (procedureUpdate) => {
       await ProcedureModel.update(
         {
           procedureId: procedureUpdate.procedureId,

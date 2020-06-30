@@ -1,9 +1,13 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
 import { DeputyProfileScraper } from '@democracy-deutschland/scapacra-bt';
 
-import DeputyModel from '../models/Deputy';
-
-import { getCron, setCronStart, setCronSuccess, setCronError } from './../services/cronJobs/tools';
+import {
+  DeputyModel,
+  getCron,
+  setCronStart,
+  setCronSuccess,
+  setCronError,
+} from '@democracy-deutschland/bundestagio-common';
 
 export const CRON_NAME = 'DeputyProfiles';
 
@@ -16,7 +20,7 @@ export default async () => {
   }
   await setCronStart({ name: CRON_NAME, startDate });
   try {
-    await Scraper.scrape(new DeputyProfileScraper(), async dataPackage => {
+    await Scraper.scrape(new DeputyProfileScraper(), async (dataPackage) => {
       // Ignore those which have no webid (ausgeschieden)
       if (!dataPackage.data.id) {
         return null;

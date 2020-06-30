@@ -2,6 +2,10 @@
 
 ### 0.1.23
 
+- [Change] Decouple models & import procedures
+
+### 0.1.23
+
 - [Fix] Use token for bio-admin instead of whitelist ip
 
 ### 0.1.20

@@ -1,4 +1,4 @@
-import { testCronTime } from './../services/cronJobs/tools';
+import { testCronTime } from '@democracy-deutschland/bundestagio-common';
 
 export default {
   CRON_START_ON_INIT: process.env.CRON_START_ON_INIT === 'true',

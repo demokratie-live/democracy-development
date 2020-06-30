@@ -1,7 +1,7 @@
 import { inspect } from 'util';
 
 // Models
-import ProcedureModel from './../../models/Procedure';
+import { ProcedureModel } from '@democracy-deutschland/bundestagio-common';
 
 const search = (req, res) => {
   ProcedureModel.search(

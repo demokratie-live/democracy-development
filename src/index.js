@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 
 // *****************************************************************
 // IMPORTANT - you cannot include any models before migrating the DB
@@ -53,22 +52,17 @@ const main = async () => {
   const search = require('./services/search'); // eslint-disable-line global-require
   server.get('/search', search);
 
-  // VOYAGER
-  if (CONFIG.VOYAGER) {
-    server.use('/voyager', voyagerMiddleware({ endpointUrl: CONFIG.GRAPHQL_PATH }));
-  }
-
   // Graphql
   // Here several Models are included for graphql
   const graphql = require('./services/graphql'); // eslint-disable-line global-require
   graphql.applyMiddleware({ app: server, path: CONFIG.GRAPHQL_PATH });
 
   // Start Server
-  server.listen({ port: CONFIG.PORT }, err => {
+  server.listen({ port: CONFIG.PORT }, (err) => {
     if (err) {
-      Log.error(err);
+      global.Log.error(err);
     } else {
-      Log.warn(
+      global.Log.warn(
         `🚀  Bundestag.io Server ready at http://localhost:${CONFIG.PORT}${CONFIG.GRAPHQL_PATH}`,
       );
     }
@@ -86,6 +80,6 @@ const main = async () => {
   try {
     await main();
   } catch (error) {
-    Log.error(error.stack);
+    global.Log.error(error.stack);
   }
 })();

@@ -7,10 +7,14 @@ import {
   NAMEDPOLL as NAMEDPOLL_DEFINITIONS,
 } from '@democracy-deutschland/bundestag.io-definitions';
 
-import Procedure from '../models/Procedure';
-import NamedPoll from '../models/NamedPoll';
-
-import { getCron, setCronStart, setCronSuccess, setCronError } from './../services/cronJobs/tools';
+import {
+  ProcedureModel,
+  NamedPollModel,
+  getCron,
+  setCronStart,
+  setCronSuccess,
+  setCronError,
+} from '@democracy-deutschland/bundestagio-common';
 
 export const CRON_NAME = 'NamedPolls';
 
@@ -23,14 +27,14 @@ export default async () => {
   }
   await setCronStart({ name: CRON_NAME, startDate });
   try {
-    await Scraper.scrape(new NamedPollScraper(), async dataPackage => {
+    await Scraper.scrape(new NamedPollScraper(), async (dataPackage) => {
       let procedureId = null;
       // TODO unify
       // currently the dip21 scraper returns document urls like so:
       // "http://dipbt.bundestag.de:80/dip21/btd/19/010/1901038.pdf
       // The named poll scraper returns them like so:
       // http://dip21.bundestag.de/dip21/btd/19/010/1901038.pdf
-      const findSpotUrls = dataPackage.data.documents.map(document => ({
+      const findSpotUrls = dataPackage.data.documents.map((document) => ({
         'history.findSpotUrl': {
           $regex: `.*${url.parse(document).path}.*`,
         },
@@ -53,7 +57,7 @@ export default async () => {
         ) === -1
       ) {
         // Find matching Procedures
-        procedures = await Procedure.find({
+        procedures = await ProcedureModel.find({
           $and: findSpotUrls,
           'history.decision': {
             $elemMatch: {
@@ -100,7 +104,7 @@ export default async () => {
       // We need this for nested document votes.all -> to prevent update/history generation
       // This is retarded - but what u can do? ¯\_(ツ)_/¯
       // Find NamedPoll
-      const existingNamedPoll = await NamedPoll.findOne({ webId: namedPoll.webId });
+      const existingNamedPoll = await NamedPollModel.findOne({ webId: namedPoll.webId });
       if (existingNamedPoll && existingNamedPoll.votes && existingNamedPoll.votes.all) {
         if (existingNamedPoll.votes.all.total !== dataPackage.data.votes.all.total) {
           namedPoll['votes.all.total'] = dataPackage.data.votes.all.total;
@@ -127,7 +131,7 @@ export default async () => {
       if (procedureId) {
         const customData = {
           voteResults: {
-            partyVotes: votes.parties.map(partyVote => {
+            partyVotes: votes.parties.map((partyVote) => {
               const main = [
                 {
                   decision: 'YES',
@@ -203,7 +207,7 @@ export default async () => {
             ? 'recommendedDecision'
             : 'mainDocument';
 
-        votingRecommendationEntrys.forEach(votingRecommendationEntry => {
+        votingRecommendationEntrys.forEach((votingRecommendationEntry) => {
           if (votingRecommendationEntry.abstract) {
             if (
               votingRecommendationEntry.abstract.search(
@@ -221,7 +225,7 @@ export default async () => {
           }
         });
 
-        await Procedure.findOneAndUpdate({ procedureId }, { customData });
+        await ProcedureModel.findOneAndUpdate({ procedureId }, { customData });
 
         // Define inverseVoteDirection on NamedPoll
         const inverseVoteDirection =
@@ -249,7 +253,7 @@ export default async () => {
       }
 
       // Update/Insert
-      await NamedPoll.findOneAndUpdate(
+      await NamedPollModel.findOneAndUpdate(
         { webId: namedPoll.webId },
         { $set: namedPoll },
         { upsert: true },
@@ -257,7 +261,7 @@ export default async () => {
     });
 
     // Validate Data - find duplicate matches which is an error!
-    const duplicateMatches = await NamedPoll.aggregate([
+    const duplicateMatches = await NamedPollModel.aggregate([
       {
         $group: {
           _id: '$procedureId',
@@ -274,7 +278,7 @@ export default async () => {
     ]);
     if (duplicateMatches.length !== 0) {
       // TODO clarify this should be an error - matching should be better
-      duplicateMatches.forEach(duplicate => {
+      duplicateMatches.forEach((duplicate) => {
         Log.error(
           `[Cronjob][${CRON_NAME}] Duplicate Matches(${duplicate.count}) on procedureId ${
             duplicate._id // eslint-disable-line no-underscore-dangle

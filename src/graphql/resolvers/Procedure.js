@@ -1,13 +1,8 @@
 import diffHistory from 'mongoose-diff-history/diffHistory';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
-import PROCEDURE_STATES from '../../config/procedureStates';
-import CONFIG from '../../config';
 import { uniq } from 'lodash';
-
-import History from '../../models/History';
-import ConferenceWeekDetail from '../../models/ConferenceWeekDetail';
-import importProcedures from '../../importer/importProcedures';
+import PROCEDURE_STATES from '../../config/procedureStates';
 
 const deputiesNumber = {
   19: {
@@ -112,9 +107,7 @@ export default {
       if (IDs) {
         match = { ...match, procedureId: { $in: IDs } };
       }
-      return ProcedureModel.find(match)
-        .skip(offset)
-        .limit(limit);
+      return ProcedureModel.find(match).skip(offset).limit(limit);
     },
 
     allProcedures: async (
@@ -212,16 +205,6 @@ export default {
   },
 
   Mutation: {
-    scrapeProcedures: async (parent, { key }) => {
-      if (CONFIG.RUN_SCRAPER_KEY.length < 10) {
-        return false;
-      }
-      if (CONFIG.RUN_SCRAPER_KEY !== key) {
-        return false;
-      }
-      importProcedures();
-      return true;
-    },
     saveProcedureCustomData: async (
       parent,
       { procedureId, partyVotes, decisionText, votingDocument },
@@ -280,7 +263,7 @@ export default {
           ...sumResults,
         };
 
-        votingRecommendationEntrys.forEach(votingRecommendationEntry => {
+        votingRecommendationEntrys.forEach((votingRecommendationEntry) => {
           if (votingRecommendationEntry.abstract) {
             if (
               votingRecommendationEntry.abstract.search(
@@ -312,8 +295,8 @@ export default {
   },
 
   Procedure: {
-    bioUpdateAt: async procedure => {
-      const h = await History.findOne({ collectionId: procedure }, { createdAt: 1 }).sort({
+    bioUpdateAt: async (procedure, _, { HistoryModel }) => {
+      const h = await HistoryModel.findOne({ collectionId: procedure }, { createdAt: 1 }).sort({
         createdAt: -1,
       });
       if (h) {
@@ -322,9 +305,9 @@ export default {
       return null;
     },
 
-    currentStatusHistory: async procedure => {
+    currentStatusHistory: async (procedure) => {
       const { _id } = procedure;
-      const history = await diffHistory.getDiffs('Procedure', _id).then(histories =>
+      const history = await diffHistory.getDiffs('Procedure', _id).then((histories) =>
         histories.reduce((prev, version) => {
           const cur = prev;
           if (version.diff.currentStatus) {
@@ -338,10 +321,10 @@ export default {
       );
       return history;
     },
-    namedVote: procedure => {
-      const namedVote = procedure.history.some(h => {
+    namedVote: (procedure) => {
+      const namedVote = procedure.history.some((h) => {
         if (h.decision) {
-          return h.decision.some(decision => {
+          return h.decision.some((decision) => {
             if (
               decision.type ===
                 PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG &&
@@ -358,8 +341,8 @@ export default {
       });
       return namedVote;
     },
-    sessions: async procedure =>
-      ConferenceWeekDetail.aggregate([
+    sessions: async (procedure, _, { ConferenceWeekDetailModel }) =>
+      ConferenceWeekDetailModel.aggregate([
         { $unwind: '$sessions' },
         { $addFields: { session: '$sessions' } },
         { $project: { sessions: 0 } },

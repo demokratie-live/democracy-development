@@ -1,9 +1,13 @@
 import { Scraper } from '@democracy-deutschland/scapacra';
 import { NamedPollDeputyScraper } from '@democracy-deutschland/scapacra-bt';
 
-import NamedPoll from '../models/NamedPoll';
-
-import { getCron, setCronStart, setCronSuccess, setCronError } from './../services/cronJobs/tools';
+import {
+  NamedPoll,
+  getCron,
+  setCronStart,
+  setCronSuccess,
+  setCronError,
+} from '@democracy-deutschland/bundestagio-common';
 
 export const CRON_NAME = 'NamedPollsDeputies';
 
@@ -16,7 +20,7 @@ export default async () => {
   }
   await setCronStart({ name: CRON_NAME, startDate });
   try {
-    await Scraper.scrape(new NamedPollDeputyScraper(), async dataPackage => {
+    await Scraper.scrape(new NamedPollDeputyScraper(), async (dataPackage) => {
       // Construct Database object
       const namedPoll = { webId: dataPackage.data.id };
       // Add webId field, Remove id field
