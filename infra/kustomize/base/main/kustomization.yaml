@@ -16,3 +16,4 @@ resources:
   - push-send-queued.yaml
   - import-procedures.yaml
   - import-conference-week-details.yaml
+  - import-deputy-profiles.yaml
