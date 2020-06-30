@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: queue-pushs-conference-week
-              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week:0.1.3
+              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week:0.1.4
               env:
                 - name: DB_URL
                   valueFrom:

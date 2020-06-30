@@ -91,6 +91,6 @@ const start = async () => {
   }
   await mongoConnect();
   console.log("procedures", await ProcedureModel.countDocuments({}));
-  await start();
+  await start().catch(() => process.exit(1));
   process.exit(0);
 })();

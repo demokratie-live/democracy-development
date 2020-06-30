@@ -166,6 +166,6 @@ const start = async () => {
   }
   await mongoConnect();
   console.log("deputies", await DeputyModel.countDocuments({}));
-  await start();
+  await start().catch(() => process.exit(1));
   process.exit(0);
 })();

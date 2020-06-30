@@ -3,8 +3,9 @@ kind: CronJob
 metadata:
   name: import-deputy-profiles-cronjob
 spec:
-  schedule: "16 17 * * *"
+  schedule: "0 4 * * *"
   concurrencyPolicy: Forbid
+  backoffLimit: 0
   jobTemplate:
     spec:
       backoffLimit: 0
