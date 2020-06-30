@@ -6,6 +6,9 @@ export default {
       parent,
       { limit = 100, offset = 0 },
       { ConferenceWeekDetailModel },
-    ) => ConferenceWeekDetailModel.find({}).skip(offset).limit(limit),
+    ) =>
+      ConferenceWeekDetailModel.find({})
+        .skip(offset)
+        .limit(limit),
   },
 };

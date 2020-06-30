@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.24
+
+- [Change] Decouple import confernece week details
+
 ### 0.1.23
 
 - [Change] Decouple models & import procedures

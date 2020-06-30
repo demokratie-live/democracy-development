@@ -9,7 +9,7 @@
     "build": "tsc",
     "serve": "node built/index.js",
     "dev": "ts-node-dev src/index.js",
-    "lint": "yarn lint:es && yarn lint:ts && yarn lint:exports",
+    "lint": "yarn lint:ts && yarn lint:exports",
     "lint:es": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas"
@@ -17,7 +17,6 @@
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "1.0.2",
     "@democracy-deutschland/bundestagio-common": "^0.1.2",
-    "@democracy-deutschland/dip21-scraper": "0.1.11",
     "@democracy-deutschland/scapacra": "1.0.6",
     "@democracy-deutschland/scapacra-bt": "1.0.28",
     "apollo-server-express": "^2.3.3",
@@ -25,8 +24,6 @@
     "cors": "^2.8.4",
     "cron": "^1.6.0",
     "eslint": "^7.3.1",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-react": "^7.7.0",
     "express": "^4.16.2",
     "express-status-monitor": "^1.2.3",
     "graphql": "^15.2.0",
@@ -35,17 +32,12 @@
     "lodash": "^4.17.10",
     "merge-graphql-schemas": "^1.5.0",
     "mongoose-diff-history": "^2.1.0",
-    "pretty-ms": "^7.0.0",
     "winston": "^3.0.0",
-    "winston-discord": "^0.2.0",
     "winston-mongodb": "^5.0.1"
   },
   "devDependencies": {
-    "eslint-config-airbnb": "^18.2.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-jsx-a11y": "^6.3.1",
-    "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.0.5",
+    "@typescript-eslint/eslint-plugin": "^3.5.0",
+    "@typescript-eslint/parser": "^3.5.0",
     "ts-node-dev": "^1.0.0-pre.49",
     "ts-unused-exports": "^6.2.1",
     "typescript": "^3.9.5"

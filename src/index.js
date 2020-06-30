@@ -58,7 +58,7 @@ const main = async () => {
   graphql.applyMiddleware({ app: server, path: CONFIG.GRAPHQL_PATH });
 
   // Start Server
-  server.listen({ port: CONFIG.PORT }, (err) => {
+  server.listen({ port: CONFIG.PORT }, err => {
     if (err) {
       global.Log.error(err);
     } else {

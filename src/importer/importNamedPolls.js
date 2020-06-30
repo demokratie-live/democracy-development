@@ -27,14 +27,14 @@ export default async () => {
   }
   await setCronStart({ name: CRON_NAME, startDate });
   try {
-    await Scraper.scrape(new NamedPollScraper(), async (dataPackage) => {
+    await Scraper.scrape(new NamedPollScraper(), async dataPackage => {
       let procedureId = null;
       // TODO unify
       // currently the dip21 scraper returns document urls like so:
       // "http://dipbt.bundestag.de:80/dip21/btd/19/010/1901038.pdf
       // The named poll scraper returns them like so:
       // http://dip21.bundestag.de/dip21/btd/19/010/1901038.pdf
-      const findSpotUrls = dataPackage.data.documents.map((document) => ({
+      const findSpotUrls = dataPackage.data.documents.map(document => ({
         'history.findSpotUrl': {
           $regex: `.*${url.parse(document).path}.*`,
         },
@@ -131,7 +131,7 @@ export default async () => {
       if (procedureId) {
         const customData = {
           voteResults: {
-            partyVotes: votes.parties.map((partyVote) => {
+            partyVotes: votes.parties.map(partyVote => {
               const main = [
                 {
                   decision: 'YES',
@@ -207,7 +207,7 @@ export default async () => {
             ? 'recommendedDecision'
             : 'mainDocument';
 
-        votingRecommendationEntrys.forEach((votingRecommendationEntry) => {
+        votingRecommendationEntrys.forEach(votingRecommendationEntry => {
           if (votingRecommendationEntry.abstract) {
             if (
               votingRecommendationEntry.abstract.search(
@@ -278,7 +278,7 @@ export default async () => {
     ]);
     if (duplicateMatches.length !== 0) {
       // TODO clarify this should be an error - matching should be better
-      duplicateMatches.forEach((duplicate) => {
+      duplicateMatches.forEach(duplicate => {
         Log.error(
           `[Cronjob][${CRON_NAME}] Duplicate Matches(${duplicate.count}) on procedureId ${
             duplicate._id // eslint-disable-line no-underscore-dangle

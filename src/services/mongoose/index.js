@@ -17,19 +17,20 @@ export default async () => {
 
   // Connect
   try {
-    await mongoose.connect(CONFIG.DB_URL, {
-      reconnectTries: 86400,
-    });
+    await mongoose.connect(
+      CONFIG.DB_URL,
+      {
+        reconnectTries: 86400,
+      },
+    );
   } catch (err) {
     await mongoose.createConnection(CONFIG.DB_URL, {});
   }
 
   // Open
-  mongoose.connection
-    .once('open', () => Log.info('MongoDB is running'))
-    .on('error', (e) => {
-      // Unknown if this ends up in main - therefore we log here
-      Log.error(e.stack);
-      throw e;
-    });
+  mongoose.connection.once('open', () => Log.info('MongoDB is running')).on('error', e => {
+    // Unknown if this ends up in main - therefore we log here
+    Log.error(e.stack);
+    throw e;
+  });
 };

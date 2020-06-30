@@ -20,7 +20,7 @@ export default async () => {
   }
   await setCronStart({ name: CRON_NAME, startDate });
   try {
-    await Scraper.scrape(new DeputyProfileScraper(), async (dataPackage) => {
+    await Scraper.scrape(new DeputyProfileScraper(), async dataPackage => {
       // Ignore those which have no webid (ausgeschieden)
       if (!dataPackage.data.id) {
         return null;

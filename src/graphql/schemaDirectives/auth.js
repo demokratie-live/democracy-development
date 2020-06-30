@@ -25,7 +25,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
 
     const fields = objectType.getFields();
 
-    Object.keys(fields).forEach((fieldName) => {
+    Object.keys(fields).forEach(fieldName => {
       const field = fields[fieldName];
       const { resolve = defaultFieldResolver } = field;
       field.resolve = async (...args) => {
@@ -45,7 +45,9 @@ class AuthDirective extends SchemaDirectiveVisitor {
             context.req.headers['bio-auth-token'] !== process.env.BIO_EDIT_TOKEN
           ) {
             Log.warn(
-              `Connection to Bio blocked from ${context.req.connection.remoteAddress} for role 'BACKEND'`,
+              `Connection to Bio blocked from ${
+                context.req.connection.remoteAddress
+              } for role 'BACKEND'`,
             );
             allow = false;
           }

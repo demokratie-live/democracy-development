@@ -3,12 +3,6 @@ import { CronJob } from 'cron';
 import { resetCronRunningState } from '@democracy-deutschland/bundestagio-common';
 import CONFIG from '../../config';
 
-import importProcedures, {
-  CRON_NAME as CRON_NAME_PROCEDURES,
-} from '../../importer/importProcedures';
-import importConferenceWeekDetails, {
-  CRON_NAME as CRON_NAME_CONFERENCE_WEEK_DETAILS,
-} from '../../importer/importConferenceWeekDetails';
 import importNamedPolls, {
   CRON_NAME as CRON_NAME_NAMED_POLLS,
 } from '../../importer/importNamedPolls';
@@ -35,20 +29,6 @@ const cronJobs = async () => {
   // Server freshly started -> Reset all cron states
   // This assumes that only one instance is running on the same database
   await resetCronRunningState();
-  // Procedures
-  registerCronJob(
-    CRON_NAME_PROCEDURES,
-    CONFIG.CRON_PROCEDURES,
-    importProcedures,
-    CONFIG.CRON_START_ON_INIT,
-  );
-  // ConferenceWeekDetails
-  registerCronJob(
-    CRON_NAME_CONFERENCE_WEEK_DETAILS,
-    CONFIG.CRON_CONFERENCEWEEKDETAILS,
-    importConferenceWeekDetails,
-    CONFIG.CRON_START_ON_INIT,
-  );
   // NamedPolls
   registerCronJob(
     CRON_NAME_NAMED_POLLS,

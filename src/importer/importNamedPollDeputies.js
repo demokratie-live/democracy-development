@@ -20,7 +20,7 @@ export default async () => {
   }
   await setCronStart({ name: CRON_NAME, startDate });
   try {
-    await Scraper.scrape(new NamedPollDeputyScraper(), async (dataPackage) => {
+    await Scraper.scrape(new NamedPollDeputyScraper(), async dataPackage => {
       // Construct Database object
       const namedPoll = { webId: dataPackage.data.id };
       // Add webId field, Remove id field

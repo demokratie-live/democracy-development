@@ -1,12 +1,11 @@
 module.exports = {
-  extends: ['airbnb', 'prettier'],
-  plugins: ['prettier'],
-  rules: {
-    'prettier/prettier': ['error'],
-    'newline-per-chained-call': [2],
-    'linebreak-style': 0,
-  },
-  globals: {
-    Log: true,
-  },
+  root: true,
+  parser: '@typescript-eslint/parser',
+  plugins: [
+    '@typescript-eslint',
+  ],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
 };
