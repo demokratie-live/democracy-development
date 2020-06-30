@@ -1,6 +1,7 @@
 import mongoConnect from "./mongoose";
 
 import { ConferenceWeekDetailScraper } from "@democracy-deutschland/scapacra-bt";
+import { Scraper } from "@democracy-deutschland/scapacra";
 
 import {
   PROCEDURE as PROCEDURE_DEFINITIONS,
@@ -11,12 +12,10 @@ import {
   ProcedureModel,
   getCron,
   setCronStart,
-  CronJobModel,
   setCronSuccess,
   setCronError,
   ConferenceWeekDetailModel,
 } from "@democracy-deutschland/bundestagio-common";
-import Scraper from "@democracy-deutschland/dip21-scraper";
 
 const CRON_NAME = "ConferenceWeekDetails";
 
@@ -253,6 +252,7 @@ const start = async () => {
     });
   } catch (error) {
     await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
+    throw error;
   }
   await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
 };

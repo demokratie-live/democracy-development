@@ -15,4 +15,4 @@ resources:
   - shedule-bio-resync.yaml
   - push-send-queued.yaml
   - import-procedures.yaml
-  - imporimport-conference-week-details.yaml
+  - import-conference-week-details.yaml

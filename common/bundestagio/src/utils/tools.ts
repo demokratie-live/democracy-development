@@ -72,12 +72,12 @@ export const setCronError = async ({
   name,
   errorDate = new Date(),
   running = false,
-  error = null,
+  error,
 }: {
   name: string;
   errorDate?: Date;
   running?: boolean;
-  error?: any;
+  error: any;
 }) => {
   console.error(`[Cronjob][${name}] errored: ${error}`);
   await CronJobModel.findOneAndUpdate(
