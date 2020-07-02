@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: import-named-polls-cronjob
 spec:
-  schedule: "0 4 * * *"
+  schedule: "15 1 * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
