@@ -43,13 +43,6 @@ const cronJobs = async () => {
     importNamedPollDeputies,
     CONFIG.CRON_START_ON_INIT,
   );
-  // DeputyProfiles
-  registerCronJob(
-    CRON_NAME_DEPUTY_PROFILES,
-    CONFIG.CRON_DEPUTY_PROFILES,
-    importDeputyProfiles,
-    CONFIG.CRON_START_ON_INIT,
-  );
   // Return
   return jobs;
 };
