@@ -1,4 +1,14 @@
-import { Schema } from 'mongoose';
+import { Schema } from "mongoose";
+
+export interface INamedPollVotesDeputy {
+  webId: string;
+  URL?: string;
+  imgURL?: string;
+  state?: string;
+  name?: string;
+  party?: string;
+  vote?: string;
+}
 
 const NamedPollVotesDeputy = new Schema(
   {
@@ -10,7 +20,7 @@ const NamedPollVotesDeputy = new Schema(
     party: { type: String },
     vote: { type: String },
   },
-  { _id: false },
+  { _id: false }
 );
 
 export default NamedPollVotesDeputy;

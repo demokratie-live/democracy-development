@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
-import NamedPollSchema from "./schema";
+import NamedPollSchema, { INamedPoll } from "./schema";
 
-export const NamedPollModel = mongoose.model("NamedPoll", NamedPollSchema);
+export const NamedPollModel = mongoose.model<INamedPoll>(
+  "NamedPoll",
+  NamedPollSchema
+);

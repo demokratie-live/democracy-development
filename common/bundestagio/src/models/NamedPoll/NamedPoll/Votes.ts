@@ -1,8 +1,15 @@
-import { Schema } from 'mongoose';
+import { Schema } from "mongoose";
 
-import NamedPollVotesVotes from './Votes/Votes';
-import NamedPollVotesParty from './Votes/Party';
-import NamedPollVotesDeputy from './Votes/Deputy';
+import NamedPollVotesVotes, { INamedPollVotesVotes } from "./Votes/Votes";
+import NamedPollVotesParty, { INamedPollVotesParty } from "./Votes/Party";
+import NamedPollVotesDeputy, { INamedPollVotesDeputy } from "./Votes/Deputy";
+
+export interface INamedPollVotes {
+  all: INamedPollVotesVotes;
+  parties: INamedPollVotesParty[];
+  deputies: INamedPollVotesDeputy[];
+  inverseVoteDirection: boolean;
+}
 
 const NamedPollVotes = new Schema(
   {
@@ -11,7 +18,7 @@ const NamedPollVotes = new Schema(
     deputies: [NamedPollVotesDeputy],
     inverseVoteDirection: { type: Boolean },
   },
-  { _id: false },
+  { _id: false }
 );
 
 export default NamedPollVotes;

@@ -1,4 +1,12 @@
-import { Schema } from 'mongoose';
+import { Schema } from "mongoose";
+
+export interface INamedPollVotesVotes {
+  total?: number;
+  yes?: number;
+  no?: number;
+  abstain?: number;
+  na?: number;
+}
 
 const NamedPollVotesVotes = new Schema(
   {
@@ -8,7 +16,7 @@ const NamedPollVotesVotes = new Schema(
     abstain: { type: Number },
     na: { type: Number },
   },
-  { _id: false },
+  { _id: false }
 );
 
 export default NamedPollVotesVotes;
