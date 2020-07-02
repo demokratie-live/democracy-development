@@ -694,7 +694,7 @@ spec:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
                       name: democracy-api-config-k9h87hccg6
-              image: docker.pkg.github.com/demokratie-live/democracy-development/shedule-bio-resync:0.1.1
+              image: docker.pkg.github.com/demokratie-live/democracy-development/shedule-bio-resync:0.1.2
               name: shedule-bio-resync
           imagePullSecrets:
             - name: regcred
