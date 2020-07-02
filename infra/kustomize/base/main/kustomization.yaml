@@ -18,3 +18,4 @@ resources:
   - import-conference-week-details.yaml
   - import-deputy-profiles.yaml
   - import-named-polls.yaml
+  - import-named-poll-deputies.yaml
