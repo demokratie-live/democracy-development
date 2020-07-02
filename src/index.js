@@ -67,11 +67,6 @@ const main = async () => {
       );
     }
   });
-
-  // Start CronJobs (Bundestag Importer)
-  // Serveral Models are included
-  const cronJobs = require('./services/cronJobs'); // eslint-disable-line global-require
-  cronJobs();
 };
 
 // Async Wrapping Function
