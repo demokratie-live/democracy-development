@@ -5,7 +5,6 @@ metadata:
 spec:
   schedule: "0 4 * * *"
   concurrencyPolicy: Forbid
-  backoffLimit: 0
   jobTemplate:
     spec:
       backoffLimit: 0
