@@ -326,6 +326,7 @@ const start = async () => {
         }
       } else {
         await setCronError({ name: CRON_NAME, error: JSON.stringify(errors) });
+        throw errors;
       }
     }
     // Update Cron - Success
