@@ -343,6 +343,11 @@ export default {
     },
     sessions: async (procedure, _, { ConferenceWeekDetailModel }) =>
       ConferenceWeekDetailModel.aggregate([
+        {
+          $match: {
+            'sessions.tops.topic.procedureIds': procedure.procedureId,
+          },
+        },
         { $unwind: '$sessions' },
         { $addFields: { session: '$sessions' } },
         { $project: { sessions: 0 } },
