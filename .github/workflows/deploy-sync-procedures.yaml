@@ -1,4 +1,4 @@
-name: Build & Push Docker – sync-procedures
+name: Docker – sync-procedures
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build & Push Docker – sync-procedures
+    name: Docker – sync-procedures
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

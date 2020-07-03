@@ -1,4 +1,4 @@
-name: Build & Push Docker – import-conference-week-details
+name: Docker – import-conference-week-details
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build & Push Docker – import-conference-week-details
+    name: Docker – import-conference-week-details
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

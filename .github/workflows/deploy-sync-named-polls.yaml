@@ -1,4 +1,4 @@
-name: Build & Push Docker – sync-named-polls
+name: Docker – sync-named-polls
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build & Push Docker – sync-named-polls
+    name: Docker – sync-named-polls
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

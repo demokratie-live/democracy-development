@@ -1,4 +1,4 @@
-name: Build & Push Docker – index-sync-democracy
+name: Docker – index-sync-democracy
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build & Push Docker – index-sync-democracy
+    name: Docker – index-sync-democracy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

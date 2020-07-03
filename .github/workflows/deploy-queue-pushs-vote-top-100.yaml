@@ -1,4 +1,4 @@
-name: Build & Push Docker – queue-pushs-vote-top-100
+name: Docker – queue-pushs-vote-top-100
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build & Push Docker – queue-pushs-vote-top-100
+    name: Docker – queue-pushs-vote-top-100
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

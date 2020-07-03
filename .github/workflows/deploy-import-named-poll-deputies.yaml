@@ -1,4 +1,4 @@
-name: Build & Push Docker – import-named-poll-deputies
+name: Docker – import-named-poll-deputies
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build & Push Docker – import-named-poll-deputies
+    name: Docker – import-named-poll-deputies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

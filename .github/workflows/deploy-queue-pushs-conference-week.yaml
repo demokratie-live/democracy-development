@@ -1,4 +1,4 @@
-name: Build & Push Docker – queue-pushs-conference-week
+name: Docker – queue-pushs-conference-week
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build & Push Docker – queue-pushs-conference-week
+    name: Docker – queue-pushs-conference-week
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
