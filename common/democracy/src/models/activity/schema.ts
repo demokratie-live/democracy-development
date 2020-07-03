@@ -23,6 +23,7 @@ const ActivitySchema = new Schema<Activity>(
 );
 
 ActivitySchema.index({ actor: 1, procedure: 1 }, { unique: true });
+ActivitySchema.index({ procedure: 1, kind: 1 });
 
 ActivitySchema.post<Activity>("save", async (doc) => {
   const activities = await mongoose

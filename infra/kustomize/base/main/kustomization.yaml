@@ -12,10 +12,11 @@ resources:
   - queue-pushs-conference-week.yaml
   - queue-pushs-vote-conference-week.yaml
   - queue-pushs-vote-top-100.yaml
-  - shedule-bio-resync.yaml
   - push-send-queued.yaml
   - import-procedures.yaml
   - import-conference-week-details.yaml
   - import-deputy-profiles.yaml
   - import-named-polls.yaml
   - import-named-poll-deputies.yaml
+  - shedule-bio-resync.yaml
+  - index-sync-democracy.yaml
