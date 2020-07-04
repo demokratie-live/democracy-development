@@ -2,6 +2,7 @@ import mongoConnect from "./mongoose";
 
 import { ConferenceWeekDetailScraper } from "@democracy-deutschland/scapacra-bt";
 import { Scraper } from "@democracy-deutschland/scapacra";
+import url from "url";
 
 import {
   PROCEDURE as PROCEDURE_DEFINITIONS,
@@ -88,17 +89,10 @@ const isVote = (topic: any, heading: any, documents: any, status: any) => {
 };
 
 const getProcedureIds = async (documents: any) => {
-  // TODO unify
-  // currently the dip21 scraper returns document urls like so:
-  // "http://dipbt.bundestag.de:80/dip21/btd/19/010/1901038.pdf
-  // The named poll scraper returns them like so:
-  // http://dip21.bundestag.de/dip21/btd/19/010/1901038.pdf
-  const docs = documents.map((document: any) =>
-    document.replace(
-      "http://dip21.bundestag.de/",
-      "http://dipbt.bundestag.de:80/"
-    )
-  );
+  const docs = documents.map((document: string) => url.parse(document).path);
+  if (docs.length === 0) {
+    return [];
+  }
   const procedures = await ProcedureModel.find(
     {
       // Find Procedures matching any of the given Documents, excluding Beschlussempfehlung
@@ -106,7 +100,7 @@ const getProcedureIds = async (documents: any) => {
         $elemMatch: {
           $and: [
             // Match at least one Document
-            { url: { $in: docs } },
+            { url: { $regex: docs.join("|") } },
             // which is not Beschlussempfehlung und Bericht || Beschlussempfehlung
             {
               type: {
