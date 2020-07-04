@@ -247,7 +247,7 @@ const start = async () => {
         );
       })
     );
-    console.log(JSON.stringify(voteDates));
+    console.log(JSON.stringify(voteDates, null, 2));
   } catch (error) {
     await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
     throw error;
