@@ -192,6 +192,7 @@ const start = async () => {
                               procedureId,
                               voteDate: topic.isVote ? top.time : null,
                               voteEnd: null,
+                              documents: topic.documents,
                             };
                           }
                         });
@@ -220,30 +221,33 @@ const start = async () => {
       }
     );
     // Update Procedure VoteDates
-    voteDates.map(async (procedureUpdate) => {
-      await ProcedureModel.update(
-        {
-          procedureId: procedureUpdate.procedureId,
-          // Update only when needed
-          $or: [
-            {
-              $and: [
-                { voteDate: { $ne: procedureUpdate.voteDate } },
-                // Make sure we do not override date from procedureScraper
-                { voteDate: { $lt: procedureUpdate.voteDate } },
-              ],
-            },
-            { voteEnd: { $ne: procedureUpdate.voteEnd } },
-          ],
-        },
-        {
-          $set: {
-            voteDate: procedureUpdate.voteDate,
-            voteEnd: procedureUpdate.voteEnd,
+    await Promise.all(
+      voteDates.map(async (procedureUpdate) => {
+        await ProcedureModel.update(
+          {
+            procedureId: procedureUpdate.procedureId,
+            // Update only when needed
+            $or: [
+              {
+                $and: [
+                  { voteDate: { $ne: procedureUpdate.voteDate } },
+                  // Make sure we do not override date from procedureScraper
+                  { voteDate: { $lt: procedureUpdate.voteDate } },
+                ],
+              },
+              { voteEnd: { $ne: procedureUpdate.voteEnd } },
+            ],
           },
-        }
-      );
-    });
+          {
+            $set: {
+              voteDate: procedureUpdate.voteDate,
+              voteEnd: procedureUpdate.voteEnd,
+            },
+          }
+        );
+      })
+    );
+    console.log(JSON.stringify(voteDates));
   } catch (error) {
     await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
     throw error;
