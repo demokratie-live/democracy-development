@@ -89,7 +89,9 @@ const isVote = (topic: any, heading: any, documents: any, status: any) => {
 };
 
 const getProcedureIds = async (documents: any) => {
-  const docs = documents.map((document: string) => url.parse(document).path);
+  const docs = documents.map(
+    (document: string) => `${url.parse(document).path}$`
+  );
   if (docs.length === 0) {
     return [];
   }
