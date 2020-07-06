@@ -1,4 +1,4 @@
-import { CronJobModel } from "../models";
+import { CronJobModel, ICronJob } from "../models";
 import { CronTime } from "cron";
 
 export const testCronTime = (time: string) => {
@@ -48,11 +48,13 @@ export const setCronSuccess = async ({
   successDate = new Date(),
   successStartDate,
   running = false,
+  data,
 }: {
   name: string;
   successDate?: Date;
   successStartDate: Date;
   running?: boolean;
+  data?: ICronJob["data"];
 }) => {
   console.info(
     `[Cronjob][${name}] finished: ${successStartDate} - ${successDate}`
@@ -63,6 +65,7 @@ export const setCronSuccess = async ({
       lastSuccessDate: successDate,
       lastSuccessStartDate: successStartDate,
       running,
+      data,
     },
     { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
   );

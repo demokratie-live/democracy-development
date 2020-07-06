@@ -1,5 +1,10 @@
 import { Schema, SchemaTimestampsConfig, Document } from "mongoose";
 
+export interface ConferenceWeeCronJobkData {
+  lastWeek: number;
+  lastYear: number;
+}
+
 export interface ICronJob extends Document, SchemaTimestampsConfig {
   name: string;
   lastStartDate?: Date;
@@ -8,6 +13,7 @@ export interface ICronJob extends Document, SchemaTimestampsConfig {
   lastSuccessDate?: Date;
   lastSuccessStartDate?: Date;
   running: boolean;
+  data?: ConferenceWeeCronJobkData;
 }
 
 const CronJobSchema = new Schema<ICronJob>(
@@ -19,6 +25,7 @@ const CronJobSchema = new Schema<ICronJob>(
     lastSuccessDate: { type: Date, default: null },
     lastSuccessStartDate: { type: Date, default: null },
     running: { type: Boolean, default: false },
+    data: { type: Schema.Types.Mixed },
   },
   { timestamps: true }
 );

@@ -16,6 +16,7 @@ import {
   setCronSuccess,
   setCronError,
   ConferenceWeekDetailModel,
+  ConferenceWeeCronJobkData,
 } from "@democracy-deutschland/bundestagio-common";
 
 const CRON_NAME = "ConferenceWeekDetails";
@@ -128,18 +129,36 @@ const getProcedureIds = async (documents: any) => {
 const start = async () => {
   const startDate = new Date();
   const cron = await getCron({ name: CRON_NAME });
+  let lastData: ConferenceWeeCronJobkData | undefined;
   if (cron.running) {
     console.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
-    return;
+    throw new Error(`[Cronjob][${CRON_NAME}] running still - skipping`);
   }
   await setCronStart({ name: CRON_NAME, startDate });
+
   try {
+    const startData =
+      cron.data && cron.lastSuccessStartDate?.getDay() === new Date().getDay()
+        ? {
+            year: cron.data.lastYear,
+            week: cron.data.lastWeek,
+          }
+        : undefined;
     let voteDates: any[] = [];
     let lastProcedureIds: any[] = [];
     await Scraper.scrape(
-      new ConferenceWeekDetailScraper(),
+      new ConferenceWeekDetailScraper(startData),
       async (dataPackage: any) => {
         // Construct Database object
+        console.log(
+          "dataPackage.data.this.year",
+          dataPackage.data.this.year,
+          dataPackage.data.this.week
+        );
+        lastData = {
+          lastYear: dataPackage.data.previous.year,
+          lastWeek: dataPackage.data.previous.week,
+        };
         const ConferenceWeekDetail = {
           URL: dataPackage.meta.url,
           id: dataPackage.data.id,
@@ -255,7 +274,11 @@ const start = async () => {
     await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
     throw error;
   }
-  await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
+  await setCronSuccess({
+    name: CRON_NAME,
+    successStartDate: startDate,
+    data: lastData,
+  });
 };
 
 (async () => {
