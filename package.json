@@ -1,6 +1,6 @@
 {
   "name": "@democracy-deutschland/scapacra-bt",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "description": "Scapacra Bundestag",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -21,7 +21,7 @@
     "lint": "tslint --project tsconfig.json && yarn typecheck",
     "typecheck": "tsc --noEmit",
     "test": "mocha -r ts-node/register src/**/*.test.ts",
-    "prepare": "yarn build"
+    "prepublish": "yarn build"
   },
   "bugs": {
     "url": "https://github.com/demokratie-live/bt-scapacra/issues"
