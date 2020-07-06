@@ -132,7 +132,7 @@ const start = async () => {
   }
   await setCronStart({ name: CRON_NAME, startDate });
   try {
-    const voteDates: any[] = [];
+    let voteDates: any[] = [];
     let lastProcedureIds: any[] = [];
     await Scraper.scrape(
       new ConferenceWeekDetailScraper(),
@@ -220,6 +220,7 @@ const start = async () => {
         );
       }
     );
+    voteDates = voteDates.filter((voteDate) => !!voteDate);
     // Update Procedure VoteDates
     await Promise.all(
       voteDates.map(async (procedureUpdate) => {

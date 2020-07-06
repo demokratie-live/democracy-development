@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: import-conference-week-details
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-conference-week-details:0.1.5
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-conference-week-details:0.1.6
               env:
                 - name: DB_URL
                   valueFrom:
