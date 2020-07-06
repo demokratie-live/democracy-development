@@ -1,0 +1,24 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: index-sync-bundestagio-cronjob
+spec:
+  schedule: "0 7 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: index-sync-bundestagio
+              image: docker.pkg.github.com/demokratie-live/democracy-development/index-sync-bundestagio:0.1.0
+              env:
+                - name: DB_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: bio-api-config
+                      key: DB_URL
+          imagePullSecrets:
+            - name: regcred

@@ -145,6 +145,11 @@ const ProcedureSchema = new Schema(
   { timestamps: true }
 );
 
+ProcedureSchema.index({
+  "importantDocuments.url": 1,
+  "importantDocuments.type": 1,
+});
+
 ProcedureSchema.plugin(diffHistory.plugin, { omit: ["updatedAt"] });
 ProcedureSchema.plugin(mongoosastic, { host: process.env.ELASTICSEARCH_URL });
 
