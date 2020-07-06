@@ -8,6 +8,11 @@ patches:
   - bundestagio-admin-depl.yaml
   - democracy-api-depl.yaml
   - democracy-app-depl.yaml
+  - import-conference-week-details.yaml
+  - import-deputy-profiles.yaml
+  - import-named-poll-deputies.yaml
+  - import-named-polls.yaml
+  - import-procedures.yaml
 
 resources:
   - ingress-srv.yaml

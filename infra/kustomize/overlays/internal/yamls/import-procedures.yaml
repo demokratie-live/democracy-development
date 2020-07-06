@@ -1,0 +1,6 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: import-procedures-cronjob
+spec:
+  schedule: "0 7 * * *"
