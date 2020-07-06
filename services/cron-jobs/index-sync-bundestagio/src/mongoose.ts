@@ -1,4 +1,4 @@
-import { mongoose } from "@democracy-deutschland/democracy-common";
+import { mongoose } from "@democracy-deutschland/bundestagio-common";
 
 export default () =>
   new Promise(async (resolve, reject) => {
