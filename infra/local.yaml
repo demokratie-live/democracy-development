@@ -217,7 +217,7 @@ spec:
             - secretRef:
                 name: democracy-api-secrets
                 optional: true
-          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.14-dev
+          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.15-dev
           name: democracy-api
       imagePullSecrets:
         - name: regcred
@@ -240,7 +240,7 @@ spec:
         - envFrom:
             - configMapRef:
                 name: democracy-app-config-k4876hmgg9
-          image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.0.3-dev
+          image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.1.0
           name: democracy-app
       imagePullSecrets:
         - name: regcred
