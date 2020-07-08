@@ -311,7 +311,7 @@ spec:
             - secretRef:
                 name: democracy-api-secrets
                 optional: true
-          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.15-dev
+          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.19-dev
           livenessProbe:
             httpGet:
               path: /.well-known/apollo/server-health
