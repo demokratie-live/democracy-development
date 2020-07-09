@@ -601,7 +601,7 @@ spec:
                     configMapKeyRef:
                       key: DB_URL
                       name: bio-api-config-k5g629h6f4
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-deputy-profiles:0.1.1
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-deputy-profiles:0.1.2
               name: import-deputy-profiles
           imagePullSecrets:
             - name: regcred

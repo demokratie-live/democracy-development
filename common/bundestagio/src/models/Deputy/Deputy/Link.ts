@@ -1,11 +1,18 @@
-import { Schema } from 'mongoose';
+import { Schema } from "mongoose";
 
-const DeputyLink = new Schema(
+export interface IDeputyLink {
+  name: string;
+  URL: string;
+  username?: string;
+}
+
+const DeputyLink = new Schema<IDeputyLink>(
   {
     name: { type: String },
     URL: { type: String },
+    username: { type: String },
   },
-  { _id: false },
+  { _id: false }
 );
 
 export default DeputyLink;

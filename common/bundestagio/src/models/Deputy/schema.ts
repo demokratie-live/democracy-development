@@ -1,10 +1,31 @@
-import { Schema } from 'mongoose';
-import diffHistory from 'mongoose-diff-history/diffHistory';
+import { Schema, Document, SchemaTimestampsConfig } from "mongoose";
+import diffHistory from "mongoose-diff-history/diffHistory";
 
-import DeputyLink from './Deputy/Link';
-import DeputyFunctions from './Deputy/Functions';
+import DeputyLink, { IDeputyLink } from "./Deputy/Link";
+import DeputyFunctions, { IDeputyFunctions } from "./Deputy/Functions";
 
-const DeputySchema = new Schema(
+export interface IDeputy {
+  URL: string;
+  webId: string;
+  imgURL?: string;
+  party?: string;
+  name: string;
+  job?: string;
+  office: string[];
+  links: IDeputyLink[];
+  biography: string[];
+  constituency?: string;
+  constituencyName?: string;
+  directCandidate?: boolean;
+  functions: IDeputyFunctions[];
+  speechesURL?: string;
+  votesURL?: string;
+  publicationRequirement: string[];
+}
+
+export type DeputyDoc = IDeputy & Document & SchemaTimestampsConfig;
+
+const DeputySchema = new Schema<DeputyDoc>(
   {
     URL: { type: String, required: true, unique: true, index: true },
     webId: { type: String, required: true, unique: true, index: true },
@@ -23,10 +44,10 @@ const DeputySchema = new Schema(
     votesURL: { type: String },
     publicationRequirement: [{ type: String }],
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-DeputySchema.plugin(diffHistory.plugin, { omit: ['updatedAt'] });
+DeputySchema.plugin(diffHistory.plugin, { omit: ["updatedAt"] });
 
 DeputySchema.index({ createdAt: 1 });
 

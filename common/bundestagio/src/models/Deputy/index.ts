@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
-import DeputySchema from "./schema";
+import DeputySchema, { IDeputy, DeputyDoc } from "./schema";
 
-export const DeputyModel = mongoose.model("Deputy", DeputySchema);
+export const DeputyModel = mongoose.model<DeputyDoc>("Deputy", DeputySchema);
+
+export { IDeputy };
