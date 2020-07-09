@@ -29,14 +29,12 @@ const getUsername = ({ URL, name }: Link) => {
       }
       break;
     case "Twitter":
+    case "Facebook":
       const parsedUrlTwitter = url.parse(URL).pathname?.split("/");
       if (parsedUrlTwitter && parsedUrlTwitter[1]) {
         username = `${parsedUrlTwitter[1]}`;
       }
       username = `@${username}`;
-      break;
-    case "Facebook":
-      // TODO add getting real Facebook username
       break;
     default:
       break;
