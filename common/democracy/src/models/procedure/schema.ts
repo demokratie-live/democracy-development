@@ -33,7 +33,6 @@ export interface IProcedure extends Document, Timestamps {
   sessionTOPHeading?: string;
   submissionDate?: Date; // Date of the first dip21 history element
   lastUpdateDate?: Date; // Date of last dip21 history element for sorting in App
-  bioUpdateAt?: Date; // Date of last dip21 changes on bundestag.io
   subjectGroups: string[];
   importantDocuments: ProcedureDocument[];
   activities: number; // cache from activity collection
@@ -76,7 +75,6 @@ const ProcedureSchema = new Schema<IProcedure>(
     sessionTOPHeading: String,
     submissionDate: Date, // Date of the first dip21 history element
     lastUpdateDate: Date, // Date of last dip21 history element for sorting in App
-    bioUpdateAt: Date, // Date of last dip21 changes on bundestag.io
     subjectGroups: [String],
     importantDocuments: [DocumentSchema],
     activities: { type: Number, default: 0 }, // cache from activity collection

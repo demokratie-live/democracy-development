@@ -223,7 +223,7 @@ spec:
             - secretRef:
                 name: bundestag-result-edit-token
                 optional: true
-          image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.2-dev
+          image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.5-dev
           livenessProbe:
             httpGet:
               path: /health-check
@@ -270,7 +270,7 @@ spec:
             - secretRef:
                 name: bundestag-result-edit-token
                 optional: true
-          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.30-dev
+          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.31-dev
           livenessProbe:
             httpGet:
               path: /.well-known/apollo/server-health
@@ -300,7 +300,7 @@ metadata:
   name: democracy-api-depl
   namespace: democracy-alpha
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: democracy-api

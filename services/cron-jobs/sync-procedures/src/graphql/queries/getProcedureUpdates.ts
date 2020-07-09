@@ -29,7 +29,6 @@ export default gql`
         abstract
         tags
         subjectGroups
-        bioUpdateAt
         history {
           assignment
           initiator
