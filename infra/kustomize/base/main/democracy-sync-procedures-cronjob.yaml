@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: democracy-sync-procedures
-              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.10
+              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.11
               env:
                 - name: DB_URL
                   valueFrom:
