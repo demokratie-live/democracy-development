@@ -106,7 +106,6 @@ type Procedure {
   subjectGroups: [String]
   history: [ProcessFlow]
   importantDocuments: [Document]
-  bioUpdateAt: Date
   customData: ProcedureCustomData
   namedVote: Boolean
   voteDate: Date

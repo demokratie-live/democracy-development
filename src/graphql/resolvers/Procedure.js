@@ -295,16 +295,6 @@ export default {
   },
 
   Procedure: {
-    bioUpdateAt: async (procedure, _, { HistoryModel }) => {
-      const h = await HistoryModel.findOne({ collectionId: procedure }, { createdAt: 1 }).sort({
-        createdAt: -1,
-      });
-      if (h) {
-        return h.createdAt;
-      }
-      return null;
-    },
-
     currentStatusHistory: async (procedure) => {
       const { _id } = procedure;
       const history = await diffHistory.getDiffs('Procedure', _id).then((histories) =>
