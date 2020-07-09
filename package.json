@@ -1,8 +1,12 @@
 {
   "name": "bundestag.io",
-  "version": "0.1.31",
+  "version": "0.1.32",
   "main": "built/index.js",
-  "author": "Ulf Gebhardt",
+  "author": "DEMOCRACY Deutschland e.V. <contact@democracy-deutschland.de>",
+  "contributors": [
+    "Manuel Ruck <m.ruck@democracy-deutschland.de>",
+    "Ulf Gebhardt"
+  ],
   "license": "Apache2",
   "private": true,
   "scripts": {
