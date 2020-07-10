@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: import-deputy-profiles
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-deputy-profiles:0.1.2
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-deputy-profiles:0.1.3
               env:
                 - name: DB_URL
                   valueFrom:

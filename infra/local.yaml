@@ -191,7 +191,7 @@ spec:
             - secretRef:
                 name: bundestag-result-edit-token
                 optional: true
-          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.33-dev
+          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.34-dev
           name: bundestagio
       imagePullSecrets:
         - name: regcred
@@ -435,7 +435,7 @@ spec:
                     configMapKeyRef:
                       key: DB_URL
                       name: bio-api-config-b9m4dc95m9
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-deputy-profiles:0.1.2
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-deputy-profiles:0.1.3
               name: import-deputy-profiles
           imagePullSecrets:
             - name: regcred

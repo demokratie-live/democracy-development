@@ -8,7 +8,6 @@ import {
 import { Scraper } from "@democracy-deutschland/scapacra";
 
 import {
-  getCron,
   setCronStart,
   setCronSuccess,
   setCronError,
@@ -44,15 +43,12 @@ const getUsername = ({ URL, name }: Link) => {
 
 const start = async () => {
   const startDate = new Date();
-  const cron = await getCron({ name: CRON_NAME });
-  if (cron.running) {
-    console.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
-    return;
-  }
   await setCronStart({ name: CRON_NAME, startDate });
   try {
     await Scraper.scrape(new DeputyProfileScraper(), async (data: any) => {
       const dataPackage = data as DeputyDataPackage;
+      console.log("webId", dataPackage.data.id);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       // Ignore those which have no webid (ausgeschieden)
       if (!dataPackage.data.id) {
         return;
@@ -102,7 +98,7 @@ const start = async () => {
     throw new Error("you have to set environment variable: DB_URL");
   }
   await mongoConnect();
-  console.log("procedures", await DeputyModel.countDocuments({}));
+  console.log("deputies", await DeputyModel.countDocuments({}));
   await start().catch(() => process.exit(1));
   process.exit(0);
 })();
