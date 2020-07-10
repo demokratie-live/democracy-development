@@ -300,6 +300,16 @@ const start = async () => {
           ],
         },
       });
+      console.log("use variables:", {
+        since,
+        limit,
+        offset,
+        periods: [19],
+        types: [
+          PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG,
+          PROCEDURE_DEFINITIONS.TYPE.ANTRAG,
+        ],
+      });
 
       if (procedureUpdates) {
         const { procedures } = procedureUpdates;
