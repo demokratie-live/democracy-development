@@ -21,6 +21,7 @@ const graphiql = new ApolloServer({
   schemaDirectives,
   introspection: true,
   playground: true,
+  tracing: true,
   context: ({ req, res }) => ({
     // Connection
     req,

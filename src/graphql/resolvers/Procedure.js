@@ -135,55 +135,6 @@ export default {
         ...periodMatch,
         ...typesMatch,
       });
-      // const updatedProceduresQ = await HistoryModel.aggregate([
-      //   {
-      //     $match: {
-      //       collectionName: 'Procedure',
-      //       createdAt: { $gt: since },
-      //     },
-      //   },
-      //   { $group: { _id: '$collectionId' } },
-      // ]);
-      // const updatedProcedures = updatedProceduresQ.map(({ _id }) => _id);
-
-      // // Also take changed session info into account
-      // const updatedSessionsQ = await HistoryModel.aggregate([
-      //   {
-      //     $match: {
-      //       collectionName: 'ConferenceWeekDetail',
-      //       createdAt: { $gt: since },
-      //     },
-      //   },
-      //   { $group: { _id: '$collectionId' } },
-      // ]);
-      // const updatedSessions = updatedSessionsQ.map(({ _id }) => _id);
-      // const changedSessionsQ = await ConferenceWeekDetailModel.aggregate([
-      //   { $match: { $or: [{ createdAt: { $gt: since } }, { _id: { $in: updatedSessions } }] } },
-      //   { $unwind: '$sessions' },
-      //   { $addFields: { session: '$sessions' } },
-      //   { $project: { sessions: 0 } },
-      //   { $unwind: '$session.tops' },
-      //   { $addFields: { 'session.top': '$session.tops' } },
-      //   { $project: { 'session.tops': 0 } },
-      //   { $unwind: '$session.top.topic' },
-      //   { $unwind: '$session.top.topic.procedureIds' },
-      //   { $addFields: { procedureId: '$session.top.topic.procedureIds' } },
-      //   { $project: { procedureId: 1 } },
-      // ]);
-      // const changedSessions = changedSessionsQ.map(({ procedureId }) => procedureId);
-      // const updatedProcedureSessionsQ = await ProcedureModel.aggregate([
-      //   { $match: { procedureId: { $in: changedSessions } } },
-      //   { $project: { _id: 1 } },
-      // ]);
-      // const updatedProcedureSessions = updatedProcedureSessionsQ.map(({ _id }) => _id);
-
-      // const changed = uniq([...updatedProcedures], ...updatedProcedureSessions);
-      // // Build find query for procedures
-      // const proceduresFindQuery = {
-      //   $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
-      //   ...periodMatch,
-      //   ...typesMatch,
-      // };
 
       const proceduresFindQuery = {
         updatedAt: { $gt: since },
