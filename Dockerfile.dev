@@ -6,10 +6,10 @@ RUN apk --no-cache update \
 
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn
+RUN yarn --frozen-lockfile
 
 COPY . .
 
-ENV NODE_ENV=development
+# ENV NODE_ENV=development
 
 ENTRYPOINT [ "yarn", "dev" ]

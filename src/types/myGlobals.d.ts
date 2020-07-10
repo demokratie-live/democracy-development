@@ -1,3 +1,10 @@
+declare global {
+  namespace NodeJS {
+    interface Global {
+      Log: Logger;
+    }
+  }
+}
 declare namespace NodeJS {
   import { Logger } from 'winston';
 

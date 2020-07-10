@@ -12,7 +12,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node built/index.js",
-    "dev": "ts-node-dev src/index.js",
+    "dev": "ts-node-dev --respawn src/index.js",
     "lint": "yarn lint:ts && yarn lint:exports",
     "lint:es": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
     "lint:ts": "tsc --noEmit",
@@ -22,7 +22,7 @@
     "@democracy-deutschland/bundestag.io-definitions": "1.0.2",
     "@democracy-deutschland/bundestagio-common": "^0.1.2",
     "@democracy-deutschland/scapacra": "1.0.6",
-    "@democracy-deutschland/scapacra-bt": "1.0.28",
+    "@democracy-deutschland/scapacra-bt": "1.0.30",
     "apollo-server-express": "^2.3.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",

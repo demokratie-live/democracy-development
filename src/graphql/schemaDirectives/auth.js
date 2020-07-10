@@ -3,6 +3,7 @@
 
 import { SchemaDirectiveVisitor } from 'graphql-tools';
 import { defaultFieldResolver } from 'graphql';
+import { Log } from '../../services/logger';
 
 class AuthDirective extends SchemaDirectiveVisitor {
   visitObject(type) {

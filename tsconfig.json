@@ -5,7 +5,11 @@
     "module": "CommonJS",
     "target": "es6",
     "skipLibCheck": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": "./src",
+    "paths": {
+      "*": ["src/types/*"]
+    }
   },
   "include": ["./src/**/*"]
 }

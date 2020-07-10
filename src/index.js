@@ -12,6 +12,7 @@ import CONFIG from './config';
 import './services/logger';
 
 import connectDB from './services/mongoose';
+import { Log } from './services/logger';
 // import migrateDB from './services/migration';
 
 const main = async () => {
@@ -60,9 +61,9 @@ const main = async () => {
   // Start Server
   server.listen({ port: CONFIG.PORT }, err => {
     if (err) {
-      global.Log.error(err);
+      Log.error(err);
     } else {
-      global.Log.warn(
+      Log.warn(
         `🚀  Bundestag.io Server ready at http://localhost:${CONFIG.PORT}${CONFIG.GRAPHQL_PATH}`,
       );
     }

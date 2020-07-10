@@ -509,10 +509,10 @@
     ts-mongoose "^0.0.21"
     ts-unused-exports "^6.2.1"
 
-"@democracy-deutschland/scapacra-bt@1.0.28":
-  version "1.0.28"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra-bt/-/scapacra-bt-1.0.28.tgz#8ce8cbcaf3306fd574b70b60bd5eee1817135f27"
-  integrity sha512-mxOf7ZqyeYArlH8OB6o6iMM3mCnQto6w7gVr+NNMz5sm1ae5hsJgD85LYge6OKMVJgeWqQutyHOQGRmtFfpDLw==
+"@democracy-deutschland/scapacra-bt@1.0.30":
+  version "1.0.30"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra-bt/-/scapacra-bt-1.0.30.tgz#eaaed54db5d1f601e7f6eccd4e8282f1a9e9eab0"
+  integrity sha512-uSGyokQ8S/uxcygjcGCgOeqfiJ6sbxvlIY6+nIPSHHyqqUgUq0APgpxvXxGLdLE3rmwbt+pD0SnixpPa4C0TKw==
   dependencies:
     "@democracy-deutschland/scapacra" "1.0.6"
     "@types/axios" "^0.14.0"

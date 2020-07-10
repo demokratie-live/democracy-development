@@ -77,4 +77,4 @@ logger.add(
     level: 'warn',
   }),
 );
-global.Log = logger;
+export const Log = logger;
