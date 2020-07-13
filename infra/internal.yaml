@@ -265,7 +265,7 @@ spec:
             - secretRef:
                 name: bundestag-result-edit-token
                 optional: true
-          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.35-dev
+          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.36-dev
           livenessProbe:
             httpGet:
               path: /.well-known/apollo/server-health
@@ -311,7 +311,7 @@ spec:
             - secretRef:
                 name: democracy-api-secrets
                 optional: true
-          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.20-dev
+          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.21-dev
           livenessProbe:
             httpGet:
               path: /.well-known/apollo/server-health
@@ -474,7 +474,7 @@ spec:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
                       name: democracy-api-config-k2ct7956t5
-              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-deputy-profiles:0.1.4
+              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-deputy-profiles:0.1.5
               name: democracy-sync-deputy-profiles
           imagePullSecrets:
             - name: regcred

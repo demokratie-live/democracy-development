@@ -11,6 +11,7 @@ export interface DeputyUpdates_deputyUpdates_deputies_links {
   __typename: "DeputyLink";
   name: string;
   URL: string;
+  username: string | null;
 }
 
 export interface DeputyUpdates_deputyUpdates_deputies {
