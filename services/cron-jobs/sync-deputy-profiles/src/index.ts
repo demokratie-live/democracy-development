@@ -73,7 +73,11 @@ const start = async () => {
                 contact: {
                   address: data.office ? data.office.join("\n") : undefined,
                   // email: { type: String },
-                  links: data.links,
+                  links: data.links.map(({ URL, name, username }) => ({
+                    URL,
+                    name,
+                    username: username ? username : undefined,
+                  })),
                 },
               };
               // Update/Insert
