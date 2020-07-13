@@ -20,7 +20,7 @@ type Deputy {
   name: String!
   job: String
   office: [String]
-  links: [DeputyLink]
+  links: [DeputyLink!]!
   biography: [String]
   constituency: String
   constituencyName: String
