@@ -25,6 +25,8 @@ export const push = ({
     body: message,
   };
 
+  data.sound = "push.aiff";
+
   data.topic = process.env.APN_TOPIC!;
   data.payload = payload;
 

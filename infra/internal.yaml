@@ -758,7 +758,7 @@ spec:
                 - secretRef:
                     name: push-notifications-secrets
                     optional: true
-              image: docker.pkg.github.com/demokratie-live/democracy-development/push-send-queued:0.1.5
+              image: docker.pkg.github.com/demokratie-live/democracy-development/push-send-queued:0.1.6
               name: push-send-queued
           imagePullSecrets:
             - name: regcred
