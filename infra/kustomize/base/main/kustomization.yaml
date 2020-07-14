@@ -17,6 +17,7 @@ resources:
   - import-conference-week-details.yaml
   - import-deputy-profiles.yaml
   - import-named-polls.yaml
+  - import-plenary-minutes.yaml
   - import-named-poll-deputies.yaml
   - shedule-bio-resync.yaml
   - index-sync-democracy.yaml

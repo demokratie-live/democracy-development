@@ -76,6 +76,14 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/import-plenary-minutes
+      context: ./services/cron-jobs/import-plenary-minutes
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
     - image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-poll-deputies
       context: ./services/cron-jobs/import-named-poll-deputies
       docker:

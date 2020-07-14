@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bundestagio-admin
-          image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.5-dev
+          image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.6-dev
           envFrom:
             - configMapRef:
                 name: bio-admin-config
