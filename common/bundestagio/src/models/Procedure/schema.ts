@@ -7,7 +7,7 @@ import mongoosastic from "mongoosastic";
 import diffHistory from "mongoose-diff-history/diffHistory";
 
 import ProcessFlow, { IProcessFlow } from "./Procedure/ProcessFlow";
-import Document from "./Procedure/Document";
+import Document, { IDocument } from "./Procedure/Document";
 import PartyVotes, { IPartyVotes } from "./Procedure/PartyVotes";
 
 export interface IProcedure extends MDocument, SchemaTimestampsConfig {
@@ -25,7 +25,7 @@ export interface IProcedure extends MDocument, SchemaTimestampsConfig {
   legalValidity?: string[];
   tags?: string[];
   subjectGroups?: string[];
-  importantDocuments: Document[];
+  importantDocuments: IDocument[];
   history: IProcessFlow[];
   voteDate: Date;
   voteEnd: Date;
