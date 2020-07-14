@@ -8,6 +8,7 @@ import {
   NamedPollModel,
   HistoryModel,
   ConferenceWeekDetailModel,
+  PlenaryMinuteModel,
 } from '@democracy-deutschland/bundestagio-common';
 
 import typeDefs from '../../graphql/schemas';
@@ -35,6 +36,7 @@ const graphiql = new ApolloServer({
     NamedPollModel,
     HistoryModel,
     ConferenceWeekDetailModel,
+    PlenaryMinuteModel,
   }),
 });
 

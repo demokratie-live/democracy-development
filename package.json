@@ -1,6 +1,6 @@
 {
   "name": "bundestag.io",
-  "version": "0.1.36",
+  "version": "0.1.37",
   "main": "built/index.js",
   "author": "DEMOCRACY Deutschland e.V. <contact@democracy-deutschland.de>",
   "contributors": [
@@ -24,6 +24,7 @@
     "@democracy-deutschland/scapacra": "1.0.6",
     "@democracy-deutschland/scapacra-bt": "1.0.30",
     "apollo-server-express": "^2.3.3",
+    "axios": "^0.19.2",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "cron": "^1.6.0",
@@ -38,7 +39,8 @@
     "mongoose-diff-history": "^2.1.0",
     "omit-deep": "^0.3.0",
     "winston": "^3.0.0",
-    "winston-mongodb": "^5.0.1"
+    "winston-mongodb": "^5.0.1",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.5.0",
