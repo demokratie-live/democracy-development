@@ -223,7 +223,7 @@ spec:
         - secretRef:
             name: bundestag-result-edit-token
             optional: true
-        image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.6-dev
+        image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.7-dev
         livenessProbe:
           httpGet:
             path: /health-check
