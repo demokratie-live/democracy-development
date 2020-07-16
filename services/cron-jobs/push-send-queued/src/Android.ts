@@ -23,13 +23,13 @@ export const push = async ({
       title,
       body: message,
       payload,
-      sound: "android.resource://de.democracydeutschland.app/raw/push",
+      sound: "push",
     },
     notification: {
       title,
       body: message,
       icon: "@drawable/notification_icon",
-      sound: "android.resource://de.democracydeutschland.app/raw/push",
+      sound: "push",
     },
   });
 
