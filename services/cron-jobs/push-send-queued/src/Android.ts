@@ -24,6 +24,12 @@ export const push = async ({
       body: message,
       payload,
     },
+    notification: {
+      title,
+      body: message,
+      icon: "@drawable/notification_icon",
+      sound: "android.resource://de.democracydeutschland.app/raw/push.mp3",
+    },
   });
 
   return new Promise((resolve, reject) => {
