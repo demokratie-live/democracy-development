@@ -23,13 +23,6 @@ export const push = async ({
       title,
       body: message,
       payload,
-      sound: "push",
-    },
-    notification: {
-      title,
-      body: message,
-      icon: "@drawable/notification_icon",
-      sound: "push",
     },
   });
 
