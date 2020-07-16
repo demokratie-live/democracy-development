@@ -23,6 +23,7 @@ export const push = async ({
       title,
       body: message,
       payload,
+      sound: "android.resource://de.democracydeutschland.app/raw/push",
     },
     notification: {
       title,
