@@ -28,7 +28,7 @@ export const push = async ({
       title,
       body: message,
       icon: "@drawable/notification_icon",
-      sound: "android.resource://de.democracydeutschland.app/raw/push.mp3",
+      sound: "push",
     },
   });
 
