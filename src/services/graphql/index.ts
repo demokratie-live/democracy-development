@@ -11,24 +11,32 @@ import {
   PlenaryMinuteModel,
 } from '@democracy-deutschland/bundestagio-common';
 
+import CONFIG from '../../config';
+
 import typeDefs from '../../graphql/schemas';
 import resolvers from '../../graphql/resolvers';
 import schemaDirectives from '../../graphql/schemaDirectives';
 
-const graphiql = new ApolloServer({
-  engine: false,
+export const graphql = new ApolloServer({
+  engine: CONFIG.ENGINE_API_KEY
+    ? {
+        apiKey: CONFIG.ENGINE_API_KEY,
+        // Send params and headers to engine
+        privateVariables: !CONFIG.ENGINE_DEBUG_MODE,
+        privateHeaders: !CONFIG.ENGINE_DEBUG_MODE,
+      }
+    : false,
   typeDefs,
   resolvers,
   schemaDirectives,
   introspection: true,
   playground: true,
-  tracing: true,
   context: ({ req, res }) => ({
     // Connection
     req,
     res,
     // user
-    user: req.user,
+    user: (req as any).user,
     // Models
     ProcedureModel,
     UserModel,
@@ -39,5 +47,3 @@ const graphiql = new ApolloServer({
     PlenaryMinuteModel,
   }),
 });
-
-module.exports = graphiql;

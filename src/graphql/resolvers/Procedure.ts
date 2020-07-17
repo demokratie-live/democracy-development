@@ -1,9 +1,12 @@
+import { Resolvers, VoteResults } from './types';
+import { MongooseFilterQuery } from 'mongoose';
 import diffHistory from 'mongoose-diff-history/diffHistory';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
-import { xml2js } from "xml-js";
+import { xml2js } from 'xml-js';
 import axios from 'axios';
 import PROCEDURE_STATES from '../../config/procedureStates';
+import { IProcedure } from '@democracy-deutschland/bundestagio-common/dist/models/Procedure/schema';
 
 const deputiesNumber = {
   19: {
@@ -22,7 +25,7 @@ const deputiesNumber = {
   },
 };
 
-export default {
+const ProcedureResolvers: Resolvers = {
   Query: {
     procedures: async (
       parent,
@@ -38,7 +41,7 @@ export default {
       },
       { ProcedureModel },
     ) => {
-      let match = { period: { $in: period }, type: { $in: type } };
+      let match: MongooseFilterQuery<IProcedure> = { period: { $in: period }, type: { $in: type } };
       if (voteDate) {
         match = {
           ...match,
@@ -99,6 +102,7 @@ export default {
             ],
           },
         };
+
         return ProcedureModel.find({ ...match }).sort({ updatedAt: 1 });
       }
 
@@ -118,12 +122,16 @@ export default {
         type = [PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG, PROCEDURE_DEFINITIONS.TYPE.ANTRAG],
       },
       { ProcedureModel },
-    ) => ProcedureModel.find({ period: { $in: period }, type: { $in: type } }),
+    ) =>
+      ProcedureModel.find({
+        period: { $in: period },
+        type: { $in: type },
+      }),
 
     procedureUpdates: async (
       parent,
       { since, limit = 99, offset = 0, periods, types },
-      { ProcedureModel, HistoryModel, ConferenceWeekDetailModel },
+      { ProcedureModel },
     ) => {
       const periodMatch = periods ? { period: { $in: periods } } : {};
       const typesMatch = types ? { type: { $in: types } } : {};
@@ -155,7 +163,7 @@ export default {
         beforeCount,
         afterCount,
         newCount: afterCount - beforeCount,
-        changedCount: changed.length,
+        changedCount: changed,
         procedures,
       };
     },
@@ -163,52 +171,54 @@ export default {
     procedure: async (parent, { procedureId }, { ProcedureModel }) =>
       ProcedureModel.findOne({ procedureId }),
 
-      voteResultTextHelper: async (parent, { procedureId }, { PlenaryMinuteModel, ProcedureModel }) => {
-        const procedure = await ProcedureModel.findOne({ procedureId });
-        const docNumbers = procedure.importantDocuments.map(({number}) => number);
+    voteResultTextHelper: async (
+      parent,
+      { procedureId },
+      { PlenaryMinuteModel, ProcedureModel },
+    ) => {
+      const procedure = await ProcedureModel.findOne({ procedureId });
+      const docNumbers = procedure.importantDocuments.map(({ number }) => number);
 
+      const flattenElements = (elements) => {
+        return elements.reduce((prev, el) => {
+          if (Array.isArray(el.elements)) {
+            return [...prev, ...flattenElements(el.elements)];
+          } else if (el.type === 'text') {
+            return [...prev, el.text];
+          }
+          return prev;
+        }, []);
+      };
+      if (procedure) {
+        const axiosInstance = axios.create();
+        const date = procedure.voteDate;
 
-        const flattenElements = (elements) => {
-          return elements.reduce((prev, el) => {
-            if (Array.isArray(el.elements)) {
-              return [...prev, ...flattenElements(el.elements)];
-            } else if (el.type === "text") {
-              return [...prev, el.text];
+        const plenaryMinute = await PlenaryMinuteModel.findOne({
+          date: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+        });
+
+        if (plenaryMinute) {
+          const { data } = await axiosInstance.get(plenaryMinute.xml);
+          const json = await xml2js(data, {
+            compact: false,
+          });
+          const protocol = json.elements.find(({ name }) => name === 'dbtplenarprotokoll');
+          const sessionHistory = protocol.elements.find(({ name }) => name === 'sitzungsverlauf');
+
+          const output = flattenElements(sessionHistory.elements);
+          const resultIndexes = output.reduce((prev, text, index) => {
+            const matches = docNumbers.filter((number) => text.indexOf(number) !== -1);
+            if (matches.length > 0) {
+              return [...prev, index];
             }
             return prev;
           }, []);
-        };
-        if(procedure) {
-          const axiosInstance = axios.create();
-          const date = procedure.voteDate;
-          
-          const plenaryMinute = await PlenaryMinuteModel.findOne({date: new Date(date.getFullYear(),date.getMonth() , date.getDate())})
-          
-          if (plenaryMinute) {
-            const { data } = await axiosInstance.get(plenaryMinute.xml);
-            const json = await xml2js(data, {
-              compact: false,
-            });
-            const protocol = json.elements.find(
-              ({ name }) => name === "dbtplenarprotokoll"
-            );
-            const sessionHistory = protocol.elements.find(
-              ({ name }) => name === "sitzungsverlauf"
-            );
-        
-            const output = flattenElements(sessionHistory.elements);
-            const resultIndexes = output.reduce((prev, text, index) => {
-              const matches = docNumbers.filter((number) => text.indexOf(number) !== -1);
-              if (matches.length > 0) {
-                return [...prev, index];
-              }
-              return prev;
-            }, []);
-            
-            const outputLines = resultIndexes.reduce((prev, line) => {
-              return [
-                ...prev,
-                {results: [
+
+          const outputLines = resultIndexes.reduce((prev, line) => {
+            return [
+              ...prev,
+              {
+                results: [
                   output[line - 1],
                   output[line],
                   output[line + 1],
@@ -216,14 +226,15 @@ export default {
                   output[line + 3],
                   output[line + 4],
                   output[line + 5],
-                ]},
-              ];
-            }, []);
-            return outputLines
+                ],
+              },
+            ];
+          }, []);
+          return outputLines;
         }
         return null;
       }
-    }
+    },
   },
 
   Mutation: {
@@ -234,7 +245,7 @@ export default {
     ) => {
       const procedure = await ProcedureModel.findOne({ procedureId });
 
-      let voteResults = {
+      let voteResults: VoteResults = {
         partyVotes,
         decisionText: decisionText.trim(),
         votingDocument,
@@ -374,3 +385,5 @@ export default {
       ]),
   },
 };
+
+export default ProcedureResolvers;

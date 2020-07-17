@@ -2,7 +2,6 @@
   THIS FILE AND ALL IMPORTS ARE NOT ALLOWED TO INCLUDE ANY MONGOOSE MODELS
   See index.js for more info
 */
-import cronjobConfig from './cronjobConfig';
 
 const requiredConfigs = {
   // No default Values
@@ -29,13 +28,12 @@ const optionalConfigs = {
   LOGGING_FILE: process.env.LOGGING_FILE || false,
   LOGGING_DISCORD: process.env.LOGGING_DISCORD || false,
   LOGGING_DISCORD_WEBHOOK: process.env.LOGGING_DISCORD_WEBHOOK || false,
-  LOGGING_MONGO: process.env.LOGGING_MONGO || false,
+  LOGGING_MONGO: process.env.LOGGING_MONGO === 'true' || false,
 };
 
 // Merge and export Configs
 export default {
   ...requiredConfigs,
   ...recommendedConfigs,
-  ...cronjobConfig,
   ...optionalConfigs,
 };

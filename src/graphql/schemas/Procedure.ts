@@ -127,14 +127,14 @@ type VoteResultTexts {
 
 type Query {
   procedure(procedureId: String!): Procedure
-  procedures(offset: Int, IDs: [String!], status: [String!], voteDate: [Boolean!], manageVoteDate: Boolean, limit: Int, offset: Int): [Procedure]
-  allProcedures(offset: Int): [Procedure]
+  procedures(offset: Int, period: [Int!], type: [String!], IDs: [String!], status: [String!], voteDate: [Boolean!], manageVoteDate: Boolean, limit: Int, offset: Int): [Procedure]
+  allProcedures(offset: Int, period: [Int!], type: [String!]): [Procedure]
   procedureUpdates(since: Date!, limit: Int, offset: Int, periods: [Int!], types: [String!]): ProcedureUpdate
   voteResultTextHelper(procedureId: String!): [VoteResultTexts!]
 }
 
 type Mutation {
-  saveProcedureCustomData(procedureId: String!, partyVotes: [PartyVoteInput!]!, decisionText: String!, votingDocument: String!): Procedure @auth(requires: BACKEND) 
+  saveProcedureCustomData(procedureId: String!, partyVotes: [PartyVoteInput!]!, decisionText: String!, votingDocument: VotingDocument!): Procedure @auth(requires: BACKEND) 
   scrapeProcedures(key: String!): Boolean 
 }
 `;

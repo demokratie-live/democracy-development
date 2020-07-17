@@ -1,4 +1,6 @@
-export default {
+import { Resolvers } from './types';
+
+const DeputyResolvers: Resolvers = {
   Query: {
     deputy: async (parent, { webId }, { DeputyModel }) => DeputyModel.findOne({ webId }),
 
@@ -39,3 +41,5 @@ export default {
     },
   },
 };
+
+export default DeputyResolvers;

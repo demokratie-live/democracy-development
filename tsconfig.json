@@ -1,15 +1,25 @@
 {
   "compilerOptions": {
-    "outDir": "./built",
+    "diagnostics": false,
+    "outDir": "./dist",
     "allowJs": true,
-    "module": "CommonJS",
-    "target": "es6",
+    "target": "es5",
+    "module": "commonjs",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "baseUrl": "./src",
-    "paths": {
-      "*": ["src/types/*"]
-    }
+    "lib": ["ESNext"],
+    // "typeRoots": ["./src/types", "./node_modules/@types"],
+    "downlevelIteration": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    // "alwaysStrict": true,
+    // "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    // "noImplicitAny": true,
+    "suppressExcessPropertyErrors": false,
+    "suppressImplicitAnyIndexErrors": false
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "generated", "src/graphql/resolvers/types.ts"]
 }

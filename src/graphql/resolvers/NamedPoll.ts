@@ -1,15 +1,18 @@
-export default {
-  Query: {
-    namedPoll: async (parent, { webId }, { NamedPollModel }) => NamedPollModel.findOne({ webId }),
+import { Resolvers } from './types';
 
-    namedPolls: async (parent, { limit = 99, offset = 0 }, { NamedPollModel }) =>
+const NamedPollResolvers: Resolvers = {
+  Query: {
+    namedPoll: async (parent: any, { webId }: any, { NamedPollModel }: any) =>
+      NamedPollModel.findOne({ webId }),
+
+    namedPolls: async (parent: any, { limit = 99, offset = 0 }: any, { NamedPollModel }: any) =>
       // Even tho the index for createdAt is set - the memory limit is reached - therefore no sort
       NamedPollModel.find({}, {}, { /* sort: { createdAt: 1 }, */ skip: offset, limit }),
 
     namedPollUpdates: async (
-      parent,
-      { since, limit = 99, offset = 0, associated = true },
-      { NamedPollModel, HistoryModel },
+      parent: any,
+      { since, limit = 99, offset = 0, associated = true }: any,
+      { NamedPollModel, HistoryModel }: any,
     ) => {
       const beforeCount = await NamedPollModel.count({ createdAt: { $lte: since } });
       const afterCount = await NamedPollModel.count({});
@@ -22,10 +25,10 @@ export default {
         },
         { $group: { _id: '$collectionId' } },
       ]);
-      const changed = changedQ.map(({ _id }) => _id);
+      const changed = changedQ.map(({ _id }: any) => _id);
 
       // Build find query for namedPolls
-      const namedPollsFindQuery = {
+      const namedPollsFindQuery: any = {
         $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
       };
 
@@ -51,3 +54,5 @@ export default {
     },
   },
 };
+
+export default NamedPollResolvers;
