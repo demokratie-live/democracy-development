@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: push-send-queued
-              image: docker.pkg.github.com/demokratie-live/democracy-development/push-send-queued:0.1.6
+              image: docker.pkg.github.com/demokratie-live/democracy-development/push-send-queued:0.1.12
               envFrom:
                 - configMapRef:
                     name: push-notifications-config
