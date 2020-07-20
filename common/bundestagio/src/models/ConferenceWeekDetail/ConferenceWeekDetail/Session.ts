@@ -1,6 +1,13 @@
-import { Schema } from 'mongoose';
+import { Schema } from "mongoose";
 
-import Top from './Session/Top';
+import Top, { ITop } from "./Session/Top";
+
+export interface ISession {
+  date: Date | null;
+  dateText: string | null;
+  session: string | null;
+  tops: ITop[];
+}
 
 const ConferenceWeekDetailSession = new Schema(
   {
@@ -9,7 +16,7 @@ const ConferenceWeekDetailSession = new Schema(
     session: { type: String, default: null },
     tops: [Top],
   },
-  { _id: false },
+  { _id: false }
 );
 
 export default ConferenceWeekDetailSession;

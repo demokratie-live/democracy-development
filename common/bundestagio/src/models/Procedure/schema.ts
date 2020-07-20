@@ -10,6 +10,11 @@ import ProcessFlow, { IProcessFlow } from "./Procedure/ProcessFlow";
 import Document, { IDocument } from "./Procedure/Document";
 import PartyVotes, { IPartyVotes } from "./Procedure/PartyVotes";
 
+enum VotingDocument {
+  MainDocument = "mainDocument",
+  RecommendedDecision = "recommendedDecision",
+}
+
 export interface IProcedure extends MDocument, SchemaTimestampsConfig {
   procedureId: string;
   type: string;
@@ -37,7 +42,7 @@ export interface IProcedure extends MDocument, SchemaTimestampsConfig {
       abstination: number;
       notVoted: number;
       decisionText: string;
-      votingDocument: "mainDocument" | "recommendedDecision";
+      votingDocument: VotingDocument;
       votingRecommendation: boolean;
       partyVotes: IPartyVotes[];
     };

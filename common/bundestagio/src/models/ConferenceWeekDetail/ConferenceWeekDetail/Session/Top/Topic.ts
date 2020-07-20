@@ -1,4 +1,11 @@
-import { Schema } from 'mongoose';
+import { Schema } from "mongoose";
+
+export interface ITopic {
+  lines: string[];
+  documents: string[];
+  isVote: boolean | null;
+  procedureIds: string[];
+}
 
 const ConferenceWeekDetailSessionTopTopic = new Schema(
   {
@@ -7,7 +14,7 @@ const ConferenceWeekDetailSessionTopTopic = new Schema(
     isVote: { type: Boolean, default: null },
     procedureIds: [String],
   },
-  { _id: false },
+  { _id: false }
 );
 
 export default ConferenceWeekDetailSessionTopTopic;

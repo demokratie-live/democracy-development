@@ -1,8 +1,15 @@
 import { Schema } from "mongoose";
 
+export enum VoteDecision {
+  Yes = "YES",
+  Abstination = "ABSTINATION",
+  No = "NO",
+  Notvoted = "NOTVOTED",
+}
+
 export interface IPartyVotes {
   party: string;
-  main?: "YES" | "NO" | "ABSTINATION" | "NOTVOTED";
+  main?: VoteDecision;
   deviants: {
     yes?: number;
     abstination?: number;

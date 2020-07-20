@@ -1,7 +1,16 @@
-import { Schema } from 'mongoose';
+import { Schema } from "mongoose";
 
-import Topic from './Top/Topic';
-import Status from './Top/Status';
+import Topic, { ITopic } from "./Top/Topic";
+import Status, { IStatus } from "./Top/Status";
+
+export interface ITop {
+  time: Date | null;
+  top: string | null;
+  heading: string | null;
+  article: string | null;
+  topic: ITopic[];
+  status: IStatus[];
+}
 
 const ConferenceWeekDetailSessionTop = new Schema(
   {
@@ -12,7 +21,7 @@ const ConferenceWeekDetailSessionTop = new Schema(
     topic: [Topic],
     status: [Status],
   },
-  { _id: false },
+  { _id: false }
 );
 
 export default ConferenceWeekDetailSessionTop;

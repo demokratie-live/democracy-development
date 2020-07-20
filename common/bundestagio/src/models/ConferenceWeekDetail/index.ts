@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import ConferenceWeekDetailSchema from "./schema";
+import ConferenceWeekDetailSchema, { IConferenceWeekDetail } from "./schema";
 
-export const ConferenceWeekDetailModel = mongoose.model(
+export const ConferenceWeekDetailModel = mongoose.model<IConferenceWeekDetail>(
   "ConferenceWeekDetail",
   ConferenceWeekDetailSchema
 );
