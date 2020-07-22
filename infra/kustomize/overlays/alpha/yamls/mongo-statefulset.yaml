@@ -25,7 +25,7 @@ spec:
               memory: "2G"
               cpu: "300m"
             limits:
-              memory: "4G"
+              memory: "3G"
               cpu: "1000m"
   volumeClaimTemplates:
     - metadata:

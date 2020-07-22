@@ -236,7 +236,7 @@ spec:
         resources:
           limits:
             cpu: 100m
-            memory: 500M
+            memory: 200M
           requests:
             cpu: 30m
             memory: 100M
@@ -281,8 +281,8 @@ spec:
           periodSeconds: 10
         resources:
           limits:
-            cpu: 1000m
-            memory: 500M
+            cpu: 300m
+            memory: 250M
           requests:
             cpu: 50m
             memory: 150M
@@ -435,7 +435,7 @@ spec:
         resources:
           limits:
             cpu: 500m
-            memory: 2Gi
+            memory: 1.5Gi
         volumeMounts:
         - mountPath: /data/db
           name: mongo-volume

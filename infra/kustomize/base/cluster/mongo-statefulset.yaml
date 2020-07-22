@@ -24,7 +24,7 @@ spec:
               mountPath: /data/db
           resources:
             limits:
-              memory: "2Gi"
+              memory: "1.5Gi"
               cpu: "500m"
   volumeClaimTemplates:
     - metadata:

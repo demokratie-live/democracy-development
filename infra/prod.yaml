@@ -1,36 +1,30 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: democracy-alpha
+  name: democracy-production
 ---
 apiVersion: v1
 data:
   BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
-  BUNDESTAGIO_SERVER_URL_CLIENT: https://alpha.admin.bundestag.io/graphql
+  BUNDESTAGIO_SERVER_URL_CLIENT: https://admin.bundestag.io/graphql
 kind: ConfigMap
 metadata:
-  name: bio-admin-config-mh9h8bkgkg
-  namespace: democracy-alpha
+  name: bio-admin-config-g7md5mh548
+  namespace: democracy-production
 ---
 apiVersion: v1
 data:
-  CRON_CONFERENCEWEEKDETAILS: '* */1 * * *'
-  CRON_DEPUTY_PROFILES: 0 4 * * *
-  CRON_NAMED_POLLS: 15 3 * * *
-  CRON_NAMED_POLLS_DEPUTIES: 45 3 * * *
-  CRON_PROCEDURES: 0 3 * * *
-  CRON_START_ON_INIT: "false"
   DB_URL: mongodb://mongo-0.mongo,mongo-1.mongo,mongo-2.mongo/bundestagio?replicaSet=rs0
   GRAPHIQL: /graphiql
   GRAPHQL_PATH: /
   NODE_ENV: production
   PERIODS: "19"
-  SCRAPER_USER_AGEND: DEMOCRACY-ALPHA
+  SCRAPER_USER_AGEND: DEMOCRACY-PRODUCTION
   VOYAGER: "true"
 kind: ConfigMap
 metadata:
-  name: bio-api-config-k5g629h6f4
-  namespace: democracy-alpha
+  name: bio-api-config-7tkf9c672b
+  namespace: democracy-production
 ---
 apiVersion: v1
 data:
@@ -43,44 +37,44 @@ data:
   NODE_ENV: production
   SMS_SIMULATE: "false"
   SMS_VERIFICATION: "true"
-  STAGE: alpha
+  STAGE: production
 kind: ConfigMap
 metadata:
-  name: democracy-api-config-6d8hh88mkf
-  namespace: democracy-alpha
+  name: democracy-api-config-fd8cg92899
+  namespace: democracy-production
 ---
 apiVersion: v1
 data:
-  GRAPHQL_URL: https://alpha.api.democracy-app.de
+  GRAPHQL_URL: https://api.democracy-app.de
   GRAPHQL_URL_SERVER: http://democracy-api-srv:3000/
 kind: ConfigMap
 metadata:
-  name: democracy-app-config-7kdb79k6b4
-  namespace: democracy-alpha
+  name: democracy-app-config-cbmg8cb52f
+  namespace: democracy-production
 ---
 apiVersion: v1
 data:
   PERIODS: '[19]'
-  SCRAPER_USER_AGEND: DEMOCRACY_ALPHA (Development server)
+  SCRAPER_USER_AGEND: DEMOCRACY-PRODUCTION
 kind: ConfigMap
 metadata:
-  name: import-procedures-config-ft2g668d7h
-  namespace: democracy-alpha
+  name: import-procedures-config-mbthmb67dh
+  namespace: democracy-production
 ---
 apiVersion: v1
 data:
-  APN_TOPIC: de.democracy-deutschland.clientapp.alpha
+  APN_TOPIC: de.democracy-deutschland.clientapp
   APPLE_TEAMID: A4B84UJD7M
 kind: ConfigMap
 metadata:
-  name: push-notifications-config-t7tdktm6f6
-  namespace: democracy-alpha
+  name: push-notifications-config-tkcf98k672
+  namespace: democracy-production
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: bundestagio-admin-srv
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   ports:
   - name: bundestagio-admin
@@ -94,7 +88,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: bundestagio-srv
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   ports:
   - name: bundestagio
@@ -108,7 +102,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: democracy-api-srv
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   ports:
   - name: democracy-api
@@ -122,7 +116,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: democracy-app-srv
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   ports:
   - name: democracy-app
@@ -138,7 +132,7 @@ metadata:
   labels:
     app: mongo
   name: mongo
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   clusterIP: None
   ports:
@@ -152,7 +146,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nats-srv
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   ports:
   - name: client
@@ -202,7 +196,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bundestagio-admin-depl
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   replicas: 1
   selector:
@@ -216,7 +210,7 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: bio-admin-config-mh9h8bkgkg
+            name: bio-admin-config-g7md5mh548
         - secretRef:
             name: bio-admin-login
             optional: true
@@ -252,7 +246,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bundestagio-depl
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   replicas: 1
   selector:
@@ -266,7 +260,7 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: bio-api-config-k5g629h6f4
+            name: bio-api-config-7tkf9c672b
         - secretRef:
             name: bundestag-result-edit-token
             optional: true
@@ -298,9 +292,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: democracy-api-depl
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: democracy-api
@@ -312,7 +306,7 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: democracy-api-config-6d8hh88mkf
+            name: democracy-api-config-fd8cg92899
         - secretRef:
             name: democracy-api-secrets
             optional: true
@@ -331,10 +325,10 @@ spec:
         resources:
           limits:
             cpu: 1000m
-            memory: 500M
+            memory: 1000M
           requests:
             cpu: 500m
-            memory: 250M
+            memory: 500M
       imagePullSecrets:
       - name: regcred
 ---
@@ -342,7 +336,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: democracy-app-depl
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   replicas: 1
   selector:
@@ -356,7 +350,7 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: democracy-app-config-7kdb79k6b4
+            name: democracy-app-config-cbmg8cb52f
         image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.1.0
         livenessProbe:
           httpGet:
@@ -387,7 +381,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nats-depl
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   replicas: 1
   selector:
@@ -420,7 +414,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongo
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   replicas: 3
   selector:
@@ -445,7 +439,7 @@ spec:
         resources:
           limits:
             cpu: 1000m
-            memory: 3G
+            memory: 4G
           requests:
             cpu: 300m
             memory: 2G
@@ -461,13 +455,13 @@ spec:
       - ReadWriteOnce
       resources:
         requests:
-          storage: 5Gi
+          storage: 10Gi
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: democracy-sync-deputy-profiles-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -481,12 +475,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             - name: BUNDESTAGIO_SERVER_URL
               valueFrom:
                 configMapKeyRef:
                   key: BUNDESTAGIO_SERVER_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             image: docker.pkg.github.com/demokratie-live/democracy-development/sync-deputy-profiles:0.1.5
             name: democracy-sync-deputy-profiles
           imagePullSecrets:
@@ -498,7 +492,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: democracy-sync-named-polls-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -512,12 +506,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             - name: BUNDESTAGIO_SERVER_URL
               valueFrom:
                 configMapKeyRef:
                   key: BUNDESTAGIO_SERVER_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls:0.1.7
             name: democracy-sync-named-polls
           imagePullSecrets:
@@ -529,7 +523,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: democracy-sync-procedures-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -543,12 +537,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             - name: BUNDESTAGIO_SERVER_URL
               valueFrom:
                 configMapKeyRef:
                   key: BUNDESTAGIO_SERVER_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.12
             name: democracy-sync-procedures
           imagePullSecrets:
@@ -560,7 +554,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: import-conference-week-details-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -574,7 +568,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: bio-api-config-k5g629h6f4
+                  name: bio-api-config-7tkf9c672b
             image: docker.pkg.github.com/demokratie-live/democracy-development/import-conference-week-details:0.1.8
             name: import-conference-week-details
           imagePullSecrets:
@@ -586,7 +580,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: import-deputy-profiles-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -600,7 +594,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: bio-api-config-k5g629h6f4
+                  name: bio-api-config-7tkf9c672b
             image: docker.pkg.github.com/demokratie-live/democracy-development/import-deputy-profiles:0.1.3
             name: import-deputy-profiles
           imagePullSecrets:
@@ -612,7 +606,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: import-named-poll-deputies-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -626,7 +620,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: bio-api-config-k5g629h6f4
+                  name: bio-api-config-7tkf9c672b
             image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-poll-deputies:0.1.0
             name: import-named-poll-deputies
           imagePullSecrets:
@@ -638,7 +632,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: import-named-polls-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -652,7 +646,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: bio-api-config-k5g629h6f4
+                  name: bio-api-config-7tkf9c672b
             image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-polls:0.1.0
             name: import-named-polls
           imagePullSecrets:
@@ -664,7 +658,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: import-plenary-minutes-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -678,7 +672,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: bio-api-config-k5g629h6f4
+                  name: bio-api-config-7tkf9c672b
             image: docker.pkg.github.com/demokratie-live/democracy-development/import-plenary-minutes:0.1.0
             name: import-plenary-minutes
           imagePullSecrets:
@@ -690,7 +684,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: import-procedures-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -704,10 +698,10 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: bio-api-config-k5g629h6f4
+                  name: bio-api-config-7tkf9c672b
             envFrom:
             - configMapRef:
-                name: import-procedures-config-ft2g668d7h
+                name: import-procedures-config-mbthmb67dh
             image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.2
             name: import-procedures
           imagePullSecrets:
@@ -719,7 +713,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: index-sync-bundestagio-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -733,7 +727,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: bio-api-config-k5g629h6f4
+                  name: bio-api-config-7tkf9c672b
             image: docker.pkg.github.com/demokratie-live/democracy-development/index-sync-bundestagio:0.1.0
             name: index-sync-bundestagio
           imagePullSecrets:
@@ -745,7 +739,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: index-sync-democracy-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -759,7 +753,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             image: docker.pkg.github.com/demokratie-live/democracy-development/index-sync-democracy:0.1.0
             name: index-sync-democracy
           imagePullSecrets:
@@ -771,7 +765,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: push-send-queued-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -785,15 +779,15 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             - name: BUNDESTAGIO_SERVER_URL
               valueFrom:
                 configMapKeyRef:
                   key: BUNDESTAGIO_SERVER_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             envFrom:
             - configMapRef:
-                name: push-notifications-config-t7tdktm6f6
+                name: push-notifications-config-tkcf98k672
             - secretRef:
                 name: push-notifications-secrets
                 optional: true
@@ -808,7 +802,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: queue-pushs-conference-week-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -822,12 +816,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             - name: BUNDESTAGIO_SERVER_URL
               valueFrom:
                 configMapKeyRef:
                   key: BUNDESTAGIO_SERVER_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week:0.1.4
             name: queue-pushs-conference-week
           imagePullSecrets:
@@ -839,7 +833,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: queue-pushs-vote-conference-week-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -853,12 +847,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             - name: BUNDESTAGIO_SERVER_URL
               valueFrom:
                 configMapKeyRef:
                   key: BUNDESTAGIO_SERVER_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-conference-week:0.1.1
             name: queue-pushs-vote-conference-week
           imagePullSecrets:
@@ -870,7 +864,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: queue-pushs-vote-top-100-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -884,12 +878,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             - name: BUNDESTAGIO_SERVER_URL
               valueFrom:
                 configMapKeyRef:
                   key: BUNDESTAGIO_SERVER_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100:0.1.3
             name: queue-pushs-vote-top-100
           imagePullSecrets:
@@ -901,7 +895,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: shedule-bio-resync-cronjob
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -915,7 +909,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: DB_URL
-                  name: democracy-api-config-6d8hh88mkf
+                  name: democracy-api-config-fd8cg92899
             image: docker.pkg.github.com/demokratie-live/democracy-development/shedule-bio-resync:0.1.2
             name: shedule-bio-resync
           imagePullSecrets:
@@ -947,44 +941,37 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: "true"
   name: ingress-service
-  namespace: democracy-alpha
+  namespace: democracy-production
 spec:
   rules:
-  - host: alpha.api.democracy-app.de
+  - host: api.democracy-app.de
     http:
       paths:
       - backend:
           serviceName: democracy-api-srv
           servicePort: 3000
         path: /?(.*)
-  - host: alpha.democracy-app.de
+  - host: democracy-app.de
     http:
       paths:
       - backend:
           serviceName: democracy-app-srv
           servicePort: 3000
         path: /?(.*)
-  - host: alpha.api.bundestag.io
+  - host: api.bundestag.io
     http:
       paths:
       - backend:
           serviceName: bundestagio-srv
           servicePort: 3100
         path: /?(.*)
-  - host: alpha.admin.bundestag.io
+  - host: admin.bundestag.io
     http:
       paths:
       - backend:
           serviceName: bundestagio-admin-srv
           servicePort: 3000
         path: /?(.*)
-  tls:
-  - hosts:
-    - alpha.api.democracy-app.de
-    - alpha.democracy-app.de
-    - alpha.api.bundestag.io
-    - alpha.admin.bundestag.io
-    secretName: democracy-tls
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress

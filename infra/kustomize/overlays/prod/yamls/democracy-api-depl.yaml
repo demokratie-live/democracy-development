@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: democracy-api-depl
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: democracy-api
@@ -12,8 +13,8 @@ spec:
         - name: democracy-api
           resources:
             requests:
-              memory: "200M"
-              cpu: "300m"
+              memory: "500M"
+              cpu: "500m"
             limits:
-              memory: "300M"
+              memory: "1000M"
               cpu: "1000m"

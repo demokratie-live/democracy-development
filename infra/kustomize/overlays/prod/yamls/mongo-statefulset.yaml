@@ -7,28 +7,26 @@ spec:
     matchLabels:
       app: mongo
   serviceName: "mongo"
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
         app: mongo
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
         - name: mongo
-          image: mongo
-          ports:
-            - containerPort: 27017
-          volumeMounts:
-            - name: mongo-volume
-              mountPath: /data/db
+          command:
+            - mongod
+            - "--bind_ip_all"
+            - "--replSet"
+            - rs0
           resources:
             requests:
-              memory: "350M"
-              cpu: "500m"
-            limits:
               memory: "2G"
-              cpu: "1500m"
+              cpu: "300m"
+            limits:
+              memory: "4G"
+              cpu: "1000m"
   volumeClaimTemplates:
     - metadata:
         name: mongo-volume
@@ -37,4 +35,4 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 10Gi

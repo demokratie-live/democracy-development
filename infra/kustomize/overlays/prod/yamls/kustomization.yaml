@@ -9,3 +9,8 @@ patches:
   - democracy-api-depl.yaml
   - democracy-app-depl.yaml
   - mongo-statefulset.yaml
+
+resources:
+  - ingress-srv.yaml
+
+namespace: democracy-production
