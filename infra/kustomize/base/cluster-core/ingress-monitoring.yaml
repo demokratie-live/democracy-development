@@ -10,7 +10,7 @@ spec:
   tls:
     - hosts:
         - monitoring.democracy-app.de
-      secretName: democracy-tls
+      secretName: democracy-monitoring-tls
   rules:
     - host: monitoring.democracy-app.de
       http:

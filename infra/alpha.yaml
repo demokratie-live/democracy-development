@@ -171,7 +171,7 @@ kind: Service
 metadata:
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
-    service.beta.kubernetes.io/do-loadbalancer-hostname: kubernetes.api.democracy-app.de
+    service.beta.kubernetes.io/do-loadbalancer-hostname: api.democracy-app.de
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
@@ -580,7 +580,7 @@ spec:
           imagePullSecrets:
           - name: regcred
           restartPolicy: Never
-  schedule: '*/30 * * * *'
+  schedule: 20 */5 * * *
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -606,7 +606,7 @@ spec:
           imagePullSecrets:
           - name: regcred
           restartPolicy: Never
-  schedule: 0 4 * * *
+  schedule: 0 6 * * *
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -632,7 +632,7 @@ spec:
           imagePullSecrets:
           - name: regcred
           restartPolicy: Never
-  schedule: 45 1 * * *
+  schedule: 45 6 * * *
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -658,7 +658,7 @@ spec:
           imagePullSecrets:
           - name: regcred
           restartPolicy: Never
-  schedule: 15 1 * * *
+  schedule: 15 6 * * *
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -984,7 +984,7 @@ spec:
     - alpha.democracy-app.de
     - alpha.api.bundestag.io
     - alpha.admin.bundestag.io
-    secretName: democracy-tls
+    secretName: democracy-alpha-tls
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -1006,4 +1006,4 @@ spec:
   tls:
   - hosts:
     - monitoring.democracy-app.de
-    secretName: democracy-tls
+    secretName: democracy-monitoring-tls

@@ -166,13 +166,13 @@ kind: Service
 metadata:
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
-    service.beta.kubernetes.io/do-loadbalancer-hostname: kubernetes.api.democracy-app.de
+    service.beta.kubernetes.io/do-loadbalancer-hostname: api.democracy-app.de
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/version: 0.32.0
+    app.kubernetes.io/version: 0.34.0
     helm.sh/chart: ingress-nginx-2.0.3
   name: ingress-nginx-controller
   namespace: ingress-nginx
@@ -971,7 +971,7 @@ spec:
     - internal.democracy-app.de
     - internal.api.bundestag.io
     - internal.admin.bundestag.io
-    secretName: democracy-tls
+    secretName: democracy-internal-tls
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -993,4 +993,4 @@ spec:
   tls:
   - hosts:
     - monitoring.democracy-app.de
-    secretName: democracy-tls
+    secretName: democracy-monitoring-tls

@@ -13,7 +13,7 @@ spec:
         - internal.democracy-app.de
         - internal.api.bundestag.io
         - internal.admin.bundestag.io
-      secretName: democracy-tls
+      secretName: democracy-internal-tls
   rules:
     - host: internal.api.democracy-app.de
       http:

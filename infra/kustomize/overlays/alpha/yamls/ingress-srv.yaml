@@ -13,7 +13,7 @@ spec:
         - alpha.democracy-app.de
         - alpha.api.bundestag.io
         - alpha.admin.bundestag.io
-      secretName: democracy-tls
+      secretName: democracy-alpha-tls
   rules:
     - host: alpha.api.democracy-app.de
       http:

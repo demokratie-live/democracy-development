@@ -165,7 +165,7 @@ kind: Service
 metadata:
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
-    service.beta.kubernetes.io/do-loadbalancer-hostname: kubernetes.api.democracy-app.de
+    service.beta.kubernetes.io/do-loadbalancer-hostname: api.democracy-app.de
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
@@ -294,7 +294,7 @@ metadata:
   name: democracy-api-depl
   namespace: democracy-production
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: democracy-api
@@ -978,7 +978,7 @@ spec:
     - democracy-app.de
     - api.bundestag.io
     - admin.bundestag.io
-    secretName: democracy-tls
+    secretName: democracy-production-tls
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -1000,4 +1000,4 @@ spec:
   tls:
   - hosts:
     - monitoring.democracy-app.de
-    secretName: democracy-tls
+    secretName: democracy-monitoring-tls

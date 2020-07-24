@@ -1,0 +1,6 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: import-named-polls-cronjob
+spec:
+  schedule: "15 6 * * *"

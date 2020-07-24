@@ -9,6 +9,10 @@ patches:
   - democracy-api-depl.yaml
   - democracy-app-depl.yaml
   - mongo-statefulset.yaml
+  - import-conference-week-details.yaml
+  - import-deputy-profiles.yaml
+  - import-named-poll-deputies.yaml
+  - import-named-polls.yaml
 
 resources:
   - ingress-srv.yaml
