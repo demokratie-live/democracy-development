@@ -21,6 +21,9 @@ spec:
             - secretRef:
                 name: bundestag-result-edit-token
                 optional: true
+            - secretRef:
+                name: bio-api-secrets
+                optional: true
       imagePullSecrets:
         - name: regcred
 ---

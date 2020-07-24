@@ -264,6 +264,9 @@ spec:
         - secretRef:
             name: bundestag-result-edit-token
             optional: true
+        - secretRef:
+            name: bio-api-secrets
+            optional: true
         image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.38-dev
         livenessProbe:
           httpGet:
@@ -796,7 +799,7 @@ spec:
           imagePullSecrets:
           - name: regcred
           restartPolicy: Never
-  schedule: '*/5 5-20 * * *'
+  schedule: '*/5 10-20 * * *'
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
