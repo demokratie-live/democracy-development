@@ -7,13 +7,13 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
-  # tls:
-  #   - hosts:
-  #       - api.democracy-app.de
-  #       - democracy-app.de
-  #       - api.bundestag.io
-  #       - admin.bundestag.io
-  #     secretName: democracy-tls
+  tls:
+    - hosts:
+        - api.democracy-app.de
+        - democracy-app.de
+        - api.bundestag.io
+        - admin.bundestag.io
+      secretName: democracy-tls
   rules:
     - host: api.democracy-app.de
       http:
