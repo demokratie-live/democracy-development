@@ -1,0 +1,24 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: import-conference-week-details-cronjob
+spec:
+  schedule: "*/30 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: import-conference-week-details
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-conference-week-details:0.1.8
+              env:
+                - name: DB_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: bio-api-config
+                      key: DB_URL
+          imagePullSecrets:
+            - name: regcred

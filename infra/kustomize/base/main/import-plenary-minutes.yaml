@@ -1,0 +1,24 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: import-plenary-minutes-cronjob
+spec:
+  schedule: "15 1 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: import-plenary-minutes
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-plenary-minutes:0.1.0
+              env:
+                - name: DB_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: bio-api-config
+                      key: DB_URL
+          imagePullSecrets:
+            - name: regcred

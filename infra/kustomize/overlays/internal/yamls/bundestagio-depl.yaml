@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bundestagio-depl
+spec:
+  selector:
+    matchLabels:
+      app: bundestagio
+  template:
+    spec:
+      containers:
+        - name: bundestagio
+          resources:
+            requests:
+              memory: "150M"
+              cpu: "50m"
+            limits:
+              memory: "250M"
+              cpu: "300m"

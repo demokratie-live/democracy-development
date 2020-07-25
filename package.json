@@ -1,14 +1,15 @@
 {
   "name": "democracy-development",
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "main": "index.js",
   "repository": "https://github.com/demokratie-live/democracy-development.git",
-  "author": "Manuel Ruck <github@manuelruck.de>",
-  "license": "MIT",
+  "author": "Manuel Ruck <m.ruck@democracy-deutschland.de>",
+  "license": "Apache-2.0",
   "scripts": {
-    "yarn-install":
-      "cd bundestag.io && yarn && cd ../server && yarn",
-    "docker-up-dev":
-      "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build",
-    "dev": "yarn yarn-install && yarn docker-up-dev"
+    "dev": "yarn build:k8s:local && skaffold dev --port-forward --status-check=false",
+    "build:k8s:local": "kustomize build ./infra/kustomize/overlays/local > infra/local.yaml",
+    "build:k8s:internal": "kustomize build ./infra/kustomize/overlays/internal > infra/internal.yaml",
+    "build:k8s:alpha": "kustomize build ./infra/kustomize/overlays/alpha > infra/alpha.yaml",
+    "build:k8s:prod": "kustomize build ./infra/kustomize/overlays/prod > infra/prod.yaml"
   }
 }

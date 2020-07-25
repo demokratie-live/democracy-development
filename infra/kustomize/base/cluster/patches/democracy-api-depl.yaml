@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democracy-api-depl
+spec:
+  template:
+    spec:
+      containers:
+        - name: democracy-api
+          livenessProbe:
+            httpGet:
+              path: /.well-known/apollo/server-health
+              port: 3000
+            periodSeconds: 180
+          readinessProbe:
+            httpGet:
+              path: /.well-known/apollo/server-health
+              port: 3000
+            initialDelaySeconds: 15

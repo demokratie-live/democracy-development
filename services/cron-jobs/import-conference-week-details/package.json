@@ -1,0 +1,26 @@
+{
+  "name": "import-conference-week-details",
+  "version": "0.1.8",
+  "main": "build/index.js",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "ts-node-dev ./src/index",
+    "lint": "yarn lint:ts && yarn lint:exports",
+    "lint:ts": "tsc --noEmit",
+    "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
+    "build": "tsc",
+    "start": "node ./build/index.js"
+  },
+  "dependencies": {
+    "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
+    "@democracy-deutschland/bundestagio-common": "^0.1.3",
+    "@democracy-deutschland/dip21-scraper": "^0.1.11",
+    "@democracy-deutschland/scapacra-bt": "^1.0.28",
+    "http2": "^3.3.7"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.0.0-pre.49",
+    "ts-unused-exports": "^6.2.1",
+    "typescript": "^3.9.5"
+  }
+}

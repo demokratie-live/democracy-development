@@ -1,0 +1,30 @@
+name: Docker – import-named-poll-deputies
+
+on:
+  push:
+    paths:
+      - "services/cron-jobs/import-named-poll-deputies/**"
+    # branches:
+    #   - master
+
+jobs:
+  build:
+    name: Docker – import-named-poll-deputies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Read package.json
+        uses: tyankatsu0105/read-package-version-actions@v1
+        id: package-version
+        with:
+          path: "./services/cron-jobs/import-named-poll-deputies"
+
+      - uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/import-named-poll-deputies
+          path: ./services/cron-jobs/import-named-poll-deputies
+          tags: ${{ steps.package-version.outputs.version }}

@@ -1,0 +1,24 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: index-sync-democracy-cronjob
+spec:
+  schedule: "0 7 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: index-sync-democracy
+              image: docker.pkg.github.com/demokratie-live/democracy-development/index-sync-democracy:0.1.0
+              env:
+                - name: DB_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: democracy-api-config
+                      key: DB_URL
+          imagePullSecrets:
+            - name: regcred

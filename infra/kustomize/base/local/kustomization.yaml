@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+  - ../main
+resources:
+  - democracy-mongo-depl.yaml
+  - democracy-mongo-persistent-volume-claim.yaml
+  - ingress-srv.yaml

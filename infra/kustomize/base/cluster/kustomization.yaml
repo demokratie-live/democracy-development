@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+  - ../main
+resources:
+  - mongo-headless-service.yaml
+  - mongo-statefulset.yaml
+
+patches:
+  - patches/bundestagio-admin-depl.yaml
+  - patches/bundestagio-depl.yaml
+  - patches/democracy-api-depl.yaml
+  - patches/democracy-app-depl.yaml

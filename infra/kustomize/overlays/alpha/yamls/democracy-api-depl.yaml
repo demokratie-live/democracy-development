@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democracy-api-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: democracy-api
+  template:
+    spec:
+      containers:
+        - name: democracy-api
+          resources:
+            requests:
+              memory: "250M"
+              cpu: "500m"
+            limits:
+              memory: "500M"
+              cpu: "1000m"

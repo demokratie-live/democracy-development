@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+  - ../../../base/cluster
+
+patches:
+  - bundestagio-depl.yaml
+  - bundestagio-admin-depl.yaml
+  - democracy-api-depl.yaml
+  - democracy-app-depl.yaml
+  - mongo-statefulset.yaml
+  - import-conference-week-details.yaml
+  - import-deputy-profiles.yaml
+  - import-named-poll-deputies.yaml
+  - import-named-polls.yaml
+
+resources:
+  - ingress-srv.yaml
+
+namespace: democracy-alpha

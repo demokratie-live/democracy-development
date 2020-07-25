@@ -1,0 +1,24 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: import-deputy-profiles-cronjob
+spec:
+  schedule: "0 4 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: import-deputy-profiles
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-deputy-profiles:0.1.3
+              env:
+                - name: DB_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: bio-api-config
+                      key: DB_URL
+          imagePullSecrets:
+            - name: regcred

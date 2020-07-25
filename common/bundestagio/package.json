@@ -1,0 +1,31 @@
+{
+  "name": "@democracy-deutschland/bundestagio-common",
+  "version": "0.1.10",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "lint": "yarn lint:ts && yarn lint:exports",
+    "lint:ts": "tsc --noEmit",
+    "lint:exports": "ts-unused-exports ./tsconfig.json --ignoreFiles=index",
+    "prepublish": "yarn build"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.0",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
+    "@types/cron": "^1.7.2",
+    "@types/mongoose": "^5.7.28",
+    "cron": "^1.8.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoosastic": "^4.6.0",
+    "mongoose": "^5.9.20",
+    "mongoose-diff-history": "^2.1.0",
+    "omit-deep": "^0.3.0",
+    "ts-mongoose": "^0.0.21",
+    "ts-unused-exports": "^6.2.1"
+  }
+}

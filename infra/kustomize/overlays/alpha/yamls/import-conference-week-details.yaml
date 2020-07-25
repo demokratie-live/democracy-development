@@ -1,0 +1,6 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: import-conference-week-details-cronjob
+spec:
+  schedule: "20 */5 * * *"

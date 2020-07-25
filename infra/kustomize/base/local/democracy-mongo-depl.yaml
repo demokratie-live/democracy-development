@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democracy-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: democracy-mongo
+  template:
+    metadata:
+      labels:
+        app: democracy-mongo
+    spec:
+      volumes:
+        - name: mongo-storage
+          persistentVolumeClaim:
+            claimName: mongo-persistent-volume-claim
+      containers:
+        - name: democracy-mongo
+          image: mongo
+          volumeMounts:
+            - name: mongo-storage
+              mountPath: /data/db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: democracy-mongo-srv
+spec:
+  selector:
+    app: democracy-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democracy-app-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: democracy-app
+  template:
+    metadata:
+      labels:
+        app: democracy-app
+    spec:
+      containers:
+        - name: democracy-app
+          image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.1.0
+          envFrom:
+            - configMapRef:
+                name: democracy-app-config
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: democracy-app-srv
+spec:
+  selector:
+    app: democracy-app
+  ports:
+    - name: democracy-app
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

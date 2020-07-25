@@ -1,0 +1,30 @@
+name: Docker – queue-pushs-vote-top-100
+
+on:
+  push:
+    paths:
+      - "services/cron-jobs/queue-pushs-vote-top-100/**"
+    # branches:
+    #   - master
+
+jobs:
+  build:
+    name: Docker – queue-pushs-vote-top-100
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Read package.json
+        uses: tyankatsu0105/read-package-version-actions@v1
+        id: package-version
+        with:
+          path: "./services/cron-jobs/queue-pushs-vote-top-100"
+
+      - uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/queue-pushs-vote-top-100
+          path: ./services/cron-jobs/queue-pushs-vote-top-100
+          tags: ${{ steps.package-version.outputs.version }}

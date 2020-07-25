@@ -1,0 +1,32 @@
+{
+  "name": "sync-deputy-profiles",
+  "version": "0.1.5",
+  "main": "build/index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev ./src/index",
+    "lint": "tsc --noEmit",
+    "build": "tsc",
+    "start": "node ./build/index.js",
+    "apollo:codegen": "apollo client:codegen --target typescript --globalTypesFile=./src/__generated__/globalTypes.ts"
+  },
+  "dependencies": {
+    "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
+    "@democracy-deutschland/democracy-common": "^0.2.7",
+    "apollo-cache-inmemory": "^1.6.6",
+    "apollo-client": "^2.6.10",
+    "apollo-link-http": "^1.5.17",
+    "cross-fetch": "^3.0.5",
+    "graphql": "^15.1.0",
+    "graphql-tag": "^2.10.3",
+    "lodash": "^4.17.15",
+    "moment": "^2.27.0",
+    "p-iteration": "^1.1.8"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.157",
+    "apollo": "^2.29.1",
+    "ts-node-dev": "^1.0.0-pre.49",
+    "typescript": "^3.9.5"
+  }
+}

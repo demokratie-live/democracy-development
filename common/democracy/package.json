@@ -1,0 +1,26 @@
+{
+  "name": "@democracy-deutschland/democracy-common",
+  "version": "0.2.10",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "lint": "yarn lint:ts && yarn lint:exports",
+    "lint:ts": "tsc --noEmit",
+    "lint:exports": "ts-unused-exports ./tsconfig.json --ignoreFiles=index",
+    "prepublish": "yarn build"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.6"
+  },
+  "dependencies": {
+    "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
+    "@types/cron": "^1.7.2",
+    "@types/mongoose": "^5.7.30",
+    "cron": "^1.8.2",
+    "mongoose": "^5.9.22",
+    "ts-mongoose": "^0.0.21",
+    "ts-unused-exports": "^6.2.1"
+  }
+}

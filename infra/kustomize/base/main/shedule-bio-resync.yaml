@@ -1,0 +1,24 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: shedule-bio-resync-cronjob
+spec:
+  schedule: "55 2 * */1 *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: shedule-bio-resync
+              image: docker.pkg.github.com/demokratie-live/democracy-development/shedule-bio-resync:0.1.2
+              env:
+                - name: DB_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: democracy-api-config
+                      key: DB_URL
+          imagePullSecrets:
+            - name: regcred

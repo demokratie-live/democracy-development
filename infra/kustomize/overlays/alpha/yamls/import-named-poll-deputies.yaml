@@ -1,0 +1,6 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: import-named-poll-deputies-cronjob
+spec:
+  schedule: "45 6 * * *"

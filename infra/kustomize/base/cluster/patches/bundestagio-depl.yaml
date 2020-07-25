@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bundestagio-depl
+spec:
+  template:
+    spec:
+      containers:
+        - name: bundestagio
+          livenessProbe:
+            httpGet:
+              path: /.well-known/apollo/server-health
+              port: 3100
+            periodSeconds: 30
+            initialDelaySeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /.well-known/apollo/server-health
+              port: 3100
+            periodSeconds: 10
+            initialDelaySeconds: 10

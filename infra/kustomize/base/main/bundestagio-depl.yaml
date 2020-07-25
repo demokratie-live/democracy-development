@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bundestagio-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bundestagio
+  template:
+    metadata:
+      labels:
+        app: bundestagio
+    spec:
+      containers:
+        - name: bundestagio
+          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.38-dev
+          envFrom:
+            - configMapRef:
+                name: bio-api-config
+            - secretRef:
+                name: bundestag-result-edit-token
+                optional: true
+            - secretRef:
+                name: bio-api-secrets
+                optional: true
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bundestagio-srv
+spec:
+  selector:
+    app: bundestagio
+  ports:
+    - name: bundestagio
+      protocol: TCP
+      port: 3100
+      targetPort: 3100
