@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: push-send-queued-cronjob
 spec:
-  schedule: "*/5 10-20 * * *"
+  schedule: "*/5 8-20 * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
