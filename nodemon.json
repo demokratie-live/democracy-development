@@ -1,12 +1,7 @@
 {
   "verbose": false,
-  "ignore": [
-    "node_modules"
-  ],
-  "watch": [
-    "**/src/**/*"
-  ],
+  "ignore": ["node_modules"],
+  "watch": ["**/src/**/*"],
   "ext": "js jsx json graphql",
-  "exec": "node --require babel-register",
   "legacyWatch": true
 }
