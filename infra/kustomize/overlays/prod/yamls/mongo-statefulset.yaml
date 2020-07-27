@@ -22,11 +22,11 @@ spec:
             - rs0
           resources:
             requests:
-              memory: "2G"
+              memory: "2.5G"
               cpu: "300m"
             limits:
-              memory: "4G"
-              cpu: "1000m"
+              memory: "5G"
+              cpu: "1500m"
   volumeClaimTemplates:
     - metadata:
         name: mongo-volume

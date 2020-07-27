@@ -22,10 +22,10 @@ spec:
             - rs0
           resources:
             requests:
-              memory: "2G"
+              memory: "1G"
               cpu: "300m"
             limits:
-              memory: "3G"
+              memory: "2G"
               cpu: "1000m"
   volumeClaimTemplates:
     - metadata:

@@ -241,10 +241,10 @@ spec:
         resources:
           limits:
             cpu: 100m
-            memory: 500M
+            memory: 100M
           requests:
             cpu: 30m
-            memory: 100M
+            memory: 70M
       imagePullSecrets:
       - name: regcred
 ---
@@ -270,6 +270,9 @@ spec:
         - secretRef:
             name: bundestag-result-edit-token
             optional: true
+        - secretRef:
+            name: bio-api-secrets
+            optional: true
         image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.38-dev
         livenessProbe:
           httpGet:
@@ -287,7 +290,7 @@ spec:
         resources:
           limits:
             cpu: 1000m
-            memory: 500M
+            memory: 300M
           requests:
             cpu: 50m
             memory: 150M
@@ -445,10 +448,10 @@ spec:
         resources:
           limits:
             cpu: 1000m
-            memory: 3G
+            memory: 2G
           requests:
             cpu: 300m
-            memory: 2G
+            memory: 1G
         volumeMounts:
         - mountPath: /data/db
           name: mongo-volume
@@ -802,7 +805,7 @@ spec:
           imagePullSecrets:
           - name: regcred
           restartPolicy: Never
-  schedule: '*/5 5-20 * * *'
+  schedule: '*/5 8-20 * * *'
 ---
 apiVersion: batch/v1beta1
 kind: CronJob

@@ -12,8 +12,8 @@ spec:
         - name: bundestagio-admin
           resources:
             limits:
-              memory: "500M"
+              memory: "100M"
               cpu: "100m"
             requests:
-              memory: "100M"
+              memory: "70M"
               cpu: "30m"

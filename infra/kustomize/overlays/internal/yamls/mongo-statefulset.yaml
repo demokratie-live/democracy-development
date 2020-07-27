@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+spec:
+  template:
+    spec:
+      containers:
+        - name: mongo
+          resources:
+            requests:
+              memory: "0.75G"
+              cpu: "100m"
+            limits:
+              memory: "1.5G"
+              cpu: "500m"

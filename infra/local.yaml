@@ -191,6 +191,9 @@ spec:
         - secretRef:
             name: bundestag-result-edit-token
             optional: true
+        - secretRef:
+            name: bio-api-secrets
+            optional: true
         image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.38-dev
         name: bundestagio
       imagePullSecrets:
@@ -629,7 +632,7 @@ spec:
           imagePullSecrets:
           - name: regcred
           restartPolicy: Never
-  schedule: '*/5 5-20 * * *'
+  schedule: '*/5 8-20 * * *'
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -794,7 +797,7 @@ spec:
   capacity:
     storage: 1Gi
   hostPath:
-    path: /tmp/democracy-mongodb-volume
+    path: /mnt/data/data/db-democracy-mongodb-volume
   persistentVolumeReclaimPolicy: Delete
   storageClassName: hostpath
 ---

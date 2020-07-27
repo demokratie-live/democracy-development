@@ -12,8 +12,8 @@ spec:
         - name: democracy-api
           resources:
             requests:
-              memory: "500M"
+              memory: "100M"
               cpu: "500m"
             limits:
-              memory: "1000M"
+              memory: "200M"
               cpu: "1000m"

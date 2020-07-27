@@ -172,7 +172,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/version: 0.34.0
+    app.kubernetes.io/version: 0.32.0
     helm.sh/chart: ingress-nginx-2.0.3
   name: ingress-nginx-controller
   namespace: ingress-nginx
@@ -236,10 +236,10 @@ spec:
         resources:
           limits:
             cpu: 100m
-            memory: 200M
+            memory: 90M
           requests:
             cpu: 30m
-            memory: 100M
+            memory: 50M
       imagePullSecrets:
       - name: regcred
 ---
@@ -264,6 +264,9 @@ spec:
             name: bio-api-config-m6k77c6mg9
         - secretRef:
             name: bundestag-result-edit-token
+            optional: true
+        - secretRef:
+            name: bio-api-secrets
             optional: true
         image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.38-dev
         livenessProbe:
@@ -326,10 +329,10 @@ spec:
         resources:
           limits:
             cpu: 1000m
-            memory: 1000M
+            memory: 200M
           requests:
             cpu: 500m
-            memory: 500M
+            memory: 100M
       imagePullSecrets:
       - name: regcred
 ---
@@ -371,7 +374,7 @@ spec:
         resources:
           limits:
             cpu: 200m
-            memory: 300M
+            memory: 120M
           requests:
             cpu: 50m
             memory: 100M
@@ -435,7 +438,10 @@ spec:
         resources:
           limits:
             cpu: 500m
-            memory: 1.5Gi
+            memory: 1.5G
+          requests:
+            cpu: 100m
+            memory: 0.75G
         volumeMounts:
         - mountPath: /data/db
           name: mongo-volume
@@ -789,7 +795,7 @@ spec:
           imagePullSecrets:
           - name: regcred
           restartPolicy: Never
-  schedule: '*/5 5-20 * * *'
+  schedule: '*/5 8-20 * * *'
 ---
 apiVersion: batch/v1beta1
 kind: CronJob

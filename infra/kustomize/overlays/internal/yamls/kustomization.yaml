@@ -13,6 +13,7 @@ patches:
   - import-named-poll-deputies.yaml
   - import-named-polls.yaml
   - import-procedures.yaml
+  - mongo-statefulset.yaml
 
 resources:
   - ingress-srv.yaml
