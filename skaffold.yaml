@@ -10,22 +10,22 @@ build:
   local:
     push: false
   artifacts:
-    - image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io
-      context: bundestag.io-api
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.{js,ts}"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin
-      context: bundestag.io-admin
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "**/*.js"
-            dest: .
+    # - image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io
+    #   context: bundestag.io-api
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.{js,ts}"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin
+    #   context: bundestag.io-admin
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "**/*.js"
+    #         dest: .
     - image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server
       context: democracy-app.de-api
       docker:
@@ -34,143 +34,142 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop
-      context: democracy-app.de
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "**/*.js"
-            dest: .
-
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures
-      context: ./services/cron-jobs/import-procedures
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/import-conference-week-details
-      context: ./services/cron-jobs/import-conference-week-details
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/import-deputy-profiles
-      context: ./services/cron-jobs/import-deputy-profiles
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-polls
-      context: ./services/cron-jobs/import-named-polls
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/import-plenary-minutes
-      context: ./services/cron-jobs/import-plenary-minutes
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-poll-deputies
-      context: ./services/cron-jobs/import-named-poll-deputies
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/push-send-queued
-      context: ./services/cron-jobs/push-send-queued
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week
-      context: ./services/cron-jobs/queue-pushs-conference-week
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-conference-week
-      context: ./services/cron-jobs/queue-pushs-vote-conference-week
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100
-      context: ./services/cron-jobs/queue-pushs-vote-top-100
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/shedule-bio-resync
-      context: ./services/cron-jobs/shedule-bio-resync
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/sync-deputy-profiles
-      context: ./services/cron-jobs/sync-deputy-profiles
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls
-      context: ./services/cron-jobs/sync-named-polls
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures
-      context: ./services/cron-jobs/sync-procedures
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/index-sync-democracy
-      context: ./services/cron-jobs/index-sync-democracy
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: docker.pkg.github.com/demokratie-live/democracy-development/index-sync-bundestagio
-      context: ./services/cron-jobs/index-sync-bundestagio
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop
+    #   context: democracy-app.de
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "**/*.js"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures
+    #   context: ./services/cron-jobs/import-procedures
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/import-conference-week-details
+    #   context: ./services/cron-jobs/import-conference-week-details
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/import-deputy-profiles
+    #   context: ./services/cron-jobs/import-deputy-profiles
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-polls
+    #   context: ./services/cron-jobs/import-named-polls
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/import-plenary-minutes
+    #   context: ./services/cron-jobs/import-plenary-minutes
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-poll-deputies
+    #   context: ./services/cron-jobs/import-named-poll-deputies
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/push-send-queued
+    #   context: ./services/cron-jobs/push-send-queued
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week
+    #   context: ./services/cron-jobs/queue-pushs-conference-week
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-conference-week
+    #   context: ./services/cron-jobs/queue-pushs-vote-conference-week
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100
+    #   context: ./services/cron-jobs/queue-pushs-vote-top-100
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/shedule-bio-resync
+    #   context: ./services/cron-jobs/shedule-bio-resync
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/sync-deputy-profiles
+    #   context: ./services/cron-jobs/sync-deputy-profiles
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls
+    #   context: ./services/cron-jobs/sync-named-polls
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures
+    #   context: ./services/cron-jobs/sync-procedures
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/index-sync-democracy
+    #   context: ./services/cron-jobs/index-sync-democracy
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
+    # - image: docker.pkg.github.com/demokratie-live/democracy-development/index-sync-bundestagio
+    #   context: ./services/cron-jobs/index-sync-bundestagio
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    #   sync:
+    #     manual:
+    #       - src: "src/**/*.ts"
+    #         dest: .
 portForward:
   - resourceType: Deployment
     resourceName: democracy-mongo-depl

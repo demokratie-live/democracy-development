@@ -8,7 +8,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 5Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -17,9 +17,9 @@ metadata:
 spec:
   storageClassName: hostpath
   capacity:
-    storage: 1Gi
+    storage: 5Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
   hostPath:
-    path: /mnt/data/data/db-democracy-mongodb-volume
+    path: /tmp/db-democracy-mongodb-volume
