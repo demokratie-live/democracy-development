@@ -314,7 +314,7 @@ spec:
         - secretRef:
             name: democracy-api-secrets
             optional: true
-        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.21-dev
+        image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.23-dev
         livenessProbe:
           httpGet:
             path: /.well-known/apollo/server-health
@@ -329,10 +329,10 @@ spec:
         resources:
           limits:
             cpu: 1000m
-            memory: 200M
+            memory: 500M
           requests:
             cpu: 500m
-            memory: 100M
+            memory: 300M
       imagePullSecrets:
       - name: regcred
 ---
