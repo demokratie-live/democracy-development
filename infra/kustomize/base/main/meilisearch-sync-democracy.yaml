@@ -20,5 +20,8 @@ spec:
                     configMapKeyRef:
                       name: democracy-api-config
                       key: DB_URL
+              envFrom:
+                - secretRef:
+                    name: meilisearch-config
           imagePullSecrets:
             - name: regcred

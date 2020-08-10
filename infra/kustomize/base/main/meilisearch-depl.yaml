@@ -22,9 +22,12 @@ spec:
           volumeMounts:
             - name: meilisearch-storage
               mountPath: /data.ms
-          envFrom:
-            - secretRef:
-                name: meilisearch-config
+          env:
+            - name: MEILI_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: meilisearch-config
+                  key: MEILI_SEARCH_SECRET
 ---
 apiVersion: v1
 kind: Service
