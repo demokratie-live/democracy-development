@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meilisearch-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meilisearch
+  template:
+    metadata:
+      labels:
+        app: meilisearch
+    spec:
+      volumes:
+        - name: meilisearch-storage
+          persistentVolumeClaim:
+            claimName: meilisearch-persistent-volume-claim
+      containers:
+        - name: meilisearch
+          image: getmeili/meilisearch
+          volumeMounts:
+            - name: meilisearch-storage
+              mountPath: /data.ms
+          envFrom:
+            - secretRef:
+                name: meilisearch-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meilisearch-srv
+spec:
+  selector:
+    app: meilisearch
+  ports:
+    - name: db
+      protocol: TCP
+      port: 7700
+      targetPort: 7700
