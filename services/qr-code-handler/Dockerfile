@@ -32,4 +32,4 @@ COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
 
 ENV NODE_ENV=production
 
-ENTRYPOINT [ "yarn", "serve" ]
+ENTRYPOINT [ "yarn", "start" ]

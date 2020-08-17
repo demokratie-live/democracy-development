@@ -14,10 +14,7 @@ spec:
     spec:
       containers:
         - name: qr-code-handler
-          image: docker.pkg.github.com/demokratie-live/qr-code-handler/qr-code-handler:0.1.0
-          envFrom:
-            - configMapRef:
-                name: qr-code-handler-config
+          image: docker.pkg.github.com/demokratie-live/democracy-development/qr-code-handler:1.0.0
       imagePullSecrets:
         - name: regcred
 ---
