@@ -11,6 +11,7 @@ spec:
     - hosts:
         - internal.api.democracy-app.de
         - internal.democracy-app.de
+        - internal.qr.democracy-app.de
         - internal.api.bundestag.io
         - internal.admin.bundestag.io
       secretName: democracy-internal-tls
@@ -28,6 +29,13 @@ spec:
           - path: /?(.*)
             backend:
               serviceName: democracy-app-srv
+              servicePort: 3000
+    - host: internal.qr.democracy-app.de
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: qr-code-handler-srv
               servicePort: 3000
     - host: internal.api.bundestag.io
       http:
