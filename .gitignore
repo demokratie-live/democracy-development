@@ -2,3 +2,4 @@
 .env
 /data/
 .vs
+node_modules

@@ -1,0 +1,30 @@
+name: Docker – qr-code-handler
+
+on:
+  push:
+    paths:
+      - "services/qr-code-handler/**"
+    # branches:
+    #   - master
+
+jobs:
+  build:
+    name: Docker – qr-code-handler
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Read package.json
+        uses: tyankatsu0105/read-package-version-actions@v1
+        id: package-version
+        with:
+          path: "./services/qr-code-handler"
+
+      - uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/qr-code-handler
+          path: ./services/qr-code-handler
+          tags: ${{ steps.package-version.outputs.version }}
