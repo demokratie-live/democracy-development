@@ -444,7 +444,7 @@ spec:
         app: qr-code-handler
     spec:
       containers:
-      - image: docker.pkg.github.com/demokratie-live/democracy-development/qr-code-handler:1.0.0
+      - image: docker.pkg.github.com/demokratie-live/democracy-development/qr-code-handler:1.0.1
         name: qr-code-handler
       imagePullSecrets:
       - name: regcred

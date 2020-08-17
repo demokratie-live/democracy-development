@@ -163,6 +163,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: qr-code-handler-srv
+  namespace: democracy-production
+spec:
+  ports:
+  - name: qr-code-handler
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: qr-code-handler
+---
+apiVersion: v1
+kind: Service
+metadata:
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
     service.beta.kubernetes.io/do-loadbalancer-hostname: api.democracy-app.de
@@ -412,6 +426,27 @@ spec:
         - ticketing
         image: nats-streaming:0.17.0
         name: nats
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qr-code-handler-depl
+  namespace: democracy-production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qr-code-handler
+  template:
+    metadata:
+      labels:
+        app: qr-code-handler
+    spec:
+      containers:
+      - image: docker.pkg.github.com/demokratie-live/democracy-development/qr-code-handler:1.0.1
+        name: qr-code-handler
+      imagePullSecrets:
+      - name: regcred
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -975,12 +1010,20 @@ spec:
           serviceName: bundestagio-admin-srv
           servicePort: 3000
         path: /?(.*)
+  - host: qr.democracy-deutschland.de
+    http:
+      paths:
+      - backend:
+          serviceName: qr-code-handler-srv
+          servicePort: 3000
+        path: /?(.*)
   tls:
   - hosts:
     - api.democracy-app.de
     - democracy-app.de
     - api.bundestag.io
     - admin.bundestag.io
+    - qr.democracy-deutschland.de
     secretName: democracy-production-tls
 ---
 apiVersion: extensions/v1beta1
