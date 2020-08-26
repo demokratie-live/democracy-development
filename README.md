@@ -1,5 +1,3 @@
-
-
 ![Screenshot](https://www.democracy-deutschland.de/files/images/forfb2.png)
 
 # Demokratie-App
@@ -30,6 +28,7 @@ Stimmung wird messbar, zu jeder Zeit, zu jedem Thema, dass genug Teilnehmer hat.
 Es sollte der Ansatz Security-by-Design verfolgt werden, um den Nutzer glaubhaft zu versichern, dass er keine Nachteile durch die Nutzung der Applikation hat. Absolute Sicherheit ist leider nie möglich und bedarf erheblichen Arbeitsaufwand. Hier muss zwischen Aufwand, Sicherheit und Usability abgewägt werden. Es sollte ein Modell der schrittweisen Einführung von Sicherheitsmechanismen verfolgt werden, um die Realisierung zu ermöglichen - der Nutzer sollte über die bereits erfüllten und unerfüllten Sicherheitsziele zu jeder Zeit informiert werden.
 
 ### Sicherheitsziele:
+
 - Anonym
 - Beweisbares Ergebniss
 - (partielle) Dezentralität
@@ -45,11 +44,11 @@ Um die Realisierung zu gewährleisten muss das Projekt in Schritten implemntiert
 DEMOCRACY Deutschland wurde über Startnext für einen Prototyp finanziert. Selbstverständlich planen wir darüber hinaus.
 
 Daher haben wir eine Roadmap entwickelt, was wir wann erreichen möchten: [Roadmap](https://www.democracy-deutschland.de/#!engineering)
- 
- ## Zentrale Architektur Fragen:
+
+## Zentrale Architektur Fragen:
 
 ![v1_architektur](https://github.com/demokratie-live/democracy-assets/blob/master/diagram/Server-Client%20Architektur.png)
-   
+
 ## Entwicklung & Werkzeuge
 
 [MeisterTask](https://www.meistertask.com/app/project/p7zXoSfq/demokratie)
@@ -78,7 +77,7 @@ TODO
 
 ## Contributing
 
-Anyone and everyone is welcome to [contribute](https://github.com/demokratie-live/democracy-client/blob/master/CONTRIBUTING.md). Start by checking out the list of
+Anyone and everyone is welcome to [contribute](https://github.com/demokratie-live/democracy-development/blob/master/CONTRIBUTE.md). Start by checking out the list of
 [open issues](https://github.com/demokratie-live/democracy-development/issues).
 
 ## License
