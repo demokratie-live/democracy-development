@@ -1,4 +1,4 @@
-import gcm, { IResponseBody } from "node-gcm";
+import gcm from "node-gcm";
 import gcmProvider from "./AndroidProvicer";
 
 export const push = async ({
