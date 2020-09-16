@@ -1,11 +1,9 @@
 import mongoConnect from "./mongoose";
-import apn from "apn";
 
 import {
   ProcedureModel,
   DeviceModel,
   PUSH_CATEGORY,
-  getCron,
   setCronStart,
   setCronSuccess,
   PushNotificationModel,
@@ -14,6 +12,7 @@ import {
 
 import { push as pushIOS } from "./iOS";
 import { push as pushAndroid } from "./Android";
+import { forEachSeries } from "p-iteration";
 
 const CRON_SEND_QUED_PUSHS_LIMIT = process.env.CRON_SEND_QUED_PUSHS_LIMIT
   ? parseInt(process.env.CRON_SEND_QUED_PUSHS_LIMIT, 10)
@@ -22,11 +21,6 @@ const CRON_SEND_QUED_PUSHS_LIMIT = process.env.CRON_SEND_QUED_PUSHS_LIMIT
 const start = async () => {
   const CRON_NAME = "sendQueuedPushs";
   const startDate = new Date();
-  const cron = await getCron({ name: CRON_NAME });
-  if (cron.running) {
-    console.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
-    return;
-  }
   await setCronStart({ name: CRON_NAME, startDate });
 
   // Query Database
@@ -51,9 +45,10 @@ const start = async () => {
       }).limit(CRON_SEND_QUED_PUSHS_LIMIT - pushs.length)),
     ];
   }
-
+  let sentPushsCount = 0;
   // send all pushs in there
-  const sentPushs = await pushs.map(
+  await forEachSeries(
+    pushs,
     async ({
       _id,
       type,
@@ -75,38 +70,41 @@ const start = async () => {
         procedureIds,
       };
       // Send Pushs
+      console.log({ os });
       switch (os) {
         case PUSH_OS.ANDROID:
-          const response = await pushAndroid({
+          await pushAndroid({
             title,
             message,
             payload,
             token,
-          }).catch(async ({ error, response }) => {
-            await PushNotificationModel.update(
-              { _id },
-              { $set: { failure: JSON.stringify({ error, response }) } }
-            );
-            if (
-              response.results &&
-              response.results[0].error === "NotRegistered"
-            ) {
-              await DeviceModel.update(
-                {},
-                { $pull: { pushTokens: { token, os: PUSH_OS.ANDROID } } },
-                { multi: true }
+          })
+            .catch(async ({ error, response }) => {
+              await PushNotificationModel.update(
+                { _id },
+                { $set: { failure: JSON.stringify({ error, response }) } }
               );
-              console.warn(`[PUSH] Android failure - removig token`);
-            } else {
-              console.error(
-                `[PUSH] Android failure ${JSON.stringify({
-                  token,
-                  error,
-                  response,
-                })}`
-              );
-            }
-          });
+              if (
+                response.results &&
+                response.results[0].error === "NotRegistered"
+              ) {
+                await DeviceModel.update(
+                  {},
+                  { $pull: { pushTokens: { token, os: PUSH_OS.ANDROID } } },
+                  { multi: true }
+                );
+                console.warn(`[PUSH] Android failure - removig token`);
+              } else {
+                console.error(
+                  `[PUSH] Android failure ${JSON.stringify({
+                    token,
+                    error,
+                    response,
+                  })}`
+                );
+              }
+            })
+            .then(() => sentPushsCount++);
           break;
         case PUSH_OS.IOS:
           const { sent, failed } = await pushIOS({
@@ -145,6 +143,8 @@ const start = async () => {
                 })}`
               );
             }
+          } else {
+            sentPushsCount++;
           }
           break;
         default:
@@ -161,11 +161,8 @@ const start = async () => {
       return _id;
     }
   );
-  await Promise.all(sentPushs);
 
-  if (sentPushs.length > 0) {
-    console.info(`[PUSH] Sent ${sentPushs.length} Pushs`);
-  }
+  console.info(`[PUSH] Sent ${sentPushsCount} Pushs`);
 
   await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
 };
