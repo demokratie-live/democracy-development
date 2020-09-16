@@ -22,3 +22,4 @@ resources:
   - shedule-bio-resync.yaml
   - index-sync-democracy.yaml
   - index-sync-bundestagio.yaml
+  - qr-code-handler-depl.yaml

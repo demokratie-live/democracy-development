@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qr-code-handler-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qr-code-handler
+  template:
+    metadata:
+      labels:
+        app: qr-code-handler
+    spec:
+      containers:
+        - name: qr-code-handler
+          image: docker.pkg.github.com/demokratie-live/democracy-development/qr-code-handler:1.0.2
+          envFrom:
+            - configMapRef:
+                name: qr-code-handler-config
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qr-code-handler-srv
+spec:
+  selector:
+    app: qr-code-handler
+  ports:
+    - name: qr-code-handler
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
