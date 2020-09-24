@@ -26,10 +26,10 @@
     ts-mongoose "^0.0.21"
     ts-unused-exports "^6.2.1"
 
-"@democracy-deutschland/dip21-scraper@^0.1.17":
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.17.tgz#583679ce30e746e6bb6f43f4bf20ca49ca9f8d26"
-  integrity sha512-NFKKHCMtk2guCTSP8Bwo1Lxqn7M7KukTl9OKsYFHKBES51U29Wrwa7Bo3Zei4bIXp5LESIuSp27977Rf9xGK2Q==
+"@democracy-deutschland/dip21-scraper@^0.1.18":
+  version "0.1.18"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/dip21-scraper/-/dip21-scraper-0.1.18.tgz#3fcc3b2691582769a551163177a1f7e82a456f91"
+  integrity sha512-hgVhareiPneDw7m7ehpiMYY38GS1bYsKQzYtI1/1W13UHJhsQUNqsRYLBSH7e1n8uqBykVdqFu7cFw7JUHpdCw==
   dependencies:
     chalk "^2.3.1"
     colors "^1.1.2"

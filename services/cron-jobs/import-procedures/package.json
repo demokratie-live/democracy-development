@@ -1,6 +1,6 @@
 {
   "name": "import-procedures",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
@@ -14,7 +14,7 @@
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@democracy-deutschland/bundestagio-common": "^0.1.10",
-    "@democracy-deutschland/dip21-scraper": "^0.1.17",
+    "@democracy-deutschland/dip21-scraper": "^0.1.18",
     "http2": "^3.3.7",
     "p-iteration": "^1.1.8",
     "pretty-ms": "^7.0.1"
