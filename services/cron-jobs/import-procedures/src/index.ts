@@ -4,7 +4,6 @@ import prettyMs from "pretty-ms";
 
 import {
   ProcedureModel,
-  getCron,
   setCronStart,
   CronJobModel,
   setCronSuccess,
@@ -34,6 +33,7 @@ const ensureArray = <T = any>(element: T | T[]) => {
 };
 
 const saveProcedure = async ({ procedureData }: { procedureData: any }) => {
+  console.log("saveProcedure", procedureData);
   // Transform History
   let process = [];
   if (procedureData.VORGANGSABLAUF) {
@@ -76,6 +76,8 @@ const saveProcedure = async ({ procedureData }: { procedureData: any }) => {
   // Find old Procedure
   const oldProcedure = await ProcedureModel.findOne({
     procedureId: procedureData.vorgangId,
+  }).catch((e) => {
+    console.log("ProcedureModel.findOne", e);
   });
 
   // take old voteDate if present (can come from ConferenceWeekDetails Scraper)
@@ -185,7 +187,6 @@ const logError = ({ error }: { error: any }) => {
 
 const start = async () => {
   cronStart = new Date();
-  const cron = await getCron({ name: CRON_NAME });
   await setCronStart({ name: CRON_NAME, startDate: cronStart });
   // Do the scrape
   await scraper
