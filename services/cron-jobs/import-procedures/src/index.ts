@@ -76,8 +76,6 @@ const saveProcedure = async ({ procedureData }: { procedureData: any }) => {
   // Find old Procedure
   const oldProcedure = await ProcedureModel.findOne({
     procedureId: procedureData.vorgangId,
-  }).catch((e) => {
-    console.log("ProcedureModel.findOne", e);
   });
 
   // take old voteDate if present (can come from ConferenceWeekDetails Scraper)
