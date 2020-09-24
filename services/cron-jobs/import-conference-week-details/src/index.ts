@@ -130,10 +130,6 @@ const start = async () => {
   const startDate = new Date();
   const cron = await getCron({ name: CRON_NAME });
   let lastData: ConferenceWeeCronJobkData | undefined;
-  if (cron.running) {
-    console.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
-    throw new Error(`[Cronjob][${CRON_NAME}] running still - skipping`);
-  }
   await setCronStart({ name: CRON_NAME, startDate });
 
   try {

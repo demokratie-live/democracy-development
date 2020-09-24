@@ -71,6 +71,14 @@ metadata:
   namespace: democracy-production
 ---
 apiVersion: v1
+data:
+  DB_URL: mongodb://mongo-0.mongo,mongo-1.mongo,mongo-2.mongo/qr-code?replicaSet=rs0
+kind: ConfigMap
+metadata:
+  name: qr-code-handler-config-9hh57dm722
+  namespace: democracy-production
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: bundestagio-admin-srv
@@ -443,7 +451,10 @@ spec:
         app: qr-code-handler
     spec:
       containers:
-        - image: docker.pkg.github.com/demokratie-live/democracy-development/qr-code-handler:1.0.1
+        - envFrom:
+            - configMapRef:
+                name: qr-code-handler-config-9hh57dm722
+          image: docker.pkg.github.com/demokratie-live/democracy-development/qr-code-handler:1.0.2
           name: qr-code-handler
       imagePullSecrets:
         - name: regcred
@@ -607,7 +618,7 @@ spec:
                     configMapKeyRef:
                       key: DB_URL
                       name: bio-api-config-7tkf9c672b
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-conference-week-details:0.1.8
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-conference-week-details:0.1.9
               name: import-conference-week-details
           imagePullSecrets:
             - name: regcred
@@ -740,7 +751,7 @@ spec:
               envFrom:
                 - configMapRef:
                     name: import-procedures-config-mbthmb67dh
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.2
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.3
               name: import-procedures
           imagePullSecrets:
             - name: regcred

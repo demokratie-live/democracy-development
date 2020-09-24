@@ -413,7 +413,7 @@ spec:
                     configMapKeyRef:
                       key: DB_URL
                       name: bio-api-config-b9m4dc95m9
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-conference-week-details:0.1.8
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-conference-week-details:0.1.9
               name: import-conference-week-details
           imagePullSecrets:
             - name: regcred
@@ -541,7 +541,7 @@ spec:
               envFrom:
                 - configMapRef:
                     name: import-procedures-config-6cghkt98bk
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.2
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.3
               name: import-procedures
           imagePullSecrets:
             - name: regcred

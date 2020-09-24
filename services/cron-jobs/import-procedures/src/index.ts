@@ -183,10 +183,6 @@ const logError = ({ error }: { error: any }) => {
 const start = async () => {
   cronStart = new Date();
   const cron = await getCron({ name: CRON_NAME });
-  if (cron.running) {
-    console.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
-    return;
-  }
   await setCronStart({ name: CRON_NAME, startDate: cronStart });
   // Do the scrape
   await scraper

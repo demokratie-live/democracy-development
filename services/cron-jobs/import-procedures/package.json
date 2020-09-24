@@ -1,6 +1,6 @@
 {
   "name": "import-procedures",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {

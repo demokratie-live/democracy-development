@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: import-procedures
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.2
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.3
               envFrom:
                 - configMapRef:
                     name: import-procedures-config
