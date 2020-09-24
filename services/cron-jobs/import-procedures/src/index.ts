@@ -152,7 +152,10 @@ const saveProcedure = async ({ procedureData }: { procedureData: any }) => {
     {
       upsert: true,
     }
-  );
+  ).catch((e) => {
+    console.log(`ERROR ${procedureObj.procedureId}`, e);
+    console.log(`ERROR ${procedureObj.procedureId}`, procedureObj);
+  });
 };
 
 let linksSum = 0;

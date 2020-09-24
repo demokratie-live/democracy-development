@@ -9,7 +9,7 @@ data:
   BUNDESTAGIO_SERVER_URL_CLIENT: https://admin.bundestag.io/graphql
 kind: ConfigMap
 metadata:
-  name: bio-admin-config-g7md5mh548
+  name: bio-admin-config-699bm9cd42
   namespace: democracy-production
 ---
 apiVersion: v1
@@ -19,11 +19,11 @@ data:
   GRAPHQL_PATH: /
   NODE_ENV: production
   PERIODS: "19"
-  SCRAPER_USER_AGEND: DEMOCRACY-PRODUCTION
+  SCRAPER_USER_AGEND: DEMOCRACY_PRODUCTION
   VOYAGER: "true"
 kind: ConfigMap
 metadata:
-  name: bio-api-config-7tkf9c672b
+  name: bio-api-config-g6kg6gtgct
   namespace: democracy-production
 ---
 apiVersion: v1
@@ -40,7 +40,7 @@ data:
   STAGE: production
 kind: ConfigMap
 metadata:
-  name: democracy-api-config-76hkfmm2t9
+  name: democracy-api-config-79dd65kdgd
   namespace: democracy-production
 ---
 apiVersion: v1
@@ -49,16 +49,16 @@ data:
   GRAPHQL_URL_SERVER: http://democracy-api-srv:3000/
 kind: ConfigMap
 metadata:
-  name: democracy-app-config-cbmg8cb52f
+  name: democracy-app-config-c76tm8tg8k
   namespace: democracy-production
 ---
 apiVersion: v1
 data:
   PERIODS: "[19]"
-  SCRAPER_USER_AGEND: DEMOCRACY-PRODUCTION
+  SCRAPER_USER_AGEND: DEMOCRACY_PRODUCTION
 kind: ConfigMap
 metadata:
-  name: import-procedures-config-mbthmb67dh
+  name: import-procedures-config-fc77mfbcbk
   namespace: democracy-production
 ---
 apiVersion: v1
@@ -67,7 +67,7 @@ data:
   APPLE_TEAMID: A4B84UJD7M
 kind: ConfigMap
 metadata:
-  name: push-notifications-config-tkcf98k672
+  name: push-notifications-config-cctkcg4mc6
   namespace: democracy-production
 ---
 apiVersion: v1
@@ -75,7 +75,7 @@ data:
   DB_URL: mongodb://mongo-0.mongo,mongo-1.mongo,mongo-2.mongo/qr-code?replicaSet=rs0
 kind: ConfigMap
 metadata:
-  name: qr-code-handler-config-9hh57dm722
+  name: qr-code-handler-config-652cdgk98b
   namespace: democracy-production
 ---
 apiVersion: v1
@@ -232,7 +232,7 @@ spec:
       containers:
         - envFrom:
             - configMapRef:
-                name: bio-admin-config-g7md5mh548
+                name: bio-admin-config-699bm9cd42
             - secretRef:
                 name: bio-admin-login
                 optional: true
@@ -282,7 +282,7 @@ spec:
       containers:
         - envFrom:
             - configMapRef:
-                name: bio-api-config-7tkf9c672b
+                name: bio-api-config-g6kg6gtgct
             - secretRef:
                 name: bundestag-result-edit-token
                 optional: true
@@ -331,7 +331,7 @@ spec:
       containers:
         - envFrom:
             - configMapRef:
-                name: democracy-api-config-76hkfmm2t9
+                name: democracy-api-config-79dd65kdgd
             - secretRef:
                 name: democracy-api-secrets
                 optional: true
@@ -375,7 +375,7 @@ spec:
       containers:
         - envFrom:
             - configMapRef:
-                name: democracy-app-config-cbmg8cb52f
+                name: democracy-app-config-c76tm8tg8k
           image: docker.pkg.github.com/demokratie-live/democracy-desktop/democracy-desktop:0.1.0
           livenessProbe:
             httpGet:
@@ -453,7 +453,7 @@ spec:
       containers:
         - envFrom:
             - configMapRef:
-                name: qr-code-handler-config-9hh57dm722
+                name: qr-code-handler-config-652cdgk98b
           image: docker.pkg.github.com/demokratie-live/democracy-development/qr-code-handler:1.0.2
           name: qr-code-handler
       imagePullSecrets:
@@ -524,12 +524,12 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
                 - name: BUNDESTAGIO_SERVER_URL
                   valueFrom:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
               image: docker.pkg.github.com/demokratie-live/democracy-development/sync-deputy-profiles:0.1.5
               name: democracy-sync-deputy-profiles
           imagePullSecrets:
@@ -555,12 +555,12 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
                 - name: BUNDESTAGIO_SERVER_URL
                   valueFrom:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
               image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls:0.1.7
               name: democracy-sync-named-polls
           imagePullSecrets:
@@ -586,12 +586,12 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
                 - name: BUNDESTAGIO_SERVER_URL
                   valueFrom:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
               image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.12
               name: democracy-sync-procedures
           imagePullSecrets:
@@ -617,7 +617,7 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: bio-api-config-7tkf9c672b
+                      name: bio-api-config-g6kg6gtgct
               image: docker.pkg.github.com/demokratie-live/democracy-development/import-conference-week-details:0.1.9
               name: import-conference-week-details
           imagePullSecrets:
@@ -643,7 +643,7 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: bio-api-config-7tkf9c672b
+                      name: bio-api-config-g6kg6gtgct
               image: docker.pkg.github.com/demokratie-live/democracy-development/import-deputy-profiles:0.1.3
               name: import-deputy-profiles
           imagePullSecrets:
@@ -669,7 +669,7 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: bio-api-config-7tkf9c672b
+                      name: bio-api-config-g6kg6gtgct
               image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-poll-deputies:0.1.0
               name: import-named-poll-deputies
           imagePullSecrets:
@@ -695,7 +695,7 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: bio-api-config-7tkf9c672b
+                      name: bio-api-config-g6kg6gtgct
               image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-polls:0.1.0
               name: import-named-polls
           imagePullSecrets:
@@ -721,7 +721,7 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: bio-api-config-7tkf9c672b
+                      name: bio-api-config-g6kg6gtgct
               image: docker.pkg.github.com/demokratie-live/democracy-development/import-plenary-minutes:0.1.0
               name: import-plenary-minutes
           imagePullSecrets:
@@ -747,11 +747,11 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: bio-api-config-7tkf9c672b
+                      name: bio-api-config-g6kg6gtgct
               envFrom:
                 - configMapRef:
-                    name: import-procedures-config-mbthmb67dh
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.3
+                    name: import-procedures-config-fc77mfbcbk
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.4
               name: import-procedures
           imagePullSecrets:
             - name: regcred
@@ -776,7 +776,7 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: bio-api-config-7tkf9c672b
+                      name: bio-api-config-g6kg6gtgct
               image: docker.pkg.github.com/demokratie-live/democracy-development/index-sync-bundestagio:0.1.0
               name: index-sync-bundestagio
           imagePullSecrets:
@@ -802,7 +802,7 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
               image: docker.pkg.github.com/demokratie-live/democracy-development/index-sync-democracy:0.1.1
               name: index-sync-democracy
           imagePullSecrets:
@@ -828,15 +828,15 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
                 - name: BUNDESTAGIO_SERVER_URL
                   valueFrom:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
               envFrom:
                 - configMapRef:
-                    name: push-notifications-config-tkcf98k672
+                    name: push-notifications-config-cctkcg4mc6
                 - secretRef:
                     name: push-notifications-secrets
                     optional: true
@@ -865,12 +865,12 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
                 - name: BUNDESTAGIO_SERVER_URL
                   valueFrom:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
               image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week:0.1.4
               name: queue-pushs-conference-week
           imagePullSecrets:
@@ -896,12 +896,12 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
                 - name: BUNDESTAGIO_SERVER_URL
                   valueFrom:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
               image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-conference-week:0.1.1
               name: queue-pushs-vote-conference-week
           imagePullSecrets:
@@ -927,12 +927,12 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
                 - name: BUNDESTAGIO_SERVER_URL
                   valueFrom:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
               image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100:0.1.3
               name: queue-pushs-vote-top-100
           imagePullSecrets:
@@ -958,7 +958,7 @@ spec:
                   valueFrom:
                     configMapKeyRef:
                       key: DB_URL
-                      name: democracy-api-config-76hkfmm2t9
+                      name: democracy-api-config-79dd65kdgd
               image: docker.pkg.github.com/demokratie-live/democracy-development/shedule-bio-resync:0.1.2
               name: shedule-bio-resync
           imagePullSecrets:
