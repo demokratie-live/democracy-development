@@ -33,129 +33,132 @@ const ensureArray = <T = any>(element: T | T[]) => {
 };
 
 const saveProcedure = async ({ procedureData }: { procedureData: any }) => {
-  console.log("saveProcedure", procedureData);
-  // Transform History
-  let process = [];
-  if (procedureData.VORGANGSABLAUF) {
-    process = Array.isArray(procedureData.VORGANGSABLAUF.VORGANGSPOSITION)
-      ? procedureData.VORGANGSABLAUF.VORGANGSPOSITION
-      : [procedureData.VORGANGSABLAUF.VORGANGSPOSITION];
-  }
-  // TODO check why some e are undefined
-  process = process.filter((e: any) => e);
-  const history = process.map((e: any) => {
-    const flow: any = {
-      assignment: e.ZUORDNUNG.trim(),
-      initiator: e.URHEBER.trim(),
-      findSpot: e.FUNDSTELLE.trim(),
-      findSpotUrl: _.trim(e.FUNDSTELLE_LINK),
-      date: parseDate(e.FUNDSTELLE.substr(0, 10)),
+  console.log("saveProcedure", procedureData.vorgangId);
+  try {
+    // Transform History
+    let process = [];
+    if (procedureData.VORGANGSABLAUF) {
+      process = Array.isArray(procedureData.VORGANGSABLAUF.VORGANGSPOSITION)
+        ? procedureData.VORGANGSABLAUF.VORGANGSPOSITION
+        : [procedureData.VORGANGSABLAUF.VORGANGSPOSITION];
+    }
+    // TODO check why some e are undefined
+    process = process.filter((e: any) => e);
+    const history = process.map((e: any) => {
+      const flow: any = {
+        assignment: e.ZUORDNUNG.trim(),
+        initiator: e.URHEBER.trim(),
+        findSpot: e.FUNDSTELLE.trim(),
+        findSpotUrl: _.trim(e.FUNDSTELLE_LINK),
+        date: parseDate(e.FUNDSTELLE.substr(0, 10)),
+      };
+      if (e.VP_ABSTRAKT) {
+        flow.abstract = e.VP_ABSTRAKT.trim();
+      }
+      if (e.BESCHLUSS) {
+        if (!_.isArray(e.BESCHLUSS)) {
+          e.BESCHLUSS = [e.BESCHLUSS];
+        }
+        if (e.BESCHLUSS.length > 0) {
+          flow.decision = e.BESCHLUSS.map((beschluss: any) => ({
+            page: beschluss.BESCHLUSSSEITE || undefined,
+            tenor: beschluss.BESCHLUSSTENOR || undefined,
+            document: beschluss.BEZUGSDOKUMENT || undefined,
+            type: beschluss.ABSTIMMUNGSART || undefined,
+            comment: beschluss.ABSTIMMUNG_BEMERKUNG || undefined,
+            majority: beschluss.MEHRHEIT || undefined,
+            foundation: beschluss.GRUNDLAGE || undefined,
+          }));
+        }
+      }
+      return flow;
+    });
+
+    // Find old Procedure
+    const oldProcedure = await ProcedureModel.findOne({
+      procedureId: procedureData.vorgangId,
+    });
+
+    // take old voteDate if present (can come from ConferenceWeekDetails Scraper)
+    let voteDate = oldProcedure ? oldProcedure.voteDate : null;
+    // Conditions on which Procedure is voted upon
+    const btWithDecisions = history.filter(
+      ({ initiator, decision }: { initiator: any; decision: any }) =>
+        // Beschluss liegt vor
+        // TODO: decision should not be an array
+        (decision &&
+          decision.find(
+            ({ tenor }: any) =>
+              tenor ===
+                PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR
+                  .VORLAGE_ABLEHNUNG ||
+              tenor ===
+                PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ANNAHME ||
+              tenor ===
+                PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ERLEDIGT
+            // ||            tenor ===
+            // PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR
+            //   .AUSSCHUSSFASSUNG_ANNAHME
+          )) ||
+        // Zurückgezogen
+        initiator ===
+          PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.RUECKNAHME_AMTLICH ||
+        initiator === PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.RUECKNAHME ||
+        initiator === PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.RUECKNAHME_VORLAGE
+    );
+    // Did we find a marker for voted Procedure?
+    if (btWithDecisions.length > 0) {
+      // Do not override the more accurate date form ConferenceWeekDetails Scraper
+      const historyDate = new Date(btWithDecisions.pop().date);
+      if (!voteDate || voteDate < historyDate) {
+        voteDate = historyDate;
+      }
+    }
+
+    // Construct Procedure Object
+    const procedureObj = {
+      procedureId: procedureData.vorgangId || undefined,
+      type: procedureData.VORGANG.VORGANGSTYP || undefined,
+      period: parseInt(procedureData.VORGANG.WAHLPERIODE, 10) || undefined,
+      title: procedureData.VORGANG.TITEL || undefined,
+      currentStatus: procedureData.VORGANG.AKTUELLER_STAND || undefined,
+      signature: procedureData.VORGANG.SIGNATUR || undefined,
+      gestOrderNumber: procedureData.VORGANG.GESTA_ORDNUNGSNUMMER || undefined,
+      approvalRequired: ensureArray(
+        procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT
+      ),
+      euDocNr: procedureData.VORGANG.EU_DOK_NR || undefined,
+      abstract: procedureData.VORGANG.ABSTRAKT || undefined,
+      promulgation: ensureArray(procedureData.VORGANG.VERKUENDUNG),
+      legalValidity: ensureArray(procedureData.VORGANG.INKRAFTTRETEN),
+      tags: ensureArray(procedureData.VORGANG.SCHLAGWORT),
+      subjectGroups: ensureArray(procedureData.VORGANG.SACHGEBIET),
+      importantDocuments: ensureArray(
+        procedureData.VORGANG.WICHTIGE_DRUCKSACHE || []
+      ).map((doc) => ({
+        editor: doc.DRS_HERAUSGEBER,
+        number: doc.DRS_NUMMER,
+        type: doc.DRS_TYP,
+        url: doc.DRS_LINK,
+      })),
+      history,
+      voteDate,
     };
-    if (e.VP_ABSTRAKT) {
-      flow.abstract = e.VP_ABSTRAKT.trim();
-    }
-    if (e.BESCHLUSS) {
-      if (!_.isArray(e.BESCHLUSS)) {
-        e.BESCHLUSS = [e.BESCHLUSS];
-      }
-      if (e.BESCHLUSS.length > 0) {
-        flow.decision = e.BESCHLUSS.map((beschluss: any) => ({
-          page: beschluss.BESCHLUSSSEITE || undefined,
-          tenor: beschluss.BESCHLUSSTENOR || undefined,
-          document: beschluss.BEZUGSDOKUMENT || undefined,
-          type: beschluss.ABSTIMMUNGSART || undefined,
-          comment: beschluss.ABSTIMMUNG_BEMERKUNG || undefined,
-          majority: beschluss.MEHRHEIT || undefined,
-          foundation: beschluss.GRUNDLAGE || undefined,
-        }));
-      }
-    }
-    return flow;
-  });
 
-  // Find old Procedure
-  const oldProcedure = await ProcedureModel.findOne({
-    procedureId: procedureData.vorgangId,
-  });
-
-  // take old voteDate if present (can come from ConferenceWeekDetails Scraper)
-  let voteDate = oldProcedure ? oldProcedure.voteDate : null;
-  // Conditions on which Procedure is voted upon
-  const btWithDecisions = history.filter(
-    ({ initiator, decision }: { initiator: any; decision: any }) =>
-      // Beschluss liegt vor
-      // TODO: decision should not be an array
-      (decision &&
-        decision.find(
-          ({ tenor }: any) =>
-            tenor ===
-              PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ABLEHNUNG ||
-            tenor ===
-              PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ANNAHME ||
-            tenor ===
-              PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ERLEDIGT
-          // ||            tenor ===
-          // PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR
-          //   .AUSSCHUSSFASSUNG_ANNAHME
-        )) ||
-      // Zurückgezogen
-      initiator ===
-        PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.RUECKNAHME_AMTLICH ||
-      initiator === PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.RUECKNAHME ||
-      initiator === PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.RUECKNAHME_VORLAGE
-  );
-  // Did we find a marker for voted Procedure?
-  if (btWithDecisions.length > 0) {
-    // Do not override the more accurate date form ConferenceWeekDetails Scraper
-    const historyDate = new Date(btWithDecisions.pop().date);
-    if (!voteDate || voteDate < historyDate) {
-      voteDate = historyDate;
-    }
+    // Write to DB
+    await ProcedureModel.update(
+      {
+        procedureId: procedureObj.procedureId,
+      },
+      { $set: _.pickBy(procedureObj) },
+      {
+        upsert: true,
+      }
+    );
+  } catch (e) {
+    console.log(`ERROR ${procedureData.vorgangId}`, e);
+    console.log(`ERROR ${procedureData.vorgangId}`, procedureData);
   }
-
-  // Construct Procedure Object
-  const procedureObj = {
-    procedureId: procedureData.vorgangId || undefined,
-    type: procedureData.VORGANG.VORGANGSTYP || undefined,
-    period: parseInt(procedureData.VORGANG.WAHLPERIODE, 10) || undefined,
-    title: procedureData.VORGANG.TITEL || undefined,
-    currentStatus: procedureData.VORGANG.AKTUELLER_STAND || undefined,
-    signature: procedureData.VORGANG.SIGNATUR || undefined,
-    gestOrderNumber: procedureData.VORGANG.GESTA_ORDNUNGSNUMMER || undefined,
-    approvalRequired: ensureArray(
-      procedureData.VORGANG.ZUSTIMMUNGSBEDUERFTIGKEIT
-    ),
-    euDocNr: procedureData.VORGANG.EU_DOK_NR || undefined,
-    abstract: procedureData.VORGANG.ABSTRAKT || undefined,
-    promulgation: ensureArray(procedureData.VORGANG.VERKUENDUNG),
-    legalValidity: ensureArray(procedureData.VORGANG.INKRAFTTRETEN),
-    tags: ensureArray(procedureData.VORGANG.SCHLAGWORT),
-    subjectGroups: ensureArray(procedureData.VORGANG.SACHGEBIET),
-    importantDocuments: ensureArray(
-      procedureData.VORGANG.WICHTIGE_DRUCKSACHE || []
-    ).map((doc) => ({
-      editor: doc.DRS_HERAUSGEBER,
-      number: doc.DRS_NUMMER,
-      type: doc.DRS_TYP,
-      url: doc.DRS_LINK,
-    })),
-    history,
-    voteDate,
-  };
-
-  // Write to DB
-  await ProcedureModel.update(
-    {
-      procedureId: procedureObj.procedureId,
-    },
-    { $set: _.pickBy(procedureObj) },
-    {
-      upsert: true,
-    }
-  ).catch((e) => {
-    console.log(`ERROR ${procedureObj.procedureId}`, e);
-    console.log(`ERROR ${procedureObj.procedureId}`, procedureObj);
-  });
 };
 
 let linksSum = 0;
