@@ -34,6 +34,10 @@ const ensureArray = <T = any>(element: T | T[]) => {
 
 const saveProcedure = async ({ procedureData }: { procedureData: any }) => {
   console.log("saveProcedure", procedureData.vorgangId);
+  if (procedureData.vorgangId === "254789") {
+    console.log("saveProcedure", procedureData);
+  }
+
   try {
     // Transform History
     let process = [];
