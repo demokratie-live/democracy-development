@@ -149,8 +149,11 @@ const saveProcedure = async ({ procedureData }: { procedureData: any }) => {
       voteDate,
     };
 
+    if (procedureData.vorgangId === "254789") {
+      console.log("procedure update", _.pickBy(procedureObj));
+    }
     // Write to DB
-    await ProcedureModel.update(
+    await ProcedureModel.updateOne(
       {
         procedureId: procedureObj.procedureId,
       },
@@ -158,7 +161,12 @@ const saveProcedure = async ({ procedureData }: { procedureData: any }) => {
       {
         upsert: true,
       }
-    );
+    ).catch((e) => {
+      console.log(`${procedureObj.procedureId} error`, e);
+    });
+    if (procedureData.vorgangId === "254789") {
+      console.log("procedure updated");
+    }
   } catch (e) {
     console.log(`ERROR ${procedureData.vorgangId}`, e);
     console.log(`ERROR ${procedureData.vorgangId}`, procedureData);
