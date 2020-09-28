@@ -80,6 +80,7 @@ const start = async () => {
             token,
           })
             .catch(async ({ error, response }) => {
+              console.log("android error", error, response);
               await PushNotificationModel.updateOne(
                 { _id },
                 { $set: { failure: JSON.stringify({ error, response }) } }
