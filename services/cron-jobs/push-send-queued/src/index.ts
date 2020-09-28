@@ -80,7 +80,7 @@ const start = async () => {
             token,
           })
             .catch(async ({ error, response }) => {
-              await PushNotificationModel.update(
+              await PushNotificationModel.updateOne(
                 { _id },
                 { $set: { failure: JSON.stringify({ error, response }) } }
               );
@@ -88,7 +88,7 @@ const start = async () => {
                 response.results &&
                 response.results[0].error === "NotRegistered"
               ) {
-                await DeviceModel.update(
+                await DeviceModel.updateOne(
                   {},
                   { $pull: { pushTokens: { token, os: PUSH_OS.ANDROID } } },
                   { multi: true }
@@ -118,7 +118,7 @@ const start = async () => {
           );
           if (sent.length === 0 && failed.length !== 0) {
             // Write failure to Database
-            await PushNotificationModel.update(
+            await PushNotificationModel.updateOne(
               { _id },
               { $set: { failure: JSON.stringify({ failed }) } }
             );
@@ -128,7 +128,7 @@ const start = async () => {
               (failed[0].response.reason === "DeviceTokenNotForTopic" ||
                 failed[0].response.reason === "BadDeviceToken")
             ) {
-              await DeviceModel.update(
+              await DeviceModel.updateOne(
                 {},
                 { $pull: { pushTokens: { token, os: PUSH_OS.IOS } } },
                 { multi: true }
