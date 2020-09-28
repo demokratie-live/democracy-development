@@ -86,6 +86,7 @@ const start = async () => {
                 { $set: { failure: JSON.stringify({ error, response }) } }
               );
               if (
+                response &&
                 response.results &&
                 response.results[0].error === "NotRegistered"
               ) {
