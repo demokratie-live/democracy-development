@@ -237,10 +237,6 @@ const start = async () => {
           ) !== -1
             ? "recommendedDecision"
             : "mainDocument";
-        console.log(
-          "customData.voteResults.votingDocument",
-          customData.voteResults.votingDocument
-        );
 
         votingRecommendationEntrys.forEach((votingRecommendationEntry) => {
           if (votingRecommendationEntry.abstract) {
