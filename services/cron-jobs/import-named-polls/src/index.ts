@@ -12,7 +12,6 @@ import {
 import {
   ProcedureModel,
   NamedPollModel,
-  getCron,
   setCronStart,
   setCronSuccess,
   setCronError,
@@ -23,11 +22,6 @@ const CRON_NAME = "NamedPolls";
 
 const start = async () => {
   const startDate = new Date();
-  const cron = await getCron({ name: CRON_NAME });
-  if (cron.running) {
-    console.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
-    return;
-  }
   await setCronStart({ name: CRON_NAME, startDate });
   try {
     await Scraper.scrape(new NamedPollScraper(), async (dataPackage: any) => {
@@ -237,9 +231,16 @@ const start = async () => {
           namedHistoryEntry?.comment?.search(
             PROCEDURE_DEFINITIONS.HISTORY.DECISION.COMMENT
               .FIND_BESCHLUSSEMPFEHLUNG_ABLEHNUNG
+          ) !== -1 ||
+          namedHistoryEntry?.tenor?.search(
+            PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ABLEHNUNG
           ) !== -1
             ? "recommendedDecision"
             : "mainDocument";
+        console.log(
+          "customData.voteResults.votingDocument",
+          customData.voteResults.votingDocument
+        );
 
         votingRecommendationEntrys.forEach((votingRecommendationEntry) => {
           if (votingRecommendationEntry.abstract) {
