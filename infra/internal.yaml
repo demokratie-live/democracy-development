@@ -692,7 +692,7 @@ spec:
                     configMapKeyRef:
                       key: DB_URL
                       name: bio-api-config-845h6mfg66
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-polls:0.1.1
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-polls:0.1.2
               name: import-named-polls
           imagePullSecrets:
             - name: regcred

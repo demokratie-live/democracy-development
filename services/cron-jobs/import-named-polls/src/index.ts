@@ -231,9 +231,6 @@ const start = async () => {
           namedHistoryEntry?.comment?.search(
             PROCEDURE_DEFINITIONS.HISTORY.DECISION.COMMENT
               .FIND_BESCHLUSSEMPFEHLUNG_ABLEHNUNG
-          ) !== -1 ||
-          namedHistoryEntry?.tenor?.search(
-            PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ABLEHNUNG
           ) !== -1
             ? "recommendedDecision"
             : "mainDocument";
@@ -257,6 +254,20 @@ const start = async () => {
             }
           }
         });
+
+        if (
+          procedures &&
+          procedures[0] &&
+          procedures[0].currentStatus === "Abgelehnt" &&
+          customData.voteResults.votingDocument === "mainDocument" &&
+          customData.voteResults.yes > customData.voteResults.no
+        ) {
+          // console.log(procedures);
+          console.log(procedureId, customData);
+          // Toggle Voting Document
+          customData.voteResults.votingDocument = "recommendedDecision";
+          console.log(procedureId, customData);
+        }
 
         await ProcedureModel.findOneAndUpdate({ procedureId }, { customData });
 
