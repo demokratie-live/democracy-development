@@ -747,7 +747,7 @@ spec:
               envFrom:
                 - configMapRef:
                     name: import-procedures-config-cf82b766d2
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.11
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.13
               name: import-procedures
           imagePullSecrets:
             - name: regcred
@@ -815,6 +815,7 @@ spec:
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
+      activeDeadlineSeconds: 300
       backoffLimit: 0
       template:
         spec:
@@ -841,7 +842,7 @@ spec:
           imagePullSecrets:
             - name: regcred
           restartPolicy: Never
-  schedule: "*/5 8-20 * * *"
+  schedule: "*/1 8-20 * * *"
 ---
 apiVersion: batch/v1beta1
 kind: CronJob

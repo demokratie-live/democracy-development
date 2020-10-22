@@ -9,6 +9,7 @@ import diffHistory from "mongoose-diff-history/diffHistory";
 import ProcessFlow, { IProcessFlow } from "./Procedure/ProcessFlow";
 import Document, { IDocument } from "./Procedure/Document";
 import PartyVotes, { IPartyVotes } from "./Procedure/PartyVotes";
+import PlenumSchema from "./Procedure/Plenum";
 
 enum VotingDocument {
   MainDocument = "mainDocument",
@@ -85,6 +86,7 @@ const ProcedureSchema = new Schema(
         },
       },
     },
+    initiative: [String],
     currentStatus: String,
     signature: String,
     gestOrderNumber: String,
@@ -115,6 +117,7 @@ const ProcedureSchema = new Schema(
       },
     ],
     importantDocuments: [Document],
+    plenums: [PlenumSchema],
     history: {
       type: [ProcessFlow],
       default: undefined,

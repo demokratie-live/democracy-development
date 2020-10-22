@@ -752,7 +752,7 @@ spec:
               envFrom:
                 - configMapRef:
                     name: import-procedures-config-fc77mfbcbk
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.11
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.13
               name: import-procedures
           imagePullSecrets:
             - name: regcred

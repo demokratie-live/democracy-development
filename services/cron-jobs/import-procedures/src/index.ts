@@ -34,9 +34,6 @@ const ensureArray = <T = any>(element: T | T[]) => {
 
 const saveProcedure = async ({ procedureData }: { procedureData: any }) => {
   console.log("saveProcedure", procedureData.vorgangId);
-  if (procedureData.vorgangId === "254789") {
-    console.log("saveProcedure", procedureData);
-  }
 
   try {
     // Transform History
@@ -119,12 +116,19 @@ const saveProcedure = async ({ procedureData }: { procedureData: any }) => {
       }
     }
 
+    const initiative = !procedureData.VORGANG.INITIATIVE
+      ? []
+      : typeof procedureData.VORGANG.INITIATIVE === "string"
+      ? [procedureData.VORGANG.INITIATIVE]
+      : procedureData.VORGANG.INITIATIVE;
+
     // Construct Procedure Object
     const procedureObj = {
       procedureId: procedureData.vorgangId || undefined,
       type: procedureData.VORGANG.VORGANGSTYP || undefined,
       period: parseInt(procedureData.VORGANG.WAHLPERIODE, 10) || undefined,
       title: procedureData.VORGANG.TITEL || undefined,
+      initiative,
       currentStatus: procedureData.VORGANG.AKTUELLER_STAND || undefined,
       signature: procedureData.VORGANG.SIGNATUR || undefined,
       gestOrderNumber: procedureData.VORGANG.GESTA_ORDNUNGSNUMMER || undefined,
@@ -145,6 +149,15 @@ const saveProcedure = async ({ procedureData }: { procedureData: any }) => {
         type: doc.DRS_TYP,
         url: doc.DRS_LINK,
       })),
+      plenums: ensureArray(procedureData.VORGANG.PLENUM || []).map(
+        (plenum) => ({
+          type: plenum.PLPR_KLARTEXT,
+          editor: plenum.PLPR_HERAUSGEBER,
+          number: plenum.PLPR_NUMMER,
+          pages: plenum.PLPR_SEITEN,
+          link: plenum.PLPR_LINK,
+        })
+      ),
       history,
       voteDate,
     };
