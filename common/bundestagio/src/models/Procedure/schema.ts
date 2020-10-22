@@ -158,7 +158,8 @@ ProcedureSchema.index({
   "importantDocuments.type": 1,
 });
 
-ProcedureSchema.plugin(diffHistory.plugin, { omit: ["updatedAt"] });
+// https://github.com/demokratie-live/democracy-client/issues/1340
+// ProcedureSchema.plugin(diffHistory.plugin, { omit: ["updatedAt"] });
 ProcedureSchema.plugin(mongoosastic, { host: process.env.ELASTICSEARCH_URL });
 
 export default ProcedureSchema;

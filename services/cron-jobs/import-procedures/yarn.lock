@@ -9,10 +9,10 @@
   dependencies:
     typescript "^3.7.2"
 
-"@democracy-deutschland/bundestagio-common@0.1.12":
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bundestagio-common/-/bundestagio-common-0.1.12.tgz#194c727721cdde3e0c387009356bc6c24426731c"
-  integrity sha512-HxcXc5vO2AAQQID5UD5a+YyD333eNf1tcTzzWXtoRjD4m9MR3uk+FLo6ZS1zVvAgLlvCJneOseu+o+r+b0pZZg==
+"@democracy-deutschland/bundestagio-common@0.1.13":
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bundestagio-common/-/bundestagio-common-0.1.13.tgz#4960c13f0d6899e26c8397ae40020b1a36a80491"
+  integrity sha512-kih6RghgeLMzrfzQrpXX/AM0DmYQXNkAsP5jupjAx07SkAU1vu7xHqHtMko2Z81/4STrgziry1198RFKrPQG/w==
   dependencies:
     "@democracy-deutschland/bundestag.io-definitions" "^1.0.2"
     "@types/cron" "^1.7.2"
