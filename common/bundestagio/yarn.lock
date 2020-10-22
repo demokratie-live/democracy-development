@@ -49,10 +49,10 @@
     "@types/bson" "*"
     "@types/node" "*"
 
-"@types/mongoose@^5.7.28":
-  version "5.7.31"
-  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.7.31.tgz#1076167766aa33733563746b9b67ff5fdb761825"
-  integrity sha512-pC9CHR/gjAbGDC4NUNkJh4+EpDhoCNkSOA8a017wltorOwpqGu674nGdxGn1aP2w/DsRrSRtdrrwZnUaTmzRkQ==
+"@types/mongoose@^5.7.36":
+  version "5.7.36"
+  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.7.36.tgz#2dae28c63041c6afba8a83ea02969f463b3f1021"
+  integrity sha512-ggFXgvkHgCNlT35B9d/heDYfSqOSwTmQjkRoR32sObGV5Xjd0N0WWuYlLzqeCg94j4hYN/OZxZ1VNNLltX/IVQ==
   dependencies:
     "@types/mongodb" "*"
     "@types/node" "*"
@@ -97,10 +97,10 @@ ansi-styles@^4.1.0:
     "@types/color-name" "^1.1.1"
     color-convert "^2.0.1"
 
-bl@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/bl/-/bl-2.2.0.tgz#e1a574cdf528e4053019bb800b041c0ac88da493"
-  integrity sha512-wbgvOpqopSr7uq6fJrLH8EsvYMJf9gzfo2jCsL2eTy75qXPukA4pCgHamOQkZtY5vmfVtjB+P3LNlMHW5CEZXA==
+bl@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/bl/-/bl-2.2.1.tgz#8c11a7b730655c5d56898cdc871224f40fd901d5"
+  integrity sha512-6Pesp1w0DEX1N550i/uGV/TqucVL4AM/pgThFSN/Qq9si1/DF9aIHs1BxD8V/QU0HoeHO6cQRTAuYnLPKq1e4g==
   dependencies:
     readable-stream "^2.3.5"
     safe-buffer "^5.1.1"
@@ -420,12 +420,12 @@ moment-timezone@^0.5.x:
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
   integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
 
-mongodb@3.5.9:
-  version "3.5.9"
-  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.5.9.tgz#799b72be8110b7e71a882bb7ce0d84d05429f772"
-  integrity sha512-vXHBY1CsGYcEPoVWhwgxIBeWqP3dSu9RuRDsoLRPTITrcrgm1f0Ubu1xqF9ozMwv53agmEiZm0YGo+7WL3Nbug==
+mongodb@3.6.2:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.6.2.tgz#1154a4ac107bf1375112d83a29c5cf97704e96b6"
+  integrity sha512-sSZOb04w3HcnrrXC82NEh/YGCmBuRgR+C1hZgmmv4L6dBz4BkRse6Y8/q/neXer9i95fKUBbFi4KgeceXmbsOA==
   dependencies:
-    bl "^2.2.0"
+    bl "^2.2.1"
     bson "^1.1.4"
     denque "^1.4.1"
     require_optional "^1.0.1"
@@ -462,14 +462,14 @@ mongoose-legacy-pluralize@1.0.2:
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
-mongoose@^5.9.20:
-  version "5.9.24"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.9.24.tgz#ba7f95529da8fa2160d9b4d708b3fe9856c56636"
-  integrity sha512-uxTLy/ExYmOfKvvbjn1PHbjSJg0SQzff+dW6jbnywtbBcfPRC/3etnG9hPv6KJe/5TFZQGxCyiSezkqa0+iJAQ==
+mongoose@^5.10.9:
+  version "5.10.9"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.10.9.tgz#23b74debc86d2055cee4fe77f962a9c8a286cdad"
+  integrity sha512-7dkr1d6Uyk87hELzoc6B7Zo7kkPTx8rKummk51Y0je2V2Ttsw0KFPwTp1G8JIbBta7Wpw8j15PJi0d33Ode2nw==
   dependencies:
     bson "^1.1.4"
     kareem "2.3.1"
-    mongodb "3.5.9"
+    mongodb "3.6.2"
     mongoose-legacy-pluralize "1.0.2"
     mpath "0.7.0"
     mquery "3.2.2"
@@ -662,10 +662,10 @@ ts-mongoose@^0.0.21:
   resolved "https://registry.yarnpkg.com/ts-mongoose/-/ts-mongoose-0.0.21.tgz#8be3769863e89919da8020351855726d09f7126a"
   integrity sha512-pbRN2JJY9N7Z5ehyMo6PJ7hlftRdELzO5nh/XvS1y31TDbeefc/GjM7C7jWb6ESZz+KlOmYDUpAT/L8i4wFbmQ==
 
-ts-unused-exports@^6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/ts-unused-exports/-/ts-unused-exports-6.2.1.tgz#6fed6f48b3253a906b6c9b90fbebab669430af2e"
-  integrity sha512-6F87xA/RouSyKFIISv1T/uNgL59usE4le0eBk+JQWfZBUax4vWG2yqSYdcw3viUK3emkCzJSII5dmYc1SNZjng==
+ts-unused-exports@^6.2.4:
+  version "6.2.4"
+  resolved "https://registry.yarnpkg.com/ts-unused-exports/-/ts-unused-exports-6.2.4.tgz#26aae7be4c8574180b0dbd1ce0c33f8f924f9700"
+  integrity sha512-hBAJNwMZsKKSMSXhBdRgIqf2IVV/FGshHXbF2psyn3WbNSAaDLUqf2pEQNRZP7qVAGf+wfLdMdSkCFZxFQuUbA==
   dependencies:
     chalk "^3.0.0"
     tsconfig-paths "^3.9.0"

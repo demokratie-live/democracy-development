@@ -55,10 +55,10 @@ metadata:
 apiVersion: v1
 data:
   PERIODS: "[19]"
-  SCRAPER_USER_AGEND: DEMOCRACY_PRODUCTION
+  SCRAPER_USER_AGEND: DEMOCRACY_DEUTSCHLAND_PRODUCTION
 kind: ConfigMap
 metadata:
-  name: import-procedures-config-fc77mfbcbk
+  name: import-procedures-config-26t4t6h5dc
   namespace: democracy-production
 ---
 apiVersion: v1
@@ -751,8 +751,8 @@ spec:
                       name: bio-api-config-g6kg6gtgct
               envFrom:
                 - configMapRef:
-                    name: import-procedures-config-fc77mfbcbk
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.13
+                    name: import-procedures-config-26t4t6h5dc
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.14
               name: import-procedures
           imagePullSecrets:
             - name: regcred

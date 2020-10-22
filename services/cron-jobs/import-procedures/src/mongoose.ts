@@ -4,7 +4,7 @@ export default () =>
   new Promise(async (resolve, reject) => {
     mongoose.set("useFindAndModify", false);
     // Mongo Debug
-    mongoose.set("debug", false);
+    mongoose.set("debug", true);
 
     mongoose.connect(process.env.DB_URL!, {
       useNewUrlParser: true,
