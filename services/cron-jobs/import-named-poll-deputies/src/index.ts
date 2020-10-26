@@ -5,7 +5,6 @@ import { NamedPollDeputyScraper } from "@democracy-deutschland/scapacra-bt";
 
 import {
   NamedPollModel,
-  getCron,
   setCronStart,
   setCronSuccess,
   setCronError,
@@ -15,11 +14,6 @@ const CRON_NAME = "NamedPollsDeputies";
 
 const start = async () => {
   const startDate = new Date();
-  const cron = await getCron({ name: CRON_NAME });
-  if (cron.running) {
-    console.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
-    return;
-  }
   await setCronStart({ name: CRON_NAME, startDate });
   try {
     await Scraper.scrape(

@@ -6,7 +6,6 @@ import {
   DeviceModel,
   PUSH_TYPE,
   PUSH_CATEGORY,
-  getCron,
   setCronStart,
   setCronSuccess,
   queuePushs,
@@ -27,11 +26,6 @@ const start = async () => {
 
   const CRON_NAME = "queuePushsVoteTop100";
   const startDate = new Date();
-  const cron = await getCron({ name: CRON_NAME });
-  if (cron.running) {
-    console.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
-    return;
-  }
   await setCronStart({ name: CRON_NAME, startDate });
   let counter = 0;
 

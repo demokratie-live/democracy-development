@@ -328,7 +328,7 @@ spec:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
                       name: democracy-api-config-mg5b2dd2d5
-              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-deputy-profiles:0.1.5
+              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-deputy-profiles:0.1.6
               name: democracy-sync-deputy-profiles
           imagePullSecrets:
             - name: regcred
@@ -358,7 +358,7 @@ spec:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
                       name: democracy-api-config-mg5b2dd2d5
-              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls:0.1.7
+              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls:0.1.8
               name: democracy-sync-named-polls
           imagePullSecrets:
             - name: regcred
@@ -388,7 +388,7 @@ spec:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
                       name: democracy-api-config-mg5b2dd2d5
-              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.12
+              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.13
               name: democracy-sync-procedures
           imagePullSecrets:
             - name: regcred
@@ -463,7 +463,7 @@ spec:
                     configMapKeyRef:
                       key: DB_URL
                       name: bio-api-config-b9m4dc95m9
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-poll-deputies:0.1.0
+              image: docker.pkg.github.com/demokratie-live/democracy-development/import-named-poll-deputies:0.1.1
               name: import-named-poll-deputies
           imagePullSecrets:
             - name: regcred
@@ -687,7 +687,7 @@ spec:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
                       name: democracy-api-config-mg5b2dd2d5
-              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-conference-week:0.1.1
+              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-conference-week:0.1.3
               name: queue-pushs-vote-conference-week
           imagePullSecrets:
             - name: regcred
@@ -717,7 +717,7 @@ spec:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
                       name: democracy-api-config-mg5b2dd2d5
-              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100:0.1.3
+              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100:0.1.4
               name: queue-pushs-vote-top-100
           imagePullSecrets:
             - name: regcred

@@ -264,10 +264,6 @@ const start = async () => {
   // New SuccessStartDate
   const startDate = new Date();
   const cron = await getCron({ name: CRON_NAME });
-  if (cron.running) {
-    console.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
-    return;
-  }
   await setCronStart({ name: CRON_NAME, startDate });
   // Last SuccessStartDate
   let since: Date = new Date("1900");
