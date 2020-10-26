@@ -873,7 +873,7 @@ spec:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
                       name: democracy-api-config-79dd65kdgd
-              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week:0.1.4
+              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-conference-week:0.1.5
               name: queue-pushs-conference-week
           imagePullSecrets:
             - name: regcred

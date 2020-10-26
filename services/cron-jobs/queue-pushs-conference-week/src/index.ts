@@ -7,7 +7,6 @@ import {
   Device,
   PUSH_TYPE,
   PUSH_CATEGORY,
-  getCron,
   setCronStart,
   setCronSuccess,
   queuePushs,
@@ -22,12 +21,7 @@ const start = async () => {
 
   const CRON_NAME = "queuePushsConferenceWeek";
   const startDate = new Date();
-  const cron = await getCron({ name: CRON_NAME });
   let counter = 0;
-  if (cron.running) {
-    console.error(`[Cronjob][${CRON_NAME}] running still - skipping`);
-    return;
-  }
   await setCronStart({ name: CRON_NAME, startDate });
   // Find coresponding Procedures
   const startOfWeek = moment().startOf("week").toDate(); // Should be So
