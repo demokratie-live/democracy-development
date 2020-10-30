@@ -7,6 +7,7 @@ import { xml2js } from 'xml-js';
 import axios from 'axios';
 import PROCEDURE_STATES from '../../config/procedureStates';
 import { IProcedure } from '@democracy-deutschland/bundestagio-common/dist/models/Procedure/schema';
+import { ConferenceWeekDetailModel } from '@democracy-deutschland/bundestagio-common';
 
 const deputiesNumber = {
   19: {
@@ -193,8 +194,25 @@ const ProcedureResolvers: Resolvers = {
         const axiosInstance = axios.create();
         const date = procedure.voteDate;
 
+        const conferenceWeekDetail = await ConferenceWeekDetailModel.findOne({
+          'sessions.date': {
+            $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+            $lte: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
+          },
+        });
+
+        const session = conferenceWeekDetail.sessions.find((s) => {
+          if (s.date.getDate() === date.getDate()) {
+            return true;
+          }
+          return false;
+        });
+
+        if (!session) {
+          return null;
+        }
         const plenaryMinute = await PlenaryMinuteModel.findOne({
-          date: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+          meeting: parseInt(session.session),
         });
 
         if (plenaryMinute) {
