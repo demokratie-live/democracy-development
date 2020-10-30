@@ -8,7 +8,7 @@ import { MetaData, PlenaryMinutesItem } from "./types";
 
 const AxiosInstance = axios.create();
 
-const getMeta = (meta: Cheerio): MetaData => {
+const getMeta = (meta: cheerio.Cheerio): MetaData => {
   let hits: number;
   let nextOffset: number;
   let staticItemCount: number;
@@ -30,7 +30,9 @@ const getMeta = (meta: Cheerio): MetaData => {
   };
 };
 
-const getPlenaryMinutes = (plenaryMinutes: Cheerio): PlenaryMinutesItem[] => {
+const getPlenaryMinutes = (
+  plenaryMinutes: cheerio.Cheerio
+): PlenaryMinutesItem[] => {
   const plenaryMinutesItems: PlenaryMinutesItem[] = [];
   plenaryMinutes.each((i, elem) => {
     // Parse Title
@@ -60,8 +62,10 @@ const parsePage = async (url: string) => {
   return await AxiosInstance.get(url).then((response) => {
     const html = response.data;
     const $ = cheerio.load(html);
-    const meta: Cheerio = $(".meta-slider");
-    const plenaryMinutesTable: Cheerio = $(".bt-table-data > tbody > tr");
+    const meta: cheerio.Cheerio = $(".meta-slider");
+    const plenaryMinutesTable: cheerio.Cheerio = $(
+      ".bt-table-data > tbody > tr"
+    );
     const metaData = getMeta(meta);
     const plenaryMinutes = getPlenaryMinutes(plenaryMinutesTable);
     return {
