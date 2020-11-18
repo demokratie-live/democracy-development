@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.40
+
+- [Fix] Vote Result helper
+
 ### 0.1.39
 
 - [Fix] Decouple import confernece week details

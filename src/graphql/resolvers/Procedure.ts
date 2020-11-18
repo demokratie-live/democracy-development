@@ -190,6 +190,7 @@ const ProcedureResolvers: Resolvers = {
           return prev;
         }, []);
       };
+
       if (procedure) {
         const axiosInstance = axios.create();
         const date = procedure.voteDate;
@@ -239,15 +240,16 @@ const ProcedureResolvers: Resolvers = {
                 results: [
                   output[line - 1],
                   output[line],
-                  output[line + 1],
-                  output[line + 2],
-                  output[line + 3],
-                  output[line + 4],
-                  output[line + 5],
+                  output[line + 1] || '',
+                  output[line + 2] || '',
+                  output[line + 3] || '',
+                  output[line + 4] || '',
+                  output[line + 5] || '',
                 ],
               },
             ];
           }, []);
+
           return outputLines;
         }
         return null;
