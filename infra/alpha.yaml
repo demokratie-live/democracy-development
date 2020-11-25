@@ -287,7 +287,7 @@ spec:
             - secretRef:
                 name: bio-api-secrets
                 optional: true
-          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.39-dev
+          image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.40-dev
           livenessProbe:
             httpGet:
               path: /.well-known/apollo/server-health
@@ -333,7 +333,7 @@ spec:
             - secretRef:
                 name: democracy-api-secrets
                 optional: true
-          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.31-dev
+          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.32-dev
           livenessProbe:
             httpGet:
               path: /.well-known/apollo/server-health
