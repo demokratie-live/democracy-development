@@ -112,7 +112,7 @@ const start = async () => {
         }
 
         // Insert Data
-        forEachSeries(Object.keys(updates), async (deputyWebId) => {
+        await forEachSeries(Object.keys(updates), async (deputyWebId) => {
           // TODO try to update deputy without fetching. z.B. with aggregation setUnion
           const deputy = await DeputyModel.findOne({ webId: deputyWebId });
           if (deputy) {

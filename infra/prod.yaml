@@ -562,7 +562,7 @@ spec:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
                       name: democracy-api-config-79dd65kdgd
-              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls:0.1.8
+              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-named-polls:0.1.9
               name: democracy-sync-named-polls
           imagePullSecrets:
             - name: regcred
