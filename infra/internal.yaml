@@ -588,7 +588,7 @@ spec:
                     configMapKeyRef:
                       key: BUNDESTAGIO_SERVER_URL
                       name: democracy-api-config-m9h7757h27
-              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.13
+              image: docker.pkg.github.com/demokratie-live/democracy-development/sync-procedures:0.1.14
               name: democracy-sync-procedures
           imagePullSecrets:
             - name: regcred

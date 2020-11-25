@@ -275,7 +275,7 @@ const start = async () => {
   // Query Bundestag.io
   try {
     const client = createClient();
-    const limit = 50;
+    const limit = 25;
     let offset = 0;
     let done = false;
     while (!done) {
