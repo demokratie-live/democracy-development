@@ -20,5 +20,8 @@ configMapGenerator:
   - name: import-procedures-config
     envs:
       - import-procedures.env
+  - name: qr-code-handler-config
+    envs:
+      - qr-code-handler.env
 
 namespace: democracy-alpha
