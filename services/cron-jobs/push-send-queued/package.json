@@ -20,8 +20,10 @@
     "p-iteration": "^1.1.8"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/node-gcm": "^1.0.0",
     "apollo": "^2.28.3",
+    "dotenv": "^8.2.0",
     "ts-node-dev": "^1.0.0-pre.49",
     "ts-unused-exports": "^6.2.1",
     "typescript": "^3.9.5"

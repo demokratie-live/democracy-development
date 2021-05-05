@@ -1,5 +1,6 @@
 import apn from "apn";
 import apnProvider from "./iOSProvicer";
+import { APN_TOPIC } from "./utils/config";
 
 // Send single iOS notification
 export const push = ({
@@ -27,7 +28,7 @@ export const push = ({
 
   data.sound = "push.aiff";
 
-  data.topic = process.env.APN_TOPIC!;
+  data.topic = APN_TOPIC!;
   data.payload = payload;
 
   // Do the sending

@@ -1,9 +1,15 @@
 import apn from "apn";
+import {
+  APPLE_APN_KEY,
+  APPLE_APN_KEY_ID,
+  APPLE_TEAMID,
+  NODE_ENV,
+} from "./utils/config";
 
-const key = process.env.APPLE_APN_KEY!;
-const keyId = process.env.APPLE_APN_KEY_ID!;
-const teamId = process.env.APPLE_TEAMID!;
-const production = process.env.NODE_ENV === "production";
+const key = APPLE_APN_KEY!;
+const keyId = APPLE_APN_KEY_ID!;
+const teamId = APPLE_TEAMID!;
+const production = NODE_ENV === "production";
 
 const apnProvider = () => {
   if (!key) {

@@ -1,5 +1,13 @@
 import mongoConnect from "./mongoose";
-
+import {
+  APN_TOPIC,
+  APPLE_APN_KEY,
+  APPLE_APN_KEY_ID,
+  APPLE_TEAMID,
+  CRON_SEND_QUED_PUSHS_LIMIT,
+  DB_URL,
+  NOTIFICATION_ANDROID_SERVER_KEY,
+} from "./utils/config";
 import {
   ProcedureModel,
   DeviceModel,
@@ -13,10 +21,6 @@ import {
 import { push as pushIOS } from "./iOS";
 import { push as pushAndroid } from "./Android";
 import { forEachSeries } from "p-iteration";
-
-const CRON_SEND_QUED_PUSHS_LIMIT = process.env.CRON_SEND_QUED_PUSHS_LIMIT
-  ? parseInt(process.env.CRON_SEND_QUED_PUSHS_LIMIT, 10)
-  : 1000;
 
 const start = async () => {
   const CRON_NAME = "sendQueuedPushs";
@@ -171,26 +175,23 @@ const start = async () => {
 
 (async () => {
   console.info("START");
-  console.info(
-    "process.env",
-    process.env.BUNDESTAGIO_SERVER_URL,
-    process.env.DB_URL
-  );
+  console.info("process.env", DB_URL);
   if (
-    !process.env.BUNDESTAGIO_SERVER_URL ||
-    !process.env.DB_URL ||
-    !process.env.APN_TOPIC ||
-    !process.env.APPLE_APN_KEY ||
-    !process.env.APPLE_APN_KEY_ID ||
-    !process.env.APPLE_TEAMID ||
-    !process.env.NOTIFICATION_ANDROID_SERVER_KEY
+    !DB_URL ||
+    !APN_TOPIC ||
+    !APPLE_APN_KEY ||
+    !APPLE_APN_KEY_ID ||
+    !APPLE_TEAMID ||
+    !NOTIFICATION_ANDROID_SERVER_KEY
   ) {
     throw new Error(
-      "you have to set environment variable: BUNDESTAGIO_SERVER_URL & DB_URL & APN_TOPIC & APPLE_APN_KEY & APPLE_APN_KEY_ID & APPLE_TEAMID & NOTIFICATION_ANDROID_SERVER_KEY"
+      "you have to set environment variable: DB_URL & APN_TOPIC & APPLE_APN_KEY & APPLE_APN_KEY_ID & APPLE_TEAMID & NOTIFICATION_ANDROID_SERVER_KEY"
     );
   }
   await mongoConnect();
   console.log("procedures", await ProcedureModel.countDocuments({}));
-  await start().catch(() => process.exit(1));
+  await start().catch((e) => {
+    throw e;
+  });
   process.exit(0);
 })();
