@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gorush
-  namespace: gorush
+  # namespace: gorush
 spec:
-  replicas: 3
+  # replicas: 1
   selector:
     matchLabels:
       app: gorush
@@ -40,15 +40,23 @@ spec:
                   key: stat.redis.host
           volumeMounts:
             - name: ios-push-secret-vol
-              mountPath: /data/ssl/apns-crt.pem
-              subPath: apns-crt.pem
+              mountPath: /data/ssl/AuthKey_WKG6X45GSC.p8
+              subPath: AuthKey_WKG6X45GSC.p8
               readOnly: true
+            - name: gorush-config-file-vol
+              mountPath: /config.yml
+              readOnly: true
+              subPath: config.yml
       volumes:
+        - name: gorush-config-file-vol
+          configMap:
+            name: gorush-config-yml
+            items:
+              - key: gorush-config.yaml
+                path: config.yml
         - name: ios-push-secret-vol
           secret:
             secretName: ios-push-secret
             items:
-              - key: ios-push-rsa-key
-                path: apns-crt.rsa
-              - key: ios-push-pem-key
-                path: apns-crt.pem
+              - key: AuthKey_WKG6X45GSC.p8
+                path: AuthKey_WKG6X45GSC.p8

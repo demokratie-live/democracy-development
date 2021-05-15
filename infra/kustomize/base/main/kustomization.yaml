@@ -1,25 +1,25 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - bundestagio-admin-depl.yaml
-  - bundestagio-depl.yaml
+  # - bundestagio-admin-depl.yaml
+  # - bundestagio-depl.yaml
   - democracy-api-depl.yaml
-  - democracy-app-depl.yaml
-  - nats-depl.yaml
-  - democracy-sync-procedures-cronjob.yaml
-  - democracy-sync-named-polls-cronjob.yaml
-  - democracy-sync-deputy-profiles.yaml
-  - queue-pushs-conference-week.yaml
-  - queue-pushs-vote-conference-week.yaml
-  - queue-pushs-vote-top-100.yaml
-  - push-send-queued.yaml
-  - import-procedures.yaml
-  - import-conference-week-details.yaml
-  - import-deputy-profiles.yaml
-  - import-named-polls.yaml
-  - import-plenary-minutes.yaml
-  - import-named-poll-deputies.yaml
-  - shedule-bio-resync.yaml
-  - index-sync-democracy.yaml
-  - index-sync-bundestagio.yaml
-  - qr-code-handler-depl.yaml
+  # - democracy-app-depl.yaml
+  # - nats-depl.yaml
+  # - democracy-sync-procedures-cronjob.yaml
+  # - democracy-sync-named-polls-cronjob.yaml
+  # - democracy-sync-deputy-profiles.yaml
+  # - queue-pushs-conference-week.yaml
+  # - queue-pushs-vote-conference-week.yaml
+  # - queue-pushs-vote-top-100.yaml
+  # - push-send-queued.yaml
+  # - import-procedures.yaml
+  # - import-conference-week-details.yaml
+  # - import-deputy-profiles.yaml
+  # - import-named-polls.yaml
+  # - import-plenary-minutes.yaml
+  # - import-named-poll-deputies.yaml
+  # - shedule-bio-resync.yaml
+  # - index-sync-democracy.yaml
+  # - index-sync-bundestagio.yaml
+  # - qr-code-handler-depl.yaml

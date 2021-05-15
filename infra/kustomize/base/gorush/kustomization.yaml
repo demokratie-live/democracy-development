@@ -3,7 +3,12 @@ kind: Kustomization
 resources:
   - gorush-configmap.yaml
   - gorush-deployment.yaml
-  - gorush-namespace.yaml
+  # - gorush-namespace.yaml
   - gorush-redis-deployment.yaml
   - gorush-redis-service.yaml
   - gorush-service.yaml
+
+configMapGenerator:
+  - name: gorush-config-yml
+    files:
+      - gorush-config.yaml
