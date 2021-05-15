@@ -38,3 +38,17 @@ spec:
                 configMapKeyRef:
                   name: gorush-config
                   key: stat.redis.host
+          volumeMounts:
+            - name: ios-push-secret-vol
+              mountPath: /data/ssl/apns-crt.pem
+              subPath: apns-crt.pem
+              readOnly: true
+      volumes:
+        - name: ios-push-secret-vol
+          secret:
+            secretName: ios-push-secret
+            items:
+              - key: ios-push-rsa-key
+                path: apns-crt.rsa
+              - key: ios-push-pem-key
+                path: apns-crt.pem

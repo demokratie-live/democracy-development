@@ -6,3 +6,4 @@ resources:
   - gorush-namespace.yaml
   - gorush-redis-deployment.yaml
   - gorush-redis-service.yaml
+  - gorush-service.yaml

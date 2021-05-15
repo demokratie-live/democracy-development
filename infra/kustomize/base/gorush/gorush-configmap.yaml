@@ -7,3 +7,10 @@ data:
   # stat
   stat.engine: redis
   stat.redis.host: redis:6379
+  gorush-config-file: |
+    core:
+      enabled: true
+      mode: "release"
+      port: "8088"
+      max_notification: 1000
+      sync: false
