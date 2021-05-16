@@ -165,7 +165,12 @@ const start = async () => {
     );
   }
   await mongoConnect();
-  console.log("procedures", await ProcedureModel.countDocuments({}));
+  const devices = await DeviceModel.countDocuments({
+    "notificationSettings.enabled": true,
+    "notificationSettings.voteTOP100Pushs": true,
+    pushTokens: { $gt: [] },
+  });
+  console.info("devices with top 100 push", devices);
   await start().catch(() => process.exit(1));
   process.exit(0);
 })();
