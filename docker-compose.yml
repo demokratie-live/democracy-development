@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - mongodb:/data/db
+      - mongodb_config:/data/configdb
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME:
+      MONGO_INITDB_ROOT_PASSWORD:
+
+volumes:
+  mongodb:
+  mongodb_config:
