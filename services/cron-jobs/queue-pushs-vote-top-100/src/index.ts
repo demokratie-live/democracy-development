@@ -72,6 +72,17 @@ const start = async () => {
       // eslint-disable-next-line no-loop-func
       async (device) => {
         let voted = null;
+
+        const pastPushs = await PushNotificationModel.countDocuments({
+          token: { $in: device.pushTokens.map(({ token }) => token) },
+          category: "top100",
+          message: procedure.title,
+        });
+
+        if (pastPushs > 0) {
+          return true;
+        }
+
         // Check if device is associcated with a vote on the procedure
         const user = await UserModel.findOne({
           device: device._id,
