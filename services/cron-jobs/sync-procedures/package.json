@@ -4,7 +4,7 @@
   "main": "build/index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev ./src/index",
+    "dev": "ts-node-dev -r dotenv/config ./src/index",
     "lint": "tsc --noEmit",
     "build": "tsc",
     "start": "node ./build/index.js",
@@ -24,8 +24,10 @@
     "p-iteration": "^1.1.8"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/lodash": "^4.14.157",
     "apollo": "^2.28.3",
+    "dotenv": "^9.0.2",
     "ts-node-dev": "^1.0.0-pre.51",
     "typescript": "^3.9.6"
   }
