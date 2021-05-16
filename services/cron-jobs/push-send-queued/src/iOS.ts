@@ -1,9 +1,7 @@
-import apn from "apn";
-import apnProvider from "./iOSProvicer";
-import { APN_TOPIC } from "./utils/config";
+import axios from "axios";
 
 // Send single iOS notification
-export const push = ({
+export const push = async ({
   title,
   message,
   payload,
@@ -13,26 +11,33 @@ export const push = ({
   message: string;
   payload: any;
   token: string;
-}): Promise<apn.Responses> => {
-  // Check if Sending Interface is present
-  if (!apnProvider) {
-    throw new Error("ERROR: apnProvider not present");
+}) => {
+  const { data } = await axios.post(`${process.env.GORUSH_URL}/api/push`, {
+    notifications: [
+      {
+        tokens: [token],
+        platform: 1,
+        title,
+        message,
+        topic: process.env.APNS_TOPIC,
+        badge: 0,
+        development: process.env.NODE_ENV === "development",
+        data: {
+          ...payload,
+        },
+        sound: {
+          name: "push.aiff",
+        },
+      },
+    ],
+  });
+  console.log(data.logs);
+  if (data.logs[0]) {
+    return {
+      sent: false,
+      errors: data.logs.map(({ error }: { error: string }) => error),
+    };
   }
 
-  // Construct Data Object
-  const data = new apn.Notification();
-  data.alert = {
-    title,
-    body: message,
-  };
-
-  data.sound = "push.aiff";
-
-  data.topic = APN_TOPIC!;
-  data.payload = payload;
-
-  // Do the sending
-  return new Promise((resolve) => {
-    apnProvider!.send(data, token).then(resolve);
-  });
+  return { sent: true };
 };

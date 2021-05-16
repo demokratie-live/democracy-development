@@ -1,13 +1,5 @@
 import mongoConnect from "./mongoose";
-import {
-  APN_TOPIC,
-  APPLE_APN_KEY,
-  APPLE_APN_KEY_ID,
-  APPLE_TEAMID,
-  CRON_SEND_QUED_PUSHS_LIMIT,
-  DB_URL,
-  NOTIFICATION_ANDROID_SERVER_KEY,
-} from "./utils/config";
+import { CRON_SEND_QUED_PUSHS_LIMIT, DB_URL } from "./utils/config";
 import {
   ProcedureModel,
   DeviceModel,
@@ -74,7 +66,6 @@ const start = async () => {
         procedureIds,
       };
       // Send Pushs
-      console.log({ os });
       switch (os) {
         case PUSH_OS.ANDROID:
           await pushAndroid({
@@ -113,26 +104,23 @@ const start = async () => {
             .then(() => sentPushsCount++);
           break;
         case PUSH_OS.IOS:
-          const { sent, failed } = await pushIOS({
+          const { sent, errors } = await pushIOS({
             title,
             message,
             payload,
             token,
           });
-          console.info(
-            JSON.stringify({ type: "apnProvider.send", sent, failed })
-          );
-          if (sent.length === 0 && failed.length !== 0) {
-            // Write failure to Database
+          if (!sent) {
+            /* Write failure to Database */
             await PushNotificationModel.updateOne(
               { _id },
-              { $set: { failure: JSON.stringify({ failed }) } }
+              { $set: { failure: JSON.stringify({ errors }) } }
             );
-            // Remove broken Push tokens
+            /* Remove broken Push tokens */
             if (
-              failed[0].response &&
-              (failed[0].response.reason === "DeviceTokenNotForTopic" ||
-                failed[0].response.reason === "BadDeviceToken")
+              errors.some((error: string) =>
+                ["DeviceTokenNotForTopic", "BadDeviceToken"].includes(error)
+              )
             ) {
               await DeviceModel.updateOne(
                 {},
@@ -145,7 +133,7 @@ const start = async () => {
                 `[PUSH] IOS failure ${JSON.stringify({
                   token,
                   sent,
-                  failed,
+                  errors,
                 })}`
               );
             }
@@ -156,15 +144,13 @@ const start = async () => {
         default:
           console.error(`[PUSH] unknown Token-OS`);
       }
-      // Set sent = true
+      /* Set sent = true */
       await PushNotificationModel.updateOne(
         { _id },
         { $set: { sent: true } }
       ).then(() => {
         console.info("### Push sent");
       });
-      // Return id
-      return _id;
     }
   );
 
@@ -176,18 +162,6 @@ const start = async () => {
 (async () => {
   console.info("START");
   console.info("process.env", DB_URL);
-  if (
-    !DB_URL ||
-    !APN_TOPIC ||
-    !APPLE_APN_KEY ||
-    !APPLE_APN_KEY_ID ||
-    !APPLE_TEAMID ||
-    !NOTIFICATION_ANDROID_SERVER_KEY
-  ) {
-    throw new Error(
-      "you have to set environment variable: DB_URL & APN_TOPIC & APPLE_APN_KEY & APPLE_APN_KEY_ID & APPLE_TEAMID & NOTIFICATION_ANDROID_SERVER_KEY"
-    );
-  }
   await mongoConnect();
   console.log("procedures", await ProcedureModel.countDocuments({}));
   await start().catch((e) => {
