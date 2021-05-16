@@ -5,3 +5,5 @@
 node_modules
 infra/*.yaml
 /infra/kustomize/base/gorush/gorush-config.yaml
+configuration/certificates/*
+!.gitkeep

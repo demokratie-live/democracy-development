@@ -8,9 +8,27 @@ services:
       - mongodb_config:/data/configdb
     ports:
       - 27017:27017
+  gorush:
+    image: appleboy/gorush
+    restart: always
+    ports:
+      - "8088:8088"
+      - "9000:9000"
+    depends_on:
+      - "redis"
+    logging:
+      options:
+        max-size: "100k"
+        max-file: "3"
     environment:
-      MONGO_INITDB_ROOT_USERNAME:
-      MONGO_INITDB_ROOT_PASSWORD:
+      - GORUSH_CORE_QUEUE_NUM=512
+      - GORUSH_STAT_ENGINE=redis
+      - GORUSH_STAT_REDIS_ADDR=redis:6379
+    volumes:
+      - ./infra/kustomize/base/gorush/gorush-config.yaml:/config.yml
+      - ./configuration/certificates/AuthKey_WKG6X45GSC.p8:/data/ssl/AuthKey_WKG6X45GSC.p8
+  redis:
+    image: "redis:alpine"
 
 volumes:
   mongodb:
