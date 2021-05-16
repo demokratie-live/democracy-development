@@ -15,9 +15,9 @@ import {
 } from "@democracy-deutschland/democracy-common";
 
 import { filterSeries, reduce } from "p-iteration";
+import { BUNDESTAGIO_SERVER_URL, DB_URL } from "./utils/config";
 
 const start = async () => {
-  console.info("queuePushsVoteTop100");
   /*
   TOP 100 - #1: Jetzt Abstimmen!
   Lorem Ipsum Titel
@@ -32,7 +32,7 @@ const start = async () => {
   // Check if we have a ConferenceWeek
   const startOfWeek = moment().startOf("isoWeek").toDate(); // Should be Mo
   const endOfWeek = moment().endOf("isoWeek").toDate(); // Should be So
-  const conferenceProceduresCount = await ProcedureModel.count({
+  const conferenceProceduresCount = await ProcedureModel.countDocuments({
     $and: [
       { voteDate: { $gte: startOfWeek } },
       { voteDate: { $lte: endOfWeek } },
@@ -97,7 +97,7 @@ const start = async () => {
         const tokens = await reduce(
           device.pushTokens,
           async (acc, token) => {
-            const pastPushs = await PushNotificationModel.count({
+            const pastPushs = await PushNotificationModel.countDocuments({
               category: PUSH_CATEGORY.TOP100,
               procedureIds: procedure.procedureId,
               token: token.token,
@@ -148,13 +148,7 @@ const start = async () => {
 };
 
 (async () => {
-  console.info("START");
-  console.info(
-    "process.env",
-    process.env.BUNDESTAGIO_SERVER_URL,
-    process.env.DB_URL
-  );
-  if (!process.env.BUNDESTAGIO_SERVER_URL) {
+  if (!BUNDESTAGIO_SERVER_URL) {
     throw new Error(
       "you have to set environment variable: BUNDESTAGIO_SERVER_URL & DB_URL"
     );

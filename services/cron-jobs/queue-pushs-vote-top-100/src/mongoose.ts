@@ -1,11 +1,13 @@
 import { mongoose } from "@democracy-deutschland/democracy-common";
+import { DB_URL } from "./utils/config";
+
 export default () =>
-  new Promise(async (resolve, reject) => {
+  new Promise<void>(async (resolve, reject) => {
     mongoose.set("useFindAndModify", false);
     // Mongo Debug
     mongoose.set("debug", false);
 
-    mongoose.connect(process.env.DB_URL!, {
+    mongoose.connect(DB_URL!, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
