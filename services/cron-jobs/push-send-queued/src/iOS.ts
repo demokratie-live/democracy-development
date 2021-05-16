@@ -31,7 +31,7 @@ export const push = async ({
       },
     ],
   });
-  console.log(data.logs);
+
   if (data.logs[0]) {
     return {
       sent: false,

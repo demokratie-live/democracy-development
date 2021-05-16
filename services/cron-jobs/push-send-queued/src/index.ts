@@ -1,7 +1,6 @@
 import mongoConnect from "./mongoose";
-import { CRON_SEND_QUED_PUSHS_LIMIT, DB_URL } from "./utils/config";
+import { CRON_SEND_QUED_PUSHS_LIMIT } from "./utils/config";
 import {
-  ProcedureModel,
   DeviceModel,
   PUSH_CATEGORY,
   setCronStart,
@@ -68,89 +67,86 @@ const start = async () => {
       // Send Pushs
       switch (os) {
         case PUSH_OS.ANDROID:
-          await pushAndroid({
-            title,
-            message,
-            payload,
-            token,
-          })
-            .catch(async ({ error, response }) => {
-              console.log("android error", error, response);
+          {
+            const { sent, errors } = await pushAndroid({
+              title,
+              message,
+              payload,
+              token,
+            });
+            if (!sent) {
               await PushNotificationModel.updateOne(
                 { _id },
-                { $set: { failure: JSON.stringify({ error, response }) } }
+                { $set: { failure: JSON.stringify(errors) } }
               );
               if (
-                response &&
-                response.results &&
-                response.results[0].error === "NotRegistered"
+                errors.some((error: string) =>
+                  ["NotRegistered"].includes(error)
+                )
               ) {
                 await DeviceModel.updateOne(
                   {},
                   { $pull: { pushTokens: { token, os: PUSH_OS.ANDROID } } },
                   { multi: true }
                 );
-                console.warn(`[PUSH] Android failure - removig token`);
               } else {
                 console.error(
                   `[PUSH] Android failure ${JSON.stringify({
                     token,
-                    error,
-                    response,
+                    errors,
                   })}`
                 );
               }
-            })
-            .then(() => sentPushsCount++);
+            } else {
+              sentPushsCount++;
+            }
+          }
           break;
         case PUSH_OS.IOS:
-          const { sent, errors } = await pushIOS({
-            title,
-            message,
-            payload,
-            token,
-          });
-          if (!sent) {
-            /* Write failure to Database */
-            await PushNotificationModel.updateOne(
-              { _id },
-              { $set: { failure: JSON.stringify({ errors }) } }
-            );
-            /* Remove broken Push tokens */
-            if (
-              errors.some((error: string) =>
-                ["DeviceTokenNotForTopic", "BadDeviceToken"].includes(error)
-              )
-            ) {
-              await DeviceModel.updateOne(
-                {},
-                { $pull: { pushTokens: { token, os: PUSH_OS.IOS } } },
-                { multi: true }
+          {
+            const { sent, errors } = await pushIOS({
+              title,
+              message,
+              payload,
+              token,
+            });
+            if (!sent) {
+              /* Write failure to Database */
+              await PushNotificationModel.updateOne(
+                { _id },
+                { $set: { failure: JSON.stringify({ errors }) } }
               );
-              console.warn(`[PUSH] IOS failure - removig token`);
+              /* Remove broken Push tokens */
+              if (
+                errors.some((error: string) =>
+                  ["DeviceTokenNotForTopic", "BadDeviceToken"].includes(error)
+                )
+              ) {
+                await DeviceModel.updateOne(
+                  {},
+                  { $pull: { pushTokens: { token, os: PUSH_OS.IOS } } },
+                  { multi: true }
+                );
+                console.warn(`[PUSH] IOS failure - removig token`);
+              } else {
+                console.error(
+                  `[PUSH] IOS failure ${JSON.stringify({
+                    token,
+                    sent,
+                    errors,
+                  })}`
+                );
+              }
             } else {
-              console.error(
-                `[PUSH] IOS failure ${JSON.stringify({
-                  token,
-                  sent,
-                  errors,
-                })}`
-              );
+              sentPushsCount++;
             }
-          } else {
-            sentPushsCount++;
           }
           break;
         default:
           console.error(`[PUSH] unknown Token-OS`);
       }
       /* Set sent = true */
-      await PushNotificationModel.updateOne(
-        { _id },
-        { $set: { sent: true } }
-      ).then(() => {
-        console.info("### Push sent");
-      });
+      await PushNotificationModel.updateOne({ _id }, { $set: { sent: true } });
     }
   );
 
@@ -160,10 +156,11 @@ const start = async () => {
 };
 
 (async () => {
-  console.info("START");
-  console.info("process.env", DB_URL);
   await mongoConnect();
-  console.log("procedures", await ProcedureModel.countDocuments({}));
+  console.log(
+    "outstanding push's",
+    await PushNotificationModel.countDocuments({ sent: false })
+  );
   await start().catch((e) => {
     throw e;
   });
