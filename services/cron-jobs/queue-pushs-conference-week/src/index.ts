@@ -41,6 +41,7 @@ const start = async () => {
   const devices = await DeviceModel.find({
     "notificationSettings.enabled": true,
     "notificationSettings.conferenceWeekPushs": true,
+    pushTokens: { $gt: [] },
   });
 
   const tokens = devices.reduce<Device["pushTokens"]>(
@@ -84,7 +85,12 @@ const start = async () => {
     );
   }
   await mongoConnect();
-  console.log("procedures", await ProcedureModel.countDocuments({}));
+  const devices = await DeviceModel.countDocuments({
+    "notificationSettings.enabled": true,
+    "notificationSettings.conferenceWeekPushs": true,
+    pushTokens: { $gt: [] },
+  });
+  console.info("devices for this push", devices);
   await start().catch(() => process.exit(1));
   process.exit(0);
 })();

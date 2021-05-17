@@ -41,6 +41,9 @@ const start = async () => {
 
   // Dont Push TOP100 if we have an active conferenceWeek
   if (conferenceProceduresCount > 0) {
+    console.info(
+      "[INFO] stopped: Do not create push's in reason of conferenceWeek day!"
+    );
     await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
     return;
   }

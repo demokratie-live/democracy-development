@@ -1,10 +1,10 @@
 {
   "name": "queue-pushs-vote-top-100",
-  "version": "0.1.5-gorush-alpha.1",
+  "version": "0.1.5-gorush-alpha.2",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development ts-node-dev ./src/index",
+    "dev": "ts-node-dev -r dotenv/config ./src/index",
     "lint": "yarn lint:ts && yarn lint:exports",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
@@ -18,7 +18,6 @@
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
-    "cross-env": "^7.0.3",
     "dotenv": "^9.0.2",
     "ts-node-dev": "^1.0.0-pre.49",
     "ts-unused-exports": "^7.0.3",
