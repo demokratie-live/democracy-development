@@ -1,6 +1,6 @@
 {
   "name": "push-send-queued",
-  "version": "0.1.17-gorush-alpha.0",
+  "version": "0.1.17-gorush-alpha.1",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
