@@ -20,7 +20,7 @@ export const push = async ({
           platform: 1,
           title,
           message,
-          topic: process.env.APNS_TOPIC,
+          topic: process.env.APN_TOPIC,
           badge: 0,
           development: process.env.NODE_ENV === "development",
           data: {

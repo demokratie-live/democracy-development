@@ -81,7 +81,7 @@ const start = async () => {
               );
               if (
                 errors.some((error: string) =>
-                  ["NotRegistered"].includes(error)
+                  ["NotRegistered", "unregistered device"].includes(error)
                 )
               ) {
                 await DeviceModel.updateOne(

@@ -11,5 +11,5 @@ spec:
   ports:
     - name: gorush
       protocol: TCP
-      port: 80
+      port: 8088
       targetPort: 8088
