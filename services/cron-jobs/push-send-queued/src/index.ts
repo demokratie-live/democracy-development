@@ -11,7 +11,6 @@ import {
 
 import { push as pushIOS } from "./iOS";
 import { push as pushAndroid } from "./Android";
-import { forEachSeries } from "p-iteration";
 
 const start = async () => {
   const CRON_NAME = "sendQueuedPushs";
@@ -42,113 +41,121 @@ const start = async () => {
   }
   let sentPushsCount = 0;
   // send all pushs in there
-  await forEachSeries(
-    pushs,
-    async ({
-      _id,
+  for (let push of pushs) {
+    const { _id, type, category, title, message, procedureIds, token, os } =
+      push;
+    console.log(sentPushsCount);
+    // Construct Payload
+    const payload = {
       type,
+      action: type,
       category,
       title,
       message,
+      procedureId: procedureIds[0],
       procedureIds,
-      token,
-      os,
-    }) => {
-      // Construct Payload
-      const payload = {
-        type,
-        action: type,
-        category,
-        title,
-        message,
-        procedureId: procedureIds[0],
-        procedureIds,
-      };
-      // Send Pushs
-      switch (os) {
-        case PUSH_OS.ANDROID:
-          {
-            const { sent, errors } = await pushAndroid({
-              title,
-              message,
-              payload,
-              token,
-            });
-            if (!sent) {
-              await PushNotificationModel.updateOne(
-                { _id },
-                { $set: { failure: JSON.stringify(errors) } }
-              );
-              if (
-                errors.some((error: string) =>
-                  ["NotRegistered", "unregistered device"].includes(error)
-                )
-              ) {
-                await DeviceModel.updateOne(
-                  {},
-                  { $pull: { pushTokens: { token, os: PUSH_OS.ANDROID } } },
-                  { multi: true }
-                );
-              } else {
-                console.error(
-                  `[PUSH] Android failure ${JSON.stringify({
-                    token,
-                    errors,
-                  })}`
-                );
-              }
+    };
+    // Send Pushs
+    switch (os) {
+      case PUSH_OS.ANDROID:
+        {
+          const { sent, errors } = await pushAndroid({
+            title,
+            message,
+            payload,
+            token,
+          });
+          if (!sent) {
+            await PushNotificationModel.updateOne(
+              { _id },
+              { $set: { failure: JSON.stringify(errors) } }
+            );
+            console.log(
+              "known error",
+              errors.some((error: string) =>
+                [
+                  "NotRegistered",
+                  "unregistered device",
+                  "invalid registration token",
+                ].includes(error)
+              )
+            );
+            if (
+              errors.some((error: string) =>
+                [
+                  "NotRegistered",
+                  "unregistered device",
+                  "invalid registration token",
+                ].includes(error)
+              )
+            ) {
+              await DeviceModel.updateMany(
+                {},
+                { $pull: { pushTokens: { token, os: PUSH_OS.ANDROID } } },
+                { multi: true }
+              ).then(console.log);
+              console.info("[PUSH] Android failure - removig token", token);
             } else {
-              sentPushsCount++;
-            }
-          }
-          break;
-        case PUSH_OS.IOS:
-          {
-            const { sent, errors } = await pushIOS({
-              title,
-              message,
-              payload,
-              token,
-            });
-            if (!sent) {
-              /* Write failure to Database */
-              await PushNotificationModel.updateOne(
-                { _id },
-                { $set: { failure: JSON.stringify({ errors }) } }
+              console.error(
+                `[PUSH] Android failure ${JSON.stringify({
+                  token,
+                  errors,
+                })}`
               );
-              /* Remove broken Push tokens */
-              if (
-                errors.some((error: string) =>
-                  ["DeviceTokenNotForTopic", "BadDeviceToken"].includes(error)
-                )
-              ) {
-                await DeviceModel.updateOne(
-                  {},
-                  { $pull: { pushTokens: { token, os: PUSH_OS.IOS } } },
-                  { multi: true }
-                );
-                console.warn(`[PUSH] IOS failure - removig token`);
-              } else {
-                console.error(
-                  `[PUSH] IOS failure ${JSON.stringify({
-                    token,
-                    sent,
-                    errors,
-                  })}`
-                );
-              }
-            } else {
-              sentPushsCount++;
             }
+          } else {
+            sentPushsCount++;
+            console.log("sent", sent, os, token);
           }
-          break;
-        default:
-          console.error(`[PUSH] unknown Token-OS`);
-      }
-      /* Set sent = true */
-      await PushNotificationModel.updateOne({ _id }, { $set: { sent: true } });
+        }
+        break;
+      case PUSH_OS.IOS:
+        {
+          const { sent, errors } = await pushIOS({
+            title,
+            message,
+            payload,
+            token,
+          });
+          if (!sent) {
+            /* Write failure to Database */
+            await PushNotificationModel.updateOne(
+              { _id },
+              { $set: { failure: JSON.stringify({ errors }) } }
+            );
+            /* Remove broken Push tokens */
+            if (
+              errors.some((error: string) =>
+                ["DeviceTokenNotForTopic", "BadDeviceToken"].includes(error)
+              )
+            ) {
+              await DeviceModel.updateMany(
+                {},
+                { $pull: { pushTokens: { token, os: PUSH_OS.IOS } } },
+                { multi: true }
+              );
+              console.warn(`[PUSH] IOS failure - removig token`, token);
+            } else {
+              console.error(
+                `[PUSH] IOS failure ${JSON.stringify({
+                  token,
+                  sent,
+                  errors,
+                })}`
+              );
+            }
+          } else {
+            console.log("sent", sent, os, token);
+            sentPushsCount++;
+          }
+        }
+        break;
+      default:
+        console.error(`[PUSH] unknown Token-OS`);
     }
-  );
+    /* Set sent = true */
+    await PushNotificationModel.updateOne({ _id }, { $set: { sent: true } });
+  }
 
   console.info(`[PUSH] Sent ${sentPushsCount} Pushs`);
 

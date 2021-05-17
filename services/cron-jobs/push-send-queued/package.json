@@ -17,8 +17,7 @@
     "apn": "^2.2.0",
     "axios": "^0.21.1",
     "http2": "^3.3.7",
-    "node-gcm": "^1.0.2",
-    "p-iteration": "^1.1.8"
+    "node-gcm": "^1.0.2"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
