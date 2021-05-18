@@ -4,6 +4,6 @@
 .vs
 node_modules
 infra/*.yaml
-/infra/kustomize/base/gorush/gorush-config.yaml
 configuration/certificates/*
 !.gitkeep
+/configuration/docker-compose-gorush.env

@@ -38,6 +38,11 @@ spec:
                 configMapKeyRef:
                   name: gorush-config
                   key: stat.redis.host
+            - name: GORUSH_ANDROID_APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: gorush-secret
+                  key: android.apikey
           volumeMounts:
             - name: ios-push-secret-vol
               mountPath: /data/ssl/AuthKey_WKG6X45GSC.p8
