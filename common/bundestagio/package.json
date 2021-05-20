@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.0",
+    "ts-unused-exports": "^6.2.4",
     "typescript": "^3.9.5"
   },
   "dependencies": {
@@ -25,7 +26,6 @@
     "mongoose": "^5.10.9",
     "mongoose-diff-history": "^2.1.0",
     "omit-deep": "^0.3.0",
-    "ts-mongoose": "^0.0.21",
-    "ts-unused-exports": "^6.2.4"
+    "ts-mongoose": "^0.0.21"
   }
 }
