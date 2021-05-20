@@ -4,3 +4,4 @@ logs
 .env*
 built
 *.log
+docker-compose*

@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  bundestag-io:
+    build:
+      context: .
+      target: BUILD
+    command: yarn run dev
+    volumes:
+      - ./:/app

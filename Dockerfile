@@ -1,35 +1,24 @@
-FROM node:12-alpine AS BUILD_IMAGE
-
-# install next-optimized-images requirements
-RUN apk --no-cache update \ 
-    && apk --no-cache add curl bash git python g++ make \
-    &&  rm -fr /var/cache/apk/*
-
-# install node-prune (https://github.com/tj/node-prune)
-RUN curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | bash -s -- -b /usr/local/bin
-
+FROM node:14-alpine AS BASE
 WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn --frozen-lockfile
-COPY . .
 
+FROM BASE as BUILD
+RUN apk --update --no-cache add git python3 make g++
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+COPY . .
 RUN yarn build
 
-RUN npm prune --production
+FROM BUILD as INSTALL
+RUN apk --update --no-cache add curl
+RUN curl -sf https://gobinaries.com/tj/node-prune | sh
+RUN rm -rf node_modules
+RUN yarn install --frozen-lockfile --production
+RUN node-prune node_modules
 
-# run node prune
-RUN /usr/local/bin/node-prune
-
-FROM node:12-alpine
-
-WORKDIR /app
-
-COPY . .
-
-# copy from build image
-COPY --from=BUILD_IMAGE /app/built ./built
-COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
-
+FROM BASE as PRODUCTION
 ENV NODE_ENV=production
+COPY package.json yarn.lock ./
+COPY --from=BUILD /app/built ./built
+COPY --from=INSTALL /app/node_modules ./node_modules
 
-ENTRYPOINT [ "yarn", "start" ]
+ENTRYPOINT [ "yarn", "run", "start" ]
