@@ -10,6 +10,7 @@
     "build:k8s:local": "kustomize build ./infra/kustomize/overlays/local > infra/local.yaml",
     "build:k8s:internal": "kustomize build ./infra/kustomize/overlays/internal > infra/internal.yaml",
     "build:k8s:alpha": "kustomize build ./infra/kustomize/overlays/alpha > infra/alpha.yaml",
-    "build:k8s:prod": "kustomize build ./infra/kustomize/overlays/prod > infra/prod.yaml"
+    "build:k8s:prod": "kustomize build ./infra/kustomize/overlays/prod > infra/prod.yaml",
+    "s:sync-procedures": "cd services/cron-jobs/sync-procedures/ && yarn dev"
   }
 }
