@@ -110,7 +110,7 @@ const start = async () => {
           $in: allDeviceTokens,
         },
         category: "top100",
-        message: procedure.title,
+        procedureIds: { $in: [procedure.procedureId] },
       },
       { token: 1 }
     ).then((pushs) => Array.from(new Set(pushs.map(({ token }) => token))));
@@ -219,6 +219,15 @@ const start = async () => {
         ({ pushTokens }) => !tokens.some((token) => pushTokens.includes(token))
       );
     }
+    console.log(`${procedure.procedureId} - ${procedure.title}`, {
+      counter,
+      multipleTokens,
+      alreadyVoted,
+      alreadyInQueue,
+      procedure: `${topId}/${top100Procedures.length}`,
+      device: `${deviceIndex}/${filteredDevices.length}/${devices.length}`,
+      memory: process.memoryUsage().heapUsed / (1024 * 1024),
+    });
   }
 
   console.log({ alreadyVoted, alreadyInQueue, multipleTokens });
