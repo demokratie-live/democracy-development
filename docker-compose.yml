@@ -4,7 +4,7 @@ services:
   bundestag-io:
     build:
       context: .
-      target: PRODUCTION
+      target: production_stage
     ports:
       - 3100:3100
     depends_on:

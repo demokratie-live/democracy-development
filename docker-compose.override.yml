@@ -4,7 +4,7 @@ services:
   bundestag-io:
     build:
       context: .
-      target: BUILD
+      target: build_stage
     command: yarn run dev
     volumes:
       - ./:/app
