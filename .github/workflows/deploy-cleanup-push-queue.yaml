@@ -1,0 +1,30 @@
+name: Docker – cleanup-push-queue
+
+on:
+  push:
+    paths:
+      - "services/cron-jobs/cleanup-push-queue/**"
+    # branches:
+    #   - master
+
+jobs:
+  build:
+    name: Docker – cleanup-push-queue
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Read package.json
+        uses: tyankatsu0105/read-package-version-actions@v1
+        id: package-version
+        with:
+          path: "./services/cron-jobs/cleanup-push-queue"
+
+      - uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/cleanup-push-queue
+          path: ./services/cron-jobs/cleanup-push-queue
+          tags: ${{ steps.package-version.outputs.version }}
