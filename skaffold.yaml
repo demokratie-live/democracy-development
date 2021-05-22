@@ -114,14 +114,11 @@ build:
     #     manual:
     #       - src: "src/**/*.ts"
     #         dest: .
-    # - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100
-    #   context: ./services/cron-jobs/queue-pushs-vote-top-100
-    #   docker:
-    #     dockerfile: Dockerfile.dev
-    #   sync:
-    #     manual:
-    #       - src: "src/**/*.ts"
-    #         dest: .
+    - image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100
+      context: services/cron-jobs/queue-pushs-vote-top-100
+      docker:
+        dockerfile: Dockerfile.dev
+      sync: { infer: [services/cron-jobs/queue-pushs-vote-top-100/**/*] }
     # - image: docker.pkg.github.com/demokratie-live/democracy-development/shedule-bio-resync
     #   context: ./services/cron-jobs/shedule-bio-resync
     #   docker:
@@ -183,3 +180,7 @@ portForward:
     resourceName: democracy-mongo-depl
     port: 27017
     localPort: 27018
+  - resourceType: Deployment
+    resourceName: democracy-api-depl
+    port: 3000
+    localPort: 5001
