@@ -23,7 +23,7 @@ const start = async () => {
 
   var date = new Date(Date.now() - 1000 * 60 * 60 * 24 * 7);
 
-  const res = await PushNotificationModel.deleteMany({
+  const oldPushs = await PushNotificationModel.deleteMany({
     category: {
       $in: [
         PUSH_CATEGORY.CONFERENCE_WEEK,
@@ -34,7 +34,61 @@ const start = async () => {
     updatedAt: { $lt: date },
   });
 
-  console.log(`deleted entries: ${res.deletedCount}`);
+  console.log(`deleted entries: ${oldPushs.deletedCount}`);
+
+  const duplicates = await PushNotificationModel.aggregate([
+    {
+      $match: {
+        category: "top100",
+      },
+    },
+    {
+      $unwind: "$procedureIds",
+    },
+    {
+      $group: {
+        _id: {
+          token: "$token",
+          procedureId: "procedureIds",
+        },
+        count: {
+          $sum: 1,
+        },
+        doc: {
+          $first: "$$ROOT",
+        },
+      },
+    },
+    {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: [
+            {
+              count: "$count",
+            },
+            "$doc",
+          ],
+        },
+      },
+    },
+    {
+      $sort: {
+        count: -1,
+      },
+    },
+  ]);
+
+  let totalDups = 0;
+  for (let push of duplicates) {
+    const dups = await PushNotificationModel.deleteMany({
+      category: "top100",
+      procedureIds: push.procedureIds,
+      token: push.token,
+      _id: { $ne: push._id },
+    });
+    totalDups += dups?.deletedCount || 0;
+  }
+  console.log(`remove total dups: ${totalDups}`);
 
   await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
 };
