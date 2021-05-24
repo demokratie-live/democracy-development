@@ -18,7 +18,7 @@ RUN node-prune node_modules
 FROM base_stage as production_stage
 ENV NODE_ENV=production
 COPY package.json yarn.lock ./
-COPY --from=build_stage /app/built ./built
+COPY --from=build_stage /app/build ./build
 COPY --from=install_stage /app/node_modules ./node_modules
 
 ENTRYPOINT [ "yarn", "run", "start" ]
