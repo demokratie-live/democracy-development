@@ -1,9 +1,7 @@
 FROM node:14-alpine AS BUILD_IMAGE
 
 # install next-optimized-images requirements
-RUN apk --no-cache update \ 
-    && apk --no-cache add curl bash \
-    &&  rm -fr /var/cache/apk/*
+RUN apk --no-cache --update add curl bash
 
 # install node-prune (https://github.com/tj/node-prune)
 RUN curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | bash -s -- -b /usr/local/bin
