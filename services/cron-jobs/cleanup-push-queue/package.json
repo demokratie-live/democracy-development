@@ -1,6 +1,6 @@
 {
   "name": "cleanup-push-queue",
-  "version": "0.0.1-gorush-alpha.0",
+  "version": "0.0.1-cleanup.push-alpha.0",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
