@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  bundestag-io:
+    build:
+      context: .
+      target: production_stage
+    ports:
+      - 3100:3100
+    depends_on:
+      - mongo
+    environment:
+      - DB_URL=mongodb://mongo:27017/bundestagio
+  mongo:
+    image: mongo
+    volumes:
+      - mongodb:/data/db
+    ports:
+      - 27017:27017
+
+volumes:
+  mongodb:
