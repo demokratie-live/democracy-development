@@ -23,6 +23,7 @@ const cleanupPushQueue = async () => {
     : undefined;
 
   const oldPushs = await PushNotificationModel.deleteMany({
+    sent: true,
     category: {
       $in: [
         PUSH_CATEGORY.CONFERENCE_WEEK,
@@ -30,10 +31,13 @@ const cleanupPushQueue = async () => {
         PUSH_CATEGORY.OUTCOME,
       ],
     },
-    updatedAt,
+    ...(updatedAt && { updatedAt }),
   });
-  console.log(`deleted sent entries: ${oldPushs.deletedCount}`);
 
+  console.log(`deleted sent entries: ${oldPushs.deletedCount}`);
+};
+
+const cleanupDuplicateTop100 = async () => {
   const duplicates = await PushNotificationModel.aggregate([
     {
       $match: {
@@ -122,19 +126,35 @@ const removeDuplicateTokens = async () => {
   console.log(`found ${duplicatedTokens.length} devices with duplicate tokens`);
 
   for (let duplicateToken of duplicatedTokens) {
-    const device = await DeviceModel.findOne({
-      pushTokens: { $elemMatch: { token: duplicateToken._id } },
-    });
-    if (device) {
-      device.pushTokens = device.pushTokens.filter(
-        (elem, index) =>
-          device.pushTokens.findIndex((obj) => obj.token === elem.token) ===
-          index
-      );
-      await device.save();
+    const devices = await DeviceModel.find(
+      {
+        pushTokens: { $elemMatch: { token: duplicateToken._id } },
+      },
+      {},
+      { sort: { createdAt: 1 } }
+    );
+    /** Remove duplicate tokens from device */
+    for (let device of devices) {
+      if (device) {
+        device.pushTokens = device.pushTokens.filter(
+          (elem, index) =>
+            device.pushTokens.findIndex((obj) => obj.token === elem.token) ===
+            index
+        );
+        await device.save();
+      }
       process.stdout.write(".");
     }
+
+    /** Remove tokens from old devices */
+    devices.pop();
+    for (let device of devices) {
+      device.pushTokens = [];
+      await device.save();
+    }
   }
+
+  process.stdout.write("\n");
 };
 
 (async () => {
@@ -153,6 +173,7 @@ const removeDuplicateTokens = async () => {
   console.info("count of sent push's", sentPushs);
 
   await cleanupPushQueue();
+  await cleanupDuplicateTop100();
   await removeDuplicateTokens();
 
   await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
