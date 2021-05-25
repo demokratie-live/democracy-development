@@ -38,59 +38,94 @@ const cleanupPushQueue = async () => {
 };
 
 const cleanupDuplicateTop100 = async () => {
-  const duplicates = await PushNotificationModel.aggregate([
-    {
-      $match: {
-        category: "top100",
-      },
-    },
-    {
-      $unwind: "$procedureIds",
-    },
-    {
-      $group: {
-        _id: {
-          token: "$token",
-          procedureId: "procedureIds",
-        },
-        count: {
-          $sum: 1,
-        },
-        doc: {
-          $first: "$$ROOT",
-        },
-      },
-    },
-    {
-      $replaceRoot: {
-        newRoot: {
-          $mergeObjects: [
-            {
-              count: "$count",
-            },
-            "$doc",
-          ],
-        },
-      },
-    },
-    {
-      $sort: {
-        count: -1,
-      },
-    },
-  ]);
+  console.log("#start cleanupDuplicateTop100");
+
+  const procedureIds = await PushNotificationModel.distinct("procedureIds");
 
   let totalDups = 0;
-  for (let push of duplicates) {
-    const dups = await PushNotificationModel.deleteMany({
-      category: "top100",
-      procedureIds: push.procedureIds,
-      token: push.token,
-      _id: { $ne: push._id },
-    });
-    totalDups += dups?.deletedCount || 0;
+  let counter = 0;
+  for (let procedureId of procedureIds) {
+    counter++;
+    console.log(" # ## # #", procedureId, `${counter}/${procedureIds.length}`);
+    const duplicates = await PushNotificationModel.aggregate<{
+      type: string;
+      category: string;
+      title: string;
+      message: string;
+      procedureIds: string[];
+      time: Date;
+      token: string;
+      os: string;
+      _id: import("mongoose").Types.ObjectId;
+      createdAt: Date;
+      updatedAt: Date;
+      __v: number;
+      sent: boolean | undefined;
+      failure: string | undefined;
+    }>([
+      {
+        $match: {
+          category: "top100",
+          procedureIds: procedureId,
+        },
+      },
+      {
+        $unwind: "$procedureIds",
+      },
+      {
+        $group: {
+          _id: {
+            token: "$token",
+            procedureId: "$procedureIds",
+          },
+          count: {
+            $sum: 1,
+          },
+          doc: {
+            $first: "$$ROOT",
+          },
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [
+              {
+                count: "$count",
+              },
+              "$doc",
+            ],
+          },
+        },
+      },
+      {
+        $match: {
+          count: {
+            $gt: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+    ]);
+
+    for (let push of duplicates) {
+      const dups = await PushNotificationModel.deleteMany({
+        category: "top100",
+        procedureIds: push.procedureIds,
+        token: push.token,
+        _id: { $ne: push._id },
+      });
+      process.stdout.write(".");
+      totalDups += dups?.deletedCount || 0;
+    }
+    process.stdout.write("\n");
   }
   console.log(`removed duplicate top100 pushs: ${totalDups}`);
+  console.log("#finish cleanupDuplicateTop100");
 };
 
 const removeDuplicateTokens = async () => {
@@ -149,7 +184,7 @@ const removeDuplicateTokens = async () => {
     /** Remove tokens from old devices */
     devices.pop();
     for (let device of devices) {
-      device.pushTokens = [];
+      device.pushTokens.filter(({ token }) => token !== duplicateToken._id);
       await device.save();
     }
   }
