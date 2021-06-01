@@ -1,13 +1,10 @@
 const gql = String.raw // just for syntax highlighting
-export const uploadProcedures = gql`
+export default gql`
 mutation($procedures: [AddProcedureInput!]!) {
   addProcedure(input: $procedures) {
+    numUids
     procedure {
-      title
-      procedureId
-      type
-      period
-      currentStatus
+      _id
     }
   }
 }

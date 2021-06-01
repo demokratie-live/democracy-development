@@ -1,5 +1,5 @@
 const gql = String.raw // just for syntax highlighting
-export const downloadProcedures = gql`{
+ export default gql`{
   procedures {
     title
     procedureId
