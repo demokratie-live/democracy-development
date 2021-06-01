@@ -17,6 +17,15 @@ services:
       - mongodb:/data/db
     ports:
       - 27017:27017
+  zero:
+    image: dgraph/standalone:master
+    volumes:
+      - dgraph:/dgraph
+    ports:
+      - 6080:6080
+      - 8080:8080
+      - 9080:9080
 
 volumes:
   mongodb:
+  dgraph:

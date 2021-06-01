@@ -1,0 +1,317 @@
+type ConferenceWeekDetail {
+  URL: String
+  id: String!
+  previousYear: Int
+  previousWeek: Int
+  thisYear: Int!
+  thisWeek: Int!
+  nextYear: Int
+  nextWeek: Int
+  sessions: [ConferenceWeekDetailSession]
+}
+
+type ConferenceWeekDetailSession {
+  date: DateTime
+  dateText: String
+  session: String
+  tops: [ConferenceWeekDetailSessionTop]
+}
+
+type ConferenceWeekDetailSessionTop {
+  time: DateTime
+  top: String
+  heading: String
+  article: String
+  topic: [ConferenceWeekDetailSessionTopTopic]
+  status: [ConferenceWeekDetailSessionTopStatus]
+}
+
+type ConferenceWeekDetailSessionTopStatus {
+  line: String
+  documents: [String]
+}
+
+type ConferenceWeekDetailSessionTopTopic {
+  lines: [String]
+  documents: [String]
+  isVote: Boolean
+  procedureIds: [String]
+}
+
+type Decision {
+  page: String
+  tenor: String
+  document: String
+  type: String
+  comment: String
+  foundation: String
+  majority: String
+}
+
+type Deputy {
+  _id: ID!
+  URL: String!
+  webId: String
+  imgURL: String
+  party: String
+  name: String!
+  job: String
+  office: [String]
+  links: [DeputyLink!]!
+  biography: [String]
+  constituency: String
+  constituencyName: String
+  directCandidate: Boolean
+  functions: [DeputyFunctions]
+  speechesURL: String
+  votesURL: String
+  publicationRequirement: [String]
+}
+
+type DeputyFunctions {
+  category: String
+  functions: [String]
+}
+
+type DeputyLink {
+  name: String!
+  URL: String!
+  username: String
+}
+
+type DeputyUpdate {
+  beforeCount: Int!
+  afterCount: Int!
+  newCount: Int
+  changedCount: Int
+  deputies: [Deputy]
+}
+
+type Deviants {
+  yes: Int
+  abstination: Int
+  no: Int
+  notVoted: Int
+}
+
+type Document {
+  editor: String
+  number: String
+  type: String
+  url: String
+}
+
+type FilteredConferenceWeekDetail {
+  URL: String
+  id: String!
+  previousYear: Int
+  previousWeek: Int
+  thisYear: Int!
+  thisWeek: Int!
+  nextYear: Int
+  nextWeek: Int
+  session: FilteredConferenceWeekDetailSession
+}
+
+type FilteredConferenceWeekDetailSession {
+  date: DateTime
+  dateText: String
+  session: String
+  top: FilteredConferenceWeekDetailSessionTop
+}
+
+type FilteredConferenceWeekDetailSessionTop {
+  time: DateTime
+  top: String
+  heading: String
+  article: String
+  topic: FilteredConferenceWeekDetailSessionTopTopic
+  status: [ConferenceWeekDetailSessionTopStatus]
+}
+
+type FilteredConferenceWeekDetailSessionTopTopic {
+  lines: [String]
+  documents: [String]
+  isVote: Boolean
+  procedureId: String
+}
+
+type LegislativePeriod {
+  number: Int!
+  start: DateTime!
+  end: DateTime
+  deputies: Int!
+}
+
+type NamedPoll {
+  _id: ID!
+  webId: String!
+  URL: String!
+  date: DateTime
+  deputyVotesURL: String
+  description: String
+  detailedDescription: String
+  documents: [String]
+  media: [NamedPollMedia]
+  plenarProtocolURL: String
+  procedureId: String
+  speeches: [NamedPollSpeech]
+  title: String
+  votes: NamedPollVotes
+}
+
+type NamedPollDeputy {
+  webId: String
+  URL: String
+  imgURL: String
+  state: String
+  name: String
+  party: String
+  vote: String
+}
+
+type NamedPollMedia {
+  iTunesURL: String
+  mediathekURL: String
+  videoURLs: [NamedPollMediaVideoURL]
+}
+
+type NamedPollMediaVideoURL {
+  URL: String
+  description: String
+}
+
+type NamedPollSpeech {
+  deputyName: String
+  deputyImgURL: String
+  mediathekURL: String
+  function: String
+  party: String
+}
+
+type NamedPollUpdate {
+  beforeCount: Int!
+  afterCount: Int!
+  newCount: Int
+  changedCount: Int
+  namedPolls: [NamedPoll]
+}
+
+type NamedPollVotes {
+  all: NamedPollVotesVotes
+  parties: [NamedPollVotesParty]
+  deputies: [NamedPollDeputy]
+  inverseVoteDirection: Boolean
+}
+
+type NamedPollVotesParty {
+  name: String
+  votes: NamedPollVotesVotes
+}
+
+type NamedPollVotesVotes {
+  total: Int
+  yes: Int
+  no: Int
+  abstain: Int
+  na: Int
+}
+
+type PartyVote {
+  party: String!
+  main: VoteDecision
+  deviants: Deviants
+}
+
+type Procedure {
+  _id: ID!
+  title: String!
+  procedureId: String
+  type: String
+  period: Int
+  currentStatus: String
+  currentStatusHistory: [String]
+  signature: String
+  gestOrderNumber: String
+  approvalRequired: [String]
+  euDocNr: String
+  abstract: String
+  promulgation: [String]
+  legalValidity: [String]
+  tags: [String]
+  subjectGroups: [String]
+  history: [ProcessFlow]
+  importantDocuments: [Document]
+  customData: ProcedureCustomData
+  namedVote: Boolean
+  voteDate: DateTime
+  voteEnd: DateTime
+  sessions: [FilteredConferenceWeekDetail]
+}
+
+type ProcedureCustomData {
+  title: String
+  voteResults: VoteResults
+}
+
+type ProcedureUpdate {
+  beforeCount: Int!
+  afterCount: Int!
+  newCount: Int
+  changedCount: Int
+  procedures: [Procedure]
+}
+
+type ProcessFlow {
+  assignment: String
+  initiator: String
+  findSpot: String
+  findSpotUrl: String
+  decision: [Decision]
+  date: DateTime
+}
+
+
+enum Role {
+  BACKEND
+  USER
+}
+
+type User {
+  email: String!
+  role: UserRole
+  jwt: String
+}
+
+enum UserRole {
+  WEB
+  BACKEND
+}
+
+enum VoteDecision {
+  YES
+  ABSTINATION
+  NO
+  NOTVOTED
+}
+
+type VoteResults {
+  yes: Int
+  no: Int
+  abstination: Int
+  notVoted: Int
+  decisionText: String
+  votingDocument: VotingDocument
+  votingRecommendation: Boolean
+  partyVotes: [PartyVote]
+}
+
+type VoteResultTexts {
+  results: [String!]!
+}
+
+enum VotingDocument {
+  mainDocument
+  recommendedDecision
+}
+
