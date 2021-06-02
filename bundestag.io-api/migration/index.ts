@@ -12,7 +12,17 @@ const log: Logger = new Logger({ name: "dgraph-migration" });
 const BUNDESTAG_IO_ENDPOINT = 'http://localhost:3100'
 const DGRAPH_ENDPOINT = 'http://localhost:8080'
 const schema = fs.readFileSync(path.resolve(__dirname, 'schema.graphql'))
-const limit = 100
+const limit = 99999999
+const chunkSize = 100
+
+const sliceIntoChunks = (arr: any[], chunkSize: number) => {
+    const res = [];
+    for (let i = 0; i < arr.length; i += chunkSize) {
+        const chunk = arr.slice(i, i + chunkSize);
+        res.push(chunk);
+    }
+    return res;
+}
 
 const bundestagIoClient = createClient({
   endpoint: BUNDESTAG_IO_ENDPOINT,
@@ -36,13 +46,15 @@ const migrateType = async (types: string, queries: object, mutations: object) =>
     downloaded = cleanDeep(downloaded, {
       emptyArrays: false
     })
-    const { data: { uploaded  } } = await dGraphClient.query(
-      {
-        query: uploadMutation,
-        variables: { entries: downloaded }
-      }
-    )
-    log.info(`${uploaded.entries.length} entries uploaded, ${uploaded.numUids} numUids`)
+    for (const chunk of sliceIntoChunks(downloaded, chunkSize)) {
+      const { data: { uploaded  } } = await dGraphClient.query(
+        {
+          query: uploadMutation,
+          variables: { entries: chunk }
+        }
+      )
+      log.info(`${uploaded.entries.length} entries uploaded, ${uploaded.numUids} numUids`)
+    }
 }
 
 async function importDumps() {
