@@ -1,7 +1,7 @@
 const gql = String.raw
 export default gql`
-query download {
-  downloaded: deputies {
+query download($limit: Int) {
+  downloaded: deputies(limit: $limit) {
     biography
     constituency
     constituencyName

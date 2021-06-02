@@ -1,8 +1,8 @@
 const gql = String.raw
 
 export default gql`
-query download {
-  downloaded: conferenceWeekDetails {
+query download($limit: Int) {
+  downloaded: conferenceWeekDetails(limit: $limit) {
     URL
     id
     previousYear

@@ -12,6 +12,7 @@ const log: Logger = new Logger({ name: "dgraph-migration" });
 const BUNDESTAG_IO_ENDPOINT = 'http://localhost:3100'
 const DGRAPH_ENDPOINT = 'http://localhost:8080'
 const schema = fs.readFileSync(path.resolve(__dirname, 'schema.graphql'))
+const limit = 100
 
 const bundestagIoClient = createClient({
   endpoint: BUNDESTAG_IO_ENDPOINT,
@@ -30,7 +31,7 @@ const migrateType = async (types: string, queries: object, mutations: object) =>
     const downloadQuery = queries[types]
     const uploadMutation = mutations[types]
     log.info(`Migrating ${types} ...`)
-    let { data: { downloaded } } = await bundestagIoClient.query({ query: downloadQuery })
+    let { data: { downloaded } } = await bundestagIoClient.query({ query: downloadQuery, variables: { limit } })
     log.info(`${downloaded.length} entries downloaded`)
     downloaded = cleanDeep(downloaded, {
       emptyArrays: false

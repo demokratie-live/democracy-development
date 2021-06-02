@@ -1,7 +1,7 @@
 const gql = String.raw // just for syntax highlighting
  export default gql`
- query download {
-  downloaded: procedures {
+ query download($limit: Int) {
+  downloaded: procedures(limit: $limit) {
     title
     procedureId
     type

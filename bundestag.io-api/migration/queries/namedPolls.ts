@@ -1,7 +1,7 @@
 const gql = String.raw
 export default gql`
-query download {
-  downloaded: namedPolls {
+query download($limit: Int) {
+  downloaded: namedPolls(limit: $limit) {
     webId
     URL
     date
