@@ -152,7 +152,7 @@ type NamedPoll {
   description: String
   detailedDescription: String
   documents: [String]
-  media: [NamedPollMedia]
+  media: NamedPollMedia
   plenarProtocolURL: String
   procedureId: String
   speeches: [NamedPollSpeech]

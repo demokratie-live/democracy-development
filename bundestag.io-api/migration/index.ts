@@ -49,9 +49,10 @@ async function importDumps() {
     await fetch(`${DGRAPH_ENDPOINT}/admin/schema`, { method: 'POST', body: schema })
     log.info('GraphQL Schema added')
 
-    await migrateType('procedures', queries, mutations)
+    await migrateType('namedPolls', queries, mutations)
     await migrateType('conferenceWeekDetails', queries, mutations)
     await migrateType('deputies', queries, mutations)
+    await migrateType('procedures', queries, mutations)
   } catch(err) {
     console.error(err)
     if(err.errors) err.errors.forEach((e: any) => console.error(e))

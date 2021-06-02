@@ -29,11 +29,22 @@ mutation upload ($entries: [AddConferenceWeekDetailInput!]!) {
     }
   }
 }
+`
 
+const namedPolls = gql`
+mutation upload ($entries: [AddNamedPollInput!]!) {
+  uploaded: addNamedPoll(input: $entries) {
+    numUids
+    entries: namedPoll {
+      URL
+    }
+  }
+}
 `
 
 export default {
   deputies,
   procedures,
   conferenceWeekDetails,
+  namedPolls,
 }
