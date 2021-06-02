@@ -3,3 +3,4 @@
 /data/
 .vs
 node_modules
+.github/workflows/*.env
