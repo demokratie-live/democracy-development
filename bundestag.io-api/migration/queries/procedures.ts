@@ -1,6 +1,7 @@
 const gql = String.raw // just for syntax highlighting
- export default gql`{
-  procedures {
+ export default gql`
+ query download {
+  downloaded: procedures {
     title
     procedureId
     type
