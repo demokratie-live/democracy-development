@@ -3,7 +3,7 @@ module.exports = {
     includes: ['./src/**/*.ts'],
     service: {
       name: 'Bundestag.io API Local',
-      url: 'http://bundestagio.develop',
+      url: 'http://localhost:3100',
       skipSSLValidation: true,
     },
   },
