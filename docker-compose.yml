@@ -2,14 +2,12 @@ version: "3.9"
 services:
   mongo:
     image: mongo
-    restart: always
     volumes:
       - democracy-mongodb:/data/db
     ports:
       - 27017:27017
   gorush:
     image: appleboy/gorush
-    restart: always
     ports:
       - "8088:8088"
     depends_on:
@@ -22,6 +20,16 @@ services:
       - ./configuration/gorush-config.yaml:/config.yml
   redis:
     image: "redis:alpine"
+  bundestag-io:
+    build:
+      context: bundestag.io-api
+      target: production_stage
+    ports:
+      - 3100:3100
+    depends_on:
+      - mongo
+    environment:
+      - DB_URL=mongodb://mongo:27017/bundestagio
 
 volumes:
   democracy-mongodb:
