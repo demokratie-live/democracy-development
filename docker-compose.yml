@@ -30,6 +30,10 @@ services:
       - mongo
     environment:
       - DB_URL=mongodb://mongo:27017/bundestagio
+  crawler:
+    build:
+      context: services/cron-jobs/crawler
+      target: production_stage
 
 volumes:
   democracy-mongodb:
