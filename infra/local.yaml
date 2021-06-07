@@ -240,7 +240,7 @@ spec:
         - secretRef:
             name: bio-api-secrets
             optional: true
-        image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io:0.1.40-dev
+        image: democracy/bundestag.io:0.1.40-dev
         name: bundestagio
       imagePullSecrets:
       - name: regcred
