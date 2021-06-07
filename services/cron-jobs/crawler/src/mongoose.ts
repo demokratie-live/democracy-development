@@ -1,5 +1,5 @@
 import { mongoose } from "@democracy-deutschland/bundestagio-common";
-import config from "./config";
+import { MONGO_DB_URL } from "./config";
 
 let connection: typeof mongoose;
 
@@ -7,7 +7,7 @@ export const mongoConnect = async () => {
   mongoose.set("useFindAndModify", false);
   mongoose.set("debug", false);
 
-  connection = await mongoose.connect(config.MONGO_DB_URL !, {
+  connection = await mongoose.connect(MONGO_DB_URL !, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
