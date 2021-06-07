@@ -22,7 +22,7 @@ services:
     image: "redis:alpine"
   bundestag-io:
     build:
-      context: bundestag.io-api
+      context: bundestag.io/server
       target: production_stage
     ports:
       - 3100:3100

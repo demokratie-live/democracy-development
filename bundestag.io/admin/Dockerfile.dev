@@ -1,0 +1,18 @@
+FROM node:12-alpine
+
+# install next-optimized-images requirements
+RUN apk --no-cache update \ 
+    && apk --no-cache add yarn curl g++ make bash zlib-dev libpng-dev python \
+    &&  rm -fr /var/cache/apk/*
+
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+
+RUN yarn --frozen-lockfile
+
+COPY . .
+
+ENV NODE_ENV=development
+
+ENTRYPOINT [ "yarn", "dev" ]

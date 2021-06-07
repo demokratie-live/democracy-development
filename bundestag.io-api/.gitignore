@@ -1,6 +1,0 @@
-node_modules
-diffs/*
-*.log
-.env*
-!.env.example
-built
