@@ -1,7 +1,0 @@
-node_modules/
-dist/
-
-# ignore until admin area is excluded
-components/admin/
-components/layouts/Admin.jsx
-lib/withData.jsx

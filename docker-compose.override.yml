@@ -3,8 +3,8 @@ version: "3.9"
 services:
   bundestag-io:
     build:
-      context: bundestag.io-api
+      context: bundestag.io/server
       target: build_stage
     command: yarn run dev
     volumes:
-      - ./bundestag.io-api:/app
+      - ./bundestag.io/server:/app
