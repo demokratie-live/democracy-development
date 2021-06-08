@@ -14,14 +14,12 @@ services:
       - "8088:8088"
     depends_on:
       - "redis"
-    env_file:
-      - ./configuration/docker-compose-gorush.env
     environment:
+      - GORUSH_ANDROID_APIKEY="NONE"
       - GORUSH_STAT_ENGINE=redis
       - GORUSH_STAT_REDIS_ADDR=redis:6379
     volumes:
-      - ./infra/kustomize/base/gorush/gorush-config.yaml:/config.yml
-      - ./configuration/certificates/AuthKey_WKG6X45GSC.p8:/data/ssl/AuthKey_WKG6X45GSC.p8
+      - ./configuration/gorush-config.yaml:/config.yml
   redis:
     image: "redis:alpine"
 

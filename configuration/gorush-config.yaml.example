@@ -1,0 +1,44 @@
+core:
+  enabled: true
+  mode: "release"
+  port: "8088"
+  max_notification: 5000
+  sync: true
+
+api:
+  push_uri: "/api/push"
+  stat_go_uri: "/api/stat/go"
+  stat_app_uri: "/api/stat/app"
+  config_uri: "/api/config"
+  sys_stat_uri: "/sys/stats"
+  metric_uri: "/metrics"
+  health_uri: "/healthz"
+
+log:
+  format: "string" # string or json
+  access_log: "stdout" # stdout: output to console, or define log path like "log/access_log"
+  access_level: "debug"
+  error_log: "stderr" # stderr: output to console, or define log path like "log/error_log"
+  error_level: "error"
+  hide_token: false
+
+android:
+  enabled: true
+  apikey: "setup in `gorush-secret` secret with key `android.apikey`"
+  max_retry: 3 # resend fail notification, default value zero is disabled
+
+ios:
+  enabled: false
+  key_path: ""
+  key_type: "p8" # could be pem, p12 or p8 type
+  production: true
+  max_concurrent_pushes: 100 # just for push ios notification
+  max_retry: 3 # resend fail notification, default value zero is disabled
+  key_id: "WKG6X45GSC" # KeyID from developer account (Certificates, Identifiers & Profiles -> Keys)
+  team_id: "A4B84UJD7M" # TeamID from developer account (View Account -> Membership)
+
+huawei:
+  enabled: false
+  apikey: "1234"
+  appid: "1234"
+  max_retry: 0
