@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: cleanup-push-queue
-              image: docker.pkg.github.com/demokratie-live/democracy-development/cleanup-push-queue:1.0.0
+              image: democracy/cleanup-push-queue:1.0.0
               env:
                 - name: DB_URL
                   valueFrom:
@@ -25,5 +25,3 @@ spec:
                     configMapKeyRef:
                       name: democracy-api-config
                       key: BUNDESTAGIO_SERVER_URL
-          imagePullSecrets:
-            - name: regcred
