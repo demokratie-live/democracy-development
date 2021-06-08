@@ -2,6 +2,8 @@ name: bundestag.io-api/ Build and Push Docker Image
 
 on:
   push:
+    paths:
+      - "bundestag.io-api/**"
     branches:
       - 'master'
     tags:
