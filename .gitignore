@@ -4,3 +4,7 @@
 .vs
 node_modules
 .github/workflows/*.env
+infra/*.yaml
+configuration/certificates/*
+!.gitkeep
+/configuration/docker-compose-gorush.env
