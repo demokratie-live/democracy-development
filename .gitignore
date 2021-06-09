@@ -1,6 +1,9 @@
 *.log
-.env
 /data/
 .vs
 node_modules
 .github/workflows/*.env
+infra/*.yaml
+configuration/*
+!configuration/*.example
+!.gitkeep

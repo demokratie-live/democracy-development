@@ -4,7 +4,7 @@
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "ts-node-dev ./src/index",
+    "dev": "ts-node-dev -r dotenv/config ./src/index dotenv_config_path=./.env.local",
     "lint": "yarn lint:ts && yarn lint:exports",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.161",
+    "dotenv": "^10.0.0",
     "ts-node-dev": "^1.0.0-pre.63",
     "ts-unused-exports": "^6.2.4",
     "typescript": "^3.9.5"

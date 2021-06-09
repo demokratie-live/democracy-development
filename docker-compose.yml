@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - democracy-mongodb:/data/db
+    ports:
+      - 27017:27017
+  gorush:
+    image: appleboy/gorush
+    restart: always
+    ports:
+      - "8088:8088"
+    depends_on:
+      - "redis"
+    environment:
+      - GORUSH_ANDROID_APIKEY="NONE"
+      - GORUSH_STAT_ENGINE=redis
+      - GORUSH_STAT_REDIS_ADDR=redis:6379
+    volumes:
+      - ./configuration/gorush-config.yaml:/config.yml
+  redis:
+    image: "redis:alpine"
+
+volumes:
+  democracy-mongodb:

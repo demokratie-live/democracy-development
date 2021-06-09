@@ -102,55 +102,57 @@ const importProcedures = async (
     };
 
     if (bIoProcedure.customData.voteResults.partyVotes) {
-      voteResults.partyVotes = bIoProcedure.customData.voteResults.partyVotes.reduce<
-        PartyVotes[]
-      >((pre, partyVote) => {
-        if (partyVote) {
-          let mainDecision: VoteSelection;
-          const { main, party, ...rest } = partyVote;
-          switch (main) {
-            case VoteDecision.YES:
-              mainDecision = VoteSelection.Yes;
-              break;
-            case VoteDecision.ABSTINATION:
-              mainDecision = VoteSelection.Abstination;
-              break;
-            case VoteDecision.NO:
-              mainDecision = VoteSelection.No;
-              break;
-            default:
-              mainDecision = VoteSelection.Notvoted;
-          }
-          let deviants: PartyVotes["deviants"] | undefined;
-          if (
-            rest.deviants &&
-            rest.deviants.yes !== null &&
-            rest.deviants.abstination !== null &&
-            rest.deviants.no !== null
-          ) {
-            deviants = {
-              yes: rest.deviants.yes,
-              abstination: rest.deviants.abstination,
-              no: rest.deviants.no,
-              notVoted: rest.deviants.notVoted,
-            };
-          }
+      voteResults.partyVotes =
+        bIoProcedure.customData.voteResults.partyVotes.reduce<PartyVotes[]>(
+          (pre, partyVote) => {
+            if (partyVote) {
+              let mainDecision: VoteSelection;
+              const { main, party, ...rest } = partyVote;
+              switch (main) {
+                case VoteDecision.YES:
+                  mainDecision = VoteSelection.Yes;
+                  break;
+                case VoteDecision.ABSTINATION:
+                  mainDecision = VoteSelection.Abstination;
+                  break;
+                case VoteDecision.NO:
+                  mainDecision = VoteSelection.No;
+                  break;
+                default:
+                  mainDecision = VoteSelection.Notvoted;
+              }
+              let deviants: PartyVotes["deviants"] | undefined;
+              if (
+                rest.deviants &&
+                rest.deviants.yes !== null &&
+                rest.deviants.abstination !== null &&
+                rest.deviants.no !== null
+              ) {
+                deviants = {
+                  yes: rest.deviants.yes,
+                  abstination: rest.deviants.abstination,
+                  no: rest.deviants.no,
+                  notVoted: rest.deviants.notVoted,
+                };
+              }
 
-          if (!deviants) {
+              if (!deviants) {
+                return pre;
+              }
+
+              const result: PartyVotes = {
+                ...rest,
+                _id: false,
+                party: convertPartyName(party),
+                main: mainDecision,
+                deviants,
+              };
+              return [...pre, result];
+            }
             return pre;
-          }
-
-          const result: PartyVotes = {
-            ...rest,
-            _id: false,
-            party: convertPartyName(party),
-            main: mainDecision,
-            deviants,
-          };
-          return [...pre, result];
-        }
-        return pre;
-      }, []);
+          },
+          []
+        );
 
       // toggle votingData (Yes & No) if needed
       if (
@@ -275,7 +277,7 @@ const start = async () => {
   // Query Bundestag.io
   try {
     const client = createClient();
-    const limit = 25;
+    const limit = process.env.LIMIT ? parseInt(process.env.LIMIT) : 25;
     let offset = 0;
     let done = false;
     while (!done) {
@@ -305,6 +307,16 @@ const start = async () => {
           PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG,
           PROCEDURE_DEFINITIONS.TYPE.ANTRAG,
         ],
+        progress: {
+          ...(procedureUpdates
+            ? {
+                afterCount: procedureUpdates.afterCount,
+                beforeCount: procedureUpdates.beforeCount,
+                changedCount: procedureUpdates.changedCount,
+                newCount: procedureUpdates.newCount,
+              }
+            : {}),
+        },
       });
 
       if (procedureUpdates) {
