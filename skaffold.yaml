@@ -10,7 +10,7 @@ build:
   local:
     push: false
   artifacts:
-    # - image: docker.pkg.github.com/demokratie-live/bundestag.io/bundestag.io
+    # - image: democracy/bundestag.io
     #   context: bundestag.io-api
     #   docker:
     #     dockerfile: Dockerfile.dev
