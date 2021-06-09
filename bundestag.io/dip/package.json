@@ -1,0 +1,9 @@
+{
+  "name": "bundestag.io-dip",
+  "version": "0.1.0",
+  "description": "GraphQL interface to the REST-endpoint of the German parliamentary documentation system \"DIP\"",
+  "main": "index.ts",
+  "repository": "https://github.com/demokratie-live/democracy-development",
+  "author": "Manuel Ruck, Robert Schäfer",
+  "license": "Apache-2.0"
+}
