@@ -14,5 +14,13 @@ type Procedure {
   wahlperiode: Int
   initiative: [String]
   datum: Date
+  deskriptor: [Deskriptor]
+  sachgebiet: [String]
+}
+
+type Deskriptor {
+  fundstelle: Boolean
+  name: String
+  type: String
 }
 `
