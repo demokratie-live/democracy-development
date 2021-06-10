@@ -1,4 +1,5 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest'
+import { Vorgang } from './types'
 
 export default class DipAPI extends RESTDataSource {
   constructor() {
@@ -10,7 +11,7 @@ export default class DipAPI extends RESTDataSource {
     request.headers.set('Authorization', `ApiKey ${this.context.DIP_API_KEY}`);
   }
 
-  async getProcedures() {
+  async getProcedures(): Promise<Array<Vorgang>> {
     const { documents } = await this.get(`/api/v1/vorgang`);
     return documents
   }

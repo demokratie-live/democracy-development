@@ -42,6 +42,7 @@ services:
       target: production_stage
     environment:
       - MONGO_DB_URL=mongodb://mongo:27017/bundestagio
+      - DIP_GRAPHQL_ENDPOINT=http://dip:3101
 
 volumes:
   democracy-mongodb:
