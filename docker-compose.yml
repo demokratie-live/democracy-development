@@ -30,6 +30,12 @@ services:
       - mongo
     environment:
       - DB_URL=mongodb://mongo:27017/bundestagio
+  dip:
+    build:
+      context: bundestag.io/dip
+      target: production_stage
+    ports:
+      - 3101:3101
   crawler:
     build:
       context: services/cron-jobs/crawler
