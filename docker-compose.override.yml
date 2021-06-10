@@ -9,6 +9,7 @@ services:
     volumes:
       - ./bundestag.io/server:/app
   dip:
+    restart: always
     build:
       context: bundestag.io/dip
       target: build_stage
