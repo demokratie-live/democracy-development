@@ -5,6 +5,12 @@ type Query {
 }
 scalar Date
 
+type Document {
+  editor: String
+  number: String
+  type: String
+  url: String
+}
 type Procedure {
   procedureId: ID!
   title: String!
@@ -16,5 +22,6 @@ type Procedure {
   date: Date
   subjectGroups: [String]
   tags: [String]
+  importantDocuments: [Document]
 }
 `
