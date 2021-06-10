@@ -6,21 +6,15 @@ type Query {
 scalar Date
 
 type Procedure {
-  id: ID!
-  titel: String!
-  beratungsstand: String
-  vorgangstyp: String
-  typ: String
-  wahlperiode: Int
-  initiative: [String]
-  datum: Date
-  deskriptor: [Deskriptor]
-  sachgebiet: [String]
-}
-
-type Deskriptor {
-  fundstelle: Boolean
-  name: String
+  procedureId: ID!
+  title: String!
+  abstract: String
+  currentStatus: String
   type: String
+  period: Int
+  initiative: [String]
+  date: Date
+  subjectGroups: [String]
+  tags: [String]
 }
 `
