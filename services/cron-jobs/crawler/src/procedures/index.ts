@@ -25,6 +25,18 @@ query {
     date
     subjectGroups
     tags
+    importantDocuments {
+      editor
+      number
+      type
+      url
+    }
+    plenums {
+      editor
+      number
+      link
+      pages
+    }
   }
 }
 `
