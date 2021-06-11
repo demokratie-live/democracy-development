@@ -31,5 +31,6 @@ type Procedure {
   tags: [String]
   importantDocuments: [Document]
   plenums: [Plenum]
+  gestOrderNumber: String
 }
 `

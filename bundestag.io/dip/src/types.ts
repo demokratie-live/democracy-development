@@ -12,6 +12,7 @@ export type Vorgang = {
    sachgebiet: string[]
    datum: Date
    deskriptor?: Array<Deskriptor>
+   gesta: string | undefined
 }
 export type Plenarprotokoll = {
   id: string
