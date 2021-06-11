@@ -16,7 +16,3 @@ services:
     command: yarn run dev
     volumes:
       - ./bundestag.io/dip:/app
-  crawler:
-    build:
-      context: services/cron-jobs/crawler
-      target: build_stage
