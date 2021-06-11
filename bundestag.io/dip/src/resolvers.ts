@@ -1,12 +1,18 @@
 import DipAPI from './DipAPI'
-import { Vorgang, Dokument } from './types'
+import { Vorgang, Drucksache, Plenarprotokoll } from './types'
 
 export default {
+  Plenum: {
+   editor: (dok: Plenarprotokoll) => dok.herausgeber,
+   number: (dok: Plenarprotokoll) => dok.dokumentnummer,
+   link: (dok: Plenarprotokoll) => dok.pdf_url,
+   pages: (dok: Plenarprotokoll) => `${dok.anfangsseite} - ${dok.endseite}`,
+  },
   Document: {
-   editor: (dokument: Dokument) => dokument.fundstelle.herausgeber,
-   number: (dokument: Dokument) => dokument.fundstelle.dokumentnummer,
-   type: (dokument: Dokument) => dokument.fundstelle.drucksachetyp,
-   url: (dokument: Dokument) => dokument.fundstelle.pdf_url,
+   editor: (dok: Drucksache) => dok.herausgeber,
+   number: (dok: Drucksache) => dok.dokumentnummer,
+   type: (dok: Drucksache) => dok.drucksachetyp,
+   url: (dok: Drucksache) => dok.pdf_url,
   },
   Procedure: {
     procedureId: (vorgang: Vorgang) => vorgang.id,
@@ -17,11 +23,17 @@ export default {
     period: (vorgang: Vorgang) => vorgang.wahlperiode,
     subjectGroups: (vorgang: Vorgang) => vorgang.sachgebiet,
     date: (vorgang: Vorgang) => vorgang.datum,
+    plenums: (vorgang: Vorgang, _args: any, { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } }) => {
+      return dipAPI.getVorgangsPlenarProtokolle(vorgang.id)
+    },
     importantDocuments: (vorgang: Vorgang, _args: any, { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } }) => {
-      return dipAPI.getVorgangsDokumente(vorgang.id)
+      return dipAPI.getVorgangsDrucksachen(vorgang.id)
     }
   },
   Query: {
+    procedure: (_parent: any,  args: { id: string }, { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } }) => {
+      return dipAPI.getVorgang(args.id)
+    },
     procedures: (_parent: any, _args: any, { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } }) => {
       return dipAPI.getVorgaenge()
     }

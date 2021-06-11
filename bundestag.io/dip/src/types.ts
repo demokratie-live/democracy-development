@@ -13,18 +13,35 @@ export type Vorgang = {
    datum: Date
    deskriptor?: Array<Deskriptor>
 }
-export type Fundstelle = {
+export type Plenarprotokoll = {
+  id: string
+  pdf_url: string,
+  dokumentart: string
+  dokumentnummer: string
+  datum: Date
+  verteildatum: Date
+  herausgeber: string
+  urheber: string[],
+  anfangsseite: number
+  endseite: number
+  anfangsquadrant: string
+  endquadrant: string
+}
+
+export type Drucksache = {
    id: string
    pdf_url: string
+   dokumentart: string
    dokumentnummer: string
    datum: Date
-   dokumentart: string
    drucksachetyp: string
    herausgeber: string
    urheber: string[]
 }
 
-export type Dokument = {
+export type Fundstelle = Drucksache | Plenarprotokoll
+
+export type Vorgangsposition = {
  id: string
  vorgangsposition: string
  zuordnung: string
