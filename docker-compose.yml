@@ -37,6 +37,7 @@ services:
     ports:
       - 3101:3101
   crawler:
+    command: node -e 'console.log("Run `docker-compose run --rm crawler yarn run start:import-procedures`")'
     build:
       context: services/cron-jobs/crawler
       target: production_stage
