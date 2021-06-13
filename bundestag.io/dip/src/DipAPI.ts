@@ -3,9 +3,9 @@ import { Vorgang, Drucksache, Plenarprotokoll, Vorgangsposition } from './types'
 
 
 export default class DipAPI extends RESTDataSource {
-  constructor() {
+  constructor({ baseURL }: { baseURL: string}) {
     super();
-    this.baseURL = 'https://search.dip.bundestag.de'
+    this.baseURL = baseURL
   }
 
   willSendRequest(request: RequestOptions) {
