@@ -1,5 +1,6 @@
 import DipAPI from './DipAPI'
-import { Vorgang, Drucksache, Plenarprotokoll } from './types'
+import { Vorgang, Drucksache, Plenarprotokoll } from './dip-types'
+import { ProceduresArgs } from './types'
 
 const inkrafttretenDateFormat = new Intl.DateTimeFormat('de-DE', {
   year: 'numeric', month: '2-digit', day: '2-digit'
@@ -46,8 +47,8 @@ export default {
     procedure: (_parent: any,  args: { id: string }, { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } }) => {
       return dipAPI.getVorgang(args.id)
     },
-    procedures: (_parent: any, _args: any, { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } }) => {
-      return dipAPI.getVorgaenge()
+    procedures: (_parent: any, args: ProceduresArgs, { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } }) => {
+      return dipAPI.getVorgaenge(args)
     }
   }
 }

@@ -2,11 +2,13 @@
 import { setupPolly } from 'setup-polly-jest';
 import supertest from 'supertest'
 import createServer from './server'
+import NodeHTTPAdapter from '@pollyjs/adapter-node-http'
+import FSPersister from '@pollyjs/persister-fs'
 
 
 const context = setupPolly({
-  adapters: [require('@pollyjs/adapter-node-http')],
-  persister: require('@pollyjs/persister-fs'),
+  adapters: [NodeHTTPAdapter],
+  persister: FSPersister,
   persisterOptions: {
     fs: {
       recordingsDir: '__recordings__'
@@ -102,6 +104,48 @@ describe('Query', () => {
             ]
           }
         }
+      })
+    })
+  })
+
+  describe('procedures', () => {
+    const query = gql`
+    query($offset: Int, $limit: Int, $filter: ProcedureFilter) {
+      procedures(offset: $offset, limit: $limit, filter: $filter) {
+        procedureId
+      }
+    }
+    `
+
+    describe('pagination', () => {
+      describe('offset', () => {
+        // it.todo('skips items')
+      })
+
+      describe('limit', () => {
+        it('returns less items', async () => {
+          const variables = { limit: 3 }
+          const { data: { procedures } } = await runQuery({query, variables})
+          expect(procedures).toHaveLength(3)
+        })
+      })
+
+      describe('limit > 50', () => {
+        it('fetches DIP API multiple times to get remaining items', async () => {
+          const variables = { limit: 53 }
+          const { data: { procedures } } = await runQuery({query, variables})
+          const idSet = new Set(procedures.map((p: {procedureId: number}) => p.procedureId))
+          expect(procedures).toHaveLength(53)
+          expect(idSet.size).toEqual(53)
+        })
+
+        it('returns less items if result set is smaller', async () => {
+          const variables = { limit: 53, filter: { before: '1970-01-01' } }
+          const { data: { procedures } } = await runQuery({query, variables})
+          const idSet = new Set(procedures.map((p: {procedureId: number}) => p.procedureId))
+          expect(procedures).toHaveLength(2)
+          expect(idSet.size).toEqual(2)
+        })
       })
     })
   })
