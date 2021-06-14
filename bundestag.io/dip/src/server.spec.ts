@@ -1,5 +1,18 @@
+/** @jest-environment setup-polly-jest/jest-environment-node */
+import { setupPolly } from 'setup-polly-jest';
 import supertest from 'supertest'
 import createServer from './server'
+
+
+const context = setupPolly({
+  adapters: [require('@pollyjs/adapter-node-http')],
+  persister: require('@pollyjs/persister-fs'),
+  persisterOptions: {
+    fs: {
+      recordingsDir: '__recordings__'
+    }
+  },
+});
 
 const DIP_API_KEY='N64VhW8.yChkBUIJeosGojQ7CSR2xwLf3Qy7Apw464'
 const { app } = createServer({ DIP_API_KEY, DIP_API_ENDPOINT: 'https://search.dip.bundestag.de' })
@@ -43,6 +56,13 @@ const runQuery = async ({ query, variables}: {query: string, variables?: object}
 
 
 describe('app', () => {
+  beforeEach(() => {
+    context.polly.server
+    .any()
+    .filter((req: any) => /^127.0.0.1:[0-9]+$/.test(req.headers.host))
+    .passthrough();
+  })
+
   it('returns 200', async () => {
     await expect(runQuery({query})).resolves.toMatchObject({
       data: {
@@ -79,8 +99,24 @@ describe('app', () => {
             "Telekommunikationsdienst"
           ],
           gestOrderNumber: "G053",
-          importantDocuments: expect.any(Array),
-          "plenums": expect.any(Array) ,
+          importantDocuments: [
+            expect.any(Object),
+            expect.any(Object),
+            expect.any(Object),
+            expect.any(Object),
+            expect.any(Object),
+            expect.any(Object),
+            expect.any(Object),
+            expect.any(Object),
+            expect.any(Object),
+          ],
+          "plenums": [
+            expect.any(Object),
+            expect.any(Object),
+            expect.any(Object),
+            expect.any(Object),
+            expect.any(Object),
+          ],
         }
       }
     })
