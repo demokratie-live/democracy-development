@@ -3,6 +3,12 @@ export type Deskriptor = {
    name: string
    typ: string
 }
+
+export type Inkrafttreten = {
+   datum: Date
+   erlaeuterung?: string
+}
+
 export type Vorgang = {
    id: string
    titel: string
@@ -13,6 +19,7 @@ export type Vorgang = {
    datum: Date
    deskriptor?: Array<Deskriptor>
    gesta: string | undefined
+   inkrafttreten?: Array<Inkrafttreten>
 }
 export type Plenarprotokoll = {
   id: string

@@ -32,5 +32,6 @@ type Procedure {
   importantDocuments: [Document]
   plenums: [Plenum]
   gestOrderNumber: String
+  legalValidity: [String]
 }
 `
