@@ -1,10 +1,14 @@
 import { gql } from 'apollo-server'
 export default gql`
 type Query {
-  procedures(offset: Int, limit: Int): [Procedure]
+  procedures(offset: Int, limit: Int! = 50, filter: ProcedureFilter): [Procedure]
   procedure(id: ID!): Procedure
 }
 scalar Date
+input ProcedureFilter {
+  before: Date
+  after: Date
+}
 
 type Document {
   editor: String

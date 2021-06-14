@@ -1,6 +1,6 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest'
-import { Vorgang, Drucksache, Plenarprotokoll, Vorgangsposition } from './types'
-
+import { Vorgang, Drucksache, Plenarprotokoll, Vorgangsposition } from './dip-types'
+import { ProceduresArgs } from './types'
 
 export default class DipAPI extends RESTDataSource {
   constructor({ baseURL }: { baseURL: string}) {
@@ -16,9 +16,21 @@ export default class DipAPI extends RESTDataSource {
     return this.get(`/api/v1/vorgang/${vorgangsId}`);
   }
 
-  async getVorgaenge(): Promise<Array<Vorgang>> {
-    const { documents } = await this.get(`/api/v1/vorgang`);
-    return documents
+  async getVorgaenge(args: ProceduresArgs): Promise<Array<Vorgang>> {
+    const { before, after } = args.filter || {}
+    const filter: { 'f.datum.start'?: Date, 'f.datum.end'?: Date } = {}
+    if(after) filter['f.datum.start'] = after
+    if(before) filter['f.datum.end'] = before
+    let { documents, cursor } = await this.get(`/api/v1/vorgang`, filter);
+    while (documents.length < args.limit) {
+      const res = await this.get(`/api/v1/vorgang`, { ...filter, cursor });
+      cursor = res.cursor
+      if(res.documents.length === 0) {
+        break
+      }
+      documents = documents.concat(res.documents)
+    }
+    return documents.slice(0, args.limit)
   }
 
   private async getVorgangsVorgangspositionen (vorgangsId: string): Promise<Array<Vorgangsposition>>  {
