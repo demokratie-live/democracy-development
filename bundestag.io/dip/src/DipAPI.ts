@@ -22,7 +22,7 @@ export default class DipAPI extends RESTDataSource {
     if(after) filter['f.datum.start'] = after
     if(before) filter['f.datum.end'] = before
     let { documents, cursor } = await this.get(`/api/v1/vorgang`, filter);
-    while (documents.length < args.limit) {
+    while (documents.length < args.limit + args.offset) {
       const res = await this.get(`/api/v1/vorgang`, { ...filter, cursor });
       cursor = res.cursor
       if(res.documents.length === 0) {
@@ -30,7 +30,7 @@ export default class DipAPI extends RESTDataSource {
       }
       documents = documents.concat(res.documents)
     }
-    return documents.slice(0, args.limit)
+    return documents.slice(args.offset, args.limit + args.offset)
   }
 
   private async getVorgangsVorgangspositionen (vorgangsId: string): Promise<Array<Vorgangsposition>>  {

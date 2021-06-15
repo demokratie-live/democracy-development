@@ -120,15 +120,16 @@ describe('Query', () => {
      })
 
     describe('pagination', () => {
-      describe('offset', () => {
-        // it.todo('skips items')
-      })
-
       describe('limit', () => {
         it('returns less items', async () => {
           const variables = { limit: 3 }
           const { data: { procedures } } = await runQuery({query, variables})
           expect(procedures).toHaveLength(3)
+          expect(procedures).toMatchObject([
+            expect.objectContaining({ procedureId: '278658' }),
+            expect.objectContaining({ procedureId: '278550' }),
+            expect.objectContaining({ procedureId: '278529' }),
+          ])
         })
       })
 
@@ -147,6 +148,19 @@ describe('Query', () => {
           const idSet = new Set(procedures.map((p: {procedureId: number}) => p.procedureId))
           expect(procedures).toHaveLength(2)
           expect(idSet.size).toEqual(2)
+        })
+      })
+
+      describe('offset', () => {
+        it('skips items', async () => {
+          const variables = { offset: 2, limit: 3 }
+          const { data: { procedures } } = await runQuery({query, variables})
+          expect(procedures).toHaveLength(3)
+          expect(procedures).toMatchObject([
+            expect.objectContaining({ procedureId: '279175' }),
+            expect.objectContaining({ procedureId: '279174' }),
+            expect.objectContaining({ procedureId: '279173' }),
+          ])
         })
       })
     })

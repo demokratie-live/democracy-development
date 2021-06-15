@@ -4,6 +4,6 @@ export type ProcedureFilter = {
 }
 export type ProceduresArgs = {
   limit: number,
-  offset?: number,
+  offset: number,
   filter?: ProcedureFilter
 }
