@@ -73,29 +73,22 @@ describe('Query', () => {
       await expect(runQuery({query, variables})).resolves.toMatchObject({
         data: {
           procedure: {
-            abstract: expect.stringContaining("Verbesserung der Verfügbarkeit barrierefreier Produkte und Dienstleistungen der Informations- und Kommunikationstechnologien"),
-            procedureId: "275933",
-            currentStatus: "Verabschiedet",
-            type: "Vorgang",
+            procedureId: '275933',
             period: 19,
-            title: expect.stringContaining("Gesetz zur Umsetzung der Richtlinie (EU) 2019/882"),
-            date: "2021-06-11",
-            gestOrderNumber: "G053",
+            date: '2021-06-11',
+            gestOrderNumber: 'G053',
           }
         }
       })
     })
 
     it('returns legalValidity', async () => {
-      const variables = { procedureId: "155381" }
+      const variables = { procedureId: '155381' }
       await expect(runQuery({query, variables})).resolves.toMatchObject({
         data: {
           procedure: {
             procedureId: "155381",
-            currentStatus: "Verkündet",
-            type: "Vorgang",
             period: 12,
-            title: "Gesetz zu dem Europa-Abkommen vom 4. Oktober 1993 zur Gründung einer Assoziation zwischen den Europäischen Gemeinschaften sowie ihren Mitgliedstaaten und der Slowakischen Republik (G-SIG: 12020791)",
             date: "1994-07-08",
             gestOrderNumber: "XE017",
             legalValidity: [
@@ -116,6 +109,15 @@ describe('Query', () => {
       }
     }
     `
+    describe('filter', () => {
+      describe('before+after', () => {
+        it('filters by date', async () => {
+          const variables = { filter: { before: '2021-06-15', after: '2021-06-15' } }
+          const { data: { procedures } } = await runQuery({query, variables})
+          expect(procedures).toHaveLength(28)
+        })
+      })
+     })
 
     describe('pagination', () => {
       describe('offset', () => {
