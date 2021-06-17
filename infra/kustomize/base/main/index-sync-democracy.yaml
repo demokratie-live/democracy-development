@@ -13,12 +13,10 @@ spec:
           restartPolicy: Never
           containers:
             - name: index-sync-democracy
-              image: docker.pkg.github.com/demokratie-live/democracy-development/index-sync-democracy:0.1.1
+              image: democracy/index-sync-democracy:0.1.1
               env:
                 - name: DB_URL
                   valueFrom:
                     configMapKeyRef:
                       name: democracy-api-config
                       key: DB_URL
-          imagePullSecrets:
-            - name: regcred

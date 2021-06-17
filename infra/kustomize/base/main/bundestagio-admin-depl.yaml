@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bundestagio-admin
-          image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin:2.1.8-dev
+          image: democracy/bundestag.io-admin:2.1.8
           envFrom:
             - configMapRef:
                 name: bio-admin-config
@@ -24,8 +24,6 @@ spec:
             - secretRef:
                 name: bundestag-result-edit-token
                 optional: true
-      imagePullSecrets:
-        - name: regcred
 ---
 apiVersion: v1
 kind: Service

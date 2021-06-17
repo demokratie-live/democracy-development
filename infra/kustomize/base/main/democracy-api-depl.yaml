@@ -14,15 +14,13 @@ spec:
     spec:
       containers:
         - name: democracy-api
-          image: docker.pkg.github.com/demokratie-live/democracy-server/democracy-server:0.2.32-dev
+          image: democracy/democracy-server:0.2.32
           envFrom:
             - configMapRef:
                 name: democracy-api-config
             - secretRef:
                 name: democracy-api-secrets
                 optional: true
-      imagePullSecrets:
-        - name: regcred
 ---
 apiVersion: v1
 kind: Service

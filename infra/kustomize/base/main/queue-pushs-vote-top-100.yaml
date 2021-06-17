@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: queue-pushs-vote-top-100
-              image: docker.pkg.github.com/demokratie-live/democracy-development/queue-pushs-vote-top-100:0.1.6
+              image: democracy/queue-pushs-vote-top-100:0.1.6
               env:
                 - name: DB_URL
                   valueFrom:
@@ -25,5 +25,3 @@ spec:
                     configMapKeyRef:
                       name: democracy-api-config
                       key: BUNDESTAGIO_SERVER_URL
-          imagePullSecrets:
-            - name: regcred

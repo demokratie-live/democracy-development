@@ -13,12 +13,10 @@ spec:
           restartPolicy: Never
           containers:
             - name: shedule-bio-resync
-              image: docker.pkg.github.com/demokratie-live/democracy-development/shedule-bio-resync:0.1.2
+              image: democracy/shedule-bio-resync:0.1.2
               env:
                 - name: DB_URL
                   valueFrom:
                     configMapKeyRef:
                       name: democracy-api-config
                       key: DB_URL
-          imagePullSecrets:
-            - name: regcred

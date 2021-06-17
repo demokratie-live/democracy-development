@@ -5,15 +5,14 @@ on:
     paths:
       - "bundestag.io-api/**"
     branches:
-      - 'master'
+      - "master"
     tags:
-      - 'v*'
+      - "bundestag.io@v*"
   pull_request:
     paths:
       - "bundestag.io-api/**"
     branches:
-      - 'master'
-
+      - "master"
 
 jobs:
   push:

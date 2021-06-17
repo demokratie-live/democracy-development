@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: import-procedures
-              image: docker.pkg.github.com/demokratie-live/democracy-development/import-procedures:0.1.16
+              image: democracy/import-procedures:0.1.16
               envFrom:
                 - configMapRef:
                     name: import-procedures-config
@@ -23,5 +23,3 @@ spec:
                     configMapKeyRef:
                       name: bio-api-config
                       key: DB_URL
-          imagePullSecrets:
-            - name: regcred
