@@ -21,6 +21,17 @@ export type Vorgang = {
    gesta: string | undefined
    inkrafttreten?: Array<Inkrafttreten>
 }
+
+export type Beschlussfassung = {
+   beschlusstenor: string
+   dokumentnummer: string
+   seite: string
+   abstimm_ergebnis_bemerkung?: string
+   abstimmungsart?: string
+   grundlage?: string
+   mehrheit?: string
+}
+
 export type Plenarprotokoll = {
   id: string
   pdf_url: string,
@@ -64,4 +75,5 @@ export type Vorgangsposition = {
  vorgang_id: string
  datum: Date
  fundstelle: Fundstelle
+ beschlussfassung?: Array<Beschlussfassung>
 }

@@ -176,6 +176,102 @@ describe('Query', () => {
           }
         })
       })
+
+      describe('decision', () => {
+        it('returns page+tenor+document+type+comment', async () => {
+          const variables = { procedureId: '234344' }
+          await expect(runQuery({query, variables})).resolves.toMatchObject({
+            data: {
+              procedure: {
+                procedureId: "234344",
+                history: [
+                  expect.any(Object),
+                  expect.objectContaining({ decision: [
+                    expect.objectContaining({
+                      page: '2385A',
+                      tenor: 'Überweisung',
+                      document: '19/1596',
+                    })
+                  ]}),
+                  expect.any(Object),
+                  expect.any(Object),
+                  expect.objectContaining({ decision: [
+                    expect.objectContaining({
+                      page: '2736B',
+                      tenor: 'Annahme der Vorlage',
+                      document: '19/1596',
+                      type: 'Namentliche Abstimmung',
+                      comment: '531:78:35'
+                    })
+                  ]}),
+                ]
+              }
+            }
+          })
+        })
+
+        it('returns foundation', async () => {
+          const variables = { procedureId: '233294' }
+          await expect(runQuery({query, variables})).resolves.toMatchObject({
+            data: {
+              procedure: {
+                procedureId: "233294",
+                history: [
+                  expect.any(Object),
+                  expect.objectContaining({ decision: [
+                    expect.objectContaining({
+                      page: '75B',
+                      tenor: 'erneute Einbringung; Bestellung eines Beauftragten',
+                      document: '81/18',
+                      foundation: 'Art. 76 Abs. 1 GG'
+                    })
+                  ]}),
+                  expect.any(Object),
+                  expect.any(Object),
+                ]
+              }
+            }
+          })
+        })
+
+        it('returns majority', async () => {
+          const variables = { procedureId: '44236' }
+          await expect(runQuery({query, variables})).resolves.toMatchObject({
+            data: {
+              procedure: {
+                procedureId: "44236",
+                history: [
+                  expect.any(Object),
+                  expect.any(Object),
+                  expect.any(Object),
+                  expect.any(Object),
+                  expect.objectContaining({ decision: [
+                    expect.objectContaining({
+                      page: '21480A',
+                      tenor: 'Annahme der Vorlage',
+                      document: '17/9392',
+                      type: 'Namentliche Abstimmung',
+                      comment: '510:0:66',
+                      majority: 'Zweidrittelmehrheit',
+                    })
+                  ]}),
+                  expect.any(Object),
+                  expect.objectContaining({ decision: [
+                    expect.objectContaining({
+                      page: '256C',
+                      tenor: 'Zustimmung',
+                      document: '289/12',
+                      type: 'Abstimmung durch Aufruf der Länder',
+                      foundation: 'Art. 79 Abs. 2 GG'
+                    })
+                  ]}),
+                  expect.any(Object),
+                ]
+              }
+            }
+          })
+        })
+      })
     })
   })
 
