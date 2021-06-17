@@ -10,6 +10,14 @@ build:
     #         dest: .
     #   docker:
     #     dockerfile: Dockerfile.dev
+    - image: democracy/bundestag.io-dip
+      context: bundestag.io/dip
+      sync:
+        manual:
+          - src: src/**/*.{js,ts}
+            dest: .
+      docker:
+        dockerfile: Dockerfile
     # - image: docker.pkg.github.com/demokratie-live/bundestag.io-admin/bundestag.io-admin
     #   context: bundestag.io-admin
     #   sync:
