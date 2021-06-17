@@ -33,7 +33,7 @@ export default class DipAPI extends RESTDataSource {
     return documents.slice(args.offset, args.limit + args.offset)
   }
 
-  private async getVorgangsVorgangspositionen (vorgangsId: string): Promise<Array<Vorgangsposition>>  {
+  async getVorgangsVorgangspositionen (vorgangsId: string): Promise<Array<Vorgangsposition>>  {
     const { documents: vorgangspositionen } = await this.get(`/api/v1/vorgangsposition`, {
       'f.vorgang': vorgangsId
     });

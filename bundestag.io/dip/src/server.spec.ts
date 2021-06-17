@@ -64,6 +64,22 @@ describe('Query', () => {
           link
           pages
         }
+        history {
+          assignment
+          initiator
+          findSpot
+          findSpotUrl
+          decision {
+            page
+            tenor
+            document
+            type
+            comment
+            foundation
+            majority
+          }
+          date
+        }
       }
     }
     `
@@ -97,6 +113,26 @@ describe('Query', () => {
             ]
           }
         }
+      })
+    })
+
+    describe('history', () => {
+      it('returns assignment+initiator', async () => {
+        const variables = { procedureId: '234344' }
+        await expect(runQuery({query, variables})).resolves.toMatchObject({
+          data: {
+            procedure: {
+              procedureId: "234344",
+              history: [
+                expect.objectContaining({ assignment: 'BT', initiator: "Antrag,  Urheber : Bundesregierung" }),
+                expect.objectContaining({ assignment: 'BT', initiator: "Beratung" }),
+                expect.objectContaining({ assignment: 'BT', initiator: "Beschlussempfehlung und Bericht,  Urheber : Auswärtiger Ausschuss" }),
+                expect.objectContaining({ assignment: 'BT', initiator: "Bericht gemäß § 96 Geschäftsordnung BT,  Urheber : Haushaltsausschuss" }),
+                expect.objectContaining({ assignment: 'BT', initiator: "Beratung" }),
+              ]
+            }
+          }
+        })
       })
     })
   })

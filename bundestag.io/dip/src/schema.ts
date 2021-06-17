@@ -22,6 +22,26 @@ type Plenum {
   link: String
   pages: String
 }
+
+type Decision {
+  page: String
+  tenor: String
+  document: String
+  type: String
+  comment: String
+  foundation: String
+  majority: String
+}
+
+type ProcessFlow {
+  assignment: String
+  initiator: String
+  findSpot: String
+  findSpotUrl: String
+  decision: [Decision]
+  date: Date
+}
+
 type Procedure {
   procedureId: ID!
   title: String!
@@ -37,5 +57,6 @@ type Procedure {
   plenums: [Plenum]
   gestOrderNumber: String
   legalValidity: [String]
+  history: [ProcessFlow]
 }
 `
