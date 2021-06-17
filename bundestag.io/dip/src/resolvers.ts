@@ -2,7 +2,7 @@ import DipAPI from './DipAPI'
 import { Vorgang, Vorgangsposition, Drucksache, Plenarprotokoll } from './dip-types'
 import { ProceduresArgs } from './types'
 
-const inkrafttretenDateFormat = new Intl.DateTimeFormat('de-DE', {
+const germanDateFormat = new Intl.DateTimeFormat('de-DE', {
   year: 'numeric', month: '2-digit', day: '2-digit'
 })
 
@@ -25,6 +25,17 @@ export default {
       return `${vp.vorgangsposition},  Urheber : ${vp.fundstelle.urheber.join(', ')}`
     },
     assignment: (vp: Vorgangsposition) => vp.fundstelle.herausgeber,
+    findSpotUrl: (vp: Vorgangsposition) => vp.fundstelle.pdf_url,
+    findSpot: (vp: Vorgangsposition) => {
+      const { fundstelle } = vp
+      const { herausgeber, dokumentart, dokumentnummer } = fundstelle
+      const datum = germanDateFormat.format(new Date(fundstelle.datum))
+      let result = `${datum} - ${herausgeber}-${dokumentart} ${dokumentnummer}`
+      const { anfangsseite, endseite, anfangsquadrant, endquadrant } = fundstelle as Plenarprotokoll
+      if(![anfangsseite, endseite, anfangsquadrant, endquadrant].every(Boolean)) return result
+      return `${result}, S. ${anfangsseite}${anfangsquadrant} - ${endseite}${endquadrant}`
+    },
+    date: (vp: Vorgangsposition) => new Date(vp.fundstelle.datum).toISOString(),
   },
   Procedure: {
     procedureId: (vorgang: Vorgang) => vorgang.id,
@@ -45,7 +56,7 @@ export default {
     legalValidity: (vorgang: Vorgang) => {
       if(!vorgang.inkrafttreten) return []
       return vorgang.inkrafttreten.map(ik => {
-        const datum = inkrafttretenDateFormat.format(new Date(ik.datum))
+        const datum = germanDateFormat.format(new Date(ik.datum))
         return `${datum}${ik.erlaeuterung ? ` (${ik.erlaeuterung})` : ''}`
       })
     },

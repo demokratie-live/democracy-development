@@ -35,6 +35,12 @@ describe('Query', () => {
     .any()
     .filter((req: any) => /^127.0.0.1:[0-9]+$/.test(req.headers.host))
     .passthrough();
+
+    context.polly.server
+    .any()
+    .on('beforePersist', (_req, recording) => {
+      recording.request.headers = []
+    });
   })
 
   describe('procedure', () => {
@@ -129,6 +135,42 @@ describe('Query', () => {
                 expect.objectContaining({ assignment: 'BT', initiator: "Beschlussempfehlung und Bericht,  Urheber : Auswärtiger Ausschuss" }),
                 expect.objectContaining({ assignment: 'BT', initiator: "Bericht gemäß § 96 Geschäftsordnung BT,  Urheber : Haushaltsausschuss" }),
                 expect.objectContaining({ assignment: 'BT', initiator: "Beratung" }),
+              ]
+            }
+          }
+        })
+      })
+
+      it('returns findSpot+findSpotUrl', async () => {
+        const variables = { procedureId: '234344' }
+        await expect(runQuery({query, variables})).resolves.toMatchObject({
+          data: {
+            procedure: {
+              procedureId: "234344",
+              history: [
+                expect.objectContaining({ findSpot: '11.04.2018 - BT-Drucksache 19/1596', findSpotUrl: 'https://dserver.bundestag.de/btd/19/015/1901596.pdf' }),
+                expect.objectContaining({ findSpot: '19.04.2018 - BT-Plenarprotokoll 19/26, S. 2377C - 2385A', findSpotUrl: 'https://dserver.bundestag.de/btp/19/19026.pdf#P.2377' }),
+                expect.objectContaining({ findSpot: '24.04.2018 - BT-Drucksache 19/1833', findSpotUrl: 'https://dserver.bundestag.de/btd/19/018/1901833.pdf' }),
+                expect.objectContaining({ findSpot: '25.04.2018 - BT-Drucksache 19/1879', findSpotUrl: 'https://dserver.bundestag.de/btd/19/018/1901879.pdf' }),
+                expect.objectContaining({ findSpot: '26.04.2018 - BT-Plenarprotokoll 19/29, S. 2723D - 2732C', findSpotUrl: 'https://dserver.bundestag.de/btp/19/19029.pdf#P.2723' }),
+              ]
+            }
+          }
+        })
+      })
+
+      it('returns date', async () => {
+        const variables = { procedureId: '234344' }
+        await expect(runQuery({query, variables})).resolves.toMatchObject({
+          data: {
+            procedure: {
+              procedureId: "234344",
+              history: [
+                expect.objectContaining({ date: '2018-04-11T00:00:00.000Z' }),
+                expect.objectContaining({ date: '2018-04-19T00:00:00.000Z' }),
+                expect.objectContaining({ date: '2018-04-24T00:00:00.000Z' }),
+                expect.objectContaining({ date: '2018-04-25T00:00:00.000Z' }),
+                expect.objectContaining({ date: '2018-04-26T00:00:00.000Z' }),
               ]
             }
           }
