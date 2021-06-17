@@ -1,5 +1,5 @@
 import DipAPI from './DipAPI'
-import { Vorgang, Drucksache, Plenarprotokoll } from './dip-types'
+import { Vorgang, Vorgangsposition, Drucksache, Plenarprotokoll } from './dip-types'
 import { ProceduresArgs } from './types'
 
 const inkrafttretenDateFormat = new Intl.DateTimeFormat('de-DE', {
@@ -18,6 +18,13 @@ export default {
    number: (dok: Drucksache) => dok.dokumentnummer,
    type: (dok: Drucksache) => dok.drucksachetyp,
    url: (dok: Drucksache) => dok.pdf_url,
+  },
+  ProcessFlow: {
+    initiator: (vp: Vorgangsposition) => {
+      if (!vp.fundstelle.urheber?.length) return vp.vorgangsposition
+      return `${vp.vorgangsposition},  Urheber : ${vp.fundstelle.urheber.join(', ')}`
+    },
+    assignment: (vp: Vorgangsposition) => vp.fundstelle.herausgeber,
   },
   Procedure: {
     procedureId: (vorgang: Vorgang) => vorgang.id,
@@ -41,6 +48,9 @@ export default {
         const datum = inkrafttretenDateFormat.format(new Date(ik.datum))
         return `${datum}${ik.erlaeuterung ? ` (${ik.erlaeuterung})` : ''}`
       })
+    },
+    history: (vorgang: Vorgang, _args: any, { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } }) => {
+      return dipAPI.getVorgangsVorgangspositionen(vorgang.id)
     }
   },
   Query: {
