@@ -1,5 +1,5 @@
 import DipAPI from './DipAPI'
-import { Vorgang, Vorgangsposition, Drucksache, Plenarprotokoll } from './dip-types'
+import { Vorgang, Vorgangsposition, Drucksache, Plenarprotokoll, Beschlussfassung } from './dip-types'
 import { ProceduresArgs } from './types'
 
 const germanDateFormat = new Intl.DateTimeFormat('de-DE', {
@@ -36,6 +36,18 @@ export default {
       return `${result}, S. ${anfangsseite}${anfangsquadrant} - ${endseite}${endquadrant}`
     },
     date: (vp: Vorgangsposition) => new Date(vp.fundstelle.datum).toISOString(),
+    decision: (vp: Vorgangsposition) => {
+      return vp.beschlussfassung
+    },
+  },
+  Decision: {
+    page: (bf: Beschlussfassung) => bf.seite,
+    tenor: (bf: Beschlussfassung) => bf.beschlusstenor,
+    document: (bf: Beschlussfassung) => bf.dokumentnummer,
+    type: (bf: Beschlussfassung) => bf.abstimmungsart,
+    comment: (bf: Beschlussfassung) => bf.abstimm_ergebnis_bemerkung,
+    foundation: (bf: Beschlussfassung) => bf.grundlage,
+    majority: (bf: Beschlussfassung) => bf.mehrheit,
   },
   Procedure: {
     procedureId: (vorgang: Vorgang) => vorgang.id,
