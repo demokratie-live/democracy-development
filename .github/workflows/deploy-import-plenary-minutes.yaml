@@ -29,9 +29,8 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
+            type=match,asref=foo,pattern=import-plenary-minutes@v(\d.\d.\d),group=1
+            type=semver,pattern={{version}},use=foo
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
