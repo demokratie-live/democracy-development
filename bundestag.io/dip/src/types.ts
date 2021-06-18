@@ -3,6 +3,7 @@ export type ProcedureFilter = {
   after?: Date
 }
 export type ProceduresArgs = {
+  cursor: string,
   limit: number,
   offset: number,
   filter?: ProcedureFilter

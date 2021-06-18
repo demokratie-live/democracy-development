@@ -1,12 +1,16 @@
 import DipAPI from './DipAPI'
 import { Vorgang, Vorgangsposition, Drucksache, Plenarprotokoll, Beschlussfassung } from './dip-types'
 import { ProceduresArgs } from './types'
+import { UserInputError } from 'apollo-server'
 
 const germanDateFormat = new Intl.DateTimeFormat('de-DE', {
   year: 'numeric', month: '2-digit', day: '2-digit'
 })
 
 export default {
+  PageInfo: {
+    startCursor: () =>  '*',
+  },
   Plenum: {
    editor: (dok: Plenarprotokoll) => dok.herausgeber,
    number: (dok: Plenarprotokoll) => dok.dokumentnummer,
@@ -81,6 +85,7 @@ export default {
       return dipAPI.getVorgang(args.id)
     },
     procedures: (_parent: any, args: ProceduresArgs, { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } }) => {
+      if(args.limit % 50 !== 0) throw new UserInputError('DIP has a fixed page size of 50. Make sure your limt is a multiple of 50 to avoid inconsistencies with cursor based pagination.')
       return dipAPI.getVorgaenge(args)
     }
   }
