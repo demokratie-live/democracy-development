@@ -17,7 +17,7 @@ spec:
           image: democracy/qr-code-handler:1.0.2
           envFrom:
             - configMapRef:
-                name: qr-code-handler-configs
+                name: qr-code-handler-config
 ---
 apiVersion: v1
 kind: Service

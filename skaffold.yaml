@@ -2,173 +2,173 @@ apiVersion: skaffold/v2beta15
 kind: Config
 build:
   artifacts:
-    - image: democracy/bundestag.io
-      context: bundestag.io-api
-      sync:
-        manual:
-          - src: src/**/*.{js,ts}
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/bundestag.io-admin
-      context: bundestag.io-admin
-      sync:
-        manual:
-          - src: "**/*.js"
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/democracy-server
-      context: democracy-app.de-api
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/democracy-app.de
-      context: democracy-app.de
-      sync:
-        manual:
-          - src: "**/*.js"
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/import-procedures
-      context: ./services/cron-jobs/import-procedures
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/import-conference-week-details
-      context: ./services/cron-jobs/import-conference-week-details
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/import-deputy-profiles
-      context: ./services/cron-jobs/import-deputy-profiles
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/import-named-polls
-      context: ./services/cron-jobs/import-named-polls
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/import-plenary-minutes
-      context: ./services/cron-jobs/import-plenary-minutes
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/import-named-poll-deputies
-      context: ./services/cron-jobs/import-named-poll-deputies
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/push-send-queued
-      context: ./services/cron-jobs/push-send-queued
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/queue-pushs-conference-week
-      context: ./services/cron-jobs/queue-pushs-conference-week
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/queue-pushs-vote-conference-week
-      context: ./services/cron-jobs/queue-pushs-vote-conference-week
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/queue-pushs-vote-top-100
-      context: services/cron-jobs/queue-pushs-vote-top-100
-      sync:
-        infer:
-          - services/cron-jobs/queue-pushs-vote-top-100/**/*
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/shedule-bio-resync
-      context: ./services/cron-jobs/shedule-bio-resync
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/sync-deputy-profiles
-      context: ./services/cron-jobs/sync-deputy-profiles
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/sync-named-polls
-      context: ./services/cron-jobs/sync-named-polls
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/sync-procedures
-      context: ./services/cron-jobs/sync-procedures
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/index-sync-democracy
-      context: ./services/cron-jobs/index-sync-democracy
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/index-sync-bundestagio
-      context: ./services/cron-jobs/index-sync-bundestagio
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/qr-code-handler
-      context: ./services/qr-code-handler
-      sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
-      docker:
-        dockerfile: Dockerfile.dev
+    # - image: democracy/bundestag.io
+    #   context: bundestag.io-api
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.{js,ts}
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile
+    # - image: democracy/bundestag.io-admin
+    #   context: bundestag.io-admin
+    #   sync:
+    #     manual:
+    #       - src: "**/*.js"
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/democracy-server
+    #   context: democracy-app.de-api
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/democracy-app.de
+    #   context: democracy-app.de
+    #   sync:
+    #     manual:
+    #       - src: "**/*.js"
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/import-procedures
+    #   context: ./services/cron-jobs/import-procedures
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/import-conference-week-details
+    #   context: ./services/cron-jobs/import-conference-week-details
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/import-deputy-profiles
+    #   context: ./services/cron-jobs/import-deputy-profiles
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/import-named-polls
+    #   context: ./services/cron-jobs/import-named-polls
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/import-plenary-minutes
+    #   context: ./services/cron-jobs/import-plenary-minutes
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/import-named-poll-deputies
+    #   context: ./services/cron-jobs/import-named-poll-deputies
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/push-send-queued
+    #   context: ./services/cron-jobs/push-send-queued
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/queue-pushs-conference-week
+    #   context: ./services/cron-jobs/queue-pushs-conference-week
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/queue-pushs-vote-conference-week
+    #   context: ./services/cron-jobs/queue-pushs-vote-conference-week
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/queue-pushs-vote-top-100
+    #   context: services/cron-jobs/queue-pushs-vote-top-100
+    #   sync:
+    #     infer:
+    #       - services/cron-jobs/queue-pushs-vote-top-100/**/*
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/shedule-bio-resync
+    #   context: ./services/cron-jobs/shedule-bio-resync
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/sync-deputy-profiles
+    #   context: ./services/cron-jobs/sync-deputy-profiles
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/sync-named-polls
+    #   context: ./services/cron-jobs/sync-named-polls
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/sync-procedures
+    #   context: ./services/cron-jobs/sync-procedures
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/index-sync-democracy
+    #   context: ./services/cron-jobs/index-sync-democracy
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/index-sync-bundestagio
+    #   context: ./services/cron-jobs/index-sync-bundestagio
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
+    # - image: democracy/qr-code-handler
+    #   context: ./services/qr-code-handler
+    #   sync:
+    #     manual:
+    #       - src: src/**/*.ts
+    #         dest: .
+    #   docker:
+    #     dockerfile: Dockerfile.dev
   tagPolicy:
     sha256: {}
   local:
