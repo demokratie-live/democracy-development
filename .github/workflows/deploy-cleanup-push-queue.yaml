@@ -7,7 +7,7 @@ on:
     branches:
       - "master"
     tags:
-      - "v*"
+      - "cleanup-push-queue@v*"
   pull_request:
     paths:
       - "services/cron-jobs/cleanup-push-queue/**"

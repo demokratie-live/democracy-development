@@ -4,27 +4,51 @@ on:
   push:
     paths:
       - "services/qr-code-handler/**"
-    # branches:
-    #   - master
+    branches:
+      - "master"
+    tags:
+      - "qr-code-handler@v*"
+  pull_request:
+    paths:
+      - "services/qr-code-handler/**"
+    branches:
+      - "master"
 
 jobs:
-  build:
-    name: Docker – qr-code-handler
+  push:
     runs-on: ubuntu-latest
+    environment: docker
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Read package.json
-        uses: tyankatsu0105/read-package-version-actions@v1
-        id: package-version
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
         with:
-          path: "./services/qr-code-handler"
-
-      - uses: docker/build-push-action@v1
+          images: democracy/qr-code-handler
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        if: github.event_name != 'pull_request'
         with:
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
-          registry: docker.pkg.github.com
-          repository: ${{ github.repository }}/qr-code-handler
-          path: ./services/qr-code-handler
-          tags: ${{ steps.package-version.outputs.version }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: services/qr-code-handler
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
