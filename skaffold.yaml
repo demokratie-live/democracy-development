@@ -9,7 +9,7 @@ build:
           - src: src/**/*.{js,ts}
             dest: .
       docker:
-        dockerfile: Dockerfile.dev
+        dockerfile: Dockerfile
     - image: democracy/bundestag.io-admin
       context: bundestag.io-admin
       sync:
