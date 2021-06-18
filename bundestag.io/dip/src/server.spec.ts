@@ -16,6 +16,8 @@ const context = setupPolly({
   },
 });
 
+const randomObjects = (n: number) => Array.from(Array(n).keys()).map(() => expect.any(Object))
+
 const DIP_API_KEY='N64VhW8.yChkBUIJeosGojQ7CSR2xwLf3Qy7Apw464'
 const { app } = createServer({ DIP_API_KEY, DIP_API_ENDPOINT: 'https://search.dip.bundestag.de' })
 
@@ -277,18 +279,27 @@ describe('Query', () => {
 
   describe('procedures', () => {
     const query = gql`
-    query($offset: Int, $limit: Int, $filter: ProcedureFilter) {
-      procedures(offset: $offset, limit: $limit, filter: $filter) {
-        procedureId
+      query($cursor: String, $offset: Int, $limit: Int, $filter: ProcedureFilter) {
+        procedures(cursor: $cursor, offset: $offset, limit: $limit, filter: $filter) {
+          edges {
+            node {
+              procedureId
+            }
+          }
+          totalCount
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
       }
-    }
     `
     describe('filter', () => {
       describe('before+after', () => {
         it('filters by date', async () => {
-          const variables = { filter: { before: '2021-06-15', after: '2021-06-15' } }
-          const { data: { procedures } } = await runQuery({query, variables})
-          expect(procedures).toHaveLength(28)
+          const variables = { filter: { after: '1980-01-01', before: '1980-01-10'  } }
+          const { data: { procedures: { edges } } } = await runQuery({query, variables})
+          expect(edges).toHaveLength(17)
         })
       })
      })
@@ -296,45 +307,112 @@ describe('Query', () => {
     describe('pagination', () => {
       describe('limit', () => {
         it('returns less items', async () => {
-          const variables = { limit: 3 }
-          const { data: { procedures } } = await runQuery({query, variables})
-          expect(procedures).toHaveLength(3)
-          expect(procedures).toMatchObject([
-            expect.objectContaining({ procedureId: '278658' }),
-            expect.objectContaining({ procedureId: '278550' }),
-            expect.objectContaining({ procedureId: '278529' }),
+          const variables = { limit: 50 }
+          const { data: { procedures: { edges } } } = await runQuery({query, variables})
+          expect(edges).toHaveLength(50)
+          expect(edges).toMatchObject([
+            expect.objectContaining({ node: { procedureId: '279259' } }),
+            expect.objectContaining({ node: { procedureId: '279258' } }),
+            expect.objectContaining({ node: { procedureId: '279257' } }),
+            ...randomObjects(47)
           ])
         })
-      })
 
-      describe('limit > 50', () => {
-        it('fetches DIP API multiple times to get remaining items', async () => {
-          const variables = { limit: 53 }
-          const { data: { procedures } } = await runQuery({query, variables})
-          const idSet = new Set(procedures.map((p: {procedureId: number}) => p.procedureId))
-          expect(procedures).toHaveLength(53)
-          expect(idSet.size).toEqual(53)
+        it('limit must be divisible of 50', async () => {
+          const variables = { limit: 3 }
+          await expect(runQuery({query, variables})).resolves.toMatchObject({
+            data: { procedures: null },
+            errors: [
+              expect.objectContaining({ message: 'DIP has a fixed page size of 50. Make sure your limt is a multiple of 50 to avoid inconsistencies with cursor based pagination.' })
+            ]
+          })
         })
 
-        it('returns less items if result set is smaller', async () => {
-          const variables = { limit: 53, filter: { before: '1970-01-01' } }
-          const { data: { procedures } } = await runQuery({query, variables})
-          const idSet = new Set(procedures.map((p: {procedureId: number}) => p.procedureId))
-          expect(procedures).toHaveLength(2)
-          expect(idSet.size).toEqual(2)
+        describe('limit > 50', () => {
+          it('fetches DIP API multiple times to get remaining items', async () => {
+            const variables = { limit: 100 }
+            const { data: { procedures: { edges } } } = await runQuery({query, variables})
+            const idSet = new Set(edges.map((edge: { node: { procedureId: number} }) => edge.node.procedureId))
+            expect(edges).toHaveLength(100)
+            expect(idSet.size).toEqual(100)
+          })
+
+          it('returns less items if result set is smaller', async () => {
+            const variables = { limit: 100, filter: { before: '1970-01-01' } }
+            const { data: { procedures: { edges } } } = await runQuery({query, variables})
+            const idSet = new Set(edges.map((edge: { node: { procedureId: number} }) => edge.node.procedureId))
+            expect(edges).toHaveLength(2)
+            expect(idSet.size).toEqual(2)
+          })
         })
       })
 
       describe('offset', () => {
         it('skips items', async () => {
-          const variables = { offset: 2, limit: 3 }
-          const { data: { procedures } } = await runQuery({query, variables})
-          expect(procedures).toHaveLength(3)
-          expect(procedures).toMatchObject([
-            expect.objectContaining({ procedureId: '279175' }),
-            expect.objectContaining({ procedureId: '279174' }),
-            expect.objectContaining({ procedureId: '279173' }),
+          let { data: { procedures: { edges } } } = await runQuery({query, variables: {
+            filter: { after: '2021-06-14', before: '2021-06-18'  }, limit: 50
+          }});
+          expect(edges).toHaveLength(50)
+          expect(edges).toMatchObject([
+            expect.objectContaining({ node: { procedureId: '279259' } }),
+            expect.objectContaining({ node: { procedureId: '279258' } }),
+            expect.objectContaining({ node: { procedureId: '279257' } }),
+            ...randomObjects(47)
+          ]);
+
+          ({ data: { procedures: { edges } } } = await runQuery({query, variables: {
+            filter: { after: '2021-06-14', before: '2021-06-18'  }, offset: 2, limit: 50
+          }}));
+          expect(edges).toHaveLength(50)
+          expect(edges).toMatchObject([
+            expect.objectContaining({ node: { procedureId: '279257' } }),
+            expect.objectContaining({ node: { procedureId: '278875' } }),
+            expect.objectContaining({ node: { procedureId: '278700' } }),
+            ...randomObjects(47)
           ])
+        })
+      })
+
+      describe('cursor', () => {
+        it('is passed to DIP API', async () => {
+          const variables = { limit: 50, cursor: 'AoJwwI7Ri/oCLlZvcmdhbmctMjc3NTM4' }
+          const { data: { procedures: { edges } } } = await runQuery({query, variables})
+          expect(edges).toHaveLength(50)
+          expect(edges).toMatchObject([
+            expect.objectContaining({ node: { procedureId: '277500' } }),
+            expect.objectContaining({ node: { procedureId: '276884' } }),
+            expect.objectContaining({ node: { procedureId: '274784' } }),
+            ...randomObjects(47)
+          ])
+        })
+      })
+    })
+
+    describe('pageInfo', () => {
+      it('maps to numFound', async () => {
+        const variables = { before: '2021-06-18' }
+        await expect(runQuery({query, variables})).resolves.toMatchObject({
+          data: {
+            procedures: {
+              totalCount: 277499,
+            }
+          }
+        })
+      })
+    })
+
+    describe('pageInfo', () => {
+      it('hasNextPage indicates if there are more entries', async () => {
+        const variables = { filter: { before: '1970-01-01' } }
+        await expect(runQuery({query, variables})).resolves.toMatchObject({
+          data: {
+            procedures: {
+              pageInfo: {
+                endCursor: "AoJwwIPJ6zMuVm9yZ2FuZy0yMDk5NjU=",
+                hasNextPage: false,
+              }
+            }
+          }
         })
       })
     })
