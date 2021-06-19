@@ -80,6 +80,25 @@ TODO
 Anyone and everyone is welcome to [contribute](https://github.com/demokratie-live/democracy-development/blob/master/CONTRIBUTE.md). Start by checking out the list of
 [open issues](https://github.com/demokratie-live/democracy-development/issues).
 
+## How to run
+
+### Skaffold
+
+1. Install nginx ingress for your platform: https://kubernetes.github.io/ingress-nginx/deploy/
+2. run `yarn dev`
+3. uncomment services from `skaffold.yaml` you need to build locally
+
+<details>
+  <summary>Troubleshooting</summary>
+  
+  1. if you have some error like following, run `kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission `
+
+```
+- Error from server (InternalError): error when creating "STDIN": Internal error occurred: failed calling webhook "validate.nginx.ingress.kubernetes.io": Post "https://ingress-nginx-controller-admission.ingress-nginx.svc:443/networking/v1beta1/ingresses?timeout=10s": dial tcp 10.108.45.182:443: connect: connection refused
+```
+
+</details>
+
 ## License
 
 Copyright © 2017-present DEMOCRACY Deutschland e.V.. This source code is licensed under the Apache 2.0 license found in the
