@@ -13,6 +13,7 @@ spec:
         - democracy-app.de
         - api.bundestag.io
         - admin.bundestag.io
+        - dip.bundestag.io
         - qr.democracy-deutschland.de
       secretName: democracy-production-tls
   rules:
@@ -44,6 +45,13 @@ spec:
             backend:
               serviceName: bundestagio-admin-srv
               servicePort: 3000
+    - host: dip.bundestag.io
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: bundestagio-dip-srv
+              servicePort: 3101
     - host: qr.democracy-deutschland.de
       http:
         paths:

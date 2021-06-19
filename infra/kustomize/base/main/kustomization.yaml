@@ -6,6 +6,7 @@ bases:
 resources:
   - bundestagio-admin-depl.yaml
   - bundestagio-depl.yaml
+  - bundestagio-dip-depl.yaml
   - democracy-api-depl.yaml
   - democracy-app-depl.yaml
   - nats-depl.yaml

@@ -13,6 +13,7 @@ spec:
         - alpha.democracy-app.de
         - alpha.api.bundestag.io
         - alpha.admin.bundestag.io
+        - alpha.dip.bundestag.io
       secretName: democracy-alpha-tls
   rules:
     - host: alpha.api.democracy-app.de
@@ -43,3 +44,10 @@ spec:
             backend:
               serviceName: bundestagio-admin-srv
               servicePort: 3000
+    - host: alpha.dip.bundestag.io
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: bundestagio-dip-srv
+              servicePort: 3101
