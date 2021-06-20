@@ -3,15 +3,15 @@ kind: Config
 build:
   artifacts:
     - image: democracy/bundestag.io
-      context: bundestag.io-api
+      context: bundestag.io/api
       sync:
         manual:
           - src: src/**/*.{js,ts}
             dest: .
       docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/bundestag.io-admin
-      context: bundestag.io-admin
+        dockerfile: Dockerfile
+    - image: democracy/bundestag.io/admin
+      context: bundestag.io/admin
       sync:
         manual:
           - src: "**/*.js"
