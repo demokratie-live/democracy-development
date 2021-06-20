@@ -42,14 +42,14 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile.dev
-    - image: democracy/import-procedures
-      context: ./services/cron-jobs/import-procedures
+    - image: democracy/crawler
+      context: ./services/cron-jobs/crawler
       sync:
         manual:
-          - src: src/**/*.ts
+          - src: src/**/*.{js,ts}
             dest: .
       docker:
-        dockerfile: Dockerfile.dev
+        dockerfile: Dockerfile
     - image: democracy/import-conference-week-details
       context: ./services/cron-jobs/import-conference-week-details
       sync:
