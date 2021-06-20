@@ -36,6 +36,8 @@ services:
       target: production_stage
     ports:
       - 3101:3101
+    environment:
+      - DIP_API_KEY=N64VhW8.yChkBUIJeosGojQ7CSR2xwLf3Qy7Apw464
   crawler:
     command: node -e 'console.log("Run `docker-compose run --rm crawler yarn run start:import-procedures`")'
     build:
