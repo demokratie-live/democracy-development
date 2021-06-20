@@ -7,3 +7,5 @@ infra/*.yaml
 configuration/*
 !configuration/*.example
 !.gitkeep
+
+infra/kustomize/overlays/prod/configs/bio-dip.env
