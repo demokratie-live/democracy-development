@@ -30,5 +30,5 @@ spec:
   ports:
     - name: bundestagio-dip
       protocol: TCP
-      port: 3100
-      targetPort: 3100
+      port: 3101
+      targetPort: 3101
