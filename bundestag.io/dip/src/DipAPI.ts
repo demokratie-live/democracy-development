@@ -42,13 +42,11 @@ export default class DipAPI extends RESTDataSource {
     let documents: Vorgang[] = []
     while (documents.length < args.limit + args.offset) {
       const res = await this.get(`/api/v1/vorgang`, { ...filter, cursor });
-      cursor = res.cursor
       totalCount = res.numFound
-      if(res.documents.length === 0) {
-        hasNextPage = false
-        break
-      }
       documents = documents.concat(res.documents)
+      hasNextPage = cursor !== res.cursor
+      cursor = res.cursor
+      if(!hasNextPage) break
     }
     return {
       totalCount,
