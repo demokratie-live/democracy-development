@@ -39,13 +39,18 @@ services:
     environment:
       - DIP_API_KEY=N64VhW8.yChkBUIJeosGojQ7CSR2xwLf3Qy7Apw464
   crawler:
-    command: node -e 'console.log("Run `docker-compose run --rm crawler yarn run start:import-procedures`")'
+    command: tail -f /dev/null # Run `docker-compose exec crawler yarn run start:import-procedures`
     build:
       context: services/cron-jobs/crawler
       target: production_stage
     environment:
       - MONGO_DB_URL=mongodb://mongo:27017/bundestagio
       - DIP_GRAPHQL_ENDPOINT=http://dip:3101
+      - DEBUG=*
+      - IMPORT_PROCEDURES_CHUNK_SIZE=50
+      - IMPORT_PROCEDURES_CHUNK_ROUNDS=5000
+      - IMPORT_PROCEDURES_FILTER_BEFORE=*
+      - IMPORT_PROCEDURES_FILTER_AFTER=*
 
 volumes:
   democracy-mongodb:

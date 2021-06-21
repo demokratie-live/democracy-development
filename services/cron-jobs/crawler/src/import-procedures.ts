@@ -4,16 +4,11 @@ import { request, gql } from 'graphql-request'
 import {
   ProcedureModel,
 } from "@democracy-deutschland/bundestagio-common";
-import {
-  setCronStart,
-  setCronSuccess,
-  setCronError,
-} from "@democracy-deutschland/bundestagio-common";
+import debug from 'debug';
+const [log, error] = [debug('bundestag-io:import-procedures:log'), debug('bundestag-io:import-procedures:error')]
+log.log = console.log.bind(console);
 
 const { DIP_GRAPHQL_ENDPOINT, IMPORT_PROCEDURES_CHUNK_SIZE, IMPORT_PROCEDURES_CHUNK_ROUNDS, IMPORT_PROCEDURES_FILTER_BEFORE, IMPORT_PROCEDURES_FILTER_AFTER } = config;
-
-let cronStart: Date | null = null;
-const CRON_NAME = "Procedures";
 
 const procedureQuery = gql`
 query($cursor: String, $offset: Int, $limit: Int, $filter: ProcedureFilter) {
@@ -73,10 +68,14 @@ export default async function importProcedures() {
     filter: { after: IMPORT_PROCEDURES_FILTER_AFTER, before: IMPORT_PROCEDURES_FILTER_BEFORE },
     limit: IMPORT_PROCEDURES_CHUNK_SIZE, cursor: '*'
   }
-  console.log(`Importing ${IMPORT_PROCEDURES_CHUNK_ROUNDS}*${IMPORT_PROCEDURES_CHUNK_SIZE} procedures.`)
-  console.log(`Between ${variables.filter.after} and ${variables.filter.before}.`)
+  log(`
+      --------------------------------------
+      Importing ${IMPORT_PROCEDURES_CHUNK_ROUNDS}*${IMPORT_PROCEDURES_CHUNK_SIZE} procedures.
+      Between ${variables.filter.after} and ${variables.filter.before}.
+      --------------------------------------
+  `)
   for (const round of Array.from(Array(IMPORT_PROCEDURES_CHUNK_ROUNDS).keys())) {
-    console.log(`Round ${round} - Cursor ${variables.cursor}`)
+    log(`Round ${round} - Cursor ${variables.cursor}`)
     const { procedures: { edges, pageInfo: { endCursor, hasNextPage } } } = await request(DIP_GRAPHQL_ENDPOINT, procedureQuery, variables );
     await ProcedureModel.bulkWrite(
       edges.map((edge: { node: {  procedureId: string } }) => ({
@@ -95,15 +94,11 @@ export default async function importProcedures() {
 
 (async () => {
   try {
-    cronStart = new Date();
-    // await setCronStart({ name: CRON_NAME, startDate: cronStart });
     await mongoConnect();
     await importProcedures()
-    // await setCronSuccess({ name: CRON_NAME, successStartDate: cronStart! });
     process.exit(0);
   } catch(err) {
-    console.error(err)
-    // await setCronError({ name: CRON_NAME, error: JSON.stringify(err) });
+    error(err)
     process.exit(1)
   } finally {
     mongoDisconnect()
