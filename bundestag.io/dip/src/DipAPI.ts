@@ -1,6 +1,14 @@
-import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest'
+import { HTTPCache, RESTDataSource, RequestOptions } from 'apollo-datasource-rest'
+import { DataSourceConfig } from 'apollo-datasource';
 import { Vorgang, Drucksache, Plenarprotokoll, Vorgangsposition } from './dip-types'
 import { ProceduresArgs } from './types'
+import { RateLimit } from "async-sema";
+import {
+  RequestInfo,
+  RequestInit,
+  fetch,
+} from 'apollo-server-env';
+
 
 type PageInfo = {
   hasNextPage: boolean
@@ -18,9 +26,20 @@ type VorgangConnection = {
 }
 
 export default class DipAPI extends RESTDataSource {
-  constructor({ baseURL }: { baseURL: string}) {
+  private ratelimit:  () => Promise<void>
+  constructor({ baseURL, limit = 5 }: { baseURL: string, limit?: number}) {
     super();
     this.baseURL = baseURL
+    this.ratelimit = RateLimit(limit)
+  }
+
+  initialize(config: DataSourceConfig<{DIP_API_KEY: string}>): void {
+    this.context = config.context;
+    const throttledFetch = async (input: RequestInfo, init?: RequestInit) => {
+      await this.ratelimit()
+      return fetch(input, init)
+    }
+    this.httpCache = new HTTPCache(config.cache, throttledFetch);
   }
 
   willSendRequest(request: RequestOptions) {
