@@ -346,6 +346,11 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@democracy-deutschland/bt-dip-sdk@^0.1.0-alpha.8":
+  version "0.1.0-alpha.8"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bt-dip-sdk/-/bt-dip-sdk-0.1.0-alpha.8.tgz#6af5fe68684e6fb677881b65a680a61e10875731"
+  integrity sha512-vgNFXxArRMCOveXVTF4N9hUdu5BUo4tQ/qYdnJVeGq/Kh69I9lIW8xhVEYE+NBxqi+00Gm0+pUZjIIYFqzQrGg==
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"

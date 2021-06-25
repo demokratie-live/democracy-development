@@ -1,5 +1,5 @@
 import DipAPI from './DipAPI'
-import { Vorgang, Vorgangsposition, Drucksache, Plenarprotokoll, Beschlussfassung } from './dip-types'
+import { Vorgang, Vorgangsposition, Fundstelle, VorgangspositionBeschlussfassung } from '@democracy-deutschland/bt-dip-sdk'
 import { ProceduresArgs } from './types'
 import { UserInputError } from 'apollo-server'
 
@@ -12,46 +12,49 @@ export default {
     startCursor: () =>  '*',
   },
   Plenum: {
-   editor: (dok: Plenarprotokoll) => dok.herausgeber,
-   number: (dok: Plenarprotokoll) => dok.dokumentnummer,
-   link: (dok: Plenarprotokoll) => dok.pdf_url,
-   pages: (dok: Plenarprotokoll) => `${dok.anfangsseite} - ${dok.endseite}`,
+   editor: (dok: Fundstelle) => dok.herausgeber,
+   number: (dok: Fundstelle) => dok.dokumentnummer,
+   link: (dok: Fundstelle) => dok.pdf_url,
+   pages: (dok: Fundstelle) => `${dok.anfangsseite} - ${dok.endseite}`,
   },
   Document: {
-   editor: (dok: Drucksache) => dok.herausgeber,
-   number: (dok: Drucksache) => dok.dokumentnummer,
-   type: (dok: Drucksache) => dok.drucksachetyp,
-   url: (dok: Drucksache) => dok.pdf_url,
+   editor: (dok: Fundstelle) => dok.herausgeber,
+   number: (dok: Fundstelle) => dok.dokumentnummer,
+   type: (dok: Fundstelle) => dok.drucksachetyp,
+   url: (dok: Fundstelle) => dok.pdf_url,
   },
   ProcessFlow: {
     initiator: (vp: Vorgangsposition) => {
-      if (!vp.fundstelle.urheber?.length) return vp.vorgangsposition
+      if (!vp.fundstelle?.urheber?.length) return vp.vorgangsposition
       return `${vp.vorgangsposition},  Urheber : ${vp.fundstelle.urheber.join(', ')}`
     },
-    assignment: (vp: Vorgangsposition) => vp.fundstelle.herausgeber,
-    findSpotUrl: (vp: Vorgangsposition) => vp.fundstelle.pdf_url,
+    assignment: (vp: Vorgangsposition) => vp.fundstelle?.herausgeber,
+    findSpotUrl: (vp: Vorgangsposition) => vp.fundstelle?.pdf_url,
     findSpot: (vp: Vorgangsposition) => {
       const { fundstelle } = vp
+      if(!fundstelle) return
       const { herausgeber, dokumentart, dokumentnummer } = fundstelle
       const datum = germanDateFormat.format(new Date(fundstelle.datum))
       let result = `${datum} - ${herausgeber}-${dokumentart} ${dokumentnummer}`
-      const { anfangsseite, endseite, anfangsquadrant, endquadrant } = fundstelle as Plenarprotokoll
+      const { anfangsseite, endseite, anfangsquadrant, endquadrant } = fundstelle as Fundstelle
       if(![anfangsseite, endseite, anfangsquadrant, endquadrant].every(Boolean)) return result
       return `${result}, S. ${anfangsseite}${anfangsquadrant} - ${endseite}${endquadrant}`
     },
-    date: (vp: Vorgangsposition) => new Date(vp.fundstelle.datum).toISOString(),
+    date: (vp: Vorgangsposition) => {
+      return vp.fundstelle && new Date(vp.fundstelle.datum).toISOString()
+    },
     decision: (vp: Vorgangsposition) => {
       return vp.beschlussfassung
     },
   },
   Decision: {
-    page: (bf: Beschlussfassung) => bf.seite,
-    tenor: (bf: Beschlussfassung) => bf.beschlusstenor,
-    document: (bf: Beschlussfassung) => bf.dokumentnummer,
-    type: (bf: Beschlussfassung) => bf.abstimmungsart,
-    comment: (bf: Beschlussfassung) => bf.abstimm_ergebnis_bemerkung,
-    foundation: (bf: Beschlussfassung) => bf.grundlage,
-    majority: (bf: Beschlussfassung) => bf.mehrheit,
+    page: (bf: VorgangspositionBeschlussfassung) => bf.seite,
+    tenor: (bf: VorgangspositionBeschlussfassung) => bf.beschlusstenor,
+    document: (bf: VorgangspositionBeschlussfassung) => bf.dokumentnummer,
+    type: (bf: VorgangspositionBeschlussfassung) => bf.abstimmungsart,
+    comment: (bf: VorgangspositionBeschlussfassung) => bf.abstimm_ergebnis_bemerkung,
+    foundation: (bf: VorgangspositionBeschlussfassung) => bf.grundlage,
+    majority: (bf: VorgangspositionBeschlussfassung) => bf.mehrheit,
   },
   Procedure: {
     procedureId: (vorgang: Vorgang) => vorgang.id,

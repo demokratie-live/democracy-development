@@ -1,6 +1,6 @@
 import { HTTPCache, RESTDataSource, RequestOptions } from 'apollo-datasource-rest'
 import { DataSourceConfig } from 'apollo-datasource';
-import { Vorgang, Drucksache, Plenarprotokoll, Vorgangsposition } from './dip-types'
+import { Vorgang, Vorgangsposition, Fundstelle } from '@democracy-deutschland/bt-dip-sdk'
 import { ProceduresArgs } from './types'
 import { RateLimit } from "async-sema";
 import {
@@ -84,17 +84,17 @@ export default class DipAPI extends RESTDataSource {
     return vorgangspositionen
   }
 
-  async getVorgangsDrucksachen(vorgangsId: string): Promise<Array<Drucksache>> {
+  async getVorgangsDrucksachen(vorgangsId: string): Promise<Array<Fundstelle>> {
     const vorgangspositionen = await this.getVorgangsVorgangspositionen(vorgangsId)
     return vorgangspositionen
     .filter((vp: Vorgangsposition) => vp.dokumentart === 'Drucksache')
-    .map((vp: Vorgangsposition) => vp.fundstelle as Drucksache)
+    .map((vp: Vorgangsposition) => vp.fundstelle as Fundstelle).filter(Boolean)
   }
 
-  async getVorgangsPlenarProtokolle(vorgangsId: string): Promise<Array<Plenarprotokoll>> {
+  async getVorgangsPlenarProtokolle(vorgangsId: string): Promise<Array<Fundstelle>> {
     const vorgangspositionen = await this.getVorgangsVorgangspositionen(vorgangsId)
     return vorgangspositionen
     .filter((vp: Vorgangsposition) => vp.dokumentart === 'Plenarprotokoll')
-    .map((vp: Vorgangsposition) => vp.fundstelle as Plenarprotokoll)
+    .map((vp: Vorgangsposition) => vp.fundstelle as Fundstelle).filter(Boolean)
   }
 }
