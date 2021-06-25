@@ -16,3 +16,6 @@ services:
     command: yarn run dev
     volumes:
       - ./bundestag.io/dip:/app
+    environment:
+      - RATE_LIMIT=15
+      - NODE_ENV=development

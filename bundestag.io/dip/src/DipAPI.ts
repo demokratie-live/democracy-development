@@ -10,6 +10,7 @@ import {
 } from 'apollo-server-env';
 
 
+
 type PageInfo = {
   hasNextPage: boolean
   endCursor: string
@@ -27,7 +28,7 @@ type VorgangConnection = {
 
 export default class DipAPI extends RESTDataSource {
   private ratelimit:  () => Promise<void>
-  constructor({ baseURL, limit = 5 }: { baseURL: string, limit?: number}) {
+  constructor({ baseURL, limit }: { baseURL: string, limit: number}) {
     super();
     this.baseURL = baseURL
     this.ratelimit = RateLimit(limit)
