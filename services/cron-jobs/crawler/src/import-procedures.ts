@@ -8,7 +8,7 @@ import debug from 'debug';
 const [log, error] = [debug('bundestag-io:import-procedures:log'), debug('bundestag-io:import-procedures:error')]
 log.log = console.log.bind(console);
 
-const { DIP_GRAPHQL_ENDPOINT, IMPORT_PROCEDURES_CHUNK_SIZE, IMPORT_PROCEDURES_CHUNK_ROUNDS, IMPORT_PROCEDURES_FILTER_BEFORE, IMPORT_PROCEDURES_FILTER_AFTER } = config;
+const { DIP_GRAPHQL_ENDPOINT, IMPORT_PROCEDURES_START_CURSOR, IMPORT_PROCEDURES_CHUNK_SIZE, IMPORT_PROCEDURES_CHUNK_ROUNDS, IMPORT_PROCEDURES_FILTER_BEFORE, IMPORT_PROCEDURES_FILTER_AFTER } = config;
 
 const procedureQuery = gql`
 query($cursor: String, $offset: Int, $limit: Int, $filter: ProcedureFilter) {
@@ -66,7 +66,7 @@ query($cursor: String, $offset: Int, $limit: Int, $filter: ProcedureFilter) {
 export default async function importProcedures() {
   const variables = {
     filter: { after: IMPORT_PROCEDURES_FILTER_AFTER, before: IMPORT_PROCEDURES_FILTER_BEFORE },
-    limit: IMPORT_PROCEDURES_CHUNK_SIZE, cursor: '*'
+    limit: IMPORT_PROCEDURES_CHUNK_SIZE, cursor: IMPORT_PROCEDURES_START_CURSOR
   }
   log(`
       --------------------------------------
