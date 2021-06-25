@@ -12,16 +12,16 @@ export default {
     startCursor: () =>  '*',
   },
   Plenum: {
-   editor: (dok: Fundstelle) => dok.herausgeber,
-   number: (dok: Fundstelle) => dok.dokumentnummer,
-   link: (dok: Fundstelle) => dok.pdf_url,
-   pages: (dok: Fundstelle) => `${dok.anfangsseite} - ${dok.endseite}`,
+    editor: (dok: Fundstelle) => dok.herausgeber,
+    number: (dok: Fundstelle) => dok.dokumentnummer,
+    link: (dok: Fundstelle) => dok.pdf_url,
+    pages: (dok: Fundstelle) => `${dok.anfangsseite} - ${dok.endseite}`,
   },
   Document: {
-   editor: (dok: Fundstelle) => dok.herausgeber,
-   number: (dok: Fundstelle) => dok.dokumentnummer,
-   type: (dok: Fundstelle) => dok.drucksachetyp,
-   url: (dok: Fundstelle) => dok.pdf_url,
+    editor: (dok: Fundstelle) => dok.herausgeber,
+    number: (dok: Fundstelle) => dok.dokumentnummer,
+    type: (dok: Fundstelle) => dok.drucksachetyp,
+    url: (dok: Fundstelle) => dok.pdf_url,
   },
   ProcessFlow: {
     initiator: (vp: Vorgangsposition) => {
@@ -35,7 +35,7 @@ export default {
       if(!fundstelle) return
       const { herausgeber, dokumentart, dokumentnummer } = fundstelle
       const datum = germanDateFormat.format(new Date(fundstelle.datum))
-      let result = `${datum} - ${herausgeber}-${dokumentart} ${dokumentnummer}`
+      const result = `${datum} - ${herausgeber}-${dokumentart} ${dokumentnummer}`
       const { anfangsseite, endseite, anfangsquadrant, endquadrant } = fundstelle as Fundstelle
       if(![anfangsseite, endseite, anfangsquadrant, endquadrant].every(Boolean)) return result
       return `${result}, S. ${anfangsseite}${anfangsquadrant} - ${endseite}${endquadrant}`

@@ -25,7 +25,7 @@ const request = supertest(app)
 
 const gql = String.raw
 
-const runQuery = async ({ query, variables}: {query: string, variables?: object}) => {
+const runQuery = async ({ query, variables}: {query: string, variables?: Record<string, any>}) => {
   const res = await request.post('/').send({query, variables}).set('Accept', 'application/json').expect(200)
   return JSON.parse(res.text)
 }
