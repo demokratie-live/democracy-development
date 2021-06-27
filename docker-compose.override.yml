@@ -8,6 +8,7 @@ services:
     command: yarn run dev
     volumes:
       - ./bundestag.io/api:/app
+      - /app/node_modules
   dip:
     restart: always
     build:
@@ -16,6 +17,7 @@ services:
     command: yarn run dev
     volumes:
       - ./bundestag.io/dip:/app
+      - /app/node_modules
     environment:
       - RATE_LIMIT=15
       - NODE_ENV=development
