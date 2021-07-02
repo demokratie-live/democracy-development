@@ -13,8 +13,8 @@ spec:
           restartPolicy: Never
           containers:
             - name: import-procedures
-              image: democracy/crawler:0.1.0
+              image: democracy/crawler:1.0.1
               envFrom:
                 - configMapRef:
                     name: crawler-config
-              command: [ "yarn", "run", "start:import-procedures" ]
+              command: ["yarn", "run", "start:import-procedures"]
