@@ -7,7 +7,7 @@ export const mongoConnect = async () => {
   mongoose.set("useFindAndModify", false);
   mongoose.set("debug", false);
 
-  connection = await mongoose.connect(config.MONGO_DB_URL !, {
+  connection = await mongoose.connect(config.MONGO_DB_URL!, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
