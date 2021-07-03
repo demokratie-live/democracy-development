@@ -1,4 +1,4 @@
-import mongoConnect from "./mongoose";
+import { mongoConnect, mongoDisconnect } from "./mongoose";
 import createClient from "./graphql/client";
 import getDeputyUpdates from "./graphql/queries/getDeputyUpdates";
 import {
@@ -118,6 +118,9 @@ const start = async () => {
   }
   await mongoConnect();
   console.log("procedures", await DeputyModel.countDocuments({}));
-  await start().catch(() => process.exit(1));
-  process.exit(0);
-})();
+  await start();
+  await mongoDisconnect();
+})().catch(async (e) => {
+  await mongoDisconnect();
+  throw e;
+});
