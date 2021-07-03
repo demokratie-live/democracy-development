@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: import-deputy-profiles
-              image: democracy/import-deputy-profiles:0.1.3
+              image: democracy/import-deputy-profiles:0.1.4
               env:
                 - name: DB_URL
                   valueFrom:

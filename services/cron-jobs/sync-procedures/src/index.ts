@@ -1,4 +1,4 @@
-import mongoConnect from "./mongoose";
+import { mongoConnect, mongoDisconnect } from "./mongoose";
 import _ from "lodash";
 import moment from "moment";
 import { forEachSeries } from "p-iteration";
@@ -372,6 +372,9 @@ const start = async () => {
   }
   await mongoConnect();
   console.log("procedures", await ProcedureModel.countDocuments({}));
-  await start().catch(() => process.exit(1));
-  process.exit(0);
-})();
+  await start();
+  await mongoDisconnect();
+})().catch(async (e) => {
+  await mongoDisconnect();
+  throw e;
+});

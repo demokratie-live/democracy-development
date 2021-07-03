@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: import-conference-week-details
-              image: democracy/import-conference-week-details:0.1.9
+              image: democracy/import-conference-week-details:0.1.10
               env:
                 - name: DB_URL
                   valueFrom:
