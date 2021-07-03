@@ -1,4 +1,4 @@
-import mongoConnect from "./mongoose";
+import { mongoConnect, mongoDisconnect } from "./mongoose";
 
 import { ConferenceWeekDetailScraper } from "@democracy-deutschland/scapacra-bt";
 import { Scraper } from "@democracy-deutschland/scapacra";
@@ -285,6 +285,9 @@ const start = async () => {
   }
   await mongoConnect();
   console.log("procedures", await ProcedureModel.countDocuments({}));
-  await start().catch(() => process.exit(1));
-  process.exit(0);
-})();
+  await start();
+  await mongoDisconnect();
+})().catch(async (e) => {
+  await mongoDisconnect();
+  throw e;
+});

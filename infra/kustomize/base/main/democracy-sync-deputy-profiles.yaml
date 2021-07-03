@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: democracy-sync-deputy-profiles
-              image: democracy/sync-deputy-profiles:0.1.6
+              image: democracy/sync-deputy-profiles:0.1.7
               env:
                 - name: DB_URL
                   valueFrom:

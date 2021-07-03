@@ -212,6 +212,8 @@ const removeDuplicateTokens = async () => {
   await removeDuplicateTokens();
 
   await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
-})()
-  .catch(console.error)
-  .finally(mongoDisconnect);
+  await mongoDisconnect();
+})().catch(async (e) => {
+  await mongoDisconnect();
+  throw e;
+});

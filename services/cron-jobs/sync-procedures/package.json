@@ -1,6 +1,6 @@
 {
   "name": "sync-procedures",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "main": "build/index.js",
   "license": "MIT",
   "scripts": {
