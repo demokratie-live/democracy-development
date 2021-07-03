@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: democracy-sync-procedures-cronjob
 spec:
-  schedule: "*/10 * * * *"
+  schedule: "0 0/2 * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
