@@ -13,7 +13,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: democracy-sync-named-polls
-              image: democracy/sync-named-polls:0.1.10
+              image: democracy/sync-named-polls:0.1.11
               env:
                 - name: DB_URL
                   valueFrom:
