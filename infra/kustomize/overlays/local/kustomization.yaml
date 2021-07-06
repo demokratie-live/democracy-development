@@ -2,6 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 bases:
   - ../../base/local
 kind: Kustomization
+secretGenerator:
+  - name: dip-api-token
+    envs:
+      - bio-dip.env
 configMapGenerator:
   - name: bio-admin-config
     envs:
@@ -18,9 +22,9 @@ configMapGenerator:
   - name: push-notifications-config
     envs:
       - push-notifications.env
-  - name: import-procedures-config
+  - name: crawler-config
     envs:
-      - import-procedures.env
+      - crawler.env
   - name: qr-code-handler-config
     envs:
       - qr-code-handler.env

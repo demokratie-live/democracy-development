@@ -4,9 +4,6 @@
 [submodule "elasticsearch"]
 	path = elasticsearch
 	url = https://github.com/demokratie-live/democracy-search
-[submodule "bundestag.io-admin"]
-	path = bundestag.io-admin
-	url = https://github.com/demokratie-live/bundestag.io-admin.git
 [submodule "docu"]
 	path = docu
 	url = https://github.com/demokratie-live/democracy-docu.git

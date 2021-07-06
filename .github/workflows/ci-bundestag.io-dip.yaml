@@ -1,0 +1,16 @@
+name: CI
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      working-directory: ./bundestag.io/dip
+      run: yarn install
+    - name: Run linter
+      working-directory: ./bundestag.io/dip
+      run: yarn run lint
+    - name: Run tests
+      working-directory: ./bundestag.io/dip
+      run: yarn run test

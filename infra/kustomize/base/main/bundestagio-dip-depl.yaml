@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bundestagio-dip-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bundestagio-dip
+  template:
+    metadata:
+      labels:
+        app: bundestagio-dip
+    spec:
+      containers:
+        - name: bundestagio-dip
+          image: democracy/bundestag.io-dip:0.1.0
+          envFrom:
+            - secretRef:
+                name: dip-api-token
+                optional: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bundestagio-dip-srv
+spec:
+  selector:
+    app: bundestagio-dip
+  ports:
+    - name: bundestagio-dip
+      protocol: TCP
+      port: 3101
+      targetPort: 3101

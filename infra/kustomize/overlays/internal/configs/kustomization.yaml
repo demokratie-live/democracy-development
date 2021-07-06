@@ -17,9 +17,9 @@ configMapGenerator:
   - name: push-notifications-config
     envs:
       - push-notifications.env
-  - name: import-procedures-config
+  - name: crawler-config
     envs:
-      - import-procedures.env
+      - crawler.env
   - name: qr-code-handler-config
     envs:
       - qr-code-handler.env

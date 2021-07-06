@@ -2,14 +2,12 @@ version: "3.9"
 services:
   mongo:
     image: mongo
-    restart: always
     volumes:
       - democracy-mongodb:/data/db
     ports:
       - 27017:27017
   gorush:
     image: appleboy/gorush
-    restart: always
     ports:
       - "8088:8088"
     depends_on:
@@ -22,6 +20,38 @@ services:
       - ./configuration/gorush-config.yaml:/config.yml
   redis:
     image: "redis:alpine"
+  bundestag-io:
+    build:
+      context: bundestag.io/api
+      target: production_stage
+    ports:
+      - 3100:3100
+    depends_on:
+      - mongo
+    environment:
+      - DB_URL=mongodb://mongo:27017/bundestagio
+  dip:
+    build:
+      context: bundestag.io/dip
+      target: production_stage
+    ports:
+      - 3101:3101
+    environment:
+      - DIP_API_KEY=N64VhW8.yChkBUIJeosGojQ7CSR2xwLf3Qy7Apw464
+  crawler:
+    command: tail -f /dev/null # Run `docker-compose exec crawler yarn run start:import-procedures`
+    build:
+      context: services/cron-jobs/crawler
+      target: production_stage
+    environment:
+      - MONGO_DB_URL=mongodb://mongo:27017/bundestagio
+      - DIP_GRAPHQL_ENDPOINT=http://dip:3101
+      - DEBUG=*
+      - IMPORT_PROCEDURES_START_CURSOR=*
+      - IMPORT_PROCEDURES_CHUNK_SIZE=50
+      - IMPORT_PROCEDURES_CHUNK_ROUNDS=10
+      - IMPORT_PROCEDURES_FILTER_BEFORE=*
+      - IMPORT_PROCEDURES_FILTER_AFTER=*
 
 volumes:
   democracy-mongodb:

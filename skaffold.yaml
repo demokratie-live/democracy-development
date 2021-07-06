@@ -2,16 +2,24 @@ apiVersion: skaffold/v2beta15
 kind: Config
 build:
   artifacts:
-    - image: democracy/bundestag.io
-      context: bundestag.io-api
+    - image: democracy/bundestag.io-dip
+      context: bundestag.io/dip
       sync:
         manual:
           - src: src/**/*.{js,ts}
             dest: .
       docker:
-        dockerfile: Dockerfile.dev
-    - image: democracy/bundestag.io-admin
-      context: bundestag.io-admin
+        dockerfile: Dockerfile
+    - image: democracy/bundestag.io
+      context: bundestag.io/api
+      sync:
+        manual:
+          - src: src/**/*.{js,ts}
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: democracy/bundestag.io/admin
+      context: bundestag.io/admin
       sync:
         manual:
           - src: "**/*.js"
@@ -34,14 +42,14 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile.dev
-    - image: democracy/import-procedures
-      context: ./services/cron-jobs/import-procedures
+    - image: democracy/crawler
+      context: ./services/cron-jobs/crawler
       sync:
         manual:
-          - src: src/**/*.ts
+          - src: src/**/*.{js,ts}
             dest: .
       docker:
-        dockerfile: Dockerfile.dev
+        dockerfile: Dockerfile
     - image: democracy/import-conference-week-details
       context: ./services/cron-jobs/import-conference-week-details
       sync:
