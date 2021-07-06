@@ -48,12 +48,16 @@ const start = async () => {
       // fetch
       const {
         data: { namedPollUpdates },
+        errors,
       } =
         // eslint-disable-next-line no-await-in-loop
         await client.query<NamedPollUpdates, NamedPollUpdatesVariables>({
           query: getNamedPollUpdates,
           variables: { since, limit, offset, associated },
         });
+      if (errors) {
+        throw errors;
+      }
 
       if (namedPollUpdates) {
         const { namedPolls } = namedPollUpdates;
@@ -133,6 +137,11 @@ const start = async () => {
         // continue?
         if (namedPolls && namedPolls.length < limit) {
           done = true;
+        } else {
+          console.log(
+            "namedPolls && namedPolls.length < limit",
+            `${namedPolls?.length || "undefined"} < ${limit}`
+          );
         }
       }
       offset += limit;
