@@ -1,41 +1,34 @@
 {
-  "name": "bundestag.io-admin",
-  "version": "2.1.8",
+  "name": "admin",
+  "version": "0.1.0",
   "scripts": {
-    "dev": "node -r dotenv/config server.js",
+    "dev": "next dev",
     "build": "next build",
-    "start": "node -r dotenv/config server.js",
-    "analyze": "cross-env ANALYZE=1 next build && cat .next/stats.txt"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@democracy-deutschland/bundestag.io-definitions": "^1.0.0",
-    "@zeit/next-css": "^0.2.0",
-    "@zeit/next-source-maps": "^0.0.2",
-    "antd": "^3.6.5",
-    "apollo-boost": "^0.1.3",
-    "babel-plugin-import": "^1.8.0",
-    "babel-plugin-transform-decorators-legacy": "^1.3.5",
-    "basic-auth-connect": "^1.0.0",
-    "dotenv": "^8.2.0",
-    "express": "^4.16.3",
-    "formik": "^1.0.2",
-    "graphql": "0.13.2",
-    "isomorphic-unfetch": "2.0.0",
-    "next": "^6.1.1",
-    "p3x-xml2json": "^2019.10.189",
-    "prop-types": "15.6.1",
-    "react": "^16.4.1",
-    "react-apollo": "^2.1.9",
-    "react-dom": "^16.4.1",
-    "react-infinite-scroller": "^1.2.0",
-    "request": "^2.88.0",
-    "styled-components": "^4.4.1",
-    "webpack-bundle-analyzer": "^2.13.1",
-    "yup": "^0.26.0"
+    "@ant-design/icons": "^4.6.2",
+    "@apollo/client": "^3.3.20",
+    "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
+    "antd": "4.15.2",
+    "graphql": "^15.5.1",
+    "next": "^11",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "styled-components": "^5.3.0"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "cross-env": "^5.2.0"
+    "@babel/core": "^7.14.6",
+    "@babel/preset-typescript": "^7.14.5",
+    "@babel/register": "^7.14.5",
+    "@types/node": "^16.0.0",
+    "@types/react": "^17.0.13",
+    "@types/request": "^2.48.5",
+    "@types/styled-components": "^5.1.11",
+    "babel-plugin-styled-components": "^1.13.1",
+    "eslint": "7.30.0",
+    "eslint-config-next": "11.0.1",
+    "typescript": "^4.3.5"
   }
 }
