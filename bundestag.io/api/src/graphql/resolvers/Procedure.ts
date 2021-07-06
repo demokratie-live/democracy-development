@@ -137,7 +137,7 @@ const ProcedureResolvers: Resolvers = {
       const periodMatch = periods ? { period: { $in: periods } } : {};
       const typesMatch = types ? { type: { $in: types } } : {};
       const beforeCount = await ProcedureModel.count({
-        createdAt: { $lte: since },
+        // createdAt: { $lte: since },
         ...periodMatch,
         ...typesMatch,
       });
@@ -147,7 +147,7 @@ const ProcedureResolvers: Resolvers = {
       });
 
       const proceduresFindQuery = {
-        updatedAt: { $gt: since },
+        // updatedAt: { $gt: since },
         ...periodMatch,
         ...typesMatch,
       };
