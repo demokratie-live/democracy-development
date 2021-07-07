@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { Layout, Menu } from "antd";
 import Link from "next/link";
 import Icon from "@ant-design/icons/lib/components/Icon";
+import { signout } from "next-auth/client";
 
 const { Header, Sider } = Layout;
 
@@ -39,6 +40,9 @@ export const Navigation = () => {
               <span className="nav-text">Vorgänge</span>
             </a>
           </Link>
+        </Menu.Item>
+        <Menu.Item key="/signout" onClick={() => signout()}>
+          Ausloggen
         </Menu.Item>
         {/* <Menu.Item key="/fractions">
         <Link  href="/fractions">

@@ -15,7 +15,9 @@ export interface GraphQlContext {
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
-function createIsomorphicLink(context: GraphQlContext | undefined) {
+function createIsomorphicLink(
+  context: GraphQlContext | { headers: any } | undefined
+) {
   /**
    * SSG and SSR
    */
@@ -24,11 +26,26 @@ function createIsomorphicLink(context: GraphQlContext | undefined) {
   //     const { graphQlSchema } = require("./schema");
   //     return new SchemaLink({ schema: graphQlSchema, context });
   //   }
+  const { HttpLink } = require("@apollo/client");
+
+  /**
+   * API
+   */
+  if (typeof window === "undefined") {
+    const headers =
+      context && "headers" in context && context?.headers
+        ? context.headers
+        : {};
+    return new HttpLink({
+      uri: process.env.BUNDESTAGIO_SERVER_URL,
+      credentials: "same-origin",
+      ...headers,
+    });
+  }
 
   /**
    * Client-side
    */
-  const { HttpLink } = require("@apollo/client");
   return new HttpLink({
     uri: "/graphql",
     credentials: "same-origin",
@@ -38,7 +55,9 @@ function createIsomorphicLink(context: GraphQlContext | undefined) {
   });
 }
 
-function createApolloClient(context?: GraphQlContext): ApolloClient<any> {
+function createApolloClient(
+  context?: GraphQlContext | { headers: any }
+): ApolloClient<any> {
   return new ApolloClient({
     /**
      * Enable SSR mode when not running on the client-side
@@ -53,7 +72,7 @@ export function initializeApollo(
   initialState: any = null,
   // Pages with Next.js data fetching methods, like `getStaticProps`, can send
   // a custom context which will be used by `SchemaLink` to server render pages
-  context?: GraphQlContext
+  context?: GraphQlContext | { headers: any }
 ): ApolloClient<any> {
   const _apolloClient = apolloClient ?? createApolloClient(context);
 
