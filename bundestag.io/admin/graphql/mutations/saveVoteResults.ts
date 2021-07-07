@@ -1,8 +1,7 @@
-import gql from "graphql-tag";
-
+import { gql } from "@apollo/client";
 import VoteResults from "../fragments/voteResults";
 
-export default gql`
+export const SAVE_VOTE_RESULTS = gql`
 
   mutation saveProcedureCustomData(
     $procedureId: String!

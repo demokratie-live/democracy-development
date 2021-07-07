@@ -9,6 +9,14 @@ services:
     volumes:
       - ./bundestag.io/api:/app
       - /app/node_modules
+  bio-admin:
+    build:
+      context: bundestag.io/admin
+      target: build_stage
+    command: yarn run dev
+    volumes:
+      - ./bundestag.io/admin:/app
+      - /app/node_modules
   dip:
     restart: always
     build:

@@ -9,11 +9,8 @@ import {
   Col,
   notification,
 } from "antd";
-
-import SAVE_VOTE_RESULTS from "../../graphql/mutations/saveVoteResults";
-import F_VOTE_RESULTS from "../../graphql/fragments/voteResults";
-import { graphql } from "graphql";
 import { useMutation } from "@apollo/client";
+import axios from "axios";
 
 // Ant Design Sub-Elements
 const { TextArea } = Input;
@@ -41,13 +38,6 @@ const FRACTIONS = [
 ];
 
 const VoteResultsForm = ({ data, type, procedureId }) => {
-  const [saveVoteResults] = useMutation(SAVE_VOTE_RESULTS, {
-    variables: {
-      procedureId,
-    },
-  });
-  // const [form] = Form.useForm();
-
   const onFinish = (values) => {
     notification.info({
       key: "saveProcedure",
@@ -69,9 +59,8 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
     };
 
     console.log("values", values, data);
-    saveVoteResults({
-      variables: data,
-    })
+    axios
+      .post("/api/procedures/save", { ...data, procedureId })
       .then(() => {
         notification.success({
           key: "saveProcedure",
