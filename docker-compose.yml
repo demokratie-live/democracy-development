@@ -30,6 +30,22 @@ services:
       - mongo
     environment:
       - DB_URL=mongodb://mongo:27017/bundestagio
+      - BIO_EDIT_TOKEN=CHANGE_ME
+  bio-admin:
+    build:
+      context: bundestag.io/admin
+      target: production_stage
+      args:
+        BUNDESTAGIO_SERVER_URL: http://localhost:3100
+    ports:
+      - 3000:3000
+    depends_on:
+      - bundestag-io
+    environment:
+      - BUNDESTAGIO_SERVER_URL=http://localhost:3100
+      - BIO_EDIT_TOKEN=CHANGE_ME
+      - NEXTAUTH_URL=http://localhost:3000
+      - CREDENTIALS=username:password
   dip:
     build:
       context: bundestag.io/dip
