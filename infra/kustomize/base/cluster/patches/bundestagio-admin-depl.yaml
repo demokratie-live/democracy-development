@@ -9,14 +9,14 @@ spec:
         - name: bundestagio-admin
           livenessProbe:
             httpGet:
-              path: /health-check
+              path: /api/health-check
               port: 3000
             initialDelaySeconds: 180
             timeoutSeconds: 10
             periodSeconds: 600
           readinessProbe:
             httpGet:
-              path: /health-check
+              path: /api/health-check
               port: 3000
             timeoutSeconds: 10
             periodSeconds: 15
