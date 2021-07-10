@@ -7,7 +7,7 @@ on:
     branches:
       - "master"
     tags:
-      - "bundestag.io@v*"
+      - "bundestag.io-admin@v*"
   pull_request:
     paths:
       - "bundestag.io/admin/**"
@@ -29,7 +29,7 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=match,asref=foo,pattern=bundestag.io@v(\d+.\d+.\d+),group=1
+            type=match,asref=foo,pattern=bundestag.io-admin@v(\d+.\d+.\d+),group=1
             type=semver,pattern={{version}},use=foo
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
