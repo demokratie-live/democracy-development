@@ -35,8 +35,6 @@ services:
     build:
       context: bundestag.io/admin
       target: production_stage
-      args:
-        BUNDESTAGIO_SERVER_URL: http://bundestag-io:3100
     ports:
       - 3000:3000
     depends_on:

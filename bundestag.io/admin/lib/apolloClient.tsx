@@ -47,11 +47,8 @@ function createIsomorphicLink(
    * Client-side
    */
   return new HttpLink({
-    uri: "/graphql",
+    uri: "/api/graphql",
     credentials: "same-origin",
-    // headers: {
-    //   "bio-auth-token": process.env.BIO_EDIT_TOKEN,
-    // },
   });
 }
 
