@@ -7,7 +7,7 @@ on:
     branches:
       - "master"
     tags:
-      - "bundestag.io@v*"
+      - "bundestag.io-admin@v*"
   pull_request:
     paths:
       - "bundestag.io/admin/**"
