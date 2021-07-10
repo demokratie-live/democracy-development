@@ -1,6 +1,6 @@
 {
   "name": "bundestag.io-admin",
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-alpha.5",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
