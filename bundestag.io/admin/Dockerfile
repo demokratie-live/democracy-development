@@ -6,8 +6,6 @@ RUN apk --update --no-cache add git python3 make g++
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
-ARG BUNDESTAGIO_SERVER_URL
-ENV BUNDESTAGIO_SERVER_URL=$BUNDESTAGIO_SERVER_URL
 RUN yarn build
 
 FROM build_stage as install_stage
