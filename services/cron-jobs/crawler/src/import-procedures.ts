@@ -1,12 +1,9 @@
-import { mongoConnect, mongoDisconnect } from "./mongoose";
-import config from "./config";
-import { request, gql } from "graphql-request";
-import { ProcedureModel } from "@democracy-deutschland/bundestagio-common";
-import debug from "debug";
-const [log, error] = [
-  debug("bundestag-io:import-procedures:log"),
-  debug("bundestag-io:import-procedures:error"),
-];
+import { gql, request } from 'graphql-request';
+import { mongoConnect, mongoDisconnect } from './mongoose';
+import { ProcedureModel } from '@democracy-deutschland/bundestagio-common';
+import config from './config';
+import debug from 'debug';
+const [log, error] = [debug('bundestag-io:import-procedures:log'), debug('bundestag-io:import-procedures:error')];
 log.log = console.log.bind(console);
 
 const {
@@ -21,12 +18,7 @@ const {
 
 const procedureQuery = gql`
   query ($cursor: String, $offset: Int, $limit: Int, $filter: ProcedureFilter) {
-    procedures(
-      cursor: $cursor
-      offset: $offset
-      limit: $limit
-      filter: $filter
-    ) {
+    procedures(cursor: $cursor, offset: $offset, limit: $limit, filter: $filter) {
       edges {
         node {
           abstract
@@ -78,15 +70,15 @@ const procedureQuery = gql`
   }
 `;
 
-export default async function importProcedures() {
+export default async function importProcedures(): Promise<void> {
   const variables = {
+    cursor: IMPORT_PROCEDURES_START_CURSOR,
     filter: {
       after: IMPORT_PROCEDURES_FILTER_AFTER,
       before: IMPORT_PROCEDURES_FILTER_BEFORE,
       types: IMPORT_PROCEDURES_FILTER_TYPES,
     },
     limit: IMPORT_PROCEDURES_CHUNK_SIZE,
-    cursor: IMPORT_PROCEDURES_START_CURSOR,
   };
   log(`
       --------------------------------------
@@ -94,14 +86,12 @@ export default async function importProcedures() {
       Between ${variables.filter.after} and ${variables.filter.before}.
       Filter: ${
         variables.filter.types && variables.filter.types.length > 0
-          ? `[types: ${variables.filter.types.join(", ")}]`
-          : "none"
+          ? `[types: ${variables.filter.types.join(', ')}]`
+          : 'none'
       }
       --------------------------------------
   `);
-  for (const round of Array.from(
-    Array(IMPORT_PROCEDURES_CHUNK_ROUNDS).keys()
-  )) {
+  for (const round of Array.from(Array(IMPORT_PROCEDURES_CHUNK_ROUNDS).keys())) {
     log(`Round ${round} - Cursor ${variables.cursor}`);
     const {
       procedures: {
@@ -117,9 +107,11 @@ export default async function importProcedures() {
           update: edge.node,
           upsert: true,
         },
-      }))
+      })),
     );
-    if (!hasNextPage) break;
+    if (!hasNextPage) {
+      break;
+    }
     variables.cursor = endCursor;
   }
 }
