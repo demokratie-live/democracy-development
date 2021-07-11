@@ -1,16 +1,16 @@
-name: bundestag.io-api/ Build and Push Docker Image
+name: bundestag.io-admin/ Build and Push Docker Image
 
 on:
   push:
     paths:
-      - "bundestag.io/api/**"
+      - "bundestag.io/admin/**"
     branches:
       - "master"
     tags:
       - "bundestag.io@v*"
   pull_request:
     paths:
-      - "bundestag.io/api/**"
+      - "bundestag.io/admin/**"
     branches:
       - "master"
 
@@ -25,7 +25,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: democracy/bundestag.io
+          images: democracy/bundestag.io-admin
           tags: |
             type=ref,event=branch
             type=ref,event=pr
@@ -45,7 +45,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: bundestag.io/api
+          context: bundestag.io/admin
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
