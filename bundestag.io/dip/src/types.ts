@@ -1,10 +1,11 @@
 export type ProcedureFilter = {
-  before?: Date
-  after?: Date
-}
+  before?: Date;
+  after?: Date;
+  types?: string[];
+};
 export type ProceduresArgs = {
-  cursor: string,
-  limit: number,
-  offset: number,
-  filter?: ProcedureFilter
-}
+  cursor: string;
+  limit: number;
+  offset: number;
+  filter?: ProcedureFilter;
+};
