@@ -16,6 +16,7 @@ const {
   IMPORT_PROCEDURES_CHUNK_ROUNDS,
   IMPORT_PROCEDURES_FILTER_BEFORE,
   IMPORT_PROCEDURES_FILTER_AFTER,
+  IMPORT_PROCEDURES_FILTER_TYPES,
 } = config;
 
 const procedureQuery = gql`
@@ -81,6 +82,7 @@ export default async function importProcedures() {
     filter: {
       after: IMPORT_PROCEDURES_FILTER_AFTER,
       before: IMPORT_PROCEDURES_FILTER_BEFORE,
+      types: IMPORT_PROCEDURES_FILTER_TYPES,
     },
     limit: IMPORT_PROCEDURES_CHUNK_SIZE,
     cursor: IMPORT_PROCEDURES_START_CURSOR,
@@ -89,6 +91,11 @@ export default async function importProcedures() {
       --------------------------------------
       Importing ${IMPORT_PROCEDURES_CHUNK_ROUNDS}*${IMPORT_PROCEDURES_CHUNK_SIZE} procedures.
       Between ${variables.filter.after} and ${variables.filter.before}.
+      Filter: ${
+        variables.filter.types && variables.filter.types.length > 0
+          ? `[types: ${variables.filter.types.join(", ")}]`
+          : "none"
+      }
       --------------------------------------
   `);
   for (const round of Array.from(
@@ -101,6 +108,7 @@ export default async function importProcedures() {
         pageInfo: { endCursor, hasNextPage },
       },
     } = await request(DIP_GRAPHQL_ENDPOINT, procedureQuery, variables);
+
     await ProcedureModel.bulkWrite(
       edges.map((edge: { node: { procedureId: string } }) => ({
         updateOne: {
