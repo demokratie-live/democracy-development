@@ -15,6 +15,11 @@ export type Scalars = {
   Upload: any;
 };
 
+export enum Role {
+  Backend = 'BACKEND',
+  User = 'USER'
+}
+
 export type ConferenceWeekDetailSessionTopTopic = {
   __typename?: 'ConferenceWeekDetailSessionTopTopic';
   lines?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -307,7 +312,7 @@ export type NamedPoll = {
   description?: Maybe<Scalars['String']>;
   detailedDescription?: Maybe<Scalars['String']>;
   documents?: Maybe<Array<Maybe<Scalars['String']>>>;
-  media?: Maybe<Array<Maybe<NamedPollMedia>>>;
+  media?: Maybe<NamedPollMedia>;
   plenarProtocolURL?: Maybe<Scalars['String']>;
   procedureId?: Maybe<Scalars['String']>;
   speeches?: Maybe<Array<Maybe<NamedPollSpeech>>>;
@@ -475,6 +480,7 @@ export type MutationSaveProcedureCustomDataArgs = {
   partyVotes: Array<PartyVoteInput>;
   decisionText: Scalars['String'];
   votingDocument: VotingDocument;
+  toggleDecision: Scalars['Boolean'];
 };
 
 
@@ -515,11 +521,6 @@ export type User = {
   role?: Maybe<UserRole>;
   jwt?: Maybe<Scalars['String']>;
 };
-
-export enum Role {
-  Backend = 'BACKEND',
-  User = 'USER'
-}
 
 export enum CacheControlScope {
   Public = 'PUBLIC',
@@ -605,6 +606,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Role: Role;
   ConferenceWeekDetailSessionTopTopic: ResolverTypeWrapper<ConferenceWeekDetailSessionTopTopic>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -652,7 +654,6 @@ export type ResolversTypes = {
   Schema: ResolverTypeWrapper<Schema>;
   UserRole: UserRole;
   User: ResolverTypeWrapper<User>;
-  Role: Role;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
 };
@@ -904,7 +905,7 @@ export type NamedPollResolvers<ContextType = GraphQlContext, ParentType extends 
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   detailedDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   documents?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
-  media?: Resolver<Maybe<Array<Maybe<ResolversTypes['NamedPollMedia']>>>, ParentType, ContextType>;
+  media?: Resolver<Maybe<ResolversTypes['NamedPollMedia']>, ParentType, ContextType>;
   plenarProtocolURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   procedureId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   speeches?: Resolver<Maybe<Array<Maybe<ResolversTypes['NamedPollSpeech']>>>, ParentType, ContextType>;
@@ -1036,7 +1037,7 @@ export type VoteResultTextsResolvers<ContextType = GraphQlContext, ParentType ex
 };
 
 export type MutationResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  saveProcedureCustomData?: Resolver<Maybe<ResolversTypes['Procedure']>, ParentType, ContextType, RequireFields<MutationSaveProcedureCustomDataArgs, 'procedureId' | 'partyVotes' | 'decisionText' | 'votingDocument'>>;
+  saveProcedureCustomData?: Resolver<Maybe<ResolversTypes['Procedure']>, ParentType, ContextType, RequireFields<MutationSaveProcedureCustomDataArgs, 'procedureId' | 'partyVotes' | 'decisionText' | 'votingDocument' | 'toggleDecision'>>;
   scrapeProcedures?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationScrapeProceduresArgs, 'key'>>;
   signIn?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationSignInArgs, 'email' | 'password'>>;
 };

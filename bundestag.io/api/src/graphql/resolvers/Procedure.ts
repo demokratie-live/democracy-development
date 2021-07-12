@@ -260,7 +260,7 @@ const ProcedureResolvers: Resolvers = {
   Mutation: {
     saveProcedureCustomData: async (
       parent,
-      { procedureId, partyVotes, decisionText, votingDocument },
+      { procedureId, partyVotes, decisionText, votingDocument, toggleDecision },
       { ProcedureModel },
     ) => {
       const procedure = await ProcedureModel.findOne({ procedureId });
@@ -302,37 +302,13 @@ const ProcedureResolvers: Resolvers = {
           return { party, main, deviants };
         });
 
-        const votingRecommendationEntrys = procedure.history.filter(
-          ({ initiator }) =>
-            initiator &&
-            initiator.search(
-              PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.FIND_BESCHLUSSEMPFEHLUNG_BERICHT,
-            ) !== -1,
-        );
-
         voteResults = {
           ...voteResults,
           partyVotes: partyResults,
           ...sumResults,
         };
 
-        votingRecommendationEntrys.forEach((votingRecommendationEntry) => {
-          if (votingRecommendationEntry.abstract) {
-            if (
-              votingRecommendationEntry.abstract.search(
-                PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME,
-              ) !== -1
-            ) {
-              voteResults.votingRecommendation = true;
-            } else if (
-              votingRecommendationEntry.abstract.search(
-                PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG,
-              ) !== -1
-            ) {
-              voteResults.votingRecommendation = false;
-            }
-          }
-        });
+        voteResults.votingRecommendation = toggleDecision;
       }
 
       await ProcedureModel.update(

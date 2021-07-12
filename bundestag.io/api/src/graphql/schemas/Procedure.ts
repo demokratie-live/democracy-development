@@ -134,7 +134,7 @@ type Query {
 }
 
 type Mutation {
-  saveProcedureCustomData(procedureId: String!, partyVotes: [PartyVoteInput!]!, decisionText: String!, votingDocument: VotingDocument!): Procedure @auth(requires: BACKEND) 
+  saveProcedureCustomData(procedureId: String!, partyVotes: [PartyVoteInput!]!, decisionText: String!, votingDocument: VotingDocument!, toggleDecision: Boolean!): Procedure @auth(requires: BACKEND) 
   scrapeProcedures(key: String!): Boolean 
 }
 `;

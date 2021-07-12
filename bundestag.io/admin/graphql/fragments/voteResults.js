@@ -10,6 +10,7 @@ export default gql`
         abstination
         decisionText
         votingDocument
+        votingRecommendation
         partyVotes {
           party
           main
