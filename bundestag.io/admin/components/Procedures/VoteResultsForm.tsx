@@ -8,6 +8,7 @@ import {
   Row,
   Col,
   notification,
+  Switch,
 } from "antd";
 import { useMutation } from "@apollo/client";
 import axios from "axios";
@@ -60,7 +61,11 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
 
     console.log("values", values, data);
     axios
-      .post("/api/procedures/save", { ...data, procedureId })
+      .post("/api/procedures/save", {
+        ...data,
+        toggleDecision: !data.toggleDecision,
+        procedureId,
+      })
       .then(() => {
         notification.success({
           key: "saveProcedure",
@@ -118,7 +123,6 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
     >
       <FormItem
         label="Abstimmung über"
-        className="collection-create-form_last-form-item"
         name="votingDocument"
         rules={[{ required: true, message: "Abstimmung über fehlt!" }]}
       >
@@ -128,6 +132,9 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
             Beschlussempfehlung
           </Radio.Button>
         </Radio.Group>
+      </FormItem>
+      <FormItem label="Ergebnis umdrehen" name="toggleDecision">
+        <Switch defaultChecked={!data.votingRecommendation} />
       </FormItem>
       <FormItem
         label="Beschlusstext"

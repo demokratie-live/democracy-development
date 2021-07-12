@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bundestagio-admin
-          image: democracy/bundestag.io-admin:3.0.1
+          image: democracy/bundestag.io-admin:3.0.2
           envFrom:
             - configMapRef:
                 name: bio-admin-config
