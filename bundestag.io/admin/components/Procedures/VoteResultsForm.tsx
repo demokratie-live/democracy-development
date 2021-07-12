@@ -134,7 +134,7 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
         </Radio.Group>
       </FormItem>
       <FormItem label="Ergebnis umdrehen" name="toggleDecision">
-        <Switch defaultChecked={!data.votingRecommendation} />
+        <Switch defaultChecked={data.votingRecommendation === false} />
       </FormItem>
       <FormItem
         label="Beschlusstext"
