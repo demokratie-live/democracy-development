@@ -25,9 +25,8 @@ class AuthDirective extends SchemaDirectiveVisitor {
     Object.keys(fields).forEach((fieldName) => {
       const field = fields[fieldName];
       const { resolve = defaultFieldResolver } = field;
-      console.log('ensureFieldsWrapped HIER 2', field);
+
       field.resolve = async (...args) => {
-        console.log('ensureFieldsWrapped HIER 3');
         // Get the required Role from the field first, falling back
         // to the objectType if no Role is required by the field:
         const requiredRole = field._requiredAuthRole || objectType._requiredAuthRole;
