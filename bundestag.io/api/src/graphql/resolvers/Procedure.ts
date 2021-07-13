@@ -321,6 +321,25 @@ const ProcedureResolvers: Resolvers = {
       );
       return ProcedureModel.findOne({ procedureId });
     },
+    saveProcedurenamedPollCustomData: async (
+      parent,
+      { procedureId, toggleDecision },
+      { ProcedureModel },
+    ) => {
+      const procedure = await ProcedureModel.findOne({ procedureId });
+      const { voteResults } = procedure.customData;
+      voteResults.votingRecommendation = toggleDecision;
+
+      await ProcedureModel.update(
+        { procedureId },
+        {
+          $set: {
+            'customData.voteResults': { ...voteResults },
+          },
+        },
+      );
+      return ProcedureModel.findOne({ procedureId });
+    },
   },
 
   Procedure: {

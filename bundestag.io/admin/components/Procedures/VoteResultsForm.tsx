@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   Form,
   Input,
@@ -10,7 +10,6 @@ import {
   notification,
   Switch,
 } from "antd";
-import { useMutation } from "@apollo/client";
 import axios from "axios";
 
 // Ant Design Sub-Elements
@@ -63,7 +62,7 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
     axios
       .post("/api/procedures/save", {
         ...data,
-        toggleDecision: !data.toggleDecision,
+        toggleDecision: !values.toggleDecision,
         procedureId,
       })
       .then(() => {
@@ -96,13 +95,9 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
       name: party,
     }));
   }
-  const staticValue = [
-    { formItem1: "value1", formItem2: "value2" },
-    { formItem1: "value3", formItem2: "value4" },
-  ];
+
   return (
     <Form
-      // form={form}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       className="login-form"
@@ -234,90 +229,6 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
           );
         }}
       </Form.List>
-      {/* <Row gutter={8}>
-        {parties.map(({ name }, i) => {
-          const mainDecision =
-            // form.getFieldValue(`partyVotes[${i}].main`) ||
-            data.partyVotes.length > 0 ? data.partyVotes[i].main : null;
-
-          return (
-            <Col span={8} key={name}>
-              <h3>{name}</h3>
-              <FormItem
-                name={`partyVotes[${i}].party`}
-                rules={[{ required: true, message: "Beschluss fehlt!" }]}
-              >
-                <Input />
-              </FormItem>
-              <FormItem
-                className="collection-create-form_last-form-item"
-                rules={[{ required: true, message: "Beschluss fehlt!" }]}
-              >
-                <Radio.Group>
-                  <Radio.Button
-                    value="YES"
-                    style={{ backgroundColor: "#f6ffed" }}
-                  >
-                    Ja
-                  </Radio.Button>
-                  <Radio.Button
-                    value="ABSTINATION"
-                    style={{ backgroundColor: "#e6f7ff" }}
-                  >
-                    Enthaltung
-                  </Radio.Button>
-                  <Radio.Button
-                    value="NO"
-                    style={{ backgroundColor: "#fff1f0" }}
-                  >
-                    Nein
-                  </Radio.Button>
-                </Radio.Group>
-              </FormItem>
-              <FormItem
-                label="Ja"
-                labelCol={{
-                  xs: { span: 24 },
-                  sm: { span: 8 },
-                }}
-              >
-                <InputNumber
-                  min={0}
-                  max={999}
-                  disabled={mainDecision === "YES"}
-                />
-              </FormItem>
-              <FormItem
-                label="Enth."
-                labelCol={{
-                  xs: { span: 24 },
-                  sm: { span: 8 },
-                }}
-              >
-                <InputNumber
-                  min={0}
-                  max={999}
-                  disabled={mainDecision === "ABSTINATION"}
-                />
-              </FormItem>
-              <FormItem
-                label="Nein"
-                labelCol={{
-                  xs: { span: 24 },
-                  sm: { span: 8 },
-                }}
-              >
-                <InputNumber
-                  min={0}
-                  max={999}
-                  disabled={mainDecision === "NO"}
-                />
-              </FormItem>
-            </Col>
-          );
-        })}
-      </Row> */}
-
       <FormItem>
         <Button type="primary" htmlType="submit" className="login-form-button">
           Speichern
@@ -328,19 +239,3 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
 };
 
 export default VoteResultsForm;
-
-// export default graphql(SAVE_VOTE_RESULTS, {
-//   props: ({ mutate, ownProps }) => {
-//     return {
-//       saveVoteResults: async (data) => {
-//         const { procedureId } = ownProps;
-//         return mutate({
-//           variables: {
-//             ...data,
-//             procedureId,
-//           },
-//         });
-//       },
-//     };
-//   },
-// })(Form.create({})(VoteResultsForm));
