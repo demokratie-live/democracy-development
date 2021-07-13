@@ -1,6 +1,6 @@
 import { Layout } from "../../components/Layout";
 import App from "../../components/App";
-import { useRouter, withRouter } from "next/router";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import Link from "next/link";
 import { Form, Input, Collapse } from "antd";
@@ -10,6 +10,7 @@ const { Panel } = Collapse;
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from "@democracy-deutschland/bundestag.io-definitions";
 
 import VoteResultsForm from "../../components/Procedures/VoteResultsForm";
+import { VoteResultsFormNamedPoll } from "../../components/Procedures/VoteResultsFormNamedPoll";
 
 // GraphQL
 import { PROCEDURE } from "../../graphql/queries/procedure";
@@ -128,12 +129,21 @@ const Procedure: React.FC = () => {
             </>
           )}
         </dl>
-        <VoteResultTextHelper
-          procedureId={procedureId}
-          importantDocuments={importantDocuments}
-        />
+        {!namedVote && (
+          <VoteResultTextHelper
+            procedureId={procedureId}
+            importantDocuments={importantDocuments}
+          />
+        )}
         {!namedVote && (
           <VoteResultsForm
+            data={customData.voteResults}
+            type={type}
+            procedureId={procedureId}
+          />
+        )}
+        {namedVote && (
+          <VoteResultsFormNamedPoll
             data={customData.voteResults}
             type={type}
             procedureId={procedureId}

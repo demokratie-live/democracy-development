@@ -470,6 +470,7 @@ export type VoteResultTexts = {
 export type Mutation = {
   __typename?: 'Mutation';
   saveProcedureCustomData?: Maybe<Procedure>;
+  saveProcedurenamedPollCustomData?: Maybe<Procedure>;
   scrapeProcedures?: Maybe<Scalars['Boolean']>;
   signIn?: Maybe<User>;
 };
@@ -480,6 +481,12 @@ export type MutationSaveProcedureCustomDataArgs = {
   partyVotes: Array<PartyVoteInput>;
   decisionText: Scalars['String'];
   votingDocument: VotingDocument;
+  toggleDecision: Scalars['Boolean'];
+};
+
+
+export type MutationSaveProcedurenamedPollCustomDataArgs = {
+  procedureId: Scalars['String'];
   toggleDecision: Scalars['Boolean'];
 };
 
@@ -1038,6 +1045,7 @@ export type VoteResultTextsResolvers<ContextType = GraphQlContext, ParentType ex
 
 export type MutationResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   saveProcedureCustomData?: Resolver<Maybe<ResolversTypes['Procedure']>, ParentType, ContextType, RequireFields<MutationSaveProcedureCustomDataArgs, 'procedureId' | 'partyVotes' | 'decisionText' | 'votingDocument' | 'toggleDecision'>>;
+  saveProcedurenamedPollCustomData?: Resolver<Maybe<ResolversTypes['Procedure']>, ParentType, ContextType, RequireFields<MutationSaveProcedurenamedPollCustomDataArgs, 'procedureId' | 'toggleDecision'>>;
   scrapeProcedures?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationScrapeProceduresArgs, 'key'>>;
   signIn?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationSignInArgs, 'email' | 'password'>>;
 };
