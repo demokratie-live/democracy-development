@@ -2,7 +2,6 @@ import mongoConnect from "./mongoose";
 
 import { Scraper } from "@democracy-deutschland/scapacra";
 import { NamedPollScraper } from "@democracy-deutschland/scapacra-bt";
-import url from "url";
 
 import {
   PROCEDURE as PROCEDURE_DEFINITIONS,
@@ -25,19 +24,18 @@ const start = async () => {
   await setCronStart({ name: CRON_NAME, startDate });
   try {
     await Scraper.scrape(new NamedPollScraper(), async (dataPackage: any) => {
+      process.stdout.write(".");
       let procedureId = null;
-      // TODO unify
-      // currently the dip21 scraper returns document urls like so:
-      // "http://dipbt.bundestag.de:80/dip21/btd/19/010/1901038.pdf
-      // The named poll scraper returns them like so:
-      // http://dip21.bundestag.de/dip21/btd/19/010/1901038.pdf
-      const findSpotUrls = dataPackage.data.documents.map((document: any) => ({
-        "history.findSpotUrl": {
-          $regex: `.*${url.parse(document).path}.*`,
-        },
-      }));
+      const documentIdsRegexp = /\D(\d{2}\/\d{4,6})\D/g;
+      const documentIds = [
+        ...new Set(
+          [...dataPackage.data.description.matchAll(documentIdsRegexp)].map(
+            (m: any) => m[1]
+          )
+        ),
+      ];
 
-      if (findSpotUrls.length === 0) {
+      if (documentIds.length === 0) {
         console.warn(
           `[Cronjob][${CRON_NAME}] no documents on poll ${dataPackage.data.id}`
         );
@@ -58,16 +56,14 @@ const start = async () => {
       ) {
         // Find matching Procedures
         procedures = await ProcedureModel.find({
-          $and: findSpotUrls,
+          "history.decision.document": { $in: documentIds },
           "history.decision": {
             $elemMatch: {
-              type:
-                PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE
-                  .NAMENTLICHE_ABSTIMMUNG,
+              type: PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE
+                .NAMENTLICHE_ABSTIMMUNG,
               tenor: {
-                $not:
-                  PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR
-                    .FIND_AENDERUNGSANTRAG,
+                $not: PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR
+                  .FIND_AENDERUNGSANTRAG,
               },
             },
           },
@@ -262,8 +258,6 @@ const start = async () => {
           customData.voteResults.votingDocument === "mainDocument" &&
           customData.voteResults.yes > customData.voteResults.no
         ) {
-          // console.log(procedures);
-          console.log(procedureId, customData);
           // Toggle Voting Document
           customData.voteResults.votingDocument = "recommendedDecision";
           console.log(procedureId, customData);
