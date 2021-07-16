@@ -2,6 +2,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: push-send-queued-cronjob
+  startingDeadlineSeconds: 200
 spec:
   schedule: "*/1 8-20 * * *"
   concurrencyPolicy: Forbid

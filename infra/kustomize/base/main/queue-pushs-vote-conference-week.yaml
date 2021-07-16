@@ -5,6 +5,7 @@ metadata:
 spec:
   schedule: "0 2 * * MON-FRI"
   concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
   jobTemplate:
     spec:
       backoffLimit: 0
