@@ -47,6 +47,7 @@ export default gql`
     findSpotUrl: String
     decision: [Decision]
     date: Date
+    abstract: String
   }
 
   type Procedure {
