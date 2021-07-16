@@ -43,6 +43,7 @@ const procedureQuery = gql`
             initiator
             findSpot
             findSpotUrl
+            abstract
             voteDate: date
             decision {
               page
