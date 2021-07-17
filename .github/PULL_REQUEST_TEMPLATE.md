@@ -1,44 +1,54 @@
 ## Pullrequest
+
 <!-- Describe the Pullrequest. -->
 
 ### Issues
+
 <!-- Which Issues does this fix, which are related?
 - fixes #XXX
 - relates #XXX
 -->
-- [X] None
+
+- [x] None
 
 ### Checklist
+
 <!-- Anything important to be thought of when deploying?
 - [ ] Env-Variables adjustment needed
 - [ ] Breaking/critical change
 -->
-- [X] None
+
+- [x] None
 
 ### Repositories Affected
+
 <!-- Did you update any Submodules? -->
+
 - [ ] bundestag.io
 - [ ] bundestag.io-admin
 - [ ] client
 - [ ] democracy-app.de
 - [ ] democracy-app.de-api
-- [ ] democracy-app.de-admin
 - [ ] democracy-deutschland.de
 - [ ] docu
 - [ ] elasticsearch
-- [X] None
+- [x] None
 
 ### How2Test
+
 <!-- Give a detailed description how to test your PR and confirm it is working as expected. -->
 <!-- Maintainers will check the Tests
 - [ ] Test1
 - [ ] Test2
 -->
-- [X] None
+
+- [x] None
 
 ### Todo
+
 <!-- In case some parts are still missing, list them here.
 - [ ] Todo1
 - [ ] Todo2
 -->
-- [X] None
+
+- [x] None
