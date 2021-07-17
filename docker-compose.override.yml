@@ -12,7 +12,7 @@ services:
   bio-admin:
     build:
       context: bundestag.io/admin
-      target: build_stage
+      target: deps
     command: yarn run dev
     volumes:
       - ./bundestag.io/admin:/app
@@ -37,9 +37,18 @@ services:
     volumes:
       - ./democracy/api:/app
       - democracy-api-node_modules:/app/node_modules
+  democracy-web-app:
+    build:
+      context: democracy/web-app
+      target: deps
+    command: yarn run dev
+    volumes:
+      - ./democracy/web-app:/app
+      - democracy-web-app-node_modules:/app/node_modules
 
 volumes:
   bundestag-io-node_modules:
   bundestag-io-admin-node_modules:
   dip-node_modules:
   democracy-api-node_modules:
+  democracy-web-app-node_modules:

@@ -25,7 +25,7 @@ services:
       context: bundestag.io/api
       target: production_stage
     ports:
-      - 3100:3100
+      - 4000:3100
     depends_on:
       - mongo
     environment:
@@ -34,9 +34,9 @@ services:
   bio-admin:
     build:
       context: bundestag.io/admin
-      target: production_stage
+      target: runner
     ports:
-      - 3000:3000
+      - 4001:3000
     depends_on:
       - bundestag-io
     environment:
@@ -49,7 +49,7 @@ services:
       context: bundestag.io/dip
       target: production_stage
     ports:
-      - 3101:3101
+      - 4002:3101
     environment:
       - DIP_API_KEY=N64VhW8.yChkBUIJeosGojQ7CSR2xwLf3Qy7Apw464
   democracy-api:
@@ -63,6 +63,17 @@ services:
     environment:
       - DB_URL=mongodb://mongo:27017/democracy
       - GRAPHIQL=true
+  democracy-web-app:
+    build:
+      context: democracy/web-app
+      target: runner
+    ports:
+      - 3001:3000
+    depends_on:
+      - democracy-api
+    environment:
+      - GRAPHQL_URL=http://localhost:3000/
+      - GRAPHQL_URL_SERVER=http://democracy-api:3000/
 
 volumes:
   democracy-mongodb:
