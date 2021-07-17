@@ -10,6 +10,3 @@ url = https://github.com/demokratie-live/democracy-docu.git
 [submodule "democracy-deutschland.de"]
 path = democracy-deutschland.de
 url = https://github.com/demokratie-live/democracy-website.git
-[submodule "democracy-app.de-admin"]
-path = democracy-app.de-admin
-url = https://github.com/demokratie-live/democracy-admin.git
