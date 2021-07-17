@@ -1,6 +1,6 @@
 {
   "name": "democracy-desktop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "DEMOCRACY Desktop & Web Client",
   "main": "index.js",
   "repository": "https://github.com/demokratie-live/democracy-desktop",
