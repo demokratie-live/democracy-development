@@ -27,7 +27,7 @@ build:
       docker:
         dockerfile: Dockerfile.dev
     - image: democracy/democracy-server
-      context: democracy-app.de-api
+      context: democracy/api
       sync:
         manual:
           - src: src/**/*.ts
