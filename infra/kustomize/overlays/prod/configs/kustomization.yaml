@@ -1,10 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-secretGenerator:
-  - name: dip-api-token
-    envs:
-      - bio-dip.env
 configMapGenerator:
   - name: bio-admin-config
     envs:
