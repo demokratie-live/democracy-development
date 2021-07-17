@@ -1,0 +1,5 @@
+.next
+node_modules
+.env
+/static/fonts/democracy/*
+yarn-error.log

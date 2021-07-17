@@ -35,7 +35,7 @@ build:
       docker:
         dockerfile: Dockerfile.dev
     - image: democracy/democracy-app.de
-      context: democracy-app.de
+      context: democracy/web-app
       sync:
         manual:
           - src: "**/*.js"

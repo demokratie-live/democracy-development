@@ -19,6 +19,7 @@ const start = async () => {
     await Scraper.scrape(
       new NamedPollDeputyScraper(),
       async (dataPackage: any) => {
+        process.stdout.write(".");
         // Construct Database object
         const namedPoll: any = { webId: dataPackage.data.id };
         // Add webId field, Remove id field
