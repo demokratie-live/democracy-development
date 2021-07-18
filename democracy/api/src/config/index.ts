@@ -24,7 +24,7 @@ const recommendedConfigs = {
   GRAPHIQL: process.env.GRAPHIQL === 'true',
   DB_URL: process.env.DB_URL || 'mongodb://localhost/democracy',
   ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL || 'elasticsearch',
-  BUNDESTAGIO_SERVER_URL: process.env.BUNDESTAGIO_SERVER_URL || 'http://localhost:3100/',
+  BUNDESTAGIO_SERVER_URL: process.env.BUNDESTAGIO_SERVER_URL || 'http://localhost:4000/',
   APN_TOPIC: ((): string => {
     switch (process.env.STAGE) {
       case 'dev':
