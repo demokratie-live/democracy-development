@@ -1,4 +1,4 @@
-import { MongooseFilterQuery } from 'mongoose';
+import { FilterQuery, MongooseFilterQuery } from 'mongoose';
 import { parseResolveInfo } from 'graphql-parse-resolve-info';
 import { Resolvers, VoteSelection } from '../../generated/graphql';
 import {
@@ -21,6 +21,22 @@ const DeputyApi: Resolvers = {
         query.directCandidate = true;
       }
       return DeputyModel.find(query);
+    },
+    deputies: async (_parent, { limit = 10, offset = 0, filterTerm, filterIds, excludeIds }) => {
+      if (limit > 100) {
+        throw new Error('limit must not exceed 100');
+      }
+      const conditions: FilterQuery<IDeputy> = {};
+      if (filterTerm) {
+        conditions.name = { $regex: new RegExp(filterTerm, 'i') };
+      }
+      if (filterIds) {
+        conditions.id = { $in: filterIds };
+      }
+      if (excludeIds) {
+        conditions.id = { $nin: excludeIds };
+      }
+      return DeputyModel.find(conditions).sort({ name: 1 }).limit(limit).skip(offset);
     },
   },
   Deputy: {
