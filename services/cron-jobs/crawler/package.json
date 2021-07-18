@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint .",
     "dev:import-procedures": "ts-node-dev -r dotenv/config ./src/import-procedures",
     "start:import-procedures": "node ./build/import-procedures.js"
   },

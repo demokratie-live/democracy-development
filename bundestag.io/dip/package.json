@@ -11,7 +11,7 @@
     "start": "node build/index.js",
     "dev": "ts-node-dev --watch=resolvers,schemas --respawn -r dotenv/config src/index.ts",
     "test": "jest",
-    "lint": "eslint src/**/*.ts"
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@pollyjs/adapter-node-http": "^5.1.1",
