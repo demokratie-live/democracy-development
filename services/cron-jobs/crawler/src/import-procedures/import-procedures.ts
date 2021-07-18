@@ -1,20 +1,18 @@
 import { gql, request } from 'graphql-request';
-import { mongoConnect, mongoDisconnect } from './mongoose';
 import { ProcedureModel } from '@democracy-deutschland/bundestagio-common';
-import config from './config';
 import debug from 'debug';
-const [log, error] = [debug('bundestag-io:import-procedures:log'), debug('bundestag-io:import-procedures:error')];
+const log = debug('bundestag-io:import-procedures:log');
 log.log = console.log.bind(console);
 
-const {
-  DIP_GRAPHQL_ENDPOINT,
-  IMPORT_PROCEDURES_START_CURSOR,
-  IMPORT_PROCEDURES_CHUNK_SIZE,
-  IMPORT_PROCEDURES_CHUNK_ROUNDS,
-  IMPORT_PROCEDURES_FILTER_BEFORE,
-  IMPORT_PROCEDURES_FILTER_AFTER,
-  IMPORT_PROCEDURES_FILTER_TYPES,
-} = config;
+export type ImportProceduresInput = {
+  DIP_GRAPHQL_ENDPOINT: string;
+  IMPORT_PROCEDURES_START_CURSOR: string;
+  IMPORT_PROCEDURES_CHUNK_SIZE: number;
+  IMPORT_PROCEDURES_CHUNK_ROUNDS: number;
+  IMPORT_PROCEDURES_FILTER_BEFORE: string;
+  IMPORT_PROCEDURES_FILTER_AFTER: string;
+  IMPORT_PROCEDURES_FILTER_TYPES: string[] | undefined;
+};
 
 const procedureQuery = gql`
   query ($cursor: String, $offset: Int, $limit: Int, $filter: ProcedureFilter) {
@@ -70,7 +68,17 @@ const procedureQuery = gql`
   }
 `;
 
-export default async function importProcedures(): Promise<void> {
+export default async function importProcedures(config: ImportProceduresInput): Promise<void> {
+  const {
+    DIP_GRAPHQL_ENDPOINT,
+    IMPORT_PROCEDURES_START_CURSOR,
+    IMPORT_PROCEDURES_CHUNK_SIZE,
+    IMPORT_PROCEDURES_CHUNK_ROUNDS,
+    IMPORT_PROCEDURES_FILTER_BEFORE,
+    IMPORT_PROCEDURES_FILTER_AFTER,
+    IMPORT_PROCEDURES_FILTER_TYPES,
+  } = config;
+
   const variables = {
     cursor: IMPORT_PROCEDURES_START_CURSOR,
     filter: {
@@ -115,15 +123,3 @@ export default async function importProcedures(): Promise<void> {
     variables.cursor = endCursor;
   }
 }
-
-(async () => {
-  try {
-    await mongoConnect();
-    await importProcedures();
-  } catch (err) {
-    error(err);
-    throw err;
-  } finally {
-    mongoDisconnect();
-  }
-})();
