@@ -13,7 +13,7 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     // "alwaysStrict": true,
-    "strict": false,
+    // "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     // "noImplicitAny": true,

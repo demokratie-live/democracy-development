@@ -110,7 +110,7 @@
             "description": null,
             "args": [
               {
-                "name": "first",
+                "name": "limit",
                 "description": null,
                 "type": {
                   "kind": "SCALAR",
