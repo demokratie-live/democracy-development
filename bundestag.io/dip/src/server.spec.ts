@@ -465,9 +465,7 @@ describe('Query', () => {
           },
         });
       });
-    });
 
-    describe('pageInfo', () => {
       it('hasNextPage indicates if there are more entries', async () => {
         const variables = { filter: { before: '1970-01-01' } };
         await expect(runQuery({ query, variables })).resolves.toMatchObject({
