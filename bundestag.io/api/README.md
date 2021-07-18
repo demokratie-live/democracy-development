@@ -1,9 +1,8 @@
 ![Screenshot](https://github.com/demokratie-live/democracy-assets/blob/master/images/forfb2.png)
 
-# Bundestag.io &nbsp; <a href="https://github.com/kriasoft/nodejs-api-starter/stargazers" target="_blank"><img src="https://img.shields.io/github/stars/bundestag/bundestag.io.svg?style=social&label=Star&maxAge=3600" height="20"/></a>  <a href="https://twitter.com/democracy_de" target="_blank"><img src="https://img.shields.io/twitter/follow/democracy_de.svg?style=social&label=Follow&maxAge=3600" height="20"/></a>  <a href="https://www.facebook.com/democracygermany/" target="_blank"><img src="https://github.com/demokratie-live/democracy-assets/blob/master/docu/facebook.png" height="20"/></a>  <a href="https://discord.gg/Pdu3ZEV" target="_blank"><img src="https://github.com/demokratie-live/democracy-assets/blob/master/docu/discord.png" height="20"/></a>
+# Bundestag.io &nbsp; <a href="https://github.com/kriasoft/nodejs-api-starter/stargazers" target="_blank"><img src="https://img.shields.io/github/stars/bundestag/bundestag.io.svg?style=social&label=Star&maxAge=3600" height="20"/></a> <a href="https://twitter.com/democracy_de" target="_blank"><img src="https://img.shields.io/twitter/follow/democracy_de.svg?style=social&label=Follow&maxAge=3600" height="20"/></a> <a href="https://www.facebook.com/democracygermany/" target="_blank"><img src="https://github.com/demokratie-live/democracy-assets/blob/master/docu/facebook.png" height="20"/></a> <a href="https://discord.gg/Pdu3ZEV" target="_blank"><img src="https://github.com/demokratie-live/democracy-assets/blob/master/docu/discord.png" height="20"/></a>
 
 This is a GraphQL API for data from [bundestag.de].
-
 
 ![Project structure](./assets/api_structure_bundestag.png)
 
@@ -15,7 +14,7 @@ You can GraphQL queries in the GraphQL playground, e.g. try this query:
 
 ```graphql
 {
-  procedures(limit: 30){
+  procedures(limit: 30) {
     title
     currentStatus
   }
@@ -32,4 +31,4 @@ Copyright © 2017-present DEMOCRACY Deutschland e.V.. This source code is licens
 Made with ♥ by Team DEMOCRACY ([democracy-deutschland.de](https://www.democracy-deutschland.de)), [startnext contributors](https://www.startnext.com/democracy/unterstuetzer/) and [contributors](https://github.com/bundestag/bundestag.io/graphs/contributors)
 
 [bundestag.de]: https://www.bundestag.de/
-[localhost]: http://localhost:3100/
+[localhost]: http://localhost:4000/

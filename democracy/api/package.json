@@ -10,7 +10,7 @@
     "serve": "node dist/index.js",
     "dev": "ts-node-dev src/index.ts",
     "dev:local": "ts-node-dev -r dotenv/config src/index.ts",
-    "generate": "graphql-codegen --config codegen.self.yml",
+    "generate": "graphql-codegen",
     "apollo:codegen": "npx apollo client:codegen --endpoint=http://localhost:4000 --excludes=node_modules/* --target typescript --globalTypesFile=./__generated__/globalTypes.ts",
     "lint": "yarn lint:es && yarn lint:ts && yarn lint:exports",
     "lint:es": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
@@ -50,6 +50,11 @@
     "winston-mongodb": "^5.0.1"
   },
   "devDependencies": {
+    "@graphql-codegen/add": "^2.0.2",
+    "@graphql-codegen/cli": "^1.21.7",
+    "@graphql-codegen/introspection": "^1.18.2",
+    "@graphql-codegen/typescript-mongodb": "^1.19.5",
+    "@graphql-codegen/typescript-resolvers": "^1.20.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/cron": "^1.7.2",
     "@types/elasticsearch": "^5.0.36",
