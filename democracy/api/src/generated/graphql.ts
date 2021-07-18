@@ -340,7 +340,7 @@ export type QueryDeputiesOfConstituencyArgs = {
 
 
 export type QueryDeputiesArgs = {
-  first?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   filterTerm?: Maybe<Scalars['String']>;
   filterIds?: Maybe<Array<Scalars['String']>>;
