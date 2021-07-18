@@ -37,7 +37,7 @@ export default class DipAPI extends RESTDataSource {
     this.httpCache = new HTTPCache(config.cache, throttledFetch);
   }
 
-  willSendRequest(request: RequestOptions) {
+  willSendRequest(request: RequestOptions): void {
     request.headers.set('Authorization', `ApiKey ${this.context.DIP_API_KEY}`);
   }
 
@@ -67,9 +67,7 @@ export default class DipAPI extends RESTDataSource {
     }
     return {
       totalCount,
-      edges: documents
-        .slice(args.offset, args.limit + args.offset)
-        .map((document) => ({ node: document })),
+      edges: documents.slice(args.offset, args.limit + args.offset).map((document) => ({ node: document })),
       pageInfo: {
         endCursor: cursor,
         hasNextPage,

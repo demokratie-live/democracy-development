@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import DipAPI from './DipAPI';
 import {
   Vorgang,
@@ -72,11 +75,7 @@ export default {
     period: (vorgang: Vorgang) => vorgang.wahlperiode,
     subjectGroups: (vorgang: Vorgang) => vorgang.sachgebiet,
     date: (vorgang: Vorgang) => vorgang.datum,
-    plenums: (
-      vorgang: Vorgang,
-      _args: any,
-      { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } },
-    ) => {
+    plenums: (vorgang: Vorgang, _args: any, { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } }) => {
       return dipAPI.getVorgangsPlenarProtokolle(vorgang.id);
     },
     importantDocuments: (
@@ -94,11 +93,7 @@ export default {
         return `${datum}${ik.erlaeuterung ? ` (${ik.erlaeuterung})` : ''}`;
       });
     },
-    history: (
-      vorgang: Vorgang,
-      _args: any,
-      { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } },
-    ) => {
+    history: (vorgang: Vorgang, _args: any, { dataSources: { dipAPI } }: { dataSources: { dipAPI: DipAPI } }) => {
       return dipAPI.getVorgangsVorgangspositionen(vorgang.id);
     },
   },

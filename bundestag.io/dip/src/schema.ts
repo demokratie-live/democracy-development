@@ -2,12 +2,7 @@ import { gql } from 'apollo-server';
 export default gql`
   type Query {
     procedure(id: ID!): Procedure
-    procedures(
-      cursor: String! = "*"
-      offset: Int! = 0
-      limit: Int! = 50
-      filter: ProcedureFilter
-    ): ProcedureConnection
+    procedures(cursor: String! = "*", offset: Int! = 0, limit: Int! = 50, filter: ProcedureFilter): ProcedureConnection
   }
 
   scalar Date
