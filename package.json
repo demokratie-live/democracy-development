@@ -5,7 +5,15 @@
   "repository": "https://github.com/demokratie-live/democracy-development.git",
   "author": "Manuel Ruck <m.ruck@democracy-deutschland.de>",
   "license": "Apache-2.0",
+  "private": true,
+  "workspaces": [
+    "./bundestag.io/dip",
+    "./services/cron-jobs/crawler"
+  ],
   "scripts": {
+    "build": "yarn workspaces run build",
+    "lint": "yarn workspaces run lint",
+    "unused-exports": "yarn workspaces run unused-exports",
     "dev": "yarn build:k8s:local && skaffold dev --port-forward --status-check=false",
     "build:k8s:local": "kustomize build ./infra/kustomize/overlays/local > infra/local.yaml",
     "build:k8s:internal": "kustomize build ./infra/kustomize/overlays/internal > infra/internal.yaml",
