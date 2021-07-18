@@ -52,6 +52,17 @@ services:
       - 3101:3101
     environment:
       - DIP_API_KEY=N64VhW8.yChkBUIJeosGojQ7CSR2xwLf3Qy7Apw464
+  democracy-api:
+    build:
+      context: democracy/api
+      target: production_stage
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+    environment:
+      - DB_URL=mongodb://mongo:27017/democracy
+      - GRAPHIQL=true
 
 volumes:
   democracy-mongodb:

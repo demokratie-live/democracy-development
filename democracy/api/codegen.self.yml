@@ -1,0 +1,21 @@
+overwrite: true
+schema:
+  - 'http://localhost:3000'
+documents: null
+generates:
+  src/generated/graphql.ts:
+    config:
+      contextType: ../types/graphqlContext#GraphQlContext
+      defaultMapper: DeepPartial<{T}>
+      mappers:
+        Deputy: ../migrations/4-schemas/Deputy#IDeputy
+        Procedure: ../migrations/11-schemas/Procedure#IProcedure
+        # Vote: ../migrations/2-schemas/Vote#VoteProps
+    plugins:
+      - 'typescript'
+      - 'typescript-resolvers'
+      - 'typescript-mongodb'
+      - add: "import { DeepPartial } from 'utility-types';"
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'

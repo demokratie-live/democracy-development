@@ -1,21 +1,18 @@
 [submodule "client"]
-	path = client
-	url = https://github.com/demokratie-live/democracy-client
+path = client
+url = https://github.com/demokratie-live/democracy-client
 [submodule "elasticsearch"]
-	path = elasticsearch
-	url = https://github.com/demokratie-live/democracy-search
+path = elasticsearch
+url = https://github.com/demokratie-live/democracy-search
 [submodule "docu"]
-	path = docu
-	url = https://github.com/demokratie-live/democracy-docu.git
+path = docu
+url = https://github.com/demokratie-live/democracy-docu.git
 [submodule "democracy-deutschland.de"]
-	path = democracy-deutschland.de
-	url = https://github.com/demokratie-live/democracy-website.git
+path = democracy-deutschland.de
+url = https://github.com/demokratie-live/democracy-website.git
 [submodule "democracy-app.de"]
-	path = democracy-app.de
-	url = https://github.com/demokratie-live/democracy-desktop.git
-[submodule "democracy-app.de-api"]
-	path = democracy-app.de-api
-	url = https://github.com/demokratie-live/democracy-server.git
+path = democracy-app.de
+url = https://github.com/demokratie-live/democracy-desktop.git
 [submodule "democracy-app.de-admin"]
-	path = democracy-app.de-admin
-	url = https://github.com/demokratie-live/democracy-admin.git
+path = democracy-app.de-admin
+url = https://github.com/demokratie-live/democracy-admin.git
