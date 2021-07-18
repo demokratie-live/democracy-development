@@ -26,6 +26,7 @@
     "@typescript-eslint/parser": "^4.28.0",
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jest": "^24.3.6",
     "jest": "^27.0.4",
     "prettier": "2.3.1",
     "setup-polly-jest": "^0.9.1",
