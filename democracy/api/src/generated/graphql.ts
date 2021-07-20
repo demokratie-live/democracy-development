@@ -309,6 +309,7 @@ export type Query = {
   currentConferenceWeek: ConferenceWeek;
   deputiesOfConstituency: Array<Deputy>;
   deputies: Array<Deputy>;
+  deputy?: Maybe<Deputy>;
   notificationSettings?: Maybe<NotificationSettings>;
   procedure: Procedure;
   procedures: Array<Procedure>;
@@ -345,6 +346,11 @@ export type QueryDeputiesArgs = {
   filterTerm?: Maybe<Scalars['String']>;
   filterIds?: Maybe<Array<Scalars['String']>>;
   excludeIds?: Maybe<Array<Scalars['String']>>;
+};
+
+
+export type QueryDeputyArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -845,6 +851,7 @@ export type QueryResolvers<ContextType = GraphQlContext, ParentType extends Reso
   currentConferenceWeek?: Resolver<ResolversTypes['ConferenceWeek'], ParentType, ContextType>;
   deputiesOfConstituency?: Resolver<Array<ResolversTypes['Deputy']>, ParentType, ContextType, RequireFields<QueryDeputiesOfConstituencyArgs, 'constituency'>>;
   deputies?: Resolver<Array<ResolversTypes['Deputy']>, ParentType, ContextType, RequireFields<QueryDeputiesArgs, never>>;
+  deputy?: Resolver<Maybe<ResolversTypes['Deputy']>, ParentType, ContextType, RequireFields<QueryDeputyArgs, 'id'>>;
   notificationSettings?: Resolver<Maybe<ResolversTypes['NotificationSettings']>, ParentType, ContextType>;
   procedure?: Resolver<ResolversTypes['Procedure'], ParentType, ContextType, RequireFields<QueryProcedureArgs, 'id'>>;
   procedures?: Resolver<Array<ResolversTypes['Procedure']>, ParentType, ContextType, RequireFields<QueryProceduresArgs, never>>;
