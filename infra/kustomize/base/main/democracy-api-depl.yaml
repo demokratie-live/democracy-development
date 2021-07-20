@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: democracy-api
-          image: democracy/democracy-server:0.2.36
+          image: democracy/democracy-server:0.2.37
           envFrom:
             - configMapRef:
                 name: democracy-api-config

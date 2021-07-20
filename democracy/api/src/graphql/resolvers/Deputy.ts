@@ -39,6 +39,9 @@ const DeputyApi: Resolvers = {
       console.log(conditions);
       return DeputyModel.find(conditions).sort({ name: 1 }).limit(limit).skip(offset);
     },
+    deputy: async (_parent, { id }) => {
+      return DeputyModel.findOne({ webId: id });
+    },
   },
   Deputy: {
     totalProcedures: ({ votes }) => votes.length,
