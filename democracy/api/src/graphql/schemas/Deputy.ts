@@ -31,9 +31,15 @@ type Deputy {
   procedures(procedureIds: [String!], pageSize: Int, offset: Int): [DeputyProcedure!]!
 }
 
+type DeputiesResult {
+  total: Int!
+  hasMore: Boolean!
+  data: [Deputy!]!
+}
+
 type Query {
   deputiesOfConstituency(constituency: String!, directCandidate: Boolean): [Deputy!]!
-  deputies(limit: Int, offset: Int, filterTerm: String, filterIds: [String!], excludeIds: [String!]): [Deputy!]!
+  deputies(limit: Int, offset: Int, filterTerm: String, filterIds: [String!], excludeIds: [String!]): DeputiesResult!
   deputy(id: String!): Deputy
 }
 `;

@@ -36,8 +36,12 @@ const DeputyApi: Resolvers = {
       if (excludeIds) {
         conditions.webId = { $nin: excludeIds };
       }
-      console.log(conditions);
-      return DeputyModel.find(conditions).sort({ name: 1 }).limit(limit).skip(offset);
+      const total = await DeputyModel.count(conditions);
+      return {
+        total,
+        hasMore: offset + limit < total,
+        data: await DeputyModel.find(conditions).sort({ name: 1 }).limit(limit).skip(offset),
+      };
     },
     deputy: async (_parent, { id }) => {
       return DeputyModel.findOne({ webId: id });
