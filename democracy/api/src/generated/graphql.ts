@@ -64,6 +64,13 @@ export type ConferenceWeek = {
 };
 
 
+export type DeputiesResult = {
+  __typename?: 'DeputiesResult';
+  total: Scalars['Int'];
+  hasMore: Scalars['Boolean'];
+  data: Array<Deputy>;
+};
+
 export type Deputy = {
   __typename?: 'Deputy';
   _id: Scalars['ID'];
@@ -308,7 +315,7 @@ export type Query = {
   activityIndex?: Maybe<ActivityIndex>;
   currentConferenceWeek: ConferenceWeek;
   deputiesOfConstituency: Array<Deputy>;
-  deputies: Array<Deputy>;
+  deputies: DeputiesResult;
   deputy?: Maybe<Deputy>;
   notificationSettings?: Maybe<NotificationSettings>;
   procedure: Procedure;
@@ -604,6 +611,7 @@ export type ResolversTypes = {
   CommunityConstituencyVotes: ResolverTypeWrapper<DeepPartial<CommunityConstituencyVotes>>;
   ProcedureType: ResolverTypeWrapper<DeepPartial<ProcedureType>>;
   ListType: ResolverTypeWrapper<DeepPartial<ListType>>;
+  DeputiesResult: ResolverTypeWrapper<DeepPartial<Omit<DeputiesResult, 'data'> & { data: Array<ResolversTypes['Deputy']> }>>;
   NotificationSettings: ResolverTypeWrapper<DeepPartial<NotificationSettings>>;
   ProcedureFilter: ResolverTypeWrapper<DeepPartial<ProcedureFilter>>;
   VotedTimeSpan: ResolverTypeWrapper<DeepPartial<VotedTimeSpan>>;
@@ -645,6 +653,7 @@ export type ResolversParentTypes = {
   DeputyVote: DeepPartial<Omit<DeputyVote, 'deputy'> & { deputy: ResolversParentTypes['Deputy'] }>;
   CommunityVotes: DeepPartial<CommunityVotes>;
   CommunityConstituencyVotes: DeepPartial<CommunityConstituencyVotes>;
+  DeputiesResult: DeepPartial<Omit<DeputiesResult, 'data'> & { data: Array<ResolversParentTypes['Deputy']> }>;
   NotificationSettings: DeepPartial<NotificationSettings>;
   ProcedureFilter: DeepPartial<ProcedureFilter>;
   ProcedureWOMFilter: DeepPartial<ProcedureWomFilter>;
@@ -711,6 +720,13 @@ export type ConferenceWeekResolvers<ContextType = GraphQlContext, ParentType ext
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
 }
+
+export type DeputiesResultResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['DeputiesResult'] = ResolversParentTypes['DeputiesResult']> = {
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  hasMore?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  data?: Resolver<Array<ResolversTypes['Deputy']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type DeputyResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Deputy'] = ResolversParentTypes['Deputy']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -850,7 +866,7 @@ export type QueryResolvers<ContextType = GraphQlContext, ParentType extends Reso
   activityIndex?: Resolver<Maybe<ResolversTypes['ActivityIndex']>, ParentType, ContextType, RequireFields<QueryActivityIndexArgs, 'procedureId'>>;
   currentConferenceWeek?: Resolver<ResolversTypes['ConferenceWeek'], ParentType, ContextType>;
   deputiesOfConstituency?: Resolver<Array<ResolversTypes['Deputy']>, ParentType, ContextType, RequireFields<QueryDeputiesOfConstituencyArgs, 'constituency'>>;
-  deputies?: Resolver<Array<ResolversTypes['Deputy']>, ParentType, ContextType, RequireFields<QueryDeputiesArgs, never>>;
+  deputies?: Resolver<ResolversTypes['DeputiesResult'], ParentType, ContextType, RequireFields<QueryDeputiesArgs, never>>;
   deputy?: Resolver<Maybe<ResolversTypes['Deputy']>, ParentType, ContextType, RequireFields<QueryDeputyArgs, 'id'>>;
   notificationSettings?: Resolver<Maybe<ResolversTypes['NotificationSettings']>, ParentType, ContextType>;
   procedure?: Resolver<ResolversTypes['Procedure'], ParentType, ContextType, RequireFields<QueryProcedureArgs, 'id'>>;
@@ -939,6 +955,7 @@ export type Resolvers<ContextType = GraphQlContext> = {
   CommunityVotes?: CommunityVotesResolvers<ContextType>;
   ConferenceWeek?: ConferenceWeekResolvers<ContextType>;
   Date?: GraphQLScalarType;
+  DeputiesResult?: DeputiesResultResolvers<ContextType>;
   Deputy?: DeputyResolvers<ContextType>;
   DeputyContact?: DeputyContactResolvers<ContextType>;
   DeputyLink?: DeputyLinkResolvers<ContextType>;
