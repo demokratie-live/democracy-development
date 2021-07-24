@@ -28,7 +28,11 @@ const DeputyApi: Resolvers = {
       }
       const conditions: FilterQuery<IDeputy> = {};
       if (filterTerm) {
-        conditions.name = { $regex: new RegExp(filterTerm, 'i') };
+        conditions.$or = [
+          { name: { $regex: new RegExp(filterTerm, 'i') } },
+          { party: { $regex: new RegExp(filterTerm, 'i') } },
+          { constituency: { $regex: new RegExp(filterTerm, 'i') } },
+        ];
       }
       if (filterIds) {
         conditions.webId = { $in: filterIds };
