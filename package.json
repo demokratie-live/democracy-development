@@ -9,7 +9,7 @@
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
     "lint": "lerna run lint",
-    "test": "lerna run test -- --verbose",
+    "test": "lerna run test --stream -- --verbose",
     "dev": "yarn build:k8s:local && skaffold dev --port-forward --status-check=false",
     "build:k8s:local": "kustomize build ./infra/kustomize/overlays/local > infra/local.yaml",
     "build:k8s:internal": "kustomize build ./infra/kustomize/overlays/internal > infra/internal.yaml",
