@@ -6,7 +6,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install modules
-      run: yarn run bootstrap
+      run: |
+        yarn install
+        yarn run bootstrap
     - name: Run linter
       run: yarn run lint
 
@@ -15,7 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install modules
-      run: yarn run bootstrap
+      run: |
+        yarn install
+        yarn run bootstrap
     - name: Run tests
       run: yarn run test
 
@@ -24,6 +28,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install modules
-      run: yarn run bootstrap
+      run: |
+        yarn install
+        yarn run bootstrap
     - name: Build packages
       run: yarn run build
