@@ -22,7 +22,7 @@ const DeputyApi: Resolvers = {
       }
       return DeputyModel.find(query);
     },
-    deputies: async (_parent, { limit = 10, offset = 0, filterTerm, filterIds, excludeIds }) => {
+    deputies: async (_parent, { limit = 10, offset = 0, filterTerm, filterIds, filterConstituency, excludeIds }) => {
       if (limit > 100) {
         throw new Error('limit must not exceed 100');
       }
@@ -33,6 +33,9 @@ const DeputyApi: Resolvers = {
           { party: { $regex: new RegExp(filterTerm, 'i') } },
           { constituency: { $regex: new RegExp(filterTerm, 'i') } },
         ];
+      }
+      if(filterConstituency) {
+        conditions.constituency = filterConstituency;
       }
       if (filterIds) {
         conditions.webId = { $in: filterIds };

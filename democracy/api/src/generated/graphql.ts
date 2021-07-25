@@ -353,6 +353,7 @@ export type QueryDeputiesArgs = {
   filterTerm?: Maybe<Scalars['String']>;
   filterIds?: Maybe<Array<Scalars['String']>>;
   excludeIds?: Maybe<Array<Scalars['String']>>;
+  filterConstituency?: Maybe<Scalars['String']>;
 };
 
 

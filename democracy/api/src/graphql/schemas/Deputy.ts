@@ -39,7 +39,7 @@ type DeputiesResult {
 
 type Query {
   deputiesOfConstituency(constituency: String!, directCandidate: Boolean): [Deputy!]!
-  deputies(limit: Int, offset: Int, filterTerm: String, filterIds: [String!], excludeIds: [String!]): DeputiesResult!
+  deputies(limit: Int, offset: Int, filterTerm: String, filterIds: [String!], excludeIds: [String!], filterConstituency: String): DeputiesResult!
   deputy(id: String!): Deputy
 }
 `;
