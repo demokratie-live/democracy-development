@@ -5,19 +5,26 @@
   "repository": "https://github.com/demokratie-live/democracy-development.git",
   "author": "Manuel Ruck <m.ruck@democracy-deutschland.de>",
   "license": "Apache-2.0",
-  "private": true,
-  "workspaces": [
-    "./bundestag.io/dip",
-    "./services/cron-jobs/crawler"
-  ],
   "scripts": {
-    "build": "yarn workspaces run build",
-    "lint": "yarn workspaces run lint",
-    "test": "yarn workspaces run test",
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build",
+    "lint": "lerna run lint",
+    "test": "lerna run test -- --verbose",
     "dev": "yarn build:k8s:local && skaffold dev --port-forward --status-check=false",
     "build:k8s:local": "kustomize build ./infra/kustomize/overlays/local > infra/local.yaml",
     "build:k8s:internal": "kustomize build ./infra/kustomize/overlays/internal > infra/internal.yaml",
     "build:k8s:alpha": "kustomize build ./infra/kustomize/overlays/alpha > infra/alpha.yaml",
     "build:k8s:prod": "kustomize build ./infra/kustomize/overlays/prod > infra/prod.yaml"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.4",
+    "@typescript-eslint/parser": "^4.28.4",
+    "eslint": "^7.31.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "lerna": "^4.0.0",
+    "prettier": "^2.3.2",
+    "typescript": "^4.3.5"
   }
 }
