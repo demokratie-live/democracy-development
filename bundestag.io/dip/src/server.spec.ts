@@ -1,6 +1,6 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { setupPolly } from 'setup-polly-jest';
-import supertest from 'supertest';
 import createServer from './server';
 import NodeHTTPAdapter from '@pollyjs/adapter-node-http';
 import FSPersister from '@pollyjs/persister-fs';
@@ -19,17 +19,9 @@ const context = setupPolly({
 const randomObjects = (n: number) => Array.from(Array(n).keys()).map(() => expect.any(Object));
 
 const DIP_API_KEY = 'N64VhW8.yChkBUIJeosGojQ7CSR2xwLf3Qy7Apw464';
-const { app } = createServer({ DIP_API_KEY, DIP_API_ENDPOINT: 'https://search.dip.bundestag.de', RATE_LIMIT: 20 });
-
-const request = supertest(app);
+const { server } = createServer({ DIP_API_KEY, DIP_API_ENDPOINT: 'https://search.dip.bundestag.de', RATE_LIMIT: 20 });
 
 const gql = String.raw;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const runQuery = async ({ query, variables }: { query: string; variables?: Record<string, unknown> }): Promise<any> => {
-  const res = await request.post('/').send({ query, variables }).set('Accept', 'application/json').expect(200);
-  return JSON.parse(res.text);
-};
 
 describe('Query', () => {
   beforeEach(() => {
@@ -92,7 +84,7 @@ describe('Query', () => {
 
     it('returns gestOrderNumber', async () => {
       const variables = { procedureId: '275933' };
-      await expect(runQuery({ query, variables })).resolves.toMatchObject({
+      await expect(server.executeOperation({ query, variables })).resolves.toMatchObject({
         data: {
           procedure: {
             procedureId: '275933',
@@ -106,7 +98,7 @@ describe('Query', () => {
 
     it('returns legalValidity', async () => {
       const variables = { procedureId: '155381' };
-      await expect(runQuery({ query, variables })).resolves.toMatchObject({
+      await expect(server.executeOperation({ query, variables })).resolves.toMatchObject({
         data: {
           procedure: {
             procedureId: '155381',
@@ -122,7 +114,7 @@ describe('Query', () => {
     describe('history', () => {
       it('returns assignment+initiator', async () => {
         const variables = { procedureId: '234344' };
-        await expect(runQuery({ query, variables })).resolves.toMatchObject({
+        await expect(server.executeOperation({ query, variables })).resolves.toMatchObject({
           data: {
             procedure: {
               procedureId: '234344',
@@ -146,7 +138,7 @@ describe('Query', () => {
 
       it('returns findSpot+findSpotUrl', async () => {
         const variables = { procedureId: '234344' };
-        await expect(runQuery({ query, variables })).resolves.toMatchObject({
+        await expect(server.executeOperation({ query, variables })).resolves.toMatchObject({
           data: {
             procedure: {
               procedureId: '234344',
@@ -179,7 +171,7 @@ describe('Query', () => {
 
       it('returns date', async () => {
         const variables = { procedureId: '234344' };
-        await expect(runQuery({ query, variables })).resolves.toMatchObject({
+        await expect(server.executeOperation({ query, variables })).resolves.toMatchObject({
           data: {
             procedure: {
               procedureId: '234344',
@@ -198,7 +190,7 @@ describe('Query', () => {
       describe('decision', () => {
         it('returns page+tenor+document+type+comment', async () => {
           const variables = { procedureId: '234344' };
-          await expect(runQuery({ query, variables })).resolves.toMatchObject({
+          await expect(server.executeOperation({ query, variables })).resolves.toMatchObject({
             data: {
               procedure: {
                 procedureId: '234344',
@@ -234,7 +226,7 @@ describe('Query', () => {
 
         it('returns foundation', async () => {
           const variables = { procedureId: '233294' };
-          await expect(runQuery({ query, variables })).resolves.toMatchObject({
+          await expect(server.executeOperation({ query, variables })).resolves.toMatchObject({
             data: {
               procedure: {
                 procedureId: '233294',
@@ -260,7 +252,7 @@ describe('Query', () => {
 
         it('returns majority', async () => {
           const variables = { procedureId: '44236' };
-          await expect(runQuery({ query, variables })).resolves.toMatchObject({
+          await expect(server.executeOperation({ query, variables })).resolves.toMatchObject({
             data: {
               procedure: {
                 procedureId: '44236',
@@ -328,7 +320,7 @@ describe('Query', () => {
             data: {
               procedures: { edges },
             },
-          } = await runQuery({ query, variables });
+          }: any = await server.executeOperation({ query, variables });
           expect(edges).toHaveLength(17);
         });
       });
@@ -342,7 +334,7 @@ describe('Query', () => {
             data: {
               procedures: { edges },
             },
-          } = await runQuery({ query, variables });
+          }: any = await server.executeOperation({ query, variables });
           expect(edges).toHaveLength(50);
           expect(edges).toMatchObject([
             expect.objectContaining({ node: { procedureId: '279259' } }),
@@ -354,7 +346,7 @@ describe('Query', () => {
 
         it('limit must be divisible of 50', async () => {
           const variables = { limit: 3 };
-          await expect(runQuery({ query, variables })).resolves.toMatchObject({
+          await expect(server.executeOperation({ query, variables })).resolves.toMatchObject({
             data: { procedures: null },
             errors: [
               expect.objectContaining({
@@ -372,7 +364,7 @@ describe('Query', () => {
               data: {
                 procedures: { edges },
               },
-            } = await runQuery({ query, variables });
+            }: any = await server.executeOperation({ query, variables });
             const idSet = new Set(edges.map((edge: { node: { procedureId: number } }) => edge.node.procedureId));
             expect(edges).toHaveLength(100);
             expect(idSet.size).toEqual(100);
@@ -384,7 +376,7 @@ describe('Query', () => {
               data: {
                 procedures: { edges },
               },
-            } = await runQuery({ query, variables });
+            }: any = await server.executeOperation({ query, variables });
             const idSet = new Set(edges.map((edge: { node: { procedureId: number } }) => edge.node.procedureId));
             expect(edges).toHaveLength(2);
             expect(idSet.size).toEqual(2);
@@ -398,7 +390,7 @@ describe('Query', () => {
             data: {
               procedures: { edges },
             },
-          } = await runQuery({
+          }: any = await server.executeOperation({
             query,
             variables: {
               filter: { after: '2021-06-14', before: '2021-06-18' },
@@ -417,14 +409,14 @@ describe('Query', () => {
             data: {
               procedures: { edges },
             },
-          } = await runQuery({
+          } = (await server.executeOperation({
             query,
             variables: {
               filter: { after: '2021-06-14', before: '2021-06-18' },
               offset: 2,
               limit: 50,
             },
-          }));
+          })) as any);
           expect(edges).toHaveLength(50);
           expect(edges).toMatchObject([
             expect.objectContaining({ node: { procedureId: '279257' } }),
@@ -442,7 +434,7 @@ describe('Query', () => {
             data: {
               procedures: { edges },
             },
-          } = await runQuery({ query, variables });
+          }: any = await server.executeOperation({ query, variables });
           expect(edges).toHaveLength(50);
           expect(edges).toMatchObject([
             expect.objectContaining({ node: { procedureId: '277500' } }),
@@ -457,7 +449,7 @@ describe('Query', () => {
     describe('pageInfo', () => {
       it('maps to numFound', async () => {
         const variables = { before: '2021-06-18' };
-        await expect(runQuery({ query, variables })).resolves.toMatchObject({
+        await expect(server.executeOperation({ query, variables })).resolves.toMatchObject({
           data: {
             procedures: {
               totalCount: 277499,
@@ -468,7 +460,7 @@ describe('Query', () => {
 
       it('hasNextPage indicates if there are more entries', async () => {
         const variables = { filter: { before: '1970-01-01' } };
-        await expect(runQuery({ query, variables })).resolves.toMatchObject({
+        await expect(server.executeOperation({ query, variables })).resolves.toMatchObject({
           data: {
             procedures: {
               pageInfo: {

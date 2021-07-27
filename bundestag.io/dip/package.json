@@ -21,7 +21,6 @@
     "@types/pollyjs__adapter-node-http": "^2.0.1",
     "@types/pollyjs__persister-fs": "^2.0.1",
     "@types/setup-polly-jest": "^0.5.1",
-    "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.0",
     "eslint": "^7.29.0",
@@ -30,7 +29,6 @@
     "jest": "^27.0.4",
     "prettier": "2.3.1",
     "setup-polly-jest": "^0.9.1",
-    "supertest": "^6.1.3",
     "ts-jest": "^27.0.3",
     "ts-node-dev": "^1.1.6",
     "typescript": "^4.3.2"
