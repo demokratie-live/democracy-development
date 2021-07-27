@@ -111,6 +111,20 @@ describe('Query', () => {
       });
     });
 
+    it('removes HTML from `abstract`', async () => {
+      const variables = { procedureId: '275942' };
+      await expect(server.executeOperation({ query, variables })).resolves.toMatchObject({
+        data: {
+          procedure: {
+            abstract: 'Beschlussempfehlung des Ausschusses: Änderungen',
+            procedureId: '275942',
+            period: 19,
+            date: '2021-06-25',
+          },
+        },
+      });
+    });
+
     describe('history', () => {
       it('returns assignment+initiator', async () => {
         const variables = { procedureId: '234344' };
