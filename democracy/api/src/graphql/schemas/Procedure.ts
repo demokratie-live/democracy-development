@@ -80,6 +80,17 @@ type ProceduresHavingVoteResults {
   procedures: [Procedure!]!
 }
 
+type RecommendationGroup {
+  title: String!
+  procedures: [Procedure!]!
+}
+
+type RecommendedProceduresResult {
+  total: Int!
+  hasMore: Boolean!
+  data: [RecommendationGroup!]!
+}
+
 type Query {
   procedure(id: ID!): Procedure!
   ${/* DEPRECATED listType 2019-01-29 Renamed filed VOTING to PAST and IN_VOTE */ ''}
@@ -91,5 +102,7 @@ type Query {
   searchProceduresAutocomplete(term: String!): SearchProcedures!
   votedProcedures: [Procedure!]!
   proceduresWithVoteResults(procedureIds: [String!]!): [Procedure!]!
+  recommendedProcedures(period: Int): RecommendedProceduresResult!
+  showRecommendations(period: Int): Boolean!
 }
 `;
