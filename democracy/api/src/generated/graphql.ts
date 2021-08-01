@@ -328,6 +328,8 @@ export type Query = {
   searchProceduresAutocomplete: SearchProcedures;
   votedProcedures: Array<Procedure>;
   proceduresWithVoteResults: Array<Procedure>;
+  recommendedProcedures: RecommendedProceduresResult;
+  showRecommendations: Scalars['Boolean'];
   mostSearched: Array<SearchTerm>;
   me?: Maybe<User>;
   votes?: Maybe<Vote>;
@@ -408,6 +410,16 @@ export type QueryProceduresWithVoteResultsArgs = {
 };
 
 
+export type QueryRecommendedProceduresArgs = {
+  period?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryShowRecommendationsArgs = {
+  period?: Maybe<Scalars['Int']>;
+};
+
+
 export type QueryVotesArgs = {
   procedure: Scalars['ID'];
   constituencies?: Maybe<Array<Scalars['String']>>;
@@ -417,6 +429,19 @@ export type QueryVotesArgs = {
 export type QueryCommunityVotesArgs = {
   procedure: Scalars['ID'];
   constituencies?: Maybe<Array<Scalars['String']>>;
+};
+
+export type RecommendationGroup = {
+  __typename?: 'RecommendationGroup';
+  title: Scalars['String'];
+  procedures: Array<Procedure>;
+};
+
+export type RecommendedProceduresResult = {
+  __typename?: 'RecommendedProceduresResult';
+  total: Scalars['Int'];
+  hasMore: Scalars['Boolean'];
+  data: Array<RecommendationGroup>;
 };
 
 export type Schema = {
@@ -619,6 +644,8 @@ export type ResolversTypes = {
   ProcedureWOMFilter: ResolverTypeWrapper<DeepPartial<ProcedureWomFilter>>;
   ProceduresHavingVoteResults: ResolverTypeWrapper<DeepPartial<Omit<ProceduresHavingVoteResults, 'procedures'> & { procedures: Array<ResolversTypes['Procedure']> }>>;
   SearchProcedures: ResolverTypeWrapper<DeepPartial<Omit<SearchProcedures, 'procedures'> & { procedures: Array<ResolversTypes['Procedure']> }>>;
+  RecommendedProceduresResult: ResolverTypeWrapper<DeepPartial<Omit<RecommendedProceduresResult, 'data'> & { data: Array<ResolversTypes['RecommendationGroup']> }>>;
+  RecommendationGroup: ResolverTypeWrapper<DeepPartial<Omit<RecommendationGroup, 'procedures'> & { procedures: Array<ResolversTypes['Procedure']> }>>;
   SearchTerm: ResolverTypeWrapper<DeepPartial<SearchTerm>>;
   User: ResolverTypeWrapper<DeepPartial<User>>;
   Vote: ResolverTypeWrapper<DeepPartial<Vote>>;
@@ -660,6 +687,8 @@ export type ResolversParentTypes = {
   ProcedureWOMFilter: DeepPartial<ProcedureWomFilter>;
   ProceduresHavingVoteResults: DeepPartial<Omit<ProceduresHavingVoteResults, 'procedures'> & { procedures: Array<ResolversParentTypes['Procedure']> }>;
   SearchProcedures: DeepPartial<Omit<SearchProcedures, 'procedures'> & { procedures: Array<ResolversParentTypes['Procedure']> }>;
+  RecommendedProceduresResult: DeepPartial<Omit<RecommendedProceduresResult, 'data'> & { data: Array<ResolversParentTypes['RecommendationGroup']> }>;
+  RecommendationGroup: DeepPartial<Omit<RecommendationGroup, 'procedures'> & { procedures: Array<ResolversParentTypes['Procedure']> }>;
   SearchTerm: DeepPartial<SearchTerm>;
   User: DeepPartial<User>;
   Vote: DeepPartial<Vote>;
@@ -879,11 +908,26 @@ export type QueryResolvers<ContextType = GraphQlContext, ParentType extends Reso
   searchProceduresAutocomplete?: Resolver<ResolversTypes['SearchProcedures'], ParentType, ContextType, RequireFields<QuerySearchProceduresAutocompleteArgs, 'term'>>;
   votedProcedures?: Resolver<Array<ResolversTypes['Procedure']>, ParentType, ContextType>;
   proceduresWithVoteResults?: Resolver<Array<ResolversTypes['Procedure']>, ParentType, ContextType, RequireFields<QueryProceduresWithVoteResultsArgs, 'procedureIds'>>;
+  recommendedProcedures?: Resolver<ResolversTypes['RecommendedProceduresResult'], ParentType, ContextType, RequireFields<QueryRecommendedProceduresArgs, never>>;
+  showRecommendations?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryShowRecommendationsArgs, never>>;
   mostSearched?: Resolver<Array<ResolversTypes['SearchTerm']>, ParentType, ContextType>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   votes?: Resolver<Maybe<ResolversTypes['Vote']>, ParentType, ContextType, RequireFields<QueryVotesArgs, 'procedure'>>;
   communityVotes?: Resolver<Maybe<ResolversTypes['CommunityVotes']>, ParentType, ContextType, RequireFields<QueryCommunityVotesArgs, 'procedure'>>;
   voteStatistic?: Resolver<Maybe<ResolversTypes['VoteStatistic']>, ParentType, ContextType>;
+};
+
+export type RecommendationGroupResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['RecommendationGroup'] = ResolversParentTypes['RecommendationGroup']> = {
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  procedures?: Resolver<Array<ResolversTypes['Procedure']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RecommendedProceduresResultResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['RecommendedProceduresResult'] = ResolversParentTypes['RecommendedProceduresResult']> = {
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  hasMore?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  data?: Resolver<Array<ResolversTypes['RecommendationGroup']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SchemaResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Schema'] = ResolversParentTypes['Schema']> = {
@@ -971,6 +1015,8 @@ export type Resolvers<ContextType = GraphQlContext> = {
   Procedure?: ProcedureResolvers<ContextType>;
   ProceduresHavingVoteResults?: ProceduresHavingVoteResultsResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  RecommendationGroup?: RecommendationGroupResolvers<ContextType>;
+  RecommendedProceduresResult?: RecommendedProceduresResultResolvers<ContextType>;
   Schema?: SchemaResolvers<ContextType>;
   SearchProcedures?: SearchProceduresResolvers<ContextType>;
   SearchTerm?: SearchTermResolvers<ContextType>;

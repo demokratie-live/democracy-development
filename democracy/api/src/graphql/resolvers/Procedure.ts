@@ -11,6 +11,7 @@ import CONFIG from '../../config';
 import elasticsearch from '../../services/search';
 
 import { Resolvers, ListType, ProcedureType } from '../../generated/graphql';
+import { recommendedProcedures } from './Procedures/recommendations.data';
 
 const ProcedureApi: Resolvers = {
   Query: {
@@ -615,6 +616,21 @@ const ProcedureApi: Resolvers = {
         ...procedure.toObject(),
         notify: true,
       }));
+    },
+
+    showRecommendations: () => true,
+    recommendedProcedures: async (parent, args, { ProcedureModel }) => {
+      return {
+        hasMore: false,
+        total: recommendedProcedures.reduce<number>((sum, group) => sum + group.procedures.length, 0 ),
+        data: await Promise.all(recommendedProcedures.map(async (group) => {
+
+          return {
+            title: group.title,
+            procedures: await ProcedureModel.find({ procedureId: { $in: group.procedures } }),
+          }
+        }))
+      };
     },
   },
 
