@@ -42,3 +42,6 @@ huawei:
   apikey: "1234"
   appid: "1234"
   max_retry: 0
+
+queue:
+  engine: "local"
