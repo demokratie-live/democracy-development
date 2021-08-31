@@ -34,7 +34,7 @@ const procedureQuery = gql`
             findSpot
             findSpotUrl
             abstract
-            voteDate: date
+            date
             decision {
               page
               tenor
