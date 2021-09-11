@@ -14,7 +14,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: democracy-sync-procedures
-              image: democracy/sync-procedures:0.1.15
+              image: democracy/sync-procedures:0.1.16-alpha.1239.0
               env:
                 - name: DB_URL
                   valueFrom:
