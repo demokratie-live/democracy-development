@@ -3,10 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import {
-  VotingDocument,
-  VoteDecision,
-} from "./../../../__generated__/globalTypes";
+import { VotingDocument, VoteDecision } from "./../../../__generated__/globalTypes";
 
 // ====================================================
 // GraphQL query operation: ProcedureUpdates
@@ -23,9 +20,7 @@ export interface ProcedureUpdates_procedureUpdates_procedures_history {
   __typename: "ProcessFlow";
   assignment: string | null;
   initiator: string | null;
-  decision:
-    | (ProcedureUpdates_procedureUpdates_procedures_history_decision | null)[]
-    | null;
+  decision: (ProcedureUpdates_procedureUpdates_procedures_history_decision | null)[] | null;
   date: any | null;
 }
 
@@ -54,16 +49,14 @@ export interface ProcedureUpdates_procedureUpdates_procedures_customData_voteRes
 
 export interface ProcedureUpdates_procedureUpdates_procedures_customData_voteResults {
   __typename: "VoteResults";
-  yes: number;
-  no: number;
-  abstination: number;
+  yes: number | null;
+  no: number | null;
+  abstination: number | null;
   notVoted: number | null;
   decisionText: string | null;
   votingDocument: VotingDocument | null;
   votingRecommendation: boolean | null;
-  partyVotes:
-    | (ProcedureUpdates_procedureUpdates_procedures_customData_voteResults_partyVotes | null)[]
-    | null;
+  partyVotes: (ProcedureUpdates_procedureUpdates_procedures_customData_voteResults_partyVotes | null)[] | null;
 }
 
 export interface ProcedureUpdates_procedureUpdates_procedures_customData {
@@ -105,19 +98,13 @@ export interface ProcedureUpdates_procedureUpdates_procedures {
   abstract: string | null;
   tags: (string | null)[] | null;
   subjectGroups: (string | null)[] | null;
-  history:
-    | (ProcedureUpdates_procedureUpdates_procedures_history | null)[]
-    | null;
-  importantDocuments:
-    | (ProcedureUpdates_procedureUpdates_procedures_importantDocuments | null)[]
-    | null;
+  history: (ProcedureUpdates_procedureUpdates_procedures_history | null)[] | null;
+  importantDocuments: (ProcedureUpdates_procedureUpdates_procedures_importantDocuments | null)[] | null;
   namedVote: boolean | null;
   voteDate: any | null;
   voteEnd: any | null;
   customData: ProcedureUpdates_procedureUpdates_procedures_customData | null;
-  sessions:
-    | (ProcedureUpdates_procedureUpdates_procedures_sessions | null)[]
-    | null;
+  sessions: (ProcedureUpdates_procedureUpdates_procedures_sessions | null)[] | null;
 }
 
 export interface ProcedureUpdates_procedureUpdates {
