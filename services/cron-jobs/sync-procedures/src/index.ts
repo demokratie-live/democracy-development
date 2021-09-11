@@ -90,9 +90,9 @@ const importProcedures = async (
       bIoProcedure.customData.voteResults.no)
   ) {
     voteResults = {
-      yes: bIoProcedure.customData.voteResults.yes,
-      abstination: bIoProcedure.customData.voteResults.abstination,
-      no: bIoProcedure.customData.voteResults.no,
+      yes: bIoProcedure.customData.voteResults.yes || 0,
+      abstination: bIoProcedure.customData.voteResults.abstination || 0,
+      no: bIoProcedure.customData.voteResults.no || 0,
       notVoted: nullToUndefined(bIoProcedure.customData.voteResults.notVoted),
       decisionText: nullToUndefined(
         bIoProcedure.customData.voteResults.decisionText
@@ -282,31 +282,25 @@ const start = async () => {
     let done = false;
     while (!done) {
       // fetch
+      const variables = {
+        since,
+        limit,
+        offset,
+        periods: [18],
+        types: [
+          PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG,
+          PROCEDURE_DEFINITIONS.TYPE.ANTRAG,
+        ],
+      }
       const {
         errors,
         data: { procedureUpdates },
       } = await client.query<ProcedureUpdates, ProcedureUpdatesVariables>({
         query: getProcedureUpdates,
-        variables: {
-          since,
-          limit,
-          offset,
-          periods: [19],
-          types: [
-            PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG,
-            PROCEDURE_DEFINITIONS.TYPE.ANTRAG,
-          ],
-        },
+        variables,
       });
       console.log("use variables:", {
-        since,
-        limit,
-        offset,
-        periods: [19],
-        types: [
-          PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG,
-          PROCEDURE_DEFINITIONS.TYPE.ANTRAG,
-        ],
+        ...variables,
         progress: {
           ...(procedureUpdates
             ? {
@@ -328,7 +322,6 @@ const start = async () => {
           await forEachSeries(procedures, async (data) => {
             if (
               data &&
-              data.period === 19 &&
               (data.type === PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG ||
                 data.type === PROCEDURE_DEFINITIONS.TYPE.ANTRAG)
             ) {
