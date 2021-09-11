@@ -60,6 +60,7 @@ services:
       - 3000:3000
     depends_on:
       - mongo
+    env_file: ./democracy/api/.env
     environment:
       - DB_URL=mongodb://mongo:27017/democracy
       - GRAPHIQL=true
