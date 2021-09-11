@@ -94,7 +94,7 @@ type RecommendedProceduresResult {
 type Query {
   procedure(id: ID!): Procedure!
   ${/* DEPRECATED listType 2019-01-29 Renamed filed VOTING to PAST and IN_VOTE */ ''}
-  procedures(listTypes: [ListType!], type: ProcedureType, pageSize: Int, offset: Int, sort: String, filter: ProcedureFilter): [Procedure!]!
+  procedures(listTypes: [ListType!], type: ProcedureType, pageSize: Int, offset: Int, sort: String, filter: ProcedureFilter, period: Int): [Procedure!]!
   proceduresById(ids: [String!]!, pageSize: Int, offset: Int): [Procedure!]!
   proceduresByIdHavingVoteResults(procedureIds: [String!], timespan: VotedTimeSpan, pageSize: Int, offset: Int, filter: ProcedureWOMFilter): ProceduresHavingVoteResults!
   notifiedProcedures: [Procedure!]!
