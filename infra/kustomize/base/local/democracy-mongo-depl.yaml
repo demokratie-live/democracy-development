@@ -18,7 +18,7 @@ spec:
             claimName: mongo-persistent-volume-claim
       containers:
         - name: democracy-mongo
-          image: mongo
+          image: mongo:4
           volumeMounts:
             - name: mongo-storage
               mountPath: /data/db
