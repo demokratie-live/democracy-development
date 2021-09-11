@@ -376,6 +376,7 @@ export type QueryProceduresArgs = {
   offset?: Maybe<Scalars['Int']>;
   sort?: Maybe<Scalars['String']>;
   filter?: Maybe<ProcedureFilter>;
+  period?: Maybe<Scalars['Int']>;
 };
 
 

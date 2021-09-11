@@ -33,6 +33,7 @@ const ProcedureApi: Resolvers = {
         pageSize = 100,
         sort = 'lastUpdateDate',
         filter = {},
+        period = 19
       },
       { ProcedureModel, user, VoteModel, device, phone },
     ) => {
@@ -97,8 +98,6 @@ const ProcedureApi: Resolvers = {
       }
 
       let sortQuery = {};
-
-      const period = { $gte: CONFIG.MIN_PERIOD };
 
       if (listTypes.indexOf(ListType.Preparation) > -1) {
         switch (sort) {
