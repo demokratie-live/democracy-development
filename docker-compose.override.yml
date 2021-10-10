@@ -27,7 +27,7 @@ services:
       - ./bundestag.io/dip:/app
       - dip-node_modules:/app/node_modules
     environment:
-      - RATE_LIMIT=15
+      - RATE_LIMIT=3
       - NODE_ENV=development
   democracy-api:
     build:

@@ -1,6 +1,6 @@
 {
   "name": "bundestag.io-dip",
-  "version": "0.1.4",
+  "version": "0.1.5-1239-alpha.0",
   "description": "GraphQL interface to the REST-endpoint of the German parliamentary documentation system \"DIP\"",
   "main": "build/index.js",
   "repository": "https://github.com/demokratie-live/democracy-development",
