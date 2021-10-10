@@ -1,6 +1,5 @@
 import { mongoConnect, mongoDisconnect } from '../mongoose';
 import {
-  CronJobModel,
   getCron,
   setCronError,
   setCronStart,
