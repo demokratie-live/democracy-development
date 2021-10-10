@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bundestagio-dip
-          image: democracy/bundestag.io-dip:0.1.4
+          image: democracy/bundestag.io-dip:0.1.5
           envFrom:
             - secretRef:
                 name: dip-api-token
