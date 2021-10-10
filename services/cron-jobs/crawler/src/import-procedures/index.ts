@@ -1,4 +1,11 @@
 import { mongoConnect, mongoDisconnect } from '../mongoose';
+import {
+  CronJobModel,
+  getCron,
+  setCronError,
+  setCronStart,
+  setCronSuccess,
+} from '@democracy-deutschland/bundestagio-common';
 import config from '../config';
 import importProcedures from './import-procedures';
 import debug from 'debug';
@@ -7,9 +14,17 @@ const error = debug('bundestag-io:import-procedures:error');
 (async () => {
   try {
     await mongoConnect();
-    await importProcedures(config);
+    const cronjob = await getCron({ name: 'import-procedures' });
+    await setCronStart({ name: 'import-procedures' });
+    await importProcedures({
+      ...config,
+      IMPORT_PROCEDURES_FILTER_AFTER:
+        cronjob?.lastSuccessDate?.toISOString().slice(0, 10) || config.IMPORT_PROCEDURES_FILTER_AFTER,
+    });
+    await setCronSuccess({ name: 'import-procedures', successStartDate: cronjob.lastStartDate || new Date() });
   } catch (err) {
     error(err);
+    await setCronError({ name: 'import-procedures', error: err });
     throw err;
   } finally {
     mongoDisconnect();
