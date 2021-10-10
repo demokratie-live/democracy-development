@@ -45,9 +45,5 @@ ConferenceWeekDetailSchema.index(
   { thisYear: 1, thisWeek: 1 },
   { unique: true }
 );
-ConferenceWeekDetailSchema.index(
-  { nextYear: 1, nextWeek: 1 },
-  { unique: true }
-);
 
 export default ConferenceWeekDetailSchema;
