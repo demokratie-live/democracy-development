@@ -1,13 +1,13 @@
 version: "3.9"
 services:
   mongo:
-    image: mongo
+    image: mongo:4
     volumes:
       - democracy-mongodb:/data/db
     ports:
       - 27017:27017
   gorush:
-    image: appleboy/gorush
+    image: appleboy/gorush:1.14.0
     ports:
       - "8088:8088"
     depends_on:
