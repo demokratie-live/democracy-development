@@ -12,6 +12,7 @@ import debug from 'debug';
 const error = debug('bundestag-io:import-procedures:error');
 
 (async () => {
+  let withError = false;
   try {
     await mongoConnect();
     const cronjob = await getCron({ name: 'import-procedures' });
@@ -23,10 +24,14 @@ const error = debug('bundestag-io:import-procedures:error');
     });
     await setCronSuccess({ name: 'import-procedures', successStartDate: cronjob.lastStartDate || new Date() });
   } catch (err) {
+    withError = true;
     error(err);
     await setCronError({ name: 'import-procedures', error: err });
     throw err;
   } finally {
     mongoDisconnect();
+  }
+  if (withError) {
+    process.exit(1);
   }
 })();
