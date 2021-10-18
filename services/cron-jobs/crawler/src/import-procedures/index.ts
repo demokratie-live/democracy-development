@@ -1,10 +1,5 @@
 import { mongoConnect, mongoDisconnect } from '../mongoose';
-import {
-  getCron,
-  setCronError,
-  setCronStart,
-  setCronSuccess,
-} from '@democracy-deutschland/bundestagio-common';
+import { getCron, setCronError, setCronStart, setCronSuccess } from '@democracy-deutschland/bundestagio-common';
 import config from '../config';
 import importProcedures from './import-procedures';
 import debug from 'debug';
