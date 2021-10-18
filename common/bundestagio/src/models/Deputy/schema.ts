@@ -21,6 +21,7 @@ export interface IDeputy {
   speechesURL?: string;
   votesURL?: string;
   publicationRequirement: string[];
+  period: number;
 }
 
 export type DeputyDoc = IDeputy & Document & SchemaTimestampsConfig;
@@ -43,6 +44,7 @@ const DeputySchema = new Schema<DeputyDoc>(
     speechesURL: { type: String },
     votesURL: { type: String },
     publicationRequirement: [{ type: String }],
+    period: { type: Number, required: true }
   },
   { timestamps: true }
 );
