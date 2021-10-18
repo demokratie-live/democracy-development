@@ -9,10 +9,10 @@
   dependencies:
     typescript "^3.7.2"
 
-"@democracy-deutschland/bundestagio-common@^0.1.4":
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bundestagio-common/-/bundestagio-common-0.1.13.tgz#4960c13f0d6899e26c8397ae40020b1a36a80491"
-  integrity sha512-kih6RghgeLMzrfzQrpXX/AM0DmYQXNkAsP5jupjAx07SkAU1vu7xHqHtMko2Z81/4STrgziry1198RFKrPQG/w==
+"@democracy-deutschland/bundestagio-common@^0.1.14":
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bundestagio-common/-/bundestagio-common-0.1.14.tgz#663a80248777a10aacf4a62aa81f8559e8b35d27"
+  integrity sha512-LtFI3Y3HYL0K5GC6XIo33bo/5A2W1PuyGnT/96CNt70IJwSyCosOYCDIWgi2VzQcDSXQLjGXJGP6A8xYS6YVhQ==
   dependencies:
     "@democracy-deutschland/bundestag.io-definitions" "^1.0.2"
     "@types/cron" "^1.7.2"
@@ -24,7 +24,6 @@
     mongoose-diff-history "^2.1.0"
     omit-deep "^0.3.0"
     ts-mongoose "^0.0.21"
-    ts-unused-exports "^6.2.4"
 
 "@democracy-deutschland/scapacra-bt@^1.0.28":
   version "1.0.30"
@@ -1342,7 +1341,7 @@ ts-node@^9.0.0:
     source-map-support "^0.5.17"
     yn "3.1.1"
 
-ts-unused-exports@^6.2.1, ts-unused-exports@^6.2.4:
+ts-unused-exports@^6.2.1:
   version "6.2.4"
   resolved "https://registry.yarnpkg.com/ts-unused-exports/-/ts-unused-exports-6.2.4.tgz#26aae7be4c8574180b0dbd1ce0c33f8f924f9700"
   integrity sha512-hBAJNwMZsKKSMSXhBdRgIqf2IVV/FGshHXbF2psyn3WbNSAaDLUqf2pEQNRZP7qVAGf+wfLdMdSkCFZxFQuUbA==

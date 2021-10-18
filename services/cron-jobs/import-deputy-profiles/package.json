@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
-    "@democracy-deutschland/bundestagio-common": "^0.1.3",
+    "@democracy-deutschland/bundestagio-common": "^0.1.14",
     "@democracy-deutschland/scapacra-bt": "^1.0.30",
     "http2": "^3.3.7"
   },

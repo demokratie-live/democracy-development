@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
-    "@democracy-deutschland/bundestagio-common": "^0.1.13",
+    "@democracy-deutschland/bundestagio-common": "^0.1.14",
     "debug": "^4.3.1",
     "dotenv": "^10.0.0",
     "graphql": "^15.5.0",
