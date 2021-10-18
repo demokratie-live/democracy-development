@@ -12,7 +12,7 @@
     "start": "node ./build/index.js"
   },
   "dependencies": {
-    "@democracy-deutschland/bundestagio-common": "^0.1.5"
+    "@democracy-deutschland/bundestagio-common": "^0.1.14"
   },
   "devDependencies": {
     "ts-node-dev": "^1.0.0-pre.50",

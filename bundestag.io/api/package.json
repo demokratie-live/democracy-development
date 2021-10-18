@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "1.0.2",
-    "@democracy-deutschland/bundestagio-common": "^0.1.2",
+    "@democracy-deutschland/bundestagio-common": "^0.1.14",
     "apollo-server-express": "^2.3.3",
     "axios": "^0.19.2",
     "body-parser": "^1.18.3",
