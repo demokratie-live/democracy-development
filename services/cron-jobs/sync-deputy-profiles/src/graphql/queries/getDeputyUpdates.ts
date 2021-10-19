@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
 export default gql`
   query DeputyUpdates($since: Date!, $limit: Int, $offset: Int) {
@@ -9,6 +9,7 @@ export default gql`
       changedCount
       deputies {
         webId
+        period
         imgURL
         name
         party

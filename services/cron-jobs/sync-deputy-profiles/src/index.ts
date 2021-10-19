@@ -1,6 +1,6 @@
-import { mongoConnect, mongoDisconnect } from "./mongoose";
-import createClient from "./graphql/client";
-import getDeputyUpdates from "./graphql/queries/getDeputyUpdates";
+import { mongoConnect, mongoDisconnect } from './mongoose';
+import createClient from './graphql/client';
+import getDeputyUpdates from './graphql/queries/getDeputyUpdates';
 import {
   DeputyModel,
   getCron,
@@ -9,14 +9,11 @@ import {
   setCronError,
   convertPartyName,
   IDeputy,
-} from "@democracy-deutschland/democracy-common";
-import { forEachSeries } from "p-iteration";
-import {
-  DeputyUpdates,
-  DeputyUpdatesVariables,
-} from "./graphql/queries/__generated__/DeputyUpdates";
+} from '@democracy-deutschland/democracy-common';
+import { forEachSeries } from 'p-iteration';
+import { DeputyUpdates, DeputyUpdatesVariables } from './graphql/queries/__generated__/DeputyUpdates';
 
-export const CRON_NAME = "DeputyProfiles";
+export const CRON_NAME = 'DeputyProfiles';
 
 const start = async () => {
   // New SuccessStartDate
@@ -53,21 +50,30 @@ const start = async () => {
           // handle results
           await forEachSeries(deputies, async (data) => {
             if (data) {
-              const deputy: Partial<IDeputy> = {
+              const deputy: Pick<
+                IDeputy,
+                | 'webId'
+                | 'period'
+                | 'imgURL'
+                | 'name'
+                | 'party'
+                | 'job'
+                | 'biography'
+                | 'constituency'
+                | 'directCandidate'
+                | 'contact'
+              > = {
                 webId: data.webId!,
+                period: data.period,
                 imgURL: data.imgURL!,
                 name: data.name,
                 party: data.party ? convertPartyName(data.party) : undefined,
                 job: data.job,
-                biography: data.biography
-                  ? data.biography.join("\n\n")
-                  : undefined,
-                constituency: data.constituency
-                  ? parseInt(data.constituency, 10).toString()
-                  : undefined, // remove pre zeros
+                biography: data.biography ? data.biography.join('\n\n') : undefined,
+                constituency: data.constituency ? parseInt(data.constituency, 10).toString() : undefined, // remove pre zeros
                 directCandidate: data.directCandidate,
                 contact: {
-                  address: data.office ? data.office.join("\n") : undefined,
+                  address: data.office ? data.office.join('\n') : undefined,
                   // email: { type: String },
                   links: data.links.map(({ URL, name, username }) => ({
                     URL,
@@ -80,7 +86,7 @@ const start = async () => {
               await DeputyModel.findOneAndUpdate(
                 { webId: deputy.webId ? deputy.webId : undefined },
                 { $set: deputy },
-                { upsert: true }
+                { upsert: true },
               );
             }
           });
@@ -105,19 +111,13 @@ const start = async () => {
 };
 
 (async () => {
-  console.info("START");
-  console.info(
-    "process.env",
-    process.env.BUNDESTAGIO_SERVER_URL,
-    process.env.DB_URL
-  );
+  console.info('START');
+  console.info('process.env', process.env.BUNDESTAGIO_SERVER_URL, process.env.DB_URL);
   if (!process.env.BUNDESTAGIO_SERVER_URL) {
-    throw new Error(
-      "you have to set environment variable: BUNDESTAGIO_SERVER_URL & DB_URL"
-    );
+    throw new Error('you have to set environment variable: BUNDESTAGIO_SERVER_URL & DB_URL');
   }
   await mongoConnect();
-  console.log("procedures", await DeputyModel.countDocuments({}));
+  console.log('procedures', await DeputyModel.countDocuments({}));
   await start();
   await mongoDisconnect();
 })().catch(async (e) => {

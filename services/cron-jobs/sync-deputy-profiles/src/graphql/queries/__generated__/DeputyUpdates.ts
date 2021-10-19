@@ -17,6 +17,7 @@ export interface DeputyUpdates_deputyUpdates_deputies_links {
 export interface DeputyUpdates_deputyUpdates_deputies {
   __typename: "Deputy";
   webId: string | null;
+  period: number;
   imgURL: string | null;
   name: string;
   party: string | null;

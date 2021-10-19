@@ -202,9 +202,9 @@ export type DeputyFunctions = {
 
 export type Deputy = {
   __typename?: 'Deputy';
-  _id: Scalars['ID'];
   URL: Scalars['String'];
   webId?: Maybe<Scalars['String']>;
+  period?: Maybe<Scalars['Int']>;
   imgURL?: Maybe<Scalars['String']>;
   party?: Maybe<Scalars['String']>;
   name: Scalars['String'];
@@ -627,7 +627,6 @@ export type ResolversTypes = {
   DeputyLink: ResolverTypeWrapper<DeputyLink>;
   DeputyFunctions: ResolverTypeWrapper<DeputyFunctions>;
   Deputy: ResolverTypeWrapper<Deputy>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
   DeputyUpdate: ResolverTypeWrapper<DeputyUpdate>;
   Document: ResolverTypeWrapper<Document>;
   LegislativePeriod: ResolverTypeWrapper<LegislativePeriod>;
@@ -639,6 +638,7 @@ export type ResolversTypes = {
   NamedPollDeputy: ResolverTypeWrapper<NamedPollDeputy>;
   NamedPollVotes: ResolverTypeWrapper<NamedPollVotes>;
   NamedPoll: ResolverTypeWrapper<NamedPoll>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   NamedPollUpdate: ResolverTypeWrapper<NamedPollUpdate>;
   FilteredConferenceWeekDetailSessionTopTopic: ResolverTypeWrapper<FilteredConferenceWeekDetailSessionTopTopic>;
   FilteredConferenceWeekDetailSessionTop: ResolverTypeWrapper<FilteredConferenceWeekDetailSessionTop>;
@@ -680,7 +680,6 @@ export type ResolversParentTypes = {
   DeputyLink: DeputyLink;
   DeputyFunctions: DeputyFunctions;
   Deputy: Deputy;
-  ID: Scalars['ID'];
   DeputyUpdate: DeputyUpdate;
   Document: Document;
   LegislativePeriod: LegislativePeriod;
@@ -692,6 +691,7 @@ export type ResolversParentTypes = {
   NamedPollDeputy: NamedPollDeputy;
   NamedPollVotes: NamedPollVotes;
   NamedPoll: NamedPoll;
+  ID: Scalars['ID'];
   NamedPollUpdate: NamedPollUpdate;
   FilteredConferenceWeekDetailSessionTopTopic: FilteredConferenceWeekDetailSessionTopTopic;
   FilteredConferenceWeekDetailSessionTop: FilteredConferenceWeekDetailSessionTop;
@@ -802,9 +802,9 @@ export type DeputyFunctionsResolvers<ContextType = GraphQlContext, ParentType ex
 };
 
 export type DeputyResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Deputy'] = ResolversParentTypes['Deputy']> = {
-  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   URL?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   webId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  period?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   imgURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   party?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

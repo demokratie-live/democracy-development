@@ -1,10 +1,11 @@
-import { Schema, Document } from "mongoose";
-import DeputyContact, { IDeputyContact } from "./Contact";
-import DeputyVote, { IDeputyVote } from "./schema-vote";
-import { Timestamps } from "../timestamp";
+import { Schema, Document } from 'mongoose';
+import DeputyContact, { IDeputyContact } from './Contact';
+import DeputyVote, { IDeputyVote } from './schema-vote';
+import { Timestamps } from '../timestamp';
 
 export interface IDeputy extends Document, Timestamps {
   webId: string;
+  period: number;
   imgURL: string;
   name: string;
   party?: string | null;
@@ -19,6 +20,7 @@ export interface IDeputy extends Document, Timestamps {
 const DeputySchema = new Schema(
   {
     webId: { type: String, required: true, unique: true, index: true },
+    period: { type: Number, required: true, index: true },
     imgURL: { type: String, required: true },
     name: { type: String, required: true },
     party: { type: String },
@@ -29,7 +31,7 @@ const DeputySchema = new Schema(
     contact: { type: DeputyContact },
     votes: [{ type: DeputyVote }],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default DeputySchema;
