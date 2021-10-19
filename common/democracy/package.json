@@ -1,6 +1,6 @@
 {
   "name": "@democracy-deutschland/democracy-common",
-  "version": "0.2.11",
+  "version": "0.2.12-alpha.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",

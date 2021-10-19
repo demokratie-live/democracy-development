@@ -31,6 +31,7 @@ const DeputyResolvers: Resolvers = {
         {},
         { sort: { createdAt: 1 }, skip: offset, limit },
       );
+
       return {
         beforeCount,
         afterCount,
@@ -38,6 +39,11 @@ const DeputyResolvers: Resolvers = {
         changedCount: changed.length,
         deputies,
       };
+    },
+  },
+  Deputy: {
+    period: (parent) => {
+      return (parent as any).toObject().period;
     },
   },
 };

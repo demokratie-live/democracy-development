@@ -12,9 +12,9 @@ type DeputyFunctions {
 }
 
 type Deputy {
-  _id: ID!
   URL: String!
   webId: String
+  period: Int!
   imgURL: String
   party: String
   name: String!
