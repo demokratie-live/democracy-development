@@ -8,6 +8,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "lib": ["ESNext"],
+    "resolveJsonModule": true,
     // "typeRoots": ["./src/types", "./node_modules/@types"],
     "downlevelIteration": true,
     "allowUnreachableCode": false,

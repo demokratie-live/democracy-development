@@ -3,6 +3,9 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import expressStatusMonitor from 'express-status-monitor';
 import { graphql } from './services/graphql';
+import packageJson from '../package.json';
+
+console.info(`Bundestag.io v${packageJson.version}`);
 
 // *****************************************************************
 // IMPORTANT - you cannot include any models before migrating the DB
