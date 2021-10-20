@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: democracy-sync-deputy-profiles-cronjob
 spec:
-  schedule: "3-59/10 * * * *"
+  schedule: '3-59/10 * * * *'
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 200
   jobTemplate:
@@ -14,7 +14,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: democracy-sync-deputy-profiles
-              image: democracy/sync-deputy-profiles:0.1.7
+              image: democracy/sync-deputy-profiles:0.1.8
               env:
                 - name: DB_URL
                   valueFrom:
