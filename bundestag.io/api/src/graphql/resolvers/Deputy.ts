@@ -12,13 +12,13 @@ const DeputyResolvers: Resolvers = {
       { since, limit = 99, offset = 0 },
       { DeputyModel, HistoryModel },
     ) => {
-      const beforeCount = await DeputyModel.count({ createdAt: { $lte: since } });
+      const beforeCount = await DeputyModel.count({ updatedAt: { $lte: since } });
       const afterCount = await DeputyModel.count({});
       const changedQ = await HistoryModel.aggregate([
         {
           $match: {
             collectionName: 'Deputy',
-            createdAt: { $gt: since },
+            updatedAt: { $gt: since },
           },
         },
         { $group: { _id: '$collectionId' } },
@@ -26,10 +26,10 @@ const DeputyResolvers: Resolvers = {
       const changed = changedQ.map(({ _id }) => _id);
       const deputies = await DeputyModel.find(
         {
-          $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
+          $or: [{ updatedAt: { $gt: since } }, { _id: { $in: changed } }],
         },
         {},
-        { sort: { createdAt: 1 }, skip: offset, limit },
+        { sort: { updatedAt: 1 }, skip: offset, limit },
       );
 
       return {
