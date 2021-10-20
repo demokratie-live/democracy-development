@@ -1,8 +1,3 @@
-/*
-  THIS FILE AND ALL IMPORTS ARE NOT ALLOWED TO INCLUDE ANY MONGOOSE MODELS
-  See index.js for more info
-*/
-
 import jwt from './jwt';
 import smsverification from './smsverification';
 // import humanconnection from './humanconnection';
@@ -13,8 +8,6 @@ const requiredConfigs = {
   ...smsverification,
   ...jwt,
 };
-
-console.log("HARD", process.env.DB_URL);
 
 const recommendedConfigs = {
   // No correct default Values
@@ -64,6 +57,21 @@ const optionalConfigs = {
   LOGGING_DISCORD_WEBHOOK: process.env.LOGGING_DISCORD_WEBHOOK,
   LOGGING_MONGO: process.env.LOGGING_MONGO || false,
 };
+
+if (process.env.NODE_ENV === 'development') {
+  console.log(
+    'CONFIG',
+    JSON.stringify(
+      {
+        ...requiredConfigs,
+        ...recommendedConfigs,
+        ...optionalConfigs,
+      },
+      null,
+      2,
+    ),
+  );
+}
 
 export default {
   ...requiredConfigs,

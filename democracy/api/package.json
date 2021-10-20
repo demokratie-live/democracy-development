@@ -1,6 +1,6 @@
 {
   "name": "democracy-server",
-  "version": "0.2.42-alpha.1239.0",
+  "version": "0.2.43",
   "main": "dist/index.js",
   "author": "Manuel Ruck",
   "license": "Apache2",
@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "serve": "node dist/index.js",
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "ts-node-dev -r dotenv/config ./src/index dotenv_config_path=./.env",
     "dev:local": "ts-node-dev -r dotenv/config src/index.ts",
     "generate": "graphql-codegen",
     "apollo:codegen": "npx apollo client:codegen --endpoint=http://localhost:4000 --excludes=node_modules/* --target typescript --globalTypesFile=./__generated__/globalTypes.ts",
@@ -68,7 +68,7 @@
     "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
-    "dotenv": "^8.2.0",
+    "dotenv": "^10.0.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
     "ts-node-dev": "^1.1.8",

@@ -42,9 +42,7 @@ const DeputyResolvers: Resolvers = {
     },
   },
   Deputy: {
-    period: (parent) => {
-      return (parent as any).toObject().period;
-    },
+    period: (parent) => (parent as any).toObject().period,
   },
 };
 

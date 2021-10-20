@@ -75,6 +75,16 @@
                 "defaultValue": null
               },
               {
+                "name": "period",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
                 "name": "directCandidate",
                 "description": null,
                 "type": {
@@ -109,6 +119,16 @@
             "name": "deputies",
             "description": null,
             "args": [
+              {
+                "name": "period",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
               {
                 "name": "limit",
                 "description": null,
@@ -1225,6 +1245,22 @@
                     "ofType": null
                   }
                 }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "period",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
               }
             },
             "isDeprecated": false,

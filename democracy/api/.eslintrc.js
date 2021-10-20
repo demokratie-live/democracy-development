@@ -3,7 +3,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
   parserOptions: {
-    project: `./tsconfig.json`,
+    project: `./democracy/api/tsconfig.json`,
   },
   extends: [
     'eslint:recommended',

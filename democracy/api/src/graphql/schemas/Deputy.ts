@@ -29,6 +29,7 @@ type Deputy {
   contact: DeputyContact
   totalProcedures: Int
   procedures(procedureIds: [String!], pageSize: Int, offset: Int): [DeputyProcedure!]!
+  period: Int!
 }
 
 type DeputiesResult {
@@ -38,8 +39,8 @@ type DeputiesResult {
 }
 
 type Query {
-  deputiesOfConstituency(constituency: String!, directCandidate: Boolean): [Deputy!]!
-  deputies(limit: Int, offset: Int, filterTerm: String, filterIds: [String!], excludeIds: [String!], filterConstituency: String): DeputiesResult!
+  deputiesOfConstituency(constituency: String!, period: Int, directCandidate: Boolean): [Deputy!]!
+  deputies(period: Int, limit: Int, offset: Int, filterTerm: String, filterIds: [String!], excludeIds: [String!], filterConstituency: String): DeputiesResult!
   deputy(id: String!): Deputy
 }
 `;

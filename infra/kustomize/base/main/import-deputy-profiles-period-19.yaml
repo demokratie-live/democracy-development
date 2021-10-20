@@ -1,0 +1,25 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: import-deputy-profiles-period-19-cronjob
+spec:
+  schedule: '0 5 * * *'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: import-deputy-profiles
+              image: democracy/import-deputy-profiles:0.1.5
+              env:
+                - name: PERIOD
+                  value: '19'
+                - name: DB_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: bio-api-config
+                      key: DB_URL

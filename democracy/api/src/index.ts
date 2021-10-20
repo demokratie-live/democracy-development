@@ -2,7 +2,6 @@
 /* eslint-disable no-console */
 
 import express from 'express';
-import bodyParser from 'body-parser';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { authMiddleware } from './express/auth';
@@ -13,7 +12,7 @@ import { authMiddleware } from './express/auth';
 
 import CONFIG from './config';
 
-import {logger} from './services/logger';
+import { logger } from './services/logger';
 
 import connectDB from './services/mongoose';
 
@@ -38,10 +37,6 @@ const main = async () => {
   };
   */
 
-  // Bodyparser
-  // @ts-ignore
-  server.use(bodyParser.json());
-
   // Cookie parser to debug JWT easily
   if (CONFIG.DEBUG) {
     server.use(cookieParser());
@@ -51,14 +46,6 @@ const main = async () => {
   // Here several Models are included
 
   server.use(authMiddleware);
-
-  // Graphiql Playground
-  // Here several Models are included for graphql
-  // This must be registered before graphql since it binds on / (default)
-  // if (CONFIG.GRAPHIQL_PATH) {
-  //   const graphiql = require('./services/graphiql'); // eslint-disable-line global-require
-  //   graphiql.applyMiddleware({ app: server, path: CONFIG.GRAPHIQL_PATH });
-  // }
 
   // Human Connection webhook
   // const smHumanConnection = require('./express/webhooks/socialmedia/humanconnection'); // eslint-disable-line global-require

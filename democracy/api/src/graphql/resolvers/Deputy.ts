@@ -12,9 +12,13 @@ import { logger } from '../../services/logger';
 
 const DeputyApi: Resolvers = {
   Query: {
-    deputiesOfConstituency: async (parent, { constituency, directCandidate = false }) => {
+    deputiesOfConstituency: async (
+      parent,
+      { constituency, period = 19, directCandidate = false },
+    ) => {
       const query: MongooseFilterQuery<IDeputy> = {
         constituency,
+        period,
       };
       if (directCandidate) {
         // returns only directCandidate
@@ -22,11 +26,23 @@ const DeputyApi: Resolvers = {
       }
       return DeputyModel.find(query);
     },
-    deputies: async (_parent, { limit = 10, offset = 0, filterTerm, filterIds, filterConstituency, excludeIds }) => {
+    deputies: async (
+      _parent,
+      {
+        period = 19,
+        limit = 10,
+        offset = 0,
+        filterTerm,
+        filterIds,
+        filterConstituency,
+        excludeIds,
+      },
+    ) => {
       if (limit > 100) {
         throw new Error('limit must not exceed 100');
       }
-      const conditions: FilterQuery<IDeputy> = {};
+      const conditions: FilterQuery<IDeputy> = { period };
+
       if (filterTerm) {
         conditions.$or = [
           { name: { $regex: new RegExp(filterTerm, 'i') } },
@@ -34,7 +50,7 @@ const DeputyApi: Resolvers = {
           { constituency: { $regex: new RegExp(filterTerm, 'i') } },
         ];
       }
-      if(filterConstituency) {
+      if (filterConstituency) {
         conditions.constituency = filterConstituency;
       }
       if (filterIds) {
@@ -56,6 +72,7 @@ const DeputyApi: Resolvers = {
   },
   Deputy: {
     totalProcedures: ({ votes }) => votes.length,
+    period: (parent) => (parent as any).toObject().period,
     procedures: async (
       { votes },
       { procedureIds, offset = 0, pageSize = 9999999 },

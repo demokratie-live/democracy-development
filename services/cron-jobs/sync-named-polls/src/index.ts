@@ -1,10 +1,10 @@
-import { mongoConnect, mongoDisconnect } from "./mongoose";
-import { unionBy } from "lodash";
-import { forEachSeries } from "p-iteration";
+import { mongoConnect, mongoDisconnect } from './mongoose';
+import { unionBy } from 'lodash';
+import { forEachSeries } from 'p-iteration';
 
 // GraphQL
-import createClient from "./graphql/client";
-import getNamedPollUpdates from "./graphql/queries/getNamedPollUpdates";
+import createClient from './graphql/client';
+import getNamedPollUpdates from './graphql/queries/getNamedPollUpdates';
 import {
   DeputyModel,
   getCron,
@@ -12,13 +12,10 @@ import {
   setCronSuccess,
   setCronError,
   VoteSelection,
-} from "@democracy-deutschland/democracy-common";
-import {
-  NamedPollUpdates,
-  NamedPollUpdatesVariables,
-} from "./graphql/queries/__generated__/NamedPollUpdates";
+} from '@democracy-deutschland/democracy-common';
+import { NamedPollUpdates, NamedPollUpdatesVariables } from './graphql/queries/__generated__/NamedPollUpdates';
 
-export const CRON_NAME = "NamedPolls";
+export const CRON_NAME = 'NamedPolls';
 
 const start = async () => {
   // New SuccessStartDate
@@ -55,6 +52,7 @@ const start = async () => {
           query: getNamedPollUpdates,
           variables: { since, limit, offset, associated },
         });
+
       if (errors) {
         throw errors;
       }
@@ -72,20 +70,16 @@ const start = async () => {
                 if (voteData && data.votes) {
                   let decision;
                   switch (voteData.vote) {
-                    case "ja":
-                      decision = data.votes.inverseVoteDirection
-                        ? VoteSelection.No
-                        : VoteSelection.Yes;
+                    case 'ja':
+                      decision = data.votes.inverseVoteDirection ? VoteSelection.No : VoteSelection.Yes;
                       break;
-                    case "nein":
-                      decision = data.votes.inverseVoteDirection
-                        ? VoteSelection.Yes
-                        : VoteSelection.No;
+                    case 'nein':
+                      decision = data.votes.inverseVoteDirection ? VoteSelection.Yes : VoteSelection.No;
                       break;
-                    case "na":
+                    case 'na':
                       decision = VoteSelection.Notvoted;
                       break;
-                    case "enthalten":
+                    case 'enthalten':
                       decision = VoteSelection.Abstination;
                       break;
                     default:
@@ -93,18 +87,13 @@ const start = async () => {
                   }
                   // Validate decision Data
                   if (!decision) {
-                    console.error(
-                      `NamedPoll import vote missmatch on deputy vote string: ${voteData.vote}`
-                    );
+                    console.error(`NamedPoll import vote missmatch on deputy vote string: ${voteData.vote}`);
                     return null;
                   }
                   // Prepare update
                   if (voteData.webId && data.procedureId) {
                     updates[voteData.webId] = updates[voteData.webId]
-                      ? [
-                          ...updates[voteData.webId],
-                          { procedureId: data.procedureId, decision },
-                        ]
+                      ? [...updates[voteData.webId], { procedureId: data.procedureId, decision }]
                       : [{ procedureId: data.procedureId, decision }];
                   }
                 }
@@ -121,16 +110,9 @@ const start = async () => {
           const deputy = await DeputyModel.findOne({ webId: deputyWebId });
           if (deputy) {
             // remove duplicates
-            const votes = unionBy(
-              updates[deputyWebId],
-              deputy.votes,
-              "procedureId"
-            );
+            const votes = unionBy(updates[deputyWebId], deputy.votes, 'procedureId');
             // Insert
-            await DeputyModel.updateOne(
-              { webId: deputyWebId },
-              { $set: { votes } }
-            );
+            await DeputyModel.updateOne({ webId: deputyWebId }, { $set: { votes } });
           }
         });
 
@@ -138,10 +120,7 @@ const start = async () => {
         if (namedPolls && namedPolls.length < limit) {
           done = true;
         } else {
-          console.log(
-            "namedPolls && namedPolls.length < limit",
-            `${namedPolls?.length || "undefined"} < ${limit}`
-          );
+          console.log('namedPolls && namedPolls.length < limit', `${namedPolls?.length || 'undefined'} < ${limit}`);
         }
       }
       offset += limit;
@@ -158,19 +137,13 @@ const start = async () => {
 };
 
 (async () => {
-  console.info("START");
-  console.info(
-    "process.env",
-    process.env.BUNDESTAGIO_SERVER_URL,
-    process.env.DB_URL
-  );
+  console.info('START');
+  console.info('process.env', process.env.BUNDESTAGIO_SERVER_URL, process.env.DB_URL);
   if (!process.env.BUNDESTAGIO_SERVER_URL) {
-    throw new Error(
-      "you have to set environment variable: BUNDESTAGIO_SERVER_URL & DB_URL"
-    );
+    throw new Error('you have to set environment variable: BUNDESTAGIO_SERVER_URL & DB_URL');
   }
   await mongoConnect();
-  console.log("deputies", await DeputyModel.countDocuments({}));
+  console.log('deputies', await DeputyModel.countDocuments({}));
   await start();
   await mongoDisconnect();
 })().catch(async (e) => {
