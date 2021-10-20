@@ -85,6 +85,7 @@ export type Deputy = {
   contact?: Maybe<DeputyContact>;
   totalProcedures?: Maybe<Scalars['Int']>;
   procedures: Array<DeputyProcedure>;
+  period: Scalars['Int'];
 };
 
 
@@ -345,11 +346,13 @@ export type QueryActivityIndexArgs = {
 
 export type QueryDeputiesOfConstituencyArgs = {
   constituency: Scalars['String'];
+  period?: Maybe<Scalars['Int']>;
   directCandidate?: Maybe<Scalars['Boolean']>;
 };
 
 
 export type QueryDeputiesArgs = {
+  period?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
   filterTerm?: Maybe<Scalars['String']>;
@@ -772,6 +775,7 @@ export type DeputyResolvers<ContextType = GraphQlContext, ParentType extends Res
   contact?: Resolver<Maybe<ResolversTypes['DeputyContact']>, ParentType, ContextType>;
   totalProcedures?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   procedures?: Resolver<Array<ResolversTypes['DeputyProcedure']>, ParentType, ContextType, RequireFields<DeputyProceduresArgs, never>>;
+  period?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
