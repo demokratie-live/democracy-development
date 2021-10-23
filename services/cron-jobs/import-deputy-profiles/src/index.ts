@@ -77,7 +77,7 @@ const start = async () => {
       }).then(async ({ data: deputyList, response }) => {
         for (const deputyListItem of deputyList.deputies) {
           await scrapeIt<Omit<IDeputy, 'URL' | 'webId' | 'period'>>(encodeURI(deputyListItem.URL), {
-            imgUrl: {
+            imgURL: {
               selector: '.bt-bild-standard > img',
               attr: 'data-img-md-normal',
               convert: (src: string) => `https://www.bundestag.de${src}`,
