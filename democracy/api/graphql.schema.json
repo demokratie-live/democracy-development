@@ -481,6 +481,16 @@
                 "defaultValue": null
               },
               {
+                "name": "period",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
                 "name": "timespan",
                 "description": null,
                 "type": {
