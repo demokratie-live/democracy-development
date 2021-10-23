@@ -14,7 +14,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: import-deputy-profiles
-              image: democracy/import-deputy-profiles:0.1.5
+              image: democracy/import-deputy-profiles:0.1.6
               env:
                 - name: PERIOD
                   value: '18'
