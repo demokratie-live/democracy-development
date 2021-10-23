@@ -33,7 +33,7 @@ const ProcedureApi: Resolvers = {
         pageSize = 100,
         sort = 'lastUpdateDate',
         filter = {},
-        period = 19
+        period = 19,
       },
       { ProcedureModel, user, VoteModel, device, phone },
     ) => {
@@ -337,7 +337,7 @@ const ProcedureApi: Resolvers = {
 
     proceduresByIdHavingVoteResults: async (
       parent,
-      { procedureIds, timespan = 'Period', pageSize = 25, offset = 0, filter = {} },
+      { period = 19, procedureIds, timespan = 'Period', pageSize = 25, offset = 0, filter = {} },
       { ProcedureModel },
     ) => {
       // Vote Results are present Filter
@@ -397,6 +397,8 @@ const ProcedureApi: Resolvers = {
           break;
         default:
       }
+
+      timespanQuery.period = { $in: [period] };
 
       // WOM Filter
       const filterQuery: MongooseFilterQuery<IProcedure> = {};
@@ -621,14 +623,18 @@ const ProcedureApi: Resolvers = {
     recommendedProcedures: async (parent, args, { ProcedureModel }) => {
       return {
         hasMore: false,
-        total: recommendedProcedures.reduce<number>((sum, group) => sum + group.procedures.length, 0 ),
-        data: await Promise.all(recommendedProcedures.map(async (group) => {
-
-          return {
-            title: group.title,
-            procedures: await ProcedureModel.find({ procedureId: { $in: group.procedures } }),
-          }
-        }))
+        total: recommendedProcedures.reduce<number>(
+          (sum, group) => sum + group.procedures.length,
+          0,
+        ),
+        data: await Promise.all(
+          recommendedProcedures.map(async (group) => {
+            return {
+              title: group.title,
+              procedures: await ProcedureModel.find({ procedureId: { $in: group.procedures } }),
+            };
+          }),
+        ),
       };
     },
   },

@@ -392,6 +392,7 @@ export type QueryProceduresByIdArgs = {
 
 export type QueryProceduresByIdHavingVoteResultsArgs = {
   procedureIds?: Maybe<Array<Scalars['String']>>;
+  period?: Maybe<Scalars['Int']>;
   timespan?: Maybe<VotedTimeSpan>;
   pageSize?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
