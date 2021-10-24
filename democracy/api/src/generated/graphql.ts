@@ -407,6 +407,7 @@ export type QuerySearchProceduresArgs = {
 
 export type QuerySearchProceduresAutocompleteArgs = {
   term: Scalars['String'];
+  period?: Maybe<Scalars['Int']>;
 };
 
 

@@ -99,7 +99,7 @@ type Query {
   proceduresByIdHavingVoteResults(procedureIds: [String!], period: Int, timespan: VotedTimeSpan, pageSize: Int, offset: Int, filter: ProcedureWOMFilter): ProceduresHavingVoteResults!
   notifiedProcedures: [Procedure!]!
   searchProcedures(term: String!): [Procedure!]! @deprecated(reason: "use searchProceduresAutocomplete")
-  searchProceduresAutocomplete(term: String!): SearchProcedures!
+  searchProceduresAutocomplete(term: String!, period: Int): SearchProcedures!
   votedProcedures: [Procedure!]!
   proceduresWithVoteResults(procedureIds: [String!]!): [Procedure!]!
   recommendedProcedures(period: Int): RecommendedProceduresResult!

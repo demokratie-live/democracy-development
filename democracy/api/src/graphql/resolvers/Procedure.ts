@@ -480,7 +480,7 @@ const ProcedureApi: Resolvers = {
       };
     },
 
-    searchProceduresAutocomplete: async (parent, { term }, { ProcedureModel }) => {
+    searchProceduresAutocomplete: async (parent, { term, period = 19 }, { ProcedureModel }) => {
       // logger.graphql('Procedure.query.searchProceduresAutocomplete');
       const autocomplete: string[] = [];
 
@@ -492,6 +492,7 @@ const ProcedureApi: Resolvers = {
             'importantDocuments.number': term,
           },
         ],
+        period,
       });
       if (directProcedures.length > 0) {
         return {
@@ -500,7 +501,7 @@ const ProcedureApi: Resolvers = {
         };
       }
 
-      const mongoSearchProcedures = await ProcedureModel.find({ $text: { $search: term } });
+      const mongoSearchProcedures = await ProcedureModel.find({ $text: { $search: term }, period });
       if (mongoSearchProcedures.length > 0) {
         return {
           procedures: mongoSearchProcedures,
@@ -518,7 +519,7 @@ const ProcedureApi: Resolvers = {
                 bool: {
                   must: [
                     {
-                      term: { period: 19 },
+                      term: { period },
                     },
                     {
                       query_string: {
@@ -553,7 +554,7 @@ const ProcedureApi: Resolvers = {
 
       // prepare procedures
       const procedureIds = hits.hits.map(({ _source: { procedureId } }) => procedureId);
-      const procedures = await ProcedureModel.find({ procedureId: { $in: procedureIds } });
+      const procedures = await ProcedureModel.find({ procedureId: { $in: procedureIds }, period });
 
       // prepare autocomplete
       // if (suggest.autocomplete[0]) {
