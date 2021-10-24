@@ -30,97 +30,113 @@ const getWeekNumber = (d: Date) => {
 
 const conferenceWeeks = [
   {
-    start: parseDate('13.01.2020'),
-    end: parseDate('17.01.2020'),
+    start: parseDate('08.11.2021'),
+    end: parseDate('12.11.2021'),
   },
   {
-    start: parseDate('27.01.2020'),
-    end: parseDate('31.01.2020'),
+    start: parseDate('15.11.2021'),
+    end: parseDate('19.11.2021'),
   },
   {
-    start: parseDate('10.02.2020'),
-    end: parseDate('14.02.2020'),
+    start: parseDate('29.11.2021'),
+    end: parseDate('03.12.2021'),
   },
   {
-    start: parseDate('02.03.2020'),
-    end: parseDate('06.03.2020'),
+    start: parseDate('13.12.2021'),
+    end: parseDate('17.12.2021'),
   },
   {
-    start: parseDate('09.03.2020'),
-    end: parseDate('13.03.2020'),
+    start: parseDate('10.01.2022'),
+    end: parseDate('14.01.2022'),
   },
   {
-    start: parseDate('23.03.2020'),
-    end: parseDate('27.03.2020'),
+    start: parseDate('24.01.2022'),
+    end: parseDate('28.01.2022'),
   },
   {
-    start: parseDate('20.04.2020'),
-    end: parseDate('24.04.2020'),
+    start: parseDate('14.02.2022'),
+    end: parseDate('18.02.2022'),
   },
   {
-    start: parseDate('04.05.2020'),
-    end: parseDate('07.05.2020'),
+    start: parseDate('14.03.2022'),
+    end: parseDate('18.03.2022'),
   },
   {
-    start: parseDate('11.05.2020'),
-    end: parseDate('15.05.2020'),
+    start: parseDate('21.03.2022'),
+    end: parseDate('25.03.2022'),
   },
   {
-    start: parseDate('25.05.2020'),
-    end: parseDate('29.05.2020'),
+    start: parseDate('04.04.2022'),
+    end: parseDate('08.04.2022'),
   },
   {
-    start: parseDate('15.06.2020'),
-    end: parseDate('19.06.2020'),
+    start: parseDate('25.04.2022'),
+    end: parseDate('29.04.2022'),
   },
   {
-    start: parseDate('29.06.2020'),
-    end: parseDate('03.07.2020'),
+    start: parseDate('02.05.2022'),
+    end: parseDate('06.05.2022'),
   },
   {
-    start: parseDate('07.09.2020'),
-    end: parseDate('11.09.2020'),
+    start: parseDate('16.05.2022'),
+    end: parseDate('20.05.2022'),
   },
   {
-    start: parseDate('14.09.2020'),
-    end: parseDate('18.09.2020'),
+    start: parseDate('30.05.2022'),
+    end: parseDate('03.06.2022'),
   },
   {
-    start: parseDate('28.09.2020'),
-    end: parseDate('02.10.2020'),
+    start: parseDate('20.06.2022'),
+    end: parseDate('24.06.2022'),
   },
   {
-    start: parseDate('05.10.2020'),
-    end: parseDate('09.10.2020'),
+    start: parseDate('04.07.2022'),
+    end: parseDate('08.07.2022'),
   },
   {
-    start: parseDate('26.10.2020'),
-    end: parseDate('30.10.2020'),
+    start: parseDate('05.09.2022'),
+    end: parseDate('09.09.2022'),
   },
   {
-    start: parseDate('02.11.2020'),
-    end: parseDate('06.11.2020'),
+    start: parseDate('19.09.2022'),
+    end: parseDate('23.09.2022'),
   },
   {
-    start: parseDate('16.11.2020'),
-    end: parseDate('20.11.2020'),
+    start: parseDate('26.09.2022'),
+    end: parseDate('30.09.2022'),
   },
   {
-    start: parseDate('23.11.2020'),
-    end: parseDate('27.11.2020'),
+    start: parseDate('10.10.2022'),
+    end: parseDate('14.10.2022'),
   },
   {
-    start: parseDate('07.12.2020'),
-    end: parseDate('11.12.2020'),
+    start: parseDate('17.10.2022'),
+    end: parseDate('21.10.2022'),
   },
   {
-    start: parseDate('14.12.2020'),
-    end: parseDate('18.12.2020'),
+    start: parseDate('07.11.2022'),
+    end: parseDate('11.11.2022'),
+  },
+  {
+    start: parseDate('21.11.2022'),
+    end: parseDate('25.11.2022'),
+  },
+  {
+    start: parseDate('28.11.2022'),
+    end: parseDate('02.12.2022'),
+  },
+  {
+    start: parseDate('12.12.2022'),
+    end: parseDate('16.12.2022'),
   },
 ];
 
 // return the current or next conference week
-export const getCurrentConferenceWeek = () => {
+export const getCurrentConferenceWeek = (): {
+  calendarWeek: number;
+  start: Date;
+  end: Date;
+} => {
   const curDate = new Date();
 
   // find actual or return undefined
