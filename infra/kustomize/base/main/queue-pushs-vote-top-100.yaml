@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: queue-pushs-vote-top-100-cronjob
 spec:
-  schedule: "0 2 * * MON-FRI"
+  schedule: '0 2 * * MON-FRI'
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 200
   jobTemplate:
@@ -14,7 +14,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: queue-pushs-vote-top-100
-              image: democracy/queue-pushs-vote-top-100:0.1.6
+              image: democracy/queue-pushs-vote-top-100:0.1.7
               env:
                 - name: DB_URL
                   valueFrom:
