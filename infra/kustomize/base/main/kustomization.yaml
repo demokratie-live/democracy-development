@@ -16,7 +16,7 @@ resources:
   - queue-pushs-conference-week.yaml
   - cleanup-push-queue.yaml
   - queue-pushs-vote-conference-week.yaml
-  - queue-pushs-vote-top-100.yaml
+  # - queue-pushs-vote-top-100.yaml
   - push-send-queued.yaml
   - import-procedures.yaml
   - import-conference-week-details.yaml
