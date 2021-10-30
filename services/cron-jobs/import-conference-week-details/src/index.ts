@@ -1,13 +1,13 @@
-import { mongoConnect, mongoDisconnect } from "./mongoose";
+import { mongoConnect, mongoDisconnect } from './mongoose';
 
-import { ConferenceWeekDetailScraper } from "@democracy-deutschland/scapacra-bt";
-import { Scraper } from "@democracy-deutschland/scapacra";
-import url from "url";
+import { ConferenceWeekDetailScraper } from '@democracy-deutschland/scapacra-bt';
+import { Scraper } from '@democracy-deutschland/scapacra';
+import url from 'url';
 
 import {
   PROCEDURE as PROCEDURE_DEFINITIONS,
   CONFERENCEWEEKDETAIL as CONFERENCEWEEKDETAIL_DEFINITIONS,
-} from "@democracy-deutschland/bundestag.io-definitions";
+} from '@democracy-deutschland/bundestag.io-definitions';
 
 import {
   ProcedureModel,
@@ -17,9 +17,9 @@ import {
   setCronError,
   ConferenceWeekDetailModel,
   ConferenceWeeCronJobkData,
-} from "@democracy-deutschland/bundestagio-common";
+} from '@democracy-deutschland/bundestagio-common';
 
-const CRON_NAME = "ConferenceWeekDetails";
+const CRON_NAME = 'ConferenceWeekDetails';
 
 const isVote = (topic: any, heading: any, documents: any, status: any) => {
   /*
@@ -31,17 +31,8 @@ const isVote = (topic: any, heading: any, documents: any, status: any) => {
   Beratung der Beschlussempfehlung = JA
   Zweite und dritte Beratung = JA
   */
-  if (
-    topic.search(
-      CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_BERATUNG_ANTRAG
-    ) !== -1
-  ) {
-    if (
-      heading &&
-      heading.search(
-        CONFERENCEWEEKDETAIL_DEFINITIONS.HEADING.FIND_ABSCHLIESSENDE_BERATUNG
-      ) !== -1
-    ) {
+  if (topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_BERATUNG_ANTRAG) !== -1) {
+    if (heading && heading.search(CONFERENCEWEEKDETAIL_DEFINITIONS.HEADING.FIND_ABSCHLIESSENDE_BERATUNG) !== -1) {
       return true;
     }
     if (
@@ -50,9 +41,7 @@ const isVote = (topic: any, heading: any, documents: any, status: any) => {
         // if(s.documents.sort().join(',') === documents.sort().join(',') &&
         if (
           s.documents.some((l: any) => documents.includes(l)) &&
-          s.line.search(
-            CONFERENCEWEEKDETAIL_DEFINITIONS.STATUS.FIND_ANTRAG_COMPLETED
-          ) !== -1
+          s.line.search(CONFERENCEWEEKDETAIL_DEFINITIONS.STATUS.FIND_ANTRAG_COMPLETED) !== -1
         ) {
           return true;
         }
@@ -63,26 +52,14 @@ const isVote = (topic: any, heading: any, documents: any, status: any) => {
     }
     return false;
   }
-  if (
-    topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_ERSTE_BERATUNG) !==
-    -1
-  ) {
+  if (topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_ERSTE_BERATUNG) !== -1) {
     return false;
   }
   if (
-    topic.search(
-      CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_BERATUNG_BESCHLUSSEMPFEHLUNG
-    ) !== -1 ||
-    topic.search(
-      CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_ZWEITE_DRITTE_BERATUNG
-    ) !== -1 ||
-    topic.search(
-      CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC
-        .FIND_ZWEITE_BERATUNG_SCHLUSSABSTIMMUNG
-    ) !== -1 ||
-    topic.search(
-      CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_DRITTE_BERATUNG
-    ) !== -1
+    topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_BERATUNG_BESCHLUSSEMPFEHLUNG) !== -1 ||
+    topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_ZWEITE_DRITTE_BERATUNG) !== -1 ||
+    topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_ZWEITE_BERATUNG_SCHLUSSABSTIMMUNG) !== -1 ||
+    topic.search(CONFERENCEWEEKDETAIL_DEFINITIONS.TOPIC.FIND_DRITTE_BERATUNG) !== -1
   ) {
     return true;
   }
@@ -90,12 +67,10 @@ const isVote = (topic: any, heading: any, documents: any, status: any) => {
 };
 
 const getProcedureIds = async (documents: any) => {
-  const docs = documents.map(
-    (document: string) => {
-      return `${url.parse(document).path?.split("/").slice(-1)[0]}$`
-    }
-  );
-  
+  const docs = documents.map((document: string) => {
+    return `${url.parse(document).path?.split('/').slice(-1)[0]}$`;
+  });
+
   if (docs.length === 0) {
     return [];
   }
@@ -106,15 +81,13 @@ const getProcedureIds = async (documents: any) => {
         $elemMatch: {
           $and: [
             // Match at least one Document
-            { url: { $regex: docs.join("|") } },
+            { url: { $regex: docs.join('|') } },
             // which is not Beschlussempfehlung und Bericht || Beschlussempfehlung
             {
               type: {
                 $nin: [
-                  PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE
-                    .BESCHLUSSEMPFEHLUNG_BERICHT,
-                  PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE
-                    .BESCHLUSSEMPFEHLUNG,
+                  PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE.BESCHLUSSEMPFEHLUNG_BERICHT,
+                  PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE.BESCHLUSSEMPFEHLUNG,
                   PROCEDURE_DEFINITIONS.IMPORTANT_DOCUMENTS.TYPE.BERICHT,
                 ],
               },
@@ -123,7 +96,7 @@ const getProcedureIds = async (documents: any) => {
         },
       },
     },
-    { procedureId: 1 }
+    { procedureId: 1 },
   );
 
   return procedures.map((p) => p.procedureId);
@@ -142,104 +115,81 @@ const start = async () => {
             year: cron.data.lastYear,
             week: cron.data.lastWeek,
           }
-        : undefined;
+        : {
+            year: process.env.CONFERENCE_WEEK_DETAIL_YEAR ? Number(process.env.CONFERENCE_WEEK_DETAIL_YEAR) : 2014,
+            week: process.env.CONFERENCE_WEEK_DETAIL_WEEK ? Number(process.env.CONFERENCE_WEEK_DETAIL_WEEK) : 8,
+          };
     let voteDates: any[] = [];
     let lastProcedureIds: any[] = [];
-    await Scraper.scrape(
-      new ConferenceWeekDetailScraper(startData),
-      async (dataPackage: any) => {
-        // Construct Database object
-        console.log(
-          "dataPackage.data.this.year",
-          dataPackage.data.this.year,
-          dataPackage.data.this.week
-        );
-        lastData = {
-          lastYear: dataPackage.data.previous.year,
-          lastWeek: dataPackage.data.previous.week,
-        };
-        const ConferenceWeekDetail = {
-          URL: dataPackage.meta.url,
-          id: dataPackage.data.id,
-          previousYear: dataPackage.data.previous.year,
-          previousWeek: dataPackage.data.previous.week,
-          thisYear: dataPackage.data.this.year,
-          thisWeek: dataPackage.data.this.week,
-          nextYear: dataPackage.data.next.year,
-          nextWeek: dataPackage.data.next.week,
-          sessions: await dataPackage.data.sessions.reduce(
-            async (pSession: any, session: any) => {
-              const resultSession = await pSession;
-              resultSession.push({
-                ...session,
-                tops: await session.tops.reduce(async (pTop: any, top: any) => {
-                  // Await for last result
-                  const resultTop = await pTop;
-                  // Write VoteEnd Date
-                  lastProcedureIds.forEach((procedureId) => {
-                    if (
-                      voteDates[procedureId].voteDate &&
-                      voteDates[procedureId].voteDate <= top.time
-                    ) {
-                      voteDates[procedureId].voteEnd = top.time;
-                    }
-                  });
-                  lastProcedureIds = [];
-                  // Append current result
-                  resultTop.push({
-                    ...top,
-                    topic: await Promise.all(
-                      top.topic.map(async (topic: any) => {
-                        // eslint-disable-next-line no-param-reassign
-                        topic.isVote = isVote(
-                          topic.lines.join(" "),
-                          top.heading,
-                          topic.documents,
-                          top.status
-                        );
-                        topic.procedureIds = await getProcedureIds(
-                          topic.documents
-                        ); // eslint-disable-line no-param-reassign
-                        // Save VoteDates to update them at the end when the correct values are present
-                        topic.procedureIds.forEach((procedureId: any) => {
-                          // Override voteDate only if there is none set or we would override it by a new date
-                          if (
-                            !voteDates[procedureId] ||
-                            !voteDates[procedureId].voteDate ||
-                            topic.isVote === true
-                          ) {
-                            voteDates[procedureId] = {
-                              procedureId,
-                              voteDate: topic.isVote ? top.time : null,
-                              voteEnd: null,
-                              documents: topic.documents,
-                            };
-                          }
-                        });
-                        // Remember last procedureIds to save voteEnd Date
-                        lastProcedureIds = lastProcedureIds.concat(
-                          topic.procedureIds
-                        );
-                        return topic;
-                      })
-                    ),
-                  });
-                  return resultTop;
-                }, []),
+    await Scraper.scrape(new ConferenceWeekDetailScraper(startData), async (dataPackage: any) => {
+      // Construct Database object
+      console.log('dataPackage.data.this.year', dataPackage.data.this.year, dataPackage.data.this.week);
+      lastData = {
+        lastYear: dataPackage.data.previous.year,
+        lastWeek: dataPackage.data.previous.week,
+      };
+      const ConferenceWeekDetail = {
+        URL: dataPackage.meta.url,
+        id: dataPackage.data.id,
+        previousYear: dataPackage.data.previous.year,
+        previousWeek: dataPackage.data.previous.week,
+        thisYear: dataPackage.data.this.year,
+        thisWeek: dataPackage.data.this.week,
+        nextYear: dataPackage.data.next.year,
+        nextWeek: dataPackage.data.next.week,
+        sessions: await dataPackage.data.sessions.reduce(async (pSession: any, session: any) => {
+          const resultSession = await pSession;
+          resultSession.push({
+            ...session,
+            tops: await session.tops.reduce(async (pTop: any, top: any) => {
+              // Await for last result
+              const resultTop = await pTop;
+              // Write VoteEnd Date
+              lastProcedureIds.forEach((procedureId) => {
+                if (voteDates[procedureId].voteDate && voteDates[procedureId].voteDate <= top.time) {
+                  voteDates[procedureId].voteEnd = top.time;
+                }
               });
-              return resultSession;
-            },
-            []
-          ),
-        };
-        // Update/Insert
-        await ConferenceWeekDetailModel.update(
-          { id: ConferenceWeekDetail.id },
-          { $set: ConferenceWeekDetail },
-          { upsert: true }
-        );
-      }
-    );
+              lastProcedureIds = [];
+              // Append current result
+              resultTop.push({
+                ...top,
+                topic: await Promise.all(
+                  top.topic.map(async (topic: any) => {
+                    // eslint-disable-next-line no-param-reassign
+                    topic.isVote = isVote(topic.lines.join(' '), top.heading, topic.documents, top.status);
+                    topic.procedureIds = await getProcedureIds(topic.documents); // eslint-disable-line no-param-reassign
+                    // Save VoteDates to update them at the end when the correct values are present
+                    topic.procedureIds.forEach((procedureId: any) => {
+                      // Override voteDate only if there is none set or we would override it by a new date
+                      if (!voteDates[procedureId] || !voteDates[procedureId].voteDate || topic.isVote === true) {
+                        voteDates[procedureId] = {
+                          procedureId,
+                          voteDate: topic.isVote ? top.time : null,
+                          voteEnd: null,
+                          documents: topic.documents,
+                        };
+                      }
+                    });
+                    // Remember last procedureIds to save voteEnd Date
+                    lastProcedureIds = lastProcedureIds.concat(topic.procedureIds);
+                    return topic;
+                  }),
+                ),
+              });
+              return resultTop;
+            }, []),
+          });
+          return resultSession;
+        }, []),
+      };
+      // Update/Insert
+      await ConferenceWeekDetailModel.update(
+        { id: ConferenceWeekDetail.id },
+        { $set: ConferenceWeekDetail },
+        { upsert: true },
+      );
+    });
     voteDates = voteDates.filter((voteDate) => !!voteDate);
     // Update Procedure VoteDates
     await Promise.all(
@@ -264,9 +214,9 @@ const start = async () => {
               voteDate: procedureUpdate.voteDate,
               voteEnd: procedureUpdate.voteEnd,
             },
-          }
+          },
         );
-      })
+      }),
     );
     console.log(JSON.stringify(voteDates, null, 2));
   } catch (error) {
@@ -281,13 +231,13 @@ const start = async () => {
 };
 
 (async () => {
-  console.info("START");
-  console.info("process.env", process.env.DB_URL);
+  console.info('START');
+  console.info('process.env', process.env.DB_URL);
   if (!process.env.DB_URL) {
-    throw new Error("you have to set environment variable: DB_URL");
+    throw new Error('you have to set environment variable: DB_URL');
   }
   await mongoConnect();
-  console.log("procedures", await ProcedureModel.countDocuments({}));
+  console.log('procedures', await ProcedureModel.countDocuments({}));
   await start();
   await mongoDisconnect();
 })().catch(async (e) => {
