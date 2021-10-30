@@ -1,6 +1,6 @@
-import mongoConnect from "./mongoose";
-import moment from "moment";
-import { DEV_MODE } from "./config";
+import mongoConnect from './mongoose';
+import moment from 'moment';
+import { DEV_MODE } from './config';
 
 import {
   ProcedureModel,
@@ -14,7 +14,7 @@ import {
   VoteModel,
   PushNotificationModel,
   Device,
-} from "@democracy-deutschland/democracy-common";
+} from '@democracy-deutschland/democracy-common';
 
 const start = async () => {
   /*
@@ -23,7 +23,7 @@ const start = async () => {
   (Top 100, Außerhalb der Sitzungwoche, 1x pro Tag, individuell)
   */
 
-  const CRON_NAME = "queuePushsVoteTop100";
+  const CRON_NAME = 'queuePushsVoteTop100';
   const startDate = new Date();
   await setCronStart({ name: CRON_NAME, startDate });
   const tokensQueued: string[] = [];
@@ -33,50 +33,43 @@ const start = async () => {
     alreadyVoted = 0;
 
   // Check if we have a ConferenceWeek
-  const startOfWeek = moment().startOf("isoWeek").toDate(); // Should be Mo
-  const endOfWeek = moment().endOf("isoWeek").toDate(); // Should be So
+  const startOfWeek = moment().startOf('isoWeek').toDate(); // Should be Mo
+  const endOfWeek = moment().endOf('isoWeek').toDate(); // Should be So
   const conferenceProceduresCount = await ProcedureModel.countDocuments({
-    $and: [
-      { voteDate: { $gte: startOfWeek } },
-      { voteDate: { $lte: endOfWeek } },
-    ],
+    period: 20,
+    $and: [{ voteDate: { $gte: startOfWeek } }, { voteDate: { $lte: endOfWeek } }],
   });
 
   /** Dont Push TOP100 if we have an active conferenceWeek */
   if (!DEV_MODE && conferenceProceduresCount > 0) {
-    console.info(
-      "[INFO] stopped: Do not create push's in reason of conferenceWeek day!"
-    );
+    console.info("[INFO] stopped: Do not create push's in reason of conferenceWeek day!");
     await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
     return;
   }
 
   // find TOP100 procedures
-  const top100Procedures = await ProcedureModel.find(
-    { period: 19 },
-    { _id: 1, procedureId: 1, title: 1 }
-  )
+  const top100Procedures = await ProcedureModel.find({ period: 20 }, { _id: 1, procedureId: 1, title: 1 })
     .sort({ activities: -1, lastUpdateDate: -1, title: 1 })
     .limit(100);
 
   console.log(
-    "# TOP 100 PROCEDURES:",
-    top100Procedures.map(({ procedureId }) => procedureId)
+    '# TOP 100 PROCEDURES:',
+    top100Procedures.map(({ procedureId }) => procedureId),
   );
 
   // Find Devices
   let devices = await DeviceModel.find(
     {
-      "notificationSettings.enabled": true,
-      "notificationSettings.voteTOP100Pushs": true,
+      'notificationSettings.enabled': true,
+      'notificationSettings.voteTOP100Pushs': true,
       pushTokens: { $gt: [] },
     },
     {
       _id: 1,
       pushTokens: 1,
-    }
+    },
   );
-  console.log("# DEVICES WITH RIGHT SETTINGS:", devices.length);
+  console.log('# DEVICES WITH RIGHT SETTINGS:', devices.length);
   if (devices.length === 0) {
     return;
   }
@@ -92,42 +85,30 @@ const start = async () => {
 
     let allDeviceTokens = Array.from(
       new Set(
-        devices.reduce<string[]>(
-          (prev, device) => [
-            ...prev,
-            ...device.pushTokens.map(({ token }) => token),
-          ],
-          []
-        )
-      )
+        devices.reduce<string[]>((prev, device) => [...prev, ...device.pushTokens.map(({ token }) => token)], []),
+      ),
     );
 
-    console.log("# TOKENS: length of all tokens", allDeviceTokens.length);
+    console.log('# TOKENS: length of all tokens', allDeviceTokens.length);
 
     let alreadyPushedDevices = await PushNotificationModel.find(
       {
         token: {
           $in: allDeviceTokens,
         },
-        category: "top100",
+        category: 'top100',
         procedureIds: { $in: [procedure.procedureId] },
       },
-      { token: 1 }
+      { token: 1 },
     ).then((pushs) => Array.from(new Set(pushs.map(({ token }) => token))));
 
-    console.log(
-      "devices which are already pushed",
-      alreadyPushedDevices.length
-    );
+    console.log('devices which are already pushed', alreadyPushedDevices.length);
     allDeviceTokens = [];
 
     const filteredDevices = devices.filter(
-      ({ pushTokens }) =>
-        !pushTokens.some((pushToken) =>
-          alreadyPushedDevices.includes(pushToken.token)
-        )
+      ({ pushTokens }) => !pushTokens.some((pushToken) => alreadyPushedDevices.includes(pushToken.token)),
     );
-    console.log("# DEVICES: without already sent", filteredDevices.length);
+    console.log('# DEVICES: without already sent', filteredDevices.length);
     /** delete alreadyPushedDevices for memory */
     alreadyPushedDevices = [];
 
@@ -154,12 +135,12 @@ const start = async () => {
         },
         {
           phone: 1,
-        }
+        },
       );
       if (user) {
         voted = await VoteModel.exists({
           procedure: procedure._id,
-          type: "Phone",
+          type: 'Phone',
           voters: {
             $elemMatch: {
               voter: user.phone,
@@ -174,7 +155,7 @@ const start = async () => {
         continue;
       }
       // Check if we sent the user a notifiation in the past time on that procedure
-      let tokens: Device["pushTokens"] = [];
+      let tokens: Device['pushTokens'] = [];
       for (let token of device.pushTokens) {
         const pastPushs = await PushNotificationModel.countDocuments({
           category: PUSH_CATEGORY.TOP100,
@@ -182,7 +163,7 @@ const start = async () => {
           token: token.token,
           os: token.os,
           time: {
-            $gte: moment().subtract(1, "month").toDate(),
+            $gte: moment().subtract(1, 'month').toDate(),
           },
         });
         if (pastPushs === 0) {
@@ -215,9 +196,7 @@ const start = async () => {
         time,
       });
 
-      devices = devices.filter(
-        ({ pushTokens }) => !tokens.some((token) => pushTokens.includes(token))
-      );
+      devices = devices.filter(({ pushTokens }) => !tokens.some((token) => pushTokens.includes(token)));
     }
     console.log(`${procedure.procedureId} - ${procedure.title}`, {
       counter,
@@ -236,11 +215,8 @@ const start = async () => {
    * Next time he will get push's from beginning :)
    */
   const clenupTokens = devices.reduce<string[]>(
-    (prev, { pushTokens }) => [
-      ...prev,
-      ...pushTokens.map(({ token }) => token),
-    ],
-    []
+    (prev, { pushTokens }) => [...prev, ...pushTokens.map(({ token }) => token)],
+    [],
   );
   console.log(`Delete pushs from ${clenupTokens.length} tokens`);
   const cleanupResp = await PushNotificationModel.deleteMany({
@@ -256,15 +232,15 @@ const start = async () => {
 
 (async () => {
   if (!process.env.DB_URL) {
-    throw new Error("you have to set environment variable: DB_URL");
+    throw new Error('you have to set environment variable: DB_URL');
   }
   await mongoConnect();
   let devices = await DeviceModel.countDocuments({
-    "notificationSettings.enabled": true,
-    "notificationSettings.voteTOP100Pushs": true,
+    'notificationSettings.enabled': true,
+    'notificationSettings.voteTOP100Pushs': true,
     pushTokens: { $gt: [] },
   });
-  console.info("devices with top 100 push", devices);
+  console.info('devices with top 100 push', devices);
   await start().catch(() => process.exit(1));
   process.exit(0);
 })();
