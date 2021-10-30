@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 services:
   mongo:
     image: mongo:4
@@ -9,17 +9,18 @@ services:
   gorush:
     image: appleboy/gorush:1.14.0
     ports:
-      - "8088:8088"
+      - '8088:8088'
     depends_on:
-      - "redis"
+      - 'redis'
     environment:
       - GORUSH_ANDROID_APIKEY="NONE"
       - GORUSH_STAT_ENGINE=redis
       - GORUSH_STAT_REDIS_ADDR=redis:6379
     volumes:
       - ./configuration/gorush-config.yaml:/config.yml
+      - ./configuration/AuthKey_WKG6X45GSC.p8:/data/ssl/AuthKey_WKG6X45GSC.p8
   redis:
-    image: "redis:alpine"
+    image: 'redis:alpine'
   bundestag-io:
     build:
       context: bundestag.io/api
@@ -42,7 +43,7 @@ services:
     environment:
       - BUNDESTAGIO_SERVER_URL=http://bundestag-io:3100
       - BIO_EDIT_TOKEN=CHANGE_ME
-      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_URL=http://localhost:4001
       - CREDENTIALS=username:password
   dip:
     build:

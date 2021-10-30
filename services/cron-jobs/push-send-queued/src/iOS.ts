@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 // Send single iOS notification
 export const push = async ({
@@ -22,12 +22,12 @@ export const push = async ({
           message,
           topic: process.env.APN_TOPIC,
           badge: 0,
-          development: process.env.NODE_ENV === "development",
+          development: process.env.NODE_ENV === 'development',
           data: {
             ...payload,
           },
           sound: {
-            name: "push.aiff",
+            name: 'push.aiff',
           },
         },
       ],
@@ -37,7 +37,7 @@ export const push = async ({
       throw e;
     });
 
-  console.info("data:", data);
+  console.info('data:', data);
 
   if (data.logs[0]) {
     return {
