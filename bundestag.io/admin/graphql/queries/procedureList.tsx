@@ -1,36 +1,35 @@
-import { gql } from "@apollo/client";
-import VoteResults from "../fragments/voteResults";
+import { gql } from '@apollo/client';
+import VoteResults from '../fragments/voteResults';
 
 const proceduresQuery = gql`
-  query procedures($manageVoteDate: Boolean, $limit: Int, $offset: Int) {
-    procedures(
-      manageVoteDate: $manageVoteDate
-      limit: $limit
-      offset: $offset
-    ) {
-      procedureId
-      title
-      type
-      period
-      currentStatus
-      namedVote
-      importantDocuments {
+  query procedures($manageVoteDate: Boolean, $limit: Int, $offset: Int, $period: Int!) {
+    proceduresData(manageVoteDate: $manageVoteDate, limit: $limit, offset: $offset, period: [$period]) {
+      totalCount
+      nodes {
+        procedureId
+        title
         type
-        editor
-        number
-        url
-      }
-      history {
-        assignment
-        initiator
-        findSpot
-        findSpotUrl
-        decision {
+        period
+        currentStatus
+        namedVote
+        importantDocuments {
           type
+          editor
+          number
+          url
         }
+        history {
+          assignment
+          initiator
+          findSpot
+          findSpotUrl
+          decision {
+            type
+          }
+        }
+        voteDate
+        ...VoteResults
       }
-      voteDate
-      ...VoteResults
     }
   }
   ${VoteResults}

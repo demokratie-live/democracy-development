@@ -82,6 +82,7 @@ export type Query = {
   allProcedures?: Maybe<Array<Maybe<Procedure>>>;
   procedureUpdates?: Maybe<ProcedureUpdate>;
   voteResultTextHelper?: Maybe<Array<VoteResultTexts>>;
+  proceduresData: ProceduresData;
 };
 
 
@@ -176,6 +177,18 @@ export type QueryVoteResultTextHelperArgs = {
   procedureId: Scalars['String'];
 };
 
+
+export type QueryProceduresDataArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  period?: Maybe<Array<Scalars['Int']>>;
+  type?: Maybe<Array<Scalars['String']>>;
+  IDs?: Maybe<Array<Scalars['String']>>;
+  status?: Maybe<Array<Scalars['String']>>;
+  voteDate?: Maybe<Array<Scalars['Boolean']>>;
+  manageVoteDate?: Maybe<Scalars['Boolean']>;
+};
+
 export type Decision = {
   __typename?: 'Decision';
   page?: Maybe<Scalars['String']>;
@@ -204,7 +217,7 @@ export type Deputy = {
   __typename?: 'Deputy';
   URL: Scalars['String'];
   webId?: Maybe<Scalars['String']>;
-  period?: Maybe<Scalars['Int']>;
+  period: Scalars['Int'];
   imgURL?: Maybe<Scalars['String']>;
   party?: Maybe<Scalars['String']>;
   name: Scalars['String'];
@@ -462,6 +475,12 @@ export type ProcedureUpdate = {
   procedures?: Maybe<Array<Maybe<Procedure>>>;
 };
 
+export type ProceduresData = {
+  __typename?: 'ProceduresData';
+  totalCount: Scalars['Int'];
+  nodes: Array<Procedure>;
+};
+
 export type VoteResultTexts = {
   __typename?: 'VoteResultTexts';
   results: Array<Scalars['String']>;
@@ -654,6 +673,7 @@ export type ResolversTypes = {
   DeviantsInput: DeviantsInput;
   Procedure: ResolverTypeWrapper<Procedure>;
   ProcedureUpdate: ResolverTypeWrapper<ProcedureUpdate>;
+  ProceduresData: ResolverTypeWrapper<ProceduresData>;
   VoteResultTexts: ResolverTypeWrapper<VoteResultTexts>;
   Mutation: ResolverTypeWrapper<{}>;
   ProcessFlow: ResolverTypeWrapper<ProcessFlow>;
@@ -705,6 +725,7 @@ export type ResolversParentTypes = {
   DeviantsInput: DeviantsInput;
   Procedure: Procedure;
   ProcedureUpdate: ProcedureUpdate;
+  ProceduresData: ProceduresData;
   VoteResultTexts: VoteResultTexts;
   Mutation: {};
   ProcessFlow: ProcessFlow;
@@ -775,6 +796,7 @@ export type QueryResolvers<ContextType = GraphQlContext, ParentType extends Reso
   allProcedures?: Resolver<Maybe<Array<Maybe<ResolversTypes['Procedure']>>>, ParentType, ContextType, RequireFields<QueryAllProceduresArgs, never>>;
   procedureUpdates?: Resolver<Maybe<ResolversTypes['ProcedureUpdate']>, ParentType, ContextType, RequireFields<QueryProcedureUpdatesArgs, 'since'>>;
   voteResultTextHelper?: Resolver<Maybe<Array<ResolversTypes['VoteResultTexts']>>, ParentType, ContextType, RequireFields<QueryVoteResultTextHelperArgs, 'procedureId'>>;
+  proceduresData?: Resolver<ResolversTypes['ProceduresData'], ParentType, ContextType, RequireFields<QueryProceduresDataArgs, never>>;
 };
 
 export type DecisionResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Decision'] = ResolversParentTypes['Decision']> = {
@@ -804,7 +826,7 @@ export type DeputyFunctionsResolvers<ContextType = GraphQlContext, ParentType ex
 export type DeputyResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Deputy'] = ResolversParentTypes['Deputy']> = {
   URL?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   webId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  period?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  period?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   imgURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   party?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1038,6 +1060,12 @@ export type ProcedureUpdateResolvers<ContextType = GraphQlContext, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type ProceduresDataResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['ProceduresData'] = ResolversParentTypes['ProceduresData']> = {
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  nodes?: Resolver<Array<ResolversTypes['Procedure']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type VoteResultTextsResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['VoteResultTexts'] = ResolversParentTypes['VoteResultTexts']> = {
   results?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
@@ -1113,6 +1141,7 @@ export type Resolvers<ContextType = GraphQlContext> = {
   Deviants?: DeviantsResolvers<ContextType>;
   Procedure?: ProcedureResolvers<ContextType>;
   ProcedureUpdate?: ProcedureUpdateResolvers<ContextType>;
+  ProceduresData?: ProceduresDataResolvers<ContextType>;
   VoteResultTexts?: VoteResultTextsResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   ProcessFlow?: ProcessFlowResolvers<ContextType>;

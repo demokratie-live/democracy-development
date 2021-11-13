@@ -116,6 +116,106 @@ const ProcedureResolvers: Resolvers = {
       return ProcedureModel.find(match).skip(offset).limit(limit);
     },
 
+    proceduresData: async (
+      parent,
+      {
+        IDs,
+        period,
+        type = [PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG, PROCEDURE_DEFINITIONS.TYPE.ANTRAG],
+        status,
+        voteDate,
+        manageVoteDate = false,
+        limit = 99999,
+        offset = 0,
+      },
+      { ProcedureModel },
+    ) => {
+      let match: MongooseFilterQuery<IProcedure> = { period: { $in: period }, type: { $in: type } };
+      if (voteDate) {
+        match = {
+          ...match,
+          history: {
+            $elemMatch: {
+              decision: {
+                $elemMatch: {
+                  tenor: {
+                    $in: [
+                      PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ABLEHNUNG,
+                      PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ANNAHME,
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        };
+        return {
+          nodes: await ProcedureModel.find({ ...match })
+            .sort({ createdAt: 1 })
+            .skip(offset)
+            .limit(limit),
+          totalCount: await ProcedureModel.count({ ...match }),
+        };
+      }
+
+      if (manageVoteDate) {
+        match = {
+          ...match,
+          'customData.voteResults.yes': { $not: { $gte: 1 } },
+          $or: [
+            {
+              history: {
+                $elemMatch: {
+                  decision: {
+                    $elemMatch: {
+                      tenor: {
+                        $in: [
+                          PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ABLEHNUNG,
+                          PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ANNAHME,
+                          PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.VORLAGE_ERLEDIGT,
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            {
+              currentStatus: { $in: PROCEDURE_STATES.COMPLETED },
+            },
+            {
+              voteDate: { $lte: new Date() },
+            },
+          ],
+          currentStatus: {
+            $nin: [
+              PROCEDURE_DEFINITIONS.STATUS.ZURUECKGEZOGEN,
+              PROCEDURE_DEFINITIONS.STATUS.ERLEDIGT,
+            ],
+          },
+        };
+
+        return {
+          nodes: await ProcedureModel.find({ ...match })
+            .sort({ updatedAt: 1 })
+            .skip(offset)
+            .limit(limit),
+          totalCount: await ProcedureModel.count({ ...match }),
+        };
+      }
+
+      if (status) {
+        match = { ...match, currentStatus: { $in: status } };
+      }
+      if (IDs) {
+        match = { ...match, procedureId: { $in: IDs } };
+      }
+      return {
+        nodes: await ProcedureModel.find(match).skip(offset).limit(limit),
+        totalCount: await ProcedureModel.count(match),
+      };
+    },
+
     allProcedures: async (
       parent,
       {
