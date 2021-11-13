@@ -121,6 +121,11 @@ type ProcedureUpdate {
   procedures: [Procedure]
 }
 
+type ProceduresData {
+  totalCount: Int!
+  nodes: [Procedure!]!
+}
+
 type VoteResultTexts {
   results: [String!]!
 }
@@ -131,6 +136,7 @@ type Query {
   allProcedures(offset: Int, period: [Int!], type: [String!]): [Procedure]
   procedureUpdates(since: Date!, limit: Int, offset: Int, periods: [Int!], types: [String!]): ProcedureUpdate
   voteResultTextHelper(procedureId: String!): [VoteResultTexts!]
+  proceduresData(offset: Int, limit: Int, period: [Int!]!, type: [String!], IDs: [String!], status: [String!], voteDate: [Boolean!], manageVoteDate: Boolean): ProceduresData!
 }
 
 type Mutation {
