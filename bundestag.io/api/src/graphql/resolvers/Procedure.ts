@@ -1,5 +1,5 @@
 import { Resolvers, VoteResults } from './types';
-import { MongooseFilterQuery } from 'mongoose';
+import { FilterQuery } from 'mongoose';
 import diffHistory from 'mongoose-diff-history/diffHistory';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
@@ -24,6 +24,20 @@ const deputiesNumber = {
     Andere: 2,
     Fraktionslos: 2,
   },
+  20: {
+    Linke: 39,
+    SPD: 206,
+    Grüne: 118,
+    'B90/Grüne': 118,
+    CDU: 197,
+    Union: 197,
+    'CDU/CSU': 197,
+    FDP: 92,
+    AFD: 82,
+    AfD: 82,
+    Andere: 2,
+    Fraktionslos: 2,
+  },
 };
 
 const ProcedureResolvers: Resolvers = {
@@ -42,7 +56,7 @@ const ProcedureResolvers: Resolvers = {
       },
       { ProcedureModel },
     ) => {
-      let match: MongooseFilterQuery<IProcedure> = { period: { $in: period }, type: { $in: type } };
+      let match: FilterQuery<IProcedure> = { period: { $in: period }, type: { $in: type } };
       if (voteDate) {
         match = {
           ...match,
@@ -130,7 +144,7 @@ const ProcedureResolvers: Resolvers = {
       },
       { ProcedureModel },
     ) => {
-      let match: MongooseFilterQuery<IProcedure> = { period: { $in: period }, type: { $in: type } };
+      let match: FilterQuery<IProcedure> = { period: { $in: period }, type: { $in: type } };
       if (voteDate) {
         match = {
           ...match,
@@ -290,6 +304,7 @@ const ProcedureResolvers: Resolvers = {
           return prev;
         }, []);
       };
+      console.log('procedure', procedure);
 
       if (procedure) {
         const axiosInstance = axios.create();
@@ -315,6 +330,8 @@ const ProcedureResolvers: Resolvers = {
         const plenaryMinute = await PlenaryMinuteModel.findOne({
           meeting: parseInt(session.session),
         });
+
+        console.log('plenaryMinute', plenaryMinute);
 
         if (plenaryMinute) {
           const { data } = await axiosInstance.get(plenaryMinute.xml);

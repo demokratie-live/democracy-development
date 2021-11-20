@@ -9,15 +9,9 @@ import CONFIG from '../../config';
 export default async () => {
   // Connect
   try {
-    await mongoose.connect(CONFIG.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(CONFIG.DB_URL);
   } catch (err) {
-    await mongoose.createConnection(CONFIG.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.createConnection(CONFIG.DB_URL);
   }
 
   // Open

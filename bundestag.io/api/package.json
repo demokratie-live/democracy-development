@@ -1,6 +1,6 @@
 {
   "name": "bundestag.io",
-  "version": "0.1.50",
+  "version": "0.1.51",
   "main": "built/index.js",
   "author": "DEMOCRACY Deutschland e.V. <contact@democracy-deutschland.de>",
   "contributors": [
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "1.0.2",
-    "@democracy-deutschland/bundestagio-common": "0.1.15-alpha.2",
+    "@democracy-deutschland/bundestagio-common": "0.1.15-alpha.4",
     "apollo-server-express": "^2.3.3",
     "axios": "^0.19.2",
     "body-parser": "^1.18.3",
@@ -33,7 +33,7 @@
     "graphql-date": "^1.0.3",
     "lodash": "^4.17.10",
     "merge-graphql-schemas": "^1.5.0",
-    "mongoose": "5.9.24",
+    "mongoose": "6.0.12",
     "mongoose-diff-history": "^2.1.0",
     "winston": "^3.0.0",
     "winston-mongodb": "^5.0.1",
@@ -52,8 +52,5 @@
     "ts-node-dev": "^1.0.0-pre.49",
     "ts-unused-exports": "^6.2.1",
     "typescript": "^3.9.5"
-  },
-  "resolutions": {
-    "mongoose": "5.9.24"
   }
 }
