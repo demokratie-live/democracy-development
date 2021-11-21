@@ -14,7 +14,7 @@
     "start": "node built/index.js",
     "dev": "ts-node-dev --watch=resolvers,schemas --respawn src/index.ts",
     "lint": "yarn lint:ts && yarn lint:exports",
-    "lint:es": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
+    "lint:es": "eslint src --ext .js,.jsx,.ts,.tsx",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas --excludePathsFromReport=graphqlContext.ts",
     "generate": "graphql-codegen"
@@ -23,10 +23,9 @@
     "@democracy-deutschland/bundestag.io-definitions": "1.0.2",
     "@democracy-deutschland/bundestagio-common": "0.1.15-alpha.4",
     "apollo-server-express": "^2.3.3",
-    "axios": "^0.19.2",
+    "axios": "^0.24.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
-    "eslint": "^7.4.0",
     "express": "^4.16.2",
     "express-status-monitor": "^1.2.3",
     "graphql": "^15.2.0",
@@ -46,11 +45,13 @@
     "@types/express-status-monitor": "^1.2.1",
     "@types/graphql-date": "^1.0.5",
     "@types/lodash": "^4.14.157",
-    "@typescript-eslint/eslint-plugin": "^3.6.1",
-    "@typescript-eslint/parser": "^3.6.1",
-    "eslint-config-prettier": "^6.11.0",
-    "ts-node-dev": "^1.0.0-pre.49",
-    "ts-unused-exports": "^6.2.1",
-    "typescript": "^3.9.5"
+    "eslint": "^7",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.3.1",
+    "prettier": "^2.4.1",
+    "ts-node-dev": "^1.1.8",
+    "ts-unused-exports": "^7.0.3",
+    "typescript": "^4.5.2"
   }
 }
