@@ -1,12 +1,12 @@
-import mongoConnect from "./mongoose";
+import mongoConnect from './mongoose';
 
-import { Scraper } from "@democracy-deutschland/scapacra";
-import { NamedPollScraper } from "@democracy-deutschland/scapacra-bt";
+import { Scraper } from '@democracy-deutschland/scapacra';
+import { NamedPollScraper } from '@democracy-deutschland/scapacra-bt';
 
 import {
   PROCEDURE as PROCEDURE_DEFINITIONS,
   NAMEDPOLL as NAMEDPOLL_DEFINITIONS,
-} from "@democracy-deutschland/bundestag.io-definitions";
+} from '@democracy-deutschland/bundestag.io-definitions';
 
 import {
   ProcedureModel,
@@ -14,31 +14,25 @@ import {
   setCronStart,
   setCronSuccess,
   setCronError,
-} from "@democracy-deutschland/bundestagio-common";
-import { IProcedure } from "@democracy-deutschland/bundestagio-common/dist/models/Procedure/schema";
+} from '@democracy-deutschland/bundestagio-common';
+import { IProcedure } from '@democracy-deutschland/bundestagio-common/dist/models/Procedure/schema';
 
-const CRON_NAME = "NamedPolls";
+const CRON_NAME = 'NamedPolls';
 
 const start = async () => {
   const startDate = new Date();
   await setCronStart({ name: CRON_NAME, startDate });
   try {
     await Scraper.scrape(new NamedPollScraper(), async (dataPackage: any) => {
-      process.stdout.write(".");
+      process.stdout.write('.');
       let procedureId = null;
-      const documentIdsRegexp = /\D(\d{2}\/\d{4,6})\D/g;
+      const documentIdsRegexp = />(\d{2}\/\d{2,6})</g;
       const documentIds = [
-        ...new Set(
-          [...dataPackage.data.description.matchAll(documentIdsRegexp)].map(
-            (m: any) => m[1]
-          )
-        ),
+        ...new Set([...dataPackage.data.description.matchAll(documentIdsRegexp)].map((m: any) => m[1])),
       ];
 
       if (documentIds.length === 0) {
-        console.warn(
-          `[Cronjob][${CRON_NAME}] no documents on poll ${dataPackage.data.id}`
-        );
+        console.warn(`\n[Cronjob][${CRON_NAME}] no documents on poll ${dataPackage.meta.url}`);
         return;
       }
 
@@ -46,46 +40,43 @@ const start = async () => {
       // Only match those which are not an Änderungsantrag
       if (
         dataPackage.data.title.search(
-          NAMEDPOLL_DEFINITIONS.TITLE
-            .FIND_AENDERUNGSANTRAG_OR_ENTSCHLIESSUNGSANTRAG_OR_EINSPRUCH
+          NAMEDPOLL_DEFINITIONS.TITLE.FIND_AENDERUNGSANTRAG_OR_ENTSCHLIESSUNGSANTRAG_OR_EINSPRUCH,
         ) === -1 &&
         dataPackage.data.description.search(
-          NAMEDPOLL_DEFINITIONS.DESCRIPTION
-            .FIND_AENDERUNGSANTRAG_OR_ENTSCHLIESSUNGSANTRAG_OR_EINSPRUCH
+          NAMEDPOLL_DEFINITIONS.DESCRIPTION.FIND_AENDERUNGSANTRAG_OR_ENTSCHLIESSUNGSANTRAG_OR_EINSPRUCH,
         ) === -1
       ) {
+        const documentRegex = new RegExp(`${documentIds.map((d) => d.replace('/', '/')).join('|')}`, 'g');
+
         // Find matching Procedures
         procedures = await ProcedureModel.find({
-          "history.decision.document": { $in: documentIds },
-          "history.decision": {
+          importantDocuments: {
+            $elemMatch: { type: { $in: ['Antrag', 'Gesetzentwurf'] }, number: { $in: documentIds } },
+          },
+          'history.decision.document': { $regex: documentRegex },
+          'history.decision': {
             $elemMatch: {
-              type: PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE
-                .NAMENTLICHE_ABSTIMMUNG,
+              type: PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG,
               tenor: {
-                $not: PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR
-                  .FIND_AENDERUNGSANTRAG,
+                $not: PROCEDURE_DEFINITIONS.HISTORY.DECISION.TENOR.FIND_AENDERUNGSANTRAG,
               },
             },
           },
         });
 
-        // We did find too many
-        if (procedures.length > 1) {
-          console.error(
-            `[Cronjob][${CRON_NAME}] duplicate Procedure match on: ${dataPackage.meta.url}`
-          );
-        }
-
-        // We did not find anything
-        if (procedures.length === 0) {
-          console.warn(
-            `[Cronjob][${CRON_NAME}] no Procedure match on: ${dataPackage.meta.url}`
-          );
-        }
-
         // We have exactly one match and can assign the procedureId
         if (procedures.length === 1) {
           [{ procedureId }] = procedures;
+        }
+
+        // We did find too many
+        else if (procedures.length > 1) {
+          console.error(`\n[Cronjob][${CRON_NAME}] duplicate Procedure match on: ${dataPackage.meta.url}`);
+        }
+
+        // We did not find anything
+        else if (procedures.length === 0) {
+          console.warn(`\n[Cronjob][${CRON_NAME}] no Procedure match on: ${dataPackage.meta.url}`);
         }
       }
       // Construct Database object
@@ -111,35 +102,24 @@ const start = async () => {
       const existingNamedPoll = await NamedPollModel.findOne({
         webId: namedPoll.webId,
       });
-      if (
-        existingNamedPoll &&
-        existingNamedPoll.votes &&
-        existingNamedPoll.votes.all
-      ) {
-        if (
-          existingNamedPoll.votes.all.total !== dataPackage.data.votes.all.total
-        ) {
-          namedPoll["votes.all.total"] = dataPackage.data.votes.all.total;
+      if (existingNamedPoll && existingNamedPoll.votes && existingNamedPoll.votes.all) {
+        if (existingNamedPoll.votes.all.total !== dataPackage.data.votes.all.total) {
+          namedPoll['votes.all.total'] = dataPackage.data.votes.all.total;
         }
-        if (
-          existingNamedPoll.votes.all.yes !== dataPackage.data.votes.all.yes
-        ) {
-          namedPoll["votes.all.yes"] = dataPackage.data.votes.all.yes;
+        if (existingNamedPoll.votes.all.yes !== dataPackage.data.votes.all.yes) {
+          namedPoll['votes.all.yes'] = dataPackage.data.votes.all.yes;
         }
         if (existingNamedPoll.votes.all.no !== dataPackage.data.votes.all.no) {
-          namedPoll["votes.all.no"] = dataPackage.data.votes.all.no;
+          namedPoll['votes.all.no'] = dataPackage.data.votes.all.no;
         }
-        if (
-          existingNamedPoll.votes.all.abstain !==
-          dataPackage.data.votes.all.abstain
-        ) {
-          namedPoll["votes.all.abstain"] = dataPackage.data.votes.all.abstain;
+        if (existingNamedPoll.votes.all.abstain !== dataPackage.data.votes.all.abstain) {
+          namedPoll['votes.all.abstain'] = dataPackage.data.votes.all.abstain;
         }
         if (existingNamedPoll.votes.all.na !== dataPackage.data.votes.all.na) {
-          namedPoll["votes.all.na"] = dataPackage.data.votes.all.na;
+          namedPoll['votes.all.na'] = dataPackage.data.votes.all.na;
         }
       } else {
-        namedPoll["votes.all"] = dataPackage.data.votes.all;
+        namedPoll['votes.all'] = dataPackage.data.votes.all;
       }
 
       // Update Procedure Custom Data
@@ -151,19 +131,19 @@ const start = async () => {
             partyVotes: votes.parties.map((partyVote: any) => {
               const main: any = [
                 {
-                  decision: "YES",
+                  decision: 'YES',
                   value: partyVote.votes.yes,
                 },
                 {
-                  decision: "NO",
+                  decision: 'NO',
                   value: partyVote.votes.no,
                 },
                 {
-                  decision: "ABSTINATION",
+                  decision: 'ABSTINATION',
                   value: partyVote.votes.abstain,
                 },
                 {
-                  decision: "NOTVOTED",
+                  decision: 'NOTVOTED',
                   value: partyVote.votes.na,
                 },
               ].reduce(
@@ -173,7 +153,7 @@ const start = async () => {
                   }
                   return prev;
                 },
-                { value: 0 }
+                { value: 0 },
               );
               return {
                 deviants: {
@@ -202,48 +182,35 @@ const start = async () => {
               history.decision &&
               history.decision.find(
                 (decision) =>
-                  decision.type &&
-                  decision.type ===
-                    PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE
-                      .NAMENTLICHE_ABSTIMMUNG
-              )
+                  decision.type && decision.type === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG,
+              ),
           )
-          ?.decision.find(
-            ({ type }) =>
-              type ===
-              PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG
-          );
+          ?.decision.find(({ type }) => type === PROCEDURE_DEFINITIONS.HISTORY.DECISION.TYPE.NAMENTLICHE_ABSTIMMUNG);
 
         const votingRecommendationEntrys = histories.filter(
           ({ initiator }) =>
             initiator &&
-            initiator.search(
-              PROCEDURE_DEFINITIONS.HISTORY.INITIATOR
-                .FIND_BESCHLUSSEMPFEHLUNG_BERICHT
-            ) !== -1
+            initiator.search(PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.FIND_BESCHLUSSEMPFEHLUNG_BERICHT) !== -1,
         );
 
         customData.voteResults.votingDocument =
           namedHistoryEntry?.comment?.search(
-            PROCEDURE_DEFINITIONS.HISTORY.DECISION.COMMENT
-              .FIND_BESCHLUSSEMPFEHLUNG_ABLEHNUNG
+            PROCEDURE_DEFINITIONS.HISTORY.DECISION.COMMENT.FIND_BESCHLUSSEMPFEHLUNG_ABLEHNUNG,
           ) !== -1
-            ? "recommendedDecision"
-            : "mainDocument";
+            ? 'recommendedDecision'
+            : 'mainDocument';
 
         votingRecommendationEntrys.forEach((votingRecommendationEntry) => {
           if (votingRecommendationEntry.abstract) {
             if (
               votingRecommendationEntry.abstract.search(
-                PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT
-                  .EMPFEHLUNG_VORLAGE_ANNAHME
+                PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME,
               ) !== -1
             ) {
               customData.voteResults.votingRecommendation = true;
             } else if (
               votingRecommendationEntry.abstract.search(
-                PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT
-                  .EMPFEHLUNG_VORLAGE_ABLEHNUNG
+                PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG,
               ) !== -1
             ) {
               customData.voteResults.votingRecommendation = false;
@@ -254,30 +221,26 @@ const start = async () => {
         if (
           procedures &&
           procedures[0] &&
-          procedures[0].currentStatus === "Abgelehnt" &&
-          customData.voteResults.votingDocument === "mainDocument" &&
+          procedures[0].currentStatus === 'Abgelehnt' &&
+          customData.voteResults.votingDocument === 'mainDocument' &&
           customData.voteResults.yes > customData.voteResults.no
         ) {
           // Toggle Voting Document
-          customData.voteResults.votingDocument = "recommendedDecision";
-          console.log(procedureId, customData);
+          customData.voteResults.votingDocument = 'recommendedDecision';
         }
 
         await ProcedureModel.findOneAndUpdate({ procedureId }, { customData });
 
         // Define inverseVoteDirection on NamedPoll
         const inverseVoteDirection =
-          customData.voteResults.votingDocument === "recommendedDecision" &&
+          customData.voteResults.votingDocument === 'recommendedDecision' &&
           customData.voteResults.votingRecommendation === false;
         if (
           !existingNamedPoll ||
           !existingNamedPoll.votes ||
-          !(
-            existingNamedPoll.votes.inverseVoteDirection ===
-            inverseVoteDirection
-          )
+          !(existingNamedPoll.votes.inverseVoteDirection === inverseVoteDirection)
         ) {
-          namedPoll["votes.inverseVoteDirection"] = inverseVoteDirection;
+          namedPoll['votes.inverseVoteDirection'] = inverseVoteDirection;
         }
       }
 
@@ -285,29 +248,22 @@ const start = async () => {
       if (
         !existingNamedPoll ||
         !existingNamedPoll.votes ||
-        !(
-          JSON.stringify(existingNamedPoll.votes.parties) ===
-          JSON.stringify(dataPackage.data.votes.parties)
-        )
+        !(JSON.stringify(existingNamedPoll.votes.parties) === JSON.stringify(dataPackage.data.votes.parties))
       ) {
-        namedPoll["votes.parties"] = dataPackage.data.votes.parties;
+        namedPoll['votes.parties'] = dataPackage.data.votes.parties;
       }
 
       // Update/Insert
-      await NamedPollModel.findOneAndUpdate(
-        { webId: namedPoll.webId },
-        { $set: namedPoll },
-        { upsert: true }
-      );
+      await NamedPollModel.findOneAndUpdate({ webId: namedPoll.webId }, { $set: namedPoll }, { upsert: true });
     });
 
     // Validate Data - find duplicate matches which is an error!
     const duplicateMatches = await NamedPollModel.aggregate([
       {
         $group: {
-          _id: "$procedureId",
+          _id: '$procedureId',
           count: { $sum: 1 },
-          namedpolls: { $push: "$webId" },
+          namedpolls: { $push: '$webId' },
         },
       },
       {
@@ -321,11 +277,9 @@ const start = async () => {
       // TODO clarify this should be an error - matching should be better
       duplicateMatches.forEach((duplicate) => {
         console.error(
-          `[Cronjob][${CRON_NAME}] Duplicate Matches(${
-            duplicate.count
-          }) on procedureId ${
+          `\n[Cronjob][${CRON_NAME}] Duplicate Matches(${duplicate.count}) on procedureId ${
             duplicate._id // eslint-disable-line no-underscore-dangle
-          } for NamedPolls: ${duplicate.namedpolls.join(",")}`
+          } for NamedPolls: ${duplicate.namedpolls.join(',')}`,
         );
       });
     }
@@ -337,13 +291,13 @@ const start = async () => {
 };
 
 (async () => {
-  console.info("START");
-  console.info("process.env", process.env.DB_URL);
+  console.info('START');
+  console.info('process.env', process.env.DB_URL);
   if (!process.env.DB_URL) {
-    throw new Error("you have to set environment variable: DB_URL");
+    throw new Error('you have to set environment variable: DB_URL');
   }
   await mongoConnect();
-  console.log("procedures", await ProcedureModel.countDocuments({}));
+  console.log('procedures', await ProcedureModel.countDocuments({}));
   await start().catch(() => process.exit(1));
   process.exit(0);
 })();
