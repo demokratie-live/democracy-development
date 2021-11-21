@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 
 services:
   bundestag-io:
@@ -8,7 +8,6 @@ services:
     command: yarn run dev
     volumes:
       - ./bundestag.io/api:/app
-      - bundestag-io-node_modules:/app/node_modules
   bio-admin:
     build:
       context: bundestag.io/admin
@@ -16,7 +15,6 @@ services:
     command: yarn run dev
     volumes:
       - ./bundestag.io/admin:/app
-      - bundestag-io-admin-node_modules:/app/node_modules
   dip:
     restart: always
     build:
@@ -25,7 +23,6 @@ services:
     command: yarn run dev
     volumes:
       - ./bundestag.io/dip:/app
-      - dip-node_modules:/app/node_modules
     environment:
       - RATE_LIMIT=3
       - NODE_ENV=development
@@ -36,7 +33,6 @@ services:
     command: yarn run dev
     volumes:
       - ./democracy/api:/app
-      - democracy-api-node_modules:/app/node_modules
   democracy-web-app:
     build:
       context: democracy/web-app
@@ -44,11 +40,3 @@ services:
     command: yarn run dev
     volumes:
       - ./democracy/web-app:/app
-      - democracy-web-app-node_modules:/app/node_modules
-
-volumes:
-  bundestag-io-node_modules:
-  bundestag-io-admin-node_modules:
-  dip-node_modules:
-  democracy-api-node_modules:
-  democracy-web-app-node_modules:
