@@ -1,6 +1,6 @@
 {
   "name": "crawler",
-  "version": "1.0.6-1239-alpha.1",
+  "version": "1.0.7",
   "description": "Kubernetes cron-job to collect data from various sources for bundestag.io",
   "main": "index.ts",
   "repository": "https://github.com/demokratie-live/democracy-development/",

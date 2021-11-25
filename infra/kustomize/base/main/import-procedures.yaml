@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: import-procedures-cronjob
 spec:
-  schedule: "0 1 * * *"
+  schedule: '0 1 * * *'
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 200
   jobTemplate:
@@ -14,8 +14,8 @@ spec:
           restartPolicy: Never
           containers:
             - name: import-procedures
-              image: democracy/crawler:1.0.6
+              image: democracy/crawler:1.0.7
               envFrom:
                 - configMapRef:
                     name: crawler-config
-              command: ["yarn", "run", "start:import-procedures"]
+              command: ['yarn', 'run', 'start:import-procedures']
