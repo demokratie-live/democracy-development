@@ -14,7 +14,8 @@ const error = debug('bundestag-io:import-procedures:error');
     await importProcedures({
       ...config,
       IMPORT_PROCEDURES_FILTER_AFTER:
-        cronjob?.lastSuccessDate?.toISOString().slice(0, 10) || config.IMPORT_PROCEDURES_FILTER_AFTER,
+        // cronjob?.lastSuccessDate?.toISOString().slice(0, 10) ||
+        config.IMPORT_PROCEDURES_FILTER_AFTER,
     });
     await setCronSuccess({ name: 'import-procedures', successStartDate: cronjob.lastStartDate || new Date() });
   } catch (err) {
