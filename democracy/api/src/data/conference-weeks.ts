@@ -38,8 +38,8 @@ const conferenceWeeks = [
     end: parseDate('19.11.2021'),
   },
   {
-    start: parseDate('29.11.2021'),
-    end: parseDate('03.12.2021'),
+    start: parseDate('06.12.2021'),
+    end: parseDate('10.12.2021'),
   },
   {
     start: parseDate('13.12.2021'),
