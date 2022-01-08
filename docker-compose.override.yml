@@ -8,6 +8,7 @@ services:
     command: yarn run dev
     volumes:
       - ./bundestag.io/api:/app
+      - /app/node_modules
   bio-admin:
     build:
       context: bundestag.io/admin
@@ -15,6 +16,7 @@ services:
     command: yarn run dev
     volumes:
       - ./bundestag.io/admin:/app
+      - /app/node_modules
   dip:
     restart: always
     build:
@@ -23,6 +25,7 @@ services:
     command: yarn run dev
     volumes:
       - ./bundestag.io/dip:/app
+      - /app/node_modules
     environment:
       - RATE_LIMIT=3
       - NODE_ENV=development
@@ -33,6 +36,7 @@ services:
     command: yarn run dev
     volumes:
       - ./democracy/api:/app
+      - /app/node_modules
   democracy-web-app:
     build:
       context: democracy/web-app
@@ -40,3 +44,4 @@ services:
     command: yarn run dev
     volumes:
       - ./democracy/web-app:/app
+      - /app/node_modules
