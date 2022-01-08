@@ -74,6 +74,7 @@ Für den bundestag.io (Bundestags-API) [hier](https://github.com/demokratie-live
 ## Running the Dev Environment
 
 Run the following:
+
 ```
 git clone git@github.com:demokratie-live/democracy-development.git
 cd democracy-development
@@ -85,26 +86,42 @@ You need to have a [MongoDB][mongo] running as well as [NodeJS][node] installed
 on your system.
 
 If you need further configuration, you can do:
+
 ```
 cp .env.example .env
 ```
+
 Change `.env` if necessary.
 
 Once this is set up, run the following:
+
 ```
 yarn install
 yarn run dev
 ```
+
 Now visit [localhost:3100][localhost] and you should see the GraphQL playground.
 
 ### With docker
 
 Run:
+
 ```
 docker-compose up
 ```
 
 Now visit [localhost:3100][localhost] and you should see the GraphQL playground.
+
+### Kuberneetes
+
+#### Preparation
+
+install kustomize `brew install kustomize`
+
+#### Generate Kubernetes configs
+
+run `yarn build:k8s:STAGE`
+_replace Stage with alpha|internal|local|prod_
 
 ## Contributing
 
