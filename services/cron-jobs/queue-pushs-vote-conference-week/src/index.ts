@@ -1,5 +1,5 @@
-import mongoConnect from "./mongoose";
-import moment from "moment";
+import mongoConnect from './mongoose';
+import moment from 'moment';
 
 import {
   ProcedureModel,
@@ -12,9 +12,9 @@ import {
   UserModel,
   VoteModel,
   PushNotificationModel,
-} from "@democracy-deutschland/democracy-common";
+} from '@democracy-deutschland/democracy-common';
 
-import { filterSeries, reduce } from "p-iteration";
+import { filterSeries, reduce } from 'p-iteration';
 
 const start = async () => {
   /*
@@ -23,19 +23,16 @@ const start = async () => {
   (Innerhalb der Sitzungswoche, nicht abgestimmt, nicht vergangen, 1x pro Tag, individuell)
   */
 
-  const CRON_NAME = "queuePushsVoteConferenceWeek";
+  const CRON_NAME = 'queuePushsVoteConferenceWeek';
   const startDate = new Date();
   let counter = 0;
   await setCronStart({ name: CRON_NAME, startDate });
 
   // Check if we have a ConferenceWeek
-  const startOfWeek = moment().startOf("isoWeek").toDate(); // Should be Mo
-  const endOfWeek = moment().endOf("isoWeek").toDate(); // Should be So
+  const startOfWeek = moment().startOf('isoWeek').toDate(); // Should be Mo
+  const endOfWeek = moment().endOf('isoWeek').toDate(); // Should be So
   const conferenceProceduresCount = await ProcedureModel.count({
-    $and: [
-      { voteDate: { $gte: startOfWeek } },
-      { voteDate: { $lte: endOfWeek } },
-    ],
+    $and: [{ voteDate: { $gte: startOfWeek } }, { voteDate: { $lte: endOfWeek } }],
   });
 
   // Dont Push ConfereceWeek Updates if we have dont have an active conferenceWeek
@@ -46,13 +43,10 @@ const start = async () => {
 
   // find ConferenceWeek procedures not voted
   const conferenceWeekProcedures = await ProcedureModel.find({
-    period: 19,
+    period: 20,
     $or: [
       {
-        $and: [
-          { voteDate: { $gte: new Date() } },
-          { $or: [{ voteEnd: { $exists: false } }, { voteEnd: undefined }] },
-        ],
+        $and: [{ voteDate: { $gte: new Date() } }, { $or: [{ voteEnd: { $exists: false } }, { voteEnd: undefined }] }],
       },
       { voteEnd: { $gte: new Date() } },
     ],
@@ -60,8 +54,8 @@ const start = async () => {
 
   // Find Devices
   let devices = await DeviceModel.find({
-    "notificationSettings.enabled": true,
-    "notificationSettings.voteConferenceWeekPushs": true,
+    'notificationSettings.enabled': true,
+    'notificationSettings.voteConferenceWeekPushs': true,
     pushTokens: { $gt: [] },
   });
 
@@ -84,7 +78,7 @@ const start = async () => {
       if (user) {
         voted = await VoteModel.findOne({
           procedure: procedure._id,
-          type: "Phone",
+          type: 'Phone',
           voters: {
             $elemMatch: {
               voter: user.phone,
@@ -106,7 +100,7 @@ const start = async () => {
             token: token.token,
             os: token.os,
             time: {
-              $gte: moment().subtract(1, "weeks").toDate(),
+              $gte: moment().subtract(1, 'weeks').toDate(),
             },
           });
           if (pastPushs === 0) {
@@ -117,7 +111,7 @@ const start = async () => {
         [] as Array<{
           token: string;
           os: string;
-        }>
+        }>,
       );
       // Dont send Pushs - User has not Tokens registered or has recieved a Push for this Procedure lately
       if (tokens.length === 0) {
@@ -133,7 +127,7 @@ const start = async () => {
       await queuePushs({
         type: PUSH_TYPE.PROCEDURE,
         category: PUSH_CATEGORY.CONFERENCE_WEEK_VOTE,
-        title: "Diese Woche im Bundestag: Jetzt Abstimmen!",
+        title: 'Diese Woche im Bundestag: Jetzt Abstimmen!',
         message: procedure.title,
         procedureIds: [procedure.procedureId],
         tokens,
@@ -149,19 +143,13 @@ const start = async () => {
 };
 
 (async () => {
-  console.info("START");
-  console.info(
-    "process.env",
-    process.env.BUNDESTAGIO_SERVER_URL,
-    process.env.DB_URL
-  );
+  console.info('START');
+  console.info('process.env', process.env.BUNDESTAGIO_SERVER_URL, process.env.DB_URL);
   if (!process.env.BUNDESTAGIO_SERVER_URL) {
-    throw new Error(
-      "you have to set environment variable: BUNDESTAGIO_SERVER_URL & DB_URL"
-    );
+    throw new Error('you have to set environment variable: BUNDESTAGIO_SERVER_URL & DB_URL');
   }
   await mongoConnect();
-  console.log("procedures", await ProcedureModel.countDocuments({}));
+  console.log('procedures', await ProcedureModel.countDocuments({}));
   await start().catch(() => process.exit(1));
   process.exit(0);
 })();
