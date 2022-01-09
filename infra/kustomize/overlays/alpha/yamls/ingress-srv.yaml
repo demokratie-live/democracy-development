@@ -1,11 +1,11 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-service
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+    cert-manager.io/cluster-issuer: 'letsencrypt-prod'
 spec:
   tls:
     - hosts:
@@ -20,34 +20,49 @@ spec:
       http:
         paths:
           - path: /?(.*)
+            pathType: Prefix
             backend:
-              serviceName: democracy-api-srv
-              servicePort: 3000
+              service:
+                name: democracy-api-srv
+                port:
+                  number: 3000
     - host: alpha.democracy-app.de
       http:
         paths:
           - path: /?(.*)
+            pathType: Prefix
             backend:
-              serviceName: democracy-app-srv
-              servicePort: 3000
+              service:
+                name: democracy-app-srv
+                port:
+                  number: 3000
     - host: alpha.api.bundestag.io
       http:
         paths:
           - path: /?(.*)
+            pathType: Prefix
             backend:
-              serviceName: bundestagio-srv
-              servicePort: 3100
+              service:
+                name: bundestagio-srv
+                port:
+                  number: 3100
     - host: alpha.admin.bundestag.io
       http:
         paths:
           - path: /?(.*)
+            pathType: Prefix
             backend:
-              serviceName: bundestagio-admin-srv
-              servicePort: 3000
+              service:
+                name: bundestagio-admin-srv
+                port:
+                  number: 3000
     - host: alpha.dip.bundestag.io
       http:
         paths:
           - path: /?(.*)
+            pathType: Prefix
             backend:
-              serviceName: bundestagio-dip-srv
-              servicePort: 3101
+              service:
+                name: bundestagio-dip-srv
+                port:
+                  number: 3101
