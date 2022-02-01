@@ -495,7 +495,11 @@ const VoteApi: Resolvers = {
       }
     },
 
-    deputyVotes: async (voteResult, { constituencies, directCandidate }, { DeputyModel }) => {
+    deputyVotes: async (
+      voteResult,
+      { constituencies, directCandidate, webIds },
+      { DeputyModel },
+    ) => {
       logger.graphql('VoteResult.deputyVotes');
       // Do we have a procedureId and not an empty array for constituencies?
       if (
@@ -515,6 +519,10 @@ const VoteApi: Resolvers = {
         // Match for directCandidate
         if (directCandidate) {
           match.$match = { ...match.$match, directCandidate };
+        }
+
+        if (webIds) {
+          match.$match = { ...match.$match, webId: { $in: webIds } };
         }
 
         // Query

@@ -522,6 +522,7 @@ export type VoteResult = {
 export type VoteResultDeputyVotesArgs = {
   constituencies?: Maybe<Array<Scalars['String']>>;
   directCandidate?: Maybe<Scalars['Boolean']>;
+  webIds?: Maybe<Array<Scalars['String']>>;
 };
 
 export enum VoteSelection {

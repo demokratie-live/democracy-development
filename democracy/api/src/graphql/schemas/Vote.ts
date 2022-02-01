@@ -39,7 +39,7 @@ export default `
     decisionText: String
     namedVote: Boolean!
     partyVotes: [PartyVote!]!
-    deputyVotes(constituencies: [String!], directCandidate: Boolean): [DeputyVote!]!
+    deputyVotes(constituencies: [String!], directCandidate: Boolean, webIds: [String!]): [DeputyVote!]!
   }
 
   type PartyVote {
