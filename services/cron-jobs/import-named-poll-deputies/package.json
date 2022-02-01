@@ -13,14 +13,14 @@
   },
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
-    "@democracy-deutschland/bundestagio-common": "^0.1.14",
+    "@democracy-deutschland/bundestagio-common": "^0.1.15-alpha.4",
     "@democracy-deutschland/scapacra-bt": "^1.0.28",
     "http2": "^3.3.7"
   },
   "devDependencies": {
-    "dotenv": "^10.0.0",
-    "ts-node-dev": "^1.0.0-pre.49",
-    "ts-unused-exports": "^6.2.1",
-    "typescript": "^3.9.5"
+    "dotenv": "^14.3.2",
+    "ts-node-dev": "^1.1.8",
+    "ts-unused-exports": "^7.0.3",
+    "typescript": "^4.5.5"
   }
 }
