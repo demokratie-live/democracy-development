@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: import-named-poll-deputies-cronjob
 spec:
-  schedule: "45 1 * * *"
+  schedule: '45 1 * * *'
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 200
   jobTemplate:
@@ -14,7 +14,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: import-named-poll-deputies
-              image: democracy/import-named-poll-deputies:0.1.1
+              image: democracy/import-named-poll-deputies:0.1.2
               env:
                 - name: DB_URL
                   valueFrom:
