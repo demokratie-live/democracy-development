@@ -526,27 +526,33 @@ const VoteApi: Resolvers = {
         }
 
         // Query
-        const deputies = await DeputyModel.aggregate<IDeputy>([match]);
+        const deputies = await DeputyModel.aggregate<IDeputy>([
+          match,
+          { $addFields: { statusValue: { $indexOfArray: [webIds, '$webId'] } } },
+          { $sort: { statusValue: 1 } },
+        ]);
 
         // Construct result
-        return deputies.reduce<
-          {
-            decision: VoteSelection;
-            deputy: IDeputy;
-          }[]
-        >((pre, deputy) => {
-          const pDeputyVote = deputy.votes.find(
-            ({ procedureId }) => procedureId === voteResult.procedureId,
-          );
-          if (pDeputyVote) {
-            const deputyVote = {
-              decision: pDeputyVote.decision,
-              deputy: deputy,
-            };
-            return [...pre, deputyVote];
-          }
-          return pre;
-        }, []);
+        return deputies
+          .reduce<
+            {
+              decision: VoteSelection;
+              deputy: IDeputy;
+            }[]
+          >((pre, deputy) => {
+            const pDeputyVote = deputy.votes.find(
+              ({ procedureId }) => procedureId === voteResult.procedureId,
+            );
+            if (pDeputyVote) {
+              const deputyVote = {
+                decision: pDeputyVote.decision,
+                deputy: deputy,
+              };
+              return [...pre, deputyVote];
+            }
+            return pre;
+          }, [])
+          .sort((a, b) => webIds.indexOf(a.deputy.webId) - webIds.indexOf(b.deputy.webId));
       }
       return [];
     },

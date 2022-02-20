@@ -60,10 +60,16 @@ const DeputyApi: Resolvers = {
         conditions.webId = { $nin: excludeIds };
       }
       const total = await DeputyModel.count(conditions);
+
+      const deputies = await DeputyModel.find(conditions)
+        .sort({ name: 1 })
+        .limit(limit)
+        .skip(offset);
+
       return {
         total,
         hasMore: offset + limit < total,
-        data: await DeputyModel.find(conditions).sort({ name: 1 }).limit(limit).skip(offset),
+        data: deputies.sort((a, b) => filterIds?.indexOf(a.webId) - filterIds?.indexOf(b.webId)),
       };
     },
     deputy: async (_parent, { id }) => {
