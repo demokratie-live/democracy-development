@@ -7,19 +7,20 @@ const SearchTermApi: Resolvers = {
   Query: {
     mostSearched: async (parent, args, { SearchTermModel }) => {
       logger.graphql('SearchTerm.query.mostSearched');
-      const result = await SearchTermModel.aggregate([
-        { $unwind: '$times' },
-        {
-          $group: {
-            _id: '$term',
-            times: { $push: '$times' },
-            size: { $sum: 1 },
-          },
-        },
-        { $sort: { size: -1 } },
-        { $limit: 10 },
-      ]);
-      return result.map(({ _id }) => ({ term: _id }));
+      // const result = await SearchTermModel.aggregate([
+      //   { $unwind: '$times' },
+      //   {
+      //     $group: {
+      //       _id: '$term',
+      //       times: { $push: '$times' },
+      //       size: { $sum: 1 },
+      //     },
+      //   },
+      //   { $sort: { size: -1 } },
+      //   { $limit: 10 },
+      // ]);
+      // return result.map(({ _id }) => ({ term: _id }));
+      return [];
     },
   },
   Mutation: {
