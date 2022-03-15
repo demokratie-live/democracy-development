@@ -52,6 +52,14 @@ const DeviceApi: Resolvers = {
       { user, device, phone, PhoneModel, VerificationModel },
     ) => {
       logger.graphql('Device.mutation.requestCode');
+
+      return {
+        allowNewUser: false,
+        resendTime: 99,
+        expireTime: 99,
+        succeeded: false,
+      };
+
       // Check for SMS Verification
       if (!CONFIG.SMS_VERIFICATION) {
         return {
