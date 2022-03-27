@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: democracy-api
-          image: democracy/democracy-server:0.2.49
+          image: democracy/democracy-server:0.2.57
           envFrom:
             - configMapRef:
                 name: democracy-api-config
@@ -34,3 +34,7 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
+    - name: democracy-api-metrics
+      protocol: TCP
+      port: 3400
+      targetPort: 3400

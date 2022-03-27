@@ -6,4 +6,5 @@ node_modules
 infra/*.yaml
 configuration/*
 !configuration/*.example
-!.gitkeep
+docker_volumes/*/*
+!/**/.gitkeep

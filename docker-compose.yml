@@ -13,7 +13,6 @@ services:
     depends_on:
       - 'redis'
     environment:
-      - GORUSH_ANDROID_APIKEY="NONE"
       - GORUSH_STAT_ENGINE=redis
       - GORUSH_STAT_REDIS_ADDR=redis:6379
     volumes:
@@ -59,6 +58,7 @@ services:
       target: production_stage
     ports:
       - 3000:3000
+      - 3400:3400
     depends_on:
       - mongo
     env_file: ./democracy/api/.env
@@ -76,6 +76,39 @@ services:
     environment:
       - GRAPHQL_URL=http://localhost:3000/
       - GRAPHQL_URL_SERVER=http://democracy-api:3000/
+  loki:
+    image: grafana/loki:2.4.2
+    volumes:
+      - ./docker_volumes/loki:/etc/loki
+    ports:
+      - 3301:3100
+    restart: unless-stopped
+    command: --config.file=/etc/loki/loki-config.yml
+  promtail:
+    image: grafana/promtail:2.4.0
+    volumes:
+      - /var/log:/var/log
+      - ./docker_volumes/promtail:/etc/promtail
+    # ports:
+    #   - "1514:1514" # this is only needed if you are going to send syslogs
+    restart: unless-stopped
+    command: -config.file=/etc/promtail/promtail-config.yml
+  grafana:
+    image: grafana/grafana:latest
+    user: '501'
+    volumes:
+      - ./docker_volumes/grafana:/var/lib/grafana
+    ports:
+      - '3300:3000'
+    restart: unless-stopped
+  prometheus:
+    image: prom/prometheus:v2.34.0
+    ports:
+      - 9090:9090
+    volumes:
+      - ./docker_volumes/prometheus:/etc/prometheus
+      - /prometheus
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
 
 volumes:
   democracy-mongodb:
