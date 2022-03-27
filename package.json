@@ -26,6 +26,7 @@
     "s:q:conference-weeks": "cd services/cron-jobs/queue-pushs-conference-week && yarn && yarn dev",
     "s:q:vote-conference-weeks": "cd services/cron-jobs/queue-pushs-vote-conference-week && yarn && yarn dev",
     "s:q:top-100": "cd services/cron-jobs/queue-pushs-vote-top-100 && yarn && yarn dev",
+    "s:push": "cd services/cron-jobs/push-send-queued && yarn && yarn dev",
     "s:s:deputy-profiles": "cd services/cron-jobs/sync-deputy-profiles && yarn && yarn dev",
     "s:s:named-polls": "cd services/cron-jobs/sync-named-polls && yarn && yarn dev",
     "s:s:procedures": "cd services/cron-jobs/sync-procedures && yarn && yarn dev",

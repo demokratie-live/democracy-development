@@ -8,6 +8,22 @@ import resolvers from '../../graphql/resolvers';
 import { permissions } from '../../express/auth/permissions';
 import DataLoader from 'dataloader';
 import { votedLoader } from '../../graphql/resolvers/dataLoaders';
+import express from 'express';
+import { createPrometheusExporterPlugin } from '@bmatei/apollo-prometheus-exporter';
+
+const app = express();
+
+app.get('/test', () => 'hallo');
+
+app.listen('3400', () => {
+  console.log('Apollo Prometheus Exporter server running on http://localhost:3400/');
+});
+
+const prometheusExporterPlugin = createPrometheusExporterPlugin({
+  app,
+  // metricsEndpointPath: '/metrics',
+  // metricsEndpoint: true,
+});
 
 // Models
 import {
@@ -41,6 +57,7 @@ const graphql = new ApolloServer({
   resolvers,
   introspection: true,
   playground: CONFIG.GRAPHIQL,
+  plugins: [prometheusExporterPlugin],
   context: ({ req, res }: { req: ExpressReqContext; res: Express.Response }) => ({
     // Connection
     res,

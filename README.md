@@ -123,6 +123,14 @@ install kustomize `brew install kustomize`
 run `yarn build:k8s:STAGE`
 _replace Stage with alpha|internal|local|prod_
 
+#### Monitoring
+
+https://www.youtube.com/watch?v=h_GGd7HfKQ8
+
+- run `id` in your terminal and copy first uid and replace `user: 'YOUR_UID'` in docker-compose.yml file
+- install `docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions`
+- do configure docker loki plugin **Change the default logging driver**: https://grafana.com/docs/loki/latest/clients/docker-driver/configuration/#change-the-default-logging-driver
+
 ## Contributing
 
 Anyone and everyone is welcome to [contribute](https://github.com/demokratie-live/democracy-development/blob/master/CONTRIBUTE.md). Start by checking out the list of
