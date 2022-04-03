@@ -26,6 +26,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: democracy-api-srv
+  labels:
+    app: democracy-api
 spec:
   selector:
     app: democracy-api
@@ -34,7 +36,20 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
-    - name: democracy-api-metrics
-      protocol: TCP
+    - name: metrics
       port: 3400
       targetPort: 3400
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: prometheus
+  name: democracy-api-exporter
+spec:
+  endpoints:
+    - port: metrics
+  namespaceSelector: {}
+  selector:
+    matchLabels:
+      app: democracy-api
