@@ -1282,7 +1282,7 @@ mongoose-diff-history@^2.1.0:
     deep-empty-object "^1.0.5"
     jsondiffpatch "^0.1.38"
     lodash.pick "^4.4.0"
-    omit-deep "git://github.com/izigibran/omit-deep.git#0.4.0"
+    omit-deep "https://github.com/izigibran/omit-deep.git#0.4.0"
     power-assign "^0.2.10"
 
 mongoose-legacy-pluralize@1.0.2:
@@ -1422,9 +1422,9 @@ omit-deep@^0.3.0:
     is-plain-object "^2.0.1"
     unset-value "^0.1.1"
 
-"omit-deep@git://github.com/izigibran/omit-deep.git#0.4.0":
+"omit-deep@https://github.com/izigibran/omit-deep.git#0.4.0":
   version "0.3.0"
-  resolved "git://github.com/izigibran/omit-deep.git#3727e48ecdbd58cb50a2a8aba1911f8d2c9fdde9"
+  resolved "https://github.com/izigibran/omit-deep.git#3727e48ecdbd58cb50a2a8aba1911f8d2c9fdde9"
   dependencies:
     is-plain-object "^2.0.1"
     unset-value "^0.1.1"
