@@ -1,20 +1,16 @@
-import { mongoose } from "@democracy-deutschland/bundestagio-common";
+import { mongoose } from '@democracy-deutschland/bundestagio-common';
 
 let connection: typeof mongoose;
 
 export const mongoConnect = async () => {
-  mongoose.set("useFindAndModify", false);
-  mongoose.set("debug", false);
+  mongoose.set('debug', false);
 
-  connection = await mongoose.connect(process.env.DB_URL!, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  connection = await mongoose.connect(process.env.DB_URL!);
 
-  mongoose.connection.once("connected", () => {
-    console.info("MongoDB is running");
+  mongoose.connection.once('connected', () => {
+    console.info('MongoDB is running');
   });
-  mongoose.connection.on("error", (e: Error) => {
+  mongoose.connection.on('error', (e: Error) => {
     console.error(e.stack);
     throw e;
   });

@@ -9,10 +9,10 @@
   dependencies:
     typescript "^3.7.2"
 
-"@democracy-deutschland/bundestagio-common@^0.1.15-alpha.4":
-  version "0.1.15-alpha.4"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bundestagio-common/-/bundestagio-common-0.1.15-alpha.4.tgz#6bdf4edebcb58cfd7153bf91270f7d611acee57c"
-  integrity sha512-MjKjKINDOjQnIOvCmlj9yXTGDSAGROz3fwFez+ACBNmkSNEtA6XrZ8Si0v4e9kvXuoUmSMhpbt56t7gyjVsPdQ==
+"@democracy-deutschland/bundestagio-common@0.1.16":
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bundestagio-common/-/bundestagio-common-0.1.16.tgz#04a55005d498758d0c2f0d423d8a57af7725e5ca"
+  integrity sha512-nLVqzShop/rE0leGdqSWqeXllIcrL3Epeh18BfnNqTMBd1hXj/axsmmo/jjn7mnPTvrZFuWZireelnapa4ejFA==
   dependencies:
     "@democracy-deutschland/bundestag.io-definitions" "^1.0.2"
     "@types/cron" "^1.7.2"
@@ -20,7 +20,7 @@
     jsonwebtoken "^8.5.1"
     mongoosastic "^4.6.0"
     mongoose "^6.0.12"
-    mongoose-diff-history "^2.1.0"
+    mongoose-diff-history mimani/mongoose-diff-history#master
     omit-deep "^0.3.0"
     ts-mongoose "^0.0.24"
 
@@ -744,10 +744,9 @@ mongoosastic@^4.6.0:
     elasticsearch "16.7.1"
     lodash.clonedeep "4.5.0"
 
-mongoose-diff-history@^2.1.0:
+"mongoose-diff-history@github:mimani/mongoose-diff-history#master":
   version "2.1.0"
-  resolved "https://registry.yarnpkg.com/mongoose-diff-history/-/mongoose-diff-history-2.1.0.tgz#1c8fe9222ccb99e80dece57daefe1f3fa083f536"
-  integrity sha512-p6mj4bpKVkD+5WDxpw7uQzHRVT5wFmOvKXfUPfryHn82MM3P6a+Q5vI/+DLrAeHmY2jak/9FxFsKuSvzCF0GWQ==
+  resolved "https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86"
   dependencies:
     deep-empty-object "^1.0.5"
     jsondiffpatch "^0.1.38"
