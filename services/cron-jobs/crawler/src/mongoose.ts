@@ -1,31 +1,23 @@
-import config from './config';
 import { mongoose } from '@democracy-deutschland/bundestagio-common';
 
 let connection: typeof mongoose;
 
-export const mongoConnect: () => Promise<void> = async () => {
-  mongoose.set('useFindAndModify', false);
+export const mongoConnect = async () => {
   mongoose.set('debug', false);
 
-  connection = await mongoose.connect(config.MONGO_DB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  connection = await mongoose.connect(process.env.DB_URL!);
 
   mongoose.connection.once('connected', () => {
-    // eslint-disable-next-line no-console
     console.info('MongoDB is running');
   });
-  mongoose.connection.on('error', (err: Error) => {
-    // eslint-disable-next-line no-console
-    console.error(err.stack);
-    throw err;
+  mongoose.connection.on('error', (e: Error) => {
+    console.error(e.stack);
+    throw e;
   });
 };
 
-export const mongoDisconnect: () => Promise<void> = () => {
+export const mongoDisconnect = () => {
   if (connection) {
     return connection.disconnect();
   }
-  return Promise.resolve();
 };
