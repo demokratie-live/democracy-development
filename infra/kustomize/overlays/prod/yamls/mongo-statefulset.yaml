@@ -6,8 +6,8 @@ spec:
   selector:
     matchLabels:
       app: mongo
-  serviceName: "mongo"
-  replicas: 3
+  serviceName: 'mongo'
+  replicas: 5
   template:
     metadata:
       labels:
@@ -17,16 +17,16 @@ spec:
         - name: mongo
           command:
             - mongod
-            - "--bind_ip_all"
-            - "--replSet"
+            - '--bind_ip_all'
+            - '--replSet'
             - rs0
           resources:
             requests:
-              memory: "2.5G"
-              cpu: "300m"
+              memory: '3G'
+              cpu: '300m'
             limits:
-              memory: "5G"
-              cpu: "1500m"
+              memory: '5G'
+              cpu: '2000m'
   volumeClaimTemplates:
     - metadata:
         name: mongo-volume
