@@ -17,10 +17,10 @@ export default function Example() {
   return (
     <Disclosure as="nav" className="fixed top-0 z-50 w-full bg-white shadow">
       {({ open }) => (
-        <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
             <div className="flex h-16 justify-between">
-              <div className="flex px-2 lg:px-0">
+              <div className="flex">
                 <div className="flex shrink-0 items-center">
                   <img
                     className="hidden h-[38px] w-auto lg:flex"
@@ -51,7 +51,7 @@ export default function Example() {
                   ))}
                 </div>
               </div>
-              <div className="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
+              <div className="flex flex-1 items-center justify-center pl-2 lg:ml-6 lg:justify-end">
                 <div className="w-full max-w-lg lg:max-w-xs">
                   <label htmlFor="search" className="sr-only">
                     Suche
@@ -242,7 +242,7 @@ export default function Example() {
               </div>
             </div>
           </Disclosure.Panel>
-        </>
+        </div>
       )}
     </Disclosure>
   );

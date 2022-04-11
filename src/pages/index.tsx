@@ -1595,16 +1595,18 @@ const Index = () => {
           <div className="h-1/3 bg-white sm:h-2/3" />
         </div> */}
         <div className="relative mx-auto max-w-7xl">
-          <div className="text-center">
-            <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              Abgestimmt
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-xl text-gray-500 sm:mt-4">
-              Hier siehst Du alle bereits abgestimmten Vorgänge
-            </p>
-          </div>
-          <div className="mt-4 flex justify-end">
-            <FilterDropdown />
+          <div className="flex flex-col items-center text-center md:flex-row md:items-end md:justify-between md:text-left">
+            <div className="">
+              <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                Abgestimmt
+              </h2>
+              <p className="-mt-1 max-w-2xl text-base text-gray-600">
+                Hier siehst Du alle bereits abgestimmten Vorgänge
+              </p>
+            </div>
+            <div className="mt-4 flex justify-end">
+              <FilterDropdown />
+            </div>
           </div>
           <div className="3xl:grid-cols-4 mx-auto mt-6 grid max-w-md gap-5 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3">
             {data.data.procedures.map((item) => (
