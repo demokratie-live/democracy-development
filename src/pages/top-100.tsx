@@ -8,10 +8,8 @@ import Loading from '@/components/molecules/Loading';
 import { GET_PROCEDURES } from '@/queries/get-procedures';
 
 export default function Example() {
-  const [selectedSubject, setSelectedSubject] = useState([
-    'Arbeit und Beschäftigung',
-  ]);
-  const [selectedType, setSelectedType] = useState(['Antrag']);
+  const [selectedSubject, setSelectedSubject] = useState([]);
+  const [selectedType, setSelectedType] = useState([]);
 
   const { loading, data } = useQuery(GET_PROCEDURES, {
     variables: {
@@ -41,19 +39,19 @@ export default function Example() {
           selected={[...selectedSubject, ...selectedType] as never}
           onToggle={(group: string, id: string) => {
             if (group === 'subject') {
-              if (selectedSubject.includes(id)) {
+              if (selectedSubject.includes(id as never)) {
                 // remove
                 setSelectedSubject(selectedSubject.filter((s) => s !== id));
               } else {
                 // add
-                setSelectedSubject([...selectedSubject, id]);
+                setSelectedSubject([...selectedSubject, id] as never);
               }
-            } else if (selectedType.includes(id)) {
+            } else if (selectedType.includes(id as never)) {
               // remove
               setSelectedType(selectedType.filter((s) => s !== id));
             } else {
               // add
-              setSelectedType([...selectedType, id]);
+              setSelectedType([...selectedType, id] as never);
             }
           }}
           onReset={() => {
