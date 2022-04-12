@@ -25,6 +25,7 @@ const GET_PROCEDURES = gql`
     ) {
       title
       procedureId
+      sessionTOPHeading
       type
       votes
       communityVotes {
@@ -158,7 +159,7 @@ const Index = () => {
           <div className="flex flex-col items-center text-center md:flex-row md:items-end md:justify-between md:text-left">
             <div className="">
               <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                Abgestimmt
+                Vergangen
               </h2>
               <p className="-mt-1 max-w-2xl text-base text-gray-600">
                 Hier siehst Du alle bereits abgestimmten Vorgänge

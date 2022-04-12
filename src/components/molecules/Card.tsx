@@ -51,8 +51,11 @@ const Card = ({ item }: any) => (
           </a>
         </p>
         <a href={item.type} className="mt-2 block">
-          <p className="text-xl font-semibold leading-6 text-gray-900 line-clamp-3">
+          <p className="hyphens-auto text-xl font-semibold leading-6 text-gray-900 line-clamp-3">
             {item.title}
+          </p>
+          <p className="hyphens-auto pt-2 text-base leading-5 text-gray-700 line-clamp-3">
+            {item.sessionTOPHeading}
           </p>
           {/* <p className="mt-3 text-base text-gray-500">
               {description}

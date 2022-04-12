@@ -272,7 +272,7 @@ export default function Example() {
 
       <div className="mx-auto max-w-7xl py-16 px-4 pt-28 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
-          Abgestimmt
+          Vergangen
         </h1>
         <p className="max-w-xl text-sm text-gray-600">
           Hier siehst Du alle bereits abgestimmten Vorgänge

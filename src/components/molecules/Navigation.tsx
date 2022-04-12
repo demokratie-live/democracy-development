@@ -2,19 +2,20 @@ import { Disclosure } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { SearchIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
 const navigation = [
-  { name: 'in Abstimmung', href: '/', current: false },
-  { name: 'Abgestimmt', href: '/vergangen', current: true },
-  { name: 'Populär', href: '/hot', current: false },
-  { name: 'in Vorbereitung', href: '/vorbereitung', current: false },
+  { name: 'Sitzungswoche', href: '/' },
+  { name: 'Vergangen', href: '/vergangen' },
+  { name: 'Top 100', href: '/top-100' },
 ];
 
 const Navigation = () => {
+  const router = useRouter();
   return (
     <Disclosure as="nav" className="fixed top-0 z-50 w-full bg-white shadow">
       {({ open }) => (
@@ -40,7 +41,7 @@ const Navigation = () => {
                     <Link href={item.href} key={item.href}>
                       <a
                         className={classNames(
-                          item.current
+                          router.pathname === item.href
                             ? 'border-ci-blue text-gray-900'
                             : 'border-transparent text-gray-500 hover:text-gray-700',
                           'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-900'

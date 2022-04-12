@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .hyphens-none {
+    hyphens: none;
+  }
+  .hyphens-manual {
+    hyphens: manual;
+  }
+  .hyphens-auto {
+    hyphens: auto;
+  }
+}
