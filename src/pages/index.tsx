@@ -47,8 +47,8 @@ export default function Top100Page() {
             Sitzungswoche
           </h1>
           <p className="max-w-xl text-sm leading-5 text-gray-600">
-            In dieser Liste findest Du alle Gesetze und Anträge des Bundestages,
-            die unmittelbar vor der Abstimmung stehen
+            Gesetze und Anträge des Bundestages, die unmittelbar vor der
+            Abstimmung stehen
           </p>
         </div>
         <Filters

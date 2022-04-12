@@ -47,8 +47,8 @@ export default function Top100Page() {
             Vergangen
           </h1>
           <p className="max-w-xl text-sm leading-5 text-gray-600">
-            In dieser Liste findest Du alle vergangenen, bereits abgestimmten
-            Gesetze und Anträge des Bundestages
+            Vergangenen und bereits abgestimmte, Gesetze und Anträge des
+            Bundestages
           </p>
         </div>
         <Filters

@@ -47,8 +47,8 @@ export default function Top100Page() {
             Top 100
           </h1>
           <p className="max-w-xl text-sm leading-5 text-gray-600">
-            In dieser Liste findest Du die heißesten Gesetze und Anträge des
-            Bundestages absteigend sortiert nach DEMOCRACY-Aktivitätsindex
+            Die Top 100 Gesetze und Anträge des Bundestages, sortiert nach
+            DEMOCRACY-Aktivitätsindex
           </p>
         </div>
         <Filters
