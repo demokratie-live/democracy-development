@@ -62,10 +62,48 @@ const GET_PROCEDURES = gql`
   }
 `;
 
+// const SEARCH_PROCEDURES = gql`
+//   query search($term: String!) {
+//     searchProceduresAutocomplete(term: $term) {
+//       procedures {
+//         title
+//         procedureId
+//         type
+//         votes
+//         communityVotes {
+//           yes
+//           no
+//           abstination
+//           __typename
+//         }
+//         currentStatus
+//         voteDate
+//         voteResults {
+//           yes
+//           no
+//           abstination
+//           notVoted
+//           namedVote
+//           partyVotes {
+//             main
+//             __typename
+//           }
+//           __typename
+//         }
+//         subjectGroups
+//         __typename
+//       }
+//       autocomplete
+//       __typename
+//     }
+//   }
+// `;
+
 const Index = () => {
   /* const router = useRouter(); */
 
   const [sort, setSort] = useState('voteDate');
+  // const [searchTerm, setSearchTerm] = useState(null);
 
   const { loading, error, data } = useQuery(GET_PROCEDURES, {
     variables: {
