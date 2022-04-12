@@ -56,7 +56,7 @@ export default function Top100Page() {
           onToggle={(group: string, id: string) => {
             if (group === 'subject') {
               setFilterSubject(toggleValue(filterSubject, id));
-            } else if (filterType.includes(id as never)) {
+            } else {
               setFilterType(toggleValue(filterType, id));
             }
           }}
