@@ -1,67 +1,13 @@
 import { useState } from 'react';
 
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import Card from '@/components/molecules/Card';
 import FilterDropdown from '@/components/molecules/FilterDropdown';
 import Loading from '@/components/molecules/Loading';
 import { Meta } from '@/layout/Meta';
+import { GET_PROCEDURES } from '@/queries/get-procedures';
 import { Main } from '@/templates/Main';
-
-const GET_PROCEDURES = gql`
-  query procedures(
-    $offset: Int
-    $pageSize: Int
-    $listTypes: [ListType!]
-    $sort: String
-    $filter: ProcedureFilter
-  ) {
-    procedures(
-      offset: $offset
-      pageSize: $pageSize
-      listTypes: $listTypes
-      sort: $sort
-      filter: $filter
-    ) {
-      title
-      procedureId
-      sessionTOPHeading
-      type
-      votes
-      communityVotes {
-        yes
-        no
-        abstination
-        __typename
-      }
-      voteDate
-      subjectGroups
-      currentStatus
-      voteResults {
-        yes
-        no
-        abstination
-        notVoted
-        decisionText
-        namedVote
-        partyVotes {
-          main
-          party
-          deviants {
-            yes
-            abstination
-            no
-            notVoted
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }
-  }
-`;
 
 // const SEARCH_PROCEDURES = gql`
 //   query search($term: String!) {

@@ -7,7 +7,7 @@ const { filters } = AppConfig;
 
 export default function Filters({
   selected = [],
-  onToggle = (_: string) => {},
+  onToggle = (_: string, __: string) => {},
   onReset = () => {},
 }) {
   return (
@@ -58,13 +58,13 @@ export default function Filters({
                     name="size[]"
                     defaultValue={option.value}
                     type="checkbox"
-                    className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-ci-blue-darker focus:ring-ci-blue-darker"
                     checked={selected.includes(option.value as never)}
-                    onChange={() => onToggle(option.value)}
+                    onChange={() => onToggle('type', option.value)}
                   />
                   <label
                     htmlFor={`size-${optionIdx}`}
-                    className="ml-2 min-w-0 flex-1 cursor-pointer py-1 leading-4 text-gray-600 lg:text-[0.90em]"
+                    className="min-w-0 flex-1 cursor-pointer py-1 pl-2 leading-4 text-gray-600 lg:text-[0.90em]"
                   >
                     {option.label}
                   </label>
@@ -87,13 +87,13 @@ export default function Filters({
                     name="category[]"
                     defaultValue={option.value}
                     type="checkbox"
-                    className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-ci-blue-darker focus:ring-ci-blue-darker"
                     checked={selected.includes(option.value as never)}
-                    onChange={() => onToggle(option.value)}
+                    onChange={() => onToggle('subject', option.value)}
                   />
                   <label
                     htmlFor={`category-${optionIdx}`}
-                    className="ml-2 min-w-0 flex-1 cursor-pointer py-1 leading-4 text-gray-600 lg:text-[0.90em]"
+                    className="min-w-0 flex-1 cursor-pointer py-1 pl-2 leading-4 text-gray-600 lg:text-[0.90em]"
                   >
                     {option.label}
                   </label>
