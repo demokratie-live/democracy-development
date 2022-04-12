@@ -1,5 +1,6 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { AppProps } from 'next/app';
+import { RecoilRoot } from 'recoil';
 
 import Layout from '@/layout/Layout';
 
@@ -12,11 +13,13 @@ const client = new ApolloClient({
 });
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
-  <Layout>
-    <ApolloProvider client={client}>
-      <Component {...pageProps} />
-    </ApolloProvider>
-  </Layout>
+  <RecoilRoot>
+    <Layout>
+      <ApolloProvider client={client}>
+        <Component {...pageProps} />
+      </ApolloProvider>
+    </Layout>
+  </RecoilRoot>
 );
 
 export default MyApp;

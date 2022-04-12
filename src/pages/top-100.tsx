@@ -1,23 +1,39 @@
-import { useState } from 'react';
-
 import { useQuery } from '@apollo/client';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import Card from '@/components/molecules/Card';
 import Filters from '@/components/molecules/Filters';
 import Loading from '@/components/molecules/Loading';
+import {
+  filterForSubjectState,
+  filterForTypeState,
+  filterState,
+} from '@/components/state/states';
 import { GET_PROCEDURES } from '@/queries/get-procedures';
 
-export default function Example() {
-  const [selectedSubject, setSelectedSubject] = useState([]);
-  const [selectedType, setSelectedType] = useState([]);
+export default function Top100Page() {
+  const filters = useRecoilValue(filterState);
+  const [filterSubject, setFilterSubject] = useRecoilState(
+    filterForSubjectState
+  );
+  const [filterType, setFilterType] = useRecoilState(filterForTypeState);
+
+  const toggleValue = (items: any, value: any): any => {
+    if (items.includes(value)) {
+      // remove
+      return items.filter((s: string) => s !== value) as never;
+    }
+    // add
+    return [...items, value] as never;
+  };
 
   const { loading, data } = useQuery(GET_PROCEDURES, {
     variables: {
       filter: {
-        subjectGroups: selectedSubject,
-        type: selectedType,
+        subjectGroups: filterSubject,
+        type: filterType,
       },
-      listTypes: ['PAST'],
+      listTypes: ['HOT'],
       pageSize: 15,
       sort: 'voteDate',
     },
@@ -36,27 +52,17 @@ export default function Example() {
           </p>
         </div>
         <Filters
-          selected={[...selectedSubject, ...selectedType] as never}
+          selected={filters as never}
           onToggle={(group: string, id: string) => {
             if (group === 'subject') {
-              if (selectedSubject.includes(id as never)) {
-                // remove
-                setSelectedSubject(selectedSubject.filter((s) => s !== id));
-              } else {
-                // add
-                setSelectedSubject([...selectedSubject, id] as never);
-              }
-            } else if (selectedType.includes(id as never)) {
-              // remove
-              setSelectedType(selectedType.filter((s) => s !== id));
-            } else {
-              // add
-              setSelectedType([...selectedType, id] as never);
+              setFilterSubject(toggleValue(filterSubject, id));
+            } else if (filterType.includes(id as never)) {
+              setFilterType(toggleValue(filterType, id));
             }
           }}
           onReset={() => {
-            setSelectedType([]);
-            setSelectedSubject([]);
+            setFilterSubject([]);
+            setFilterType([]);
           }}
         />
       </div>
