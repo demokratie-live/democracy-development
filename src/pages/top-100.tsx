@@ -30,10 +30,11 @@ export default function Example() {
       <div className="bg-gray-200">
         <div className="mx-auto max-w-7xl px-4 pb-7 pt-28 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
-            Vergangen
+            Top 100
           </h1>
-          <p className="max-w-xl text-sm text-gray-600">
-            Hier siehst Du alle bereits abgestimmten Vorgänge
+          <p className="max-w-xl text-sm leading-5 text-gray-600">
+            In dieser Liste findest Du die heißesten Gesetze und Anträge des
+            Bundestages absteigend sortiert nach DEMOCRACY-Aktivitätsindex
           </p>
         </div>
         <Filters
@@ -61,7 +62,7 @@ export default function Example() {
           }}
         />
       </div>
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">
         <div className="3xl:grid-cols-4 mx-auto mt-6 grid h-full max-w-md gap-5 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3">
           {loading ? (
             <Loading />
