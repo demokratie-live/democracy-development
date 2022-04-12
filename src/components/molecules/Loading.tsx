@@ -1,7 +1,7 @@
 const Loading = () => (
-  <div className="flex h-screen pt-16">
-    <div className="mb-32 flex w-full items-center justify-center">
-      <div className="flex items-center justify-center space-x-1 text-base text-gray-600">
+  <div className="inline-flex h-[76vh] w-screen">
+    <div className="flex w-full max-w-7xl items-center justify-center">
+      <div className="mb-[50vh] flex items-center justify-center space-x-1 text-base text-ci-blue-dark">
         <svg
           fill="none"
           className="h-10 w-10 animate-spin"
@@ -16,7 +16,7 @@ const Loading = () => (
           />
         </svg>
 
-        <div>bitte warten ...</div>
+        <div>einen Moment noch…</div>
       </div>
     </div>
   </div>

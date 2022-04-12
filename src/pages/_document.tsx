@@ -8,9 +8,9 @@ class MyDocument extends Document {
   // eslint-disable-next-line class-methods-use-this
   render() {
     return (
-      <Html lang={AppConfig.locale}>
+      <Html lang={AppConfig.locale} className="h-full">
         <Head />
-        <body className="bg-gray-100 ">
+        <body className="h-full bg-gray-100">
           <Navigation />
           <Main />
           <NextScript />
