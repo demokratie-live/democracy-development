@@ -9,16 +9,6 @@ const filterForSubjectState = atom({
   default: [],
 });
 
-const filterState = selector({
-  key: 'filterState',
-  get: ({ get }) => {
-    const type = get(filterForTypeState);
-    const subject = get(filterForSubjectState);
-
-    return [...type, ...subject];
-  },
-});
-
 const filterSizeState = selector({
   key: 'filterSizeState',
   get: ({ get }) => {
@@ -29,9 +19,19 @@ const filterSizeState = selector({
   },
 });
 
+const filterState = selector({
+  key: 'filterState',
+  get: ({ get }) => {
+    const type = get(filterForTypeState);
+    const subject = get(filterForSubjectState);
+
+    return [...type, ...subject];
+  },
+});
+
 export {
-  filterForSubjectState,
   filterForTypeState,
+  filterForSubjectState,
   filterSizeState,
   filterState,
 };
