@@ -16,6 +16,13 @@ module.exports = {
     },
     extend: {
       colors: {
+        ci: {
+          blue: '#4494d3',
+          'blue-dark': '#4f81bd',
+          'blue-darker': '#1c659f',
+          pink: '#e67c89',
+          orange: '#f5a623',
+        },
         gray: {
           100: '#f7fafc',
           200: '#edf2f7',

@@ -1,31 +1,12 @@
-import { gql, useQuery } from '@apollo/client';
-import dayjs from 'dayjs';
+import { useState } from 'react';
 
+import { gql, useQuery } from '@apollo/client';
+
+import Card from '@/components/molecules/Card';
 import FilterDropdown from '@/components/molecules/FilterDropdown';
+import Loading from '@/components/molecules/Loading';
 import { Meta } from '@/layout/Meta';
 import { Main } from '@/templates/Main';
-
-/**
- * just a hacky dummy for getting correct data
- * @param term string
- * @returns string
- */
-const getImage = (term: string) =>
-  `https://democracy-app.de/static/images/sachgebiete/${encodeURIComponent(
-    term
-      ?.replace(/ /g, '_')
-      .replace(/-/g, '_')
-      .toLowerCase()
-      .replace(/_und_/g, '_')
-      .replace(/,/g, '_')
-      .replace(/__/g, '_')
-      .replace(/ß/g, 'ss')
-      .replace(/ä/g, 'ae')
-      .replace(/ö/g, 'oe')
-      .replace(/ü/g, 'ue')
-      .replace('aussenpolitik_internationale_beziehungen', 'aussenpolitik')
-      .replace('raumordnung_bau_wohnungswesen', 'bauwesen')
-  )}_648.jpg`;
 
 const GET_PROCEDURES = gql`
   query procedures(
@@ -84,6 +65,8 @@ const GET_PROCEDURES = gql`
 const Index = () => {
   /* const router = useRouter(); */
 
+  const [sort, setSort] = useState('voteDate');
+
   const { loading, error, data } = useQuery(GET_PROCEDURES, {
     variables: {
       filter: {
@@ -121,34 +104,10 @@ const Index = () => {
       },
       listTypes: ['PAST'],
       pageSize: 15,
-      sort: 'voteDate',
+      sort,
     },
   });
 
-  if (loading)
-    return (
-      <div className="flex h-screen pt-16">
-        <div className="mb-32 flex w-full items-center justify-center">
-          <div className="flex items-center justify-center space-x-1 text-base text-gray-600">
-            <svg
-              fill="none"
-              className="h-10 w-10 animate-spin"
-              viewBox="0 0 32 32"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clipRule="evenodd"
-                d="M15.165 8.53a.5.5 0 01-.404.58A7 7 0 1023 16a.5.5 0 011 0 8 8 0 11-9.416-7.874.5.5 0 01.58.404z"
-                fill="currentColor"
-                fillRule="evenodd"
-              />
-            </svg>
-
-            <div>bitte warten ...</div>
-          </div>
-        </div>
-      </div>
-    );
   if (error) return <div className="pt-16">Error! {error.message}</div>;
 
   return (
@@ -168,70 +127,17 @@ const Index = () => {
               </p>
             </div>
             <div className="mt-4 flex justify-end">
-              <FilterDropdown />
+              <FilterDropdown onSelect={(id: string) => setSort(id)} />
             </div>
           </div>
           <div className="3xl:grid-cols-4 mx-auto mt-6 grid max-w-md gap-5 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3">
-            {data.procedures.map((item: any) => (
-              <div
-                key={item.title}
-                className="flex flex-col overflow-hidden rounded-lg border shadow-lg"
-              >
-                {/* <DonutChart
-                  colors={['#16C063', '#2882E4', '#EC3E31']}
-                  innerTextBottom="Abstimmende"
-                  innerTextTop="3"
-                  size={500}
-                  topLeftText="Bundesweit"
-                  votesData={{
-                    abstination: 1,
-                    no: 1,
-                    yes: 1,
-                  }}
-                /> */}
-                <div className="shrink-0">
-                  <img
-                    className="h-48 w-full object-cover"
-                    src={getImage(item.subjectGroups[0]!)}
-                    alt=""
-                  />
-                </div>
-                <div className="flex flex-1 flex-col justify-between bg-white p-6">
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-indigo-600">
-                      <a href={item.type} className="hover:underline">
-                        {item.type}
-                      </a>
-                    </p>
-                    <a href={item.type} className="mt-2 block">
-                      <p className="text-xl font-semibold leading-6 text-gray-900 line-clamp-3">
-                        {item.title}
-                      </p>
-                      {/* <p className="mt-3 text-base text-gray-500">
-                        {item.description}
-                      </p> */}
-                    </a>
-                  </div>
-                  <div className="mt-6 flex items-center">
-                    <div>
-                      {/* <p className="text-sm font-medium text-gray-900">
-                        <a href={item.author.href} className="hover:underline">
-                          {item.author.name}
-                        </a>
-                      </p> */}
-                      <div className="flex space-x-1 text-sm text-gray-500">
-                        <time dateTime={item.voteDate}>
-                          {dayjs(item.voteDate).format('DD.MM.YYYY')}
-                        </time>
-                        {/* {item.subjectGroups[0]?.replace(' ', '_').toLowerCase()} */}
-                        {/* <span aria-hidden="true">&middot;</span>
-                        <span>{item.voteDate}</span> */}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+            {loading ? (
+              <Loading />
+            ) : (
+              data.procedures.map((item: { procedureId: any }) => (
+                <Card item={item as any} key={item.procedureId} />
+              ))
+            )}
           </div>
         </div>
       </div>

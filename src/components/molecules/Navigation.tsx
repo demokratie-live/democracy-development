@@ -1,19 +1,20 @@
 import { Disclosure } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { SearchIcon } from '@heroicons/react/solid';
+import Link from 'next/link';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
 const navigation = [
-  { name: 'in Vorbereitung', href: '#', current: false },
-  { name: 'Abgestimmt', href: '#', current: true },
-  { name: 'Populär', href: '#', current: false },
-  { name: 'in Vorbereitung', href: '#', current: false },
+  { name: 'in Abstimmung', href: '/', current: false },
+  { name: 'Abgestimmt', href: '/vergangen', current: true },
+  { name: 'Populär', href: '/hot', current: false },
+  { name: 'in Vorbereitung', href: '/vorbereitung', current: false },
 ];
 
-export default function Example() {
+const Navigation = () => {
   return (
     <Disclosure as="nav" className="fixed top-0 z-50 w-full bg-white shadow">
       {({ open }) => (
@@ -36,18 +37,18 @@ export default function Example() {
                 <div className="hidden md:ml-10 md:flex md:space-x-6">
                   {/* Current: "border-indigo-500 text-gray-900", Default: "" */}
                   {navigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className={classNames(
-                        item.current
-                          ? 'border-indigo-500 text-gray-900'
-                          : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                        'inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900'
-                      )}
-                    >
-                      {item.name}
-                    </a>
+                    <Link href={item.href} key={item.href}>
+                      <a
+                        className={classNames(
+                          item.current
+                            ? 'border-ci-blue text-gray-900'
+                            : 'border-transparent text-gray-500 hover:text-gray-700',
+                          'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-900'
+                        )}
+                      >
+                        {item.name}
+                      </a>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -246,4 +247,6 @@ export default function Example() {
       )}
     </Disclosure>
   );
-}
+};
+
+export default Navigation;
