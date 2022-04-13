@@ -10,7 +10,9 @@ import {
   filterForTypeState,
   filterState,
 } from '@/components/state/states';
+import { Meta } from '@/layout/Meta';
 import { GET_PROCEDURES } from '@/queries/get-procedures';
+import { Main } from '@/templates/Main';
 
 export default function Top100Page() {
   const filters = useRecoilValue(filterState);
@@ -41,44 +43,54 @@ export default function Top100Page() {
   });
 
   return (
-    <div>
-      <div className="bg-gray-200">
-        <div className="mx-auto max-w-7xl px-4 pb-7 pt-28 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
-            Top 100
-          </h1>
-          <p className="max-w-xl text-sm leading-5 text-gray-600">
-            Die Top 100 Gesetze und Anträge des Bundestages, sortiert nach
-            DEMOCRACY-Aktivitätsindex
-          </p>
-        </div>
-        <Filters
-          selected={filters as never}
-          onToggle={(group: string, id: string) => {
-            if (group === 'subject') {
-              setFilterSubject(toggleValue(filterSubject, id));
-            } else {
-              setFilterType(toggleValue(filterType, id));
-            }
-          }}
-          onReset={() => {
-            setFilterSubject([]);
-            setFilterType([]);
-          }}
+    <Main
+      meta={
+        <Meta
+          title="Top 100"
+          description="Die Top 100 Gesetze und Anträge des Bundestages, sortiert nach
+          DEMOCRACY-Aktivitätsindex"
         />
-      </div>
-      <div className="mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">
-        <div className="3xl:grid-cols-4 mx-auto mt-6 grid h-full max-w-md gap-5 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3">
-          {!error && loading && <Loading />}
-          {!error &&
-            !loading &&
-            data.procedures?.length > 0 &&
-            data.procedures.map((item: { procedureId: any }) => (
-              <Card item={item as any} key={item.procedureId} />
-            ))}
-          {!loading && data.procedures?.length <= 0 && <Empty />}
+      }
+    >
+      <div>
+        <div className="bg-gray-200">
+          <div className="mx-auto max-w-7xl px-4 pb-7 pt-28 sm:px-6 lg:px-8">
+            <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
+              Top 100
+            </h1>
+            <p className="max-w-xl text-sm leading-5 text-gray-600">
+              Die Top 100 Gesetze und Anträge des Bundestages, sortiert nach
+              DEMOCRACY-Aktivitätsindex
+            </p>
+          </div>
+          <Filters
+            selected={filters as never}
+            onToggle={(group: string, id: string) => {
+              if (group === 'subject') {
+                setFilterSubject(toggleValue(filterSubject, id));
+              } else {
+                setFilterType(toggleValue(filterType, id));
+              }
+            }}
+            onReset={() => {
+              setFilterSubject([]);
+              setFilterType([]);
+            }}
+          />
+        </div>
+        <div className="mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">
+          <div className="3xl:grid-cols-4 mx-auto mt-6 grid h-full max-w-md gap-5 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3">
+            {!error && loading && <Loading />}
+            {!error &&
+              !loading &&
+              data.procedures?.length > 0 &&
+              data.procedures.map((item: { procedureId: any }) => (
+                <Card item={item as any} key={item.procedureId} />
+              ))}
+            {!loading && data.procedures?.length <= 0 && <Empty />}
+          </div>
         </div>
       </div>
-    </div>
+    </Main>
   );
 }
