@@ -1,16 +1,12 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import { AppProps } from 'next/app';
 import { RecoilRoot } from 'recoil';
 
-import Layout from '@/layout/Layout';
-
 import '../styles/global.css';
+import Layout from '@/layout/Layout';
+import getClient from '@/utils/Client';
 
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-
-  uri: 'https://api.democracy-app.de/',
-});
+const client = getClient();
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <RecoilRoot>

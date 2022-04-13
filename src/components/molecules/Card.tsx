@@ -1,36 +1,10 @@
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRecoilState } from 'recoil';
-import slug from 'slug';
+
+import { makeLink, getImage } from '@/utils/Helpers';
 
 import { filterForTypeState } from '../state/states';
-
-/**
- * just a hacky dummy for getting correct data
- * @param term string
- * @returns string
- */
-const getImage = (term: string) =>
-  `https://democracy-app.de/static/images/sachgebiete/${encodeURIComponent(
-    term
-      ?.replace(/ /g, '_')
-      .replace(/-/g, '_')
-      .toLowerCase()
-      .replace(/_und_/g, '_')
-      .replace(/,/g, '_')
-      .replace(/__/g, '_')
-      .replace(/ß/g, 'ss')
-      .replace(/ä/g, 'ae')
-      .replace(/ö/g, 'oe')
-      .replace(/ü/g, 'ue')
-      .replace('aussenpolitik_internationale_beziehungen', 'aussenpolitik')
-      .replace('raumordnung_bau_wohnungswesen', 'bauwesen')
-  )}_648.jpg`;
-
-const makeLink = ({ type, procedureId, title }: any) => {
-  const t = title.split(' ').slice(0, 10).join(' ');
-  return `/${slug(type)}/${procedureId}/${slug(t)}`;
-};
 
 const Card = ({ item }: any) => {
   const [, setFilterType] = useRecoilState(filterForTypeState);

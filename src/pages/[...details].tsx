@@ -1,25 +1,14 @@
-import { useQuery } from '@apollo/client';
 import { PaperClipIcon } from '@heroicons/react/outline';
 import dayjs from 'dayjs';
 import { sortBy } from 'lodash-es';
-import { useRouter } from 'next/router';
 
 import Loading from '@/components/molecules/Loading';
 import { Meta } from '@/layout/Meta';
 import { GET_PROCEDURE_DETAILS } from '@/queries/get-procedure-details';
 import { Main } from '@/templates/Main';
+import getClient from '@/utils/Client';
 
-export default function DetailsPage() {
-  const router = useRouter();
-
-  const [, id] = router.query.details ?? ([null, null] as any);
-
-  const { loading, data } = useQuery(GET_PROCEDURE_DETAILS, {
-    variables: {
-      id,
-    },
-  });
-
+export default function DetailsPage({ data }: any) {
   return (
     <Main
       meta={
@@ -35,7 +24,7 @@ export default function DetailsPage() {
       }
     >
       <div>
-        {loading || !data ? (
+        {!data ? (
           <Loading />
         ) : (
           <>
@@ -175,4 +164,28 @@ export default function DetailsPage() {
       </div>
     </Main>
   );
+}
+
+export async function getServerSideProps({ res, query }: any) {
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=60, stale-while-revalidate=59'
+  );
+
+  const [, id] = query.details ?? ([null, null] as any);
+
+  const client = getClient();
+  const { data } = await client.query({
+    query: GET_PROCEDURE_DETAILS,
+    variables: {
+      id,
+    },
+  });
+
+  return {
+    props: {
+      id,
+      data,
+    },
+  };
 }
