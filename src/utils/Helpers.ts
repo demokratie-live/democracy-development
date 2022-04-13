@@ -14,8 +14,8 @@ export const getImage = (term: string) => {
   const img =
     find(subjectConfig, {
       value: term,
-    })?.image ?? '/static/images/sachgebiete/bundestag';
-  return `https://democracy-app.de${img}_648.jpg`;
+    })?.image ?? 'bundestag';
+  return `/assets/images/categories/${img}.jpg`;
 };
 
 export const makeLink = ({ type, procedureId, title }: any) => {

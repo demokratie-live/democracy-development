@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRecoilState } from 'recoil';
 
@@ -24,10 +25,12 @@ const Card = ({ item }: any) => {
       /> */}
       <Link href={makeLink(item)}>
         <a className="shrink-0 cursor-pointer">
-          <img
+          <Image
             className="h-48 w-full object-cover"
             src={getImage(item.subjectGroups[0])}
-            alt=""
+            width={1920}
+            height={1024}
+            alt={item.subjectGroups[0]}
           />
         </a>
       </Link>
