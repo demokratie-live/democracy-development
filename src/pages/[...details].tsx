@@ -6,6 +6,7 @@ import Loading from '@/components/molecules/Loading';
 import { Meta } from '@/layout/Meta';
 import { GET_PROCEDURE_DETAILS } from '@/queries/get-procedure-details';
 import { Main } from '@/templates/Main';
+import { AppConfig } from '@/utils/AppConfig';
 import getClient from '@/utils/Client';
 
 export default function DetailsPage({ data, resolvedUrl }: any) {
@@ -13,7 +14,9 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
     <Main
       meta={
         <Meta
-          title={data?.procedure?.title ?? 'Democracy'}
+          title={truncate(data?.procedure?.title ?? 'Democracy', {
+            length: 60,
+          })}
           description={truncate(
             data?.procedure?.sessionTOPHeading ??
               data?.procedure?.abstract ??
@@ -21,7 +24,7 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
               'Democracy',
             { length: 150 }
           )}
-          canonical={resolvedUrl}
+          canonical={`${AppConfig.url}${resolvedUrl}`}
         />
       }
     >
@@ -35,9 +38,9 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                 <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-gray-900">
                   {data.procedure.title}
                 </h1>
-                <p className="max-w-xl pt-2 text-sm leading-5 text-gray-600">
+                <h2 className="max-w-xl pt-2 text-sm leading-5 text-gray-600">
                   {data.procedure.sessionTOPHeading}
-                </p>
+                </h2>
               </div>
             </div>
             <div className="mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">

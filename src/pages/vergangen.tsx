@@ -62,10 +62,10 @@ export default function Top100Page() {
             <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
               Vergangen
             </h1>
-            <p className="max-w-xl text-sm leading-5 text-gray-600">
+            <h2 className="max-w-xl text-sm leading-5 text-gray-600">
               Vergangenen und bereits abgestimmte, Gesetze und Anträge des
               Bundestages
-            </p>
+            </h2>
           </div>
           <Filters
             selected={filters as never}

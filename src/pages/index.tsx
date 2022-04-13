@@ -62,10 +62,10 @@ export default function Top100Page() {
             <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
               Sitzungswoche
             </h1>
-            <p className="max-w-xl text-sm leading-5 text-gray-600">
+            <h2 className="max-w-xl text-sm leading-5 text-gray-600">
               Gesetze und Anträge des Bundestages, die unmittelbar vor der
               Abstimmung stehen
-            </p>
+            </h2>
           </div>
           <Filters
             selected={filters as never}
