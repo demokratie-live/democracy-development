@@ -33,7 +33,7 @@ export default function Top100Page() {
         subjectGroups: filterSubject,
         type: filterType,
       },
-      listTypes: ['IN_VOTE'],
+      listTypes: ['CONFERENCEWEEKS_PLANNED'],
       pageSize: 15,
       sort: 'voteDate',
     },

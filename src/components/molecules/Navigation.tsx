@@ -23,18 +23,20 @@ const Navigation = () => {
           <div className="mx-auto max-w-7xl">
             <div className="flex h-16 justify-between">
               <div className="flex">
-                <div className="flex shrink-0 items-center">
-                  <img
-                    className="hidden h-[38px] w-auto lg:flex"
-                    src="/assets/images/logo-text.svg"
-                    alt="Democracy App"
-                  />
-                  <img
-                    className="flex h-[38px] w-auto lg:hidden"
-                    src="/assets/images/logo.svg"
-                    alt="Democracy App"
-                  />
-                </div>
+                <Link href="/">
+                  <a className="flex shrink-0 items-center">
+                    <img
+                      className="hidden h-[38px] w-auto lg:flex"
+                      src="/assets/images/logo-text.svg"
+                      alt="Democracy App"
+                    />
+                    <img
+                      className="flex h-[38px] w-auto lg:hidden"
+                      src="/assets/images/logo.svg"
+                      alt="Democracy App"
+                    />
+                  </a>
+                </Link>
                 <div className="hidden md:ml-10 md:flex md:space-x-6">
                   {/* Current: "border-indigo-500 text-gray-900", Default: "" */}
                   {navigation.map((item) => (
