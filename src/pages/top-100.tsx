@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import Card from '@/components/molecules/Card';
@@ -13,8 +14,10 @@ import {
 import { Meta } from '@/layout/Meta';
 import { GET_PROCEDURES } from '@/queries/get-procedures';
 import { Main } from '@/templates/Main';
+import { AppConfig } from '@/utils/AppConfig';
 
 export default function Top100Page() {
+  const router = useRouter();
   const filters = useRecoilValue(filterState);
   const [filterSubject, setFilterSubject] = useRecoilState(
     filterForSubjectState
@@ -49,6 +52,7 @@ export default function Top100Page() {
           title="Top 100"
           description="Die Top 100 Gesetze und Anträge des Bundestages, sortiert nach
           DEMOCRACY-Aktivitätsindex"
+          canonical={`${AppConfig.url}${router?.asPath}`}
         />
       }
     >

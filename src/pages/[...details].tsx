@@ -1,6 +1,6 @@
 import { PaperClipIcon } from '@heroicons/react/outline';
 import dayjs from 'dayjs';
-import { sortBy } from 'lodash-es';
+import { sortBy, truncate } from 'lodash-es';
 
 import Loading from '@/components/molecules/Loading';
 import { Meta } from '@/layout/Meta';
@@ -8,18 +8,20 @@ import { GET_PROCEDURE_DETAILS } from '@/queries/get-procedure-details';
 import { Main } from '@/templates/Main';
 import getClient from '@/utils/Client';
 
-export default function DetailsPage({ data }: any) {
+export default function DetailsPage({ data, resolvedUrl }: any) {
   return (
     <Main
       meta={
         <Meta
           title={data?.procedure?.title ?? 'Democracy'}
-          description={
+          description={truncate(
             data?.procedure?.sessionTOPHeading ??
-            data?.procedure?.abstract ??
-            data?.procedure?.title ??
-            'Democracy'
-          }
+              data?.procedure?.abstract ??
+              data?.procedure?.title ??
+              'Democracy',
+            { length: 150 }
+          )}
+          canonical={resolvedUrl}
         />
       }
     >
@@ -166,10 +168,10 @@ export default function DetailsPage({ data }: any) {
   );
 }
 
-export async function getServerSideProps({ res, query }: any) {
+export async function getServerSideProps({ res, query, resolvedUrl }: any) {
   res.setHeader(
     'Cache-Control',
-    'public, s-maxage=60, stale-while-revalidate=59'
+    'public, s-maxage=0, stale-while-revalidate=0'
   );
 
   const [, id] = query.details ?? ([null, null] as any);
@@ -186,6 +188,7 @@ export async function getServerSideProps({ res, query }: any) {
     props: {
       id,
       data,
+      resolvedUrl,
     },
   };
 }

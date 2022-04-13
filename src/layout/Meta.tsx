@@ -1,3 +1,4 @@
+import { truncate } from 'lodash-es';
 import { NextSeo } from 'next-seo';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -53,7 +54,10 @@ const Meta = (props: IMetaProps) => {
         canonical={props.canonical}
         openGraph={{
           title: (props.title ?? AppConfig.description).slice(0, 70),
-          description: props.description ?? AppConfig.description,
+          description: truncate(props.description ?? AppConfig.description, {
+            length: 150,
+          }),
+          type: 'website',
           url: props.canonical,
           locale: AppConfig.locale,
           site_name: AppConfig.site_name,

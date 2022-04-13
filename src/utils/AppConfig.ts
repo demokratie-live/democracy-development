@@ -3,6 +3,7 @@ export const AppConfig = {
   title: 'Democracy Deutschland',
   description:
     'Die offizielle Browserversion der DEMOCRACY App – das 10X-Improvement für unsere Demokratie. DEMOCRACY räumt jedem nutzenden Bundesbürger die Möglichkeit ein, sich über die aktuellen Parlamentsabstimmungen des deutschen Bundestags zu informieren und selbst abzustimmen',
+  url: 'https://democracy-app.de',
   locale: 'de',
   filters: {
     type: {
