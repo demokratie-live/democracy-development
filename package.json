@@ -21,7 +21,6 @@
     "@tailwindcss/line-clamp": "^0.3.1",
     "@tailwindcss/typography": "^0.5.2",
     "dayjs": "^1.11.0",
-    "democracy-ui": "https://github.com/demokratie-live/democracy-ui.git",
     "graphql": "^16.3.0",
     "lodash-es": "^4.17.21",
     "next": "^12.1.4",
