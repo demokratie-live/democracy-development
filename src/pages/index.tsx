@@ -28,7 +28,7 @@ export default function Top100Page() {
     return [...items, value] as never;
   };
 
-  const { loading, data } = useQuery(GET_PROCEDURES, {
+  const { loading, data, error } = useQuery(GET_PROCEDURES, {
     variables: {
       filter: {
         subjectGroups: filterSubject,
@@ -69,8 +69,9 @@ export default function Top100Page() {
       </div>
       <div className="mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">
         <div className="3xl:grid-cols-4 mx-auto mt-6 grid h-full max-w-md gap-5 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3">
-          {loading && <Loading />}
-          {!loading &&
+          {!error && loading && <Loading />}
+          {!error &&
+            !loading &&
             data.procedures?.length > 0 &&
             data.procedures.map((item: { procedureId: any }) => (
               <Card item={item as any} key={item.procedureId} />
