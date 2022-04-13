@@ -22,16 +22,18 @@ const Navigation = () => {
 
   const [searchTerm, setSearchTerm] = useRecoilState(searchTermState);
 
+  // TODO: use recoil sync?
   // reset the search if navigating to a different page
-  router?.events?.on('routeChangeComplete', () => {
-    if (router.asPath.startsWith('/suche')) return;
+  router?.events?.on('routeChangeComplete', (url) => {
+    if (url.startsWith('/suche')) return;
     setSearchTerm('');
   });
 
+  // TODO: use recoil sync?
   // update the search term and navigate to the search page
   const updateSearch = (term: string) => {
     setSearchTerm(term);
-    if (router.asPath.startsWith('/suche')) return;
+    if (router.asPath.startsWith('/suche') || term.length < 3) return;
     router.replace(`/suche`);
   };
 

@@ -39,11 +39,13 @@ export default function Top100Page() {
         subjectGroups: filterSubject,
         type: filterType,
       },
-      listTypes: ['HOT'],
+      listTypes: ['TOP100'],
       pageSize: 15,
       sort: 'voteDate',
+      // period: 'BT-20',
     },
   });
+  const isEmpty = error || data?.procedures?.length <= 0;
 
   return (
     <Main
@@ -86,12 +88,12 @@ export default function Top100Page() {
           <div className="3xl:grid-cols-4 mx-auto mt-6 grid h-full max-w-md gap-5 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3">
             {!error && loading && <Loading />}
             {!error &&
+              !isEmpty &&
               !loading &&
-              data.procedures?.length > 0 &&
-              data.procedures.map((item: { procedureId: any }) => (
+              data?.procedures.map((item: { procedureId: any }) => (
                 <Card item={item as any} key={item.procedureId} />
               ))}
-            {!loading && data.procedures?.length <= 0 && <Empty />}
+            {!loading && isEmpty && <Empty />}
           </div>
         </div>
       </div>

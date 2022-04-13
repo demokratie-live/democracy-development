@@ -27,6 +27,9 @@ export default function Top100Page() {
     },
   });
 
+  const isEmpty =
+    error || data?.searchProceduresAutocomplete?.procedures?.length <= 0;
+
   return (
     <Main
       meta={
@@ -52,17 +55,14 @@ export default function Top100Page() {
           <div className="3xl:grid-cols-4 mx-auto mt-6 grid h-full max-w-md gap-5 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3">
             {!error && loading && <Loading />}
             {!error &&
+              !isEmpty &&
               !loading &&
-              data?.searchProceduresAutocomplete?.procedures?.length > 0 &&
               data?.searchProceduresAutocomplete?.procedures.map(
                 (item: { procedureId: any }) => (
                   <Card item={item as any} key={item.procedureId} />
                 )
               )}
-            {!loading &&
-              (!data?.searchProceduresAutocomplete?.procedures ||
-                data?.searchProceduresAutocomplete?.procedures?.length <=
-                  0) && <Empty />}
+            {!loading && isEmpty && <Empty />}
           </div>
         </div>
       </div>

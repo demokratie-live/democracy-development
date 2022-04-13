@@ -3,15 +3,18 @@ import slug from 'slug';
 
 import { AppConfig } from './AppConfig';
 
+const subjectConfig = [...AppConfig.filters.subjectGroups.options];
+
 /**
  * just a hacky dummy for getting correct data
  * @param term string
  * @returns string
  */
 export const getImage = (term: string) => {
-  const img = find(AppConfig.filters.subjectGroups.options, {
-    value: term,
-  })!.image;
+  const img =
+    find(subjectConfig, {
+      value: term,
+    })?.image ?? '/static/images/sachgebiete/bundestag';
   return `https://democracy-app.de${img}_648.jpg`;
 };
 
