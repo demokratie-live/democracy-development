@@ -171,7 +171,7 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
 export async function getServerSideProps({ res, query, resolvedUrl }: any) {
   res.setHeader(
     'Cache-Control',
-    'public, s-maxage=0, stale-while-revalidate=0'
+    'public, s-maxage=360, stale-while-revalidate=359'
   );
 
   const [, id] = query.details ?? ([null, null] as any);
