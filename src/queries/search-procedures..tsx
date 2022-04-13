@@ -5,6 +5,7 @@ export const SEARCH_PROCEDURES = gql`
     searchProceduresAutocomplete(term: $term) {
       procedures {
         title
+        sessionTOPHeading
         procedureId
         type
         votes

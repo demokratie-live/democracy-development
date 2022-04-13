@@ -29,9 +29,25 @@ const filterState = selector({
   },
 });
 
+const searchTermState = atom({
+  key: 'searchTermState',
+  default: '',
+});
+
+const searchActiveState = selector({
+  key: 'searchActiveState',
+  get: ({ get }) => {
+    const term = get(searchTermState);
+
+    return term?.length > 3 && term.trim() !== '';
+  },
+});
+
 export {
   filterForTypeState,
   filterForSubjectState,
   filterSizeState,
   filterState,
+  searchTermState,
+  searchActiveState,
 };

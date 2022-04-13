@@ -3,6 +3,9 @@ import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { SearchIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+
+import { searchTermState } from '@/components/state/states';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -16,6 +19,22 @@ const navigation = [
 
 const Navigation = () => {
   const router = useRouter();
+
+  const [searchTerm, setSearchTerm] = useRecoilState(searchTermState);
+
+  // reset the search if navigating to a different page
+  router?.events?.on('routeChangeComplete', () => {
+    if (router.asPath.startsWith('/suche')) return;
+    setSearchTerm('');
+  });
+
+  // update the search term and navigate to the search page
+  const updateSearch = (term: string) => {
+    setSearchTerm(term);
+    if (router.asPath.startsWith('/suche')) return;
+    router.replace(`/suche`);
+  };
+
   return (
     <Disclosure as="nav" className="fixed top-0 z-50 w-full bg-white shadow">
       {({ open }) => (
@@ -73,6 +92,8 @@ const Navigation = () => {
                       className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 leading-5 placeholder:text-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:placeholder:text-gray-400 sm:text-sm"
                       placeholder="Suche"
                       type="search"
+                      value={searchTerm}
+                      onChange={(e) => updateSearch(e.target.value)}
                     />
                   </div>
                 </div>
