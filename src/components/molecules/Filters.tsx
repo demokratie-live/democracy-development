@@ -46,12 +46,14 @@ export default function Filters({
       <Disclosure.Panel className="bg-white py-5">
         <div className="mx-auto grid max-w-7xl select-none gap-y-12 px-8 text-sm md:grid-cols-6">
           <fieldset className="col-span-2 lg:col-span-1">
-            <legend className="block font-medium">{filters.type.label}</legend>
-            <div className="space-y-1 pt-6 sm:pt-4">
+            <legend className="block font-semibold text-gray-900">
+              {filters.type.label}
+            </legend>
+            <div className="space-y-2.5 pt-6 sm:pt-4 md:space-y-1">
               {filters.type.options.map((option, optionIdx) => (
                 <div
                   key={option.value}
-                  className="flex items-start text-base sm:text-sm"
+                  className="flex items-start text-[1.1em] sm:text-sm"
                 >
                   <input
                     id={`size-${optionIdx}`}
@@ -64,7 +66,7 @@ export default function Filters({
                   />
                   <label
                     htmlFor={`size-${optionIdx}`}
-                    className="min-w-0 flex-1 cursor-pointer py-1 pl-2 leading-4 text-gray-600 lg:text-[0.90em]"
+                    className="min-w-0 flex-1 cursor-pointer py-1 pl-2 leading-4 text-gray-800 lg:text-[0.90em]"
                   >
                     {option.label}
                   </label>
@@ -73,14 +75,14 @@ export default function Filters({
             </div>
           </fieldset>
           <fieldset className="col-span-4 lg:col-span-5">
-            <legend className="block font-medium">
+            <legend className="block font-semibold text-gray-900">
               {filters.subjectGroups.label}
             </legend>
-            <div className="grid auto-cols-min grid-cols-1 gap-x-6 gap-y-1 pt-6 sm:pt-4 lg:grid-cols-2 xl:grid-cols-3">
+            <div className="grid auto-cols-min grid-cols-1 gap-x-6 gap-y-2.5 pt-6 sm:pt-4 md:gap-y-1 lg:grid-cols-2 xl:grid-cols-3">
               {filters.subjectGroups.options.map((option, optionIdx) => (
                 <div
                   key={option.value}
-                  className="flex items-start text-base sm:text-sm"
+                  className="flex items-start text-[1.1em] sm:text-sm"
                 >
                   <input
                     id={`category-${optionIdx}`}
@@ -93,7 +95,7 @@ export default function Filters({
                   />
                   <label
                     htmlFor={`category-${optionIdx}`}
-                    className="min-w-0 flex-1 cursor-pointer py-1 pl-2 leading-4 text-gray-600 lg:text-[0.90em]"
+                    className="min-w-0 flex-1 cursor-pointer py-1 pl-2 leading-4 text-gray-800 lg:text-[0.90em]"
                   >
                     {option.label}
                   </label>
