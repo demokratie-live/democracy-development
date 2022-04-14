@@ -42,7 +42,7 @@ const Card = ({ item }: any) => {
       <div className="flex flex-1 flex-col justify-between bg-white p-6">
         <div className="flex-1">
           <p className="text-sm font-medium text-ci-blue-darker">
-            <a
+            <div
               onClick={(e) => {
                 e.preventDefault();
                 setFilterType([item.type as never]);
@@ -50,7 +50,7 @@ const Card = ({ item }: any) => {
               className="cursor-pointer hover:underline"
             >
               {item.type}
-            </a>
+            </div>
           </p>
           <Link href={makeLink(item)}>
             <a className="mt-2 block">
