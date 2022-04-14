@@ -49,12 +49,16 @@ const Navigation = () => {
                 <Link href="/">
                   <a className="flex shrink-0 items-center">
                     <img
-                      className="hidden h-[38px] w-auto lg:flex"
+                      className="hidden h-[38px] w-auto md:inline-flex"
+                      height="161"
+                      width="1024"
                       src="/assets/images/logo-text.svg"
                       alt="Democracy App"
                     />
                     <img
-                      className="flex h-[38px] w-auto lg:hidden"
+                      className="inline-flex h-[38px] w-auto md:hidden"
+                      height="160"
+                      width="161"
                       src="/assets/images/logo.svg"
                       alt="Democracy App"
                     />
