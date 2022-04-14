@@ -46,18 +46,25 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
 
   const pageSize = 15;
 
-  const { loading, data, error, fetchMore } = useQuery(GET_PROCEDURES, {
-    variables: {
-      filter: {
-        subjectGroups: filterSubject,
-        type: filterType,
+  const { loading, data, error, fetchMore, refetch } = useQuery(
+    GET_PROCEDURES,
+    {
+      variables: {
+        filter: {
+          subjectGroups: filterSubject,
+          type: filterType,
+        },
+        listTypes,
+        offset: 0,
+        pageSize,
+        sort: 'voteDate',
+        period: 20,
+        context: {
+          debounceKey: title,
+        },
       },
-      listTypes,
-      pageSize,
-      sort: 'voteDate',
-      period: 20,
-    },
-  });
+    }
+  );
 
   const [sentryRef] = useInfiniteScroll({
     loading: isLoadingMore,
@@ -90,7 +97,7 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
         />
       }
     >
-      <div>
+      <div className="mb-20">
         <div className="bg-gray-200">
           <div className="mx-auto max-w-7xl px-4 pb-7 pt-28 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
@@ -108,10 +115,15 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
               } else {
                 setFilterType(toggleValue(filterType, id));
               }
+              setHasMore(true);
+              setOffset(0);
             }}
             onReset={() => {
               setFilterSubject([]);
               setFilterType([]);
+              setHasMore(true);
+              setOffset(0);
+              refetch();
             }}
           />
         </div>

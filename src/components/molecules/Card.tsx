@@ -35,7 +35,7 @@ const Card = ({ item }: any) => {
             height={1024}
             layout="responsive"
             sizes={width !== undefined ? `${Math.round(width)}px` : '800px'}
-            alt={item.subjectGroups[0]}
+            alt={item.subjectGroups[0] ?? 'Bundestag'}
           />
         </a>
       </Link>

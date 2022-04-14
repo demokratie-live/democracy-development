@@ -18,7 +18,7 @@ export default function getClient() {
       Query: {
         fields: {
           procedures: {
-            ...offsetLimitPagination(['filter', 'sort']),
+            ...offsetLimitPagination(['filter', 'sort', 'listTypes', 'period']),
           },
         },
       },
