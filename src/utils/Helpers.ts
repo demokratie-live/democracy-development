@@ -15,7 +15,7 @@ export const getImage = (term: string) => {
     find(subjectConfig, {
       value: term,
     })?.image ?? 'bundestag';
-  return `/assets/images/categories/${img}.jpg`;
+  return `/img/categories/${img}.jpg`;
 };
 
 export const makeLink = ({ type, procedureId, title }: any) => {

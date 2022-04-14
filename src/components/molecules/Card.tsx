@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
+import useDimensions from 'react-cool-dimensions';
 import { useRecoilState } from 'recoil';
 
 import { makeLink, getImage } from '@/utils/Helpers';
@@ -9,6 +10,8 @@ import { filterForTypeState } from '../state/states';
 
 const Card = ({ item }: any) => {
   const [, setFilterType] = useRecoilState(filterForTypeState);
+  const { observe, width } = useDimensions();
+
   return (
     <div className="flex flex-col overflow-hidden rounded-lg border shadow-lg">
       {/* <DonutChart
@@ -24,12 +27,14 @@ const Card = ({ item }: any) => {
         }}
       /> */}
       <Link href={makeLink(item)}>
-        <a className="shrink-0 cursor-pointer">
+        <a className="shrink-0 cursor-pointer" ref={observe}>
           <Image
-            className="h-48 w-full object-cover"
+            className="aspect-video object-cover"
             src={getImage(item.subjectGroups[0])}
             width={1920}
             height={1024}
+            layout="responsive"
+            sizes={width !== undefined ? `${Math.round(width)}px` : '800px'}
             alt={item.subjectGroups[0]}
           />
         </a>
