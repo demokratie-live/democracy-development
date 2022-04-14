@@ -46,25 +46,22 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
 
   const pageSize = 15;
 
-  const { loading, data, error, fetchMore, refetch } = useQuery(
-    GET_PROCEDURES,
-    {
-      variables: {
-        filter: {
-          subjectGroups: filterSubject,
-          type: filterType,
-        },
-        listTypes,
-        offset: 0,
-        pageSize,
-        sort: 'voteDate',
-        period: 20,
-        context: {
-          debounceKey: title,
-        },
+  const { loading, data, error, fetchMore } = useQuery(GET_PROCEDURES, {
+    variables: {
+      filter: {
+        subjectGroups: filterSubject,
+        type: filterType,
       },
-    }
-  );
+      listTypes,
+      offset: 0,
+      pageSize,
+      sort: 'voteDate',
+      period: 20,
+      context: {
+        debounceKey: title,
+      },
+    },
+  });
 
   const [sentryRef] = useInfiniteScroll({
     loading: isLoadingMore,
@@ -123,7 +120,7 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
               setFilterType([]);
               setHasMore(true);
               setOffset(0);
-              refetch();
+              // refetch();
             }}
           />
         </div>
@@ -160,4 +157,13 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
       </div>
     </Main>
   );
+}
+
+export async function getServerSideProps({ res }: any) {
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=86400, stale-while-revalidate=60'
+  );
+
+  return {};
 }
