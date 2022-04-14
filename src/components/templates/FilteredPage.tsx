@@ -1,5 +1,9 @@
+import { useState } from 'react';
+
 import { useQuery } from '@apollo/client';
+import { uniqBy } from 'lodash-es';
 import { useRouter } from 'next/router';
+import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import Card from '@/components/molecules/Card';
@@ -29,27 +33,49 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
     filterForSubjectState
   );
   const [filterType, setFilterType] = useRecoilState(filterForTypeState);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffset] = useState(0);
 
   const toggleValue = (items: any, value: any): any => {
     if (items.includes(value)) {
-      // remove
       return items.filter((s: string) => s !== value) as never;
     }
-    // add
     return [...items, value] as never;
   };
 
-  const { loading, data, error } = useQuery(GET_PROCEDURES, {
+  const pageSize = 15;
+
+  const { loading, data, error, fetchMore } = useQuery(GET_PROCEDURES, {
     variables: {
       filter: {
         subjectGroups: filterSubject,
         type: filterType,
       },
       listTypes,
-      pageSize: 15,
+      pageSize,
       sort: 'voteDate',
       period: 20,
     },
+  });
+
+  const [sentryRef] = useInfiniteScroll({
+    loading: isLoadingMore,
+    hasNextPage: hasMore,
+    onLoadMore: () => {
+      setIsLoadingMore(true);
+      setOffset(offset + pageSize);
+      fetchMore({
+        variables: {
+          offset,
+        },
+      }).then((res: any) => {
+        setHasMore(res.data?.procedures.length === pageSize);
+        setIsLoadingMore(false);
+      });
+    },
+    disabled: !!error,
+    rootMargin: '0px 0px 800px 0px',
   });
 
   const isEmpty = error || data?.procedures?.length <= 0;
@@ -91,15 +117,24 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
         </div>
         <div className="mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">
           <div className="3xl:grid-cols-4 mx-auto mt-6 grid h-full max-w-md gap-5 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3">
-            {!error && loading && <Loading />}
+            {/* {!error && loading && <Loading slim={false} />} */}
             {!error &&
               !isEmpty &&
               !loading &&
-              data?.procedures.map((item: { procedureId: any }) => (
-                <Card item={item as any} key={item.procedureId} />
+              uniqBy(data?.procedures, '_id').map((item: any) => (
+                // eslint-disable-next-line no-underscore-dangle
+                <Card item={item as any} key={item._id} />
               ))}
             {!loading && isEmpty && <Empty />}
           </div>
+          {(isLoadingMore || (hasMore && !error)) && (
+            <div
+              className="flex h-32 w-full items-center justify-center"
+              ref={sentryRef}
+            >
+              <Loading slim={true} />
+            </div>
+          )}
         </div>
       </div>
     </Main>

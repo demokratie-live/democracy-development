@@ -3,6 +3,7 @@ import { gql } from '@apollo/client';
 export const GET_PROCEDURE_DETAILS = gql`
   query procedure($id: ID!) {
     procedure(id: $id) {
+      _id
       list
       completed
       title

@@ -17,6 +17,7 @@ export const GET_PROCEDURES = gql`
       filter: $filter
       period: $period
     ) {
+      _id
       title
       procedureId
       sessionTOPHeading

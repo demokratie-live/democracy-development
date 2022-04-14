@@ -4,6 +4,7 @@ import {
   HttpLink,
   InMemoryCache,
 } from '@apollo/client';
+import { offsetLimitPagination } from '@apollo/client/utilities';
 import DebounceLink from 'apollo-link-debounce';
 
 export default function getClient() {
@@ -12,8 +13,20 @@ export default function getClient() {
     new HttpLink({ uri: 'https://api.democracy-app.de/' }),
   ]);
 
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          procedures: {
+            ...offsetLimitPagination(['filter', 'sort']),
+          },
+        },
+      },
+    },
+  });
+
   return new ApolloClient({
-    cache: new InMemoryCache(),
+    cache,
     link,
   });
 }

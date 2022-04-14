@@ -4,6 +4,7 @@ export const SEARCH_PROCEDURES = gql`
   query search($term: String!) {
     searchProceduresAutocomplete(term: $term) {
       procedures {
+        _id
         title
         sessionTOPHeading
         procedureId

@@ -1,7 +1,15 @@
-const Loading = () => (
-  <div className="inline-flex h-[76vh] w-screen">
+interface Props {
+  slim?: boolean;
+}
+
+const Loading = ({ slim }: Props) => (
+  <div className={`inline-flex w-screen ${slim !== true && 'h-[75px]'}`}>
     <div className="flex w-full max-w-7xl items-center justify-center">
-      <div className="mb-[50vh] flex items-center justify-center space-x-1 text-base text-ci-blue-dark">
+      <div
+        className={`${
+          slim !== true && 'mb-[50vh]'
+        } flex items-center justify-center space-x-1 text-base text-ci-blue-dark`}
+      >
         <svg
           fill="none"
           className="h-10 w-10 animate-spin"
