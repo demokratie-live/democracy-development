@@ -41,7 +41,7 @@ const Card = ({ item }: any) => {
       </Link>
       <div className="flex flex-1 flex-col justify-between bg-white p-6">
         <div className="flex-1">
-          <p className="text-sm font-medium text-ci-blue-darker">
+          <div className="text-sm font-medium text-ci-blue-darker">
             <div
               onClick={(e) => {
                 e.preventDefault();
@@ -51,7 +51,7 @@ const Card = ({ item }: any) => {
             >
               {item.type}
             </div>
-          </p>
+          </div>
           <Link href={makeLink(item)}>
             <a className="mt-2 block">
               <p className="hyphens-auto text-xl font-semibold leading-6 text-gray-900 line-clamp-3">
