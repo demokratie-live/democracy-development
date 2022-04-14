@@ -40,7 +40,7 @@ export default function Top100Page() {
         />
       }
     >
-      <div>
+      <div className="mb-20">
         <div className="bg-gray-200">
           <div className="mx-auto max-w-7xl px-4 pb-7 pt-28 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
