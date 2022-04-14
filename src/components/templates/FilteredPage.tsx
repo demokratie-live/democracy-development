@@ -128,8 +128,17 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
           />
         </div>
         <div className="mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">
-          <div className="3xl:grid-cols-4 mx-auto mt-6 grid h-full max-w-md gap-5 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3">
-            {/* {!error && loading && <Loading slim={false} />} */}
+          <div
+            className={`
+            ${
+              !isEmpty &&
+              !loading &&
+              !error &&
+              'grid gap-5 3xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3'
+            }
+             mt-6 h-full w-full max-w-md sm:max-w-none mx-auto`}
+          >
+            {!error && loading && !isLoadingMore && <Loading />}
             {!error &&
               !isEmpty &&
               !loading &&
@@ -139,7 +148,7 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
               ))}
             {!loading && isEmpty && <Empty />}
           </div>
-          {(isLoadingMore || (hasMore && !error)) && (
+          {(isLoadingMore || (!loading && hasMore && !error)) && (
             <div
               className="flex h-32 w-full items-center justify-center"
               ref={sentryRef}

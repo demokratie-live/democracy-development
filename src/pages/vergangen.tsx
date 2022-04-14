@@ -5,8 +5,7 @@ export default function PastPage() {
     <FilteredPage
       listTypes={['PAST']}
       title="Vergangen"
-      description="Vergangenen und bereits abgestimmte, Gesetze und Anträge des
-      Bundestages"
+      description="Vorgänge, die in der vergangenen Sitzungswoche zur Abstimmung standen."
     />
   );
 }

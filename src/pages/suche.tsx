@@ -52,7 +52,16 @@ export default function Top100Page() {
           </div>
         </div>
         <div className="mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">
-          <div className="3xl:grid-cols-4 mx-auto mt-6 grid h-full max-w-md gap-5 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            className={`
+            ${
+              !isEmpty &&
+              !loading &&
+              !error &&
+              'grid gap-5 3xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3'
+            }
+             mt-6 h-full w-full max-w-md sm:max-w-none mx-auto`}
+          >
             {!error && loading && <Loading />}
             {!error &&
               !isEmpty &&

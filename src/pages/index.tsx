@@ -5,8 +5,7 @@ export default function CurrentPage() {
     <FilteredPage
       listTypes={['CONFERENCEWEEKS_PLANNED']}
       title="Sitzungswoche"
-      description="Gesetze und Anträge des Bundestages, die unmittelbar vor der
-  Abstimmung stehen"
+      description="Vorgänge, die in der kommenden Sitzungswoche zur Abstimmung stehen."
     />
   );
 }
