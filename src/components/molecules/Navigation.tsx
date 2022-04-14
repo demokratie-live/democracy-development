@@ -25,8 +25,10 @@ const Navigation = () => {
   // TODO: use recoil sync?
   // reset the search if navigating to a different page
   router?.events?.on('routeChangeComplete', (url) => {
-    if (url.startsWith('/suche')) return;
-    setSearchTerm('');
+    const u = url.split('/');
+    if (u.length > 1 && ['', 'vergangen', 'top-100'].includes(u[1])) {
+      setSearchTerm('');
+    }
   });
 
   // TODO: use recoil sync?
