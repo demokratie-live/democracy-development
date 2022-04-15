@@ -37,8 +37,6 @@ export async function getServerSideProps({ res }: any) {
     query: GET_CONFERENCE_WEEK,
   });
 
-  console.log(data);
-
   return {
     props: {
       conferenceWeek: data.currentConferenceWeek,
