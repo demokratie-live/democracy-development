@@ -5,7 +5,7 @@ export default function PastPage() {
     <FilteredPage
       listTypes={['PAST']}
       title="Vergangen"
-      description="Vorgänge, die in der vergangenen Sitzungswoche zur Abstimmung standen."
+      description="Vorgänge, die in der vergangenen Sitzungswoche zur Abstimmung standen"
     />
   );
 }

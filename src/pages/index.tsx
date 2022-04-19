@@ -20,7 +20,7 @@ export default function CurrentPage({ conferenceWeek }: Props) {
     <FilteredPage
       listTypes={['CONFERENCEWEEKS_PLANNED']}
       title={`Sitzungswoche - KW ${conferenceWeek.calendarWeek}`}
-      description={`Vorgänge, die in der kommenden Sitzungswoche vom ${start} bis ${end} zur Abstimmung stehen.`}
+      description={`Vorgänge, die in der kommenden Sitzungswoche vom ${start} bis ${end} zur Abstimmung stehen`}
       // description="Vorgänge, die in der kommenden Sitzungswoche zur Abstimmung stehen."
     />
   );
