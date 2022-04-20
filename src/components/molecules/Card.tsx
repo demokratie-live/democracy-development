@@ -1,12 +1,16 @@
+import { Chart, ArcElement } from 'chart.js';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import useDimensions from 'react-cool-dimensions';
 import { useRecoilState } from 'recoil';
 
-import { makeLink, getImage } from '@/utils/Helpers';
+import { makeLink, getImage, formatVotes } from '@/utils/Helpers';
 
+import DoughnutChart from '../organisms/DoughnutChart';
 import { filterForTypeState } from '../state/states';
+
+Chart.register(ArcElement);
 
 const Card = ({ item }: any) => {
   const [, setFilterType] = useRecoilState(filterForTypeState);
@@ -27,16 +31,59 @@ const Card = ({ item }: any) => {
         }}
       /> */}
       <Link href={makeLink(item)}>
-        <a className="shrink-0 cursor-pointer" ref={observe}>
-          <Image
-            className="aspect-video object-cover"
-            src={getImage(item.subjectGroups[0])}
-            width={1920}
-            height={1024}
-            layout="responsive"
-            sizes={width !== undefined ? `${Math.round(width)}px` : '800px'}
-            alt={item.subjectGroups[0] ?? 'Bundestag'}
-          />
+        <a
+          className="relative shrink-0 cursor-pointer bg-white pb-10 "
+          ref={observe}
+        >
+          <div className="relative flex aspect-teaser flex-col justify-center overflow-hidden">
+            <Image
+              className="object-cover"
+              src={getImage(item.subjectGroups[0])}
+              width={1920}
+              height={1024}
+              layout="responsive"
+              sizes={width !== undefined ? `${Math.round(width)}px` : '800px'}
+              alt={item.subjectGroups[0] ?? 'Bundestag'}
+            />
+          </div>
+          <div className="absolute -bottom-3 flex w-full items-center justify-center space-x-2 border-white">
+            {item.voteResults && (
+              <div className="flex flex-col items-center">
+                <DoughnutChart
+                  colors={['#708E32', '#B1B3B4', '#C34091']}
+                  className="!h-28 !w-28 rounded-full bg-white p-0.5"
+                  yes={item.voteResults.yes}
+                  abstination={item.voteResults.abstination}
+                  no={item.voteResults.no}
+                />
+                <p className="flex flex-col items-center pb-1 pt-px text-xs leading-[1.1em]">
+                  <span className="font-bold">Bundestag</span>
+                  <span className="text-sm font-semibold tracking-wide">
+                    <small>
+                      {item.voteResults.yes +
+                        item.voteResults.abstination +
+                        item.voteResults.no}
+                    </small>
+                  </span>
+                </p>
+              </div>
+            )}
+            <div className="flex flex-col items-center">
+              <DoughnutChart
+                className="!h-28 !w-28 rounded-full bg-white p-0.5"
+                colors={['#46A058', '#4580DD', '#B83829']}
+                yes={item.communityVotes.yes}
+                abstination={item.communityVotes.abstination}
+                no={item.communityVotes.no}
+              />
+              <p className="flex flex-col items-center pb-1 pt-px text-xs leading-[1.1em]">
+                <span className="font-bold">Community</span>
+                <span className="text-sm font-semibold tracking-wide">
+                  <small>{formatVotes(item.votes)}</small>
+                </span>
+              </p>
+            </div>
+          </div>
         </a>
       </Link>
       <div className="flex flex-1 flex-col justify-between bg-white p-6">

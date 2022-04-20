@@ -15,6 +15,9 @@ module.exports = {
       '6xl': '4rem',
     },
     extend: {
+      aspectRatio: {
+        teaser: '16 / 6',
+      },
       colors: {
         ci: {
           blue: '#4494d3',
