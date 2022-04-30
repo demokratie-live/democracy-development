@@ -744,7 +744,7 @@ mongoosastic@^4.6.0:
     elasticsearch "16.7.1"
     lodash.clonedeep "4.5.0"
 
-"mongoose-diff-history@github:mimani/mongoose-diff-history#master":
+mongoose-diff-history@mimani/mongoose-diff-history#master:
   version "2.1.0"
   resolved "https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86"
   dependencies:
@@ -1088,9 +1088,9 @@ typescript@^3.7.2:
   integrity sha512-hSAifV3k+i6lEoCJ2k6R2Z/rp/H3+8sdmcn5NrS3/3kE7+RyZXm9aqvxWqjEXHAd8b0pShatpcdMTvEdvAJltQ==
 
 typescript@^4.5.2:
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.2.tgz#8ac1fba9f52256fdb06fb89e4122fa6a346c2998"
-  integrity sha512-5BlMof9H1yGt0P8/WF+wPNw6GfctgGjXp5hkblpyT+8rkASSmkUKMXrxR0Xg8ThVCi/JnHQiKXeBaEwCeQwMFw==
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.3.tgz#eefeafa6afdd31d725584c67a0eaba80f6fc6c6c"
+  integrity sha512-yNIatDa5iaofVozS/uQJEl3JRWLKKGJKh6Yaiv0GLGSuhpFJe7P3SbHZ8/yjAHRQwKRoA6YZqlfjXWmVzoVSMw==
 
 unset-value@^0.1.1:
   version "0.1.2"
