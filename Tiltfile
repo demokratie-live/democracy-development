@@ -34,6 +34,8 @@ k8s_resource(workload='gorush', labels=["third-paty"])
 k8s_resource(workload='nats-depl', labels=["third-paty"])
 k8s_resource(workload='redis', labels=["third-paty"])
 
+
+# democracy-api
 docker_build(
     'democracy/democracy-server',
     context='./democracy/api',
@@ -49,3 +51,54 @@ docker_build(
         )
     ]
 )
+# import-procedures-cronjob
+docker_build(
+    'democracy/crawler',
+    context='./services/cron-jobs/crawler',
+    dockerfile='./services/cron-jobs/crawler/Dockerfile',
+    only=['.'],
+    target='build_stage',
+    entrypoint='yarn dev',
+    live_update=[
+        sync('./services/cron-jobs/crawler/src/', '/app/src/'),
+        run(
+            'yarn install',
+            trigger=['./yarn.lock']
+        )
+    ]
+)
+
+### DAPR #######################################################################
+load('ext://helm_remote', 'helm_remote')
+helm_remote('dapr',
+            repo_url='https://dapr.github.io/helm-charts/',
+            namespace='dapr-system',
+            create_namespace=True,
+            version='1.7.0'
+)
+k8s_yaml(helm('./infra/dapr/zipkin-helm',
+     namespace='dapr-system',
+))
+### TODO: Appling daprsystem config does currently not work.
+### It should work by helm, but also manually adding the config does not effect.
+# k8s_yaml('./infra/dapr/dapr-config.yaml', allow_duplicates=True)
+k8s_yaml(kustomize('./infra/dapr'), allow_duplicates=True)
+
+k8s_resource(workload='dapr-dashboard', port_forwards='3300:8080', labels=["dapr"])
+k8s_resource(workload='dapr-operator', labels=["dapr"])
+k8s_resource(workload='dapr-sentry', labels=["dapr"])
+k8s_resource(workload='dapr-sidecar-injector', labels=["dapr"])
+k8s_resource(workload='dapr-placement-server', labels=["dapr"])
+k8s_resource(workload='chart-zipkin-ui', port_forwards='9411', labels=["dapr"])
+k8s_resource(workload='chart-zipkin-dependencies-gen', labels=["dapr"])
+k8s_resource(workload='chart-zipkin-cassandra', labels=["dapr"])
+k8s_resource(workload='chart-zipkin-collector', labels=["dapr"])
+
+### HASHICORP VAULT  #######################################################################
+helm_remote('vault',
+            repo_url='https://helm.releases.hashicorp.com',
+            namespace='hashicorp-vault',
+            create_namespace=True
+)
+k8s_resource(workload='vault-agent-injector', labels=["vault"])
+k8s_resource(workload='vault', port_forwards='3301:8200', labels=["vault"])

@@ -1,0 +1,64 @@
+{{if eq .Values.dependencies.enabled true}}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-zipkin-dependencies-gen
+  labels:
+    app: zipkin-dependencies-gen
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  schedule: "{{ .Values.dependencies.cron }}"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: zipkin-dependencies-gen
+            release: {{ .Release.Name }}
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: zipkin-dependencies-gen
+            image: "openzipkin/zipkin-dependencies:{{ .Values.dependencies.imageVersion }}"
+            env:
+            - name: STORAGE_TYPE
+              value: "{{ .Values.storageMethod }}"
+{{if eq .Values.storageMethod "cassandra3"}}
+            - name: CASSANDRA_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.username.name }}
+                  key: {{ .Values.configmap.username.key }}
+            - name: CASSANDRA_CONTACT_POINTS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.contactPoints.name }}
+                  key: {{ .Values.configmap.contactPoints.key }}
+            - name: CASSANDRA_LOCAL_DC
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.localdc.name }}
+                  key: {{ .Values.configmap.localdc.key }}
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zipkin
+                  key: cassandra.password
+            - name: CASSANDRA_ENSURE_SCHEMA
+              value: "false"
+{{ end }}
+            - name: JAVA_OPTS
+              value: "-XX:ConcGCThreads={{ .Values.node.cpus }} -XX:ParallelGCThreads={{ .Values.node.cpus }} -Djava.util.concurrent.ForkJoinPool.common.parallelism={{ .Values.node.cpus }} -Xms{{ .Values.dependencies.resources.javaOptsHeap }}M -Xmx{{ .Values.dependencies.resources.javaOptsHeap }}M -XX:+UseG1GC -server"
+            resources:
+              limits:
+                cpu: "{{ .Values.dependencies.resources.cpuLimit }}"
+                memory: "{{ .Values.dependencies.resources.ramMb }}Mi" # TODO fix this, this field id mi but the value is mb. There will be slight wastage
+              requests:
+                cpu: "{{ .Values.dependencies.resources.cpuRequest }}"
+                memory: "{{ .Values.dependencies.resources.ramMb }}Mi" # TODO fix this, this field id mi but the value is mb. There will be slight wastage
+{{ end }}

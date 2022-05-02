@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: zipkin-ui
+  labels:
+      app: zipkin-ui
+spec:
+  ports:
+   - port: {{ .Values.ui.queryPort }}
+     name: "http"
+     targetPort: {{ .Values.ui.queryPort }}
+  selector:
+    app: zipkin-ui
