@@ -1,3 +1,4 @@
+load('ext://helm_remote', 'helm_remote')
 k8s_yaml(kustomize('./infra/kustomize/overlays/local'))
 
 k8s_resource(workload='democracy-app-depl', port_forwards='3000:3000', labels=["democracy"])
@@ -69,7 +70,6 @@ docker_build(
 )
 
 ### DAPR #######################################################################
-load('ext://helm_remote', 'helm_remote')
 helm_remote('dapr',
             repo_url='https://dapr.github.io/helm-charts/',
             namespace='dapr-system',
@@ -79,9 +79,6 @@ helm_remote('dapr',
 k8s_yaml(helm('./infra/dapr/zipkin-helm',
      namespace='dapr-system',
 ))
-### TODO: Appling daprsystem config does currently not work.
-### It should work by helm, but also manually adding the config does not effect.
-# k8s_yaml('./infra/dapr/dapr-config.yaml', allow_duplicates=True)
 k8s_yaml(kustomize('./infra/dapr'), allow_duplicates=True)
 
 k8s_resource(workload='dapr-dashboard', port_forwards='3300:8080', labels=["dapr"])
@@ -95,10 +92,24 @@ k8s_resource(workload='chart-zipkin-cassandra', labels=["dapr"])
 k8s_resource(workload='chart-zipkin-collector', labels=["dapr"])
 
 ### HASHICORP VAULT  #######################################################################
-helm_remote('vault',
-            repo_url='https://helm.releases.hashicorp.com',
-            namespace='hashicorp-vault',
-            create_namespace=True
+# helm_remote('vault',
+#             repo_url='https://helm.releases.hashicorp.com',
+#             namespace='hashicorp-vault',
+#             create_namespace=True
+# )
+# k8s_resource(workload='vault-agent-injector', labels=["vault"])
+# k8s_resource(workload='vault', port_forwards='3301:8200', labels=["vault"])
+
+### Monitoring  #######################################################################
+k8s_yaml('infra/monitoring/prometheus/monitoring.coreos.com_prometheuses.yaml') # FIX https://github.com/prometheus-community/helm-charts/issues/1500#issuecomment-969149744
+helm_remote('kube-prometheus-stack',
+    repo_url='https://prometheus-community.github.io/helm-charts',
+    namespace='monitoring',
+    create_namespace=True,
+    values="./infra/monitoring/prometheus/values.yaml"
 )
-k8s_resource(workload='vault-agent-injector', labels=["vault"])
-k8s_resource(workload='vault', port_forwards='3301:8200', labels=["vault"])
+
+k8s_resource(workload='kube-prometheus-stack-prometheus-node-exporter', labels=["monitoring"])
+k8s_resource(workload='kube-prometheus-stack-kube-state-metrics', labels=["monitoring"])
+k8s_resource(workload='kube-prometheus-stack-operator', labels=["monitoring"])
+k8s_resource(workload='kube-prometheus-stack-grafana', port_forwards='3302:3000', labels=["monitoring"])
