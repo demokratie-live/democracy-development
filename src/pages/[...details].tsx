@@ -2,6 +2,7 @@ import { PaperClipIcon } from '@heroicons/react/outline';
 import dayjs from 'dayjs';
 import { sortBy, truncate } from 'lodash-es';
 
+import ChartPair from '@/components/molecules/ChartPair';
 import Loading from '@/components/molecules/Loading';
 import { Meta } from '@/layout/Meta';
 import { GET_PROCEDURE_DETAILS } from '@/queries/get-procedure-details';
@@ -34,16 +35,21 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
         ) : (
           <>
             <div className="border-b border-gray-300 bg-gray-200">
-              <div className="mx-auto max-w-7xl px-4 pb-7 pt-28 sm:px-6 lg:px-8">
-                <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-gray-900">
+              <div className="mx-auto max-w-7xl px-4 pb-7 pt-28 text-center sm:px-6 lg:px-8">
+                <ChartPair
+                  item={data.procedure}
+                  className="mb-12 flex w-full items-center justify-center space-x-6"
+                  large={true}
+                />
+                <h1 className="mx-auto max-w-3xl text-2xl font-extrabold leading-tight tracking-tight text-gray-900">
                   {data.procedure.title}
                 </h1>
-                <h2 className="max-w-xl pt-2 text-sm leading-5 text-gray-600">
+                <h2 className="mx-auto max-w-3xl pt-2 text-sm leading-5 text-gray-600">
                   {data.procedure.sessionTOPHeading}
                 </h2>
               </div>
             </div>
-            <div className="mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-5xl px-4 pb-7 sm:px-6 lg:px-8">
               {/* <div className="hyphens-auto prose py-10">
                 {data.procedure.abstract}
               </div> */}

@@ -1,4 +1,7 @@
+import { Chart, ArcElement } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+
+Chart.register(ArcElement);
 
 const icons = {
   yes: 'M19.396 20.708c-.81-.062-.733-.812.031-.953 1.269-.234 1.827-.914 1.827-1.543 0-.529-.396-1.022-1.098-1.181-.837-.189-.664-.757.031-.812 1.132-.09 1.688-.764 1.688-1.41 0-.565-.425-1.108-1.261-1.22-.857-.115-.578-.734.031-.922.521-.16 1.354-.5 1.354-1.51 0-.672-.5-1.562-2.271-1.49-1.228.05-3.667-.198-4.979-.885.907-3.657.689-8.782-1.687-8.782-1.594 0-1.896 1.807-2.375 3.469-1.718 5.969-5.156 7.062-8.687 7.603v9.928c6.688 0 8.5 3 13.505 3 3.199 0 4.852-1.735 4.852-2.666-.001-.334-.273-.572-.961-.626z',
@@ -9,29 +12,37 @@ const icons = {
 
 interface Props {
   className?: string;
-  yes?: number;
-  abstination?: number;
-  no?: number;
-  colors: string[];
+  votes: Votes;
 }
 
-export default function DoughnutChart({
-  className,
-  yes,
-  abstination,
-  no,
-  colors,
-}: Props) {
-  const itsNeutral = (yes ?? 0) + (no ?? 0) < (abstination ?? 0);
-  const itsAYes = (yes ?? 0) > (no ?? 0);
+interface Votes {
+  yes: VoteCategory;
+  no: VoteCategory;
+  abstination?: VoteCategory;
+  notVoted?: VoteCategory;
+}
+
+interface VoteCategory {
+  label: string;
+  color: string;
+  count: number;
+}
+
+export default function DoughnutChart({ className, votes }: Props) {
+  const itsNeutral =
+    votes.yes.count + votes.no.count < (votes?.abstination?.count ?? 0);
+  const itsAYes = votes.yes.count > votes.no.count;
 
   let ico: string = itsAYes ? icons.yes : icons.no;
-  let col = itsAYes ? colors[0] : colors[2];
+  let col = itsAYes ? votes.yes.color : votes.no.color;
 
   if (itsNeutral) {
     ico = icons.neutral;
-    col = colors[1] as string;
+    col = votes?.abstination?.color ?? col;
   }
+
+  const colors = Object.values(votes).map((v) => v?.color);
+  const counts = Object.values(votes).map((v) => v?.count);
 
   return (
     <div className="relative">
@@ -58,7 +69,7 @@ export default function DoughnutChart({
               backgroundColor: colors,
               offset: 0,
               // offset: -6,
-              data: [yes, abstination, no],
+              data: counts,
               borderJoinStyle: 'miter',
               // hoverOffset: -2,
               // hoverBorderWidth: 2,

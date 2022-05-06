@@ -49,14 +49,14 @@ const Navigation = () => {
                 <Link href="/">
                   <a className="flex shrink-0 items-center">
                     <img
-                      className="hidden h-[38px] w-auto md:inline-flex"
+                      className="hidden h-[38px] w-auto lg:inline-flex"
                       height="161"
                       width="1024"
                       src="/assets/images/logo-text.svg"
                       alt="Democracy App"
                     />
                     <img
-                      className="inline-flex h-[38px] w-auto md:hidden"
+                      className="inline-flex h-[38px] w-auto lg:hidden"
                       height="160"
                       width="161"
                       src="/assets/images/logo.svg"
@@ -106,7 +106,7 @@ const Navigation = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center lg:hidden">
+              <div className="flex items-center md:hidden">
                 {/* Mobile menu button */}
                 <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                   <span className="sr-only">Open main menu</span>
@@ -120,7 +120,7 @@ const Navigation = () => {
             </div>
           </div>
 
-          <Disclosure.Panel className="lg:hidden">
+          <Disclosure.Panel className="md:hidden">
             <div className="space-y-1 pt-2 pb-3">
               {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" */}
               {navigation.map((item) => (
