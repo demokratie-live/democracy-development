@@ -15,7 +15,7 @@ const icons = {
 interface Props {
   className?: string;
   votes: Votes;
-  onHover?: (vote: VoteCategory) => void;
+  onHover?: (vote?: VoteCategory) => void;
 }
 
 export interface Votes {
@@ -79,6 +79,12 @@ export default function DoughnutChart({ className, votes, onHover }: Props) {
               onHover(item);
             }
           },
+        }}
+        onMouseOut={() => {
+          setIndex(null);
+          if (onHover) {
+            onHover();
+          }
         }}
         data={{
           datasets: [

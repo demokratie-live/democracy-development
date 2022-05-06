@@ -6,8 +6,8 @@ import DoughnutChart, { VoteCategory } from '../organisms/DoughnutChart';
 
 export default function ChartPair({ item, className, large }) {
   // hover state 1
-  const [hover1, setHover1] = useState<VoteCategory | null>(null);
-  const [hover2, setHover2] = useState<VoteCategory | null>(null);
+  const [hover1, setHover1] = useState<VoteCategory | undefined>(undefined);
+  const [hover2, setHover2] = useState<VoteCategory | undefined>(undefined);
 
   const calculatePercent = (current, total) => {
     return `${Math.round((current / total) * 100)}%`;
