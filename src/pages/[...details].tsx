@@ -123,11 +123,12 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                         </dd>
                       </div>
                     )}
-                    <div className="sm:col-span-2 sm:grid sm:grid-cols-3 sm:gap-4  md:col-span-3">
+                    <hr className="my-5 border-dashed sm:col-span-3" />
+                    <div className="sm:col-span-3 sm:grid sm:grid-cols-3 sm:gap-4 md:col-span-3">
                       <dt className="text-sm font-medium text-gray-800">
                         Dokumente
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
+                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-3 sm:mt-0">
                         <ul
                           role="list"
                           className="divide-y divide-gray-200 rounded-md border border-gray-200"
@@ -148,7 +149,7 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                                     className="h-5 w-5 shrink-0 text-gray-400"
                                     aria-hidden="true"
                                   />
-                                  <div className="ml-2 flex flex-col">
+                                  <div className="ml-2 flex w-full flex-col !pr-8">
                                     <span className="truncate font-medium">
                                       {document.type}
                                     </span>
