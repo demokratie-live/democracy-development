@@ -41,7 +41,7 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                   className="mb-12 flex w-full items-center justify-center space-x-6"
                   large={true}
                 />
-                <h1 className="mx-auto max-w-3xl text-2xl font-extrabold leading-tight tracking-tight text-gray-900">
+                <h1 className="mx-auto max-w-3xl text-2xl font-semibold leading-7 tracking-tight text-gray-900">
                   {data.procedure.title}
                 </h1>
                 <h2 className="mx-auto max-w-3xl pt-2 text-sm leading-5 text-gray-600">
