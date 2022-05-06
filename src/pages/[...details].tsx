@@ -64,7 +64,7 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                   </p> */}
                 </div>
                 <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
-                  <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                  <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
                     <div className="sm:col-span-1 ">
                       <dt className="text-sm font-medium text-gray-800">Typ</dt>
                       <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
@@ -123,7 +123,7 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                         </dd>
                       </div>
                     )}
-                    <div className="sm:col-span-2 sm:grid sm:grid-cols-3 sm:gap-4">
+                    <div className="sm:col-span-2 sm:grid sm:grid-cols-3 sm:gap-4  md:col-span-3">
                       <dt className="text-sm font-medium text-gray-800">
                         Dokumente
                       </dt>
