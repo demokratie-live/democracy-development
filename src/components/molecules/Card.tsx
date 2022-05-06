@@ -47,7 +47,7 @@ const Card = ({ item }: any) => {
             (intersection.isIntersecting && (
               <ChartPair
                 item={item}
-                className="absolute -bottom-3 flex w-full items-center justify-center space-x-2 border-white"
+                className="absolute -bottom-3 flex w-full items-center justify-center space-x-6 border-white"
                 large={false}
               />
             ))}
