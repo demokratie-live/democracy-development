@@ -1,7 +1,9 @@
-import { Chart, ArcElement } from 'chart.js';
+import { useRef, useState } from 'react';
+
+import { Chart as ChartJS, ArcElement } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
-Chart.register(ArcElement);
+ChartJS.register(ArcElement);
 
 const icons = {
   yes: 'M19.396 20.708c-.81-.062-.733-.812.031-.953 1.269-.234 1.827-.914 1.827-1.543 0-.529-.396-1.022-1.098-1.181-.837-.189-.664-.757.031-.812 1.132-.09 1.688-.764 1.688-1.41 0-.565-.425-1.108-1.261-1.22-.857-.115-.578-.734.031-.922.521-.16 1.354-.5 1.354-1.51 0-.672-.5-1.562-2.271-1.49-1.228.05-3.667-.198-4.979-.885.907-3.657.689-8.782-1.687-8.782-1.594 0-1.896 1.807-2.375 3.469-1.718 5.969-5.156 7.062-8.687 7.603v9.928c6.688 0 8.5 3 13.505 3 3.199 0 4.852-1.735 4.852-2.666-.001-.334-.273-.572-.961-.626z',
@@ -13,22 +15,23 @@ const icons = {
 interface Props {
   className?: string;
   votes: Votes;
+  onHover?: (vote: VoteCategory) => void;
 }
 
-interface Votes {
+export interface Votes {
   yes: VoteCategory;
   no: VoteCategory;
   abstination?: VoteCategory;
   notVoted?: VoteCategory;
 }
 
-interface VoteCategory {
+export interface VoteCategory {
   label: string;
   color: string;
   count: number;
 }
 
-export default function DoughnutChart({ className, votes }: Props) {
+export default function DoughnutChart({ className, votes, onHover }: Props) {
   const itsNeutral =
     votes.yes.count + votes.no.count < (votes?.abstination?.count ?? 0);
   const itsAYes = votes.yes.count > votes.no.count;
@@ -40,13 +43,18 @@ export default function DoughnutChart({ className, votes }: Props) {
     ico = icons.neutral;
     col = votes?.abstination?.color ?? col;
   }
+  const chartRef = useRef();
 
   const colors = Object.values(votes).map((v) => v?.color);
   const counts = Object.values(votes).map((v) => v?.count);
 
+  // current index
+  const [index, setIndex] = useState<number | null>(null);
+
   return (
     <div className="relative">
       <Doughnut
+        ref={chartRef}
         className={className}
         options={{
           borderColor: '#fff',
@@ -60,6 +68,17 @@ export default function DoughnutChart({ className, votes }: Props) {
           },
           spacing: 0,
           cutout: 24,
+          onHover: (_, elements) => {
+            const i = elements?.length ? elements[0]!.index : null;
+            if (i === index) return;
+
+            const item = i !== null ? Object.values(votes)[i] : null;
+
+            setIndex(i);
+            if (onHover) {
+              onHover(item);
+            }
+          },
         }}
         data={{
           datasets: [
@@ -82,7 +101,7 @@ export default function DoughnutChart({ className, votes }: Props) {
           ],
         }}
       />
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <svg
           className="h-6 w-6"
           xmlns="http://www.w3.org/2000/svg"
