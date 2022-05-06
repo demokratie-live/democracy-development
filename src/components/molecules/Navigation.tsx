@@ -110,10 +110,10 @@ const Navigation = () => {
                 <a
                   href="https://www.democracy-deutschland.de/#!donate"
                   target="_blank"
-                  className="inline-flex items-center space-x-1 rounded-md bg-gradient-to-b from-red-500 to-red-600 px-3 py-2 text-xs font-medium text-white shadow-sm hover:from-red-700 hover:to-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                  className="inline-flex items-center rounded-md bg-gradient-to-b from-red-500 to-red-600 px-3 py-2 text-xs font-medium text-white shadow-sm hover:from-red-700 hover:to-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                   rel="noreferrer"
                 >
-                  <span className="hidden px-1 sm:block">Spenden</span>
+                  <span className="hidden px-1 pr-2 sm:block">Spenden</span>
                   <HeartIcon className="h-5 w-5" aria-hidden="true" />
                 </a>
               </div>
