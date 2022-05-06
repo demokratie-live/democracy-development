@@ -55,9 +55,9 @@ export default function ChartPair({ item, className, large }) {
                 {hover1 &&
                   `${hover1.label} (${calculatePercent(
                     hover1.count,
-                    item.communityVotes.yes +
-                      item.communityVotes.no +
-                      item.communityVotes.abstination +
+                    item.voteResults.yes +
+                      item.voteResults.no +
+                      item.voteResults.abstination +
                       item.voteResults.notVoted
                   )})`}
                 {!hover1 && (
