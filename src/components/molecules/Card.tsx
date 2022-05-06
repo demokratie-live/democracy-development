@@ -1,7 +1,10 @@
+import { useRef } from 'react';
+
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import useDimensions from 'react-cool-dimensions';
+import { useIntersection } from 'react-use';
 import { useRecoilState } from 'recoil';
 
 import { makeLink, getImage } from '@/utils/Helpers';
@@ -12,9 +15,18 @@ import ChartPair from './ChartPair';
 const Card = ({ item }: any) => {
   const [, setFilterType] = useRecoilState(filterForTypeState);
   const { observe, width } = useDimensions();
+  const intersectionRef = useRef(null);
+  const intersection = useIntersection(intersectionRef, {
+    root: null,
+    rootMargin: '350px',
+    threshold: 1,
+  });
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-lg border shadow-lg">
+    <div
+      className="flex flex-col overflow-hidden rounded-lg border shadow-lg"
+      ref={intersectionRef}
+    >
       <Link href={makeLink(item)}>
         <a
           className="relative shrink-0 cursor-pointer bg-white pb-10 "
@@ -31,11 +43,14 @@ const Card = ({ item }: any) => {
               alt={item.subjectGroups[0] ?? 'Bundestag'}
             />
           </div>
-          <ChartPair
-            item={item}
-            className="absolute -bottom-3 flex w-full items-center justify-center space-x-2 border-white"
-            large={false}
-          />
+          {!intersection ||
+            (intersection.isIntersecting && (
+              <ChartPair
+                item={item}
+                className="absolute -bottom-3 flex w-full items-center justify-center space-x-2 border-white"
+                large={false}
+              />
+            ))}
         </a>
       </Link>
       <div className="flex flex-1 flex-col justify-between bg-white p-6">
