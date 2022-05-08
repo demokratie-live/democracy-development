@@ -1,0 +1,14 @@
+### Monitoring  #######################################################################
+load('ext://helm_remote', 'helm_remote')
+
+helm_remote('kube-prometheus-stack',
+    repo_url='https://prometheus-community.github.io/helm-charts',
+    namespace='monitoring',
+    values="./values.yaml",
+    create_namespace=True
+)
+
+k8s_resource(workload='kube-prometheus-stack-prometheus-node-exporter', labels=["monitoring"])
+k8s_resource(workload='kube-prometheus-stack-kube-state-metrics', labels=["monitoring"])
+k8s_resource(workload='kube-prometheus-stack-operator', labels=["monitoring"])
+k8s_resource(workload='kube-prometheus-stack-grafana', port_forwards='3302:3000', labels=["monitoring"])
