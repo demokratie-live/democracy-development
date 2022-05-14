@@ -1,7 +1,7 @@
 # DEMOCRACY Desktop Version
 
 <p align="center">
-  <img width="1416" alt="grafik" src="https://user-images.githubusercontent.com/432828/168431160-ec86a80b-303e-4107-a714-b71fdfcaeff1.png">
+  <img width="1530" alt="Screenshot" src="https://user-images.githubusercontent.com/432828/168432040-dbb54b91-40a9-4265-ba33-285a4527d932.png">
 </p>
 
 🚀 Boilerplate and Starter for Next.js, Tailwind CSS and TypeScript ⚡️ Made with developer experience first: Next.js, TypeScript, ESLint, Prettier, Husky, Lint-Staged, VSCode, Netlify, PostCSS, Tailwind CSS.
