@@ -2,6 +2,7 @@ import { PaperClipIcon } from '@heroicons/react/outline';
 import dayjs from 'dayjs';
 import { sortBy, truncate } from 'lodash-es';
 
+import ChartPair from '@/components/molecules/ChartPair';
 import Loading from '@/components/molecules/Loading';
 import { Meta } from '@/layout/Meta';
 import { GET_PROCEDURE_DETAILS } from '@/queries/get-procedure-details';
@@ -34,16 +35,21 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
         ) : (
           <>
             <div className="border-b border-gray-300 bg-gray-200">
-              <div className="mx-auto max-w-7xl px-4 pb-7 pt-28 sm:px-6 lg:px-8">
-                <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-gray-900">
+              <div className="mx-auto max-w-7xl px-4 pb-7 pt-28 text-center sm:px-6 lg:px-8">
+                <ChartPair
+                  item={data.procedure}
+                  className="mb-12 flex w-full items-center justify-center space-x-6"
+                  large={true}
+                />
+                <h1 className="mx-auto max-w-3xl text-2xl font-semibold leading-7 tracking-tight text-gray-900">
                   {data.procedure.title}
                 </h1>
-                <h2 className="max-w-xl pt-2 text-sm leading-5 text-gray-600">
+                <h2 className="mx-auto max-w-3xl pt-2 text-sm leading-5 text-gray-600">
                   {data.procedure.sessionTOPHeading}
                 </h2>
               </div>
             </div>
-            <div className="mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-5xl px-4 pb-7 sm:px-6 lg:px-8">
               {/* <div className="hyphens-auto prose py-10">
                 {data.procedure.abstract}
               </div> */}
@@ -58,7 +64,7 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                   </p> */}
                 </div>
                 <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
-                  <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                  <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
                     <div className="sm:col-span-1 ">
                       <dt className="text-sm font-medium text-gray-800">Typ</dt>
                       <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
@@ -117,11 +123,12 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                         </dd>
                       </div>
                     )}
-                    <div className="sm:col-span-2 sm:grid sm:grid-cols-3 sm:gap-4">
+                    <hr className="my-5 border-dashed sm:col-span-3" />
+                    <div className="sm:col-span-3 sm:grid sm:grid-cols-3 sm:gap-4 md:col-span-3">
                       <dt className="text-sm font-medium text-gray-800">
                         Dokumente
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
+                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-3 sm:mt-0">
                         <ul
                           role="list"
                           className="divide-y divide-gray-200 rounded-md border border-gray-200"
@@ -142,7 +149,7 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                                     className="h-5 w-5 shrink-0 text-gray-400"
                                     aria-hidden="true"
                                   />
-                                  <div className="ml-2 flex flex-col">
+                                  <div className="ml-2 flex w-full flex-col !pr-8">
                                     <span className="truncate font-medium">
                                       {document.type}
                                     </span>

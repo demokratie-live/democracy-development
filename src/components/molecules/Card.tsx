@@ -1,42 +1,56 @@
+import { useRef } from 'react';
+
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import useDimensions from 'react-cool-dimensions';
+import { useIntersection } from 'react-use';
 import { useRecoilState } from 'recoil';
 
 import { makeLink, getImage } from '@/utils/Helpers';
 
 import { filterForTypeState } from '../state/states';
+import ChartPair from './ChartPair';
 
 const Card = ({ item }: any) => {
   const [, setFilterType] = useRecoilState(filterForTypeState);
   const { observe, width } = useDimensions();
+  const intersectionRef = useRef(null);
+  const intersection = useIntersection(intersectionRef, {
+    root: null,
+    rootMargin: '350px',
+    threshold: 1,
+  });
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-lg border shadow-lg">
-      {/* <DonutChart
-        colors={['#16C063', '#2882E4', '#EC3E31']}
-        innerTextBottom="Abstimmende"
-        innerTextTop="3"
-        size={500}
-        topLeftText="Bundesweit"
-        votesData={{
-          abstination: 1,
-          no: 1,
-          yes: 1,
-        }}
-      /> */}
+    <div
+      className="flex flex-col overflow-hidden rounded-lg border shadow-lg"
+      ref={intersectionRef}
+    >
       <Link href={makeLink(item)}>
-        <a className="shrink-0 cursor-pointer" ref={observe}>
-          <Image
-            className="aspect-video object-cover"
-            src={getImage(item.subjectGroups[0])}
-            width={1920}
-            height={1024}
-            layout="responsive"
-            sizes={width !== undefined ? `${Math.round(width)}px` : '800px'}
-            alt={item.subjectGroups[0] ?? 'Bundestag'}
-          />
+        <a
+          className="relative shrink-0 cursor-pointer bg-white pb-10 "
+          ref={observe}
+        >
+          <div className="relative flex aspect-teaser flex-col justify-center overflow-hidden">
+            <Image
+              className="object-cover"
+              src={getImage(item.subjectGroups[0])}
+              width={1920}
+              height={1024}
+              layout="responsive"
+              sizes={width !== undefined ? `${Math.round(width)}px` : '800px'}
+              alt={item.subjectGroups[0] ?? 'Bundestag'}
+            />
+          </div>
+          {!intersection ||
+            (intersection.isIntersecting && (
+              <ChartPair
+                item={item}
+                className="absolute -bottom-3 flex w-full items-center justify-center space-x-6 border-white"
+                large={false}
+              />
+            ))}
         </a>
       </Link>
       <div className="flex flex-1 flex-col justify-between bg-white p-6">

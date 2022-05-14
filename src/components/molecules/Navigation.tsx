@@ -1,6 +1,6 @@
 import { Disclosure } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
-import { SearchIcon } from '@heroicons/react/solid';
+import { HeartIcon, SearchIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
@@ -47,16 +47,16 @@ const Navigation = () => {
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <Link href="/">
-                  <a className="flex shrink-0 items-center">
+                  <a className="flex shrink-0 items-center rounded">
                     <img
-                      className="hidden h-[38px] w-auto md:inline-flex"
+                      className="hidden h-[38px] w-auto lg:inline-flex"
                       height="161"
                       width="1024"
                       src="/assets/images/logo-text.svg"
                       alt="Democracy App"
                     />
                     <img
-                      className="inline-flex h-[38px] w-auto md:hidden"
+                      className="inline-flex h-[38px] w-auto lg:hidden"
                       height="160"
                       width="161"
                       src="/assets/images/logo.svg"
@@ -73,7 +73,7 @@ const Navigation = () => {
                           router.pathname === item.href
                             ? 'border-ci-blue text-gray-900'
                             : 'border-transparent text-gray-500 hover:text-gray-700',
-                          'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-900'
+                          'inline-flex focus:rounded items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-900'
                         )}
                       >
                         {item.name}
@@ -106,7 +106,18 @@ const Navigation = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center lg:hidden">
+              <div className="flex items-center px-2">
+                <a
+                  href="https://www.democracy-deutschland.de/#!donate"
+                  target="_blank"
+                  className="inline-flex items-center rounded-md bg-gradient-to-b from-red-500 to-red-600 px-3 py-2 text-xs font-medium text-white shadow-sm hover:from-red-700 hover:to-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                  rel="noreferrer"
+                >
+                  <span className="hidden px-1 pr-2 sm:block">Spenden</span>
+                  <HeartIcon className="h-5 w-5" aria-hidden="true" />
+                </a>
+              </div>
+              <div className="flex items-center md:hidden">
                 {/* Mobile menu button */}
                 <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                   <span className="sr-only">Open main menu</span>
@@ -120,7 +131,7 @@ const Navigation = () => {
             </div>
           </div>
 
-          <Disclosure.Panel className="lg:hidden">
+          <Disclosure.Panel className="md:hidden">
             <div className="space-y-1 pt-2 pb-3">
               {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" */}
               {navigation.map((item) => (
