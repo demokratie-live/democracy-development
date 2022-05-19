@@ -3,8 +3,10 @@ kind: Configuration
 metadata:
   name: daprsystem
   namespace: dapr-system
-# spec:
-#   tracing:
-#     samplingRate: '1'
-#     zipkin:
-#       endpointAddress: 'http://zipkin:9411/api/v2/spans'
+spec:
+  # tracing:
+  #   samplingRate: '1'
+  #   zipkin:
+  #     endpointAddress: 'http://zipkin:9411/api/v2/spans'
+  mtls:
+    enabled: false

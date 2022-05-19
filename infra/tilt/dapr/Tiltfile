@@ -6,10 +6,9 @@ helm_remote('dapr',
             repo_url='https://dapr.github.io/helm-charts/',
             namespace='dapr-system',
             create_namespace=True,
-            version='1.7.0'
+            version='1.7.0',
+            values="./values.yaml"
 )
-
-k8s_yaml('./dapr-config.yaml', allow_duplicates=True)
 
 k8s_resource(workload='dapr-dashboard', port_forwards='3300:8080', labels=["dapr"])
 k8s_resource(workload='dapr-operator', labels=["dapr"])
@@ -17,17 +16,20 @@ k8s_resource(workload='dapr-sentry', labels=["dapr"])
 k8s_resource(workload='dapr-sidecar-injector', labels=["dapr"])
 k8s_resource(workload='dapr-placement-server', labels=["dapr"])
 
+k8s_yaml('./dapr-config.yaml', allow_duplicates=True)
+# k8s_yaml('./local-secret-store.yaml', allow_duplicates=True)
+
 ### Zipkin  #######################################################################
 
-k8s_yaml(helm('./zipkin-helm',
-     namespace='dapr-system',
-))
-k8s_yaml('./dapr-tracing-zipkin-config.yaml')
+# k8s_yaml(helm('./zipkin-helm',
+#      namespace='dapr-system',
+# ))
+# # k8s_yaml('./dapr-tracing-zipkin-config.yaml')
 
-k8s_resource(workload='chart-zipkin-ui', port_forwards='9411', labels=["dapr"])
-k8s_resource(workload='chart-zipkin-dependencies-gen', labels=["dapr"])
-k8s_resource(workload='chart-zipkin-cassandra', labels=["dapr"])
-k8s_resource(workload='chart-zipkin-collector', labels=["dapr"])
+# k8s_resource(workload='chart-zipkin-ui', port_forwards='9411', labels=["dapr"], resource_deps=['chart-zipkin-cassandra'])
+# k8s_resource(workload='chart-zipkin-dependencies-gen', labels=["dapr"], resource_deps=['chart-zipkin-cassandra'])
+# k8s_resource(workload='chart-zipkin-cassandra', labels=["dapr"])
+# k8s_resource(workload='chart-zipkin-collector', labels=["dapr"], resource_deps=['chart-zipkin-cassandra'])
 
 ### HASHICORP VAULT  #######################################################################
 # helm_remote('vault',

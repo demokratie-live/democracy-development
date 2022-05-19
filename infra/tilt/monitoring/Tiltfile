@@ -11,4 +11,4 @@ helm_remote('kube-prometheus-stack',
 k8s_resource(workload='kube-prometheus-stack-prometheus-node-exporter', labels=["monitoring"])
 k8s_resource(workload='kube-prometheus-stack-kube-state-metrics', labels=["monitoring"])
 k8s_resource(workload='kube-prometheus-stack-operator', labels=["monitoring"])
-k8s_resource(workload='kube-prometheus-stack-grafana', port_forwards='3302:3000', labels=["monitoring"])
+k8s_resource(workload='kube-prometheus-stack-grafana', port_forwards='3302:3000', labels=["monitoring"], resource_deps=['kube-prometheus-stack-operator'])
