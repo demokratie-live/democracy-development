@@ -10,4 +10,4 @@ patches:
   - patches/bundestagio-admin-depl.yaml
   - patches/bundestagio-depl.yaml
   - patches/democracy-api-depl.yaml
-  - patches/democracy-app-depl.yaml
+  # - patches/democracy-app-depl.yaml

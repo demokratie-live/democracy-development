@@ -7,7 +7,7 @@ patches:
   - bundestagio-depl.yaml
   - bundestagio-admin-depl.yaml
   - democracy-api-depl.yaml
-  - democracy-app-depl.yaml
+  # - democracy-app-depl.yaml
   - mongo-statefulset.yaml
 
 resources:
