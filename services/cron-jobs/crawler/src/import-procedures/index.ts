@@ -21,8 +21,11 @@ const error = debug('bundestag-io:import-procedures:error');
   } catch (err) {
     withError = true;
     error(err);
-    await setCronError({ name: 'import-procedures', error: err });
-    throw err;
+    try {
+      await setCronError({ name: 'import-procedures', error: err });
+    } catch (error) {
+      console.error(error);
+    }
   } finally {
     mongoDisconnect();
   }
