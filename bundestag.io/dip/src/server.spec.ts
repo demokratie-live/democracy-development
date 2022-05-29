@@ -18,7 +18,7 @@ const context = setupPolly({
 
 const randomObjects = (n: number) => Array.from(Array(n).keys()).map(() => expect.any(Object));
 
-const DIP_API_KEY = 'N64VhW8.yChkBUIJeosGojQ7CSR2xwLf3Qy7Apw464';
+const DIP_API_KEY = 'GmEPb1B.bfqJLIhcGAsH9fTJevTglhFpCoZyAAAdhp';
 const { server } = createServer({ DIP_API_KEY, DIP_API_ENDPOINT: 'https://search.dip.bundestag.de', RATE_LIMIT: 20 });
 
 const gql = String.raw;
