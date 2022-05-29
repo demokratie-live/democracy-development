@@ -112,7 +112,7 @@ export default async function importProcedures(config: ImportProceduresInput): P
       edges.map((edge: { node: { procedureId: string } }) => ({
         updateOne: {
           filter: { procedureId: edge.node.procedureId },
-          update: edge.node,
+          update: { $set: edge.node },
           upsert: true,
         },
       })),
