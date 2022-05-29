@@ -53,7 +53,7 @@ services:
     depends_on:
       - mongo
     environment:
-      - DIP_API_KEY=N64VhW8.yChkBUIJeosGojQ7CSR2xwLf3Qy7Apw464
+      - DIP_API_KEY=GmEPb1B.bfqJLIhcGAsH9fTJevTglhFpCoZyAAAdhp
   democracy-api:
     build:
       context: democracy/api
