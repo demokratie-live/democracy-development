@@ -50,6 +50,8 @@ services:
       target: production_stage
     ports:
       - 4002:3101
+    depends_on:
+      - mongo
     environment:
       - DIP_API_KEY=N64VhW8.yChkBUIJeosGojQ7CSR2xwLf3Qy7Apw464
   democracy-api:
