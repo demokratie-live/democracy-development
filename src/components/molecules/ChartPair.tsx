@@ -26,17 +26,17 @@ export default function ChartPair({ item, className, large }) {
               yes: {
                 label: 'Ja',
                 color: '#708E32',
-                count: item.voteResults.yes,
+                count: item.voteResults.yes ?? 0,
               },
               no: {
                 label: 'Nein',
                 color: '#C34091',
-                count: item.voteResults.no,
+                count: item.voteResults.no ?? 0,
               },
               abstination: {
                 label: 'enthalten',
                 color: '#6BAAD0',
-                count: item.voteResults.abstination,
+                count: item.voteResults.abstination ?? 0,
               },
               notVoted: item.voteResults.notVoted
                 ? {
@@ -74,47 +74,49 @@ export default function ChartPair({ item, className, large }) {
           </p>
         </div>
       )}
-      <div className="flex flex-col items-center">
-        <DoughnutChart
-          className={`rounded-full bg-white p-0.5 ${sizes}`}
-          onHover={(item2) => {
-            setHover2(item2);
-          }}
-          votes={{
-            yes: {
-              label: 'Ja',
-              color: '#46A058',
-              count: item.communityVotes.yes,
-            },
-            no: {
-              label: 'Nein',
-              color: '#B83829',
-              count: item.communityVotes.no,
-            },
-            abstination: {
-              label: 'enthalten',
-              color: '#4580DD',
-              count: item.communityVotes.abstination,
-            },
-          }}
-        />
-        <p className="flex flex-col items-center pb-1 pt-px text-xs leading-[1.1em]">
-          <span className="text-[1.1em] font-bold">Community</span>
-          <span className="text-sm font-semibold tracking-wide text-gray-600">
-            <small>
-              {hover2
-                ? `${hover2.label} (${calculatePercent(
-                    hover2.count,
-                    item.communityVotes.yes +
-                      item.communityVotes.no +
-                      item.communityVotes.abstination
-                  )})`
-                : formatVotes(item.votes)}
-              {!hover2 && ' Nutzer'}
-            </small>
-          </span>
-        </p>
-      </div>
+      {item.communityVotes && (
+        <div className="flex flex-col items-center">
+          <DoughnutChart
+            className={`rounded-full bg-white p-0.5 ${sizes}`}
+            onHover={(item2) => {
+              setHover2(item2);
+            }}
+            votes={{
+              yes: {
+                label: 'Ja',
+                color: '#46A058',
+                count: item.communityVotes?.yes ?? 0,
+              },
+              no: {
+                label: 'Nein',
+                color: '#B83829',
+                count: item.communityVotes?.no ?? 0,
+              },
+              abstination: {
+                label: 'enthalten',
+                color: '#4580DD',
+                count: item.communityVotes?.abstination ?? 0,
+              },
+            }}
+          />
+          <p className="flex flex-col items-center pb-1 pt-px text-xs leading-[1.1em]">
+            <span className="text-[1.1em] font-bold">Community</span>
+            <span className="text-sm font-semibold tracking-wide text-gray-600">
+              <small>
+                {hover2
+                  ? `${hover2.label} (${calculatePercent(
+                      hover2.count,
+                      item.communityVotes.yes +
+                        item.communityVotes.no +
+                        item.communityVotes.abstination
+                    )})`
+                  : formatVotes(item.votes)}
+                {!hover2 && ' Nutzer'}
+              </small>
+            </span>
+          </p>
+        </div>
+      )}
     </div>
   );
 }
