@@ -7,7 +7,7 @@ import Empty from '@/components/molecules/Empty';
 import Loading from '@/components/molecules/Loading';
 import { searchTermState } from '@/components/state/states';
 import { Meta } from '@/layout/Meta';
-import { SEARCH_PROCEDURES } from '@/queries/search-procedures.';
+import { SEARCH_PROCEDURES } from '@/queries/search-procedures';
 import { Main } from '@/templates/Main';
 import { AppConfig } from '@/utils/AppConfig';
 
