@@ -89,7 +89,7 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                     </div>
                     <div className="sm:col-span-1 ">
                       <dt className="text-sm font-medium text-gray-800">
-                        erstellt man
+                        erstellt am
                       </dt>
                       <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
                         {dayjs(data.procedure.submissionDate).format(
