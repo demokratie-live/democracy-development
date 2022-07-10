@@ -1,5 +1,5 @@
 export const AppConfig = {
-  site_name: 'Democracy Deutschland e.V.',
+  site_name: 'DEMOCRACY Deutschland e.V.',
   title: 'DEMOCRACY Browser',
   description:
     'Verfolge Gesetzesvorlagen und -entscheidungen mit der offiziellen Browserversion der DEMOCRACY App',
