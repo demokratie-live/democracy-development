@@ -70,7 +70,7 @@ namespace Parser {
       }
 
       let sessions: Session[] = [];
-      const regex_DateSession = /<caption>[\s\S]*?<div class="bt-conference-title">([\s\S]*?)\((\d*)\. Sitzung\)<\/div>[\s\S]*?<\/caption>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/gm;
+      const regex_DateSession = /<caption>[\s\S]*?<div class="bt-conference-title".*?>([\s\S]*?)\((\d*)\. Sitzung\)<\/div>[\s\S]*?<\/caption>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/gm;
       while ((m = regex_DateSession.exec(string)) !== null) {
         // This is necessary to avoid infinite loops with zero-width matches
         if (m.index === regex_DateSession.lastIndex) {
