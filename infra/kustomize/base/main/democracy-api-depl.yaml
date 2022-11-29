@@ -39,17 +39,17 @@ spec:
     - name: metrics
       port: 3400
       targetPort: 3400
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  labels:
-    release: prometheus
-  name: democracy-api-exporter
-spec:
-  endpoints:
-    - port: metrics
-  namespaceSelector: {}
-  selector:
-    matchLabels:
-      app: democracy-api
+# ---
+# apiVersion: monitoring.coreos.com/v1
+# kind: ServiceMonitor
+# metadata:
+#   labels:
+#     release: prometheus
+#   name: democracy-api-exporter
+# spec:
+#   endpoints:
+#     - port: metrics
+#   namespaceSelector: {}
+#   selector:
+#     matchLabels:
+#       app: democracy-api

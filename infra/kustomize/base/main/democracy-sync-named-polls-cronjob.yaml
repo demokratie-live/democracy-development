@@ -1,9 +1,9 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: democracy-sync-named-polls-cronjob
 spec:
-  schedule: "5-59/10 * * * *"
+  schedule: '5-59/10 * * * *'
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 200
   jobTemplate:
