@@ -1,9 +1,9 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: import-conference-week-details-cronjob
 spec:
-  schedule: "*/30 * * * *"
+  schedule: '*/30 * * * *'
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 200
   jobTemplate:

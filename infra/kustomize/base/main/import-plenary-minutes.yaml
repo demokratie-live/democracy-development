@@ -1,9 +1,9 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: import-plenary-minutes-cronjob
 spec:
-  schedule: "15 1 * * *"
+  schedule: '15 1 * * *'
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 200
   jobTemplate:
