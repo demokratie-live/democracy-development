@@ -18,12 +18,13 @@ export default function Top100Page() {
   const { loading, data, error } = useQuery(SEARCH_PROCEDURES, {
     variables: {
       term: searchTerm ?? null,
+      period: 20,
     },
     context: {
       // Requests get debounced together if they share the same debounceKey.
       // Requests without a debounce key are passed to the next link unchanged.
       debounceKey: 'search',
-      debounceTimeout: 350,
+      debounceTimeout: 1000,
     },
   });
 

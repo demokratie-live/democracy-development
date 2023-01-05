@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const SEARCH_PROCEDURES = gql`
-  query search($term: String!) {
-    searchProceduresAutocomplete(term: $term) {
+  query search($term: String!, $period: Int!) {
+    searchProceduresAutocomplete(term: $term, period: $period) {
       procedures {
         _id
         title
