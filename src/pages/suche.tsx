@@ -6,6 +6,7 @@ import Card from '@/components/molecules/Card';
 import Empty from '@/components/molecules/Empty';
 import Loading from '@/components/molecules/Loading';
 import { searchTermState } from '@/components/state/states';
+import { config } from '@/config/constants';
 import { Meta } from '@/layout/Meta';
 import { SEARCH_PROCEDURES } from '@/queries/search-procedures';
 import { Main } from '@/templates/Main';
@@ -18,7 +19,7 @@ export default function Top100Page() {
   const { loading, data, error } = useQuery(SEARCH_PROCEDURES, {
     variables: {
       term: searchTerm ?? null,
-      period: 20,
+      period: config.period,
     },
     context: {
       // Requests get debounced together if they share the same debounceKey.

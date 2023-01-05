@@ -15,6 +15,7 @@ import {
   filterForTypeState,
   filterState,
 } from '@/components/state/states';
+import { config } from '@/config/constants';
 import { Meta } from '@/layout/Meta';
 import { GET_PROCEDURES } from '@/queries/get-procedures';
 import { Main } from '@/templates/Main';
@@ -56,7 +57,7 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
       offset: 0,
       pageSize,
       sort: 'voteDate',
-      period: 20,
+      period: config.period,
       context: {
         debounceKey: title,
       },
