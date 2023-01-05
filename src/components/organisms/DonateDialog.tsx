@@ -3,7 +3,7 @@ import { Fragment, useMemo, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 // import { CheckIcon } from '@heroicons/react/24/outline';
 
-export default function Donate() {
+export default function DonateDialog() {
   const [open, setOpen] = useState(false);
   useMemo(() => {
     const timeout = setTimeout(() => {
@@ -58,12 +58,12 @@ export default function Donate() {
                   <div className="mt-2 sm:mt-1">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-semibold leading-6 text-gray-900"
+                      className="px-2 text-xl font-semibold leading-6 text-gray-900 sm:px-0"
                     >
                       Wir brauchen Dich! 🫵🏼
                     </Dialog.Title>
                     <div className="mt-4">
-                      <p className="text-sm text-gray-700">
+                      <p className=" px-2 text-gray-700 sm:px-0 sm:pb-2 sm:pt-1 sm:text-base">
                         Sichere die Existenz der DEMOCRACY App, indem Du das
                         Projekt{' '}
                         <a
