@@ -13,14 +13,24 @@ interface Props {
 }
 
 export default function CurrentPage({ conferenceWeek }: Props) {
-  const start = dayjs(conferenceWeek.start).format('DD.MM.');
-  const end = dayjs(conferenceWeek.end).format('DD.MM.YYYY');
+  if (conferenceWeek) {
+    const start = dayjs(conferenceWeek.start).format('DD.MM.');
+    const end = dayjs(conferenceWeek.end).format('DD.MM.YYYY');
 
+    return (
+      <FilteredPage
+        listTypes={['CONFERENCEWEEKS_PLANNED']}
+        title={`Sitzungswoche - KW ${conferenceWeek.calendarWeek}`}
+        description={`Vorgänge, die in der kommenden Sitzungswoche vom ${start} bis ${end} zur Abstimmung stehen`}
+        // description="Vorgänge, die in der kommenden Sitzungswoche zur Abstimmung stehen."
+      />
+    );
+  }
   return (
     <FilteredPage
       listTypes={['CONFERENCEWEEKS_PLANNED']}
-      title={`Sitzungswoche - KW ${conferenceWeek.calendarWeek}`}
-      description={`Vorgänge, die in der kommenden Sitzungswoche vom ${start} bis ${end} zur Abstimmung stehen`}
+      title={'Sitzungswoche'}
+      description={`Vorgänge, die in der kommenden Sitzungswoche zur Abstimmung stehen`}
       // description="Vorgänge, die in der kommenden Sitzungswoche zur Abstimmung stehen."
     />
   );
@@ -33,9 +43,15 @@ export async function getServerSideProps({ res }: any) {
   );
 
   const client = getClient();
-  const { data } = await client.query({
-    query: GET_CONFERENCE_WEEK,
-  });
+  let data;
+  try {
+    const result = await client.query({
+      query: GET_CONFERENCE_WEEK,
+    });
+    data = result.data;
+  } catch (e) {
+    return { props: {} };
+  }
 
   return {
     props: {
