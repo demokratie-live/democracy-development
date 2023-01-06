@@ -15,7 +15,7 @@ const icons = {
 interface Props {
   className?: string;
   votes: Votes;
-  onHover?: (vote?: VoteCategory) => void;
+  onHover?: (vote?: VoteCategory, key?: string | null) => void;
 }
 
 export interface Votes {
@@ -23,12 +23,22 @@ export interface Votes {
   no: VoteCategory;
   abstination?: VoteCategory;
   notVoted?: VoteCategory;
+  partyVotes?: PartyVote[];
 }
 
 export interface VoteCategory {
   label: string;
   color: string;
   count: number;
+}
+
+export interface PartyVote {
+  party: string;
+  main: string;
+  yes: number;
+  no: number;
+  abstination: number;
+  notVoted: number;
 }
 
 export default function DoughnutChart({ className, votes, onHover }: Props) {
@@ -73,10 +83,11 @@ export default function DoughnutChart({ className, votes, onHover }: Props) {
             if (i === index) return;
 
             const item = i !== null ? Object.values(votes)[i] : null;
+            const key = i !== null ? Object.keys(votes)[i] : null;
 
             setIndex(i);
             if (onHover) {
-              onHover(item);
+              onHover(item, key);
             }
           },
         }}
