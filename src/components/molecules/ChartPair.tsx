@@ -72,7 +72,18 @@ export default function ChartPair({ item, className, large }) {
     : undefined;
 
   return (
-    <div className={className}>
+    <div
+      className={className}
+      onMouseLeave={() => {
+        setDelay(
+          setTimeout(() => {
+            setHover1(undefined);
+            setPartyVotes([]);
+            setKey1(undefined);
+          }, 500)
+        );
+      }}
+    >
       <div
         className={`flex gap-6 p-2 ${
           hover1 ? 'bg-white rounded-md overflow-hidden shadow' : ''
