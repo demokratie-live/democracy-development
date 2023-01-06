@@ -74,7 +74,7 @@ export default function ChartPair({ item, className, large }) {
   return (
     <div className={className}>
       <div
-        className={`flex gap-6 p-2 transition-all duration-75 ${
+        className={`flex gap-6 p-2 ${
           hover1 ? 'bg-white rounded-md overflow-hidden shadow' : ''
         }`}
       >
