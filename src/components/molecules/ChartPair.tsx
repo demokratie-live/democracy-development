@@ -20,6 +20,17 @@ function sortPartyVotes(partyVotes: PartyVote[], key: string) {
   }
 }
 
+function slug(name: string): string {
+  return name
+    .replaceAll(/ü/g, 'ue')
+    .replaceAll(/ö/g, 'oe')
+    .replaceAll(/ä/g, 'ae')
+    .replaceAll(/Ü/g, 'Ue')
+    .replaceAll(/Ö/g, 'Oe')
+    .replaceAll(/Ä/g, 'Ae')
+    .replaceAll(/ß/g, 'ss');
+}
+
 export default function ChartPair({ item, className, large }) {
   // hover state 1
   const [hover1, setHover1] = useState<VoteCategory | undefined>(undefined);
@@ -195,7 +206,7 @@ export default function ChartPair({ item, className, large }) {
                     className="flex w-full items-center justify-between pb-px"
                   >
                     <img
-                      src={`/img/parteilogos/unified/${p.party}.svg`}
+                      src={`/img/parteilogos/unified/${slug(p.party)}.svg`}
                       className={`${
                         large ? 'h-6 w-20' : 'h-5 w-14'
                       } object-cover text-xs italic`}
