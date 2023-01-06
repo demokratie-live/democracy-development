@@ -90,6 +90,17 @@ export default function DoughnutChart({ className, votes, onHover }: Props) {
               onHover(item, key);
             }
           },
+          onClick: (_, elements) => {
+            const i = elements?.length ? elements[0]!.index : null;
+
+            const item = i !== null ? Object.values(votes)[i] : null;
+            const key = i !== null ? Object.keys(votes)[i] : null;
+
+            setIndex(i);
+            if (onHover) {
+              onHover(item, key);
+            }
+          },
         }}
         onMouseOut={() => {
           setIndex(null);

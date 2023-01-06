@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { formatVotes } from '@/utils/Helpers';
 
@@ -32,7 +32,6 @@ function slug(name: string): string {
 }
 
 export default function ChartPair({ item, className, large }) {
-  // hover state 1
   const [hover1, setHover1] = useState<VoteCategory | undefined>(undefined);
   const [hover2, setHover2] = useState<VoteCategory | undefined>(undefined);
 
@@ -46,6 +45,35 @@ export default function ChartPair({ item, className, large }) {
   };
 
   const sizes = large ? '!w-32 !h-32 md:!w-40 md:!h-40' : '!w-28 !h-28';
+
+  const close = () => {
+    clearTimeout(delay);
+    setDelay(undefined);
+
+    setHover1(undefined);
+    setHover2(undefined);
+    setPartyVotes([]);
+    setKey1(undefined);
+  };
+
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    /**
+     * Alert if clicked on outside of element
+     */
+    function handleClickOutside(event) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        console.log('CLOSE');
+        close();
+      }
+    }
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
 
   const officialVotes: Votes | undefined = item.voteResults
     ? {
@@ -86,16 +114,11 @@ export default function ChartPair({ item, className, large }) {
     <div
       className={className}
       onMouseLeave={() => {
-        setDelay(
-          setTimeout(() => {
-            setHover1(undefined);
-            setPartyVotes([]);
-            setKey1(undefined);
-          }, 500)
-        );
+        setDelay(setTimeout(() => close(), 500));
       }}
     >
       <div
+        ref={ref}
         className={`flex gap-6 p-2 ${
           hover1 ? 'bg-white rounded-md overflow-hidden shadow' : ''
         }`}
@@ -108,13 +131,7 @@ export default function ChartPair({ item, className, large }) {
                 clearTimeout(delay);
 
                 if (!k1) {
-                  setDelay(
-                    setTimeout(() => {
-                      setHover1(undefined);
-                      setPartyVotes([]);
-                      setKey1(undefined);
-                    }, 500)
-                  );
+                  setDelay(setTimeout(() => close(), 500));
                 } else {
                   setHover1(item1);
                   setPartyVotes(
@@ -196,7 +213,7 @@ export default function ChartPair({ item, className, large }) {
               </p>
             </div>
             {hover1 && partyVotes.length > 0 && (
-              <div className="absolute flex h-full w-full flex-col items-center text-base">
+              <div className="absolute flex h-full w-full flex-col items-center justify-center text-base">
                 {/* <span className="pb-1 pt-px text-sm font-bold">
                   {hover1.label}
                 </span> */}
