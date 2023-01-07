@@ -1,0 +1,19 @@
+version: '3'
+services:
+  democracy-api-mongodb:
+    image: mongo:4
+    container_name: mongodb
+    volumes:
+      - ./data/db:/data/db:rw
+    ports:
+      - "27017:27017"
+  democracy-api:
+    build: .
+    container_name: app
+    command: yarn dev
+    volumes:
+      - .:/src
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
