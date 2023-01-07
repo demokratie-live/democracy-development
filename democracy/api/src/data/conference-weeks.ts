@@ -129,6 +129,95 @@ const conferenceWeeks = [
     start: parseDate('12.12.2022'),
     end: parseDate('16.12.2022'),
   },
+  // 2023
+  {
+    start: parseDate('16.01.2023'),
+    end: parseDate('20.01.2023'),
+  },
+  {
+    start: parseDate('23.01.2023'),
+    end: parseDate('27.01.2023'),
+  },
+  {
+    start: parseDate('06.02.2023'),
+    end: parseDate('10.02.2023'),
+  },
+  {
+    start: parseDate('27.02.2023'),
+    end: parseDate('03.03.2023'),
+  },
+  {
+    start: parseDate('13.03.2023'),
+    end: parseDate('17.03.2023'),
+  },
+  {
+    start: parseDate('27.03.2023'),
+    end: parseDate('31.03.2023'),
+  },
+  {
+    start: parseDate('17.04.2023'),
+    end: parseDate('21.04.2023'),
+  },
+  {
+    start: parseDate('24.04.2023'),
+    end: parseDate('28.04.2023'),
+  },
+  {
+    start: parseDate('08.05.2023'),
+    end: parseDate('12.05.2023'),
+  },
+  {
+    start: parseDate('22.05.2023'),
+    end: parseDate('26.05.2023'),
+  },
+  {
+    start: parseDate('12.06.2023'),
+    end: parseDate('16.06.2023'),
+  },
+  {
+    start: parseDate('19.06.2023'),
+    end: parseDate('23.06.2023'),
+  },
+  {
+    start: parseDate('03.07.2023'),
+    end: parseDate('07.07.2023'),
+  },
+  {
+    start: parseDate('04.09.2023'),
+    end: parseDate('08.09.2023'),
+  },
+  {
+    start: parseDate('18.09.2023'),
+    end: parseDate('22.09.2023'),
+  },
+  {
+    start: parseDate('25.09.2023'),
+    end: parseDate('29.09.2023'),
+  },
+  {
+    start: parseDate('09.10.2023'),
+    end: parseDate('13.10.2023'),
+  },
+  {
+    start: parseDate('16.10.2023'),
+    end: parseDate('20.10.2023'),
+  },
+  {
+    start: parseDate('06.11.2023'),
+    end: parseDate('10.11.2023'),
+  },
+  {
+    start: parseDate('13.11.2023'),
+    end: parseDate('17.11.2023'),
+  },
+  {
+    start: parseDate('27.11.2023'),
+    end: parseDate('01.12.2023'),
+  },
+  {
+    start: parseDate('11.12.2023'),
+    end: parseDate('15.12.2023'),
+  },
 ];
 
 // return the current or next conference week
