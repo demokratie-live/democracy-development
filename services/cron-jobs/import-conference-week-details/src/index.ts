@@ -110,31 +110,33 @@ const start = async () => {
 
   try {
     const startData =
-      cron.data && cron.lastSuccessStartDate?.getDay() === new Date().getDay()
+      cron.data?.lastYear && cron.lastSuccessStartDate?.getDay() === new Date().getDay()
         ? {
             year: cron.data.lastYear,
             week: cron.data.lastWeek,
           }
         : {
-            year: process.env.CONFERENCE_WEEK_DETAIL_YEAR ? Number(process.env.CONFERENCE_WEEK_DETAIL_YEAR) : 2014,
-            week: process.env.CONFERENCE_WEEK_DETAIL_WEEK ? Number(process.env.CONFERENCE_WEEK_DETAIL_WEEK) : 8,
+            year: process.env.CONFERENCE_WEEK_DETAIL_YEAR ? Number(process.env.CONFERENCE_WEEK_DETAIL_YEAR) : 2022,
+            week: process.env.CONFERENCE_WEEK_DETAIL_WEEK ? Number(process.env.CONFERENCE_WEEK_DETAIL_WEEK) : 2,
           };
     let voteDates: any[] = [];
     let lastProcedureIds: any[] = [];
+
     await Scraper.scrape(new ConferenceWeekDetailScraper(startData), async (dataPackage: any) => {
       // Construct Database object
-      console.log('dataPackage.data.this.year', dataPackage.data.this.year, dataPackage.data.this.week);
+
       lastData = {
         lastYear: dataPackage.data.previous.year,
         lastWeek: dataPackage.data.previous.week,
       };
+
       const ConferenceWeekDetail = {
         URL: dataPackage.meta.url,
         id: dataPackage.data.id,
         previousYear: dataPackage.data.previous.year,
         previousWeek: dataPackage.data.previous.week,
-        thisYear: dataPackage.data.this.year,
-        thisWeek: dataPackage.data.this.week,
+        thisYear: dataPackage.data.this.year ?? dataPackage.meta.currentYear,
+        thisWeek: dataPackage.data.this.week ?? dataPackage.meta.currentWeek,
         nextYear: dataPackage.data.next.year,
         nextWeek: dataPackage.data.next.week,
         sessions: await dataPackage.data.sessions.reduce(async (pSession: any, session: any) => {
@@ -184,17 +186,17 @@ const start = async () => {
         }, []),
       };
       // Update/Insert
-      await ConferenceWeekDetailModel.update(
+      await ConferenceWeekDetailModel.updateOne(
         { id: ConferenceWeekDetail.id },
         { $set: ConferenceWeekDetail },
         { upsert: true },
-      );
+      ).catch(console.error);
     });
     voteDates = voteDates.filter((voteDate) => !!voteDate);
     // Update Procedure VoteDates
     await Promise.all(
       voteDates.map(async (procedureUpdate) => {
-        await ProcedureModel.update(
+        await ProcedureModel.updateOne(
           {
             procedureId: procedureUpdate.procedureId,
             // Update only when needed
@@ -218,7 +220,6 @@ const start = async () => {
         );
       }),
     );
-    console.log(JSON.stringify(voteDates, null, 2));
   } catch (error) {
     await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
     throw error;
