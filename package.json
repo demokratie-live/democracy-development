@@ -16,7 +16,8 @@
     "lint:es": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
-    "postinstall": "husky install"
+    "prepare": "husky install",
+    "release": "standard-version"
   },
   "dependencies": {
     "@bmatei/apollo-prometheus-exporter": "^2.1.1",
@@ -78,6 +79,7 @@
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
     "husky": "^8.0.3",
+    "standard-version": "^9.5.0",
     "ts-node-dev": "^1.1.8",
     "ts-unused-exports": "^6.2.1",
     "typescript": "^4.3.5",
