@@ -1,5 +1,15 @@
 # Changelog
 
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### 0.2.59 (2023-01-08)
+
+
+### Automation
+
+* :rocket: create new release and docker image on dispatch action ([7f3b9a0](https://github.com/demokratie-live/democracy-api/commit/7f3b9a0eb63c2f2fb2b78e2a8f6a2366053cf11b))
+* :sparkles: add husky with commitlint to enable conventional commits ([24a68bb](https://github.com/demokratie-live/democracy-api/commit/24a68bb40d2d03715964bf29ee0ad5d0484f1415))
+
 ### 0.2.32
 
 - [Fix] WOM Constituency fix sort procedures
