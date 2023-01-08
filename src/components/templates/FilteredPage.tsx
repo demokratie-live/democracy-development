@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useQuery } from '@apollo/client';
-import { uniqBy } from 'lodash-es';
+import { uniqBy, groupBy as _groupBy } from 'lodash-es';
 import { useRouter } from 'next/router';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -25,9 +25,15 @@ interface Props {
   listTypes: string[];
   title: string;
   description: string;
+  groupBy?: (item: any) => string;
 }
 
-export default function FilteredPage({ listTypes, title, description }: Props) {
+export default function FilteredPage({
+  listTypes,
+  title,
+  description,
+  groupBy,
+}: Props) {
   const router = useRouter();
   const filters = useRecoilValue(filterState);
   const [filterSubject, setFilterSubject] = useRecoilState(
@@ -85,6 +91,21 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
 
   const isEmpty = error || data?.procedures?.length <= 0;
 
+  const isLoading = useMemo(() => {
+    return !error && loading && !isLoadingMore;
+  }, [error, loading, isLoadingMore]);
+
+  const isReady = useMemo(() => {
+    return !error && !isEmpty && !loading && data?.procedures.length > 0;
+  }, [error, isEmpty, loading, data]);
+
+  const grouped = useMemo(() => {
+    if (isReady && !!groupBy) {
+      return _groupBy(uniqBy(data?.procedures, '_id'), groupBy);
+    }
+    return {};
+  }, [isReady, groupBy, data?.procedures]);
+
   return (
     <Main
       meta={
@@ -125,21 +146,40 @@ export default function FilteredPage({ listTypes, title, description }: Props) {
             }}
           />
         </div>
-        <div className="mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">
+        <div className="px-4 pb-7 sm:px-6 lg:px-8">
           <div
             className={`
             ${
               !isEmpty &&
               !loading &&
               !error &&
-              'grid gap-5 3xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3'
+              !groupBy &&
+              ' grid gap-5 3xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3 '
             }
-             mt-6 h-full w-full max-w-md sm:max-w-none mx-auto`}
+            ${!groupBy && ' mx-auto !max-w-7xl '}
+            mt-6 h-full w-full max-w-md sm:max-w-none mx-auto`}
           >
-            {!error && loading && !isLoadingMore && <Loading />}
-            {!error &&
-              !isEmpty &&
-              !loading &&
+            {isLoading && <Loading />}
+            {isReady &&
+              !!groupBy &&
+              Object.keys(grouped).map((key: string) => {
+                return (
+                  <div key={key}>
+                    <div className=" sticky top-16 z-10 col-span-full mb-5 bg-gray-100/90 px-5 py-3 text-base font-medium backdrop-blur-lg sm:-mx-8">
+                      <div className="mx-auto !max-w-7xl">{key}</div>
+                    </div>
+                    <div className="3xl:grid-cols-4 col-span-full mx-auto grid !max-w-7xl gap-5 pb-10 sm:grid-cols-2 lg:grid-cols-3">
+                      {grouped[key]!.map((item: any) => {
+                        // eslint-disable-next-line no-underscore-dangle
+                        return <Card item={item as any} key={item._id} />;
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+
+            {isReady &&
+              !groupBy &&
               uniqBy(data?.procedures, '_id').map((item: any) => (
                 // eslint-disable-next-line no-underscore-dangle
                 <Card item={item as any} key={item._id} />
