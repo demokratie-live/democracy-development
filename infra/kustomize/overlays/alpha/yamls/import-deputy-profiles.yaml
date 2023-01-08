@@ -1,6 +1,0 @@
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: import-deputy-profiles-cronjob
-spec:
-  schedule: '0 6 * * *'
