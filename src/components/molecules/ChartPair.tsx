@@ -229,9 +229,9 @@ export default function ChartPair({ item, className, large }) {
                       } object-cover text-xs italic`}
                       alt={p.party}
                     />
-                    <div className="h-full w-full pl-1 text-right font-mono text-xs font-semibold text-gray-700">
+                    <div className="h-full w-full pl-1 text-right text-gray-700">
                       <div
-                        className="relative h-full w-full"
+                        className="relative h-full w-full text-sm font-semibold tracking-wide text-gray-600"
                         style={{ borderColor: hover1.color }}
                       >
                         {/* <div
@@ -245,9 +245,9 @@ export default function ChartPair({ item, className, large }) {
                           }}
                           className="flex h-full"
                         ></div> */}
-                        <div className="absolute inset-0 px-1 text-xs">
+                        <small className="absolute inset-0 px-1">
                           {p[key1!]}
-                        </div>
+                        </small>
                       </div>
                     </div>
                   </div>
