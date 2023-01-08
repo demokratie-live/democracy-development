@@ -25,6 +25,8 @@ jobs:
   push:
     needs: create-new-release
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     environment: docker
     steps:
       - name: Checkout
@@ -50,3 +52,47 @@ jobs:
           docker tag democracy/democracy-server:${{ steps.version.outputs.version }} democracy/democracy-server:latest
           docker push democracy/democracy-server:latest
           docker push democracy/democracy-server:${{ steps.version.outputs.version }}
+
+  create-pull-request-to-infrastructure:
+    needs: push
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository where the pull request should be created
+      - name: Checkout target repository
+        uses: actions/checkout@v3
+        with:
+          repository: demokratie-live/infrastructure
+          token: ${{ secrets.ACTION_INFRASTRUCTURE_PR }}
+          fetch-depth: 0
+          ref: main
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      # Step 2: Create a new Branch
+      - name: Create a new branch
+        run: |
+          git checkout -b democracy-server-${{ needs.push.outputs.version }}
+          git push --set-upstream origin democracy-server-${{ needs.push.outputs.version }}
+
+      - name: Edit file
+        run: |
+          sed -i -E "s/image: democracy\/democracy-server:.*$/image: democracy\/democracy-server:${{ needs.push.outputs.version }}/g" kustomize/base/main/democracy-api-depl.yaml
+          git add kustomize/base/main/democracy-api-depl.yaml
+          git commit -m "chore(infrastructure): update Docker container version in Kubernetes YAML"
+          git push --set-upstream origin democracy-server-${{ needs.push.outputs.version }}
+
+      # Step 4: Create the pull request
+      - name: Create Pull Request
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/{owner}/{repo}/pulls
+          owner: "demokratie-live"
+          repo: infrastructure
+          title: 'New version for democracy-server ${{ needs.push.outputs.version }}'
+          base: main
+          head: democracy-server-${{ needs.push.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_INFRASTRUCTURE_PR }}
