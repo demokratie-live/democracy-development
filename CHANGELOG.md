@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.61](https://github.com/demokratie-live/democracy-api/compare/v0.2.60...v0.2.61) (2023-01-10)
+
+
+### Build System
+
+* :rotating_light: fix project settings in eslint config ([03152e8](https://github.com/demokratie-live/democracy-api/commit/03152e8cc475460bb17a532a39e618107dcb4a85))
+
+
+### Automation
+
+* :bug: fix version number of docker image and pull request ([f2d0b59](https://github.com/demokratie-live/democracy-api/commit/f2d0b59128dfafc8173452511ecd3addd919d328))
+
 ### 0.2.60 (2023-01-10)
 
 
