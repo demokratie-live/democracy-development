@@ -9,7 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
+          token: ${{ secrets.ACTIONS_PUSH_TO_PROTECTED_BRANCH }}
       - uses: actions/setup-node@v3
         with:
           node-version: 14
@@ -94,7 +95,7 @@ jobs:
           route: POST /repos/{owner}/{repo}/pulls
           owner: "demokratie-live"
           repo: infrastructure
-          title: 'New version for democracy-app.de ${{ needs.push.outputs.version }}'
+          title: "New version for democracy-app.de ${{ needs.push.outputs.version }}"
           base: main
           head: democracy-app.de-${{ needs.push.outputs.version }}
         env:
