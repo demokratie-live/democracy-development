@@ -24,5 +24,6 @@
   },
   "[ignore]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
-  }
+  },
+  "conventionalCommits.scopes": ["push-send-queued"]
 }
