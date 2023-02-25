@@ -6,7 +6,6 @@ import {
   UserModel,
   DeputyModel,
   NamedPollModel,
-  HistoryModel,
   ConferenceWeekDetailModel,
   PlenaryMinuteModel,
 } from '@democracy-deutschland/bundestagio-common';
@@ -42,7 +41,6 @@ export const graphql = new ApolloServer({
     UserModel,
     DeputyModel,
     NamedPollModel,
-    HistoryModel,
     ConferenceWeekDetailModel,
     PlenaryMinuteModel,
   }),

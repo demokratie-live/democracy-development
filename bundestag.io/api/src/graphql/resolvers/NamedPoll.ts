@@ -12,24 +12,14 @@ const NamedPollResolvers: Resolvers = {
     namedPollUpdates: async (
       parent: any,
       { since, limit = 99, offset = 0, associated = true }: any,
-      { NamedPollModel, HistoryModel }: any,
+      { NamedPollModel }: any,
     ) => {
       const beforeCount = await NamedPollModel.count({ createdAt: { $lte: since } });
       const afterCount = await NamedPollModel.count({});
-      const changedQ = await HistoryModel.aggregate([
-        {
-          $match: {
-            collectionName: 'NamedPoll',
-            createdAt: { $gt: since },
-          },
-        },
-        { $group: { _id: '$collectionId' } },
-      ]);
-      const changed = changedQ.map(({ _id }: any) => _id);
 
       // Build find query for namedPolls
       const namedPollsFindQuery: any = {
-        $or: [{ createdAt: { $gt: since } }, { _id: { $in: changed } }],
+        createdAt: { $gt: since },
       };
 
       // if only return accociated polls do filter
@@ -48,7 +38,6 @@ const NamedPollResolvers: Resolvers = {
         beforeCount,
         afterCount,
         newCount: afterCount - beforeCount,
-        changedCount: changed.length,
         namedPolls,
       };
     },

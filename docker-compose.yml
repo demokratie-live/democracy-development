@@ -3,23 +3,9 @@ services:
   mongo:
     image: mongo:4
     volumes:
-      - democracy-mongodb:/data/db
+      - ./data/mongo:/data/db
     ports:
       - 27017:27017
-  gorush:
-    image: appleboy/gorush:1.14.0
-    ports:
-      - '8088:8088'
-    depends_on:
-      - 'redis'
-    environment:
-      - GORUSH_STAT_ENGINE=redis
-      - GORUSH_STAT_REDIS_ADDR=redis:6379
-    volumes:
-      - ./configuration/gorush-config.yaml:/config.yml
-      - ./configuration/AuthKey_WKG6X45GSC.p8:/data/ssl/AuthKey_WKG6X45GSC.p8
-  redis:
-    image: 'redis:alpine'
   bundestag-io:
     build:
       context: bundestag.io/api
@@ -54,19 +40,6 @@ services:
       - mongo
     environment:
       - DIP_API_KEY=GmEPb1B.bfqJLIhcGAsH9fTJevTglhFpCoZyAAAdhp
-  democracy-api:
-    build:
-      context: democracy/api
-      target: production_stage
-    ports:
-      - 3000:3000
-      - 3400:3400
-    depends_on:
-      - mongo
-    env_file: ./democracy/api/.env
-    environment:
-      - DB_URL=mongodb://mongo:27017/democracy
-      - GRAPHIQL=true
   democracy-web-app:
     build:
       context: democracy/web-app
@@ -111,6 +84,3 @@ services:
       - ./docker_volumes/prometheus:/etc/prometheus
       - /prometheus
     command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
-
-volumes:
-  democracy-mongodb:
