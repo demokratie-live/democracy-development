@@ -652,10 +652,10 @@
   dependencies:
     typescript "^3.7.2"
 
-"@democracy-deutschland/bundestagio-common@0.1.16":
-  version "0.1.16"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bundestagio-common/-/bundestagio-common-0.1.16.tgz#04a55005d498758d0c2f0d423d8a57af7725e5ca"
-  integrity sha512-nLVqzShop/rE0leGdqSWqeXllIcrL3Epeh18BfnNqTMBd1hXj/axsmmo/jjn7mnPTvrZFuWZireelnapa4ejFA==
+"@democracy-deutschland/bundestagio-common@0.1.20":
+  version "0.1.20"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/bundestagio-common/-/bundestagio-common-0.1.20.tgz#32f921d6a93a5192c74138ed73777f71eaf2ec52"
+  integrity sha512-PZEXAXtp2sWyki1mm2RRoF4hpl1u6ob8IoAljTaY4bAnBS8mP565bj+ZbFjlJzEI94LZBAqU0t1F69TTOjkPLQ==
   dependencies:
     "@democracy-deutschland/bundestag.io-definitions" "^1.0.2"
     "@types/cron" "^1.7.2"
@@ -663,7 +663,6 @@
     jsonwebtoken "^8.5.1"
     mongoosastic "^4.6.0"
     mongoose "^6.0.12"
-    mongoose-diff-history mimani/mongoose-diff-history#master
     omit-deep "^0.3.0"
     ts-mongoose "^0.0.24"
 
@@ -1904,11 +1903,6 @@ ansi-escapes@^4.2.1, ansi-escapes@^4.3.1:
   dependencies:
     type-fest "^0.21.3"
 
-ansi-regex@^0.2.0, ansi-regex@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-0.2.1.tgz#0d8e946967a3d8143f93e24e298525fc1b2235f9"
-  integrity sha1-DY6UaWej2BQ/k+JOKYUl/BsiNfk=
-
 ansi-regex@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-2.1.1.tgz#c3b33ab5ee360d86e0e628f0468ae7ef27d654df"
@@ -1923,11 +1917,6 @@ ansi-regex@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-5.0.1.tgz#082cb2c89c9fe8659a311a53bd6a4dc5301db304"
   integrity sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==
-
-ansi-styles@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-1.1.0.tgz#eaecbf66cd706882760b2f4691582b8f55d7a7de"
-  integrity sha1-6uy/Zs1waIJ2Cy9GkVgrj1XXp94=
 
 ansi-styles@^2.2.1:
   version "2.2.1"
@@ -2559,17 +2548,6 @@ capital-case@^1.0.4:
     tslib "^2.0.3"
     upper-case-first "^2.0.2"
 
-chalk@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/chalk/-/chalk-0.5.1.tgz#663b3a648b68b55d04690d49167aa837858f2174"
-  integrity sha1-Zjs6ZItotV0EaQ1JFnqoN4WPIXQ=
-  dependencies:
-    ansi-styles "^1.1.0"
-    escape-string-regexp "^1.0.0"
-    has-ansi "^0.1.0"
-    strip-ansi "^0.3.0"
-    supports-color "^0.2.0"
-
 chalk@^1.0.0, chalk@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-1.1.3.tgz#a8115c55e4a702fe4d150abd3872822a7e09fc98"
@@ -3057,11 +3035,6 @@ dedent@^0.7.0:
   resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.7.0.tgz#2495ddbaf6eb874abb0e1be9df22d2e5a544326c"
   integrity sha1-JJXduvbrh0q7Dhvp3yLS5aVEMmw=
 
-deep-empty-object@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/deep-empty-object/-/deep-empty-object-1.0.5.tgz#b38b3201bfed4517b3a3fcb4517cf7ea2d303892"
-  integrity sha1-s4syAb/tRRezo/y0UXz36i0wOJI=
-
 deep-extend@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
@@ -3076,11 +3049,6 @@ deepmerge@4.2.2, deepmerge@^4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
   integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
-
-deepmerge@^2.0.0:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.2.1.tgz#5d3ff22a01c00f645405a2fbc17d0778a1801170"
-  integrity sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA==
 
 defer-to-connect@^1.0.1:
   version "1.1.3"
@@ -3369,7 +3337,7 @@ escape-html@~1.0.3:
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
   integrity sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=
 
-escape-string-regexp@^1.0.0, escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
+escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
   integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
@@ -3642,11 +3610,6 @@ extract-files@^8.0.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/extract-files/-/extract-files-8.1.0.tgz#46a0690d0fe77411a2e3804852adeaa65cd59288"
   integrity sha512-PTGtfthZK79WUMk+avLmwx3NGdU8+iVFXC2NMGxKsn0MnihOG2lvumj+AZo8CTwTrwjXDgZ5tztbRlEdRjBonQ==
-
-fast-deep-equal@^1.0.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-1.1.0.tgz#c053477817c86b51daa853c81e059b733d023614"
-  integrity sha1-wFNHeBfIa1HaqFPIHgWbcz0CNhQ=
 
 fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
@@ -4098,13 +4061,6 @@ handlebars@^4.7.7:
     wordwrap "^1.0.0"
   optionalDependencies:
     uglify-js "^3.1.4"
-
-has-ansi@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/has-ansi/-/has-ansi-0.1.0.tgz#84f265aae8c0e6a88a12d7022894b7568894c62e"
-  integrity sha1-hPJlqujA5qiKEtcCKJS3VoiUxi4=
-  dependencies:
-    ansi-regex "^0.2.0"
 
 has-ansi@^2.0.0:
   version "2.0.0"
@@ -5224,13 +5180,6 @@ json5@^2.1.2:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.1.tgz#655d50ed1e6f95ad1a3caababd2b0efda10b395c"
   integrity sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==
 
-jsondiffpatch@^0.1.38:
-  version "0.1.43"
-  resolved "https://registry.yarnpkg.com/jsondiffpatch/-/jsondiffpatch-0.1.43.tgz#c052889a99ef7eba19d0095f90f725cfa70a5611"
-  integrity sha1-wFKImpnvfroZ0AlfkPclz6cKVhE=
-  dependencies:
-    chalk "^0.5.1"
-
 jsonify@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
@@ -5429,11 +5378,6 @@ lodash.once@^4.0.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
   integrity sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=
-
-lodash.pick@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/lodash.pick/-/lodash.pick-4.4.0.tgz#52f05610fff9ded422611441ed1fc123a03001b3"
-  integrity sha1-UvBWEP/53tQiYRRB7R/BI6AwAbM=
 
 lodash.sortby@^4.7.0:
   version "4.7.0"
@@ -5726,11 +5670,6 @@ mongodb@^3.6.2:
   optionalDependencies:
     saslprep "^1.0.0"
 
-mongolike-operations@~0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/mongolike-operations/-/mongolike-operations-0.1.5.tgz#b8879c0798c1c59d4f5a8d2539c270c79ea09c18"
-  integrity sha512-sYFNudINVxHuC68pJp4HWi4IXL3GPLeg4s/wSEWPyNKAd62cpXli9FYwex3d1eLo718o2znXlINfjRK+LZOoeA==
-
 mongoosastic@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/mongoosastic/-/mongoosastic-4.6.0.tgz#d74d0dee2c88df99919d7e0b703132326d7c6187"
@@ -5738,16 +5677,6 @@ mongoosastic@^4.6.0:
   dependencies:
     elasticsearch "16.7.1"
     lodash.clonedeep "4.5.0"
-
-"mongoose-diff-history@github:mimani/mongoose-diff-history#master", mongoose-diff-history@mimani/mongoose-diff-history#master:
-  version "2.1.0"
-  resolved "https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86"
-  dependencies:
-    deep-empty-object "^1.0.5"
-    jsondiffpatch "^0.1.38"
-    lodash.pick "^4.4.0"
-    omit-deep "https://github.com/izigibran/omit-deep.git#0.4.0"
-    power-assign "^0.2.10"
 
 mongoose@6.0.12:
   version "6.0.12"
@@ -5907,14 +5836,6 @@ nwsapi@^2.2.0:
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.0.tgz#204879a9e3d068ff2a55139c2c772780681a38b7"
   integrity sha512-h2AatdwYH+JHiZpv7pt/gSX1XoRGb7L/qSIeuqA6GwYoF9w1vP1cw42TO0aI2pNyshRK5893hNSl+1//vHK7hQ==
 
-oad-utils@~0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/oad-utils/-/oad-utils-0.3.0.tgz#021a50d8c6d3fb4c059ab0c1ab1aa94c25b54f9a"
-  integrity sha512-qjVeIGscc9DBzdpMiVws7ymrcinOcpIaqRYfJHjXhsJeg7/ex+pZ6kfMu98EVBmR7+vulzVRO7L9CrJNyUDvLw==
-  dependencies:
-    deepmerge "^2.0.0"
-    mongolike-operations "~0.1.5"
-
 object-assign@^4, object-assign@^4.1.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
@@ -5958,13 +5879,6 @@ omit-deep@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/omit-deep/-/omit-deep-0.3.0.tgz#21c8af3499bcadd29651a232cbcacbc52445ebec"
   integrity sha1-IcivNJm8rdKWUaIyy8rLxSRF6+w=
-  dependencies:
-    is-plain-object "^2.0.1"
-    unset-value "^0.1.1"
-
-"omit-deep@https://github.com/izigibran/omit-deep.git#0.4.0":
-  version "0.3.0"
-  resolved "https://github.com/izigibran/omit-deep.git#3727e48ecdbd58cb50a2a8aba1911f8d2c9fdde9"
   dependencies:
     is-plain-object "^2.0.1"
     unset-value "^0.1.1"
@@ -6238,25 +6152,6 @@ pkg-dir@^4.2.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
-
-power-assign@^0.2.10:
-  version "0.2.10"
-  resolved "https://registry.yarnpkg.com/power-assign/-/power-assign-0.2.10.tgz#6b11b0746313f79edf67d4dc4c6bf3abacab1575"
-  integrity sha512-UNSXkOYJj8MVnpDdg7skBWRWbpPR7ukXTxo6ypcXQQwOaqa6v0kXbMM5SzvExozufvPfrDlsjyQvTd8Ub3pEGA==
-  dependencies:
-    fast-deep-equal "^1.0.0"
-    mongolike-operations "~0.1.5"
-    oad-utils "~0.3.0"
-    power-filter "~0.1.9"
-
-power-filter@~0.1.9:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/power-filter/-/power-filter-0.1.9.tgz#4aec4b476f4a04312a0abb1771c79d7f9a170547"
-  integrity sha512-sVZyGCwnopn9Wb9YlyfkZOXxoaXVC4z7hLXkSK48aF5iEH+ocGxUyKATR7Kf7s+vb2mDd8IFWiMY77+r/8ORmA==
-  dependencies:
-    fast-deep-equal "^1.0.0"
-    mongolike-operations "~0.1.5"
-    oad-utils "~0.3.0"
 
 prelude-ls@^1.2.1:
   version "1.2.1"
@@ -7047,13 +6942,6 @@ string_decoder@~1.1.1:
   dependencies:
     safe-buffer "~5.1.0"
 
-strip-ansi@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-0.3.0.tgz#25f48ea22ca79187f3174a4db8759347bb126220"
-  integrity sha1-JfSOoiynkYfzF0pNuHWTR7sSYiA=
-  dependencies:
-    ansi-regex "^0.2.1"
-
 strip-ansi@^3.0.0, strip-ansi@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-3.0.1.tgz#6a385fb8853d952d5ff05d0e8aaf94278dc63dcf"
@@ -7110,11 +6998,6 @@ subscriptions-transport-ws@^0.9.18, subscriptions-transport-ws@^0.9.19:
     iterall "^1.2.1"
     symbol-observable "^1.0.4"
     ws "^5.2.0 || ^6.0.0 || ^7.0.0"
-
-supports-color@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-0.2.0.tgz#d92de2694eb3f67323973d7ae3d8b55b4c22190a"
-  integrity sha1-2S3iaU6z9nMjlz1649i1W0wiGQo=
 
 supports-color@^2.0.0:
   version "2.0.0"
