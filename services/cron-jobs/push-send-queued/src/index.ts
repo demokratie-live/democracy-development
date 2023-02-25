@@ -1,6 +1,11 @@
 import mongoConnect from './mongoose';
 import { CRON_SEND_QUED_PUSHS_LIMIT } from './config';
-import { setCronStart, setCronSuccess, PushNotificationModel } from '@democracy-deutschland/democracy-common';
+import {
+  setCronStart,
+  setCronSuccess,
+  PushNotificationModel,
+  DeviceModel,
+} from '@democracy-deutschland/democracy-common';
 import admin from 'firebase-admin';
 import serviceAccount from './credentials.json';
 
@@ -20,7 +25,7 @@ const getUnsendPushs = async (limit: number) => {
 };
 
 const sendPush = async (push: Awaited<ReturnType<typeof getUnsendPushs>>[0]) => {
-  const { _id, type, category, title, message, procedureIds, token } = push;
+  const { type, category, title, message, procedureIds, token } = push;
 
   await admin.messaging().send({
     token,
@@ -44,8 +49,18 @@ const sendPush = async (push: Awaited<ReturnType<typeof getUnsendPushs>>[0]) => 
       },
     },
   });
-  /* Set sent = true */
-  await PushNotificationModel.updateOne({ _id }, { $set: { sent: true } });
+};
+
+const handleSendError = async (push: Awaited<ReturnType<typeof getUnsendPushs>>[0], error: unknown) => {
+  console.error('errorASDF', error);
+  await DeviceModel.updateMany(
+    {
+      'pushTokens.token': push.token,
+    },
+    {
+      $pull: { pushTokens: { token: push.token } },
+    },
+  );
 };
 
 const start = async () => {
@@ -57,14 +72,22 @@ const start = async () => {
   let pushs = await getUnsendPushs(CRON_SEND_QUED_PUSHS_LIMIT);
 
   let sentPushsCount = 0;
+  let sentPushsErrorCount = 0;
+  console.log(CRON_SEND_QUED_PUSHS_LIMIT, pushs);
 
   // send all pushs
   for (let push of pushs) {
-    await sendPush(push);
+    await sendPush(push).catch((error) => {
+      handleSendError(push, error);
+      sentPushsErrorCount++;
+    });
     sentPushsCount++;
+    /* Set sent = true */
+    await PushNotificationModel.updateOne({ _id: push._id }, { $set: { sent: true } });
   }
 
   console.info(`[PUSH] Sent ${sentPushsCount} Pushs`);
+  console.info(`[PUSH] Error ${sentPushsErrorCount} Pushs`);
 
   await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
 };

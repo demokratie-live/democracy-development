@@ -1,6 +1,5 @@
 import { Resolvers, VoteResults } from './types';
 import { FilterQuery } from 'mongoose';
-import diffHistory from 'mongoose-diff-history/diffHistory';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 import { xml2js } from 'xml-js';
@@ -461,20 +460,9 @@ const ProcedureResolvers: Resolvers = {
 
   Procedure: {
     currentStatusHistory: async (procedure) => {
-      const { _id } = procedure;
-      const history = await diffHistory.getDiffs('Procedure', _id).then((histories) =>
-        histories.reduce((prev, version) => {
-          const cur = prev;
-          if (version.diff.currentStatus) {
-            if (cur.length === 0) {
-              cur.push(version.diff.currentStatus[0]);
-            }
-            cur.push(version.diff.currentStatus[1]);
-          }
-          return cur;
-        }, []),
-      );
-      return history;
+      // TODO find replacement for current status history
+      // previously it was resolved by a bad working mongodb history model
+      return [];
     },
     namedVote: (procedure) => {
       const namedVote = procedure.history.some((h) => {
