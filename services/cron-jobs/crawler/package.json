@@ -10,7 +10,7 @@
     "build": "tsc",
     "lint": "eslint .",
     "test": "jest",
-    "dev": "ts-node-dev -r dotenv/config ./src/import-procedures dotenv_config_path=./.env.local",
+    "dev": "ts-node-dev ./src/import-procedures",
     "start:import-procedures": "node ./build/import-procedures"
   },
   "dependencies": {
