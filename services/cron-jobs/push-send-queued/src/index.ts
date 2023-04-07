@@ -7,13 +7,12 @@ import {
   DeviceModel,
 } from '@democracy-deutschland/democracy-common';
 import admin from 'firebase-admin';
-import serviceAccount from './credentials.json';
 
 admin.initializeApp({
   credential: admin.credential.cert({
-    clientEmail: serviceAccount.client_email,
-    privateKey: serviceAccount.private_key,
-    projectId: serviceAccount.project_id,
+    clientEmail: process.env.SERVICE_ACCOUNT_CLIENT_EMAIL,
+    privateKey: process.env.SERVICE_ACCOUNT_PRIVATE_KEY,
+    projectId: process.env.SERVICE_ACCOUNT_PROJECT_ID,
   }),
 });
 
