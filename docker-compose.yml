@@ -6,17 +6,25 @@ services:
       - ./data/mongo:/data/db
     ports:
       - 27017:27017
+    networks:
+      - democracy
   bundestag-io:
     build:
       context: bundestag.io/api
-      target: production_stage
+      target: build_stage
     ports:
-      - 4000:3100
+      - 4000:4000
+    command: yarn run dev
     depends_on:
       - mongo
     environment:
       - DB_URL=mongodb://mongo:27017/bundestagio
       - BIO_EDIT_TOKEN=CHANGE_ME
+      - PORT=4000
+    volumes:
+      - ./bundestag.io/api/src:/app/src
+    networks:
+      - democracy
   bio-admin:
     build:
       context: bundestag.io/admin
@@ -30,27 +38,82 @@ services:
       - BIO_EDIT_TOKEN=CHANGE_ME
       - NEXTAUTH_URL=http://localhost:4001
       - CREDENTIALS=username:password
+    profiles:
+      - admin
   dip:
     build:
       context: bundestag.io/dip
-      target: production_stage
-    ports:
-      - 4002:3101
-    depends_on:
-      - mongo
+      target: base_stage
+    env_file:
+      - bundestag.io/dip/.env
     environment:
-      - DIP_API_KEY=GmEPb1B.bfqJLIhcGAsH9fTJevTglhFpCoZyAAAdhp
+      - PORT=4002
+    command: yarn dev
+    volumes:
+      - ./bundestag.io/dip/src:/app/src
+    ports:
+      - 4002:4002
   democracy-web-app:
     build:
       context: democracy/web-app
       target: runner
     ports:
       - 3001:3000
-    depends_on:
-      - democracy-api
     environment:
       - GRAPHQL_URL=http://localhost:3000/
       - GRAPHQL_URL_SERVER=http://democracy-api:3000/
+    profiles:
+      - frontend
+  crawler:
+    build:
+      context: services/cron-jobs/crawler
+      target: base_stage
+    command: yarn dev
+    volumes:
+      - ./services/cron-jobs/crawler/src:/app/src
+    env_file:
+      - services/cron-jobs/crawler/.env.local
+    environment:
+      - MONGO_DB_URL=mongodb://mongo:27017/bundestagio
+      - DIP_GRAPHQL_ENDPOINT=http://dip:4002
+    depends_on:
+      - dip
+      - mongo
+    profiles:
+      - cronjobs
+  sync-procedures:
+    build:
+      context: services/cron-jobs/sync-procedures
+      target: base_stage
+    command: yarn dev
+    volumes:
+      - ./services/cron-jobs/sync-procedures/src:/app/src
+    env_file:
+      - services/cron-jobs/sync-procedures/.env.local
+    environment:
+      - DB_URL=mongodb://mongo/democracy
+      - BUNDESTAGIO_SERVER_URL=http://bundestag-io:4000
+    depends_on:
+      - bundestag-io
+    profiles:
+      - cronjobs
+    networks:
+      - democracy
+  queue-pushs-vote-top-100:
+    build:
+      context: services/cron-jobs/queue-pushs-vote-top-100
+      target: base_stage
+    command: yarn dev
+    volumes:
+      - ./services/cron-jobs/queue-pushs-vote-top-100/src:/app/src
+    env_file:
+      - services/cron-jobs/queue-pushs-vote-top-100/.env.local
+    environment:
+      - DB_URL=mongodb://mongo/democracy
+    depends_on:
+      - mongo
+    profiles:
+      - cronjobs
   loki:
     image: grafana/loki:2.4.2
     volumes:
@@ -59,6 +122,8 @@ services:
       - 3301:3100
     restart: unless-stopped
     command: --config.file=/etc/loki/loki-config.yml
+    profiles:
+      - debug
   promtail:
     image: grafana/promtail:2.4.0
     volumes:
@@ -68,6 +133,8 @@ services:
     #   - "1514:1514" # this is only needed if you are going to send syslogs
     restart: unless-stopped
     command: -config.file=/etc/promtail/promtail-config.yml
+    profiles:
+      - debug
   grafana:
     image: grafana/grafana:latest
     user: '501'
@@ -76,6 +143,8 @@ services:
     ports:
       - '3300:3000'
     restart: unless-stopped
+    profiles:
+      - debug
   prometheus:
     image: prom/prometheus:v2.34.0
     ports:
@@ -84,3 +153,8 @@ services:
       - ./docker_volumes/prometheus:/etc/prometheus
       - /prometheus
     command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+    profiles:
+      - debug
+networks:
+  democracy:
+    external: true
