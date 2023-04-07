@@ -1,18 +1,19 @@
 name: Docker – qr-code-handler
 
 on:
+  workflow_dispatch:
   push:
     paths:
-      - "services/qr-code-handler/**"
+      - 'services/qr-code-handler/**'
     branches:
-      - "master"
+      - 'master'
     tags:
-      - "qr-code-handler@v*"
+      - 'qr-code-handler@v*'
   pull_request:
     paths:
-      - "services/qr-code-handler/**"
+      - 'services/qr-code-handler/**'
     branches:
-      - "master"
+      - 'master'
 
 jobs:
   push:
@@ -23,14 +24,15 @@ jobs:
         uses: actions/checkout@v2
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: democracy/qr-code-handler
           tags: |
-            type=ref,event=branch
+            type=ref,event=branch,enable=${{ github.ref == format('refs/heads/{0}', 'master') || github.ref == format('refs/heads/{0}', 'alpha') || github.ref == format('refs/heads/{0}', 'internal') }}
             type=ref,event=pr
-            type=match,asref=foo,pattern=qr-code-handler@v(\d+.\d+.\d+),group=1
+            type=match,asref=foo,pattern=crawler@v(\d+.\d+.\d+)(-alpha.\d+)?,group=1
             type=semver,pattern={{version}},use=foo
+            type=sha,enable=${{ github.event_name == 'workflow_dispatch' }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
