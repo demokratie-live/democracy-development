@@ -114,6 +114,25 @@ services:
       - mongo
     profiles:
       - cronjobs
+    networks:
+      - democracy
+  push-send-queued:
+    build:
+      context: services/cron-jobs/push-send-queued
+      target: base_stage
+    command: yarn dev
+    volumes:
+      - ./services/cron-jobs/push-send-queued/src:/app/src
+    env_file:
+      - services/cron-jobs/push-send-queued/.env.local
+    environment:
+      - DB_URL=mongodb://mongo/democracy
+    depends_on:
+      - mongo
+    profiles:
+      - cronjobs
+    networks:
+      - democracy
   import-named-polls:
     build:
       context: services/cron-jobs/import-named-polls
