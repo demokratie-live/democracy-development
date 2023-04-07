@@ -1,20 +1,20 @@
-import { createSchema, Type } from "ts-mongoose";
+import { createSchema, Type } from 'ts-mongoose';
 
 export const PUSH_TYPE = {
-  PROCEDURE: "procedure",
-  PROCEDURE_BULK: "procedureBulk",
+  PROCEDURE: 'procedure',
+  PROCEDURE_BULK: 'procedureBulk',
 };
 
 export const PUSH_CATEGORY = {
-  CONFERENCE_WEEK: "conferenceWeek",
-  CONFERENCE_WEEK_VOTE: "conferenceWeekVote",
-  TOP100: "top100",
-  OUTCOME: "outcome",
+  CONFERENCE_WEEK: 'conferenceWeek',
+  CONFERENCE_WEEK_VOTE: 'conferenceWeekVote',
+  TOP100: 'top100',
+  OUTCOME: 'outcome',
 };
 
 export const PUSH_OS = {
-  IOS: "ios",
-  ANDROID: "android",
+  IOS: 'ios',
+  ANDROID: 'android',
 };
 
 const PushNotificationSchema = createSchema(
@@ -38,14 +38,12 @@ const PushNotificationSchema = createSchema(
     message: Type.string({
       required: true,
     }),
-    procedureIds: Type.array({ required: true }).of(
-      Type.string({ required: true })
-    ),
+    procedureIds: Type.array({ required: true }).of(Type.string({ required: true })),
     token: Type.string({
       required: true,
     }),
     os: Type.string({
-      enum: ["android", "ios"],
+      enum: ['android', 'ios', 'fcm'],
       required: true,
     }),
     time: Type.date({
@@ -56,7 +54,7 @@ const PushNotificationSchema = createSchema(
     }),
     failure: Type.string({}),
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 PushNotificationSchema.index({ category: -1 }, { background: true });
