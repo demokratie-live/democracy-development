@@ -9,10 +9,10 @@
   dependencies:
     typescript "^3.7.2"
 
-"@democracy-deutschland/democracy-common@^0.2.7":
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/democracy-common/-/democracy-common-0.2.11.tgz#7cff26c9ac65f6936896c52997db2dce6c16e8a7"
-  integrity sha512-77vEW+6GMcWMRzGKLsXZWrVV3zPKem0KZJH5TyI2Jv0Cym2ccb7GZxzp3sIyKWs6MyJs0RgbG8AIR7xpzX9kdw==
+"@democracy-deutschland/democracy-common@0.2.12-alpha.3":
+  version "0.2.12-alpha.3"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/democracy-common/-/democracy-common-0.2.12-alpha.3.tgz#3c9788572c558dd0d9a83b686430acff509ef485"
+  integrity sha512-RRZO6htW1YneNdmlE+HKsmM5TpNiEgcNdD+6oyga0os/irpi+qh4TIJuP4HdCwJNi7KjeD00OG3vadUyTZ4wWA==
   dependencies:
     "@democracy-deutschland/bundestag.io-definitions" "^1.0.2"
     "@types/cron" "^1.7.2"
