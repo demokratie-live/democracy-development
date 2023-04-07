@@ -28,7 +28,7 @@ jobs:
         with:
           images: democracy/crawler
           tags: |
-            type=ref,event=branch
+            type=ref,event=branch,enable=${{ github.ref == format('refs/heads/{0}', 'master') || github.ref == format('refs/heads/{0}', 'alpha') || github.ref == format('refs/heads/{0}', 'internal') }}
             type=ref,event=pr
             type=match,asref=foo,pattern=crawler@v(\d+.\d+.\d+),group=1
             type=semver,pattern={{version}},use=foo
