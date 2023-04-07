@@ -11,7 +11,8 @@ services:
   bundestag-io:
     build:
       context: bundestag.io/api
-      target: build_stage
+      target: base_stage
+      dockerfile: ../../infra/Dockerfile
     ports:
       - 4000:4000
     command: yarn run dev
@@ -40,10 +41,13 @@ services:
       - CREDENTIALS=username:password
     profiles:
       - admin
+    networks:
+      - democracy
   dip:
     build:
       context: bundestag.io/dip
       target: base_stage
+      dockerfile: ../../infra/Dockerfile
     env_file:
       - bundestag.io/dip/.env
     environment:
@@ -53,6 +57,8 @@ services:
       - ./bundestag.io/dip/src:/app/src
     ports:
       - 4002:4002
+    networks:
+      - democracy
   democracy-web-app:
     build:
       context: democracy/web-app
@@ -64,10 +70,13 @@ services:
       - GRAPHQL_URL_SERVER=http://democracy-api:3000/
     profiles:
       - frontend
+    networks:
+      - democracy
   crawler:
     build:
       context: services/cron-jobs/crawler
       target: base_stage
+      dockerfile: ../../../infra/Dockerfile
     command: yarn dev
     volumes:
       - ./services/cron-jobs/crawler/src:/app/src
@@ -81,10 +90,13 @@ services:
       - mongo
     profiles:
       - cronjobs
+    networks:
+      - democracy
   sync-procedures:
     build:
       context: services/cron-jobs/sync-procedures
       target: base_stage
+      dockerfile: ../../../infra/Dockerfile
     command: yarn dev
     volumes:
       - ./services/cron-jobs/sync-procedures/src:/app/src
@@ -95,6 +107,7 @@ services:
       - BUNDESTAGIO_SERVER_URL=http://bundestag-io:4000
     depends_on:
       - bundestag-io
+      - mongo
     profiles:
       - cronjobs
     networks:
@@ -103,6 +116,7 @@ services:
     build:
       context: services/cron-jobs/queue-pushs-vote-top-100
       target: base_stage
+      dockerfile: ../../../infra/Dockerfile
     command: yarn dev
     volumes:
       - ./services/cron-jobs/queue-pushs-vote-top-100/src:/app/src
@@ -120,11 +134,30 @@ services:
     build:
       context: services/cron-jobs/push-send-queued
       target: base_stage
+      dockerfile: ../../../infra/Dockerfile
     command: yarn dev
     volumes:
       - ./services/cron-jobs/push-send-queued/src:/app/src
     env_file:
-      - services/cron-jobs/push-send-queued/.env.local
+      - services/cron-jobs/push-send-queued/.env
+    environment:
+      - DB_URL=mongodb://mongo/democracy
+    depends_on:
+      - mongo
+    profiles:
+      - cronjobs
+    networks:
+      - democracy
+  cleanup-push-queue:
+    build:
+      context: services/cron-jobs/cleanup-push-queue
+      target: base_stage
+      dockerfile: ../../../infra/Dockerfile
+    command: yarn dev
+    volumes:
+      - ./services/cron-jobs/cleanup-push-queue/src:/app/src
+    env_file:
+      - services/cron-jobs/cleanup-push-queue/.env.local
     environment:
       - DB_URL=mongodb://mongo/democracy
     depends_on:
@@ -175,6 +208,8 @@ services:
     command: --config.file=/etc/loki/loki-config.yml
     profiles:
       - debug
+    networks:
+      - democracy
   promtail:
     image: grafana/promtail:2.4.0
     volumes:
@@ -186,6 +221,8 @@ services:
     command: -config.file=/etc/promtail/promtail-config.yml
     profiles:
       - debug
+    networks:
+      - democracy
   grafana:
     image: grafana/grafana:latest
     user: '501'
@@ -196,6 +233,8 @@ services:
     restart: unless-stopped
     profiles:
       - debug
+    networks:
+      - democracy
   prometheus:
     image: prom/prometheus:v2.34.0
     ports:
@@ -206,6 +245,8 @@ services:
     command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
     profiles:
       - debug
+    networks:
+      - democracy
 networks:
   democracy:
     external: true

@@ -1,7 +1,7 @@
 {
   "name": "bundestag.io",
   "version": "0.1.52",
-  "main": "built/index.js",
+  "main": "build/index.js",
   "author": "DEMOCRACY Deutschland e.V. <contact@democracy-deutschland.de>",
   "contributors": [
     "Manuel Ruck <m.ruck@democracy-deutschland.de>",
@@ -11,7 +11,7 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "start": "node built/index.js",
+    "start": "node build/index.js",
     "dev": "ts-node-dev --watch=resolvers,schemas --respawn src/index.ts",
     "lint": "yarn lint:ts && yarn lint:exports",
     "lint:es": "eslint src --ext .js,.jsx,.ts,.tsx",
