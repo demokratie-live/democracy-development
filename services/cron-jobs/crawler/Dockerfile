@@ -7,7 +7,6 @@ COPY . .
 
 FROM base_stage as build_stage
 WORKDIR /app
-COPY --from=base_stage /app ./
 RUN yarn build
 
 FROM build_stage as install_stage
@@ -18,7 +17,7 @@ RUN rm -rf node_modules
 RUN yarn install --frozen-lockfile --production
 RUN node-prune node_modules
 
-FROM base_stage as production_stage
+FROM node:14-alpine as production_stage
 WORKDIR /app
 ENV NODE_ENV=production
 COPY package.json yarn.lock ./
