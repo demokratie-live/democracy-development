@@ -1,6 +1,7 @@
 name: Docker – crawler
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - "services/cron-jobs/crawler/**"
@@ -31,6 +32,7 @@ jobs:
             type=ref,event=pr
             type=match,asref=foo,pattern=crawler@v(\d+.\d+.\d+),group=1
             type=semver,pattern={{version}},use=foo
+            type=seq,asref=pr_num,format=pr-{{pr_number}}-{{seq_padding}},start=0,pad=1
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
