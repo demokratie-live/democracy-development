@@ -11,7 +11,7 @@ import admin from 'firebase-admin';
 admin.initializeApp({
   credential: admin.credential.cert({
     clientEmail: process.env.SERVICE_ACCOUNT_CLIENT_EMAIL,
-    privateKey: process.env.SERVICE_ACCOUNT_PRIVATE_KEY,
+    privateKey: process.env.SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/gm, '\n'),
     projectId: process.env.SERVICE_ACCOUNT_PROJECT_ID,
   }),
 });
