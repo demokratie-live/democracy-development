@@ -89,7 +89,7 @@ namespace Browser {
                     }
                 );
                 if (response.status === 200) {
-                    const regex_dataLoader = /data-dataloader-url="(.*?)"[\s\S]*?data-dataloader-url="(.*?)"/gm;
+                    const regex_dataLoader = /data-dataloader-url="(.*?)"/gm;
                     let m;
                     while ((m = regex_dataLoader.exec(response.data)) !== null) {
                         // This is necessary to avoid infinite loops with zero-width matches
