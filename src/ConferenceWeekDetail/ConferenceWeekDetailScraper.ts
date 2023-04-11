@@ -13,7 +13,7 @@ namespace Scraper {
     private year: number;
     private week: number;
 
-    constructor({ year = 2014, week = 8 } = {}) {
+    constructor({ year = 2022, week = 41 } = {}) {
       this.year = year;
       this.week = week;
     }
