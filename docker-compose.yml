@@ -54,30 +54,47 @@ services:
       - mongo
     environment:
       - DIP_API_KEY=GmEPb1B.bfqJLIhcGAsH9fTJevTglhFpCoZyAAAdhp
-  democracy-api:
-    build:
-      context: democracy/api
-      target: production_stage
-    ports:
-      - 3000:3000
-      - 3400:3400
-    depends_on:
-      - mongo
-    env_file: ./democracy/api/.env
-    environment:
-      - DB_URL=mongodb://mongo:27017/democracy
-      - GRAPHIQL=true
   democracy-web-app:
     build:
       context: democracy/web-app
       target: runner
     ports:
       - 3001:3000
-    depends_on:
-      - democracy-api
     environment:
       - GRAPHQL_URL=http://localhost:3000/
       - GRAPHQL_URL_SERVER=http://democracy-api:3000/
+  import-named-polls:
+    build:
+      context: services/cron-jobs/import-named-polls
+      target: base_stage
+      dockerfile: ../../../infra/Dockerfile
+    command: yarn dev
+    volumes:
+      - ./services/cron-jobs/import-named-polls/src:/app/src
+    env_file:
+      - services/cron-jobs/import-named-polls/.env.local
+    environment:
+      - DB_URL=mongodb://mongo/bundestagio
+    depends_on:
+      - mongo
+    profiles:
+      - cronjobs
+  import-named-poll-deputies:
+    build:
+      context: services/cron-jobs/import-named-poll-deputies
+      target: base_stage
+      dockerfile: ../../../infra/Dockerfile
+    command: yarn dev
+    volumes:
+      - ./services/cron-jobs/import-named-poll-deputies/src:/app/src
+    env_file:
+      - services/cron-jobs/import-named-poll-deputies/.env.local
+    environment:
+      - DB_URL=mongodb://mongo/bundestagio
+    depends_on:
+      - mongo
+    profiles:
+      - cronjobs
   loki:
     image: grafana/loki:2.4.2
     volumes:

@@ -26,13 +26,6 @@ services:
     environment:
       - RATE_LIMIT=3
       - NODE_ENV=development
-  democracy-api:
-    build:
-      context: democracy/api
-      target: build_stage
-    command: yarn run dev
-    volumes:
-      - ./democracy/api:/app
   democracy-web-app:
     build:
       context: democracy/web-app

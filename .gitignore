@@ -8,3 +8,4 @@ configuration/*
 !configuration/*.example
 docker_volumes/*/*
 !/**/.gitkeep
+/services/cron-jobs/push-send-queued/.env
