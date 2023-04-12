@@ -24,10 +24,10 @@
     omit-deep "^0.3.0"
     ts-mongoose "^0.0.24"
 
-"@democracy-deutschland/scapacra-bt@^1.0.28":
-  version "1.0.30"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra-bt/-/scapacra-bt-1.0.30.tgz#eaaed54db5d1f601e7f6eccd4e8282f1a9e9eab0"
-  integrity sha512-uSGyokQ8S/uxcygjcGCgOeqfiJ6sbxvlIY6+nIPSHHyqqUgUq0APgpxvXxGLdLE3rmwbt+pD0SnixpPa4C0TKw==
+"@democracy-deutschland/scapacra-bt@1.0.32":
+  version "1.0.32"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/scapacra-bt/-/scapacra-bt-1.0.32.tgz#d586ee1ed81f37a9232aa110d69b7577df16d2c9"
+  integrity sha512-B0wAw7ffkSHaI+qF5XYyJWKoxiDwwDQGFBjZ1RCtwoJmiXECrXjUxrFdLTd9c0sbhE43siPFWes3ehHv7nBJag==
   dependencies:
     "@democracy-deutschland/scapacra" "1.0.6"
     "@types/axios" "^0.14.0"
@@ -737,7 +737,7 @@ mongoosastic@^4.6.0:
     elasticsearch "16.7.1"
     lodash.clonedeep "4.5.0"
 
-"mongoose-diff-history@github:mimani/mongoose-diff-history#master":
+mongoose-diff-history@mimani/mongoose-diff-history#master:
   version "2.1.0"
   resolved "https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86"
   dependencies:
