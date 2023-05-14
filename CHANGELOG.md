@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.62-alpha.0 (2023-05-14)
+
+
+### Automation
+
+* reset Dockerfile ([530375a](https://github.com/demokratie-live/democracy-api/commit/530375a582ce2bd1d90eb3f11d87284086124005))
+
 ### [0.2.61](https://github.com/demokratie-live/democracy-api/compare/v0.2.60...v0.2.61) (2023-01-10)
 
 
