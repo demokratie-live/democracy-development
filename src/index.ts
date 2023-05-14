@@ -15,6 +15,8 @@ import CONFIG from './config';
 import { logger } from './services/logger';
 
 import connectDB from './services/mongoose';
+import { appVersion } from './express/appVersion';
+import { applicationId } from './express/applicationId';
 
 const main = async () => {
   // Connect to DB - this keeps the process running
@@ -46,6 +48,12 @@ const main = async () => {
   // Here several Models are included
 
   server.use(authMiddleware);
+  
+  // add version to graphql context
+  server.use(appVersion);
+  
+  // add application id to graphql context
+  server.use(applicationId);
 
   // Human Connection webhook
   // const smHumanConnection = require('./express/webhooks/socialmedia/humanconnection'); // eslint-disable-line global-require

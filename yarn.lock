@@ -788,10 +788,10 @@
   dependencies:
     typescript "^3.7.2"
 
-"@democracy-deutschland/democracy-common@^0.2.7":
-  version "0.2.10"
-  resolved "https://registry.yarnpkg.com/@democracy-deutschland/democracy-common/-/democracy-common-0.2.10.tgz#e60b6c01d03dc7557e006608dd3ede15901830a0"
-  integrity sha512-+7iSU2YE4LDhKV4l1M2spd29O5AlFVG/zAkojILyAStwsKfNz5/QCM6gPPX9mZLBMOjOhq8IoDJuRGb38CBLjA==
+"@democracy-deutschland/democracy-common@0.2.12-alpha.3":
+  version "0.2.12-alpha.3"
+  resolved "https://registry.yarnpkg.com/@democracy-deutschland/democracy-common/-/democracy-common-0.2.12-alpha.3.tgz#3c9788572c558dd0d9a83b686430acff509ef485"
+  integrity sha512-RRZO6htW1YneNdmlE+HKsmM5TpNiEgcNdD+6oyga0os/irpi+qh4TIJuP4HdCwJNi7KjeD00OG3vadUyTZ4wWA==
   dependencies:
     "@democracy-deutschland/bundestag.io-definitions" "^1.0.2"
     "@types/cron" "^1.7.2"
@@ -3422,6 +3422,11 @@ compare-func@^2.0.0:
   dependencies:
     array-ify "^1.0.0"
     dot-prop "^5.1.0"
+
+compare-versions@^6.0.0-rc.1:
+  version "6.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/compare-versions/-/compare-versions-6.0.0-rc.1.tgz#93e6beb8767c2375333ee168fa64c28b75ace2c6"
+  integrity sha512-cFhkjbGY1jLFWIV7KegECbfuyYPxSGvgGkdkfM+ibboQDoPwg2FRHm5BSNTOApiauRBzJIQH7qvOJs2sW5ueKQ==
 
 component-bind@1.0.0:
   version "1.0.0"

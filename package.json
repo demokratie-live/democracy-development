@@ -22,10 +22,11 @@
   "dependencies": {
     "@bmatei/apollo-prometheus-exporter": "^2.1.1",
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.0",
-    "@democracy-deutschland/democracy-common": "^0.2.7",
+    "@democracy-deutschland/democracy-common": "0.2.12-alpha.3",
     "apn": "^2.2.0",
     "apollo-server-express": "^2.9.12",
     "body-parser": "^1.19.0",
+    "compare-versions": "^6.0.0-rc.1",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.4",
     "cron": "^1.7.2",

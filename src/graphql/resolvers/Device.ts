@@ -7,6 +7,7 @@ import { createTokens, headerToken } from '../../express/auth';
 import { sendSMS, statusSMS } from '../../services/sms';
 import { Resolvers, NotificationSettings } from '../../generated/graphql';
 import { logger } from '../../services/logger';
+import { addToken } from './Device/addToken';
 
 const calculateResendTime = ({
   latestCodeTime,
@@ -383,16 +384,7 @@ const DeviceApi: Resolvers = {
       };
     },
 
-    addToken: async (parent, { token, os }, { device }) => {
-      logger.graphql('Device.mutation.addToken');
-      if (!device.pushTokens.some((t) => t.token === token)) {
-        device.pushTokens.push({ token, os });
-        await device.save();
-      }
-      return {
-        succeeded: true,
-      };
-    },
+    addToken,
 
     updateNotificationSettings: async (
       parent,
