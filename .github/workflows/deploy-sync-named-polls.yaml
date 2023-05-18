@@ -33,6 +33,10 @@ jobs:
             type=match,asref=foo,pattern=crawler@v(\d+.\d+.\d+)(-alpha.\d+)?,group=1
             type=semver,pattern={{version}},use=foo
             type=sha,enable=${{ github.event_name == 'workflow_dispatch' }}
+      - name: Print Meta Summary
+        run: |
+          echo "🏷️ Tags: ${{ steps.meta.outputs.tags }}
+          " >> $GITHUB_STEP_SUMMARY
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
