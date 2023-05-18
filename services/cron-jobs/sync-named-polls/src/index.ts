@@ -146,7 +146,11 @@ const start = async () => {
   console.log('deputies', await DeputyModel.countDocuments({}));
   await start();
   await mongoDisconnect();
-})().catch(async (e) => {
-  await mongoDisconnect();
-  throw e;
-});
+})()
+  .catch(async (e) => {
+    await mongoDisconnect();
+    throw e;
+  })
+  .finally(() => {
+    process.exit(0);
+  });
