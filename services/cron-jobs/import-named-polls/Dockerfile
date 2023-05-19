@@ -1,4 +1,4 @@
-FROM node:12-alpine AS BUILD_IMAGE
+FROM node:20-alpine AS BUILD_IMAGE
 
 # install next-optimized-images requirements
 RUN apk --no-cache update \ 
@@ -17,10 +17,7 @@ RUN yarn build
 
 RUN npm prune --production
 
-# run node prune
-RUN /usr/local/bin/node-prune
-
-FROM node:12-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
