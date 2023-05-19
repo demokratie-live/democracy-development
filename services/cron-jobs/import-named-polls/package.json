@@ -1,6 +1,6 @@
 {
   "name": "import-named-polls",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
@@ -14,10 +14,13 @@
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@democracy-deutschland/bundestagio-common": "0.1.20",
-    "@democracy-deutschland/scapacra-bt": "1.0.32",
-    "http2": "^3.3.7"
+    "cheerio": "^1.0.0-rc.12",
+    "crawlee": "^3.3.2",
+    "dayjs": "^1.11.7",
+    "playwright": "^1.33.0"
   },
   "devDependencies": {
+    "@types/node": "^20.1.6",
     "dotenv": "^16.0.3",
     "ts-node-dev": "^2.0.0",
     "ts-unused-exports": "^9.0.4",
