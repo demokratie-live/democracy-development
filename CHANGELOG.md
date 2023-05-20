@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.62-alpha.1 (2023-05-20)
+
+
+### Bug Fixes
+
+* 🐛 replace device token os with fcm when it's android ([9aee02f](https://github.com/demokratie-live/democracy-api/commit/9aee02f6859fd24559901b4ece25069d3fa76768))
+
 ### 0.2.62-alpha.0 (2023-05-14)
 
 
