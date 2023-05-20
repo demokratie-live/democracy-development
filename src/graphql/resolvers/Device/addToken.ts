@@ -2,11 +2,6 @@ import { compare } from 'compare-versions';
 import { Resolvers } from '../../../generated/graphql';
 import { logger } from '../../../services/logger';
 import axios from 'axios';
-import { Device } from '@democracy-deutschland/democracy-common';
-
-const hasPushToken = (device: Device, token: string) => {
-  return device.pushTokens.some((pushToken) => pushToken.token === token);
-};
 
 export const addToken: Resolvers['Mutation']['addToken'] = async (
   parent,
@@ -14,6 +9,8 @@ export const addToken: Resolvers['Mutation']['addToken'] = async (
   { device, version, applicationId },
 ) => {
   logger.graphql('Device.mutation.addToken', { version, applicationId });
+
+  const oldToken = device.pushTokens.find((pushToken) => pushToken.token === token);
 
   if (os === 'ios' && compare(version, '1.5.5', '<')) {
     // Convert apn to fcm token
@@ -34,15 +31,20 @@ export const addToken: Resolvers['Mutation']['addToken'] = async (
       },
     );
     const fpnToken = response.data.results[0]?.registration_token;
-    if (fpnToken && !hasPushToken(device, fpnToken)) {
+    if (fpnToken && !oldToken) {
       device.pushTokens.push({
         token: fpnToken,
         os: 'fcm',
       });
       await device.save();
     }
+  } else if (oldToken.os !== "fcm") {
+    device.pushTokens.push({
+      token: token,
+      os: 'fcm',
+    });
   } else {
-    if (!hasPushToken(device, token) ) {
+    if (!oldToken) {
       device.pushTokens.push({
         token: token,
         os: 'fcm',
