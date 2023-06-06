@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.62-alpha.2 (2023-06-06)
+
+
+### Bug Fixes
+
+* 🐛 fix add new push tokens ([d07ebcd](https://github.com/demokratie-live/democracy-api/commit/d07ebcd8805bc2a06d5ab425fd203ec04bdea5f2))
+
 ### 0.2.62-alpha.1 (2023-05-20)
 
 
