@@ -6,6 +6,7 @@ export interface MetaData {
 
 export interface PlenaryMinutesItem {
   meeting: number;
+  period: number;
   date: Date;
   xml: string;
 }

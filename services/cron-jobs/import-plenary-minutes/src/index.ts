@@ -29,7 +29,7 @@ const getMeta = (meta: cheerio.Cheerio): MetaData => {
   };
 };
 
-const getPlenaryMinutes = (plenaryMinutes: cheerio.Cheerio): PlenaryMinutesItem[] => {
+const getPlenaryMinutes = (plenaryMinutes: cheerio.Cheerio, period: number): PlenaryMinutesItem[] => {
   const plenaryMinutesItems: PlenaryMinutesItem[] = [];
   plenaryMinutes.each((i, elem) => {
     // Parse Title
@@ -46,6 +46,7 @@ const getPlenaryMinutes = (plenaryMinutes: cheerio.Cheerio): PlenaryMinutesItem[
 
     const plenaryMinutesItem: PlenaryMinutesItem = {
       date: m.toDate(),
+      period,
       meeting: parseInt(match.meeting),
       xml: `https://www.bundestag.de${xmlLink}`,
     };
@@ -55,14 +56,14 @@ const getPlenaryMinutes = (plenaryMinutes: cheerio.Cheerio): PlenaryMinutesItem[
   return plenaryMinutesItems;
 };
 
-const parsePage = async (url: string) => {
+const parsePage = async (url: string, period: number) => {
   return await AxiosInstance.get(url).then((response) => {
     const html = response.data;
     const $ = cheerio.load(html);
     const meta: cheerio.Cheerio = $('.meta-slider');
     const plenaryMinutesTable: cheerio.Cheerio = $('.bt-table-data > tbody > tr');
     const metaData = getMeta(meta);
-    const plenaryMinutes = getPlenaryMinutes(plenaryMinutesTable);
+    const plenaryMinutes = getPlenaryMinutes(plenaryMinutesTable, period);
     return {
       meta: metaData,
       plenaryMinutes,
@@ -70,17 +71,24 @@ const parsePage = async (url: string) => {
   });
 };
 
-const getUrl = (offset: number) =>
-  `https://www.bundestag.de/ajax/filterlist/de/services/opendata/543410-543410/h_49f0d94cb26682ff1e9428b6de471a5b?offset=${offset}`;
+const getUrl = ({ offset, id }: { offset: number; id: string }) =>
+  `https://www.bundestag.de/ajax/filterlist/de/services/opendata/${id}?offset=${offset}`;
 
-const start = async () => {
-  let url: string | false = getUrl(0);
+const periods = [
+  { period: 19, id: '543410-543410' },
+  { period: 20, id: '866354-866354' },
+];
+
+const start = async (period: number) => {
+  const periodId = periods.find((p) => p.period === period)!.id;
+
+  let url: string | false = getUrl({ offset: 0, id: periodId });
   const data: PlenaryMinutesItem[] = [];
   do {
-    const { meta, plenaryMinutes } = await parsePage(url);
+    const { meta, plenaryMinutes } = await parsePage(url, period);
     data.push(...plenaryMinutes);
     if (meta.nextOffset < meta.hits) {
-      url = getUrl(meta.nextOffset);
+      url = getUrl({ offset: meta.nextOffset, id: periodId });
     } else {
       url = false;
     }
@@ -88,7 +96,7 @@ const start = async () => {
   await PlenaryMinuteModel.collection.bulkWrite(
     data.map((item) => ({
       updateOne: {
-        filter: { meeting: item.meeting },
+        filter: { meeting: item.meeting, period: item.period },
         update: {
           $set: item,
         },
@@ -96,7 +104,7 @@ const start = async () => {
       },
     })),
   );
-  console.log('found: ', data.length);
+  console.log(`found for period ${period}: `, data.length);
 };
 
 (async () => {
@@ -107,6 +115,7 @@ const start = async () => {
   }
   await mongoConnect();
   console.log('PlenaryMinutes', await PlenaryMinuteModel.countDocuments({}));
-  await start();
+  await start(19);
+  await start(20);
   process.exit(0);
 })();
