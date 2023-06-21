@@ -13,6 +13,7 @@ export const addToken: Resolvers['Mutation']['addToken'] = async (
   const oldToken = device.pushTokens.find((pushToken) => pushToken.token === token);
 
   if (os === 'ios' && compare(version, '1.5.5', '<')) {
+    console.log('addToken', 'ios', 'oldToken', oldToken);
     // Convert apn to fcm token
     const response = await axios.post<{
       results: { registration_token?: string; apns_token: string; status: string }[];
@@ -38,20 +39,23 @@ export const addToken: Resolvers['Mutation']['addToken'] = async (
       });
       await device.save();
     }
-  } else if (oldToken?.os !== "fcm") {
+  } else if (oldToken?.os !== 'fcm') {
+    console.log('addToken', 'fcm', 'oldToken', oldToken);
     device.pushTokens.push({
       token: token,
       os: 'fcm',
     });
+  } else if (!oldToken) {
+    console.log("addToken", "newToken", "oldToken", oldToken)
+    device.pushTokens.push({
+      token: token,
+      os: 'fcm',
+    });
+    await device.save();
   } else {
-    if (!oldToken) {
-      device.pushTokens.push({
-        token: token,
-        os: 'fcm',
-      });
-      await device.save();
-    }
+    console.log("addToken", "oldToken", "oldToken", oldToken)
   }
+
   return {
     succeeded: true,
   };
