@@ -37,12 +37,7 @@ export const addToken: Resolvers['Mutation']['addToken'] = async (
         os: 'fcm',
       });
     }
-  } else if (oldToken.os !== 'fcm') {
-    device.pushTokens.push({
-      token: token,
-      os: 'fcm',
-    });
-  } else if (!oldToken) {
+  } else if (oldToken?.os !== 'fcm') {
     device.pushTokens.push({
       token: token,
       os: 'fcm',
