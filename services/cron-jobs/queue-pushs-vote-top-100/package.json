@@ -1,6 +1,6 @@
 {
   "name": "queue-pushs-vote-top-100",
-  "version": "0.1.8-alpha.0",
+  "version": "0.1.8",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
@@ -12,7 +12,7 @@
     "start": "node ./build/index.js"
   },
   "dependencies": {
-    "@democracy-deutschland/democracy-common": "0.2.12-alpha.3",
+    "@democracy-deutschland/democracy-common": "0.2.12",
     "moment": "^2.27.0",
     "p-iteration": "^1.1.8"
   },
