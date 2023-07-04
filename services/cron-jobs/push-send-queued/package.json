@@ -1,6 +1,6 @@
 {
   "name": "push-send-queued",
-  "version": "0.1.18-alpha.0",
+  "version": "0.1.18",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
