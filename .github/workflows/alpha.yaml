@@ -8,9 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.ACTIONS_PUSH_TO_PROTECTED_BRANCH }}
       - uses: actions/setup-node@v3
         with:
           node-version: 14
@@ -20,7 +17,7 @@ jobs:
           git config --local user.name "GitHub Action"
       - name: Bump and Commit
         run: |
-          npx standard-version --prerelease alpha
+          npx standard-version --prerelease alpha --skip.tag
           git push --follow-tags
 
   push:
@@ -40,9 +37,10 @@ jobs:
       - name: Get version from package.json
         id: version  
         run: |
+          version=$(node -p "require('./package.json').version")
           branch=$(git rev-parse --abbrev-ref HEAD | sed 's/feature\///') 
           branch=${branch//[^a-zA-Z0-9_-]/-} 
-          echo "version=$branch" >> $GITHUB_OUTPUT
+          echo "version=$version-$branch" >> $GITHUB_OUTPUT
           
       # Build the Docker image
       - name: Build Docker image
@@ -55,9 +53,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Push to Docker Hub
-        run: |
-          docker tag democracy/democracy-server:${{ steps.version.outputs.version }}
-          docker push democracy/democracy-server:${{ steps.version.outputs.version }}
+        run: docker push democracy/democracy-server:${{ steps.version.outputs.version }}
 
   create-pull-request-to-infrastructure:
     needs: push

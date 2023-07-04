@@ -65,6 +65,8 @@ const graphql = new ApolloServer({
     user: req.user,
     device: req.device,
     phone: req.phone,
+    version: req.version,
+    applicationId: req.applicationId,
     // Models
     ProcedureModel,
     UserModel,

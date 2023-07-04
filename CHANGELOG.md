@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.62-alpha.6 (2023-06-21)
+
+
+### Bug Fixes
+
+* 🐛 fix save token ([00b33da](https://github.com/demokratie-live/democracy-api/commit/00b33dace66cff82863b0269c37c815d932b573a))
+
+### 0.2.62-alpha.5 (2023-06-21)
+
+### 0.2.62-alpha.4 (2023-06-21)
+
+
+### Bug Fixes
+
+* 🐛 save push token ([2ca60b7](https://github.com/demokratie-live/democracy-api/commit/2ca60b7efd4d8ac9c3d7f8fcb19cd72e22954ac6))
+
+### 0.2.62-alpha.3 (2023-06-21)
+
+
+### Bug Fixes
+
+* 🐛 log addToken tasks ([4029429](https://github.com/demokratie-live/democracy-api/commit/40294291d7c89323395b91f52361eccff5f3f791))
+
+### 0.2.62-alpha.2 (2023-06-06)
+
+
+### Bug Fixes
+
+* 🐛 fix add new push tokens ([d07ebcd](https://github.com/demokratie-live/democracy-api/commit/d07ebcd8805bc2a06d5ab425fd203ec04bdea5f2))
+
+### 0.2.62-alpha.1 (2023-05-20)
+
+
+### Bug Fixes
+
+* 🐛 replace device token os with fcm when it's android ([9aee02f](https://github.com/demokratie-live/democracy-api/commit/9aee02f6859fd24559901b4ece25069d3fa76768))
+
+### 0.2.62-alpha.0 (2023-05-14)
+
+
+### Automation
+
+* reset Dockerfile ([530375a](https://github.com/demokratie-live/democracy-api/commit/530375a582ce2bd1d90eb3f11d87284086124005))
+
 ### [0.2.61](https://github.com/demokratie-live/democracy-api/compare/v0.2.60...v0.2.61) (2023-01-10)
 
 

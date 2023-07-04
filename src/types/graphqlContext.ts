@@ -29,6 +29,8 @@ export interface GraphQlContext {
   user: User;
   phone: Phone;
   device: Device;
+  version?: string;
+  applicationId?: string;
   votedLoader: DataLoader<string, boolean, unknown>;
 }
 
@@ -36,4 +38,6 @@ export interface ExpressReqContext extends Request {
   user?: User | null;
   phone?: Phone | null;
   device?: Device | null;
+  version?: string;
+  applicationId?: string;
 }

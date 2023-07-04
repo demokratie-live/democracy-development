@@ -1,19 +1,20 @@
 version: '3'
 services:
-  democracy-api-mongodb:
-    image: mongo:4
-    container_name: mongodb
-    volumes:
-      - ./data/db:/data/db:rw
-    ports:
-      - "27017:27017"
   democracy-api:
-    build: .
-    container_name: app
+    build:
+      target: base_stage
+      context: .
+    env_file:
+      - .env
+    environment:
+      - DB_URL=mongodb://mongo/democracy
     command: yarn dev
     volumes:
-      - .:/src
+      - ./src:/app/src
     ports:
       - "3000:3000"
-    depends_on:
-      - mongodb
+    networks:
+      - democracy
+networks:
+  democracy:
+    external: true
