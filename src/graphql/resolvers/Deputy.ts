@@ -41,7 +41,8 @@ const DeputyApi: Resolvers = {
       if (limit > 100) {
         throw new Error('limit must not exceed 100');
       }
-      const conditions: FilterQuery<IDeputy> = { period };
+
+      const conditions: FilterQuery<IDeputy> = { period, name: { $ne: '' } };
 
       if (filterTerm) {
         conditions.$or = [
@@ -59,6 +60,7 @@ const DeputyApi: Resolvers = {
       if (excludeIds) {
         conditions.webId = { $nin: excludeIds };
       }
+
       const total = await DeputyModel.count(conditions);
 
       const deputies = await DeputyModel.find(conditions)
@@ -69,7 +71,9 @@ const DeputyApi: Resolvers = {
       return {
         total,
         hasMore: offset + limit < total,
-        data: deputies.sort((a, b) => filterIds?.indexOf(a.webId) - filterIds?.indexOf(b.webId)),
+        data: filterIds
+          ? deputies.sort((a, b) => filterIds?.indexOf(a.webId) - filterIds?.indexOf(b.webId))
+          : deputies,
       };
     },
     deputy: async (_parent, { id }) => {
