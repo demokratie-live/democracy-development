@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.63 (2023-07-05)
+
+
+### Bug Fixes
+
+* 🐛 filter empty deputies ([#2](https://github.com/demokratie-live/democracy-api/issues/2)) ([a733389](https://github.com/demokratie-live/democracy-api/commit/a733389a8b190745b6d22b41925c759e1af7bb08))
+
 ### 0.2.63-alpha.0 (2023-07-05)
 
 
