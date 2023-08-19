@@ -2,6 +2,11 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      prerelease:
+        description: 'Create a new prerelease'
+        type: boolean
+        default: true
 
 jobs:
   create-new-release:
@@ -20,7 +25,11 @@ jobs:
           git config --local user.name "GitHub Action"
       - name: Bump and Commit
         run: |
-          npx standard-version
+          if [[ "${{ github.event.inputs.prerelease }}" == "true" ]]; then
+            npx standard-version -p
+          else
+            npx standard-version
+          fi
           git push --follow-tags
 
   push:
