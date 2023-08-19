@@ -23,10 +23,20 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+      
+      - name: Set Prerelease Tag
+        id: set_prerelease_tag
+        run: |
+          # Get branch name
+          BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//-/g')
+          
+          # Set it as an output (optional, if you want to use it in a later step)
+          echo "PRERELEASE_TAG=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
       - name: Bump and Commit
         run: |
           if [[ "${{ github.event.inputs.prerelease }}" == "true" ]]; then
-            npx standard-version -p
+            npx standard-version --prerelease ${{ steps.set_prerelease_tag.outputs.PRERELEASE_TAG }}
           else
             npx standard-version
           fi
