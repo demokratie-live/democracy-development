@@ -20,4 +20,13 @@ module.exports = withBundleAnalyzer({
   images: {
     formats: ['image/avif', 'image/webp'],
   },
+
+  async rewrites() {
+    return [
+      {
+        source: '/apple-app-site-association',
+        destination: '/api/apple-app-site-association',
+      },
+    ];
+  },
 });
