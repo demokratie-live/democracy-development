@@ -1,6 +1,6 @@
 {
   "name": "democracy-app.de",
-  "version": "1.0.7-0",
+  "version": "1.0.7-1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
