@@ -35,7 +35,7 @@ export default function handler(
   { headers: { host } }: NextApiRequest,
   res: NextApiResponse
 ) {
-  const isProduction = host?.includes('democracy-app.de');
+  const isProduction = host === 'democracy-app.de';
 
   const appleAppSiteAssociation = isProduction
     ? appleAppSiteAssociationProduction
