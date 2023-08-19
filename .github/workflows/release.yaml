@@ -63,7 +63,9 @@ jobs:
       - name: Push to Docker Hub
         run: |
           docker tag democracy/democracy-app.de:${{ steps.version.outputs.version }} democracy/democracy-app.de:latest
-          docker push democracy/democracy-app.de:latest
+          if [ "${{ github.event.inputs.prerelease }}" != "true" ]; then
+            docker push democracy/democracy-app.de:latest
+          fi
           docker push democracy/democracy-app.de:${{ steps.version.outputs.version }}
 
   create-pull-request-to-infrastructure:
