@@ -1,6 +1,6 @@
 {
   "name": "democracy-app.de",
-  "version": "1.0.7",
+  "version": "1.0.8-feature-deeplingking.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
