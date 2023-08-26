@@ -31,6 +31,11 @@ module.exports = withBundleAnalyzer({
         source: '/.well-known/assetlinks.json',
         destination: '/api/assetlinks',
       },
+      {
+        source:
+          '/.well-known/apple-developer-merchantid-domain-association.txt',
+        destination: '/api/apple-developer-merchantid-domain-association',
+      },
     ];
   },
 });
