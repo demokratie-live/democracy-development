@@ -1,6 +1,6 @@
 {
   "name": "democracy-app.de",
-  "version": "1.0.9",
+  "version": "1.0.10-feature-native-donation.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.10-feature-native-donation.0](https://github.com/demokratie-live/desktop/compare/v1.0.9...v1.0.10-feature-native-donation.0) (2023-08-26)
+
 ### [1.0.9](https://github.com/demokratie-live/desktop/compare/v1.0.8...v1.0.9) (2023-08-26)
 
 ### [1.0.9-feature-deeplingking.0](https://github.com/demokratie-live/desktop/compare/v1.0.8...v1.0.9-feature-deeplingking.0) (2023-08-26)
