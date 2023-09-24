@@ -15,8 +15,8 @@
     "@democracy-deutschland/democracy-common": "^0.2.8"
   },
   "devDependencies": {
-    "ts-node-dev": "^1.0.0-pre.50",
-    "ts-unused-exports": "^6.2.1",
+    "ts-node-dev": "^2.0.0",
+    "ts-unused-exports": "^10.0.1",
     "typescript": "^5.2.2"
   }
 }

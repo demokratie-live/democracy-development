@@ -20,8 +20,8 @@
   },
   "devDependencies": {
     "dotenv": "^16.0.0",
-    "ts-node-dev": "^1.0.0-pre.49",
-    "ts-unused-exports": "^8.0.0",
+    "ts-node-dev": "^2.0.0",
+    "ts-unused-exports": "^10.0.1",
     "typescript": "^5.2.2"
   }
 }

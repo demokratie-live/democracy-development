@@ -8,7 +8,8 @@
   "private": true,
   "packageManager": "yarn@1.22.10",
   "workspaces": [
-    "services/**/*"
+    "services/**/*",
+    "bundestag.io/**/*"
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap",
