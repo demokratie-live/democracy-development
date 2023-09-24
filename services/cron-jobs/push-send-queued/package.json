@@ -27,6 +27,6 @@
     "dotenv": "^16.0.3",
     "ts-node-dev": "^2.0.0",
     "ts-unused-exports": "^9.0.2",
-    "typescript": "^4.9.4"
+    "typescript": "^5.2.2"
   }
 }

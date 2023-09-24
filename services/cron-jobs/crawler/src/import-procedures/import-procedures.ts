@@ -106,7 +106,12 @@ export default async function importProcedures(config: ImportProceduresInput): P
         edges,
         pageInfo: { endCursor, hasNextPage },
       },
-    } = await request(DIP_GRAPHQL_ENDPOINT, procedureQuery, variables);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } = await request<{ procedures: { edges: any; pageInfo: { endCursor: string; hasNextPage: boolean } } }>(
+      DIP_GRAPHQL_ENDPOINT,
+      procedureQuery,
+      variables,
+    );
 
     await ProcedureModel.bulkWrite(
       edges.map((edge: { node: { procedureId: string } }) => ({
