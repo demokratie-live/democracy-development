@@ -11,12 +11,12 @@ WORKDIR /app
 RUN yarn global add turbo
 COPY . .
 RUN cat package.json
-RUN turbo prune --scope=qr-code-handler --docker
+RUN turbo prune --scope=$SERVICE --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
 ARG  SERVICE
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat python3 make g++
 RUN apk update
 WORKDIR /app
  

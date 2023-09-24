@@ -1,25 +1,29 @@
-name: Docker – qr-code-handler
+name: Docker – Build and Push
 
 on:
   workflow_dispatch:
   push:
     paths:
-      - 'services/qr-code-handler/**'
+      - 'services/**'
     branches:
       - 'master'
     tags:
-      - 'qr-code-handler@v*'
+      - '*@v*.*.*'
   pull_request:
     paths:
-      - 'services/qr-code-handler/**'
+      - 'services/**'
     branches:
       - 'master'
+
+env:
+  SINCE: origin/feature/turbo-simple-base-2
 
 jobs:
   analyse-changed-packages:
     runs-on: ubuntu-latest
     outputs:
       changed: ${{ steps.changed-packages.outputs.changed }}
+      changedPackages: ${{ steps.changed-packages.outputs.changedPackages }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -40,30 +44,49 @@ jobs:
       - name: Identifying Changed Bap-Services
         id: changed-packages
         run: |
-          turboChanges=$(node_modules/.bin/turbo run build --dry-run=json --since=origin/develop)
-          changedPackages=$(node -e "let results = $turboChanges.tasks.filter((task) => task.command != '<NONEXISTENT>' && task.directory.startsWith('apps/')).map((task) => task.package); console.log(results);")
-          shopt -s nullglob; folders=(./apps/*); allPackages=$(basename -a "${folders[@]}" | jq -R -c . | jq -s .);
-          changedPackages=$(node -e "let results = '${{ github.ref }}' === 'refs/heads/develop' ? $allPackages : $changedPackages; console.log(JSON.stringify(results));")
+          turboChanges=$(node_modules/.bin/turbo run build --dry-run=json --since=${{ env.SINCE }})
+          changedPackages=$(node -e "const results = $turboChanges.tasks.map((task) => ({ package: task.package, directory: task.directory })); process.stdout.write(JSON.stringify(results));")
           echo "$changedPackages"
-          echo "changed=$changedPackages" >> $GITHUB_OUTPUT
+          echo "changedPackages=$changedPackages" >> $GITHUB_OUTPUT
+          changed=$(node -e "const results = $changedPackages.map(({package}) => package); process.stdout.write(JSON.stringify(results));")
+          echo "changed=$changed" >> $GITHUB_OUTPUT
+
       - run: echo ${{ steps.changed-packages.outputs.changed }}
 
   push:
     runs-on: ubuntu-latest
     environment: docker
     needs: [analyse-changed-packages]
+    if: ${{ needs.analyse-changed-packages.outputs.changed != '[]' && needs.analyse-changed-packages.outputs.changed != '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{fromJson(needs.analyse-changed-packages.outputs.changed)}}
     steps:
+      - name: get directory for package
+        id: get-directory
+        run: |
+          # Variablen setzen
+          matrix_package="${{ matrix.package }}"
+          changed_packages_json='${{ needs.analyse-changed-packages.outputs.changedPackages }}'
+
+          # Verzeichnis mit jq finden
+          directory=$(echo "$changed_packages_json" | jq -r --arg package "$matrix_package" '.[] | select(.package == $package) | .directory')
+
+          # Ausgabe
+          echo "$directory"
+          echo "directory=$directory" >> $GITHUB_OUTPUT
       - name: Checkout
         uses: actions/checkout@v3
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
-          images: democracy/qr-code-handler
+          images: democracy/${{ matrix.package }}
           tags: |
             type=ref,event=branch,enable=${{ github.ref == format('refs/heads/{0}', 'master') || github.ref == format('refs/heads/{0}', 'alpha') || github.ref == format('refs/heads/{0}', 'internal') }}
             type=ref,event=pr
-            type=match,asref=foo,pattern=qr-code-handler@v(\d+.\d+.\d+)(-alpha.\d+)?,group=1
+            type=match,asref=foo,pattern=${{ matrix.package }}@v(\d+.\d+.\d+)(-alpha.\d+)?,group=1
             type=semver,pattern={{version}},use=foo
             type=sha,enable=${{ github.event_name == 'workflow_dispatch' }}
       - name: Print Meta Summary
@@ -96,7 +119,7 @@ jobs:
 
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: infra/Dockerfile.service
@@ -107,8 +130,8 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
           build-args: |
-            SERVICE=qr-code-handler
-            SERVICE_PATH=services/qr-code-handler
+            SERVICE=${{ matrix.package }}
+            SERVICE_PATH=${{ steps.get-directory.outputs.directory }}
             NODE_VERSION=${{ steps.node_version.outputs.version }}
       - name: Move buildx cache
         run: |

@@ -1,6 +1,6 @@
 {
   "name": "qr-code-handler",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "built/index.js",
   "scripts": {
     "dev": "tsnd src/index.ts",
