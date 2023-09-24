@@ -9,3 +9,5 @@ configuration/*
 docker_volumes/*/*
 !/**/.gitkeep
 /services/cron-jobs/push-send-queued/.env
+.turbo
+out

@@ -17,6 +17,6 @@
   "devDependencies": {
     "ts-node-dev": "^1.0.0-pre.50",
     "ts-unused-exports": "^6.2.1",
-    "typescript": "^3.9.6"
+    "typescript": "^5.2.2"
   }
 }
