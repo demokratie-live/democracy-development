@@ -10,7 +10,9 @@ import DebounceLink from 'apollo-link-debounce';
 export default function getClient() {
   const link = ApolloLink.from([
     new DebounceLink(100),
-    new HttpLink({ uri: 'https://api.democracy-app.de/' }),
+    new HttpLink({
+      uri: process.env.NEXT_PUBLIC_APP_API_URL,
+    }),
   ]);
 
   const cache = new InMemoryCache({
