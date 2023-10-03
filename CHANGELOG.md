@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.11-feature-api-via-env-var.1](https://github.com/demokratie-live/desktop/compare/v1.0.11-feature-api-via-env-var.0...v1.0.11-feature-api-via-env-var.1) (2023-10-03)
+
 ### [1.0.11-feature-api-via-env-var.0](https://github.com/demokratie-live/desktop/compare/v1.0.10...v1.0.11-feature-api-via-env-var.0) (2023-10-03)
 
 ### [1.0.10](https://github.com/demokratie-live/desktop/compare/v1.0.9...v1.0.10) (2023-08-26)
