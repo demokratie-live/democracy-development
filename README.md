@@ -133,16 +133,15 @@ https://www.youtube.com/watch?v=h_GGd7HfKQ8
 
 ### build docker image of a service
 
-```
-docker buildx build --build-arg NODE_VERSION=$(cat .node-version | tr -d 'v') -f infra/Dockerfile PATH_TO_SERVICE
-```
-
-Example for the QR-Code-Handler service
+Example for the **qr-code-handler** service
 
 ```
+SERVICE=qr-code-handler
+SERVICE_PATH=services/$SERVICE
+
 docker buildx build \
-    --build-arg SERVICE=qr-code-handler \
-    --build-arg SERVICE_PATH=services/qr-code-handler \
+    --build-arg SERVICE=$SERVICE \
+    --build-arg SERVICE_PATH=$SERVICE_PATH \
     --build-arg NODE_VERSION=$(cat .node-version | tr -d 'v') \
     -f infra/Dockerfile.service \
     .
