@@ -14,7 +14,6 @@
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@democracy-deutschland/bundestagio-common": "0.1.16",
-    "@democracy-deutschland/dip21-scraper": "^0.1.11",
     "@democracy-deutschland/scapacra-bt": "^1.0.31",
     "http2": "^3.3.7"
   },

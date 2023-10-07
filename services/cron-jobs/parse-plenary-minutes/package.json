@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@democracy-deutschland/bundestagio-common": "0.1.16",
+    "@democracy-deutschland/democracy-common": "^0.2.8",
     "axios": "^0.19.2",
     "xml-js": "^1.6.11",
     "xml2js": "^0.4.23"
