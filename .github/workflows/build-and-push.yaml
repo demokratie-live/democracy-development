@@ -44,6 +44,7 @@ jobs:
       - name: Identifying Changed Bap-Services
         id: changed-packages
         run: |
+          branch=${${{ github.ref }}:-${${{ github.ref }}#refs/heads/}}
           turboChanges=""
           if [ $branch = "master" ]; \
             then turboChanges=$(turbo run build --dry-run=json --since="${{ github.event.before }}"); \
