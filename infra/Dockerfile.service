@@ -10,7 +10,6 @@ RUN apk update
 WORKDIR /app
 RUN yarn global add turbo
 COPY . .
-RUN cat package.json
 RUN turbo prune --scope=$SERVICE --docker
 
 # Add lockfile and package.json's of isolated subworkspace
