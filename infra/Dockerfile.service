@@ -31,6 +31,8 @@ COPY --from=builder /app/out/full/ .
 RUN yarn turbo run build --filter=$SERVICE
  
 FROM base AS runner
+ARG  SERVICE_PATH
+ENV SERVICE_PATH ${SERVICE_PATH}
 WORKDIR /app
  
 # Don't run production as root
