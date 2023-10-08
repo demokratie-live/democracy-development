@@ -124,6 +124,7 @@ jobs:
           file: infra/Dockerfile.service
           platforms: linux/amd64,linux/arm64
           push: true
+          target: runner
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache
