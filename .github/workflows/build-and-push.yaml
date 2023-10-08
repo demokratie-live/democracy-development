@@ -16,7 +16,7 @@ on:
       - 'master'
 
 env:
-  SINCE: origin/master
+  SINCE: ${{ github.event.base_ref }}
 
 jobs:
   analyse-changed-packages:
