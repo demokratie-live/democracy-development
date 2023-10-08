@@ -16,7 +16,7 @@ on:
       - 'master'
 
 env:
-  SINCE: origin/feature/turbo-simple-base-2
+  SINCE: master
 
 jobs:
   analyse-changed-packages:
