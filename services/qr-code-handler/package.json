@@ -1,9 +1,9 @@
 {
   "name": "qr-code-handler",
   "version": "1.0.4",
-  "main": "built/index.js",
+  "main": "build/index.js",
   "scripts": {
-    "dev": "tsup src/index.ts --watch --onSuccess 'node dist/index.js'",
+    "dev": "tsup src/index.ts --watch --onSuccess 'node build/index.js'",
     "build": "tsup-node",
     "start": "node build/index.js"
   },
@@ -18,6 +18,7 @@
     "@types/mongoose": "^5.7.36",
     "ts-node-dev": "^1.0.0-pre.57",
     "tsup": "^7.2.0",
+    "tsup-config": "*",
     "typescript": "^5.2.2"
   }
 }
