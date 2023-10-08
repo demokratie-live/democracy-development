@@ -1,0 +1,15 @@
+{
+  "name": "tsup-config",
+  "version": "1.0.0",
+  "description": "configuration for tsup",
+  "main": "build/index.js",
+  "author": "Manuel Ruck <m.ruck@democracy-deutschland.de>",
+  "license": "Apache-2.0",
+  "private": true,
+  "devDependencies": {
+    "tsup": "^7.2.0"
+  },
+  "scripts": {
+    "build": "tsup"
+  }
+}

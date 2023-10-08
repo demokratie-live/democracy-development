@@ -47,11 +47,14 @@ jobs:
           turboChanges=$(turbo run build --dry-run=json --since=${{ env.SINCE }})
           changedPackages=$(node -e "const results = $turboChanges.tasks.map((task) => ({ package: task.package, directory: task.directory })); process.stdout.write(JSON.stringify(results));")
           echo "$changedPackages"
+          changedPackagesFiltered=$(node -e "const fs = require('fs'); const results = $changedPackages.filter(({directory}) => {const private = JSON.parse(fs.readFileSync(\`./\${directory}/package.json\`, 'utf8')).private; return private === false || private === undefined;}); process.stdout.write(JSON.stringify(results));")
+          echo "$changedPackagesFiltered"
           echo "changedPackages=$changedPackages" >> $GITHUB_OUTPUT
-          changed=$(node -e "const results = $changedPackages.map(({package}) => package); process.stdout.write(JSON.stringify(results));")
+          changed=$(node -e "const results = $changedPackagesFiltered.map(({package}) => package); process.stdout.write(JSON.stringify(results));")
           echo "changed=$changed" >> $GITHUB_OUTPUT
 
-      - run: echo ${{ steps.changed-packages.outputs.changed }}
+      - name: Print Changed Packages
+        run: echo ${{ steps.changed-packages.outputs.changed }}
 
   push:
     runs-on: ubuntu-latest
