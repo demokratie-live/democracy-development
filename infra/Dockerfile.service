@@ -29,7 +29,7 @@ RUN yarn install
  
 # Build the project
 COPY --from=builder /app/out/full/ .
-RUN turbo run build --filter=$SERVICE
+RUN yarn turbo run build --filter=$SERVICE
 RUN yarn install --prod --frozen-lockfile --ignore-scripts --prefer-offline
  
 FROM base AS runner
