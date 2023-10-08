@@ -11,10 +11,8 @@
     "services/**/*"
   ],
   "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "build": "lerna run build",
-    "lint": "lerna run lint",
-    "test": "lerna run test --stream -- --verbose",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
     "dev": "yarn build:k8s:local && skaffold dev --port-forward --status-check=false",
     "build:k8s:local": "kustomize build ./infra/kustomize/overlays/local > infra/local.yaml",
     "build:k8s:internal": "kustomize build ./infra/kustomize/overlays/internal > infra/internal.yaml",
@@ -44,7 +42,6 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-jest": "^27.4.0",
     "eslint-plugin-prettier": "^5.0.0",
-    "lerna": "^7.3.0",
     "prettier": "^3.0.3",
     "turbo": "^1.10.14"
   }
