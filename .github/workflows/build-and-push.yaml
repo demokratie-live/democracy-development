@@ -16,7 +16,7 @@ on:
       - 'master'
 
 env:
-  SINCE: ${{ github.event.base_ref }}
+  DEFAULT_BRANCH: origin/master
 
 jobs:
   analyse-changed-packages:
@@ -44,7 +44,10 @@ jobs:
       - name: Identifying Changed Bap-Services
         id: changed-packages
         run: |
-          turboChanges=$(turbo run build --dry-run=json --since=${{ env.SINCE }})
+          turboChanges=""
+          if [ $branch = "master" ]; \
+            then turboChanges=$(turbo run build --dry-run=json --since="${{ github.event.before }}"); \
+          else turboChanges=$(turbo run build --dry-run=json --since="${{ env.DEFAULT_BRANCH }}"); fi
           changedPackages=$(node -e "const results = $turboChanges.tasks.map((task) => ({ package: task.package, directory: task.directory })); process.stdout.write(JSON.stringify(results));")
           echo "$changedPackages"
           changedPackagesFiltered=$(node -e "const fs = require('fs'); const results = $changedPackages.filter(({directory}) => {const private = JSON.parse(fs.readFileSync(\`./\${directory}/package.json\`, 'utf8')).private; return private === false || private === undefined;}); process.stdout.write(JSON.stringify(results));")
