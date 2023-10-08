@@ -42,6 +42,6 @@ USER runuser
  
 COPY --from=installer /app/$SERVICE_PATH/package.json .
  
-COPY --from=installer --chown=runuser:nodejs /app/$SERVICE_PATH/build ./
+COPY --from=installer --chown=runuser:nodejs /app/$SERVICE_PATH/build ./build
  
 CMD yarn --cwd $SERVICE_PATH start
