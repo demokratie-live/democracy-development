@@ -3,6 +3,7 @@ ARG  NODE_VERSION
 FROM node:${NODE_VERSION}-alpine AS base
 ARG  SERVICE
 ARG  SERVICE_PATH
+ENV SERVICE_PATH ${SERVICE_PATH}
 FROM base AS builder
 RUN apk add --no-cache libc6-compat
 RUN apk update
@@ -28,10 +29,9 @@ RUN yarn install
 # Build the project
 COPY --from=builder /app/out/full/ .
 RUN yarn turbo run build --filter=$SERVICE
+RUN yarn --prod
  
 FROM base AS runner
-ARG  SERVICE_PATH
-ENV SERVICE_PATH ${SERVICE_PATH}
 WORKDIR /app
  
 # Don't run production as root
