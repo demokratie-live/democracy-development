@@ -16,7 +16,7 @@ on:
       - 'master'
 
 env:
-  SINCE: master
+  SINCE: origin/master
 
 jobs:
   analyse-changed-packages:
