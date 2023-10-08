@@ -1,0 +1,141 @@
+name: Docker – Build and Push
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'services/**'
+    branches:
+      - 'master'
+    tags:
+      - '*@v*.*.*'
+  pull_request:
+    paths:
+      - 'services/**'
+    branches:
+      - 'master'
+
+env:
+  SINCE: origin/feature/turbo-simple-base-2
+
+jobs:
+  analyse-changed-packages:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.changed-packages.outputs.changed }}
+      changedPackages: ${{ steps.changed-packages.outputs.changedPackages }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read .node-version
+        id: node_version
+        run: echo "version=$(cat .node-version | tr -d 'v')" >> $GITHUB_OUTPUT
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.node_version.outputs.version }}
+          cache: 'yarn'
+
+      - run: yarn install
+
+      - name: Identifying Changed Bap-Services
+        id: changed-packages
+        run: |
+          turboChanges=$(node_modules/.bin/turbo run build --dry-run=json --since=${{ env.SINCE }})
+          changedPackages=$(node -e "const results = $turboChanges.tasks.map((task) => ({ package: task.package, directory: task.directory })); process.stdout.write(JSON.stringify(results));")
+          echo "$changedPackages"
+          echo "changedPackages=$changedPackages" >> $GITHUB_OUTPUT
+          changed=$(node -e "const results = $changedPackages.map(({package}) => package); process.stdout.write(JSON.stringify(results));")
+          echo "changed=$changed" >> $GITHUB_OUTPUT
+
+      - run: echo ${{ steps.changed-packages.outputs.changed }}
+
+  push:
+    runs-on: ubuntu-latest
+    environment: docker
+    needs: [analyse-changed-packages]
+    if: ${{ needs.analyse-changed-packages.outputs.changed != '[]' && needs.analyse-changed-packages.outputs.changed != '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{fromJson(needs.analyse-changed-packages.outputs.changed)}}
+    steps:
+      - name: get directory for package
+        id: get-directory
+        run: |
+          # Variablen setzen
+          matrix_package="${{ matrix.package }}"
+          changed_packages_json='${{ needs.analyse-changed-packages.outputs.changedPackages }}'
+
+          # Verzeichnis mit jq finden
+          directory=$(echo "$changed_packages_json" | jq -r --arg package "$matrix_package" '.[] | select(.package == $package) | .directory')
+
+          # Ausgabe
+          echo "$directory"
+          echo "directory=$directory" >> $GITHUB_OUTPUT
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: democracy/${{ matrix.package }}
+          tags: |
+            type=ref,event=branch,enable=${{ github.ref == format('refs/heads/{0}', 'master') || github.ref == format('refs/heads/{0}', 'alpha') || github.ref == format('refs/heads/{0}', 'internal') }}
+            type=ref,event=pr
+            type=match,asref=foo,pattern=${{ matrix.package }}@v(\d+.\d+.\d+)(-alpha.\d+)?,group=1
+            type=semver,pattern={{version}},use=foo
+            type=sha,enable=${{ github.event_name == 'workflow_dispatch' }}
+      - name: Print Meta Summary
+        run: |
+          echo "🏷️ Tags: ${{ steps.meta.outputs.tags }}
+          " >> $GITHUB_STEP_SUMMARY
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          install: true
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-multi-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-multi-buildx
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Read .node-version
+        id: node_version
+        run: echo "version=$(cat .node-version | tr -d 'v')" >> $GITHUB_OUTPUT
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: infra/Dockerfile.service
+          platforms: linux/amd64,linux/arm64
+          push: true
+          target: runner
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
+          build-args: |
+            SERVICE=${{ matrix.package }}
+            SERVICE_PATH=${{ steps.get-directory.outputs.directory }}
+            NODE_VERSION=${{ steps.node_version.outputs.version }}
+      - name: Move buildx cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}

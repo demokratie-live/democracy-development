@@ -1,6 +1,6 @@
 {
   "name": "sync-deputy-profiles",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "main": "build/index.js",
   "license": "MIT",
   "scripts": {
@@ -25,9 +25,10 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.157",
+    "@types/node": "^20.6.4",
     "apollo": "^2.29.1",
     "dotenv": "^10.0.0",
     "ts-node-dev": "^1.0.0-pre.49",
-    "typescript": "^3.9.5"
+    "typescript": "^5.2.2"
   }
 }

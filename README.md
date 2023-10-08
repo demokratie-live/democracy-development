@@ -131,6 +131,23 @@ https://www.youtube.com/watch?v=h_GGd7HfKQ8
 - install `docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions`
 - do configure docker loki plugin **Change the default logging driver**: https://grafana.com/docs/loki/latest/clients/docker-driver/configuration/#change-the-default-logging-driver
 
+### build docker image of a service
+
+Example for the **qr-code-handler** service
+
+```
+SERVICE=qr-code-handler
+SERVICE_PATH=services/$SERVICE
+
+docker buildx build \
+    --build-arg SERVICE=$SERVICE \
+    --build-arg SERVICE_PATH=$SERVICE_PATH \
+    --build-arg NODE_VERSION=$(cat .node-version | tr -d 'v') \
+    -f infra/Dockerfile.service \
+    -t $SERVICE:latest
+    .
+```
+
 ## Contributing
 
 Anyone and everyone is welcome to [contribute](https://github.com/demokratie-live/democracy-development/blob/master/CONTRIBUTE.md). Start by checking out the list of

@@ -1,6 +1,6 @@
 {
   "name": "import-conference-week-details",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
@@ -14,7 +14,6 @@
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@democracy-deutschland/bundestagio-common": "0.1.16",
-    "@democracy-deutschland/dip21-scraper": "^0.1.11",
     "@democracy-deutschland/scapacra-bt": "^1.0.31",
     "http2": "^3.3.7"
   },
@@ -22,6 +21,6 @@
     "dotenv": "^16.0.0",
     "ts-node-dev": "^1.1.8",
     "ts-unused-exports": "^8.0.0",
-    "typescript": "^4.6.3"
+    "typescript": "^5.2.2"
   }
 }
