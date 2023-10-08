@@ -17,6 +17,7 @@ on:
 
 env:
   DEFAULT_BRANCH: origin/master
+  DEFAULT_BRANCH_REF: refs/heads/master
 
 jobs:
   analyse-changed-packages:
@@ -45,7 +46,7 @@ jobs:
         id: changed-packages
         run: |
           turboChanges=""
-          if [ "${{ github.ref }}" = "refs/heads/master" ]; \
+          if [ "${{ github.ref }}" = "${{ env.DEFAULT_BRANCH_REF }}" ]; \
             then turboChanges=$(turbo run build --dry-run=json --since="${{ github.event.before }}"); \
           else turboChanges=$(turbo run build --dry-run=json --since="${{ env.DEFAULT_BRANCH }}"); fi
           changedPackages=$(node -e "const results = $turboChanges.tasks.map((task) => ({ package: task.package, directory: task.directory })); process.stdout.write(JSON.stringify(results));")
