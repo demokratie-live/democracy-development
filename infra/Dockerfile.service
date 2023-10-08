@@ -3,6 +3,8 @@ ARG  NODE_VERSION
 FROM node:${NODE_VERSION}-alpine AS base
 ARG  SERVICE
 ARG  SERVICE_PATH
+ENV SERVICE_PATH ${SERVICE_PATH}
+
 FROM base AS builder
 RUN apk add --no-cache libc6-compat
 RUN apk update
@@ -10,7 +12,6 @@ RUN apk update
 WORKDIR /app
 RUN yarn global add turbo
 COPY . .
-RUN cat package.json
 RUN turbo prune --scope=$SERVICE --docker
 
 # Add lockfile and package.json's of isolated subworkspace
@@ -28,11 +29,10 @@ RUN yarn install
  
 # Build the project
 COPY --from=builder /app/out/full/ .
-RUN yarn turbo run build --filter=$SERVICE
+RUN turbo run build --filter=$SERVICE
+RUN yarn install --prod --frozen-lockfile --ignore-scripts --prefer-offline
  
 FROM base AS runner
-ARG  SERVICE_PATH
-ENV SERVICE_PATH ${SERVICE_PATH}
 WORKDIR /app
  
 # Don't run production as root
