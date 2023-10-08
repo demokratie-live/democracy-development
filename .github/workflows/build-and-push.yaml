@@ -16,7 +16,7 @@ on:
       - 'master'
 
 env:
-  SINCE: master
+  SINCE: origin/master
 
 jobs:
   analyse-changed-packages:
@@ -39,12 +39,12 @@ jobs:
           node-version: ${{ steps.node_version.outputs.version }}
           cache: 'yarn'
 
-      - run: yarn install
+      - run: yarn global add turbo
 
       - name: Identifying Changed Bap-Services
         id: changed-packages
         run: |
-          turboChanges=$(node_modules/.bin/turbo run build --dry-run=json --since=${{ env.SINCE }})
+          turboChanges=$(turbo run build --dry-run=json --since=${{ env.SINCE }})
           changedPackages=$(node -e "const results = $turboChanges.tasks.map((task) => ({ package: task.package, directory: task.directory })); process.stdout.write(JSON.stringify(results));")
           echo "$changedPackages"
           echo "changedPackages=$changedPackages" >> $GITHUB_OUTPUT
