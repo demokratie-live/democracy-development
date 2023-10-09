@@ -7,13 +7,43 @@ permissions:
 name: release-please
 
 jobs:
+  changeFinder:
+    runs-on: ubuntu-latest
+    outputs:
+      since: ${{ steps.interrogate.outputs.result }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: interrogate
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          result-encoding: string
+          script: |
+            const {execSync} = require('child_process');
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+            const latestRelease = await github.rest.repos.getLatestRelease({
+              owner,
+              repo
+            });
+            console.log(`latest release: ${JSON.stringify(latestRelease.data)}`);
+            execSync('git pull --tags -q');
+            execSync(`git reset --hard ${latestRelease.data.tag_name}`);
+            const sha = execSync('git rev-parse HEAD').toString();
+            console.log(`sha: ${sha}`)
+            return sha
+
+      - run: |
+          echo "since=${{ steps.interrogate.outputs.result }}"
   analyse-changed-packages:
-    uses: demokratie-live/democracy-development/.github/workflows/analyse-changed-packages.yaml@master
+    needs: [changeFinder]
+    uses: demokratie-live/democracy-development/.github/workflows/analyse-changed-packages.yaml@feature/changelog
+    with:
+      since: ${{ needs.changeFinder.outputs.since }}
 
   release-please:
     runs-on: ubuntu-latest
     environment: docker
-    needs: [analyse-changed-packages]
+    needs: [changeFinder, analyse-changed-packages]
     if: ${{ needs.analyse-changed-packages.outputs.changed != '[]' && needs.analyse-changed-packages.outputs.changed != '' }}
     strategy:
       fail-fast: false
