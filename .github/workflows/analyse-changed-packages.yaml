@@ -1,0 +1,56 @@
+name: Analyse changed packages
+
+on:
+  workflow_call:
+    outputs:
+      changed:
+        description: 'Changed packages (comma separated names)'
+        value: ${{ jobs.analyse_changed_packages.outputs.changed }}
+      changedPackages:
+        description: 'Changed packages (JSON array of objects with package and directory properties)'
+        value: ${{ jobs.analyse_changed_packages.outputs.changedPackages }}
+
+env:
+  DEFAULT_BRANCH: origin/master
+  DEFAULT_BRANCH_REF: refs/heads/master
+
+jobs:
+  analyse_changed_packages:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.changed-packages.outputs.changed }}
+      changedPackages: ${{ steps.changed-packages.outputs.changedPackages }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read .node-version
+        id: node_version
+        run: echo "version=$(cat .node-version | tr -d 'v')" >> $GITHUB_OUTPUT
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.node_version.outputs.version }}
+          cache: 'yarn'
+
+      - run: yarn global add turbo
+
+      - name: Identifying Changed Bap-Services
+        id: changed-packages
+        run: |
+          turboChanges=""
+          if [ "${{ github.ref }}" = "${{ env.DEFAULT_BRANCH_REF }}" ]; \
+              then turboChanges=$(turbo run build --dry-run=json --since="${{ github.event.before }}"); \
+          else turboChanges=$(turbo run build --dry-run=json --since="${{ env.DEFAULT_BRANCH }}"); fi
+          changedPackages=$(node -e "const results = $turboChanges.tasks.map((task) => ({ package: task.package, directory: task.directory })); process.stdout.write(JSON.stringify(results));")
+          echo "$changedPackages"
+          changedPackagesFiltered=$(node -e "const fs = require('fs'); const results = $changedPackages.filter(({directory}) => {const private = JSON.parse(fs.readFileSync(\`./\${directory}/package.json\`, 'utf8')).private; return private === false || private === undefined;}); process.stdout.write(JSON.stringify(results));")
+          echo "$changedPackagesFiltered"
+          echo "changedPackages=$changedPackages" >> $GITHUB_OUTPUT
+          changed=$(node -e "const results = $changedPackagesFiltered.map(({package}) => package); process.stdout.write(JSON.stringify(results));")
+          echo "changed=$changed" >> $GITHUB_OUTPUT
+
+      - name: Print Changed Packages
+        run: echo ${{ steps.changed-packages.outputs.changed }}
