@@ -42,3 +42,4 @@ jobs:
           monorepo-tags: true
           package-name: ${{ matrix.package }}
           command: github-release
+          bootstrap-sha: 416a41c6c73b0ed1e145ce798dce2cca51518721
