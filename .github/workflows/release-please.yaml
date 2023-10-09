@@ -1,0 +1,44 @@
+on: workflow_dispatch
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: release-please
+
+jobs:
+  analyse-changed-packages:
+    uses: demokratie-live/democracy-development/.github/workflows/analyse-changed-packages.yaml@master
+
+  release-please:
+    runs-on: ubuntu-latest
+    environment: docker
+    needs: [analyse-changed-packages]
+    if: ${{ needs.analyse-changed-packages.outputs.changed != '[]' && needs.analyse-changed-packages.outputs.changed != '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{fromJson(needs.analyse-changed-packages.outputs.changed)}}
+    steps:
+      - name: get directory for package
+        id: get-directory
+        run: |
+          # Variablen setzen
+          matrix_package="${{ matrix.package }}"
+          changed_packages_json='${{ needs.analyse-changed-packages.outputs.changedPackages }}'
+
+          # Verzeichnis mit jq finden
+          directory=$(echo "$changed_packages_json" | jq -r --arg package "$matrix_package" '.[] | select(.package == $package) | .directory')
+
+          # Ausgabe
+          echo "$directory"
+          echo "directory=$directory" >> $GITHUB_OUTPUT
+
+      - uses: google-github-actions/release-please-action@v3
+        with:
+          path: ${{ steps.get-directory.outputs.directory }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: ${{ matrix.package }}
+          command: github-release
