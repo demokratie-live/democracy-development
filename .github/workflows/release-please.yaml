@@ -28,7 +28,7 @@ jobs:
             console.log(`latest release: ${JSON.stringify(latestRelease.data)}`);
             execSync('git pull --tags -q');
             execSync(`git reset --hard ${latestRelease.data.tag_name}`);
-            const sha = execSync('git rev-parse HEAD').toString();
+            const sha = execSync('git rev-parse HEAD').toString().trim();
             console.log(`sha: ${sha}`)
             return sha
 
