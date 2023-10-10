@@ -36,7 +36,7 @@ jobs:
           echo "since=${{ steps.interrogate.outputs.result }}"
   analyse-changed-packages:
     needs: [changeFinder]
-    uses: demokratie-live/democracy-development/.github/workflows/analyse-changed-packages.yaml@feature/changelog
+    uses: demokratie-live/democracy-development/.github/workflows/analyse-changed-packages.yaml@master
     with:
       since: ${{ needs.changeFinder.outputs.since }}
 
