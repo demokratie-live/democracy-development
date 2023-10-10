@@ -2,6 +2,12 @@ name: Analyse changed packages
 
 on:
   workflow_call:
+    inputs:
+      since:
+        description: 'Commit branch, tag or SHA to compare against'
+        required: false
+        default: ${{ github.event.before }}
+        type: string
     outputs:
       changed:
         description: 'Changed packages (comma separated names)'
@@ -42,7 +48,7 @@ jobs:
         run: |
           turboChanges=""
           if [ "${{ github.ref }}" = "${{ env.DEFAULT_BRANCH_REF }}" ]; \
-              then turboChanges=$(turbo run build --dry-run=json --since="${{ github.event.before }}"); \
+              then turboChanges=$(turbo run build --dry-run=json --since="${{ inputs.since }}"); \
           else turboChanges=$(turbo run build --dry-run=json --since="${{ env.DEFAULT_BRANCH }}"); fi
           changedPackages=$(node -e "const results = $turboChanges.tasks.map((task) => ({ package: task.package, directory: task.directory })); process.stdout.write(JSON.stringify(results));")
           echo "$changedPackages"
