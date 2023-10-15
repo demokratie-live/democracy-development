@@ -17,33 +17,68 @@ on:
 
 jobs:
   analyse-changed-packages:
-    uses: demokratie-live/democracy-development/.github/workflows/analyse-changed-packages.yaml@feature/changelog
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.changed-packages.outputs.CHANGED }}
+      changedPackages: ${{ steps.changed-packages.outputs.CHANGED_PACKAGES }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  push:
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - run: |
+          SINCE=$(git rev-list --tags --max-count=1)
+          echo SINCE=$SINCE >> $GITHUB_OUTPUT
+          echo SINCE=$SINCE
+        id: since
+
+      - run: |
+          pnpm list -r --json --filter "...[$SINCE]" | jq '[.[] | select(.private == false) | {name, path}]' > ./tmp.json
+          CHANGED_PACKAGES=$(jq '[.[] | .name]' ./tmp.json)
+          echo CHANGED_PACKAGES=$CHANGED_PACKAGES  >> $GITHUB_OUTPUT
+          echo CHANGED_PACKAGES=$CHANGED_PACKAGES
+        id: changed-packages
+        env:
+          SINCE: ${{ steps.since.outputs.SINCE }}
+
+  build-and-push:
     runs-on: ubuntu-latest
     environment: docker
     needs: [analyse-changed-packages]
-    if: ${{ needs.analyse-changed-packages.outputs.changed != '[]' && needs.analyse-changed-packages.outputs.changed != '' }}
+    if: ${{ needs.analyse-changed-packages.outputs.changedPackages != '[]'}}
     strategy:
       fail-fast: false
       matrix:
-        package: ${{fromJson(needs.analyse-changed-packages.outputs.changed)}}
+        package: ${{fromJson(needs.analyse-changed-packages.outputs.changedPackages)}}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+      - run: echo "package=${{ matrix.package }}"
       - name: get directory for package
         id: get-directory
         run: |
-          # Variablen setzen
-          matrix_package="${{ matrix.package }}"
-          changed_packages_json='${{ needs.analyse-changed-packages.outputs.changedPackages }}'
-
-          # Verzeichnis mit jq finden
-          directory=$(echo "$changed_packages_json" | jq -r --arg package "$matrix_package" '.[] | select(.package == $package) | .directory')
+          directory=$(pnpm ls -r --json --filter $MATRIX_PACKAGE | jq -r '.[0] | .path')
+          directory="${directory##*/democracy-development/}"
 
           # Ausgabe
-          echo "$directory"
           echo "directory=$directory" >> $GITHUB_OUTPUT
-      - name: Checkout
-        uses: actions/checkout@v4
+        env:
+          MATRIX_PACKAGE: ${{ matrix.package }}
+
+      - run: echo "directory=${{ steps.get-directory.outputs.directory }}"
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5

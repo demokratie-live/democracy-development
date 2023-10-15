@@ -1,16 +1,20 @@
 ARG  NODE_VERSION
 
 FROM node:${NODE_VERSION}-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 ARG  SERVICE
 ARG  SERVICE_PATH
 ENV SERVICE_PATH ${SERVICE_PATH}
+RUN corepack enable
+RUN pnpm install turbo --global
 
 FROM base AS builder
 RUN apk add --no-cache libc6-compat
 RUN apk update
 # Set working directory
 WORKDIR /app
-RUN pnpm global add turbo
+
 COPY . .
 RUN turbo prune --scope=$SERVICE --docker
 
@@ -42,6 +46,7 @@ USER runuser
  
 COPY --from=installer /app/$SERVICE_PATH/package.json .
 COPY --from=installer /app/node_modules ./node_modules
+RUN echo "COPY --from=installer --chown=runuser:nodejs /app/$SERVICE_PATH/build ./build"
 COPY --from=installer --chown=runuser:nodejs /app/$SERVICE_PATH/build ./build
  
 CMD pnpm --cwd $SERVICE_PATH start

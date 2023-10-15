@@ -130,6 +130,9 @@ importers:
       '@democracy-deutschland/bundestagio-common':
         specifier: 0.1.16
         version: 0.1.16(@types/mongoose@5.11.97)
+      '@democracy-deutschland/scapacra':
+        specifier: ^1.0.6
+        version: 1.0.6
       '@democracy-deutschland/scapacra-bt':
         specifier: ^1.0.31
         version: 1.0.33
@@ -186,6 +189,9 @@ importers:
       '@democracy-deutschland/bundestagio-common':
         specifier: 0.1.16
         version: 0.1.16(@types/mongoose@5.11.97)
+      '@democracy-deutschland/scapacra':
+        specifier: ^1.0.6
+        version: 1.0.6
       '@democracy-deutschland/scapacra-bt':
         specifier: 1.0.32
         version: 1.0.32
