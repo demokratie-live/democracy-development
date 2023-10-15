@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "dev": "ts-node-dev -r dotenv/config ./src/index dotenv_config_path=./.env.local",
-    "lint": "yarn lint:ts && yarn lint:exports",
+    "lint": "pnpm lint:ts && pnpm lint:exports",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
     "build": "tsc",
@@ -14,6 +14,7 @@
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@democracy-deutschland/bundestagio-common": "0.1.16",
+    "@democracy-deutschland/scapacra": "^1.0.6",
     "@democracy-deutschland/scapacra-bt": "1.0.32",
     "http2": "^3.3.7"
   },

@@ -8,7 +8,7 @@
 `kubectl create secret docker-registry regcred --docker-server=docker.pkg.github.com --docker-username=<GITHUB_USERNAME> --docker-password=<GITHUB_TOKEN> --docker-email=<EMAIL_ADDRESS>`
 
 5. clone democracy-development
-6. run `yarn dev`
+6. run `pnpm dev`
 7. edit `/etc/hosts` (macOS) add
 
 ```

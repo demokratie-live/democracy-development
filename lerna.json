@@ -1,8 +1,5 @@
 {
-  "npmClient": "yarn",
-  "packages": [
-    "./bundestag.io/dip",
-    "./services/cron-jobs/crawler"
-  ],
+  "npmClient": "pnpm",
+  "packages": ["./bundestag.io/dip", "./services/cron-jobs/crawler"],
   "version": "independent"
 }
