@@ -18,9 +18,9 @@ on:
         default: 'auto'
         options:
           - 'auto'
-          - 'major'
-          - 'minor'
-          - 'patch'
+          # - 'major'
+          # - 'minor'
+          # - 'patch'
 
 jobs:
   analyse-changed-packages:
@@ -77,6 +77,19 @@ jobs:
 
       - run: echo "package=${{ matrix.package }}"
 
+      - name: Get pnpm store directory
+        id: pnpm-store
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-store.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: get directory for package
         id: get-directory
         run: |
@@ -107,17 +120,18 @@ jobs:
           changelog=''
 
           if ( ${{ inputs.releaseVersion == 'auto' }} ); then
-            changelog=`pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v --dry-run | sed -n '/^---$/,/^---$/p' | grep -v '^---$'`
+            changelog=`pnpm dlx commit-and-tag-version --path . -t $MATRIX_PACKAGE@v --dry-run | sed -n '/^---$/,/^---$/p' | grep -v '^---$'`
           else
-            changelog=`pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v --release-as '${{ inputs.releaseVersion }}' --dry-run | sed -n '/^---$/,/^---$/p' | grep -v '^---$'`
+            changelog=`pnpm dlx commit-and-tag-version --path . -t $MATRIX_PACKAGE@v --release-as '${{ inputs.releaseVersion }}' --dry-run | sed -n '/^---$/,/^---$/p' | grep -v '^---$'`
           fi
 
+          echo "$changelog"
+          echo "{${{ matrix.package }} v$changelog}" >> $GITHUB_STEP_SUMMARY
           changelog="${changelog//'%'/'%25'}"
           changelog="${changelog//$'\n'/'%0A'}"
           changelog="${changelog//$'\r'/'%0D'}"
-          echo "$changelog"
           echo "changelog=$changelog" >> $GITHUB_OUTPUT
-          echo "${{ matrix.package }} v$changelog" >> $GITHUB_STEP_SUMMARY
+
         working-directory: ${{ steps.get-directory.outputs.directory }}
         env:
           MATRIX_PACKAGE: ${{ matrix.package }}
@@ -125,26 +139,26 @@ jobs:
       - name: Determine next version number
         if: inputs.releaseVersion == 'auto'
         run: |
-          nextVersion=`pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v --dry-run | sed -n '/^---$/,/^---$/p' | grep -P -o '(\d+\.)(\d+\.)(\d)' | head -n 1`
+          nextVersion=`pnpm dlx commit-and-tag-version --path . -t $MATRIX_PACKAGE@v --dry-run | sed -n '/^---$/,/^---$/p' | grep -P -o '(\d+\.)(\d+\.)(\d)' | head -n 1`
           echo "$nextVersion"
           echo "NEXT_VERSION=$nextVersion" >> $GITHUB_ENV
         working-directory: ${{ steps.get-directory.outputs.directory }}
         env:
           MATRIX_PACKAGE: ${{ matrix.package }}
 
-      - name: Manually next version number
-        if: inputs.releaseVersion != 'auto'
-        run: |
-          echo "NEXT_VERSION=${{ inputs.releaseVersion }}" >> $GITHUB_ENV
-          echo "$NEXT_VERSION"
+      # - name: Manually next version number
+      #   if: inputs.releaseVersion != 'auto'
+      #   run: |
+      #     echo "NEXT_VERSION=${{ inputs.releaseVersion }}" >> $GITHUB_ENV
+      #     echo "$NEXT_VERSION"
 
       - name: bump version - DRY RUN
         if: inputs.dryRun == true
         run: |
           if ( ${{ inputs.releaseVersion == 'auto' }} ); then
-            pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v --dry-run
+            pnpm dlx commit-and-tag-version --path . -t $MATRIX_PACKAGE@v --dry-run
           else
-            pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v --release-as '${{ inputs.releaseVersion }}' --dry-run
+            pnpm dlx commit-and-tag-version --path . -t $MATRIX_PACKAGE@v --release-as '${{ inputs.releaseVersion }}' --dry-run
           fi
         working-directory: ${{ steps.get-directory.outputs.directory }}
         env:
@@ -152,17 +166,17 @@ jobs:
 
       - name: bump version - AUTOMATIC
         if: inputs.dryRun == false && inputs.releaseVersion == 'auto'
-        run: pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v
+        run: pnpm dlx commit-and-tag-version --path . -t $MATRIX_PACKAGE@v
         working-directory: ${{ steps.get-directory.outputs.directory }}
         env:
           MATRIX_PACKAGE: ${{ matrix.package }}
 
-      - name: bump version - MANUAL VERSION NO.
-        if: inputs.dryRun == false && inputs.releaseVersion != 'auto'
-        run: pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v --release-as '${{ inputs.releaseVersion }}'
-        working-directory: ${{ steps.get-directory.outputs.directory }}
-        env:
-          MATRIX_PACKAGE: ${{ matrix.package }}
+      # - name: bump version - MANUAL VERSION NO.
+      #   if: inputs.dryRun == false && inputs.releaseVersion != 'auto'
+      #   run: pnpm dlx commit-and-tag-version --path . -t $MATRIX_PACKAGE@v --release-as '${{ inputs.releaseVersion }}'
+      #   working-directory: ${{ steps.get-directory.outputs.directory }}
+      #   env:
+      #     MATRIX_PACKAGE: ${{ matrix.package }}
 
       - name: Publish tag # only possible on default branch
         if: inputs.dryRun == false
