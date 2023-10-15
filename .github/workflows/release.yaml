@@ -13,7 +13,7 @@ on:
         default: true
       releaseVersion:
         description: 'Custom Version (major.minor.patch; leave empty for automatic determination)'
-        required: false
+        required: true
         type: choice
         default: 'auto'
         options:
@@ -60,6 +60,7 @@ jobs:
     if: ${{ needs.analyse-changed-packages.outputs.changedPackages != '[]'}}
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         package: ${{fromJson(needs.analyse-changed-packages.outputs.changedPackages)}}
     steps:
@@ -84,6 +85,7 @@ jobs:
 
           # Ausgabe
           echo "directory=$directory" >> $GITHUB_OUTPUT
+          echo "directory=$directory"
         env:
           MATRIX_PACKAGE: ${{ matrix.package }}
 
@@ -104,71 +106,80 @@ jobs:
         run: |
           changelog=''
 
-          if ( ${{ github.event.inputs.releaseVersion == 'auto' }} ); then
-            changelog=`npx standard-version -t $npm_package_name@ --dry-run | sed -n '/^---$/,/^---$/p' | grep -v '^---$'`
+          if ( ${{ inputs.releaseVersion == 'auto' }} ); then
+            changelog=`pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v --dry-run | sed -n '/^---$/,/^---$/p' | grep -v '^---$'`
           else
-            changelog=`npx standard-version -t $npm_package_name@ --release-as '${{ github.event.inputs.releaseVersion }}' --dry-run | sed -n '/^---$/,/^---$/p' | grep -v '^---$'`
+            changelog=`pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v --release-as '${{ inputs.releaseVersion }}' --dry-run | sed -n '/^---$/,/^---$/p' | grep -v '^---$'`
           fi
 
           changelog="${changelog//'%'/'%25'}"
           changelog="${changelog//$'\n'/'%0A'}"
           changelog="${changelog//$'\r'/'%0D'}"
           echo "$changelog"
-          echo "::set-output name=changelog::$changelog"
+          echo "changelog=$changelog" >> $GITHUB_OUTPUT
         working-directory: ${{ steps.get-directory.outputs.directory }}
+        env:
+          MATRIX_PACKAGE: ${{ matrix.package }}
 
       - name: Determine next version number
-        if: github.event.inputs.releaseVersion == 'auto'
+        if: inputs.releaseVersion == 'auto'
         run: |
-          nextVersion=`npx standard-version -t $npm_package_name@ --dry-run | sed -n '/^---$/,/^---$/p' | grep -P -o '(\d+\.)(\d+\.)(\d)' | head -n 1`
+          nextVersion=`pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v --dry-run | sed -n '/^---$/,/^---$/p' | grep -P -o '(\d+\.)(\d+\.)(\d)' | head -n 1`
           echo "$nextVersion"
           echo "NEXT_VERSION=$nextVersion" >> $GITHUB_ENV
         working-directory: ${{ steps.get-directory.outputs.directory }}
+        env:
+          MATRIX_PACKAGE: ${{ matrix.package }}
 
       - name: Manually next version number
-        if: github.event.inputs.releaseVersion != 'auto'
+        if: inputs.releaseVersion != 'auto'
         run: |
-          echo "NEXT_VERSION=${{ github.event.inputs.releaseVersion }}" >> $GITHUB_ENV
+          echo "NEXT_VERSION=${{ inputs.releaseVersion }}" >> $GITHUB_ENV
           echo "$NEXT_VERSION"
 
       - name: bump version - DRY RUN
-        if: github.event.inputs.dryRun == true
+        if: inputs.dryRun == true
         run: |
-          if ( ${{ github.event.inputs.releaseVersion == 'auto' }} ); then
-            npx standard-version -t $npm_package_name@ --dry-run
+          if ( ${{ inputs.releaseVersion == 'auto' }} ); then
+            pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v --dry-run
           else
-            npx standard-version -t $npm_package_name@ --release-as '${{ github.event.inputs.releaseVersion }}' --dry-run
+            pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v --release-as '${{ inputs.releaseVersion }}' --dry-run
           fi
         working-directory: ${{ steps.get-directory.outputs.directory }}
+        env:
+          MATRIX_PACKAGE: ${{ matrix.package }}
 
       - name: bump version - AUTOMATIC
-        if: github.event.inputs.dryRun == false && github.event.inputs.releaseVersion == 'auto'
-        run: npx standard-version -t $npm_package_name@
+        if: inputs.dryRun == false && inputs.releaseVersion == 'auto'
+        run: pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v
         working-directory: ${{ steps.get-directory.outputs.directory }}
+        env:
+          MATRIX_PACKAGE: ${{ matrix.package }}
 
       - name: bump version - MANUAL VERSION NO.
-        if: github.event.inputs.dryRun == false && github.event.inputs.releaseVersion != 'auto'
-        run: npx standard-version -t $npm_package_name@ --release-as '${{ github.event.inputs.releaseVersion }}'
+        if: inputs.dryRun == false && inputs.releaseVersion != 'auto'
+        run: pnpm dlx standard-version --path . -t $MATRIX_PACKAGE@v --release-as '${{ inputs.releaseVersion }}'
         working-directory: ${{ steps.get-directory.outputs.directory }}
+        env:
+          MATRIX_PACKAGE: ${{ matrix.package }}
 
       - name: Publish tag # only possible on main branch
-        if: github.event.inputs.dryRun == false
+        if: inputs.dryRun == false
         run: |
-          if ( ${{ contains(github.ref, 'main') }} ); then
+          if ( ${{ contains(github.ref, 'master') }} ); then
             git push --follow-tags origin main
           else
             exit 1
           fi
 
       - name: Publish GitHub release
-        uses: actions/create-release@v1.1.4
-        if: github.event.inputs.dryRun == false
+        uses: ncipollo/release-action@v1
+        if: inputs.dryRun == false
         # env:
         # GITHUB_TOKEN: ${{ secrets.PAT_ME_REPO }} # # use PAT to being able to push to protected branch later on
         with:
-          tag_name: $NEXT_VERSION
-          release_name: $NEXT_VERSION
-          commitish: main
+          tag: $NEXT_VERSION
+          name: $NEXT_VERSION
           prerelease: true
           body: |
             ${{ steps.get_changelog.outputs.changelog }}
