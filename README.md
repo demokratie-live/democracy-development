@@ -96,8 +96,8 @@ Change `.env` if necessary.
 Once this is set up, run the following:
 
 ```
-yarn install
-yarn run dev
+pnpm install
+pnpm run dev
 ```
 
 Now visit [localhost:3100][localhost] and you should see the GraphQL playground.
@@ -120,7 +120,7 @@ install kustomize `brew install kustomize`
 
 #### Generate Kubernetes configs
 
-run `yarn build:k8s:STAGE`
+run `pnpm build:k8s:STAGE`
 _replace Stage with alpha|internal|local|prod_
 
 #### Monitoring

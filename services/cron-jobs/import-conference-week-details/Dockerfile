@@ -6,11 +6,11 @@ RUN apk --no-cache update \
     &&  rm -fr /var/cache/apk/*
 
 WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn --frozen-lockfile
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm --frozen-lockfile
 COPY . .
 
-RUN yarn build
+RUN pnpm build
 
 FROM node:16-alpine
 
@@ -24,4 +24,4 @@ COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
 
 ENV NODE_ENV=production
 
-ENTRYPOINT [ "yarn", "start" ]
+ENTRYPOINT [ "pnpm", "start" ]

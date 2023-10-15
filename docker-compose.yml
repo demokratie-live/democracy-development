@@ -15,7 +15,7 @@ services:
       dockerfile: ../../infra/Dockerfile
     ports:
       - 4000:4000
-    command: yarn run dev
+    command: pnpm run dev
     depends_on:
       - mongo
     environment:
@@ -52,7 +52,7 @@ services:
       - bundestag.io/dip/.env
     environment:
       - PORT=4002
-    command: yarn dev
+    command: pnpm dev
     volumes:
       - ./bundestag.io/dip/src:/app/src
     ports:
@@ -77,7 +77,7 @@ services:
       context: services/cron-jobs/crawler
       target: base_stage
       dockerfile: ../../../infra/Dockerfile
-    command: yarn dev
+    command: pnpm dev
     volumes:
       - ./services/cron-jobs/crawler/src:/app/src
     env_file:
@@ -97,7 +97,7 @@ services:
       context: services/cron-jobs/sync-procedures
       target: base_stage
       dockerfile: ../../../infra/Dockerfile
-    command: yarn dev
+    command: pnpm dev
     volumes:
       - ./services/cron-jobs/sync-procedures/src:/app/src
     env_file:
@@ -117,7 +117,7 @@ services:
       context: services/cron-jobs/queue-pushs-vote-top-100
       target: base_stage
       dockerfile: ../../../infra/Dockerfile
-    command: yarn dev
+    command: pnpm dev
     volumes:
       - ./services/cron-jobs/queue-pushs-vote-top-100/src:/app/src
     env_file:
@@ -135,7 +135,7 @@ services:
       context: services/cron-jobs/push-send-queued
       target: base_stage
       dockerfile: ../../../infra/Dockerfile
-    command: yarn dev
+    command: pnpm dev
     volumes:
       - ./services/cron-jobs/push-send-queued/src:/app/src
     env_file:
@@ -153,7 +153,7 @@ services:
       context: services/cron-jobs/cleanup-push-queue
       target: base_stage
       dockerfile: ../../../infra/Dockerfile
-    command: yarn dev
+    command: pnpm dev
     volumes:
       - ./services/cron-jobs/cleanup-push-queue/src:/app/src
     env_file:
@@ -171,7 +171,7 @@ services:
       context: services/cron-jobs/import-named-polls
       target: base_stage
       dockerfile: ../../../infra/Dockerfile
-    command: yarn dev
+    command: pnpm dev
     volumes:
       - ./services/cron-jobs/import-named-polls/src:/app/src
     env_file:
@@ -187,7 +187,7 @@ services:
       context: services/cron-jobs/import-named-poll-deputies
       target: base_stage
       dockerfile: ../../../infra/Dockerfile
-    command: yarn dev
+    command: pnpm dev
     volumes:
       - ./services/cron-jobs/import-named-poll-deputies/src:/app/src
     env_file:

@@ -39,9 +39,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.node_version.outputs.version }}
-          cache: 'yarn'
+          cache: 'pnpm'
 
-      - run: yarn global add turbo
+      - run: pnpm global add turbo
 
       - name: Identifying Changed Bap-Services
         id: changed-packages
