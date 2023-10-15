@@ -1,0 +1,36 @@
+{
+  "types": [
+    {
+      "type": "feat",
+      "section": "🚀 Feature"
+    },
+    {
+      "type": "fix"
+    },
+    {
+      "type": "chore"
+    },
+    {
+      "type": "docs"
+    },
+    {
+      "type": "style"
+    },
+    {
+      "type": "refactor"
+    },
+    {
+      "type": "perf"
+    },
+    {
+      "type": "test"
+    },
+    {
+      "type": "ci",
+      "section": "👷 CI/CD"
+    },
+    {
+      "type": "build"
+    }
+  ]
+}
