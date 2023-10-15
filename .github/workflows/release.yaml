@@ -1,0 +1,166 @@
+name: Release
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: 'Dry Run'
+        required: true
+        default: 'true'
+      releaseVersion:
+        description: 'Custom Version (major.minor.patch; leave empty for automatic determination)'
+        required: false
+
+jobs:
+  analyse-changed-packages:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.changed-packages.outputs.CHANGED }}
+      changedPackages: ${{ steps.changed-packages.outputs.CHANGED_PACKAGES }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - run: |
+          SINCE=$(git rev-list --tags --max-count=1)
+          echo SINCE=$SINCE >> $GITHUB_OUTPUT
+          echo SINCE=$SINCE
+        id: since
+
+      - run: |
+          pnpm list -r --json --filter "...[$SINCE]" | jq '[.[] | select(.private == false) | {name, path}]' > ./tmp.json
+          CHANGED_PACKAGES=$(jq '[.[] | .name]' ./tmp.json)
+          echo CHANGED_PACKAGES=$CHANGED_PACKAGES  >> $GITHUB_OUTPUT
+          echo CHANGED_PACKAGES=$CHANGED_PACKAGES
+        id: changed-packages
+        env:
+          SINCE: ${{ steps.since.outputs.SINCE }}
+
+  release:
+    needs: [analyse-changed-packages]
+    runs-on: ubuntu-latest
+    if: ${{ needs.analyse-changed-packages.outputs.changedPackages != '[]'}}
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{fromJson(needs.analyse-changed-packages.outputs.changedPackages)}}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # token: ${{ secrets.PAT_ME_REPO }} # use PAT to being able to push to protected branch later on
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - run: echo "package=${{ matrix.package }}"
+
+      - name: get directory for package
+        id: get-directory
+        run: |
+          directory=$(pnpm ls -r --json --filter $MATRIX_PACKAGE | jq -r '.[0] | .path')
+          directory="${directory##*/democracy-development/}"
+
+          # Ausgabe
+          echo "directory=$directory" >> $GITHUB_OUTPUT
+        env:
+          MATRIX_PACKAGE: ${{ matrix.package }}
+
+      - name: Fetch tags
+        run: git fetch --tags
+
+      - name: Configure CI Git User
+        run: |
+          git config user.name "Manuel Ruck"
+          git config user.email "m.ruck@democracy-deutschland.de"
+          git config push.followTags true
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
+        # env:
+        # GITHUB_TOKEN: ${{ secrets.PAT_ME_REPO }}
+
+      - name: Get changelog
+        id: get_changelog
+        run: |
+          changelog=''
+
+          if ( ${{ github.event.inputs.releaseVersion == null }} ); then
+            changelog=`npx standard-version -t $npm_package_name@ --dry-run | sed -n '/^---$/,/^---$/p' | grep -v '^---$'`
+          else
+            changelog=`npx standard-version -t $npm_package_name@ --release-as '${{ github.event.inputs.releaseVersion }}' --dry-run | sed -n '/^---$/,/^---$/p' | grep -v '^---$'`
+          fi
+
+          changelog="${changelog//'%'/'%25'}"
+          changelog="${changelog//$'\n'/'%0A'}"
+          changelog="${changelog//$'\r'/'%0D'}"
+          echo "$changelog"
+          echo "::set-output name=changelog::$changelog"
+        working-directory: ${{ steps.get-directory.outputs.directory }}
+
+      - name: Determine next version number
+        if: github.event.inputs.releaseVersion == null
+        run: |
+          nextVersion=`npx standard-version -t $npm_package_name@ --dry-run | sed -n '/^---$/,/^---$/p' | grep -P -o '(\d+\.)(\d+\.)(\d)' | head -n 1`
+          echo "$nextVersion"
+          echo "NEXT_VERSION=$nextVersion" >> $GITHUB_ENV
+        working-directory: ${{ steps.get-directory.outputs.directory }}
+
+      - name: Manually next version number
+        if: github.event.inputs.releaseVersion != null
+        run: |
+          echo "NEXT_VERSION=${{ github.event.inputs.releaseVersion }}" >> $GITHUB_ENV
+          echo "$NEXT_VERSION"
+
+      - name: bump version - DRY RUN
+        if: github.event.inputs.dryRun == 'true'
+        run: |
+          if ( ${{ github.event.inputs.releaseVersion == null }} ); then
+            npx standard-version -t $npm_package_name@ --dry-run
+          else
+            npx standard-version -t $npm_package_name@ --release-as '${{ github.event.inputs.releaseVersion }}' --dry-run
+          fi
+        working-directory: ${{ steps.get-directory.outputs.directory }}
+
+      - name: bump version - AUTOMATIC
+        if: github.event.inputs.dryRun == 'false' && github.event.inputs.releaseVersion == null
+        run: npx standard-version -t $npm_package_name@
+        working-directory: ${{ steps.get-directory.outputs.directory }}
+
+      - name: bump version - MANUAL VERSION NO.
+        if: github.event.inputs.dryRun == 'false' && github.event.inputs.releaseVersion != null
+        run: npx standard-version -t $npm_package_name@ --release-as '${{ github.event.inputs.releaseVersion }}'
+        working-directory: ${{ steps.get-directory.outputs.directory }}
+
+      - name: Publish tag # only possible on main branch
+        if: github.event.inputs.dryRun == 'false'
+        run: |
+          if ( ${{ contains(github.ref, 'main') }} ); then
+            git push --follow-tags origin main
+          else
+            exit 1
+          fi
+
+      - name: Publish GitHub release
+        uses: actions/create-release@v1.1.4
+        if: github.event.inputs.dryRun == 'false'
+        # env:
+        # GITHUB_TOKEN: ${{ secrets.PAT_ME_REPO }} # # use PAT to being able to push to protected branch later on
+        with:
+          tag_name: $NEXT_VERSION
+          release_name: $NEXT_VERSION
+          commitish: main
+          prerelease: true
+          body: |
+            ${{ steps.get_changelog.outputs.changelog }}

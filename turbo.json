@@ -8,6 +8,7 @@
     "dev": {
       "dependsOn": ["^build"]
     },
-    "lint": {}
+    "lint": {},
+    "release:version": {}
   }
 }
