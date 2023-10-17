@@ -3,10 +3,6 @@ name: Docker – Build and Push
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'services/**'
-    branches:
-      - 'master'
     tags:
       - '*@v*.*.*'
   pull_request:
