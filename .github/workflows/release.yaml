@@ -22,6 +22,9 @@ on:
           # - 'minor'
           # - 'patch'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   analyse-changed-packages:
     runs-on: ubuntu-latest
@@ -67,8 +70,12 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
         with:
+          ref:
           fetch-depth: 0
           token: ${{ secrets.PAT }} # use PAT to being able to push to protected branch later on
+
+      - run: git checkout ${{ github.event.repository.default_branch }}
+        if: ${{ contains(github.ref, github.event.repository.default_branch) }}
 
       - uses: pnpm/action-setup@v2
         with:
@@ -127,10 +134,16 @@ jobs:
 
           echo "$changelog"
           echo "{${{ matrix.package }} v$changelog}" >> $GITHUB_STEP_SUMMARY
-          changelog="${changelog//'%'/'%25'}"
-          changelog="${changelog//$'\n'/'%0A'}"
-          changelog="${changelog//$'\r'/'%0D'}"
-          echo "changelog=$changelog" >> $GITHUB_OUTPUT
+
+          {
+          echo 'CHANGELOG<<EOF'
+            echo $changelog
+            echo EOF
+          } >> "$GITHUB_ENV"
+
+          echo 'CHANGELOG<<EOF' >> $GITHUB_ENV
+          echo $changelog >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
 
         working-directory: ${{ steps.get-directory.outputs.directory }}
         env:
@@ -138,10 +151,11 @@ jobs:
 
       - name: Determine next version number
         if: inputs.releaseVersion == 'auto'
+        id: determine_next_version
         run: |
           nextVersion=`pnpm dlx commit-and-tag-version --path . -t $MATRIX_PACKAGE@v --dry-run | sed -n '/^---$/,/^---$/p' | grep -P -o '(\d+\.)(\d+\.)(\d)' | head -n 1`
           echo "$nextVersion"
-          echo "NEXT_VERSION=$nextVersion" >> $GITHUB_ENV
+          echo "NEXT_VERSION=$nextVersion" >> $GITHUB_OUTPUT
         working-directory: ${{ steps.get-directory.outputs.directory }}
         env:
           MATRIX_PACKAGE: ${{ matrix.package }}
@@ -192,9 +206,10 @@ jobs:
         if: inputs.dryRun == false
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }} # # use PAT to being able to push to protected branch later on
+          CHANGELOG: '${{ env.CHANGELOG }}'
         with:
-          tag: $NEXT_VERSION
-          name: $NEXT_VERSION
+          tag: ${{ matrix.package }}@v${{ steps.determine_next_version.outputs.NEXT_VERSION }}
+          name: ${{ matrix.package }}@v${{ steps.determine_next_version.outputs.NEXT_VERSION }}
           prerelease: true
           body: |
-            ${{ steps.get_changelog.outputs.changelog }}
+            '${{ env.CHANGELOG }}'
