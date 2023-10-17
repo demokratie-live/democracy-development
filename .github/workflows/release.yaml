@@ -68,7 +68,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # token: ${{ secrets.PAT_ME_REPO }} # use PAT to being able to push to protected branch later on
+          token: ${{ secrets.PAT }} # use PAT to being able to push to protected branch later on
 
       - uses: pnpm/action-setup@v2
         with:
