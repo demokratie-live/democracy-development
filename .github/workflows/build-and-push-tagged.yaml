@@ -1,0 +1,30 @@
+name: Build and Push tagged
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  get-tagged-service:
+    runs-on: ubuntu-latest
+    outputs:
+      TAGGED_SERVICE: ${{ steps.get-tagged-service.outputs.TAGGED_SERVICE }}
+    steps:
+      # syntax: qr-code-handler@v1.0.8
+      - name: Get tagged service
+        id: get-tagged-service
+        run: |
+          service=$(echo "${{ github.ref_name }}" | sed -n 's/^\(.*\)@v.*/\1/p')
+          serviceJSON=[\"$service\"]
+          echo "TAGGED_SERVICE=$serviceJSON" >> $GITHUB_OUTPUT
+          echo $serviceJSON
+
+  build-and-push:
+    uses: ./.github/workflows/build-and-push.yaml
+    needs: get-tagged-service
+    with:
+      changedPackages: ${{ needs.get-tagged-service.outputs.TAGGED_SERVICE }}
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
