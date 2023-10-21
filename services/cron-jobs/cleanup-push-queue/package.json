@@ -1,6 +1,6 @@
 {
   "name": "cleanup-push-queue",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
