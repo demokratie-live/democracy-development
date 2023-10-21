@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
-    "@democracy-deutschland/bundestagio-common": "0.1.16",
+    "@democracy-deutschland/bundestagio-common": "*",
     "http2": "^3.3.7",
     "scrape-it": "^5.3.2"
   },

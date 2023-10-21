@@ -1,4 +1,4 @@
-import mongoConnect from './mongoose';
+import { mongoConnect, mongoDisconnect } from './mongoose';
 import moment from 'moment';
 
 import {
@@ -41,7 +41,7 @@ const start = async () => {
 
   let hasMore = true;
   let skip = 0;
-  let limit = 1000;
+  const limit = 1000;
   while (hasMore) {
     console.log('Find Devices', skip);
     const devices = await DeviceModel.find(
@@ -99,4 +99,6 @@ const start = async () => {
   console.log('procedures', await ProcedureModel.countDocuments({}));
   await start().catch(() => process.exit(1));
   process.exit(0);
-})();
+})().finally(() => {
+  mongoDisconnect();
+});

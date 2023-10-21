@@ -1,25 +1,24 @@
-import { mongoose } from "@democracy-deutschland/democracy-common";
-import { DB_URL } from "./config";
+import { mongoose } from '@democracy-deutschland/democracy-common';
 
 let connection: typeof mongoose;
 
-export const mongoConnect = async () => {
-  mongoose.set("useFindAndModify", false);
-  mongoose.set("debug", false);
+export const mongoConnect = async () =>
+  new Promise(async (resolve) => {
+    // Mongo Debug
+    mongoose.set('debug', false);
 
-  connection = await mongoose.connect(DB_URL!, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+    mongoose.connect(process.env.DB_URL!);
 
-  mongoose.connection.once("connected", () => {
-    console.info("MongoDB is running");
+    mongoose.connection.once('connected', () => {
+      console.info('MongoDB is running');
+      resolve(true);
+    });
+    mongoose.connection.on('error', (e: Error) => {
+      // Unknown if this ends up in main - therefore we log here
+      console.error(e.stack);
+      throw e;
+    });
   });
-  mongoose.connection.on("error", (e: Error) => {
-    console.error(e.stack);
-    throw e;
-  });
-};
 
 export const mongoDisconnect = () => {
   if (connection) {

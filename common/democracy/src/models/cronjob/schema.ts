@@ -1,13 +1,13 @@
-import { Schema, Document } from "mongoose";
-import { Timestamps } from "../timestamp";
+import { Schema, Document } from 'mongoose';
+import { Timestamps } from '../timestamp';
 
 export interface ICronJob extends Document, Timestamps {
   name: string;
-  lastStartDate: Date;
-  lastErrorDate: Date;
-  lastError: string;
-  lastSuccessDate: Date;
-  lastSuccessStartDate: Date;
+  lastStartDate?: Date;
+  lastErrorDate?: Date;
+  lastError?: string;
+  lastSuccessDate?: Date;
+  lastSuccessStartDate?: Date;
   running: boolean;
 }
 
@@ -21,7 +21,7 @@ const CronJobSchema = new Schema<ICronJob>(
     lastSuccessStartDate: { type: Date, default: null },
     running: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default CronJobSchema;

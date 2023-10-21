@@ -1,4 +1,4 @@
-import mongoConnect from './mongoose';
+import { mongoConnect, mongoDisconnect } from './mongoose';
 import { CRON_SEND_QUED_PUSHS_LIMIT } from './config';
 import {
   setCronStart,
@@ -68,14 +68,14 @@ const start = async () => {
   await setCronStart({ name: CRON_NAME, startDate });
 
   // Query Database
-  let pushs = await getUnsendPushs(CRON_SEND_QUED_PUSHS_LIMIT);
+  const pushs = await getUnsendPushs(CRON_SEND_QUED_PUSHS_LIMIT);
 
   let sentPushsCount = 0;
   let sentPushsErrorCount = 0;
   console.log(CRON_SEND_QUED_PUSHS_LIMIT, pushs);
 
   // send all pushs
-  for (let push of pushs) {
+  for (const push of pushs) {
     await sendPush(push).catch((error) => {
       handleSendError(push, error);
       sentPushsErrorCount++;
@@ -98,4 +98,6 @@ const start = async () => {
     throw e;
   });
   process.exit(0);
-})();
+})().finally(() => {
+  mongoDisconnect();
+});

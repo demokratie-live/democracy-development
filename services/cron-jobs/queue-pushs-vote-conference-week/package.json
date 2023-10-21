@@ -12,7 +12,7 @@
     "start": "node ./build/index.js"
   },
   "dependencies": {
-    "@democracy-deutschland/democracy-common": "^0.2.7",
+    "@democracy-deutschland/democracy-common": "*",
     "moment": "^2.27.0",
     "p-iteration": "^1.1.8"
   },

@@ -1,4 +1,4 @@
-import mongoConnect from "./mongoose";
+import { mongoConnect, mongoDisconnect } from './mongoose';
 
 import {
   ActivityModel,
@@ -12,7 +12,7 @@ import {
   UserModel,
   VerificationModel,
   VoteModel,
-} from "@democracy-deutschland/democracy-common";
+} from '@democracy-deutschland/democracy-common';
 
 const start = async () => {
   await Promise.all([
@@ -31,16 +31,18 @@ const start = async () => {
 };
 
 (async () => {
-  console.info("START");
-  console.info("process.env", process.env.DB_URL);
+  console.info('START');
+  console.info('process.env', process.env.DB_URL);
   if (!process.env.DB_URL) {
-    throw new Error("you have to set environment variable: DB_URL");
+    throw new Error('you have to set environment variable: DB_URL');
   }
   await mongoConnect();
-  console.log("cronjobs", await CronJobModel.countDocuments({}));
+  console.log('cronjobs', await CronJobModel.countDocuments({}));
   await start().catch((e) => {
     console.log(e);
     process.exit(1);
   });
   process.exit(0);
-})();
+})().finally(() => {
+  mongoDisconnect();
+});

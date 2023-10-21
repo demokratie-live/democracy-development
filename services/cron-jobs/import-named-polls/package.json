@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
-    "@democracy-deutschland/bundestagio-common": "0.1.20",
+    "@democracy-deutschland/bundestagio-common": "*",
     "cheerio": "^1.0.0-rc.12",
     "crawlee": "^3.3.2",
     "dayjs": "^1.11.7",

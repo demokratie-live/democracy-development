@@ -12,11 +12,12 @@
     "start": "node ./build/index.js"
   },
   "dependencies": {
-    "@democracy-deutschland/democracy-common": "0.2.12",
+    "@democracy-deutschland/democracy-common": "*",
     "moment": "^2.27.0",
     "p-iteration": "^1.1.8"
   },
   "devDependencies": {
+    "@types/node": "^20.8.7",
     "dotenv": "^10.0.0",
     "ts-node-dev": "^1.0.0-pre.49",
     "ts-unused-exports": "^6.2.1",

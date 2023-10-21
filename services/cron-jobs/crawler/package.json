@@ -7,15 +7,15 @@
   "author": "Manuel Ruck, Ulf Gebhardt, Robert Schäfer",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "dev": "tsup src/index.ts --watch --onSuccess 'node build/index.js'",
+    "build": "tsup-node",
     "lint": "eslint .",
     "test": "jest",
-    "dev": "ts-node-dev ./src/import-procedures",
-    "start": "node ./build/import-procedures"
+    "start": "node ./build/index.js"
   },
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
-    "@democracy-deutschland/bundestagio-common": "0.1.16",
+    "@democracy-deutschland/bundestagio-common": "*",
     "debug": "^4.3.1",
     "dotenv": "^10.0.0",
     "graphql": "^15.5.0",
@@ -34,6 +34,8 @@
     "prettier": "^2.3.2",
     "ts-jest": "^27.0.3",
     "ts-node-dev": "^1.1.6",
+    "tsup": "^7.2.0",
+    "tsup-config": "*",
     "typescript": "^5.2.2"
   }
 }

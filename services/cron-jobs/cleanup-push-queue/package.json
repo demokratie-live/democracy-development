@@ -4,21 +4,23 @@
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "ts-node-dev -r dotenv/config ./src/index dotenv_config_path=./.env.local",
+    "dev": "tsup src/index.ts --watch --onSuccess 'node build/index.js'",
+    "build": "tsup-node",
     "lint": "pnpm lint:ts && pnpm lint:exports",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
-    "build": "tsc",
     "start": "node ./build/index.js"
   },
   "dependencies": {
-    "@democracy-deutschland/democracy-common": "^0.2.7"
+    "@democracy-deutschland/democracy-common": "*"
   },
   "devDependencies": {
     "@types/node": "^15.6.0",
     "dotenv": "^16.3.1",
     "ts-node-dev": "^2.0.0",
     "ts-unused-exports": "^10.0.1",
+    "tsup": "^7.2.0",
+    "tsup-config": "*",
     "typescript": "^5.2.2"
   }
 }

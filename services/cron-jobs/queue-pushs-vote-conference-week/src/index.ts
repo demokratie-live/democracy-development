@@ -1,4 +1,4 @@
-import mongoConnect from './mongoose';
+import { mongoConnect, mongoDisconnect } from './mongoose';
 import moment from 'moment';
 
 import {
@@ -152,4 +152,6 @@ const start = async () => {
   console.log('procedures', await ProcedureModel.countDocuments({}));
   await start().catch(() => process.exit(1));
   process.exit(0);
-})();
+})().finally(() => {
+  mongoDisconnect();
+});

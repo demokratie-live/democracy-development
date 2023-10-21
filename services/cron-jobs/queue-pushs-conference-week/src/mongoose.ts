@@ -1,14 +1,13 @@
 import { mongoose } from '@democracy-deutschland/democracy-common';
-export default () =>
-  new Promise(async (resolve, reject) => {
-    mongoose.set('useFindAndModify', false);
+
+let connection: typeof mongoose;
+
+export const mongoConnect = async () =>
+  new Promise(async (resolve) => {
     // Mongo Debug
     mongoose.set('debug', false);
 
-    mongoose.connect(process.env.DB_URL!, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    mongoose.connect(process.env.DB_URL!);
 
     mongoose.connection.once('connected', () => {
       console.info('MongoDB is running');
@@ -20,3 +19,9 @@ export default () =>
       throw e;
     });
   });
+
+export const mongoDisconnect = () => {
+  if (connection) {
+    return connection.disconnect();
+  }
+};
