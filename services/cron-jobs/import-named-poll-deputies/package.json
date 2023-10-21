@@ -1,6 +1,6 @@
 {
   "name": "import-named-poll-deputies",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
