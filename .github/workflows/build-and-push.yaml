@@ -8,11 +8,17 @@ on:
         required: true
         default: '[]'
         type: string
+    secrets:
+      DOCKER_USERNAME:
+        description: 'Dockerhub Username'
+        required: true
+      DOCKER_PASSWORD:
+        description: 'Dockerhub Token'
+        required: true
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    environment: docker
     if: ${{ inputs.changedPackages != '[]'}}
     strategy:
       fail-fast: false
@@ -69,11 +75,12 @@ jobs:
           key: ${{ runner.os }}-multi-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-multi-buildx
+
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Read .node-version
         id: node_version

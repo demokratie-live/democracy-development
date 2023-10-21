@@ -26,46 +26,18 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  analyse-changed-packages:
-    runs-on: ubuntu-latest
-    outputs:
-      changed: ${{ steps.changed-packages.outputs.CHANGED }}
-      changedPackages: ${{ steps.changed-packages.outputs.CHANGED_PACKAGES }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
-
-      - run: |
-          SINCE=$(git rev-list --tags --max-count=1)
-          echo SINCE=$SINCE >> $GITHUB_OUTPUT
-          echo SINCE=$SINCE
-        id: since
-
-      - run: |
-          pnpm list -r --json --filter "...[$SINCE]" | jq '[.[] | select(.private == false) | {name, path}]' > ./tmp.json
-          CHANGED_PACKAGES=$(jq '[.[] | .name]' ./tmp.json)
-          echo CHANGED_PACKAGES=$CHANGED_PACKAGES  >> $GITHUB_OUTPUT
-          echo CHANGED_PACKAGES=$CHANGED_PACKAGES
-        id: changed-packages
-        env:
-          SINCE: ${{ steps.since.outputs.SINCE }}
+  analyse-changed-services:
+    uses: ./.github/workflows/get-changed-services.yaml
 
   release:
-    needs: [analyse-changed-packages]
+    needs: [analyse-changed-services]
     runs-on: ubuntu-latest
-    if: ${{ needs.analyse-changed-packages.outputs.changedPackages != '[]'}}
+    if: ${{ needs.analyse-changed-services.outputs.CHANGED_PACKAGES != '[]'}}
     strategy:
       fail-fast: false
       max-parallel: 1
       matrix:
-        package: ${{fromJson(needs.analyse-changed-packages.outputs.changedPackages)}}
+        package: ${{fromJson(needs.analyse-changed-services.outputs.CHANGED_PACKAGES)}}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
