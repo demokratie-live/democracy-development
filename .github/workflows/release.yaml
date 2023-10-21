@@ -46,7 +46,10 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PAT }} # use PAT to being able to push to protected branch later on
 
-      - run: git checkout ${{ github.event.repository.default_branch }}
+      - name: Checkout latest default branch
+        run: |
+          git checkout ${{ github.event.repository.default_branch }}
+          git pull origin ${{ github.event.repository.default_branch }}
         if: ${{ contains(github.ref, github.event.repository.default_branch) }}
 
       - uses: pnpm/action-setup@v2
