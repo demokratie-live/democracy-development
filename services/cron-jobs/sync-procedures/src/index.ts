@@ -1,14 +1,14 @@
-import { mongoConnect, mongoDisconnect } from "./mongoose";
-import _ from "lodash";
-import moment from "moment";
-import { forEachSeries } from "p-iteration";
+import { mongoConnect, mongoDisconnect } from './mongoose';
+import _ from 'lodash';
+import moment from 'moment';
+import { forEachSeries } from 'p-iteration';
 
 // Definitions
-import { PROCEDURE as PROCEDURE_DEFINITIONS } from "@democracy-deutschland/bundestag.io-definitions";
+import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 
 // GraphQL
-import createClient from "./graphql/client";
-import getProcedureUpdates from "./graphql/queries/getProcedureUpdates";
+import createClient from './graphql/client';
+import getProcedureUpdates from './graphql/queries/getProcedureUpdates';
 import {
   ProcedureModel,
   VoteSelection,
@@ -21,21 +21,19 @@ import {
   IProcedure,
   PartyVotes,
   ProcedureDocument,
-} from "@democracy-deutschland/democracy-common";
+} from '@democracy-deutschland/democracy-common';
 
 // Queries
 import {
   ProcedureUpdates,
   ProcedureUpdatesVariables,
   ProcedureUpdates_procedureUpdates_procedures,
-} from "./graphql/queries/__generated__/ProcedureUpdates";
-import { VoteDecision } from "./__generated__/globalTypes";
+} from './graphql/queries/__generated__/ProcedureUpdates';
+import { VoteDecision } from './__generated__/globalTypes';
 
-export const CRON_NAME = "Procedures";
+export const CRON_NAME = 'Procedures';
 
-const notEmpty = <TValue>(
-  value: TValue | null | undefined
-): value is TValue => {
+const notEmpty = <TValue>(value: TValue | null | undefined): value is TValue => {
   return value !== null && value !== undefined;
 };
 
@@ -43,10 +41,7 @@ export const nullToUndefined = <TValue>(value: TValue | null | undefined) => {
   return value === null ? undefined : value;
 };
 
-const importProcedures = async (
-  bIoProcedure: ProcedureUpdates_procedureUpdates_procedures,
-  { push = false }
-) => {
+const importProcedures = async (bIoProcedure: ProcedureUpdates_procedureUpdates_procedures, { push = false }) => {
   const importProcedure: Partial<IProcedure> = {
     ...bIoProcedure,
     procedureId: nullToUndefined(bIoProcedure.procedureId),
@@ -58,12 +53,8 @@ const importProcedures = async (
       ? bIoProcedure.currentStatusHistory.filter(notEmpty)
       : undefined,
     tags: bIoProcedure.tags ? bIoProcedure.tags.filter(notEmpty) : undefined,
-    subjectGroups: bIoProcedure.subjectGroups
-      ? bIoProcedure.subjectGroups.filter(notEmpty)
-      : undefined,
-    importantDocuments: bIoProcedure.importantDocuments?.reduce<
-      ProcedureDocument[]
-    >((prev, doc) => {
+    subjectGroups: bIoProcedure.subjectGroups ? bIoProcedure.subjectGroups.filter(notEmpty) : undefined,
+    importantDocuments: bIoProcedure.importantDocuments?.reduce<ProcedureDocument[]>((prev, doc) => {
       if (doc) {
         return [...prev, doc] as ProcedureDocument[];
       }
@@ -81,7 +72,7 @@ const importProcedures = async (
   }
 
   // check vote results
-  let voteResults: IProcedure["voteResults"] | undefined;
+  let voteResults: IProcedure['voteResults'] | undefined;
   if (
     bIoProcedure.customData &&
     bIoProcedure.customData.voteResults &&
@@ -90,100 +81,88 @@ const importProcedures = async (
       bIoProcedure.customData.voteResults.no)
   ) {
     voteResults = {
-      yes: bIoProcedure.customData.voteResults.yes || 0,
-      abstination: bIoProcedure.customData.voteResults.abstination || 0,
+      yes: bIoProcedure.customData.voteResults.yes || 0,
+      abstination: bIoProcedure.customData.voteResults.abstination || 0,
       no: bIoProcedure.customData.voteResults.no || 0,
       notVoted: nullToUndefined(bIoProcedure.customData.voteResults.notVoted),
-      decisionText: nullToUndefined(
-        bIoProcedure.customData.voteResults.decisionText
-      ),
+      decisionText: nullToUndefined(bIoProcedure.customData.voteResults.decisionText),
       namedVote: nullToUndefined(bIoProcedure.namedVote),
       partyVotes: [],
     };
 
     if (bIoProcedure.customData.voteResults.partyVotes) {
-      voteResults.partyVotes =
-        bIoProcedure.customData.voteResults.partyVotes.reduce<PartyVotes[]>(
-          (pre, partyVote) => {
-            if (partyVote) {
-              let mainDecision: VoteSelection;
-              const { main, party, ...rest } = partyVote;
-              switch (main) {
-                case VoteDecision.YES:
-                  mainDecision = VoteSelection.Yes;
-                  break;
-                case VoteDecision.ABSTINATION:
-                  mainDecision = VoteSelection.Abstination;
-                  break;
-                case VoteDecision.NO:
-                  mainDecision = VoteSelection.No;
-                  break;
-                default:
-                  mainDecision = VoteSelection.Notvoted;
-              }
-              let deviants: PartyVotes["deviants"] | undefined;
-              if (
-                rest.deviants &&
-                rest.deviants.yes !== null &&
-                rest.deviants.abstination !== null &&
-                rest.deviants.no !== null
-              ) {
-                deviants = {
-                  yes: rest.deviants.yes,
-                  abstination: rest.deviants.abstination,
-                  no: rest.deviants.no,
-                  notVoted: rest.deviants.notVoted,
-                };
-              }
+      voteResults.partyVotes = bIoProcedure.customData.voteResults.partyVotes.reduce<PartyVotes[]>((pre, partyVote) => {
+        if (partyVote) {
+          let mainDecision: VoteSelection;
+          const { main, party, ...rest } = partyVote;
+          switch (main) {
+            case VoteDecision.YES:
+              mainDecision = VoteSelection.Yes;
+              break;
+            case VoteDecision.ABSTINATION:
+              mainDecision = VoteSelection.Abstination;
+              break;
+            case VoteDecision.NO:
+              mainDecision = VoteSelection.No;
+              break;
+            default:
+              mainDecision = VoteSelection.Notvoted;
+          }
+          let deviants: PartyVotes['deviants'] | undefined;
+          if (
+            rest.deviants &&
+            rest.deviants.yes !== null &&
+            rest.deviants.abstination !== null &&
+            rest.deviants.no !== null
+          ) {
+            deviants = {
+              yes: rest.deviants.yes,
+              abstination: rest.deviants.abstination,
+              no: rest.deviants.no,
+              notVoted: rest.deviants.notVoted,
+            };
+          }
 
-              if (!deviants) {
-                return pre;
-              }
-
-              const result: PartyVotes = {
-                ...rest,
-                _id: false,
-                party: convertPartyName(party),
-                main: mainDecision,
-                deviants,
-              };
-              return [...pre, result];
-            }
+          if (!deviants) {
             return pre;
-          },
-          []
-        );
+          }
+
+          const result: PartyVotes = {
+            ...rest,
+            _id: false,
+            party: convertPartyName(party),
+            main: mainDecision,
+            deviants,
+          };
+          return [...pre, result];
+        }
+        return pre;
+      }, []);
 
       // toggle votingData (Yes & No) if needed
       if (
-        bIoProcedure.customData.voteResults.votingDocument ===
-          "recommendedDecision" &&
+        bIoProcedure.customData.voteResults.votingDocument === 'recommendedDecision' &&
         bIoProcedure.customData.voteResults.votingRecommendation === false
       ) {
         voteResults = {
           ...voteResults,
           yes: voteResults.no,
           no: voteResults.yes,
-          partyVotes: voteResults.partyVotes.map(
-            ({ main, deviants, ...rest }) => {
-              let mainDecision = main;
-              if (main !== "ABSTINATION") {
-                mainDecision =
-                  main === VoteSelection.Yes
-                    ? VoteSelection.No
-                    : VoteSelection.Yes;
-              }
-              return {
-                ...rest,
-                main: mainDecision,
-                deviants: {
-                  ...deviants,
-                  yes: deviants.no,
-                  no: deviants.yes,
-                },
-              };
+          partyVotes: voteResults.partyVotes.map(({ main, deviants, ...rest }) => {
+            let mainDecision = main;
+            if (main !== 'ABSTINATION') {
+              mainDecision = main === VoteSelection.Yes ? VoteSelection.No : VoteSelection.Yes;
             }
-          ),
+            return {
+              ...rest,
+              main: mainDecision,
+              deviants: {
+                ...deviants,
+                yes: deviants.no,
+                no: deviants.yes,
+              },
+            };
+          }),
         };
       }
     }
@@ -197,19 +176,13 @@ const importProcedures = async (
     if (lastSession && lastSession.session?.top?.topic?.isVote) {
       importProcedure.voteWeek = lastSession.thisWeek; // eslint-disable-line no-param-reassign
       importProcedure.voteYear = lastSession.thisYear; // eslint-disable-line no-param-reassign
-      importProcedure.sessionTOPHeading = nullToUndefined(
-        lastSession.session.top.heading
-      ); // eslint-disable-line no-param-reassign
+      importProcedure.sessionTOPHeading = nullToUndefined(lastSession.session.top.heading); // eslint-disable-line no-param-reassign
     }
   }
   // Set CalendarWeek & Year even if no sessions where found
   // Always override Week & Year by voteDate since we sort by this and the session match is not too accurate
-  if (
-    bIoProcedure.voteDate /* && (!bIoProcedure.voteWeek || !bIoProcedure.voteYear) */
-  ) {
-    importProcedure.voteWeek = parseInt(
-      moment(bIoProcedure.voteDate).format("W")
-    ); // eslint-disable-line no-param-reassign
+  if (bIoProcedure.voteDate /* && (!bIoProcedure.voteWeek || !bIoProcedure.voteYear) */) {
+    importProcedure.voteWeek = parseInt(moment(bIoProcedure.voteDate).format('W')); // eslint-disable-line no-param-reassign
     importProcedure.voteYear = moment(bIoProcedure.voteDate).year(); // eslint-disable-line no-param-reassign
   }
 
@@ -225,7 +198,7 @@ const importProcedures = async (
     {
       upsert: true,
       new: true,
-    }
+    },
   ).then(async () => {
     if (push) {
       // We have a vote result in new Procedure
@@ -237,10 +210,7 @@ const importProcedures = async (
           importProcedure.voteResults.notVoted !== null)
       ) {
         // We have no old Procedure or no VoteResult on old Procedure
-        if (
-          importProcedure.procedureId &&
-          (!oldProcedure || !oldProcedure.voteResults)
-        ) {
+        if (importProcedure.procedureId && (!oldProcedure || !oldProcedure.voteResults)) {
           await queuePushsOutcome(importProcedure.procedureId);
           // We have different values for VoteResult
         } else if (
@@ -249,11 +219,9 @@ const importProcedures = async (
           oldProcedure &&
           (importProcedure.voteResults.yes !== oldProcedure.voteResults.yes ||
             importProcedure.voteResults.no !== oldProcedure.voteResults.no ||
-            importProcedure.voteResults.abstination !==
-              oldProcedure.voteResults.abstination ||
+            importProcedure.voteResults.abstination !== oldProcedure.voteResults.abstination ||
             (importProcedure.voteResults.notVoted &&
-              importProcedure.voteResults.notVoted !==
-                oldProcedure.voteResults.notVoted))
+              importProcedure.voteResults.notVoted !== oldProcedure.voteResults.notVoted))
         ) {
           await queuePushsOutcome(importProcedure.procedureId);
         }
@@ -268,7 +236,7 @@ const start = async () => {
   const cron = await getCron({ name: CRON_NAME });
   await setCronStart({ name: CRON_NAME, startDate });
   // Last SuccessStartDate
-  let since: Date = new Date("1900");
+  let since: Date = new Date('1900');
   if (cron.lastSuccessStartDate) {
     since = new Date(cron.lastSuccessStartDate);
   }
@@ -287,11 +255,8 @@ const start = async () => {
         limit,
         offset,
         periods: [18, 19, 20],
-        types: [
-          PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG,
-          PROCEDURE_DEFINITIONS.TYPE.ANTRAG,
-        ],
-      }
+        types: [PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG, PROCEDURE_DEFINITIONS.TYPE.ANTRAG],
+      };
       const {
         errors,
         data: { procedureUpdates },
@@ -299,7 +264,7 @@ const start = async () => {
         query: getProcedureUpdates,
         variables,
       });
-      console.log("use variables:", {
+      console.log('use variables:', {
         ...variables,
         progress: {
           ...(procedureUpdates
@@ -322,8 +287,7 @@ const start = async () => {
           await forEachSeries(procedures, async (data) => {
             if (
               data &&
-              (data.type === PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG ||
-                data.type === PROCEDURE_DEFINITIONS.TYPE.ANTRAG)
+              (data.type === PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG || data.type === PROCEDURE_DEFINITIONS.TYPE.ANTRAG)
             ) {
               await importProcedures(data, { push: true });
             }
@@ -352,19 +316,13 @@ const start = async () => {
 };
 
 (async () => {
-  console.info("START");
-  console.info(
-    "process.env",
-    process.env.BUNDESTAGIO_SERVER_URL,
-    process.env.DB_URL
-  );
+  console.info('START');
+  console.info('process.env', process.env.BUNDESTAGIO_SERVER_URL, process.env.DB_URL);
   if (!process.env.BUNDESTAGIO_SERVER_URL) {
-    throw new Error(
-      "you have to set environment variable: BUNDESTAGIO_SERVER_URL & DB_URL"
-    );
+    throw new Error('you have to set environment variable: BUNDESTAGIO_SERVER_URL & DB_URL');
   }
   await mongoConnect();
-  console.log("procedures", await ProcedureModel.countDocuments({}));
+  console.log('procedures', await ProcedureModel.countDocuments({}));
   await start();
   await mongoDisconnect();
 })().catch(async (e) => {

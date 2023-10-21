@@ -1,5 +1,5 @@
-import { CronTime } from "cron";
-import { ICronJob, CronJobModel } from "../models";
+import { CronTime } from 'cron';
+import { ICronJob, CronJobModel } from '../models';
 
 export const testCronTime = (time?: string) => {
   if (!time) {
@@ -14,11 +14,7 @@ export const testCronTime = (time?: string) => {
   return true;
 };
 
-export const getCron = async ({
-  name,
-}: {
-  name: string;
-}): Promise<Partial<ICronJob>> => {
+export const getCron = async ({ name }: { name: string }): Promise<Partial<ICronJob>> => {
   const cronjob = await CronJobModel.findOne({ name });
   if (!cronjob) {
     return {
@@ -47,7 +43,7 @@ export const setCronStart = async ({
   await CronJobModel.findOneAndUpdate(
     { name },
     { lastStartDate: startDate, running },
-    { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
+    { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true },
   );
 };
 
@@ -62,9 +58,7 @@ export const setCronSuccess = async ({
   successStartDate: Date;
   running?: boolean;
 }) => {
-  console.info(
-    `[Cronjob][${name}] finished: ${successStartDate} - ${successDate}`
-  );
+  console.info(`[Cronjob][${name}] finished: ${successStartDate} - ${successDate}`);
   await CronJobModel.findOneAndUpdate(
     { name },
     {
@@ -72,7 +66,7 @@ export const setCronSuccess = async ({
       lastSuccessStartDate: successStartDate,
       running,
     },
-    { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
+    { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true },
   );
 };
 
@@ -91,12 +85,12 @@ export const setCronError = async ({
   await CronJobModel.findOneAndUpdate(
     { name },
     { lastErrorDate: errorDate, running, lastError: error },
-    { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
+    { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true },
   );
 };
 
 export const resetCronSuccessStartDate = async () => {
-  const CRON_NAME = "SheduleBioResync";
+  const CRON_NAME = 'SheduleBioResync';
   const startDate = new Date();
   const cron = await getCron({ name: CRON_NAME });
   if (cron.running) {
@@ -108,5 +102,4 @@ export const resetCronSuccessStartDate = async () => {
   await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
 };
 
-export const resetCronRunningState = async () =>
-  CronJobModel.updateMany({}, { running: false });
+export const resetCronRunningState = async (): Promise<unknown> => CronJobModel.updateMany({}, { running: false });

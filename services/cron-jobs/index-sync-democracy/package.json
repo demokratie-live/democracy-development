@@ -12,7 +12,7 @@
     "start": "node ./build/index.js"
   },
   "dependencies": {
-    "@democracy-deutschland/democracy-common": "^0.2.8"
+    "@democracy-deutschland/democracy-common": "*"
   },
   "devDependencies": {
     "ts-node-dev": "^1.0.0-pre.50",

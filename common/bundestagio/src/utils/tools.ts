@@ -1,9 +1,10 @@
-import { CronJobModel, ICronJob } from "../models";
-import { CronTime } from "cron";
+import { CronJobModel, ICronJob } from '../models';
+import { CronTime } from 'cron';
 
 export const testCronTime = (time: string) => {
   try {
-    const p = new CronTime(time); // eslint-disable-line no-unused-vars
+    const p = new CronTime(time);
+    console.log(`[Cronjob] Test CronTime:`, time, p);
   } catch (e) {
     return false;
   }
@@ -39,7 +40,7 @@ export const setCronStart = async ({
   await CronJobModel.findOneAndUpdate(
     { name },
     { lastStartDate: startDate, running },
-    { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
+    { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true },
   );
 };
 
@@ -54,11 +55,9 @@ export const setCronSuccess = async ({
   successDate?: Date;
   successStartDate: Date;
   running?: boolean;
-  data?: ICronJob["data"];
+  data?: ICronJob['data'];
 }) => {
-  console.info(
-    `[Cronjob][${name}] finished: ${successStartDate} - ${successDate}`
-  );
+  console.info(`[Cronjob][${name}] finished: ${successStartDate} - ${successDate}`);
   await CronJobModel.findOneAndUpdate(
     { name },
     {
@@ -67,7 +66,7 @@ export const setCronSuccess = async ({
       running,
       data,
     },
-    { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
+    { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true },
   );
 };
 
@@ -80,15 +79,14 @@ export const setCronError = async ({
   name: string;
   errorDate?: Date;
   running?: boolean;
-  error: any;
+  error: string;
 }) => {
   console.error(`[Cronjob][${name}] errored: ${error}`);
   await CronJobModel.findOneAndUpdate(
     { name },
     { lastErrorDate: errorDate, running, lastError: error },
-    { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
+    { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true },
   );
 };
 
-export const resetCronRunningState = async () =>
-  CronJobModel.updateMany({}, { running: false });
+export const resetCronRunningState = async (): Promise<unknown> => CronJobModel.updateMany({}, { running: false });
