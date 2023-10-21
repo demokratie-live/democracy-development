@@ -8,38 +8,14 @@ on:
       - 'master'
 
 jobs:
-  analyse-changed-packages:
-    runs-on: ubuntu-latest
-    outputs:
-      changedPackages: ${{ steps.changed-packages.outputs.CHANGED_PACKAGES }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
-
-      - run: |
-          SINCE=$(git rev-list --tags --max-count=1)
-          echo SINCE=$SINCE >> $GITHUB_OUTPUT
-          echo SINCE=$SINCE
-        id: since
-
-      - run: |
-          pnpm list -r --json --filter "...[$SINCE]" | jq '[.[] | select(.private == false) | {name, path}]' > ./tmp.json
-          CHANGED_PACKAGES=$(jq '[.[] | .name]' ./tmp.json)
-          echo CHANGED_PACKAGES=$CHANGED_PACKAGES  >> $GITHUB_OUTPUT
-          echo CHANGED_PACKAGES=$CHANGED_PACKAGES
-        id: changed-packages
-        env:
-          SINCE: ${{ steps.since.outputs.SINCE }}
+  analyse-changed-services:
+    uses: ./.github/workflows/get-changed-services.yaml
 
   build-and-push:
     uses: ./.github/workflows/build-and-push.yaml
-    needs: analyse-changed-packages
+    needs: analyse-changed-services
     with:
-      changedPackages: ${{ needs.analyse-changed-packages.outputs.changedPackages }}
+      changedPackages: ${{ needs.analyse-changed-services.outputs.CHANGED_PACKAGES }}
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
