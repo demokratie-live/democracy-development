@@ -2,3 +2,4 @@ packages:
   - 'services/**/*'
   - 'packages/**/*'
   - 'common/**/*'
+  - 'bundestag.io/**/*'
