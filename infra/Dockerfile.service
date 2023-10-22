@@ -4,6 +4,7 @@ FROM node:${NODE_VERSION}-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ARG  SERVICE
+ENV SERVICE ${SERVICE}
 ARG  SERVICE_PATH
 ENV SERVICE_PATH ${SERVICE_PATH}
 RUN corepack enable
@@ -46,9 +47,6 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 runuser
 USER runuser
  
-COPY --from=installer /app/$SERVICE_PATH/package.json .
-COPY --from=installer /app/node_modules ./node_modules
-RUN echo "COPY --from=installer --chown=runuser:nodejs /app/$SERVICE_PATH/build ./build"
-COPY --from=installer --chown=runuser:nodejs /app/$SERVICE_PATH/build ./build
+COPY --from=installer /app .
  
-CMD pnpm --cwd $SERVICE_PATH start
+CMD cd $SERVICE_PATH && pnpm start
