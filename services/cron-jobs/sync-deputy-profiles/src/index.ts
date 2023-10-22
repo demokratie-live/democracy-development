@@ -1,5 +1,5 @@
 import createClient from './graphql/client';
-import getDeputyUpdates from './graphql/queries/getDeputyUpdates';
+import { getDeputyUpdates } from './graphql/queries/getDeputyUpdates';
 import {
   DeputyModel,
   getCron,

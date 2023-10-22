@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
+import { DocumentNode } from 'graphql';
 
-export default gql`
+export const getDeputyUpdates: DocumentNode = gql`
   query DeputyUpdates($since: Date!, $limit: Int, $offset: Int) {
     deputyUpdates(since: $since, limit: $limit, offset: $offset) {
       beforeCount
