@@ -12,7 +12,7 @@
     "start": "node ./build/index.js"
   },
   "dependencies": {
-    "@democracy-deutschland/democracy-common": "*"
+    "@democracy-deutschland/democracy-common": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^15.6.0",
@@ -20,7 +20,7 @@
     "ts-node-dev": "^2.0.0",
     "ts-unused-exports": "^10.0.1",
     "tsup": "^7.2.0",
-    "tsup-config": "*",
+    "tsup-config": "workspace:*",
     "typescript": "^5.2.2"
   }
 }
