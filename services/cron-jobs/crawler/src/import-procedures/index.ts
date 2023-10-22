@@ -22,7 +22,11 @@ const error = debug('bundestag-io:import-procedures:error');
     withError = true;
     error(err);
     try {
-      await setCronError({ name: 'import-procedures', error: err });
+      if (typeof err === 'string') {
+        await setCronError({ name: 'import-procedures', error: err });
+      } else {
+        console.error(err);
+      }
     } catch (error) {
       console.error(error);
     }
