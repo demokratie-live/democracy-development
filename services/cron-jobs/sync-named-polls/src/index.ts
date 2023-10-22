@@ -3,7 +3,7 @@ import { forEachSeries } from 'p-iteration';
 
 // GraphQL
 import createClient from './graphql/client';
-import getNamedPollUpdates from './graphql/queries/getNamedPollUpdates';
+import { namedPollUpdates as getNamedPollUpdates } from './graphql/queries/getNamedPollUpdates';
 import {
   DeputyModel,
   getCron,
