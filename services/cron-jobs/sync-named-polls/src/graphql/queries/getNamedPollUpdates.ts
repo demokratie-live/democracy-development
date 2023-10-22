@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
+import { DocumentNode } from 'graphql';
 
-export default gql`
+export const namedPollUpdates: DocumentNode = gql`
   query NamedPollUpdates($since: Date!, $limit: Int, $offset: Int, $associated: Boolean) {
     namedPollUpdates(since: $since, limit: $limit, offset: $offset, associated: $associated) {
       beforeCount
