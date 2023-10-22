@@ -4,11 +4,11 @@
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "ts-node-dev -r dotenv/config ./src/index",
+    "dev": "tsup src/index.ts --watch --onSuccess 'node build/index.js'",
     "lint": "pnpm lint:ts && pnpm lint:exports",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
-    "build": "tsc",
+    "build": "tsup-node",
     "start": "node ./build/index.js",
     "apollo:codegen": "apollo client:codegen --target typescript --globalTypesFile=./src/__generated__/globalTypes.ts"
   },
@@ -27,6 +27,8 @@
     "dotenv": "^16.0.3",
     "ts-node-dev": "^2.0.0",
     "ts-unused-exports": "^9.0.2",
+    "tsup": "^7.2.0",
+    "tsup-config": "workspace:*",
     "typescript": "^5.2.2"
   }
 }
