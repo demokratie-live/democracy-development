@@ -2,11 +2,6 @@ node_modules
 git
 infra
 docker_volumes
-democracy
-data
-configuration
-common
-bundestag.io
 .vscode
 .turbo
 .github

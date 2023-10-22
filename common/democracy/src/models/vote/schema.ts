@@ -1,12 +1,12 @@
-import { Schema, Document, Types } from "mongoose";
-import { IProcedure } from "models/procedure";
-import { Phone } from "models/phone";
-import { Device } from "models/device";
+import { Schema, Document, Types } from 'mongoose';
+import { IProcedure } from '../procedure';
+import { Phone } from '../phone';
+import { Device } from '../device';
 
 export interface Vote extends Document {
   procedure: IProcedure | Types.ObjectId;
-  state: "VOTING" | "COMPLETED";
-  type: "Phone" | "Device";
+  state: 'VOTING' | 'COMPLETED';
+  type: 'Phone' | 'Device';
   voters: { voter: Types.ObjectId | Phone | Device }[];
   votes: {
     general: {
@@ -21,7 +21,7 @@ export interface Vote extends Document {
         no: number;
         abstain: number;
         _id: false;
-      }
+      },
     ];
     cache: {
       yes: number;
@@ -34,14 +34,12 @@ export interface Vote extends Document {
 const VoteSchema = new Schema<Vote>({
   procedure: {
     type: Schema.Types.ObjectId,
-    ref: "Procedure",
+    ref: 'Procedure',
     required: true,
   },
-  state: { type: String, enum: ["VOTING", "COMPLETED"], required: true },
-  type: { type: String, enum: ["Phone", "Device"], required: true },
-  voters: [
-    { voter: { type: Schema.Types.ObjectId, refPath: "type" }, _id: false },
-  ],
+  state: { type: String, enum: ['VOTING', 'COMPLETED'], required: true },
+  type: { type: String, enum: ['Phone', 'Device'], required: true },
+  voters: [{ voter: { type: Schema.Types.ObjectId, refPath: 'type' }, _id: false }],
   votes: {
     general: {
       yes: { type: Number, default: 0 },
@@ -66,13 +64,7 @@ const VoteSchema = new Schema<Vote>({
 });
 
 VoteSchema.index({ procedure: 1, state: 1, type: 1 }, { unique: true });
-VoteSchema.index(
-  { procedure: 1, type: 1, "voters.voter": 1 },
-  { unique: true }
-);
-VoteSchema.index(
-  { _id: 1, "votes.constituencies.constituency": 1 },
-  { unique: true }
-);
+VoteSchema.index({ procedure: 1, type: 1, 'voters.voter': 1 }, { unique: true });
+VoteSchema.index({ _id: 1, 'votes.constituencies.constituency': 1 }, { unique: true });
 
 export default VoteSchema;
