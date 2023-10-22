@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.12](https://github.com/demokratie-live/democracy-development/compare/queue-pushs-vote-top-100@v0.1.11...queue-pushs-vote-top-100@v0.1.12) (2023-10-22)
+
+
+* 📦️ add and use tsconfig package ([9cc78ef](https://github.com/demokratie-live/democracy-development/commit/9cc78efa450817dbbb6317bcda49faca66a91c28))
+
 ## [0.1.11](https://github.com/demokratie-live/democracy-development/compare/queue-pushs-vote-top-100@v0.1.10...queue-pushs-vote-top-100@v0.1.11) (2023-10-22)
 
 

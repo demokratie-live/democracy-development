@@ -1,6 +1,6 @@
 {
   "name": "queue-pushs-vote-top-100",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
