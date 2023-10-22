@@ -136,7 +136,7 @@ jobs:
         if: inputs.releaseVersion == 'auto'
         id: determine_next_version
         run: |
-          nextVersion=`pnpm dlx commit-and-tag-version --path . -t $MATRIX_PACKAGE@v --dry-run | sed -n '/^---$/,/^---$/p' | grep -P -o '(\d+\.)(\d+\.)(\d)' | head -n 1`
+          nextVersion=`pnpm dlx commit-and-tag-version --path . -t $MATRIX_PACKAGE@v --dry-run | sed -n '/^---$/,/^---$/p' | grep -P -o '(\d+\.)(\d+\.)(\d+)' | head -n 1`
           echo "$nextVersion"
           echo "NEXT_VERSION=$nextVersion" >> $GITHUB_OUTPUT
         working-directory: ${{ steps.get-directory.outputs.directory }}
