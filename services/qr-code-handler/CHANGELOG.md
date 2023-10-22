@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.9](https://github.com/demokratie-live/democracy-development/compare/qr-code-handler@v1.0.8...qr-code-handler@v1.0.9) (2023-10-22)
+
+
+* 📦️ add common packages ([ffaac73](https://github.com/demokratie-live/democracy-development/commit/ffaac738ab8bd2376bdc6f792c741a51df253002))
+* 📦️ use workspace:* instead of * for local package references ([cfc139e](https://github.com/demokratie-live/democracy-development/commit/cfc139e62c56dcd67c363d45227bb7675acb863a))
+
 ## [1.0.8](https://github.com/demokratie-live/democracy-development/compare/qr-code-handler@v1.0.2...qr-code-handler@v1.0.8) (2023-10-21)
 
 
