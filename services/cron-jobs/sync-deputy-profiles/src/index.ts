@@ -1,4 +1,3 @@
-import { mongoConnect, mongoDisconnect } from './mongoose';
 import createClient from './graphql/client';
 import getDeputyUpdates from './graphql/queries/getDeputyUpdates';
 import {
@@ -9,6 +8,7 @@ import {
   setCronError,
   convertPartyName,
   IDeputy,
+  mongoConnect,
 } from '@democracy-deutschland/democracy-common';
 import { forEachSeries } from 'p-iteration';
 import { DeputyUpdates, DeputyUpdatesVariables } from './graphql/queries/__generated__/DeputyUpdates';
@@ -119,8 +119,5 @@ const start = async () => {
   await mongoConnect();
   console.log('procedures', await DeputyModel.countDocuments({}));
   await start();
-  await mongoDisconnect();
-})().catch(async (e) => {
-  await mongoDisconnect();
-  throw e;
-});
+  process.exit(0);
+})();

@@ -1,9 +1,8 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import moment from 'moment';
-import { PlenaryMinuteModel } from '@democracy-deutschland/bundestagio-common';
+import { PlenaryMinuteModel, mongoConnect } from '@democracy-deutschland/bundestagio-common';
 
-import { mongoConnect, mongoDisconnect } from './mongoose';
 import { MetaData, PlenaryMinutesItem } from './types';
 
 const AxiosInstance = axios.create();
@@ -40,7 +39,7 @@ const getPlenaryMinutes = (plenaryMinutes: cheerio.Cheerio): PlenaryMinutesItem[
       meeting: string;
       date: string;
     };
-    var m = moment(match.date, 'DD MMMM YYYY', 'de');
+    const m = moment(match.date, 'DD MMMM YYYY', 'de');
 
     // Parse link
     const xmlLink = cheerio(elem).find('.bt-link-dokument').attr('href');
@@ -108,8 +107,6 @@ const start = async () => {
   }
   await mongoConnect();
   console.log('PlenaryMinutes', await PlenaryMinuteModel.countDocuments({}));
-  await start().catch(() => {
-    process.exit(1);
-  });
+  await start();
   process.exit(0);
-})().finally(mongoDisconnect);
+})();

@@ -1,10 +1,10 @@
-import mongoConnect from './mongoose';
 import {
   ProcedureModel,
   NamedPollModel,
   setCronStart,
   setCronSuccess,
   setCronError,
+  mongoConnect,
 } from '@democracy-deutschland/bundestagio-common';
 import { CRON_NAME } from './constants';
 import { crawl } from './crawler';
@@ -56,6 +56,6 @@ const start = async () => {
   }
   await mongoConnect();
   console.log('procedures', await ProcedureModel.countDocuments({}));
-  await start().catch(() => process.exit(1));
+  await start();
   process.exit(0);
 })();

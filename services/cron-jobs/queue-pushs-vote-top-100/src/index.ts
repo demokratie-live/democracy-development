@@ -1,4 +1,3 @@
-import mongoConnect from './mongoose';
 import moment from 'moment';
 import { DEV_MODE } from './config';
 
@@ -14,6 +13,7 @@ import {
   VoteModel,
   PushNotificationModel,
   Device,
+  mongoConnect,
 } from '@democracy-deutschland/democracy-common';
 
 const start = async () => {
@@ -26,7 +26,6 @@ const start = async () => {
   const CRON_NAME = 'queuePushsVoteTop100';
   const startDate = new Date();
   await setCronStart({ name: CRON_NAME, startDate });
-  const tokensQueued: string[] = [];
   let counter = 0,
     multipleTokens = 0,
     alreadyInQueue = 0,
@@ -76,7 +75,7 @@ const start = async () => {
 
   // loop through the TOP100
   let topId = 0;
-  for (let procedure of top100Procedures) {
+  for (const procedure of top100Procedures) {
     topId++;
     console.log(`# PROCEDURE: ${procedure.procedureId} - ${procedure.title}`);
 
@@ -112,7 +111,7 @@ const start = async () => {
     /** delete alreadyPushedDevices for memory */
     alreadyPushedDevices = [];
 
-    for (let device of filteredDevices) {
+    for (const device of filteredDevices) {
       deviceIndex++;
       if (deviceIndex % 1000 === 0) {
         console.log(`${procedure.procedureId} - ${procedure.title}`, {
@@ -155,8 +154,8 @@ const start = async () => {
         continue;
       }
       // Check if we sent the user a notifiation in the past time on that procedure
-      let tokens: Device['pushTokens'] = [];
-      for (let token of device.pushTokens) {
+      const tokens: Device['pushTokens'] = [];
+      for (const token of device.pushTokens) {
         const pastPushs = await PushNotificationModel.countDocuments({
           category: PUSH_CATEGORY.TOP100,
           procedureIds: procedure.procedureId,
@@ -235,12 +234,12 @@ const start = async () => {
     throw new Error('you have to set environment variable: DB_URL');
   }
   await mongoConnect();
-  let devices = await DeviceModel.countDocuments({
+  const devices = await DeviceModel.countDocuments({
     'notificationSettings.enabled': true,
     'notificationSettings.voteTOP100Pushs': true,
     pushTokens: { $gt: [] },
   });
   console.info('devices with top 100 push', devices);
-  await start().catch(() => process.exit(1));
+  await start();
   process.exit(0);
 })();

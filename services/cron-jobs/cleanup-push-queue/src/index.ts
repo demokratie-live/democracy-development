@@ -1,12 +1,12 @@
-import { mongoConnect, mongoDisconnect } from "./mongoose";
 import {
   DeviceModel,
   PushNotificationModel,
   PUSH_CATEGORY,
   setCronStart,
   setCronSuccess,
-} from "@democracy-deutschland/democracy-common";
-import { DB_URL, ENTRY_PERSIST_MILLISECONDS } from "./config";
+} from '@democracy-deutschland/democracy-common';
+import { DB_URL, ENTRY_PERSIST_MILLISECONDS } from './config';
+import { mongoConnect } from '@democracy-deutschland/democracy-common';
 
 /*
   This service cleanes up the democrac.pushnotifications collection:
@@ -18,18 +18,12 @@ import { DB_URL, ENTRY_PERSIST_MILLISECONDS } from "./config";
 
 const cleanupPushQueue = async () => {
   // if ENTRY_PERSIST_MILLISECONDS is set, entries will persist
-  const updatedAt = ENTRY_PERSIST_MILLISECONDS
-    ? { $lt: new Date(Date.now() - ENTRY_PERSIST_MILLISECONDS) }
-    : undefined;
+  const updatedAt = ENTRY_PERSIST_MILLISECONDS ? { $lt: new Date(Date.now() - ENTRY_PERSIST_MILLISECONDS) } : undefined;
 
   const oldPushs = await PushNotificationModel.deleteMany({
     sent: true,
     category: {
-      $in: [
-        PUSH_CATEGORY.CONFERENCE_WEEK,
-        PUSH_CATEGORY.CONFERENCE_WEEK_VOTE,
-        PUSH_CATEGORY.OUTCOME,
-      ],
+      $in: [PUSH_CATEGORY.CONFERENCE_WEEK, PUSH_CATEGORY.CONFERENCE_WEEK_VOTE, PUSH_CATEGORY.OUTCOME],
     },
     ...(updatedAt && { updatedAt }),
   });
@@ -38,15 +32,15 @@ const cleanupPushQueue = async () => {
 };
 
 const cleanupDuplicateTop100 = async () => {
-  console.log("#start cleanupDuplicateTop100");
+  console.log('#start cleanupDuplicateTop100');
 
-  const procedureIds = await PushNotificationModel.distinct("procedureIds");
+  const procedureIds = await PushNotificationModel.distinct('procedureIds');
 
   let totalDups = 0;
   let counter = 0;
-  for (let procedureId of procedureIds) {
+  for (const procedureId of procedureIds) {
     counter++;
-    console.log(" # ## # #", procedureId, `${counter}/${procedureIds.length}`);
+    console.log(' # ## # #', procedureId, `${counter}/${procedureIds.length}`);
     const duplicates = await PushNotificationModel.aggregate<{
       type: string;
       category: string;
@@ -56,7 +50,7 @@ const cleanupDuplicateTop100 = async () => {
       time: Date;
       token: string;
       os: string;
-      _id: import("mongoose").Types.ObjectId;
+      _id: import('mongoose').Types.ObjectId;
       createdAt: Date;
       updatedAt: Date;
       __v: number;
@@ -65,24 +59,24 @@ const cleanupDuplicateTop100 = async () => {
     }>([
       {
         $match: {
-          category: "top100",
+          category: 'top100',
           procedureIds: procedureId,
         },
       },
       {
-        $unwind: "$procedureIds",
+        $unwind: '$procedureIds',
       },
       {
         $group: {
           _id: {
-            token: "$token",
-            procedureId: "$procedureIds",
+            token: '$token',
+            procedureId: '$procedureIds',
           },
           count: {
             $sum: 1,
           },
           doc: {
-            $first: "$$ROOT",
+            $first: '$$ROOT',
           },
         },
       },
@@ -91,9 +85,9 @@ const cleanupDuplicateTop100 = async () => {
           newRoot: {
             $mergeObjects: [
               {
-                count: "$count",
+                count: '$count',
               },
-              "$doc",
+              '$doc',
             ],
           },
         },
@@ -112,20 +106,20 @@ const cleanupDuplicateTop100 = async () => {
       },
     ]);
 
-    for (let push of duplicates) {
+    for (const push of duplicates) {
       const dups = await PushNotificationModel.deleteMany({
-        category: "top100",
+        category: 'top100',
         procedureIds: push.procedureIds,
         token: push.token,
         _id: { $ne: push._id },
       });
-      process.stdout.write(".");
+      process.stdout.write('.');
       totalDups += dups?.deletedCount || 0;
     }
-    process.stdout.write("\n");
+    process.stdout.write('\n');
   }
   console.log(`removed duplicate top100 pushs: ${totalDups}`);
-  console.log("#finish cleanupDuplicateTop100");
+  console.log('#finish cleanupDuplicateTop100');
 };
 
 const removeDuplicateTokens = async () => {
@@ -135,15 +129,15 @@ const removeDuplicateTokens = async () => {
   }>([
     {
       $project: {
-        "pushTokens.token": 1,
+        'pushTokens.token': 1,
       },
     },
     {
-      $unwind: "$pushTokens",
+      $unwind: '$pushTokens',
     },
     {
       $group: {
-        _id: "$pushTokens.token",
+        _id: '$pushTokens.token',
         count: {
           $sum: 1,
         },
@@ -160,45 +154,43 @@ const removeDuplicateTokens = async () => {
 
   console.log(`found ${duplicatedTokens.length} devices with duplicate tokens`);
 
-  for (let duplicateToken of duplicatedTokens) {
+  for (const duplicateToken of duplicatedTokens) {
     const devices = await DeviceModel.find(
       {
         pushTokens: { $elemMatch: { token: duplicateToken._id } },
       },
       {},
-      { sort: { createdAt: 1 } }
+      { sort: { createdAt: 1 } },
     );
     /** Remove duplicate tokens from device */
-    for (let device of devices) {
+    for (const device of devices) {
       if (device) {
         device.pushTokens = device.pushTokens.filter(
-          (elem, index) =>
-            device.pushTokens.findIndex((obj) => obj.token === elem.token) ===
-            index
+          (elem, index) => device.pushTokens.findIndex((obj) => obj.token === elem.token) === index,
         );
         await device.save();
       }
-      process.stdout.write(".");
+      process.stdout.write('.');
     }
 
     /** Remove tokens from old devices */
     devices.pop();
-    for (let device of devices) {
+    for (const device of devices) {
       device.pushTokens.filter(({ token }) => token !== duplicateToken._id);
       await device.save();
     }
   }
 
-  process.stdout.write("\n");
+  process.stdout.write('\n');
 };
 
 (async () => {
   if (!DB_URL) {
-    throw new Error("you have to set environment variable: DB_URL");
+    throw new Error('you have to set environment variable: DB_URL');
   }
   await mongoConnect();
 
-  const CRON_NAME = "cleanup-push-queue";
+  const CRON_NAME = 'cleanup-push-queue';
   const startDate = new Date();
   await setCronStart({ name: CRON_NAME, startDate });
 
@@ -212,8 +204,5 @@ const removeDuplicateTokens = async () => {
   await removeDuplicateTokens();
 
   await setCronSuccess({ name: CRON_NAME, successStartDate: startDate });
-  await mongoDisconnect();
-})().catch(async (e) => {
-  await mongoDisconnect();
-  throw e;
-});
+  process.exit(0);
+})();

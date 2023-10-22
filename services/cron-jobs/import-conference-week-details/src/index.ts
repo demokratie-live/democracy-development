@@ -1,5 +1,4 @@
-import { mongoConnect, mongoDisconnect } from './mongoose';
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ConferenceWeekDetailScraper } from '@democracy-deutschland/scapacra-bt';
 import { Scraper } from '@democracy-deutschland/scapacra';
 import url from 'url';
@@ -17,6 +16,7 @@ import {
   setCronError,
   ConferenceWeekDetailModel,
   ConferenceWeeCronJobkData,
+  mongoConnect,
 } from '@democracy-deutschland/bundestagio-common';
 
 const CRON_NAME = 'ConferenceWeekDetails';
@@ -240,8 +240,5 @@ const start = async () => {
   await mongoConnect();
   console.log('procedures', await ProcedureModel.countDocuments({}));
   await start();
-  await mongoDisconnect();
-})().catch(async (e) => {
-  await mongoDisconnect();
-  throw e;
-});
+  process.exit(0);
+})();
