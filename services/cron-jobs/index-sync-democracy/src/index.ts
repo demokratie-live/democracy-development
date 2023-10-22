@@ -1,5 +1,3 @@
-import { mongoConnect, mongoDisconnect } from './mongoose';
-
 import {
   ActivityModel,
   CronJobModel,
@@ -12,6 +10,7 @@ import {
   UserModel,
   VerificationModel,
   VoteModel,
+  mongoConnect,
 } from '@democracy-deutschland/democracy-common';
 
 const start = async () => {
@@ -38,11 +37,6 @@ const start = async () => {
   }
   await mongoConnect();
   console.log('cronjobs', await CronJobModel.countDocuments({}));
-  await start().catch((e) => {
-    console.log(e);
-    process.exit(1);
-  });
+  await start();
   process.exit(0);
-})().finally(() => {
-  mongoDisconnect();
-});
+})();

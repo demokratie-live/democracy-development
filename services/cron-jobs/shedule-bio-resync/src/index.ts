@@ -1,6 +1,4 @@
-import { mongoConnect, mongoDisconnect } from './mongoose';
-
-import { ProcedureModel, resetCronSuccessStartDate } from '@democracy-deutschland/democracy-common';
+import { ProcedureModel, mongoConnect, resetCronSuccessStartDate } from '@democracy-deutschland/democracy-common';
 
 const start = async () => {
   await resetCronSuccessStartDate();
@@ -14,6 +12,6 @@ const start = async () => {
   }
   await mongoConnect();
   console.log('procedures', await ProcedureModel.countDocuments({}));
-  await start().catch(() => process.exit(1));
+  await start();
   process.exit(0);
-})().finally(() => mongoDisconnect());
+})();

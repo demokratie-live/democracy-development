@@ -1,10 +1,10 @@
-import { mongoConnect, mongoDisconnect } from './mongoose';
 import { CRON_SEND_QUED_PUSHS_LIMIT } from './config';
 import {
   setCronStart,
   setCronSuccess,
   PushNotificationModel,
   DeviceModel,
+  mongoConnect,
 } from '@democracy-deutschland/democracy-common';
 import admin from 'firebase-admin';
 
@@ -94,10 +94,6 @@ const start = async () => {
 (async () => {
   await mongoConnect();
   console.log("outstanding push's", await PushNotificationModel.countDocuments({ sent: false }));
-  await start().catch((e) => {
-    throw e;
-  });
+  await start();
   process.exit(0);
-})().finally(() => {
-  mongoDisconnect();
-});
+})();

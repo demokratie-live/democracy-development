@@ -1,4 +1,3 @@
-import { mongoConnect, mongoDisconnect } from './mongoose';
 import { unionBy } from 'lodash';
 import { forEachSeries } from 'p-iteration';
 
@@ -12,6 +11,7 @@ import {
   setCronSuccess,
   setCronError,
   VoteSelection,
+  mongoConnect,
 } from '@democracy-deutschland/democracy-common';
 import { NamedPollUpdates, NamedPollUpdatesVariables } from './graphql/queries/__generated__/NamedPollUpdates';
 
@@ -145,12 +145,5 @@ const start = async () => {
   await mongoConnect();
   console.log('deputies', await DeputyModel.countDocuments({}));
   await start();
-  await mongoDisconnect();
-})()
-  .catch(async (e) => {
-    await mongoDisconnect();
-    throw e;
-  })
-  .finally(() => {
-    process.exit(0);
-  });
+  process.exit(0);
+})();

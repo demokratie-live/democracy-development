@@ -1,4 +1,3 @@
-import { mongoConnect, mongoDisconnect } from './mongoose';
 import _ from 'lodash';
 import moment from 'moment';
 import { forEachSeries } from 'p-iteration';
@@ -21,6 +20,7 @@ import {
   IProcedure,
   PartyVotes,
   ProcedureDocument,
+  mongoConnect,
 } from '@democracy-deutschland/democracy-common';
 
 // Queries
@@ -322,10 +322,7 @@ const start = async () => {
     throw new Error('you have to set environment variable: BUNDESTAGIO_SERVER_URL & DB_URL');
   }
   await mongoConnect();
-  console.log('procedures', await ProcedureModel.countDocuments({}));
   await start();
-  await mongoDisconnect();
-})().catch(async (e) => {
-  await mongoDisconnect();
-  throw e;
-});
+  console.info('END');
+  process.exit();
+})();

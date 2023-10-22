@@ -1,4 +1,3 @@
-import { mongoConnect, mongoDisconnect } from './mongoose';
 import url from 'url';
 
 import {
@@ -7,6 +6,7 @@ import {
   setCronError,
   DeputyModel,
   IDeputy,
+  mongoConnect,
 } from '@democracy-deutschland/bundestagio-common';
 import scrapeIt from 'scrape-it';
 import { IDeputyLink } from '@democracy-deutschland/bundestagio-common/dist/models/Deputy/Deputy/Link';
@@ -74,7 +74,7 @@ const start = async () => {
             },
           },
         },
-      }).then(async ({ data: deputyList, response }) => {
+      }).then(async ({ data: deputyList }) => {
         for (const deputyListItem of deputyList.deputies) {
           await scrapeIt<Omit<IDeputy, 'URL' | 'webId' | 'period'>>(encodeURI(deputyListItem.URL), {
             imgURL: {
@@ -117,8 +117,8 @@ const start = async () => {
               selector: '.bt-wk-map a',
               attr: 'title',
               convert: (text: string) => {
-                var rx = /Wahlkreis (\d{3})/;
-                var arr = rx.exec(text);
+                const rx = /Wahlkreis (\d{3})/;
+                const arr = rx.exec(text);
                 return arr?.[1];
               },
             },
@@ -126,8 +126,8 @@ const start = async () => {
               selector: '.bt-wk-map a',
               attr: 'title',
               convert: (text: string) => {
-                var rx = /Wahlkreis \d{3}: (.*?)$/;
-                var arr = rx.exec(text);
+                const rx = /Wahlkreis \d{3}: (.*?)$/;
+                const arr = rx.exec(text);
                 return arr?.[1];
               },
             },
@@ -135,7 +135,7 @@ const start = async () => {
               selector: 'div:has(>#bt-landesliste-collapse) > div:first-child h4',
               convert: (text: string) => text === 'Direkt gewählt',
             },
-          }).then(async ({ data: deputyData, response }) => {
+          }).then(async ({ data: deputyData }) => {
             const deputy = {
               period,
               URL: deputyListItem.URL,
@@ -179,8 +179,5 @@ const start = async () => {
   await mongoConnect();
   console.log('deputies', await DeputyModel.countDocuments({}));
   await start();
-  await mongoDisconnect();
-})().catch(async (e) => {
-  await mongoDisconnect();
-  throw e;
-});
+  process.exit(0);
+})();

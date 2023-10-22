@@ -1,4 +1,3 @@
-import { mongoConnect, mongoDisconnect } from './mongoose';
 import moment from 'moment';
 
 import {
@@ -12,6 +11,7 @@ import {
   UserModel,
   VoteModel,
   PushNotificationModel,
+  mongoConnect,
 } from '@democracy-deutschland/democracy-common';
 
 import { filterSeries, reduce } from 'p-iteration';
@@ -150,8 +150,6 @@ const start = async () => {
   }
   await mongoConnect();
   console.log('procedures', await ProcedureModel.countDocuments({}));
-  await start().catch(() => process.exit(1));
+  await start();
   process.exit(0);
-})().finally(() => {
-  mongoDisconnect();
-});
+})();
