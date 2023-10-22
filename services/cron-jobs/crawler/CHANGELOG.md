@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.13](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.0.12...crawler@v1.0.13) (2023-10-22)
+
+
+* 📦️ add and use tsconfig package ([9cc78ef](https://github.com/demokratie-live/democracy-development/commit/9cc78efa450817dbbb6317bcda49faca66a91c28))
+
 ## [1.0.12](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.0.10...crawler@v1.0.12) (2023-10-22)
 
 
