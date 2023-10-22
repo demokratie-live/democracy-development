@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
-    "@democracy-deutschland/bundestagio-common": "*",
+    "@democracy-deutschland/bundestagio-common": "workspace:*",
     "debug": "^4.3.1",
     "dotenv": "^10.0.0",
     "graphql": "^15.5.0",
@@ -35,7 +35,7 @@
     "ts-jest": "^27.0.3",
     "ts-node-dev": "^1.1.6",
     "tsup": "^7.2.0",
-    "tsup-config": "*",
+    "tsup-config": "workspace:*",
     "typescript": "^5.2.2"
   }
 }

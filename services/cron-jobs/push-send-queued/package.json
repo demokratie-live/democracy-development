@@ -13,7 +13,7 @@
     "apollo:codegen": "apollo client:codegen --target typescript --globalTypesFile=./src/__generated__/globalTypes.ts"
   },
   "dependencies": {
-    "@democracy-deutschland/democracy-common": "*",
+    "@democracy-deutschland/democracy-common": "workspace:*",
     "apn": "^2.2.0",
     "axios": "^1.2.3",
     "firebase-admin": "^11.5.0",
