@@ -1,8 +1,10 @@
-schema: http://localhost:4000/
+overwrite: true
+schema: './src/graphql/schemas/*.graphql'
+# documents: './src/**/*.graphql'
 generates:
-  ./src/graphql/resolvers/types.ts:
-    config:
-      contextType: ../../types/graphqlContext#GraphQlContext
+  ./src/generated/graphql.ts:
     plugins:
-      - typescript
-      - typescript-resolvers
+      - 'typescript'
+      - 'codegen/typedefs.js'
+      - 'typescript-operations'
+      - 'typescript-resolvers'

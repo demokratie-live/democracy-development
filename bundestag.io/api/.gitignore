@@ -4,3 +4,4 @@ diffs/*
 .env*
 !.env.example
 built
+generated

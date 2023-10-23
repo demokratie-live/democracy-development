@@ -1,24 +1,22 @@
-export default `
-
 type ConferenceWeekDetailSessionTopTopic {
-    lines: [String]
-    documents: [String],
-    isVote: Boolean
-    procedureIds: [String]
+  lines: [String]
+  documents: [String]
+  isVote: Boolean
+  procedureIds: [String]
 }
 
 type ConferenceWeekDetailSessionTopStatus {
-    line: String
-    documents: [String]
+  line: String
+  documents: [String]
 }
 
 type ConferenceWeekDetailSessionTop {
-    time: Date
-    top: String
-    heading: String
-    article: String
-    topic: [ConferenceWeekDetailSessionTopTopic]
-    status: [ConferenceWeekDetailSessionTopStatus]
+  time: Date
+  top: String
+  heading: String
+  article: String
+  topic: [ConferenceWeekDetailSessionTopTopic]
+  status: [ConferenceWeekDetailSessionTopStatus]
 }
 
 type ConferenceWeekDetailSession {
@@ -44,4 +42,3 @@ type Query {
   conferenceWeekDetail(year: Int!, week: Int!): ConferenceWeekDetail
   conferenceWeekDetails(limit: Int, offset: Int): [ConferenceWeekDetail]
 }
-`;

@@ -1,61 +1,43 @@
-import { defaultFieldResolver } from 'graphql';
-import { Log } from '../../services/logger';
-import { SchemaDirectiveVisitor } from 'apollo-server-express';
+import { defaultFieldResolver, GraphQLSchema } from 'graphql';
+import { getDirective, MapperKind, mapSchema } from '@graphql-tools/utils';
 
-class AuthDirective extends SchemaDirectiveVisitor {
-  visitObject(type): void {
-    this.ensureFieldsWrapped(type);
-    type._requiredAuthRole = this.args.requires;
-  }
+const directiveTypeDefs = `
+directive @auth( 
+    requires: Role = USER 
+) on FIELD_DEFINITION 
 
-  // Visitor methods for nested types like fields and arguments
-  // also receive a details object that provides information about
-  // the parent and grandparent types.
-  visitFieldDefinition(field, details) {
-    this.ensureFieldsWrapped(details.objectType);
-    field._requiredAuthRole = this.args.requires;
-  }
-
-  ensureFieldsWrapped(objectType) {
-    // Mark the GraphQLObjectType object to avoid re-wrapping:
-    if (objectType._authFieldsWrapped) return;
-    objectType._authFieldsWrapped = true;
-
-    const fields = objectType.getFields();
-    Object.keys(fields).forEach((fieldName) => {
-      const field = fields[fieldName];
-      const { resolve = defaultFieldResolver } = field;
-
-      field.resolve = async (...args) => {
-        // Get the required Role from the field first, falling back
-        // to the objectType if no Role is required by the field:
-        const requiredRole = field._requiredAuthRole || objectType._requiredAuthRole;
-
-        if (!requiredRole) {
-          return resolve.apply(this, args);
-        }
-
-        const [, , context] = args;
-        let allow = true;
-        if (requiredRole === 'BACKEND') {
-          if (
-            !context.req.headers['bio-auth-token'] ||
-            context.req.headers['bio-auth-token'] !== process.env.BIO_EDIT_TOKEN
-          ) {
-            Log.warn(
-              `Connection to Bio blocked from ${context.req.connection.remoteAddress} for role 'BACKEND'`,
-            );
-            allow = false;
-          }
-        }
-        if (!allow) {
-          throw new Error(`not authorized ${context.req.connection.remoteAddress}`);
-        }
-
-        return resolve.apply(this, args);
-      };
-    });
-  }
+enum Role { 
+    BACKEND 
+    USER 
 }
+`;
 
-export default AuthDirective;
+const hasPermissions = (context, role) =>
+  context.req.headers['bio-auth-token'] &&
+  context.req.headers['bio-auth-token'] === process.env.BIO_EDIT_TOKEN;
+
+export const authDirective = (directiveName: string) => {
+  return {
+    authDirectiveTypeDefs: directiveTypeDefs,
+    authDirectiveTransformer: (schema: GraphQLSchema) =>
+      mapSchema(schema, {
+        [MapperKind.OBJECT_FIELD](fieldConfig) {
+          const authDirective = getDirective(schema, fieldConfig, directiveName)?.[0];
+          if (authDirective) {
+            const { resolve = defaultFieldResolver } = fieldConfig;
+            console.log(authDirective);
+            const { requires } = authDirective;
+            fieldConfig.resolve = async (parent, args, context, info) => {
+              console.log(hasPermissions(context, requires));
+              if (!hasPermissions(context, requires)) {
+                throw new Error('You have not enough permissions!');
+              }
+              const result = await resolve(parent, args, context, info);
+              return result;
+            };
+            return fieldConfig;
+          }
+        },
+      }),
+  };
+};

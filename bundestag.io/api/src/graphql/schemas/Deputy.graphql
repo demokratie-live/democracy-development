@@ -1,5 +1,3 @@
-export default `
-
 type DeputyLink {
   name: String!
   URL: String!
@@ -8,7 +6,7 @@ type DeputyLink {
 
 type DeputyFunctions {
   category: String
-  functions: [String],
+  functions: [String]
 }
 
 type Deputy {
@@ -24,8 +22,8 @@ type Deputy {
   biography: [String]
   constituency: String
   constituencyName: String
-  directCandidate: Boolean,
-  functions: [DeputyFunctions],
+  directCandidate: Boolean
+  functions: [DeputyFunctions]
   speechesURL: String
   votesURL: String
   publicationRequirement: [String]
@@ -44,4 +42,3 @@ type Query {
   deputies(limit: Int, offset: Int): [Deputy]
   deputyUpdates(since: Date!, limit: Int, offset: Int): DeputyUpdate
 }
-`;

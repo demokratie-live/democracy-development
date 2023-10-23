@@ -1,5 +1,3 @@
-export default `
-
 type NamedPollMediaVideoURL {
   URL: String
   description: String
@@ -79,4 +77,3 @@ type Query {
   namedPolls(limit: Int, offset: Int): [NamedPoll]
   namedPollUpdates(since: Date!, limit: Int, offset: Int, associated: Boolean): NamedPollUpdate
 }
-`;

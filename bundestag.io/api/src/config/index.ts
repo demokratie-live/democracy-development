@@ -10,7 +10,7 @@ const requiredConfigs = {
 
 const recommendedConfigs = {
   // No correct default Values
-  PORT: process.env.PORT || 3100,
+  PORT: Number(process.env.PORT || 3100),
   DB_URL: process.env.DB_URL || 'mongodb://localhost:27017/bundestagio',
   ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL || 'elasticsearch',
   PERIODS: process.env.PERIODS ? process.env.PERIODS.split(',') : ['Alle'],
