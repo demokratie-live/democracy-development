@@ -1,47 +1,22 @@
-import { ApolloServer } from 'apollo-server-express';
-
-// Models
-import {
-  ProcedureModel,
-  UserModel,
-  DeputyModel,
-  NamedPollModel,
-  ConferenceWeekDetailModel,
-  PlenaryMinuteModel,
-} from '@democracy-deutschland/bundestagio-common';
-
-import CONFIG from '../../config';
-
-import typeDefs from '../../graphql/schemas';
+import { ApolloServer } from '@apollo/server';
+import { GraphQlContext } from '../../types/graphqlContext';
+import { authDirective } from '../../graphql/schemaDirectives/auth';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import { typeDefs as typeDefsBase } from '../../generated/graphql';
 import resolvers from '../../graphql/resolvers';
-import schemaDirectives from '../../graphql/schemaDirectives';
+import { mergeTypeDefs } from '@graphql-tools/merge';
 
-export const graphql = new ApolloServer({
-  engine: CONFIG.ENGINE_API_KEY
-    ? {
-        apiKey: CONFIG.ENGINE_API_KEY,
-        // Send params and headers to engine
-        privateVariables: !CONFIG.ENGINE_DEBUG_MODE,
-        privateHeaders: !CONFIG.ENGINE_DEBUG_MODE,
-      }
-    : false,
+const typeDefsAuth = authDirective('auth').authDirectiveTypeDefs;
+
+const typeDefs = mergeTypeDefs([typeDefsBase, typeDefsAuth]);
+
+const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
-  schemaDirectives,
+});
+
+export const server = new ApolloServer<GraphQlContext>({
+  schema: authDirective('auth').authDirectiveTransformer(schema),
+  // schema,
   introspection: true,
-  playground: true,
-  context: ({ req, res }) => ({
-    // Connection
-    req,
-    res,
-    // user
-    user: (req as any).user,
-    // Models
-    ProcedureModel,
-    UserModel,
-    DeputyModel,
-    NamedPollModel,
-    ConferenceWeekDetailModel,
-    PlenaryMinuteModel,
-  }),
 });

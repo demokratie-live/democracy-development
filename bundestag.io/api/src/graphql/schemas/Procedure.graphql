@@ -1,8 +1,6 @@
-export default `
-
 type FilteredConferenceWeekDetailSessionTopTopic {
   lines: [String]
-  documents: [String],
+  documents: [String]
   isVote: Boolean
   procedureId: String
 }
@@ -132,16 +130,47 @@ type VoteResultTexts {
 
 type Query {
   procedure(procedureId: String!): Procedure
-  procedures(offset: Int, period: [Int!], type: [String!], IDs: [String!], status: [String!], voteDate: [Boolean!], manageVoteDate: Boolean, limit: Int, offset: Int): [Procedure]
+  procedures(
+    offset: Int
+    period: [Int!]
+    type: [String!]
+    IDs: [String!]
+    status: [String!]
+    voteDate: [Boolean!]
+    manageVoteDate: Boolean
+    limit: Int
+    offset: Int
+  ): [Procedure]
   allProcedures(offset: Int, period: [Int!], type: [String!]): [Procedure]
-  procedureUpdates(since: Date!, limit: Int, offset: Int, periods: [Int!], types: [String!]): ProcedureUpdate
+  procedureUpdates(
+    since: Date!
+    limit: Int
+    offset: Int
+    periods: [Int!]
+    types: [String!]
+  ): ProcedureUpdate
   voteResultTextHelper(procedureId: String!): [VoteResultTexts!]
-  proceduresData(offset: Int, limit: Int, period: [Int!]!, type: [String!], IDs: [String!], status: [String!], voteDate: [Boolean!], manageVoteDate: Boolean): ProceduresData!
+  proceduresData(
+    offset: Int
+    limit: Int
+    period: [Int!]!
+    type: [String!]
+    IDs: [String!]
+    status: [String!]
+    voteDate: [Boolean!]
+    manageVoteDate: Boolean
+  ): ProceduresData!
 }
 
 type Mutation {
-  saveProcedureCustomData(procedureId: String!, partyVotes: [PartyVoteInput!]!, decisionText: String!, votingDocument: VotingDocument!, toggleDecision: Boolean!): Procedure @auth(requires: BACKEND) 
-  saveProcedurenamedPollCustomData(procedureId: String!, toggleDecision: Boolean!): Procedure @auth(requires: BACKEND) 
-  scrapeProcedures(key: String!): Boolean 
+  saveProcedureCustomData(
+    procedureId: String!
+    partyVotes: [PartyVoteInput!]!
+    decisionText: String!
+    votingDocument: VotingDocument!
+    toggleDecision: Boolean!
+  ): Procedure @auth(requires: BACKEND)
+  saveProcedurenamedPollCustomData(procedureId: String!, toggleDecision: Boolean!): Procedure
+    @auth(requires: BACKEND)
+  scrapeProcedures(key: String!): Boolean
 }
-`;

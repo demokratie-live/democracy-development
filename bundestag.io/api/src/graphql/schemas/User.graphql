@@ -1,5 +1,3 @@
-export default `
-
 enum UserRole {
   WEB
   BACKEND
@@ -14,4 +12,3 @@ type User {
 type Mutation {
   signIn(email: String!, password: String!): User
 }
-`;
