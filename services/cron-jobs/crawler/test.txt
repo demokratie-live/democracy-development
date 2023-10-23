@@ -1,0 +1,7 @@
+
+> crawler@1.0.11 start /Users/manuelruck/Work/democracy/repos/democracy-development/services/cron-jobs/crawler
+> node ./build/index.js
+
+MongoDB is running
+[Cronjob][import-procedures] started: Mon Oct 23 2023 22:15:26 GMT+0200 (GMT+02:00)
+ ELIFECYCLE  Command failed with exit code 1.
