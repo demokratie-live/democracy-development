@@ -1,6 +1,5 @@
+import { CONFIG } from '../config';
 import importProcedures from './import-procedures';
-import config from '../config';
-import { request } from 'graphql-request';
 import { ProcedureModel } from '@democracy-deutschland/bundestagio-common';
 
 jest.mock('@democracy-deutschland/bundestagio-common', () => ({
@@ -21,16 +20,11 @@ jest.mock('graphql-request', () => ({
 
 describe('importProcedures', () => {
   it('returns undefined once done', async () => {
-    await expect(importProcedures(config)).resolves.toBe(undefined);
-  });
-
-  it('calls `request`', async () => {
-    await importProcedures(config);
-    expect(request).toHaveBeenCalled();
+    await expect(importProcedures(CONFIG)).resolves.toBe(undefined);
   });
 
   it('calls `ProcedureModel.bulkWrite`', async () => {
-    await importProcedures(config);
+    await importProcedures(CONFIG);
     expect(ProcedureModel.bulkWrite).toHaveBeenCalled();
   });
 });

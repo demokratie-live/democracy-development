@@ -43,22 +43,6 @@ services:
       - admin
     networks:
       - democracy
-  dip:
-    build:
-      context: bundestag.io/dip
-      target: base_stage
-      dockerfile: ../../infra/Dockerfile
-    env_file:
-      - bundestag.io/dip/.env
-    environment:
-      - PORT=4002
-    command: pnpm dev
-    volumes:
-      - ./bundestag.io/dip/src:/app/src
-    ports:
-      - 4002:4002
-    networks:
-      - democracy
   democracy-web-app:
     build:
       context: democracy/web-app
@@ -84,9 +68,7 @@ services:
       - services/cron-jobs/crawler/.env.local
     environment:
       - MONGO_DB_URL=mongodb://mongo:27017/bundestagio
-      - DIP_GRAPHQL_ENDPOINT=http://dip:4002
     depends_on:
-      - dip
       - mongo
     profiles:
       - cronjobs

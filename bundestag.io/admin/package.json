@@ -12,7 +12,7 @@
     "@apollo/client": "^3.3.20",
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "antd": "4.15.2",
-    "axios": "^0.21.1",
+    "axios": "^1.5.1",
     "graphql": "^15.5.1",
     "next": "^11",
     "next-auth": "^3.27.2",
