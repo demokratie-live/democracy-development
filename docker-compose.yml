@@ -67,7 +67,7 @@ services:
     env_file:
       - services/cron-jobs/crawler/.env.local
     environment:
-      - MONGO_DB_URL=mongodb://mongo:27017/bundestagio
+      - DB_URL=mongodb://mongo:27017/bundestagio
     depends_on:
       - mongo
     profiles:
