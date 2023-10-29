@@ -1,5 +1,5 @@
 const {
-  MONGO_DB_URL = 'mongodb://localhost:27017/bundestagio',
+  DB_URL = 'mongodb://localhost:27017/bundestagio',
   IMPORT_PROCEDURES_START_CURSOR = '*',
   IMPORT_PROCEDURES_FILTER_BEFORE = new Date().toISOString().slice(0, 10),
   IMPORT_PROCEDURES_FILTER_AFTER = new Date(Number(new Date()) - 1000 * 60 * 60 * 24 * 7 * 4)
@@ -17,7 +17,7 @@ const IMPORT_PROCEDURES_FILTER_TYPES = process.env.IMPORT_PROCEDURES_FILTER_TYPE
 
 export const CONFIG = {
   DIP_API_KEY: process.env.DIP_API_KEY || '',
-  MONGO_DB_URL,
+  DB_URL,
   IMPORT_PROCEDURES_CHUNK_SIZE,
   IMPORT_PROCEDURES_CHUNK_ROUNDS,
   IMPORT_PROCEDURES_FILTER_BEFORE,
