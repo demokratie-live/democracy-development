@@ -8,9 +8,9 @@
     "Ulf Gebhardt"
   ],
   "license": "Apache2",
-  "private": true,
   "scripts": {
     "build": "tsc",
+    "prebuild": "pnpm run generate",
     "start": "node build/index.js",
     "dev": "ts-node-dev --watch=resolvers,schemas --respawn src/index.ts",
     "lint": "yarn lint:ts && yarn lint:exports",
@@ -23,6 +23,7 @@
     "@apollo/server": "^4.9.4",
     "@democracy-deutschland/bundestag.io-definitions": "1.0.2",
     "@democracy-deutschland/bundestagio-common": "workspace:*",
+    "@graphql-tools/merge": "^9.0.0",
     "@graphql-tools/schema": "^10.0.0",
     "@graphql-tools/utils": "^10.0.7",
     "axios": "1.5.1",
