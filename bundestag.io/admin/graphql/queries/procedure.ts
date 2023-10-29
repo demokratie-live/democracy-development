@@ -1,6 +1,6 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
-import VoteResults from "../fragments/voteResults";
+import VoteResults from '../fragments/voteResults';
 
 export const PROCEDURE = gql`
   query procedure($procedureId: String!) {

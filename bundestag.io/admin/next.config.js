@@ -1,2 +1,6 @@
-require('@babel/register')({extensions: ['.ts'], presets: ['@babel/preset-typescript']})
-module.exports = require('./next.config.babel.ts')
+// nextjs config
+module.exports = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+};

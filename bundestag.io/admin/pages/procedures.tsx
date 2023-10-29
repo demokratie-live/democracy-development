@@ -1,6 +1,6 @@
-import { Layout } from "../components/Layout";
-import App from "../components/App";
-import { ProcedureList } from "../components/Procedures/List";
+import { Layout } from '../components/Layout';
+import App from '../components/App';
+import { ProcedureList } from '../components/Procedures/List';
 
 export default function Procedures() {
   return (

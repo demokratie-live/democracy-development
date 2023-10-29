@@ -1,13 +1,13 @@
-import React, { Component, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Table, Input, Button, Select } from 'antd';
 import Link from 'next/link';
-import graphql from 'graphql';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 
 import PROCEDURE_LIST from '../../graphql/queries/procedureList';
 import Icon from '@ant-design/icons/lib/components/Icon';
 import { useQuery } from '@apollo/client';
+import { ColumnType } from 'antd/es/table/interface';
 
 const { Option } = Select;
 
@@ -38,13 +38,11 @@ export const ProcedureList: React.FC = () => {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
   });
-  const [hasMore, setHasMore] = useState(true);
-  const [searchText, setSearchText] = useState<string>('');
-  const searchInput = useRef<Input>(null);
+  const searchInput = useRef(null);
 
   const procedures = data?.proceduresData.nodes || [];
 
-  const getColumnSearchProps = (dataIndex) => ({
+  const getColumnSearchProps = (dataIndex): ColumnType<any> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
@@ -70,7 +68,7 @@ export const ProcedureList: React.FC = () => {
       </div>
     ),
     filterIcon: (filtered) => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
-    onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         setTimeout(() => searchInput.current.select());
@@ -80,12 +78,10 @@ export const ProcedureList: React.FC = () => {
 
   const handleSearch = (selectedKeys, confirm) => {
     confirm();
-    setSearchText(selectedKeys[0]);
   };
 
   const handleReset = (clearFilters) => {
     clearFilters();
-    setSearchText('');
   };
 
   const columns = [
@@ -95,7 +91,7 @@ export const ProcedureList: React.FC = () => {
       name: 'procedureId',
       sorter: (a, b) => a.procedureId - b.procedureId,
       width: '100px',
-      ...getColumnSearchProps('procedureId'),
+      // ...getColumnSearchProps('procedureId'),
     },
     {
       title: 'Date',
@@ -143,7 +139,7 @@ export const ProcedureList: React.FC = () => {
       sorter: (a, b) => a.title.localeCompare(b.title),
       ...getColumnSearchProps('title'),
       render: (title, { procedureId }) => (
-        <Link as={`/procedure/${procedureId}`} href={`/procedure?id=${procedureId}`}>
+        <Link as={`/procedure/${procedureId}`} href={`/procedure?id=${procedureId}`} legacyBehavior>
           <a>{title}</a>
         </Link>
       ),

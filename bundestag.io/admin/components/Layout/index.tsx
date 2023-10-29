@@ -1,11 +1,15 @@
-import Head from "next/head";
-import { Layout as AntLayout, Menu, Breadcrumb } from "antd";
+import Head from 'next/head';
+import { Layout as AntLayout, Breadcrumb } from 'antd';
 
-import { Navigation } from "../Navigation";
+import { Navigation } from '../Navigation';
 
-const { Header, Content, Footer } = AntLayout;
+const { Content } = AntLayout;
 
-export const Layout: React.FC = ({ children }) => (
+type Props = {
+  children: React.ReactNode;
+};
+
+export const Layout: React.FC<Props> = ({ children }) => (
   <>
     <Head>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,13 +18,11 @@ export const Layout: React.FC = ({ children }) => (
     </Head>
     <AntLayout>
       <Navigation />
-      <Content style={{ padding: "0 50px" }}>
-        <Breadcrumb style={{ margin: "16px 0" }}>
+      <Content style={{ padding: '0 50px' }}>
+        <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>Backend</Breadcrumb.Item>
         </Breadcrumb>
-        <div style={{ background: "#fff", padding: 24, minHeight: 280 }}>
-          {children}
-        </div>
+        <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>{children}</div>
       </Content>
     </AntLayout>
   </>
