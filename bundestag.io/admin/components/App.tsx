@@ -1,11 +1,10 @@
 const App = ({ children }) => (
   <main>
     {children}
-    <style jsx global>{`
+    <style>{`
       * {
-        font-family: Menlo, Monaco, "Lucida Console", "Liberation Mono",
-          "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New",
-          monospace, serif;
+        font-family: Menlo, Monaco, 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono',
+          'Courier New', monospace, serif;
       }
       body {
         margin: 0;

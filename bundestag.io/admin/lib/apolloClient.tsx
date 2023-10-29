@@ -1,12 +1,7 @@
-import React from "react";
-import {
-  ApolloClient,
-  ApolloProvider,
-  InMemoryCache,
-  NormalizedCacheObject,
-} from "@apollo/client";
-import { useMemo } from "react";
-import { NextApiRequest, NextApiResponse, NextPage } from "next";
+import React from 'react';
+import { ApolloClient, ApolloProvider, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import { useMemo } from 'react';
+import { NextApiRequest, NextApiResponse, NextPage } from 'next';
 
 export interface GraphQlContext {
   req: NextApiRequest;
@@ -15,9 +10,7 @@ export interface GraphQlContext {
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
-function createIsomorphicLink(
-  context: GraphQlContext | { headers: any } | undefined
-) {
+function createIsomorphicLink(context: GraphQlContext | { headers: any } | undefined) {
   /**
    * SSG and SSR
    */
@@ -26,19 +19,17 @@ function createIsomorphicLink(
   //     const { graphQlSchema } = require("./schema");
   //     return new SchemaLink({ schema: graphQlSchema, context });
   //   }
-  const { HttpLink } = require("@apollo/client");
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { HttpLink } = require('@apollo/client');
 
   /**
    * API
    */
-  if (typeof window === "undefined") {
-    const headers =
-      context && "headers" in context && context?.headers
-        ? context.headers
-        : {};
+  if (typeof window === 'undefined') {
+    const headers = context && 'headers' in context && context?.headers ? context.headers : {};
     return new HttpLink({
       uri: process.env.BUNDESTAGIO_SERVER_URL,
-      credentials: "same-origin",
+      credentials: 'same-origin',
       ...headers,
     });
   }
@@ -47,19 +38,17 @@ function createIsomorphicLink(
    * Client-side
    */
   return new HttpLink({
-    uri: "/api/graphql",
-    credentials: "same-origin",
+    uri: '/api/graphql',
+    credentials: 'same-origin',
   });
 }
 
-function createApolloClient(
-  context?: GraphQlContext | { headers: any }
-): ApolloClient<any> {
+function createApolloClient(context?: GraphQlContext | { headers: any }): ApolloClient<any> {
   return new ApolloClient({
     /**
      * Enable SSR mode when not running on the client-side
      */
-    ssrMode: typeof window === "undefined",
+    ssrMode: typeof window === 'undefined',
     link: createIsomorphicLink(context),
     cache: new InMemoryCache(),
   });
@@ -69,7 +58,7 @@ export function initializeApollo(
   initialState: any = null,
   // Pages with Next.js data fetching methods, like `getStaticProps`, can send
   // a custom context which will be used by `SchemaLink` to server render pages
-  context?: GraphQlContext | { headers: any }
+  context?: GraphQlContext | { headers: any },
 ): ApolloClient<any> {
   const _apolloClient = apolloClient ?? createApolloClient(context);
 
@@ -83,7 +72,7 @@ export function initializeApollo(
    * SSG and SSR
    * Always create a new Apollo Client
    */
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return _apolloClient;
   }
 
@@ -96,10 +85,7 @@ export function initializeApollo(
 export const getApolloClient = initializeApollo;
 
 export function useApollo(initialState: any) {
-  const apolloStore = useMemo(
-    () => initializeApollo(initialState),
-    [initialState]
-  );
+  const apolloStore = useMemo(() => initializeApollo(initialState), [initialState]);
   return apolloStore;
 }
 

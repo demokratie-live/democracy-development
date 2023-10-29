@@ -1,31 +1,31 @@
-import React from "react";
-import { ApolloProvider } from "@apollo/client";
-import type { AppProps } from "next/app";
-import "antd/dist/antd.css";
-import { Provider, signIn, useSession } from "next-auth/client";
+import React from 'react';
+import { ApolloProvider } from '@apollo/client';
+import type { AppProps } from 'next/app';
+import { SessionProvider, signIn, useSession } from 'next-auth/react';
 
-import "../styles/globals.css";
-import { useApollo } from "../lib/apolloClient";
+import '../styles/globals.css';
+import { useApollo } from '../lib/apolloClient';
 
 interface AppPropsWithAuth extends AppProps {
-  Component: AppProps["Component"] & { auth: { role: string } };
+  Component: AppProps['Component'] & { auth: { role: string } };
 }
 
 function MyApp({ Component, pageProps }: AppPropsWithAuth) {
   const client = useApollo(pageProps.initialApolloState);
   return (
-    <Provider session={pageProps.session}>
+    <SessionProvider session={pageProps.session}>
       <ApolloProvider client={client}>
         <Auth>
           <Component {...pageProps} />
         </Auth>
       </ApolloProvider>
-    </Provider>
+    </SessionProvider>
   );
 }
 
 function Auth({ children }) {
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
+  const loading = status === 'loading';
   const isUser = !!session?.user;
 
   React.useEffect(() => {

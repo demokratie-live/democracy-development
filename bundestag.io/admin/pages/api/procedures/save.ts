@@ -1,16 +1,15 @@
-import { getSession } from "next-auth/client";
-import {
-  SAVE_VOTE_RESULTS,
-  SAVE_VOTE_RESULTS_NAMED_POLL,
-} from "../../../graphql/mutations/saveVoteResults";
-import { getApolloClient } from "../../../lib/apolloClient";
+import { getServerSession } from 'next-auth';
+import { SAVE_VOTE_RESULTS, SAVE_VOTE_RESULTS_NAMED_POLL } from '../../../graphql/mutations/saveVoteResults';
+import { getApolloClient } from '../../../lib/apolloClient';
+import { authOptions } from '../auth/[...nextauth]';
 
 const save = async (req, res) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
+  console.log(session);
   if (!!session?.user) {
     const client = getApolloClient(undefined, {
       headers: {
-        "bio-auth-token": process.env.BIO_EDIT_TOKEN,
+        'bio-auth-token': process.env.BIO_EDIT_TOKEN,
       },
     });
     if (!req.body.namedPoll) {
@@ -20,13 +19,14 @@ const save = async (req, res) => {
           variables: req.body,
           context: {
             headers: {
-              "bio-auth-token": process.env.BIO_EDIT_TOKEN,
+              'bio-auth-token': process.env.BIO_EDIT_TOKEN,
             },
           },
         })
-        .catch((e) =>
-          res.status(e.networkError.statusCode).send(e.networkError.result)
-        );
+        .catch((e) => {
+          console.log(e.graphQLErrors[0]);
+          return res.status(500).send(e.graphQLErrors[0].message);
+        });
     } else {
       console.log(req.body);
       await client
@@ -35,16 +35,17 @@ const save = async (req, res) => {
           variables: req.body,
           context: {
             headers: {
-              "bio-auth-token": process.env.BIO_EDIT_TOKEN,
+              'bio-auth-token': process.env.BIO_EDIT_TOKEN,
             },
           },
         })
-        .catch((e) =>
-          res.status(e.networkError.statusCode).send(e.networkError.result)
-        );
+        .catch((e) => {
+          console.log(e.graphQLErrors[0]);
+          return res.status(500).send(e.graphQLErrors[0].message);
+        });
     }
   } else {
-    throw new Error("not authorized");
+    throw new Error('not authorized');
   }
 
   res.end();

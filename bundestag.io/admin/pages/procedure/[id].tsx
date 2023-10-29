@@ -1,25 +1,18 @@
-import { Layout } from "../../components/Layout";
-import App from "../../components/App";
-import { useRouter } from "next/router";
-import styled from "styled-components";
-import Link from "next/link";
-import { Form, Input, Collapse } from "antd";
+import { Layout } from '../../components/Layout';
+import App from '../../components/App';
+import { useRouter } from 'next/router';
+import styled from 'styled-components';
+import Link from 'next/link';
 
-const { Panel } = Collapse;
+import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 
-import { PROCEDURE as PROCEDURE_DEFINITIONS } from "@democracy-deutschland/bundestag.io-definitions";
-
-import VoteResultsForm from "../../components/Procedures/VoteResultsForm";
-import { VoteResultsFormNamedPoll } from "../../components/Procedures/VoteResultsFormNamedPoll";
+import VoteResultsForm from '../../components/Procedures/VoteResultsForm';
+import { VoteResultsFormNamedPoll } from '../../components/Procedures/VoteResultsFormNamedPoll';
 
 // GraphQL
-import { PROCEDURE } from "../../graphql/queries/procedure";
-import { VoteResultTextHelper } from "../../components/Procedures/VoteResultTextHelper";
-import { useQuery } from "@apollo/client";
-
-// Ant Design Sub-Elements
-const { TextArea } = Input;
-const FormItem = Form.Item;
+import { PROCEDURE } from '../../graphql/queries/procedure';
+import { VoteResultTextHelper } from '../../components/Procedures/VoteResultTextHelper';
+import { useQuery } from '@apollo/client';
 
 const DT = styled.dt`
   font-weight: bold;
@@ -34,11 +27,11 @@ const Procedure: React.FC = () => {
 
   const { data, loading } = useQuery(PROCEDURE, {
     variables: {
-      procedureId: router.query.id || "",
+      procedureId: router.query.id || '',
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
   });
-  console.log("data.procedure", data);
+  console.log('data.procedure', data);
 
   if (loading) {
     return <div>…loading</div>;
@@ -59,8 +52,6 @@ const Procedure: React.FC = () => {
     customData,
     namedVote,
   } = data.procedure;
-  const { voteResultTextHelper } = data;
-
   if (loadingProcedure) {
     return (
       <Layout>
@@ -71,15 +62,9 @@ const Procedure: React.FC = () => {
     );
   }
 
-  const plenaryProtocolls = history.filter(
-    ({ assignment, initiator, findSpot, ...rest }) => {
-      return (
-        findSpot.search(
-          PROCEDURE_DEFINITIONS.HISTORY.FINDSPOT.FIND_BT_PLENARPROTOKOLL
-        ) !== -1
-      );
-    }
-  );
+  const plenaryProtocolls = history.filter(({ findSpot }) => {
+    return findSpot.search(PROCEDURE_DEFINITIONS.HISTORY.FINDSPOT.FIND_BT_PLENARPROTOKOLL) !== -1;
+  });
 
   return (
     <Layout>
@@ -87,9 +72,9 @@ const Procedure: React.FC = () => {
         <h2>{title}</h2>
         <dl
           style={{
-            display: "block",
-            marginTop: "1em",
-            marginBottom: "1em",
+            display: 'block',
+            marginTop: '1em',
+            marginBottom: '1em',
             marginLeft: 0,
             marginRight: 0,
           }}
@@ -106,7 +91,7 @@ const Procedure: React.FC = () => {
           {importantDocuments.map((document) => {
             return (
               <DD key={document.number}>
-                <Link href={document.url}>
+                <Link href={document.url} legacyBehavior>
                   <a target="_blank">{`${document.type} (${document.editor} – ${document.number})`}</a>
                 </Link>
               </DD>
@@ -118,7 +103,7 @@ const Procedure: React.FC = () => {
               {plenaryProtocolls.map(({ initiator, findSpotUrl, findSpot }) => {
                 return (
                   <DD key={findSpot}>
-                    <Link href={findSpotUrl}>
+                    <Link href={findSpotUrl} legacyBehavior>
                       <a target="_blank">
                         {initiator} – {findSpot}
                       </a>
@@ -129,26 +114,9 @@ const Procedure: React.FC = () => {
             </>
           )}
         </dl>
-        {!namedVote && (
-          <VoteResultTextHelper
-            procedureId={procedureId}
-            importantDocuments={importantDocuments}
-          />
-        )}
-        {!namedVote && (
-          <VoteResultsForm
-            data={customData.voteResults}
-            type={type}
-            procedureId={procedureId}
-          />
-        )}
-        {namedVote && (
-          <VoteResultsFormNamedPoll
-            data={customData.voteResults}
-            type={type}
-            procedureId={procedureId}
-          />
-        )}
+        {!namedVote && <VoteResultTextHelper procedureId={procedureId} importantDocuments={importantDocuments} />}
+        {!namedVote && <VoteResultsForm data={customData.voteResults} type={type} procedureId={procedureId} />}
+        {namedVote && <VoteResultsFormNamedPoll data={customData.voteResults} procedureId={procedureId} />}
       </App>
     </Layout>
   );

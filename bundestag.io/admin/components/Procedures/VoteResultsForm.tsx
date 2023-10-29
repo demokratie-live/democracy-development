@@ -1,16 +1,6 @@
-import React from "react";
-import {
-  Form,
-  Input,
-  Button,
-  InputNumber,
-  Radio,
-  Row,
-  Col,
-  notification,
-  Switch,
-} from "antd";
-import axios from "axios";
+import React from 'react';
+import { Form, Input, Button, InputNumber, Radio, Row, Col, notification, Switch } from 'antd';
+import { axiosClient } from '../../lib/axios';
 
 // Ant Design Sub-Elements
 const { TextArea } = Input;
@@ -18,30 +8,30 @@ const FormItem = Form.Item;
 
 const FRACTIONS = [
   {
-    name: "Union",
+    name: 'Union',
   },
   {
-    name: "SPD",
+    name: 'SPD',
   },
   {
-    name: "AfD",
+    name: 'AfD',
   },
   {
-    name: "Grüne",
+    name: 'Grüne',
   },
   {
-    name: "FDP",
+    name: 'FDP',
   },
   {
-    name: "Linke",
+    name: 'Linke',
   },
 ];
 
 const VoteResultsForm = ({ data, type, procedureId }) => {
   const onFinish = (values) => {
     notification.info({
-      key: "saveProcedure",
-      message: "Vorgang wird gespeichert!",
+      key: 'saveProcedure',
+      message: 'Vorgang wird gespeichert!',
       duration: 0,
     });
 
@@ -58,34 +48,34 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
       })),
     };
 
-    console.log("values", values, data);
-    axios
-      .post("/api/procedures/save", {
+    console.log('values', values, data);
+    axiosClient
+      .post('/api/procedures/save', {
         ...data,
         toggleDecision: !values.toggleDecision,
         procedureId,
       })
       .then(() => {
         notification.success({
-          key: "saveProcedure",
-          message: "Vorgang wurde gespeichert!",
+          key: 'saveProcedure',
+          message: 'Vorgang wurde gespeichert!',
         });
       })
       .catch((err) => {
         notification.error({
-          key: "saveProcedure",
-          message: "Ein Fehler ist vorgefallen",
+          key: 'saveProcedure',
+          message: 'Ein Fehler ist vorgefallen',
           // description: err
         });
-        console.log("Error:", err);
+        console.log('Error:', err);
       });
   };
 
   const onFinishFailed = (...args) => {
     console.log(...args);
     notification.error({
-      message: "Speichern Fehlgeschlagen!",
-      description: "Überprüfe deine eingaben",
+      message: 'Speichern Fehlgeschlagen!',
+      description: 'Überprüfe deine eingaben',
     });
   };
 
@@ -108,10 +98,7 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
           party: p.name,
           main: data.partyVotes.length > 0 ? data.partyVotes[i].main : null,
           yes: data.partyVotes.length > 0 ? data.partyVotes[i].deviants.yes : 0,
-          abstination:
-            data.partyVotes.length > 0
-              ? data.partyVotes[i].deviants.abstination
-              : 0,
+          abstination: data.partyVotes.length > 0 ? data.partyVotes[i].deviants.abstination : 0,
           no: data.partyVotes.length > 0 ? data.partyVotes[i].deviants.no : 0,
         })),
       }}
@@ -119,23 +106,17 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
       <FormItem
         label="Abstimmung über"
         name="votingDocument"
-        rules={[{ required: true, message: "Abstimmung über fehlt!" }]}
+        rules={[{ required: true, message: 'Abstimmung über fehlt!' }]}
       >
         <Radio.Group>
           <Radio.Button value="mainDocument">{type}</Radio.Button>
-          <Radio.Button value="recommendedDecision">
-            Beschlussempfehlung
-          </Radio.Button>
+          <Radio.Button value="recommendedDecision">Beschlussempfehlung</Radio.Button>
         </Radio.Group>
       </FormItem>
       <FormItem label="Ergebnis umdrehen" name="toggleDecision">
         <Switch defaultChecked={data.votingRecommendation === false} />
       </FormItem>
-      <FormItem
-        label="Beschlusstext"
-        name="decisionText"
-        rules={[{ required: true, message: "Beschlusstext fehlt!" }]}
-      >
+      <FormItem label="Beschlusstext" name="decisionText" rules={[{ required: true, message: 'Beschlusstext fehlt!' }]}>
         <TextArea placeholder="Beschlusstext" rows={3} />
       </FormItem>
       <Form.List name="partyVotes">
@@ -148,79 +129,55 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
                   data.partyVotes.length > 0 ? data.partyVotes[i].main : null;
                 return (
                   <Col span={8} key={field.name}>
-                    <FormItem
-                      name={[field.name, "party"]}
-                      rules={[{ required: true, message: "Beschluss fehlt!" }]}
-                    >
+                    <FormItem name={[field.name, 'party']} rules={[{ required: true, message: 'Beschluss fehlt!' }]}>
                       <Input readOnly />
                     </FormItem>
                     <FormItem
                       className="collection-create-form_last-form-item"
-                      name={[field.name, "main"]}
-                      rules={[{ required: true, message: "Beschluss fehlt!" }]}
+                      name={[field.name, 'main']}
+                      rules={[{ required: true, message: 'Beschluss fehlt!' }]}
                     >
                       <Radio.Group>
-                        <Radio.Button
-                          value="YES"
-                          style={{ backgroundColor: "#f6ffed" }}
-                        >
+                        <Radio.Button value="YES" style={{ backgroundColor: '#f6ffed' }}>
                           Ja
                         </Radio.Button>
-                        <Radio.Button
-                          value="ABSTINATION"
-                          style={{ backgroundColor: "#e6f7ff" }}
-                        >
+                        <Radio.Button value="ABSTINATION" style={{ backgroundColor: '#e6f7ff' }}>
                           Enthaltung
                         </Radio.Button>
-                        <Radio.Button
-                          value="NO"
-                          style={{ backgroundColor: "#fff1f0" }}
-                        >
+                        <Radio.Button value="NO" style={{ backgroundColor: '#fff1f0' }}>
                           Nein
                         </Radio.Button>
                       </Radio.Group>
                     </FormItem>
                     <FormItem
                       label="Ja"
-                      name={[field.name, "yes"]}
+                      name={[field.name, 'yes']}
                       labelCol={{
                         xs: { span: 24 },
                         sm: { span: 8 },
                       }}
                     >
-                      <InputNumber
-                        min={0}
-                        max={999}
-                        disabled={mainDecision === "YES"}
-                      />
+                      <InputNumber min={0} max={999} disabled={mainDecision === 'YES'} />
                     </FormItem>
                     <FormItem
                       label="Enth."
-                      name={[field.name, "abstination"]}
+                      name={[field.name, 'abstination']}
                       labelCol={{
                         xs: { span: 24 },
                         sm: { span: 8 },
                       }}
                     >
-                      <InputNumber
-                        min={0}
-                        max={999}
-                        disabled={mainDecision === "ABSTINATION"}
-                      />
+                      <InputNumber min={0} max={999} disabled={mainDecision === 'ABSTINATION'} />
                     </FormItem>
                     <FormItem
                       label="Nein"
-                      name={[field.name, "no"]}
+                      name={[field.name, 'no']}
                       labelCol={{
                         xs: { span: 24 },
                         sm: { span: 8 },
                       }}
                     >
-                      <InputNumber
-                        min={0}
-                        max={999}
-                        disabled={mainDecision === "NO"}
-                      />
+                      <InputNumber min={0} max={999} disabled={mainDecision === 'NO'} />
                     </FormItem>
                   </Col>
                 );

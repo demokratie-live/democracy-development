@@ -1,17 +1,10 @@
-import styled from "styled-components";
-import { useRouter } from "next/router";
-import { Layout, Menu } from "antd";
-import Link from "next/link";
-import Icon from "@ant-design/icons/lib/components/Icon";
-import { signout } from "next-auth/client";
+import { useRouter } from 'next/router';
+import { Layout, Menu } from 'antd';
+import Link from 'next/link';
+import Icon from '@ant-design/icons/lib/components/Icon';
+import { signOut } from 'next-auth/react';
 
-const { Header, Sider } = Layout;
-
-// import Link from "./Link";
-
-const Wrapper = styled.header`
-  margin-bottom: 25px;
-`;
+const { Sider } = Layout;
 
 export const Navigation = () => {
   const router = useRouter();
@@ -26,7 +19,7 @@ export const Navigation = () => {
       <div className="logo" />
       <Menu theme="dark" mode="inline" defaultSelectedKeys={[router.pathname]}>
         <Menu.Item key="/">
-          <Link href="/">
+          <Link href="/" legacyBehavior>
             <a>
               <Icon type="user" />
               <span className="nav-text">Home</span>
@@ -34,18 +27,18 @@ export const Navigation = () => {
           </Link>
         </Menu.Item>
         <Menu.Item key="/procedures">
-          <Link href="/procedures">
+          <Link href="/procedures" legacyBehavior>
             <a>
               <Icon type="pie-chart" />
               <span className="nav-text">Vorgänge</span>
             </a>
           </Link>
         </Menu.Item>
-        <Menu.Item key="/signout" onClick={() => signout()}>
+        <Menu.Item key="/signout" onClick={() => signOut()}>
           Ausloggen
         </Menu.Item>
         {/* <Menu.Item key="/fractions">
-        <Link  href="/fractions">
+        <Link  href="/fractions" legacyBehavior>
           <a>
             <Icon type="team" />
             <span className="nav-text">Fraktionen</span>
@@ -53,7 +46,7 @@ export const Navigation = () => {
         </Link>
       </Menu.Item>
       <Menu.Item key="/periods">
-        <Link  href="/periods">
+        <Link  href="/periods" legacyBehavior>
           <a>
             <Icon type="global" />
             <span className="nav-text">Legislaturen</span>
