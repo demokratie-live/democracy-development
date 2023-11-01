@@ -1,5 +1,14 @@
 # Changelog
 
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+## [0.1.55](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.54...bundestag.io@v0.1.55) (2023-11-01)
+
+
+* ✨ use pull request build action for bundestag api ([cd5c542](https://github.com/demokratie-live/democracy-development/commit/cd5c5423886f75cfa41c66a529d94803855c0652))
+* 📦️ upgrade packages ([e154803](https://github.com/demokratie-live/democracy-development/commit/e1548036686fee8c53e47e0ba85337e249e54ff5))
+* 📦️ upgrade packages ([38e9700](https://github.com/demokratie-live/democracy-development/commit/38e9700c661d5d893837164133427345d8350d4d))
+
 ### 0.1.40
 
 - [Fix] Vote Result helper
