@@ -416,6 +416,12 @@ importers:
       tsconfig:
         specifier: workspace:*
         version: link:../../../packages/tsconfig
+      tsup:
+        specifier: ^7.2.0
+        version: 7.2.0(@swc/core@1.3.93)(typescript@5.2.2)
+      tsup-config:
+        specifier: workspace:*
+        version: link:../../../packages/tsup-config
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -708,6 +714,12 @@ importers:
       tsconfig:
         specifier: workspace:*
         version: link:../../../packages/tsconfig
+      tsup:
+        specifier: ^7.2.0
+        version: 7.2.0(@swc/core@1.3.93)(typescript@5.2.2)
+      tsup-config:
+        specifier: workspace:*
+        version: link:../../../packages/tsup-config
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
