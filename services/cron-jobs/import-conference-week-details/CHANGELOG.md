@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.25](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.24...import-conference-week-details@v0.1.25) (2023-11-01)
+
+
+* 🐛 use tsup build for two more services ([16073ae](https://github.com/demokratie-live/democracy-development/commit/16073aed026fe6b2132590cdf242535375935c7d))
+
 ## [0.1.24](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.23...import-conference-week-details@v0.1.24) (2023-11-01)
 
 ## [0.1.23](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.22...import-conference-week-details@v0.1.23) (2023-10-22)
