@@ -11,7 +11,11 @@ export default function getClient() {
   const link = ApolloLink.from([
     new DebounceLink(100),
     new HttpLink({
-      uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/graphql`,
+      uri: `${
+        process.env.NODE_ENV === 'development'
+          ? process.env.NEXT_PUBLIC_APP_URL
+          : ''
+      }/api/graphql`,
     }),
   ]);
 
