@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.13](https://github.com/demokratie-live/democracy-development/compare/queue-pushs-vote-top-100@v0.1.12...queue-pushs-vote-top-100@v0.1.13) (2023-11-01)
+
+
+* 🐛 use tsup build for two more services ([16073ae](https://github.com/demokratie-live/democracy-development/commit/16073aed026fe6b2132590cdf242535375935c7d))
+
 ## [0.1.12](https://github.com/demokratie-live/democracy-development/compare/queue-pushs-vote-top-100@v0.1.11...queue-pushs-vote-top-100@v0.1.12) (2023-10-22)
 
 
