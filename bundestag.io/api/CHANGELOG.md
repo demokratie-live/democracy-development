@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.56](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.55...bundestag.io@v0.1.56) (2023-11-01)
+
+
+* 🐛 add health endpoint ([d157922](https://github.com/demokratie-live/democracy-development/commit/d157922dcd7dcfd524a0ae4e17100cd679be3f06))
+
 ## [0.1.55](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.54...bundestag.io@v0.1.55) (2023-11-01)
 
 

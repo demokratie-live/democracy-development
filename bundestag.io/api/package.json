@@ -1,6 +1,6 @@
 {
   "name": "bundestag.io",
-  "version": "0.1.55",
+  "version": "0.1.56",
   "main": "build/index.js",
   "author": "DEMOCRACY Deutschland e.V. <contact@democracy-deutschland.de>",
   "contributors": [
