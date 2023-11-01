@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.57](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.56...bundestag.io@v0.1.57) (2023-11-01)
+
 ## [0.1.56](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.55...bundestag.io@v0.1.56) (2023-11-01)
 
 
