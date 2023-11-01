@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.14](https://github.com/demokratie-live/democracy-development/compare/queue-pushs-vote-top-100@v0.1.13...queue-pushs-vote-top-100@v0.1.14) (2023-11-01)
+
+
+* 💚 exclude tsup.config.ts for ts-unused-exports ([4592469](https://github.com/demokratie-live/democracy-development/commit/459246967a4a62effc3dc2566545d34972470d66))
+* 🗑️ delete unused packages ([56cfaa4](https://github.com/demokratie-live/democracy-development/commit/56cfaa4daf8b28bf1904037163fcc8d93e390da6))
+
 ## [0.1.13](https://github.com/demokratie-live/democracy-development/compare/queue-pushs-vote-top-100@v0.1.12...queue-pushs-vote-top-100@v0.1.13) (2023-11-01)
 
 
