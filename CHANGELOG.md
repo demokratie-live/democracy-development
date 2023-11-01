@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.11-feature-api-via-env-var.6](https://github.com/demokratie-live/desktop/compare/v1.0.11-feature-api-via-env-var.5...v1.0.11-feature-api-via-env-var.6) (2023-11-01)
+
+
+### Bug Fixes
+
+* handle ssr for graphql endpoint ([0e6ded2](https://github.com/demokratie-live/desktop/commit/0e6ded2b030abfeb01a2c000805e3cc689de2b30))
+
 ### [1.0.11-feature-api-via-env-var.5](https://github.com/demokratie-live/desktop/compare/v1.0.11-feature-api-via-env-var.4...v1.0.11-feature-api-via-env-var.5) (2023-11-01)
 
 
