@@ -8,14 +8,19 @@ import { offsetLimitPagination } from '@apollo/client/utilities';
 import DebounceLink from 'apollo-link-debounce';
 
 export default function getClient() {
+  const isServer = typeof window === 'undefined';
+  const host = isServer ? process.env.HOSTNAME : window.location.origin;
+  const port = isServer ? process.env.PORT : window.location.port;
+  const protocol = isServer ? process.env.PROTOCOL : window.location.protocol;
+  const url =
+    process.env.NODE_ENV === 'production'
+      ? `${protocol}://${host}`
+      : `${protocol}://${host}:${port}`;
+
   const link = ApolloLink.from([
     new DebounceLink(100),
     new HttpLink({
-      uri: `${
-        process.env.NODE_ENV === 'development'
-          ? process.env.NEXT_PUBLIC_APP_URL
-          : ''
-      }/api/graphql`,
+      uri: `${url}/api/graphql`,
     }),
   ]);
 
