@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.11](https://github.com/demokratie-live/desktop/compare/v1.0.10...v1.0.11) (2023-11-01)
+
+
+### Bug Fixes
+
+* 🐛 add graphql proxy api endpoint ([2e3e06a](https://github.com/demokratie-live/desktop/commit/2e3e06a96dabeee4bd47d86f9435eaec8b6d208b))
+* 🐛 fix ssr for graphql endpoint ([986dd6b](https://github.com/demokratie-live/desktop/commit/986dd6b773bf08eca1ef9b8805ee8d6d0cd2d7c9))
+* 🐛 only use NEXT_PUBLIC_APP_URL in development mode ([d896fec](https://github.com/demokratie-live/desktop/commit/d896feceb1efb91e882f778829760958a951a58b))
+* handle ssr for graphql endpoint ([fe8bb27](https://github.com/demokratie-live/desktop/commit/fe8bb27ceff654f2a8eafbad4dd5870faa1e1a43))
+
 ### [1.0.11-feature-api-via-env-var.6](https://github.com/demokratie-live/desktop/compare/v1.0.11-feature-api-via-env-var.5...v1.0.11-feature-api-via-env-var.6) (2023-11-01)
 
 
