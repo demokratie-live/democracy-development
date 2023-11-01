@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.11-feature-api-via-env-var.4](https://github.com/demokratie-live/desktop/compare/v1.0.11-feature-api-via-env-var.3...v1.0.11-feature-api-via-env-var.4) (2023-11-01)
+
+
+### Bug Fixes
+
+* 🐛 only use NEXT_PUBLIC_APP_URL in development mode ([9638f7f](https://github.com/demokratie-live/desktop/commit/9638f7f27ec02354182564647ee60234d04d67bc))
+
 ### [1.0.11-feature-api-via-env-var.3](https://github.com/demokratie-live/desktop/compare/v1.0.11-feature-api-via-env-var.2...v1.0.11-feature-api-via-env-var.3) (2023-11-01)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "democracy-app.de",
-  "version": "1.0.11-feature-api-via-env-var.3",
+  "version": "1.0.11-feature-api-via-env-var.4",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
