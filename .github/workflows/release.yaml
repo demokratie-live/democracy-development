@@ -40,7 +40,7 @@ jobs:
   release:
     needs: [analyse-changed-services]
     runs-on: ubuntu-latest
-    if: ${{ needs.analyse-changed-services.outputs.CHANGED_PACKAGES != '[]'}}
+    if: ${{ needs.analyse-changed-services.outputs.CHANGED_PACKAGES != '[]' && needs.analyse-changed-services.outputs.CHANGED_PACKAGES != ''}}
     strategy:
       fail-fast: false
       max-parallel: 1
