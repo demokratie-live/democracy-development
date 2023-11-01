@@ -17,7 +17,7 @@
     "@democracy-deutschland/bt-dip-sdk": "^0.1.0-alpha.8",
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@democracy-deutschland/bundestagio-common": "workspace:*",
-    "axios": "^1.5.1",
+    "axios": "^1.6.0",
     "debug": "^4.3.1",
     "dotenv": "^10.0.0"
   },

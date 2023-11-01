@@ -127,8 +127,8 @@ importers:
         specifier: ^10.0.8
         version: 10.0.8(graphql@16.8.1)
       axios:
-        specifier: 1.5.1
-        version: 1.5.1(debug@3.2.7)
+        specifier: 1.6.0
+        version: 1.6.0
       body-parser:
         specifier: ^1.20.2
         version: 1.20.2
@@ -328,8 +328,8 @@ importers:
         specifier: workspace:*
         version: link:../../../common/bundestagio
       axios:
-        specifier: ^1.5.1
-        version: 1.5.1(debug@4.3.4)
+        specifier: ^1.6.0
+        version: 1.6.0(debug@4.3.4)
       debug:
         specifier: ^4.3.1
         version: 4.3.4(supports-color@8.1.1)
@@ -522,8 +522,8 @@ importers:
         specifier: workspace:*
         version: link:../../../common/bundestagio
       axios:
-        specifier: ^1.5.1
-        version: 1.5.1(debug@3.2.7)
+        specifier: ^1.6.0
+        version: 1.6.0
       cheerio:
         specifier: ^1.0.0-rc.3
         version: 1.0.0-rc.12
@@ -591,8 +591,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       axios:
-        specifier: ^1.5.1
-        version: 1.5.1(debug@3.2.7)
+        specifier: ^1.6.0
+        version: 1.6.0
       firebase-admin:
         specifier: ^11.5.0
         version: 11.10.1
@@ -4733,7 +4733,7 @@ packages:
     resolution: {integrity: sha512-KqQnQbdYE54D7oa/UmYVMZKq7CO4l8DEENzOKc4aBRwxCXSlJXGz83flFx5L7AWrOQnmuN3kVsRdt+GZPPjiVQ==}
     deprecated: This is a stub types definition for axios (https://github.com/mzabriskie/axios). axios provides its own type definitions, so you don't need @types/axios installed!
     dependencies:
-      axios: 1.5.1
+      axios: 1.6.0
     transitivePeerDependencies:
       - debug
 
@@ -6641,15 +6641,6 @@ packages:
       - supports-color
     dev: false
 
-  /axios@1.5.1:
-    resolution: {integrity: sha512-Q28iYCWzNHjAm+yEAot5QaAMxhMghWLFVf7rRdwhUI+c2jix2DUXjAHXVi+s1ibs3mjPO/cCgbA++3BjD0vP/A==}
-    dependencies:
-      follow-redirects: 1.15.3(debug@3.2.7)
-      form-data: 4.0.0
-      proxy-from-env: 1.1.0
-    transitivePeerDependencies:
-      - debug
-
   /axios@1.5.1(debug@3.2.7):
     resolution: {integrity: sha512-Q28iYCWzNHjAm+yEAot5QaAMxhMghWLFVf7rRdwhUI+c2jix2DUXjAHXVi+s1ibs3mjPO/cCgbA++3BjD0vP/A==}
     dependencies:
@@ -6660,20 +6651,19 @@ packages:
       - debug
     dev: false
 
-  /axios@1.5.1(debug@4.3.4):
-    resolution: {integrity: sha512-Q28iYCWzNHjAm+yEAot5QaAMxhMghWLFVf7rRdwhUI+c2jix2DUXjAHXVi+s1ibs3mjPO/cCgbA++3BjD0vP/A==}
-    dependencies:
-      follow-redirects: 1.15.3(debug@4.3.4)
-      form-data: 4.0.0
-      proxy-from-env: 1.1.0
-    transitivePeerDependencies:
-      - debug
-    dev: false
-
   /axios@1.6.0:
     resolution: {integrity: sha512-EZ1DYihju9pwVB+jg67ogm+Tmqc6JmhamRN6I4Zt8DfZu5lbcQGw3ozH9lFejSJgs/ibaef3A9PMXPLeefFGJg==}
     dependencies:
       follow-redirects: 1.15.3(debug@3.2.7)
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  /axios@1.6.0(debug@4.3.4):
+    resolution: {integrity: sha512-EZ1DYihju9pwVB+jg67ogm+Tmqc6JmhamRN6I4Zt8DfZu5lbcQGw3ozH9lFejSJgs/ibaef3A9PMXPLeefFGJg==}
+    dependencies:
+      follow-redirects: 1.15.3(debug@4.3.4)
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -13983,7 +13973,7 @@ packages:
         optional: true
     dependencies:
       lilconfig: 2.1.0
-      yaml: 2.3.2
+      yaml: 2.3.3
 
   /postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
@@ -17510,14 +17500,9 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
-  /yaml@2.3.2:
-    resolution: {integrity: sha512-N/lyzTPaJasoDmfV7YTrYCI0G/3ivm/9wdG0aHuheKowWQwGTsK0Eoiw6utmzAnI6pkJa0DUVygvp3spqqEKXg==}
-    engines: {node: '>= 14'}
-
   /yaml@2.3.3:
     resolution: {integrity: sha512-zw0VAJxgeZ6+++/su5AFoqBbZbrEakwu+X0M5HmcwUiBL7AzcuPKjj5we4xfQLp78LkEMpD0cOnUhmgOVy3KdQ==}
     engines: {node: '>= 14'}
-    dev: true
 
   /yargonaut@1.1.4:
     resolution: {integrity: sha512-rHgFmbgXAAzl+1nngqOcwEljqHGG9uUZoPjsdZEs1w5JW9RXYzrSvH/u70C1JE5qFi0qjsdhnUX/dJRpWqitSA==}
