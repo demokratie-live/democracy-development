@@ -328,6 +328,7 @@ const ProcedureResolvers: Resolvers = {
         }
         const plenaryMinute = await PlenaryMinuteModel.findOne({
           meeting: parseInt(session.session),
+          period: procedure.period,
         });
 
         console.log('plenaryMinute', plenaryMinute);
