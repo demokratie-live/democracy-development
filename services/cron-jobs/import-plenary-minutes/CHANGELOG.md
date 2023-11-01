@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.4](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.3...import-plenary-minutes@v0.1.4) (2023-11-01)
+
+
+* 🔥 remove dip service and use bt-sdk ([7927c4f](https://github.com/demokratie-live/democracy-development/commit/7927c4f4205ce7bc03e407ac5f36192117166fd2))
+
 ## [0.1.3](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.2...import-plenary-minutes@v0.1.3) (2023-10-22)
 
 
