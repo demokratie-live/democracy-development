@@ -11,7 +11,7 @@ export type PlenaryMinuteDoc = IPlenaryMinute & Document & SchemaTimestampsConfi
 
 const PlenaryMinuteSchema = new Schema<PlenaryMinuteDoc>(
   {
-    date: { type: Date, required: true, unique: true },
+    date: { type: Date, required: true, unique: false },
     meeting: { type: Number, required: true, unique: false },
     period: { type: Number, required: true, unique: false },
     xml: { type: String, required: true, unique: true },
