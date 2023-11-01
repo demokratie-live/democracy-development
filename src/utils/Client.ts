@@ -9,18 +9,11 @@ import DebounceLink from 'apollo-link-debounce';
 
 export default function getClient() {
   const isServer = typeof window === 'undefined';
-  const host = isServer ? process.env.HOSTNAME : window.location.origin;
-  const port = isServer ? process.env.PORT : window.location.port;
-  const protocol = isServer ? process.env.PROTOCOL : window.location.protocol;
-  const url =
-    process.env.NODE_ENV === 'production'
-      ? `${protocol}://${host}`
-      : `${protocol}://${host}:${port}`;
-
+  const host = isServer ? process.env.APP_HOST : window.location.origin;
   const link = ApolloLink.from([
     new DebounceLink(100),
     new HttpLink({
-      uri: `${url}/api/graphql`,
+      uri: `${host}/api/graphql`,
     }),
   ]);
 
