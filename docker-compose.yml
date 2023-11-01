@@ -43,19 +43,6 @@ services:
       - admin
     networks:
       - democracy
-  democracy-web-app:
-    build:
-      context: democracy/web-app
-      target: runner
-    ports:
-      - 3001:3000
-    environment:
-      - GRAPHQL_URL=http://localhost:3000/
-      - GRAPHQL_URL_SERVER=http://democracy-api:3000/
-    profiles:
-      - frontend
-    networks:
-      - democracy
   crawler:
     build:
       context: services/cron-jobs/crawler
