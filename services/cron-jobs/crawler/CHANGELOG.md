@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.16](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.0.15...crawler@v1.0.16) (2023-11-01)
+
+
+* ⬆️ upgrade axios ([c20e506](https://github.com/demokratie-live/democracy-development/commit/c20e5065941172d6b4876b3927167d35d58ba38d))
+
 ## [1.0.15](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.0.14...crawler@v1.0.15) (2023-11-01)
 
 ## [1.0.14](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.0.13...crawler@v1.0.14) (2023-11-01)
