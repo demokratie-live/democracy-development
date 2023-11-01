@@ -117,6 +117,7 @@ jobs:
 
           echo "$changelog"
           echo "$changelog" >> $GITHUB_STEP_SUMMARY
+          echo "$changelog" >> /tmp/CHANGELOG.md
 
           {
           echo 'CHANGELOG<<EOF'
@@ -127,7 +128,6 @@ jobs:
           echo 'CHANGELOG<<EOF' >> $GITHUB_ENV
           echo $changelog >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-
         working-directory: ${{ steps.get-directory.outputs.directory }}
         env:
           MATRIX_PACKAGE: ${{ matrix.package }}
@@ -184,15 +184,29 @@ jobs:
             exit 1
           fi
 
-      - name: Publish GitHub release
-        uses: ncipollo/release-action@v1
+      - name: Create release
+        uses: actions/github-script@v6
         if: inputs.dryRun == false
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT }} # # use PAT to being able to push to protected branch later on
-          CHANGELOG: ${{ env.CHANGELOG }}
+          TAG: ${{ matrix.package }}@v${{ steps.determine_next_version.outputs.NEXT_VERSION }}
         with:
-          tag: ${{ matrix.package }}@v${{ steps.determine_next_version.outputs.NEXT_VERSION }}
-          name: ${{ matrix.package }}@v${{ steps.determine_next_version.outputs.NEXT_VERSION }}
-          prerelease: false
-          body: |
-            '${{ env.CHANGELOG }}'
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+          script: |
+            const fs = require('fs');
+            const { TAG } = process.env;
+            const body = fs.readFileSync('/tmp/CHANGELOG.md', 'utf8');
+
+            try {
+              const response = await github.rest.repos.createRelease({
+                draft: false,
+                generate_release_notes: false,
+                name: `${TAG}`,
+                owner: context.repo.owner,
+                prerelease: false,
+                repo: context.repo.repo,
+                tag_name: `${TAG}`,
+                body: body.replace('\n', '<br />'),
+              });
+            } catch (error) {
+              core.setFailed(error.message);
+            }
