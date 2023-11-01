@@ -193,6 +193,6 @@ jobs:
         with:
           tag: ${{ matrix.package }}@v${{ steps.determine_next_version.outputs.NEXT_VERSION }}
           name: ${{ matrix.package }}@v${{ steps.determine_next_version.outputs.NEXT_VERSION }}
-          prerelease: true
+          prerelease: false
           body: |
             '${{ env.CHANGELOG }}'
