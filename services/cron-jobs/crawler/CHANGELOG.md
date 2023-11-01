@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.14](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.0.13...crawler@v1.0.14) (2023-11-01)
+
+
+* 🐛 rename MONGO_DB_URL to DB_URL ([5b844fb](https://github.com/demokratie-live/democracy-development/commit/5b844fb2e2ad2617e3a235b6fd66fdf2d17abe2e))
+* 🔥 remove dip service and use bt-sdk ([7927c4f](https://github.com/demokratie-live/democracy-development/commit/7927c4f4205ce7bc03e407ac5f36192117166fd2))
+
 ## [1.0.13](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.0.12...crawler@v1.0.13) (2023-10-22)
 
 
