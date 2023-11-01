@@ -24,6 +24,7 @@
     "@types/d3": "^5.7.0",
     "accounting": "^0.4.1",
     "apollo-link-debounce": "^3.0.0",
+    "axios": "^1.6.0",
     "chart.js": "^3.7.1",
     "d3": "^5.7.0",
     "dayjs": "^1.11.0",
