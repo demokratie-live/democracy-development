@@ -1,7 +1,7 @@
 import { truncate } from 'lodash-es';
-import { NextSeo } from 'next-seo';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { NextSeo } from 'next-seo';
 
 import { AppConfig } from '@/utils/AppConfig';
 
