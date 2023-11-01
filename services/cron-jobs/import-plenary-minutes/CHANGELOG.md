@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.5](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.4...import-plenary-minutes@v0.1.5) (2023-11-01)
+
 ## [0.1.4](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.3...import-plenary-minutes@v0.1.4) (2023-11-01)
 
 
