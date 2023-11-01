@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.23](https://github.com/demokratie-live/democracy-development/compare/push-send-queued@v0.1.22...push-send-queued@v0.1.23) (2023-11-01)
+
+
+* 🔥 remove dip service and use bt-sdk ([7927c4f](https://github.com/demokratie-live/democracy-development/commit/7927c4f4205ce7bc03e407ac5f36192117166fd2))
+
 ## [0.1.22](https://github.com/demokratie-live/democracy-development/compare/push-send-queued@v0.1.21...push-send-queued@v0.1.22) (2023-10-22)
 
 
