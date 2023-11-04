@@ -46,8 +46,13 @@ WORKDIR /app
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 runuser
-USER runuser
  
 COPY --from=installer /app .
+
+# Create data directory and set permissions
+RUN mkdir $SERVICE_PATH/data
+RUN chown runuser:nodejs $SERVICE_PATH/data
  
+USER runuser
+
 CMD cd $SERVICE_PATH && pnpm start
