@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.12](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.11...import-named-polls@v0.1.12) (2023-11-04)
+
+
+* 🐛 use data directory for crawlee cache ([f48dcfc](https://github.com/demokratie-live/democracy-development/commit/f48dcfc45c43846bfff0fb55693374589654b3d2))
+* **cleanup:** 🧹 remove unused dockerfiles ([8b4ba6f](https://github.com/demokratie-live/democracy-development/commit/8b4ba6f2203ae7d41f12e7ac6bc74597526d4aa2))
+
 ## [0.1.11](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.10...import-named-polls@v0.1.11) (2023-11-01)
 
 ## [0.1.10](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.9...import-named-polls@v0.1.10) (2023-11-01)
