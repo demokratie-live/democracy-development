@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.13](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.12...import-named-polls@v0.1.13) (2023-11-05)
+
+
+* 🐛 setting up dayjs out of loops ([2e66186](https://github.com/demokratie-live/democracy-development/commit/2e66186cc946e1bdfb50e70ede02d972adf85202)), closes [#535](https://github.com/demokratie-live/democracy-development/issues/535)
+
 ## [0.1.12](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.11...import-named-polls@v0.1.12) (2023-11-04)
 
 
