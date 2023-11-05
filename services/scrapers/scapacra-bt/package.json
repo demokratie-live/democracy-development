@@ -1,0 +1,56 @@
+{
+  "name": "@democracy-deutschland/scapacra-bt",
+  "version": "1.0.33",
+  "description": "Scapacra Bundestag",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "author": "DEMOCRACY Deutschland e.V.",
+  "homepage": "https://github.com/demokratie-live/bt-scapacra#readme",
+  "keywords": [],
+  "license": "Apache-2.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/demokratie-live/bt-scapacra.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "link": "cd dist && npm link",
+    "dev": "nodemon ./src/run.ts",
+    "start": "node ./dist/run.js",
+    "inspect": "node --inspect-brk ./dist/run.js",
+    "lint": "tslint --project tsconfig.json && yarn typecheck",
+    "typecheck": "tsc --noEmit",
+    "test": "mocha -r ts-node/register src/**/*.test.ts",
+    "prepublish": "yarn build"
+  },
+  "bugs": {
+    "url": "https://github.com/demokratie-live/bt-scapacra/issues"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.2",
+    "@types/mocha": "^10.0.3",
+    "@types/node": "^20.8.10",
+    "@types/xsd-schema-validator": "^0.5.4",
+    "chai": "^4.2.0",
+    "mocha": "^10.2.0",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "tslint": "^6.1.3",
+    "xsd-schema-validator": "^0.7.0"
+  },
+  "dependencies": {
+    "@democracy-deutschland/scapacra": "workspace:*",
+    "@types/axios": "^0.14.0",
+    "@types/xml2js": "^0.4.13",
+    "@types/xmldom": "^0.1.33",
+    "axios": "^1.6.0",
+    "jsonschema": "^1.2.4",
+    "moment": "^2.24.0",
+    "typescript": "^5.2.2",
+    "url": "^0.11.0",
+    "xml2js": "^0.6.2",
+    "xmldom": "^0.6.0",
+    "xpath": "^0.0.33"
+  }
+}

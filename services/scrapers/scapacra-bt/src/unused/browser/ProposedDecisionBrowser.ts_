@@ -1,0 +1,28 @@
+import { IBrowser } from '@democracy-deutschland/scapacra';
+import { BundestagListBrowser } from './BundestagListBrowser';
+
+export = Documents_Browser;
+
+namespace Documents_Browser {
+    export type ProposedDecisionData = NodeJS.ReadableStream;
+    export type ProposedDecisionMeta = {
+        url: string
+    }
+
+    export class ProposedDecisionBrowser extends BundestagListBrowser<ProposedDecisionData,ProposedDecisionMeta>{
+        public static readonly pageSize = 10;
+        private static readonly ajaxRequestPath: string = "ajax/filterlist/de/ausschuesse/a03/berichte/-/549888";
+
+        public getPageSize(): number {
+            return ProposedDecisionBrowser.pageSize;
+        }
+
+        public getListAjaxRequestPath(): string {
+            return ProposedDecisionBrowser.ajaxRequestPath;
+        }
+
+        protected createFromStream(readableStream: NodeJS.ReadableStream): ProposedDecisionData {
+            return readableStream;
+        }
+    }
+}

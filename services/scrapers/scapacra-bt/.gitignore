@@ -1,0 +1,7 @@
+out/**/*
+node_modules/
+scraperResult/
+dist/
+*.js
+*.d.ts
+*.svg

@@ -1,0 +1,20 @@
+@startuml Parser
+  package Parser {
+    note top of IParser
+      Extrahiert die gewünschten Daten aus dem gegebenen IFile.
+    end note
+
+    interface IParser<T extends IFile> {
+      JSON parse(content: T) 
+    }
+
+    class DipProcedureDataParser<Html> {
+    }
+
+    class PlenarProtocolSpeechesParser<Xml> {
+    }
+
+    IParser <|-- DipProcedureDataParser
+    IParser <|-- PlenarProtocolSpeechesParser
+  }
+@enduml
