@@ -15,7 +15,7 @@
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@democracy-deutschland/bundestagio-common": "workspace:*",
     "@democracy-deutschland/scapacra": "^1.0.6",
-    "@democracy-deutschland/scapacra-bt": "^1.0.31",
+    "@democracy-deutschland/scapacra-bt": "workspace:*",
     "http2": "^3.3.7"
   },
   "devDependencies": {
