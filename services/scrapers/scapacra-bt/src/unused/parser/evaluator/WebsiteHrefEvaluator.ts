@@ -1,30 +1,17 @@
-import xpath = require('xpath');
-import { DocumentEvaluater } from '@democracy-deutschland/scapacra'
+import { DocumentEvaluater } from '@democracy-deutschland/scapacra';
+import { SelectedValue } from 'xpath';
 
-export = Documents_Parser_Evaluator;
+export class WebsiteHrefEvaluator extends DocumentEvaluater {
+  /**
+   * Finds all href links from the HTML website.
+   */
+  public async getSources(): Promise<string[]> {
+    const sources = await this.evaluate("//a[@class='bt-link-dokument']/@href");
+    return sources || [];
+  }
 
-namespace Documents_Parser_Evaluator {
-    /**
-     * Evaluates all href attributes from html list.
-     */
-    export class WebsiteHrefEvaluator extends DocumentEvaluater {
-
-        /**
-         * Finds all href links from the HTML website.
-         */
-        public getSources(): Promise<any[]> {
-            return this.evaluate("//a[@class='bt-link-dokument']/@href");
-        }
-
-        protected getValueFromSelectedNode(node: xpath.SelectedValue): any {
-            let attr = <Attr>node;
-            return attr.value;
-        }
-
-        /*
-        protected xmlDOMErrorCallback(msg: String) {
-            return;
-        }
-        */
-    }
+  protected async getValueFromSelectedNode(node: SelectedValue): Promise<string> {
+    const attr = node as Attr;
+    return Promise.resolve(attr.value);
+  }
 }

@@ -8,6 +8,7 @@
   "homepage": "https://github.com/demokratie-live/bt-scapacra#readme",
   "keywords": [],
   "license": "Apache-2.0",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/demokratie-live/bt-scapacra.git"
