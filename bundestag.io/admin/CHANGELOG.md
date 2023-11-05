@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.0.7](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.0.6...bundestag.io-admin@v3.0.7) (2023-11-05)
+
+
+* **cleanup:** 🧹 remove yarn.lock files ([5903869](https://github.com/demokratie-live/democracy-development/commit/59038691fceadc388574d7fd6b00951cc6e53eb0))
+
 ## 3.0.6 (2023-11-01)
 
 
