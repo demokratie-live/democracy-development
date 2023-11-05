@@ -14,6 +14,9 @@ const crawler = new CheerioCrawler({
   maxRequestsPerMinute: MAX_REQUESTS_PER_MINUTE,
 });
 
+dayjs.extend(customParseFormat);
+dayjs.locale('de');
+
 export const crawl = async () => {
   await crawler.run([
     {
@@ -50,8 +53,6 @@ router.addHandler(CRAWLER_LABELS.LIST, async ({ $, request, crawler }) => {
     const urlElement = $(element.find('a'));
     const url = `${BASE_URL}${urlElement.attr('href')}`;
 
-    dayjs.extend(customParseFormat);
-    dayjs.locale('de');
     const date = dayjs($(element.find('.bt-date')).text().trim(), 'L')
       .add(1, 'day')
       .set('hours', 1)
