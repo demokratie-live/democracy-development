@@ -1,0 +1,5 @@
+apiVersion: v1
+description: Zipkin distributed tracing
+name: zipkin-helm
+version: 0.6.2
+icon: https://avatars1.githubusercontent.com/u/11860887
