@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.17](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.16...import-named-polls@v0.1.17) (2023-12-10)
+
+
+* 🐛 fix typings ([e73eb3a](https://github.com/demokratie-live/democracy-development/commit/e73eb3a6431547ed39d39ccaadf5773643307f0c))
+
 ## [0.1.16](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.15...import-named-polls@v0.1.16) (2023-12-10)
 
 
