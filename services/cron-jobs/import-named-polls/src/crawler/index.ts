@@ -54,7 +54,7 @@ router.addDefaultHandler(({ log }) => {
 router.addHandler(CRAWLER_LABELS.LIST, async ({ $, request, crawler }) => {
   console.log('List', request.url);
   const polls = $('.col-xs-12.bt-slide:not(.bt-slide-error)');
-  polls.each(async (i, poll) => {
+  polls.each((i, poll): boolean | void => {
     const element = $(poll);
 
     const urlElement = $(element.find('a'));
@@ -91,17 +91,18 @@ router.addHandler(CRAWLER_LABELS.LIST, async ({ $, request, crawler }) => {
         },
       };
 
-      const existingNamedPoll = await NamedPollModel.exists({ webId: id });
-      if (!existingNamedPoll) {
-        console.log('Poll Details', url);
-        await crawler.addRequests([
-          {
-            url,
-            label: CRAWLER_LABELS.POLL,
-            userData,
-          },
-        ]);
-      }
+      NamedPollModel.exists({ webId: id }).then((exists) => {
+        if (!exists) {
+          console.log('Poll Details', url);
+          crawler.addRequests([
+            {
+              url,
+              label: CRAWLER_LABELS.POLL,
+              userData,
+            },
+          ]);
+        }
+      });
     }
   });
 

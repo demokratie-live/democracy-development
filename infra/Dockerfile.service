@@ -50,7 +50,7 @@ RUN adduser --system --uid 1001 runuser
 COPY --from=installer /app .
 
 # Create data directory and set permissions
-RUN mkdir $SERVICE_PATH/data
+RUN mkdir -p $SERVICE_PATH/data
 RUN chown runuser:nodejs $SERVICE_PATH/data
  
 USER runuser
