@@ -76,6 +76,17 @@ const start = async () => {
         },
       }).then(async ({ data: deputyList }) => {
         for (const deputyListItem of deputyList.deputies) {
+          const lastUpdate = await DeputyModel.findOne({ webId: deputyListItem.webId }).then(
+            (deputy) => deputy?.updatedAt as string,
+          );
+
+          // run only if last update is older than 7 day
+          if (lastUpdate && new Date(lastUpdate).getTime() > Date.now() - 1000 * 60 * 60 * 24 * 7) {
+            console.log('skip', deputyListItem.URL);
+            continue;
+          }
+          console.log('lastUpdate', lastUpdate);
+
           await scrapeIt<Omit<IDeputy, 'URL' | 'webId' | 'period'>>(encodeURI(deputyListItem.URL), {
             imgURL: {
               selector: '.bt-bild-standard > img',
