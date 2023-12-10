@@ -15,15 +15,15 @@
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@democracy-deutschland/bundestagio-common": "workspace:*",
     "cheerio": "^1.0.0-rc.12",
-    "crawlee": "^3.5.8",
+    "crawlee": "^3.6.2",
     "dayjs": "^1.11.7",
-    "playwright": "^1.39.0"
+    "playwright": "^1.40.1"
   },
   "devDependencies": {
-    "@types/node": "^20.8.10",
+    "@types/node": "^20.10.4",
     "dotenv": "^16.0.3",
     "ts-node-dev": "^2.0.0",
     "ts-unused-exports": "^10.0.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.3.3"
   }
 }
