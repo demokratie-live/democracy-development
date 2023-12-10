@@ -1,6 +1,6 @@
 export const CRON_NAME = 'NamedPolls';
 
-export const MAX_CONCURRENCY = process.env.MAX_CONCURRENCY ? Number(process.env.MAX_CONCURRENCY) : 5;
+export const MAX_CONCURRENCY = process.env.MAX_CONCURRENCY ? Number(process.env.MAX_CONCURRENCY) : 1;
 export const MAX_REQUESTS_PER_MINUTE = process.env.MAX_REQUESTS_PER_MINUTE
   ? Number(process.env.MAX_REQUESTS_PER_MINUTE)
   : 100;

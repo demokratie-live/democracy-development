@@ -58,8 +58,27 @@ export const processNamedPoll = async (data: any) => {
       console.warn(`\n[Cronjob][${CRON_NAME}] no Procedure match on: ${data.url}`);
     }
   }
+
+  // We need this for nested document votes.all -> to prevent update/history generation
+  // This is retarded - but what u can do? ¯\_(ツ)_/¯
+  // Find NamedPoll
+  const existingNamedPoll = await NamedPollModel.findOne({
+    webId: data.webId,
+  });
+
+  let existingNamedPollObject: any = existingNamedPoll?.toObject();
+
+  if (existingNamedPollObject) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, ...rest } = existingNamedPollObject;
+    existingNamedPollObject = rest;
+  } else {
+    existingNamedPollObject = {};
+  }
+
   // Construct Database object
   const namedPoll: any = {
+    ...existingNamedPollObject,
     procedureId,
     URL: data.url,
     webId: data.id,
@@ -74,13 +93,6 @@ export const processNamedPoll = async (data: any) => {
     media: data.media,
     speeches: data.speeches,
   };
-
-  // We need this for nested document votes.all -> to prevent update/history generation
-  // This is retarded - but what u can do? ¯\_(ツ)_/¯
-  // Find NamedPoll
-  const existingNamedPoll = await NamedPollModel.findOne({
-    webId: namedPoll.webId,
-  });
   if (existingNamedPoll && existingNamedPoll.votes && existingNamedPoll.votes.all) {
     if (existingNamedPoll.votes.all.total !== data.votes.all.total) {
       namedPoll['votes.all.total'] = data.votes.all.total;
@@ -153,7 +165,7 @@ export const processNamedPoll = async (data: any) => {
     };
 
     // Determin Vote Direction
-    let [{ history: histories }] = procedures as IProcedure[];
+    const [{ history: histories }] = procedures as IProcedure[];
 
     const namedHistoryEntry = histories
       .find(
@@ -233,4 +245,6 @@ export const processNamedPoll = async (data: any) => {
 
   // Update/Insert
   await NamedPollModel.findOneAndUpdate({ webId: namedPoll.webId }, { $set: namedPoll }, { upsert: true });
+  // await NamedPollModel.findOneAndUpdate({ webId: namedPoll.webId }, { $set: namedPoll }, { upsert: true });
+  process.stdout.write(namedPoll.webId);
 };

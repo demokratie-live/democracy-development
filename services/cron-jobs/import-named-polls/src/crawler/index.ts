@@ -7,17 +7,24 @@ import { getUrlParams } from '../utils/getUrlParams';
 import { processNamedPoll } from '../process-named-poll';
 import { router } from './router';
 import { getVoteNumber } from '../utils/getVoteNumber';
+import { NamedPollModel } from '@democracy-deutschland/bundestagio-common';
 
 const crawler = new CheerioCrawler({
   requestHandler: router,
   maxConcurrency: MAX_CONCURRENCY,
   maxRequestsPerMinute: MAX_REQUESTS_PER_MINUTE,
+  requestHandlerTimeoutSecs: 60,
 });
 
 dayjs.extend(customParseFormat);
 dayjs.locale('de');
 
 export const crawl = async () => {
+  console.log({
+    requestHandler: router,
+    maxConcurrency: MAX_CONCURRENCY,
+    maxRequestsPerMinute: MAX_REQUESTS_PER_MINUTE,
+  });
   await crawler.run([
     {
       url: `https://www.bundestag.de/ajax/filterlist/de/parlament/plenum/abstimmung/484422-484422?limit=10&noFilterSet=true&offset=0`,
@@ -45,13 +52,16 @@ router.addDefaultHandler(({ log }) => {
 });
 
 router.addHandler(CRAWLER_LABELS.LIST, async ({ $, request, crawler }) => {
-  const polls = $('.col-xs-12.bt-slide');
-
-  for (const poll of polls) {
+  console.log('List', request.url);
+  const polls = $('.col-xs-12.bt-slide:not(.bt-slide-error)');
+  polls.each(async (i, poll) => {
     const element = $(poll);
 
     const urlElement = $(element.find('a'));
     const url = `${BASE_URL}${urlElement.attr('href')}`;
+    if (!urlElement.attr('href')) {
+      return;
+    }
 
     const date = dayjs($(element.find('.bt-date')).text().trim(), 'L')
       .add(1, 'day')
@@ -84,16 +94,19 @@ router.addHandler(CRAWLER_LABELS.LIST, async ({ $, request, crawler }) => {
       },
     };
 
-    // console.log(userData);
-
-    await crawler.addRequests([
-      {
-        url,
-        label: CRAWLER_LABELS.POLL,
-        userData,
-      },
-    ]);
-  }
+    const existingNamedPoll = await NamedPollModel.exists({ webId: id });
+    if (!existingNamedPoll) {
+      console.log('Poll Details', url);
+      await crawler.addRequests([
+        {
+          url,
+          label: CRAWLER_LABELS.POLL,
+          userData,
+        },
+      ]);
+    }
+  });
+  console.log(polls.length);
   if (polls.length > 0) {
     const newOffset = request.userData.offset + 10;
     await crawler.addRequests([
@@ -108,7 +121,8 @@ router.addHandler(CRAWLER_LABELS.LIST, async ({ $, request, crawler }) => {
   }
 });
 
-router.addHandler(CRAWLER_LABELS.POLL, async ({ $, request, crawler }) => {
+router.addHandler(CRAWLER_LABELS.POLL, async ({ $, request }) => {
+  console.log('Poll', request.url);
   const descriptionElement = $('.bt-artikel.bt-standard-content p').first();
 
   const id = request.userData.id;
@@ -150,8 +164,8 @@ router.addHandler(CRAWLER_LABELS.POLL, async ({ $, request, crawler }) => {
       parties: partyVotes,
     },
   };
-  //   console.log(userData);
 
   await processNamedPoll(userData);
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+
+  return userData;
 });

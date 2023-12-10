@@ -1,5 +1,4 @@
 import {
-  ProcedureModel,
   NamedPollModel,
   setCronStart,
   setCronSuccess,
@@ -55,7 +54,7 @@ const start = async () => {
     throw new Error('you have to set environment variable: DB_URL');
   }
   await mongoConnect();
-  console.log('procedures', await ProcedureModel.countDocuments({}));
+  console.log('mongoConnect');
   await start();
   process.exit(0);
 })();
