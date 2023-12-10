@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.14](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.13...import-named-polls@v0.1.14) (2023-12-10)
+
+
+* 🐛 quit job on poll list pages with no results ([23bf21b](https://github.com/demokratie-live/democracy-development/commit/23bf21b16fc52eced67884ca9d42221c1189f138))
+
 ## [0.1.13](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.12...import-named-polls@v0.1.13) (2023-11-05)
 
 
