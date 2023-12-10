@@ -58,55 +58,53 @@ router.addHandler(CRAWLER_LABELS.LIST, async ({ $, request, crawler }) => {
     const element = $(poll);
 
     const urlElement = $(element.find('a'));
-    const url = `${BASE_URL}${urlElement.attr('href')}`;
-    if (!urlElement.attr('href')) {
-      return;
-    }
+    if (urlElement.attr('href')) {
+      const url = `${BASE_URL}${urlElement.attr('href')}`;
+      const date = dayjs($(element.find('.bt-date')).text().trim(), 'L')
+        .add(1, 'day')
+        .set('hours', 1)
+        .set('minute', 0)
+        .set('second', 0)
+        .set('millisecond', 0)
+        .toDate();
 
-    const date = dayjs($(element.find('.bt-date')).text().trim(), 'L')
-      .add(1, 'day')
-      .set('hours', 1)
-      .set('minute', 0)
-      .set('second', 0)
-      .set('millisecond', 0)
-      .toDate();
+      const votesElement = $(element.find('.bt-chart-legend'));
+      const votesYes = getVoteNumber('ja', { $, votesElement });
+      const votesNo = getVoteNumber('nein', { $, votesElement });
+      const votesAbstain = getVoteNumber('enthalten', { $, votesElement });
+      const votesNA = getVoteNumber('na', { $, votesElement });
 
-    const votesElement = $(element.find('.bt-chart-legend'));
-    const votesYes = getVoteNumber('ja', { $, votesElement });
-    const votesNo = getVoteNumber('nein', { $, votesElement });
-    const votesAbstain = getVoteNumber('enthalten', { $, votesElement });
-    const votesNA = getVoteNumber('na', { $, votesElement });
+      const { id } = getUrlParams(url);
 
-    const { id } = getUrlParams(url);
-
-    const userData = {
-      id,
-      url,
-      date,
-      votes: {
-        all: {
-          total: votesYes + votesNo + votesAbstain + votesNA,
-          yes: votesYes,
-          no: votesNo,
-          abstain: votesAbstain,
-          na: votesNA,
+      const userData = {
+        id,
+        url,
+        date,
+        votes: {
+          all: {
+            total: votesYes + votesNo + votesAbstain + votesNA,
+            yes: votesYes,
+            no: votesNo,
+            abstain: votesAbstain,
+            na: votesNA,
+          },
         },
-      },
-    };
+      };
 
-    const existingNamedPoll = await NamedPollModel.exists({ webId: id });
-    if (!existingNamedPoll) {
-      console.log('Poll Details', url);
-      await crawler.addRequests([
-        {
-          url,
-          label: CRAWLER_LABELS.POLL,
-          userData,
-        },
-      ]);
+      const existingNamedPoll = await NamedPollModel.exists({ webId: id });
+      if (!existingNamedPoll) {
+        console.log('Poll Details', url);
+        await crawler.addRequests([
+          {
+            url,
+            label: CRAWLER_LABELS.POLL,
+            userData,
+          },
+        ]);
+      }
     }
   });
-  console.log(polls.length);
+
   if (polls.length > 0) {
     const newOffset = request.userData.offset + 10;
     await crawler.addRequests([
