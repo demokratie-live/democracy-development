@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.12](https://github.com/demokratie-live/democracy-development/compare/import-deputy-profiles@v0.1.11...import-deputy-profiles@v0.1.12) (2023-12-10)
+
+
+### 🚀 Feature
+
+* ⚡️ Update profiles when older than 7 days ([7429376](https://github.com/demokratie-live/democracy-development/commit/7429376c9d55a147d73ba4782d0653337fb77520))
+
 ## [0.1.11](https://github.com/demokratie-live/democracy-development/compare/import-deputy-profiles@v0.1.10...import-deputy-profiles@v0.1.11) (2023-12-10)
 
 
