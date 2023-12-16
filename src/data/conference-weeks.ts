@@ -218,6 +218,91 @@ const conferenceWeeks = [
     start: parseDate('11.12.2023'),
     end: parseDate('15.12.2023'),
   },
+  // https://www.bundestag.de/parlament/plenum/sitzungskalender/bt2024-941110
+  {
+    start: parseDate('15.01.2024'),
+    end: parseDate('19.01.2024'),
+  },
+  {
+    start: parseDate('29.01.2024'),
+    end: parseDate('02.02.2024'),
+  },
+  {
+    start: parseDate('19.02.2024'),
+    end: parseDate('23.02.2024'),
+  },
+  {
+    start: parseDate('11.03.2024'),
+    end: parseDate('15.03.2024'),
+  },
+  {
+    start: parseDate('18.03.2024'),
+    end: parseDate('22.03.2024'),
+  },
+  {
+    start: parseDate('08.04.2024'),
+    end: parseDate('12.04.2024'),
+  },
+  {
+    start: parseDate('22.04.2024'),
+    end: parseDate('26.04.2024'),
+  },
+  {
+    start: parseDate('13.05.2024'),
+    end: parseDate('17.05.2024'),
+  },
+  {
+    start: parseDate('03.06.2024'),
+    end: parseDate('07.06.2024'),
+  },
+  {
+    start: parseDate('10.06.2024'),
+    end: parseDate('14.06.2024'),
+  },
+  {
+    start: parseDate('24.06.2024'),
+    end: parseDate('28.06.2024'),
+  },
+  {
+    start: parseDate('01.07.2024'),
+    end: parseDate('05.07.2024'),
+  },
+  {
+    start: parseDate('09.09.2024'),
+    end: parseDate('13.09.2024'),
+  },
+  {
+    start: parseDate('23.09.2024'),
+    end: parseDate('27.09.2024'),
+  },
+  {
+    start: parseDate('07.10.2024'),
+    end: parseDate('11.10.2024'),
+  },
+  {
+    start: parseDate('14.10.2024'),
+    end: parseDate('18.10.2024'),
+  },
+  {
+    start: parseDate('04.11.2024'),
+    end: parseDate('08.11.2024'),
+  },
+  {
+    start: parseDate('11.11.2024'),
+    end: parseDate('15.11.2024'),
+  },
+  {
+    start: parseDate('25.11.2024'),
+    end: parseDate('29.11.2024'),
+  },
+  {
+    start: parseDate('02.12.2024'),
+    end: parseDate('06.12.2024'),
+  },
+  {
+    start: parseDate('16.12.2024'),
+    end: parseDate('20.12.2024'),
+  },
 ];
 
 // return the current or next conference week
