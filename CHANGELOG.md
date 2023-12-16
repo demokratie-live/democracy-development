@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.12](https://github.com/demokratie-live/desktop/compare/v1.0.11...v1.0.12) (2023-12-16)
+
 ### [1.0.12-4-keine-sitzungswochen-daten.0](https://github.com/demokratie-live/desktop/compare/v1.0.11...v1.0.12-4-keine-sitzungswochen-daten.0) (2023-12-16)
 
 ### [1.0.11](https://github.com/demokratie-live/desktop/compare/v1.0.10...v1.0.11) (2023-11-01)
