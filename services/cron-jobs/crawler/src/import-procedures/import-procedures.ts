@@ -1,15 +1,26 @@
 import { ProcedureModel } from '@democracy-deutschland/bundestagio-common';
 import debug from 'debug';
 import { CONFIG } from '../config';
-import { Configuration, DipApi, Vorgang } from '@democracy-deutschland/bt-dip-sdk';
+import {
+  Configuration,
+  Vorgang,
+  VorgngeApi,
+  VorgangspositionenApi,
+  Vorgangsposition,
+} from '@democracy-deutschland/bt-dip-sdk';
 const log = debug('bundestag-io:import-procedures:log');
 log.log = console.log.bind(console);
 import axios from '../axios';
+import { IProcedure } from '@democracy-deutschland/bundestagio-common/dist/models/Procedure/schema';
+import { IDocument } from '@democracy-deutschland/bundestagio-common/dist/models/Procedure/Procedure/Document';
+import { IProcessFlow } from '@democracy-deutschland/bundestagio-common/dist/models/Procedure/Procedure/ProcessFlow';
+import { germanDateFormat } from './utils';
 
 const config = new Configuration({
   apiKey: `ApiKey ${CONFIG.DIP_API_KEY}`, // Replace #YOUR_API_KEY# with your api key
 });
-const dipAPI = new DipApi(config, undefined, axios);
+const vorgangApi = new VorgngeApi(config, undefined, axios);
+const vorgangspositionenApi = new VorgangspositionenApi(config, undefined, axios);
 
 export default async function importProcedures(config: typeof CONFIG): Promise<void> {
   const {
@@ -53,15 +64,93 @@ export default async function importProcedures(config: typeof CONFIG): Promise<v
     const {
       edges,
       pageInfo: { endCursor, hasNextPage },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } = await getVorgaenge({
       cursor: variables.cursor,
       limit: variables.limit,
-      filter: { after: new Date(variables.filter.after) },
+      filter: { start: new Date(variables.filter.after) },
       offset: 0,
     });
 
-    const procedures = edges.map(({ node }) => ({ ...node, procedureId: node.id }));
+    let procedures: Partial<IProcedure>[] = [];
+
+    for (const edge of edges) {
+      log(`${edge.node.aktualisiert} ${edge.node.id} - ${edge.node.titel}`);
+      const { node } = edge;
+      const vorgangspositionen = await vorgangspositionenApi
+        .getVorgangspositionList({
+          fVorgang: Number(node.id),
+        })
+        .then((res) => res.data.documents);
+
+      const importantDocuments = vorgangspositionen
+        .filter((v) => v.fundstelle?.dokumentart === 'Drucksache')
+        .map<IDocument>((d) => ({
+          editor: d.fundstelle.herausgeber,
+          number: d.fundstelle.dokumentnummer,
+          type: d.fundstelle.drucksachetyp!,
+          url: d.fundstelle.pdf_url!,
+        }));
+
+      const legalValidity =
+        node.inkrafttreten?.map((i) => `${i.datum}${i.erlaeuterung ? ` (${i.erlaeuterung})` : ''}`) || [];
+
+      const history = vorgangspositionen.map<IProcessFlow>((d) => {
+        const getFindSpot = (d: Vorgangsposition) => {
+          const { fundstelle } = d;
+          if (!fundstelle) return;
+          const { herausgeber, dokumentart, dokumentnummer } = fundstelle;
+          const datum = germanDateFormat.format(new Date(fundstelle.datum));
+          const result = `${datum} - ${herausgeber}-${dokumentart} ${dokumentnummer}`;
+          const { anfangsseite, endseite, anfangsquadrant, endquadrant } = fundstelle;
+          if (![anfangsseite, endseite, anfangsquadrant, endquadrant].every(Boolean)) return result;
+          return `${result}, S. ${anfangsseite}${anfangsquadrant} - ${endseite}${endquadrant}`;
+        };
+
+        const getDecision = (d: Vorgangsposition) => {
+          const { beschlussfassung } = d;
+          if (!beschlussfassung) return [];
+          return beschlussfassung.map((b) => ({
+            page: b.seite,
+            tenor: b.beschlusstenor,
+            document: b.dokumentnummer,
+            type: b.abstimmungsart,
+            comment: b.abstimm_ergebnis_bemerkung,
+            foundation: b.grundlage,
+            majority: b.mehrheit,
+          }));
+        };
+
+        return {
+          assignment: d.fundstelle.herausgeber,
+          initiator:
+            d.fundstelle.urheber.length > 0
+              ? `${d.vorgangsposition}, Urheber : ${d.fundstelle.urheber.join(', ')}`
+              : d.vorgangsposition,
+          findSpot: getFindSpot(d),
+          findSpotUrl: d.fundstelle.pdf_url,
+          decision: getDecision(d),
+          abstract: d.abstract,
+          date: new Date(d.fundstelle.datum),
+        };
+      });
+
+      const procedure: Partial<IProcedure> = {
+        ...node,
+        procedureId: node.id,
+        type: node.vorgangstyp,
+        tags: node.deskriptor?.map((d) => d.name) || [],
+        title: node.titel,
+        currentStatus: node.beratungsstand,
+        period: node.wahlperiode,
+        subjectGroups: node.sachgebiet,
+        importantDocuments,
+        gestOrderNumber: node.gesta,
+        legalValidity,
+        history,
+      };
+
+      procedures = [...procedures, procedure];
+    }
 
     await ProcedureModel.bulkWrite(
       procedures.map((node) => ({
@@ -80,8 +169,8 @@ export default async function importProcedures(config: typeof CONFIG): Promise<v
 }
 
 export type ProcedureFilter = {
-  before?: Date;
-  after?: Date;
+  start?: Date;
+  end?: Date;
   types?: string[];
 };
 
@@ -93,19 +182,24 @@ export type ProceduresArgs = {
 };
 
 const getVorgaenge = async (args: ProceduresArgs) => {
-  const { before, after, types: typesFilter } = args.filter || {};
+  const { start, end, types: typesFilter } = args.filter || {};
   const filter: { 'f.datum.start'?: Date; 'f.datum.end'?: Date } = {};
-  if (after) filter['f.datum.start'] = after;
-  if (before) filter['f.datum.end'] = before;
+  if (start) filter['f.datum.start'] = start;
+  if (end) filter['f.datum.end'] = end;
   let hasNextPage = true;
   let totalCount = 0;
   let cursor = args.cursor;
   let documents: Vorgang[] = [];
   while (documents.length < args.limit + args.offset) {
-    const { data } = await dipAPI.getVorgaenge({
+    console.log({
       cursor,
-      fDatumStart: args.filter?.before?.toISOString().slice(0, 10),
-      fDatumEnd: args.filter?.after?.toISOString().slice(0, 10),
+      fAktualisiertStart: args.filter?.start?.toISOString(),
+      fAktualisiertEnd: args.filter?.end?.toISOString(),
+    });
+    const { data } = await vorgangApi.getVorgangList({
+      cursor,
+      fAktualisiertStart: args.filter?.start?.toISOString(),
+      fAktualisiertEnd: args.filter?.end?.toISOString(),
     });
     // const res = await this.get(`/api/v1/vorgang`, { ...filter, cursor });
     totalCount = Number(data.numFound);
