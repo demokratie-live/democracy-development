@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.17](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.0.16...crawler@v1.0.17) (2024-03-16)
+
+
+* add map missing data ([ca4f119](https://github.com/demokratie-live/democracy-development/commit/ca4f119f966c666528479a18d19bcb735460a387))
+* upgrade packages ([8194f3a](https://github.com/demokratie-live/democracy-development/commit/8194f3aa5aaaaf6757d6040978d920bd5e611105))
+
 ## [1.0.16](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.0.15...crawler@v1.0.16) (2023-11-01)
 
 
