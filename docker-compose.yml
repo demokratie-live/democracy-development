@@ -49,6 +49,11 @@ services:
       - CREDENTIALS=username:password
     volumes:
       - ./bundestag.io/admin/pages:/app/bundestag.io/admin/pages
+      - ./bundestag.io/admin/components:/app/bundestag.io/admin/components
+      - ./bundestag.io/admin/graphql:/app/bundestag.io/admin/graphql
+      - ./bundestag.io/admin/lib:/app/bundestag.io/admin/lib
+      - ./bundestag.io/admin/public:/app/bundestag.io/admin/public
+      - ./bundestag.io/admin/styles:/app/bundestag.io/admin/styles
     profiles:
       - admin
     networks:
