@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.9](https://github.com/demokratie-live/democracy-development/compare/import-named-poll-deputies@v0.1.8...import-named-poll-deputies@v0.1.9) (2024-04-07)
+
+
+### 🚀 Feature
+
+* imporve docker compose usage ([df12f75](https://github.com/demokratie-live/democracy-development/commit/df12f751199dc85ac0ca7d9425d09faf3af836ea))
+
 ## [0.1.8](https://github.com/demokratie-live/democracy-development/compare/import-named-poll-deputies@v0.1.7...import-named-poll-deputies@v0.1.8) (2023-11-05)
 
 
