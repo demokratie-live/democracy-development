@@ -115,7 +115,9 @@ const Procedure: React.FC = () => {
           )}
         </dl>
         {!namedVote && <VoteResultTextHelper procedureId={procedureId} importantDocuments={importantDocuments} />}
-        {!namedVote && <VoteResultsForm data={customData.voteResults} type={type} procedureId={procedureId} />}
+        {!namedVote && (
+          <VoteResultsForm data={customData.voteResults} type={type} procedureId={procedureId} period={period} />
+        )}
         {namedVote && <VoteResultsFormNamedPoll data={customData.voteResults} procedureId={procedureId} />}
       </App>
     </Layout>

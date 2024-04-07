@@ -160,7 +160,7 @@ export const ProcedureList: React.FC = () => {
       ],
       filterMultiple: false,
       onFilter: (value, { namedVote }) => (value === 'true' && namedVote) || (value === 'false' && !namedVote),
-      render: ({ namedVote }) => <>{namedVote && <Icon key={'idcard'} type="idcard" />}</>,
+      render: ({ namedVote }) => <>{namedVote ? '✅' : '❌'}</>,
     },
     {
       title: 'Daten',
