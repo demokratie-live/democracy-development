@@ -2,12 +2,11 @@ import Mongoose from 'mongoose';
 const mongoose = Mongoose;
 export { mongoose };
 
-export const mongoConnect = async () =>
+export const mongoConnect = async (dbUrl: string) =>
   new Promise(async (resolve) => {
     // Mongo Debug
     mongoose.set('debug', false);
-
-    mongoose.connect(process.env.DB_URL!);
+    mongoose.connect(dbUrl);
 
     mongoose.connection.once('connected', () => {
       console.info('MongoDB is running');

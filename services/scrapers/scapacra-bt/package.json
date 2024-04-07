@@ -19,10 +19,10 @@
     "dev": "nodemon ./src/run.ts",
     "start": "node ./dist/run.js",
     "inspect": "node --inspect-brk ./dist/run.js",
-    "lint": "tslint --project tsconfig.json && yarn typecheck",
+    "lint": "tslint --project tsconfig.json && pnpm typecheck",
     "typecheck": "tsc --noEmit",
     "test": "mocha -r ts-node/register src/**/*.test.ts",
-    "prepublish": "yarn build"
+    "prepublish": "pnpm build"
   },
   "bugs": {
     "url": "https://github.com/demokratie-live/bt-scapacra/issues"

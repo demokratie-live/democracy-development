@@ -7,7 +7,7 @@
     "dev": "tsup src/index.ts --watch --onSuccess 'node build/index.js'",
     "lint": "pnpm lint:ts && pnpm lint:exports",
     "lint:ts": "tsc --noEmit",
-    "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
+    "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas --excludePathsFromReport=tsup.config.ts",
     "build": "tsup-node",
     "start": "node ./build/index.js",
     "apollo:codegen": "apollo client:codegen --target typescript --globalTypesFile=./src/__generated__/globalTypes.ts"

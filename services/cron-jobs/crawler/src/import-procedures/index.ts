@@ -3,7 +3,7 @@ import { CONFIG } from '../config';
 import importProcedures from './import-procedures';
 
 (async () => {
-  await mongoConnect();
+  await mongoConnect(CONFIG.DB_URL);
   const cronjob = await getCron({ name: 'import-procedures' });
   console.log('cronjob', cronjob.lastSuccessStartDate);
   await setCronStart({ name: 'import-procedures' });
