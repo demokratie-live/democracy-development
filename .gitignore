@@ -12,3 +12,4 @@ docker_volumes/*/*
 .turbo
 out
 build
+/.env
