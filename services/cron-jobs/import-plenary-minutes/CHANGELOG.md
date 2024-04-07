@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.7](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.6...import-plenary-minutes@v0.1.7) (2024-04-07)
+
+
+### 🚀 Feature
+
+* imporve docker compose usage ([df12f75](https://github.com/demokratie-live/democracy-development/commit/df12f751199dc85ac0ca7d9425d09faf3af836ea))
+
 ## [0.1.6](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.5...import-plenary-minutes@v0.1.6) (2023-11-01)
 
 
