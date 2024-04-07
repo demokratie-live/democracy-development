@@ -47,6 +47,7 @@ services:
       - BIO_EDIT_TOKEN=CHANGE_ME
       - NEXTAUTH_URL=http://localhost:4001
       - CREDENTIALS=username:password
+      - VOTES_AI_ACCESS_TOKEN=VERY_SECRET
     volumes:
       - ./bundestag.io/admin/pages:/app/bundestag.io/admin/pages
       - ./bundestag.io/admin/components:/app/bundestag.io/admin/components
@@ -58,6 +59,17 @@ services:
       - admin
     networks:
       - democracy
+  votes-ai:
+    image: democracy/votes-ai:0.0.1-alpha.0
+    ports:
+      - 4002:4002
+    env_file:
+      - .env
+    environment:
+      - PORT=4002
+      - ACCESS_TOKEN=VERY_SECRET
+    profiles:
+      - admin
 networks:
   democracy:
     external: false

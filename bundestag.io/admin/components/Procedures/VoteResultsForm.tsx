@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { FormEventHandler } from 'react';
 import { Form, Input, Button, InputNumber, Radio, Row, Col, notification, Switch } from 'antd';
 import { axiosClient } from '../../lib/axios';
+import { VotesRecommendation } from './votesRecommendation';
 
 // Ant Design Sub-Elements
 const { TextArea } = Input;
@@ -27,7 +28,8 @@ const FRACTIONS = [
   },
 ];
 
-const VoteResultsForm = ({ data, type, procedureId }) => {
+const VoteResultsForm = ({ data, type, procedureId, period }) => {
+  const [decision, setDecision] = React.useState(data.decision);
   const onFinish = (values) => {
     notification.info({
       key: 'saveProcedure',
@@ -86,10 +88,18 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
     }));
   }
 
+  const onChange: FormEventHandler<HTMLFormElement> = (e) => {
+    const field = e.target as unknown as { id: string; value: string };
+    if (field.id === 'decisionText') {
+      setDecision(field.value);
+    }
+  };
+
   return (
     <Form
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
+      onChange={onChange}
       className="login-form"
       initialValues={{
         votingDocument: data.votingDocument,
@@ -119,6 +129,7 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
       <FormItem label="Beschlusstext" name="decisionText" rules={[{ required: true, message: 'Beschlusstext fehlt!' }]}>
         <TextArea placeholder="Beschlusstext" rows={3} />
       </FormItem>
+      {decision && <VotesRecommendation period={period} decision={decision} />}
       <Form.List name="partyVotes">
         {(parties) => {
           return (
