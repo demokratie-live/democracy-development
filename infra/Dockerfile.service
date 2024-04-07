@@ -37,6 +37,11 @@ RUN pnpm install
  
 # Build the project
 COPY --from=builder /app/out/full/ .
+
+FROM installer AS dev
+CMD cd $SERVICE_PATH && pnpm dev
+
+FROM installer AS installer_prod
 RUN pnpm turbo run build --filter=$SERVICE
 RUN pnpm install --prod --frozen-lockfile --ignore-scripts --prefer-offline
  
@@ -47,12 +52,12 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 runuser
  
-COPY --from=installer /app .
+COPY --from=installer_prod /app .
 
 # Create data directory and set permissions
-RUN mkdir -p $SERVICE_PATH/data
-RUN chown runuser:nodejs $SERVICE_PATH/data
+# RUN mkdir -p $SERVICE_PATH/data
+# RUN chown runuser:nodejs $SERVICE_PATH/data
  
-USER runuser
+# USER runuser
 
 CMD cd $SERVICE_PATH && pnpm start

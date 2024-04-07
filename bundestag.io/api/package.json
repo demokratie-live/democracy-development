@@ -13,7 +13,7 @@
     "prebuild": "pnpm run generate",
     "start": "node build/index.js",
     "dev": "ts-node-dev --watch=resolvers,schemas --respawn src/index.ts",
-    "lint": "yarn lint:ts && yarn lint:exports",
+    "lint": "pnpm lint:ts && pnpm lint:exports",
     "lint:es": "eslint src --ext .js,.jsx,.ts,.tsx",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas --excludePathsFromReport=graphqlContext.ts",

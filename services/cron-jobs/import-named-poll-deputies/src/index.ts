@@ -63,7 +63,7 @@ const start = async () => {
   if (!process.env.DB_URL) {
     throw new Error('you have to set environment variable: DB_URL');
   }
-  await mongoConnect();
+  await mongoConnect(process.env.DB_URL);
   console.log('procedures', await NamedPollModel.countDocuments({}));
   await start();
   process.exit(0);

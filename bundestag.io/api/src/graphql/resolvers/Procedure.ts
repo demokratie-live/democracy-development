@@ -303,11 +303,14 @@ const ProcedureResolvers: Resolvers = {
           return prev;
         }, []);
       };
-      console.log('procedure', procedure);
 
       if (procedure) {
         const axiosInstance = axios.create();
         const date = procedure.voteDate;
+
+        if (!date) {
+          throw new Error('No vote date found');
+        }
 
         const conferenceWeekDetail = await ConferenceWeekDetailModel.findOne({
           'sessions.date': {

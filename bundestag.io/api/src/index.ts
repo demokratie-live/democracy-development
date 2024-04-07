@@ -30,7 +30,7 @@ const server = createServer({ httpServer });
 const main = async () => {
   // Connect to DB - this keeps the process running
   // IMPORTANT - This is done before any Model is registered
-  await mongoConnect();
+  await mongoConnect(CONFIG.DB_URL);
 
   await server.start();
 

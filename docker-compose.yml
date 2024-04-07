@@ -1,4 +1,5 @@
 version: '3.9'
+
 services:
   mongo:
     image: mongo:4
@@ -10,12 +11,14 @@ services:
       - democracy
   bundestag-io:
     build:
-      context: bundestag.io/api
-      target: base_stage
-      dockerfile: ../../infra/Dockerfile
+      dockerfile: ./infra/Dockerfile.service
+      target: dev
+      args:
+        - NODE_VERSION=18.18.2
+        - SERVICE=bundestag.io
+        - SERVICE_PATH=bundestag.io/api
     ports:
       - 4000:4000
-    command: pnpm run dev
     depends_on:
       - mongo
     environment:
@@ -23,199 +26,33 @@ services:
       - BIO_EDIT_TOKEN=CHANGE_ME
       - PORT=4000
     volumes:
-      - ./bundestag.io/api/src:/app/src
+      - ./bundestag.io/api/src:/app/bundestag.io/api/src
     networks:
       - democracy
   bio-admin:
     build:
-      context: bundestag.io/admin
-      target: runner
+      dockerfile: ./infra/Dockerfile.service
+      target: dev
+      args:
+        - NODE_VERSION=18.18.2
+        - SERVICE=bundestag.io-admin
+        - SERVICE_PATH=bundestag.io/admin
+        - BUNDESTAGIO_SERVER_URL=http://bundestag-io:4000
     ports:
       - 4001:3000
     depends_on:
       - bundestag-io
     environment:
-      - BUNDESTAGIO_SERVER_URL=http://bundestag-io:3100
+      - BUNDESTAGIO_SERVER_URL=http://bundestag-io:4000
       - BIO_EDIT_TOKEN=CHANGE_ME
       - NEXTAUTH_URL=http://localhost:4001
       - CREDENTIALS=username:password
+    volumes:
+      - ./bundestag.io/admin/pages:/app/bundestag.io/admin/pages
     profiles:
       - admin
     networks:
       - democracy
-  crawler:
-    build:
-      context: services/cron-jobs/crawler
-      target: base_stage
-      dockerfile: ../../../infra/Dockerfile
-    command: pnpm dev
-    volumes:
-      - ./services/cron-jobs/crawler/src:/app/src
-    env_file:
-      - services/cron-jobs/crawler/.env.local
-    environment:
-      - DB_URL=mongodb://mongo:27017/bundestagio
-    depends_on:
-      - mongo
-    profiles:
-      - cronjobs
-    networks:
-      - democracy
-  sync-procedures:
-    build:
-      context: services/cron-jobs/sync-procedures
-      target: base_stage
-      dockerfile: ../../../infra/Dockerfile
-    command: pnpm dev
-    volumes:
-      - ./services/cron-jobs/sync-procedures/src:/app/src
-    env_file:
-      - services/cron-jobs/sync-procedures/.env.local
-    environment:
-      - DB_URL=mongodb://mongo/democracy
-      - BUNDESTAGIO_SERVER_URL=http://bundestag-io:4000
-    depends_on:
-      - bundestag-io
-      - mongo
-    profiles:
-      - cronjobs
-    networks:
-      - democracy
-  queue-pushs-vote-top-100:
-    build:
-      context: services/cron-jobs/queue-pushs-vote-top-100
-      target: base_stage
-      dockerfile: ../../../infra/Dockerfile
-    command: pnpm dev
-    volumes:
-      - ./services/cron-jobs/queue-pushs-vote-top-100/src:/app/src
-    env_file:
-      - services/cron-jobs/queue-pushs-vote-top-100/.env.local
-    environment:
-      - DB_URL=mongodb://mongo/democracy
-    depends_on:
-      - mongo
-    profiles:
-      - cronjobs
-    networks:
-      - democracy
-  push-send-queued:
-    build:
-      context: services/cron-jobs/push-send-queued
-      target: base_stage
-      dockerfile: ../../../infra/Dockerfile
-    command: pnpm dev
-    volumes:
-      - ./services/cron-jobs/push-send-queued/src:/app/src
-    env_file:
-      - services/cron-jobs/push-send-queued/.env
-    environment:
-      - DB_URL=mongodb://mongo/democracy
-    depends_on:
-      - mongo
-    profiles:
-      - cronjobs
-    networks:
-      - democracy
-  cleanup-push-queue:
-    build:
-      context: services/cron-jobs/cleanup-push-queue
-      target: base_stage
-      dockerfile: ../../../infra/Dockerfile
-    command: pnpm dev
-    volumes:
-      - ./services/cron-jobs/cleanup-push-queue/src:/app/src
-    env_file:
-      - services/cron-jobs/cleanup-push-queue/.env.local
-    environment:
-      - DB_URL=mongodb://mongo/democracy
-    depends_on:
-      - mongo
-    profiles:
-      - cronjobs
-    networks:
-      - democracy
-  import-named-polls:
-    build:
-      context: services/cron-jobs/import-named-polls
-      target: base_stage
-      dockerfile: ../../../infra/Dockerfile
-    command: pnpm dev
-    volumes:
-      - ./services/cron-jobs/import-named-polls/src:/app/src
-    env_file:
-      - services/cron-jobs/import-named-polls/.env.local
-    environment:
-      - DB_URL=mongodb://mongo/bundestagio
-    depends_on:
-      - mongo
-    profiles:
-      - cronjobs
-  import-named-poll-deputies:
-    build:
-      context: services/cron-jobs/import-named-poll-deputies
-      target: base_stage
-      dockerfile: ../../../infra/Dockerfile
-    command: pnpm dev
-    volumes:
-      - ./services/cron-jobs/import-named-poll-deputies/src:/app/src
-    env_file:
-      - services/cron-jobs/import-named-poll-deputies/.env.local
-    environment:
-      - DB_URL=mongodb://mongo/bundestagio
-    depends_on:
-      - mongo
-    profiles:
-      - cronjobs
-  loki:
-    image: grafana/loki:2.4.2
-    volumes:
-      - ./docker_volumes/loki:/etc/loki
-    ports:
-      - 3301:3100
-    restart: unless-stopped
-    command: --config.file=/etc/loki/loki-config.yml
-    profiles:
-      - debug
-    networks:
-      - democracy
-  promtail:
-    image: grafana/promtail:2.4.0
-    volumes:
-      - /var/log:/var/log
-      - ./docker_volumes/promtail:/etc/promtail
-    # ports:
-    #   - "1514:1514" # this is only needed if you are going to send syslogs
-    restart: unless-stopped
-    command: -config.file=/etc/promtail/promtail-config.yml
-    profiles:
-      - debug
-    networks:
-      - democracy
-  grafana:
-    image: grafana/grafana:latest
-    user: '501'
-    volumes:
-      - ./docker_volumes/grafana:/var/lib/grafana
-    ports:
-      - '3300:3000'
-    restart: unless-stopped
-    profiles:
-      - debug
-    networks:
-      - democracy
-  prometheus:
-    image: prom/prometheus:v2.34.0
-    ports:
-      - 9090:9090
-    volumes:
-      - ./docker_volumes/prometheus:/etc/prometheus
-      - /prometheus
-    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
-    profiles:
-      - debug
-    networks:
-      - democracy
 networks:
   democracy:
-    external: true
+    external: false

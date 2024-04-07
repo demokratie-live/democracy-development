@@ -4,7 +4,7 @@
   "main": "build/index.js",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "tsup src/index.ts --watch --onSuccess 'node build/index.js'",
+    "dev": "dotenv -e .env.local -- tsup src/index.ts --watch --onSuccess 'node build/index.js'",
     "build": "tsup-node",
     "lint": "pnpm lint:ts && pnpm lint:exports",
     "lint:ts": "tsc --noEmit",
@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "dotenv": "^16.0.0",
+    "dotenv-cli": "^7.4.1",
     "ts-node-dev": "^1.1.8",
     "ts-unused-exports": "^8.0.0",
     "tsconfig": "workspace:*",

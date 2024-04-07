@@ -7,7 +7,7 @@
   "author": "Manuel Ruck, Ulf Gebhardt, Robert Schäfer",
   "license": "MIT",
   "scripts": {
-    "dev": "tsup src/import-procedures --watch --onSuccess 'node build/index.js'",
+    "dev": "dotenv -e .env -e .env.local -- tsup src/import-procedures --watch --onSuccess 'node build/index.js'",
     "build": "tsup-node",
     "lint": "eslint .",
     "test": "jest",
@@ -27,6 +27,7 @@
     "@types/node": "^20.11.28",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
+    "dotenv-cli": "^7.4.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^27.9.0",
