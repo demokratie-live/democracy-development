@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.0](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.0.17...crawler@v1.1.0) (2024-04-07)
+
+
+### 🚀 Feature
+
+* imporve docker compose usage ([df12f75](https://github.com/demokratie-live/democracy-development/commit/df12f751199dc85ac0ca7d9425d09faf3af836ea))
+
 ## [1.0.17](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.0.16...crawler@v1.0.17) (2024-03-16)
 
 
