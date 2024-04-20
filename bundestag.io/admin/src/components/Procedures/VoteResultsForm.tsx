@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input, Button, InputNumber, Radio, Row, Col, notification, Switch } from 'antd';
 import { axiosClient } from '../../lib/axios';
+import { AiVotes } from './AiVotes';
 
 // Ant Design Sub-Elements
 const { TextArea } = Input;
@@ -27,7 +28,7 @@ const FRACTIONS = [
   },
 ];
 
-const VoteResultsForm = ({ data, type, procedureId }) => {
+const VoteResultsForm = ({ data, type, procedureId, period }) => {
   const onFinish = (values) => {
     notification.info({
       key: 'saveProcedure',
@@ -48,7 +49,6 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
       })),
     };
 
-    console.log('values', values, data);
     axiosClient
       .post('/api/procedures/save', {
         ...data,
@@ -67,12 +67,11 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
           message: 'Ein Fehler ist vorgefallen',
           // description: err
         });
-        console.log('Error:', err);
+        console.error('Error:', err);
       });
   };
 
   const onFinishFailed = (...args) => {
-    console.log(...args);
     notification.error({
       message: 'Speichern Fehlgeschlagen!',
       description: 'Überprüfe deine eingaben',
@@ -118,6 +117,17 @@ const VoteResultsForm = ({ data, type, procedureId }) => {
       </FormItem>
       <FormItem label="Beschlusstext" name="decisionText" rules={[{ required: true, message: 'Beschlusstext fehlt!' }]}>
         <TextArea placeholder="Beschlusstext" rows={3} />
+      </FormItem>
+      <FormItem
+        noStyle
+        shouldUpdate={(prevValues, currentValues) => prevValues.decisionText !== currentValues.decisionText}
+      >
+        {({ getFieldValue }) => {
+          if (getFieldValue('decisionText') && period) {
+            return <AiVotes decision={getFieldValue('decisionText')} period={period} />;
+          }
+          return null;
+        }}
       </FormItem>
       <Form.List name="partyVotes">
         {(parties) => {

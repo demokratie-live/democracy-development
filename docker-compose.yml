@@ -21,6 +21,7 @@ services:
       - 4000:4000
     depends_on:
       - mongo
+      - ai-votes
     environment:
       - DB_URL=mongodb://mongo:27017/bundestagio
       - BIO_EDIT_TOKEN=CHANGE_ME
@@ -54,6 +55,20 @@ services:
       - admin
     networks:
       - democracy
+  ai-votes:
+    image: democracy/votes-ai:0.0.1-alpha.0
+    profiles:
+      - admin
+      - ai
+    env_file:
+      - .env
+    environment:
+      - PORT=4003
+    ports:
+      - 4003:4003
+    networks:
+      - democracy
+
 networks:
   democracy:
     external: false
