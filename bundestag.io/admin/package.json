@@ -5,15 +5,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint && tsc --noEmit"
+    "lint": "next lint && tsc --noEmit",
+    "codegen": "graphql-codegen --require dotenv/config --config codegen.ts dotenv_config_path=.env.local"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.6",
     "@apollo/client": "^3.9.10",
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "antd": "5.16.1",
     "axios": "^1.6.8",
     "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
     "graphql-tag": "^2.12.6",
     "next": "^14.2.2",
     "next-auth": "^4.24.7",
@@ -25,6 +28,8 @@
     "@babel/core": "^7.24.4",
     "@babel/preset-typescript": "^7.24.1",
     "@babel/register": "^7.23.7",
+    "@graphql-codegen/cli": "5.0.2",
+    "@graphql-codegen/client-preset": "4.2.5",
     "@types/node": "^20.12.6",
     "@types/react": "^18.2.75",
     "@types/request": "^2.48.12",

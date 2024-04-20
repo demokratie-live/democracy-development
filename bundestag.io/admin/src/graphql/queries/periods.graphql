@@ -1,0 +1,8 @@
+query LegislativePeriods {
+  legislativePeriods {
+    number
+    deputies
+    start
+    end
+  }
+}

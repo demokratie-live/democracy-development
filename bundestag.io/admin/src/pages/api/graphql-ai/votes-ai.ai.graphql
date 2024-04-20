@@ -1,0 +1,30 @@
+query ParseDecision($decision: String, $period: Int) {
+  parseDecision(decision: $decision, period: $period) {
+    input {
+      decision
+      period
+    }
+    result {
+      votes {
+        name
+        vote
+      }
+      votingDocument
+      votingRecommendation
+    }
+    usage {
+      costs {
+        completion
+        prompt
+        total
+      }
+      duration
+      model
+      tokens {
+        completion
+        prompt
+        total
+      }
+    }
+  }
+}

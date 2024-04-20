@@ -11,15 +11,15 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        let user = null;
-        const users = process.env.CREDENTIALS.split('|').map((userCreds) => {
+        let user: any = null;
+        const users = process.env.CREDENTIALS!.split('|').map((userCreds) => {
           const [username, password] = userCreds.split(':');
           return { username: username.trim(), password: password.trim() };
         });
 
         user = users.find(
           ({ username, password }) =>
-            username.toLowerCase() === credentials.username.toLowerCase() && password === credentials.password,
+            username.toLowerCase() === credentials?.username.toLowerCase() && password === credentials?.password,
         );
 
         // If no error and we have user data, return it
