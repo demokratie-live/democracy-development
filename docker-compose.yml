@@ -39,16 +39,17 @@ services:
         - SERVICE_PATH=bundestag.io/admin
         - BUNDESTAGIO_SERVER_URL=http://bundestag-io:4000
     ports:
-      - 4001:3000
+      - 4001:4001
     depends_on:
       - bundestag-io
     environment:
+      - PORT=4001
       - BUNDESTAGIO_SERVER_URL=http://bundestag-io:4000
       - BIO_EDIT_TOKEN=CHANGE_ME
       - NEXTAUTH_URL=http://localhost:4001
       - CREDENTIALS=username:password
     volumes:
-      - ./bundestag.io/admin/pages:/app/bundestag.io/admin/pages
+      - ./bundestag.io/admin/src:/app/bundestag.io/admin/src
     profiles:
       - admin
     networks:

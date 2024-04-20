@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { axiosClient } from '../../../lib/axios';
+import { config } from '@/lib/config';
 
 const graphql = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions);
@@ -9,7 +10,7 @@ const graphql = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (!!session?.user) {
     try {
-      const response = await axiosClient.post(process.env.BUNDESTAGIO_SERVER_URL, { query, variables });
+      const response = await axiosClient.post(config.BUNDESTAGIO_SERVER_URL, { query, variables });
 
       res.status(response.status).send(response.data);
     } catch (error) {
