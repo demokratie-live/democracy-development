@@ -38,7 +38,7 @@ export const ProcedureList: React.FC = () => {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
   });
-  const searchInput = useRef(null);
+  const searchInput = useRef<any>(null);
 
   const procedures = data?.proceduresData.nodes || [];
 
@@ -71,7 +71,7 @@ export const ProcedureList: React.FC = () => {
     onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value),
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
-        setTimeout(() => searchInput.current.select());
+        setTimeout(() => searchInput.current?.select());
       }
     },
   });

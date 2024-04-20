@@ -5,3 +5,5 @@ docker_volumes
 .vscode
 .turbo
 .github
+build
+dist
