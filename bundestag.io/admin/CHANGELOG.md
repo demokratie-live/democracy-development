@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.2.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.1.0...bundestag.io-admin@v3.2.0) (2024-04-21)
+
+
+* use src directory ([2ee1586](https://github.com/demokratie-live/democracy-development/commit/2ee158689e7e488471246f33ce4f4384ad88259e))
+
+
+### 🚀 Feature
+
+* add ai vote decesion to party vote resolver ([86095f9](https://github.com/demokratie-live/democracy-development/commit/86095f96e520ec4d5853e131d09a8c58072f5128))
+
 ## [3.1.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.0.7...bundestag.io-admin@v3.1.0) (2024-04-07)
 
 
