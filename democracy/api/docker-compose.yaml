@@ -1,0 +1,20 @@
+version: '3'
+services:
+  democracy-api:
+    build:
+      target: base_stage
+      context: .
+    env_file:
+      - .env
+    environment:
+      - DB_URL=mongodb://mongo/democracy
+    command: yarn dev
+    volumes:
+      - ./src:/app/src
+    ports:
+      - "3000:3000"
+    networks:
+      - democracy
+networks:
+  democracy:
+    external: true

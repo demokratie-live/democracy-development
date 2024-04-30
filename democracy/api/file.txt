@@ -1,0 +1,12 @@
+diff --git a/.github/workflows/release.yaml b/.github/workflows/release.yaml
+index 86e5a24..6a53786 100644
+--- a/.github/workflows/release.yaml
++++ b/.github/workflows/release.yaml
+@@ -88,6 +88,7 @@ jobs:
+           git status
+           git branch
+           git branch -r
++          
+ 
+       # Step 4: Create the pull request
+       - name: Create pull request
