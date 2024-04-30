@@ -12,15 +12,19 @@
     "lint": "turbo run lint",
     "dev": "turbo run dev",
     "infra:setup": "sh infra/minikube/setup.sh || bash infra/minikube/setup.sh || cmd.exe /C infra\\minikube\\setup.sh",
-    "infra:start": "minikube start -p mk-democracy"
+    "infra:start": "minikube start -p mk-democracy",
+    "prepare": "husky install"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.4.0",
+    "@commitlint/config-conventional": "^17.4.0",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^27.6.0",
     "eslint-plugin-prettier": "^5.0.1",
+    "husky": "^8.0.3",
     "prettier": "^3.1.1",
     "turbo": "^1.11.1"
   }

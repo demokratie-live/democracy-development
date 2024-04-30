@@ -16,7 +16,6 @@
     "lint:es": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
-    "prepare": "husky install",
     "release": "standard-version"
   },
   "dependencies": {
@@ -55,8 +54,6 @@
     "winston-mongodb": "^5.0.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.4.0",
-    "@commitlint/config-conventional": "^17.4.0",
     "@graphql-codegen/add": "^2.0.2",
     "@graphql-codegen/cli": "^1.21.7",
     "@graphql-codegen/introspection": "^1.18.2",
@@ -79,7 +76,6 @@
     "dotenv": "^10.0.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
-    "husky": "^8.0.3",
     "standard-version": "^9.5.0",
     "ts-node-dev": "^1.1.8",
     "ts-unused-exports": "^6.2.1",
