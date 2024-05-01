@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: import-conference-week-details
+  labels:
+    app: import-conference-week-details
+spec:
+  schedule: '*/30 * * * *'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 86400
+          containers:
+            - name: import-conference-week-details
+              image: democracy/import-conference-week-details:0.1.26
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: import-conference-week-details

@@ -1,0 +1,6 @@
+kind: Deploy
+name: mongo
+type: kubernetes
+spec:
+  files:
+    - ./manifests/*

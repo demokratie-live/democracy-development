@@ -1,0 +1,24 @@
+apiVersion: garden.io/v1
+kind: Project
+name: democracy-development
+
+defaultEnvironment: local
+
+variables:
+  userNamespace: democracy-local
+
+environments:
+  - name: local
+    defaultNamespace: ${var.userNamespace}
+    variables:
+      # hostname: local.democracy-app.de
+      hostname: local.app.garden
+  - name: local-prod
+    defaultNamespace: ${var.userNamespace}
+    variables:
+      # hostname: local.democracy-app.de
+      hostname: local.app.garden
+
+providers:
+  - name: local-kubernetes
+    environments: [local, local-prod]

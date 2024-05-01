@@ -1,0 +1,43 @@
+kind: Build
+name: cleanup-push-queue
+description: Import procedures for the bundestag.io API
+type: container
+source:
+  path: ../../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: cleanup-push-queue
+    SERVICE_PATH: services/cron-jobs/cleanup-push-queue
+
+---
+kind: Deploy
+name: cleanup-push-queue
+type: kubernetes
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.cleanup-push-queue, deploy.mongo]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/democracy
+
+spec:
+  files: [./manifests/*]
+
+  patchResources:
+    - name: cleanup-push-queue
+      kind: CronJob
+      patch:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: cleanup-push-queue
+                      image: ${actions.build.cleanup-push-queue.outputs.deploymentImageId}

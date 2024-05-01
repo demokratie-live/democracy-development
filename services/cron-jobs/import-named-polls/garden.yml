@@ -1,0 +1,43 @@
+kind: Build
+name: import-named-polls
+description: Import procedures for the bundestag.io API
+type: container
+source:
+  path: ../../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: import-named-polls
+    SERVICE_PATH: services/cron-jobs/import-named-polls
+
+---
+kind: Deploy
+name: import-named-polls
+type: kubernetes
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.import-named-polls, deploy.mongo]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/bundestagio
+
+spec:
+  files: [./manifests/*]
+
+  patchResources:
+    - name: import-named-polls
+      kind: CronJob
+      patch:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: import-named-polls
+                      image: ${actions.build.import-named-polls.outputs.deploymentImageId}

@@ -1,0 +1,44 @@
+kind: Build
+name: sync-deputy-profiles
+description: Import procedures for the bundestag.io API
+type: container
+source:
+  path: ../../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: sync-deputy-profiles
+    SERVICE_PATH: services/cron-jobs/sync-deputy-profiles
+
+---
+kind: Deploy
+name: sync-deputy-profiles
+type: kubernetes
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.sync-deputy-profiles, deploy.mongo, deploy.bundestag-io-api]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/democracy
+  BUNDESTAGIO_SERVER_URL: http://bundestag-io-api
+
+spec:
+  files: [./manifests/*]
+
+  patchResources:
+    - name: sync-deputy-profiles
+      kind: CronJob
+      patch:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: sync-deputy-profiles
+                      image: ${actions.build.sync-deputy-profiles.outputs.deploymentImageId}

@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: push-send-queued
+  labels:
+    app: push-send-queued
+spec:
+  schedule: '*/1 8-20 * * *'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 86400
+          containers:
+            - name: push-send-queued
+              image: democracy/push-send-queued:0.1.24
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: push-send-queued
+                - secretRef:
+                    name: push-send-queued
+                    optional: false

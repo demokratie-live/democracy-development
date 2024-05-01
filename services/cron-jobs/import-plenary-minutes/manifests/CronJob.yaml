@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: import-plenary-minutes
+  labels:
+    app: import-plenary-minutes
+spec:
+  schedule: '15 1 * * *'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 86400
+          containers:
+            - name: import-plenary-minutes
+              image: democracy/import-plenary-minutes:0.1.6
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: import-plenary-minutes

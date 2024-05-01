@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bundestag-io-api
+  labels:
+    app: bundestag-io-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bundestag-io-api
+  template:
+    metadata:
+      labels:
+        app: bundestag-io-api
+    spec:
+      containers:
+        - name: bundestag-io-api
+          image: democracy/bundestag.io:0.1.58
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PORT
+              value: '4000'
+            - name: DB_URL
+              value: mongodb://democracy-mongo:27017/bundestagio
+          ports:
+            - containerPort: 4000
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              cpu: 10m
+              memory: 90Mi

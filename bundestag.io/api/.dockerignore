@@ -5,3 +5,6 @@ logs
 build
 *.log
 docker-compose*
+manifests
+.garden
+.turbo

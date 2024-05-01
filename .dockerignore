@@ -7,3 +7,5 @@ docker_volumes
 .github
 build
 dist
+manifests
+.garden

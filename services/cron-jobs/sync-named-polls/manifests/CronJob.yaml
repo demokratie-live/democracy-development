@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sync-named-polls
+  labels:
+    app: sync-named-polls
+spec:
+  schedule: '5-59/10 * * * *'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 86400
+          containers:
+            - name: sync-named-polls
+              image: democracy/sync-named-polls:0.1.14
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: sync-named-polls

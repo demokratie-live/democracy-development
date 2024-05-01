@@ -1,0 +1,54 @@
+kind: Build
+name: push-send-queued
+description: Import procedures for the bundestag.io API
+type: container
+source:
+  path: ../../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: push-send-queued
+    SERVICE_PATH: services/cron-jobs/push-send-queued
+
+---
+kind: Deploy
+name: push-send-queued
+type: kubernetes
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.push-send-queued, deploy.mongo]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+varfiles:
+  - .env
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/democracy
+
+spec:
+  files: [./manifests/*]
+
+  patchResources:
+    - name: push-send-queued
+      kind: CronJob
+      patch:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: push-send-queued
+                      image: ${actions.build.push-send-queued.outputs.deploymentImageId}
+    - name: push-send-queued
+      kind: Secret
+      patch:
+        data:
+          SERVICE_ACCOUNT_CLIENT_EMAIL: ${base64Encode(var.SERVICE_ACCOUNT_CLIENT_EMAIL)}
+          SERVICE_ACCOUNT_PRIVATE_KEY: ${base64Encode(var.SERVICE_ACCOUNT_PRIVATE_KEY)}
+          SERVICE_ACCOUNT_PROJECT_ID: ${base64Encode(var.SERVICE_ACCOUNT_PROJECT_ID)}
+            

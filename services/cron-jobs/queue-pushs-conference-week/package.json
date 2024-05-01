@@ -12,7 +12,7 @@
     "start": "node ./build/index.js"
   },
   "dependencies": {
-    "@democracy-deutschland/democracy-common": "^0.2.12",
+    "@democracy-deutschland/democracy-common": "workspace:*",
     "moment": "^2.27.0"
   },
   "devDependencies": {

@@ -1,0 +1,43 @@
+kind: Build
+name: queue-pushs-vote-top-100
+description: Import procedures for the bundestag.io API
+type: container
+source:
+  path: ../../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: queue-pushs-vote-top-100
+    SERVICE_PATH: services/cron-jobs/queue-pushs-vote-top-100
+
+---
+kind: Deploy
+name: queue-pushs-vote-top-100
+type: kubernetes
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.queue-pushs-vote-top-100, deploy.mongo]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/democracy
+
+spec:
+  files: [./manifests/*]
+
+  patchResources:
+    - name: queue-pushs-vote-top-100
+      kind: CronJob
+      patch:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: queue-pushs-vote-top-100
+                      image: ${actions.build.queue-pushs-vote-top-100.outputs.deploymentImageId}

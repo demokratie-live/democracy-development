@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: qr-code-handler
+  labels:
+    app: qr-code-handler
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: 'qr-code-handler.${var.hostname}'
+      http:
+        paths:
+          - backend:
+              service:
+                name: qr-code-handler
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

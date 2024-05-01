@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: shedule-bio-resync
+  labels:
+    app: shedule-bio-resync
+spec:
+  schedule: '55 2 * */1 *'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 86400
+          containers:
+            - name: shedule-bio-resync
+              image: democracy/shedule-bio-resync:0.1.5
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: shedule-bio-resync

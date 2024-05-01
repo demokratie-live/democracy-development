@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sync-procedures
+  labels:
+    app: sync-procedures
+spec:
+  schedule: '0 0/2 * * *'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 86400
+          containers:
+            - name: sync-procedures
+              image: democracy/sync-procedures:0.1.19
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: sync-procedures

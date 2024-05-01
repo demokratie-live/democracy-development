@@ -1,0 +1,39 @@
+kind: Build
+name: qr-code-handler
+type: container
+source:
+  path: ../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: qr-code-handler
+    SERVICE_PATH: services/qr-code-handler
+
+---
+kind: Deploy
+name: qr-code-handler
+type: kubernetes
+dependencies: [build.qr-code-handler, deploy.mongo]
+
+spec:
+  files: [./manifests/*] # <--- Tell Garden what manifests to use
+
+  defaultTarget: # <--- This tells Garden what "target" to use for logs, code syncing and more
+    kind: Deployment
+    name: qr-code-handler
+
+  # Patch the K8s manifests for the api service so that we can set the correct image
+  patchResources:
+    - name: qr-code-handler
+      kind: Deployment
+      patch:
+        spec:
+          template:
+            spec:
+              containers:
+                - name: qr-code-handler
+                  image: ${actions.build.qr-code-handler.outputs.deploymentImageId} # <--- Reference the output from the Build action

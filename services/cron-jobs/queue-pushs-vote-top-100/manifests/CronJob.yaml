@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: queue-pushs-vote-top-100
+  labels:
+    app: queue-pushs-vote-top-100
+spec:
+  schedule: '0 2 * * MON-FRI'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 86400
+          containers:
+            - name: queue-pushs-vote-top-100
+              image: democracy/queue-pushs-vote-top-100:0.1.14
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: queue-pushs-vote-top-100

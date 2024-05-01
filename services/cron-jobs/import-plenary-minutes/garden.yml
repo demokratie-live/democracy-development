@@ -1,0 +1,43 @@
+kind: Build
+name: import-plenary-minutes
+description: Import procedures for the bundestag.io API
+type: container
+source:
+  path: ../../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: import-plenary-minutes
+    SERVICE_PATH: services/cron-jobs/import-plenary-minutes
+
+---
+kind: Deploy
+name: import-plenary-minutes
+type: kubernetes
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.import-plenary-minutes, deploy.mongo]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/bundestagio
+
+spec:
+  files: [./manifests/*]
+
+  patchResources:
+    - name: import-plenary-minutes
+      kind: CronJob
+      patch:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: import-plenary-minutes
+                      image: ${actions.build.import-plenary-minutes.outputs.deploymentImageId}

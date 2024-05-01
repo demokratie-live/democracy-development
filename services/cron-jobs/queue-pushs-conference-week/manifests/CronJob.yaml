@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: queue-pushs-conference-week
+  labels:
+    app: queue-pushs-conference-week
+spec:
+  schedule: '0 12 * * SUN'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 86400
+          containers:
+            - name: queue-pushs-conference-week
+              image: democracy/queue-pushs-conference-week:0.1.9
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: queue-pushs-conference-week

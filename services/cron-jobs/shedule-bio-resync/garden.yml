@@ -1,0 +1,43 @@
+kind: Build
+name: shedule-bio-resync
+description: Import procedures for the bundestag.io API
+type: container
+source:
+  path: ../../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: shedule-bio-resync
+    SERVICE_PATH: services/cron-jobs/shedule-bio-resync
+
+---
+kind: Deploy
+name: shedule-bio-resync
+type: kubernetes
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.shedule-bio-resync, deploy.mongo]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/democracy
+
+spec:
+  files: [./manifests/*]
+
+  patchResources:
+    - name: shedule-bio-resync
+      kind: CronJob
+      patch:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: shedule-bio-resync
+                      image: ${actions.build.shedule-bio-resync.outputs.deploymentImageId}

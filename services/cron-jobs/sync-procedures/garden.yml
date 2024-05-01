@@ -1,0 +1,44 @@
+kind: Build
+name: sync-procedures
+description: Import procedures for the bundestag.io API
+type: container
+source:
+  path: ../../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: sync-procedures
+    SERVICE_PATH: services/cron-jobs/sync-procedures
+
+---
+kind: Deploy
+name: sync-procedures
+type: kubernetes
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.sync-procedures, deploy.mongo, deploy.bundestag-io-api]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/democracy
+  BUNDESTAGIO_SERVER_URL: http://bundestag-io-api
+
+spec:
+  files: [./manifests/*]
+
+  patchResources:
+    - name: sync-procedures
+      kind: CronJob
+      patch:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: sync-procedures
+                      image: ${actions.build.sync-procedures.outputs.deploymentImageId}

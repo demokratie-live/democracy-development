@@ -1,0 +1,16 @@
+*.log
+/data/
+.vs
+node_modules
+.github/workflows/*.env
+infra/*.yaml
+configuration/*
+!configuration/*.example
+docker_volumes/*/*
+!/**/.gitkeep
+/services/cron-jobs/push-send-queued/.env
+.turbo
+out
+build
+/.env
+manifests

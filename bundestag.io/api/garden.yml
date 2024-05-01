@@ -1,0 +1,51 @@
+kind: Build
+name: bundestag-io-api
+description: Bundestag.io API
+type: container
+source:
+  path: ../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  targetStage:
+    $if: ${this.mode == "sync"}
+    $then: dev
+    $else: runner
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: bundestag.io
+    SERVICE_PATH: bundestag.io/api
+
+---
+kind: Deploy
+name: bundestag-io-api
+type: kubernetes
+description: Deploy the bundestag.io API
+dependencies: [build.bundestag-io-api, deploy.mongo]
+
+spec:
+  files: [./manifests/*] # <--- Tell Garden what manifests to use
+
+  defaultTarget: # <--- This tells Garden what "target" to use for logs, code syncing and more
+    kind: Deployment
+    name: bundestag-io-api
+
+  sync:
+    paths:
+      - containerPath: /app/bundestag.io/api/src
+        sourcePath: src
+        mode: one-way
+
+  # Patch the K8s manifests for the api service so that we can set the correct image
+  patchResources:
+    - name: bundestag-io-api
+      kind: Deployment
+      patch:
+        spec:
+          template:
+            spec:
+              containers:
+                - name: bundestag-io-api
+                  image: ${actions.build.bundestag-io-api.outputs.deploymentImageId} # <--- Reference the output from the Build action
