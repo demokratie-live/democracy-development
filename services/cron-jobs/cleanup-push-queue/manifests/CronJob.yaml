@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cleanup-push-queue
+  labels:
+    app: cleanup-push-queue
+spec:
+  schedule: '0 12 * * SUN'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 86400
+          containers:
+            - name: cleanup-push-queue
+              image: democracy/cleanup-push-queue:1.0.4
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: DB_URL
+                  value: mongodb://democracy-mongo:27017/democracy

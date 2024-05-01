@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democracy-api
+  labels:
+    app: democracy-api
+spec:
+  selector:
+    matchLabels:
+      app: democracy-api
+  template:
+    metadata:
+      labels:
+        app: democracy-api
+    spec:
+      containers:
+        - name: democracy-api
+          image: democracy/democracy-server:0.2.64
+          ports:
+            - containerPort: 3000
+          envFrom:
+          - configMapRef:
+              name: democracy-api-config
+              optional: false
+          - secretRef:
+              name: democracy-api-secrets
+              optional: false
+          resources:
+            limits:
+              cpu: '0.5'
+              memory: '512Mi'

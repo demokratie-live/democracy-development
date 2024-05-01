@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: admin
+  labels:
+    app: admin
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: 'admin.${var.hostname}'
+      http:
+        paths:
+          - backend:
+              service:
+                name: admin
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

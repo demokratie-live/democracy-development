@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: import-named-polls
+  labels:
+    app: import-named-polls
+spec:
+  schedule: '15 1 * * *'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 86400
+          containers:
+            - name: import-named-polls
+              image: democracy/import-named-polls:0.1.17
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: import-named-polls

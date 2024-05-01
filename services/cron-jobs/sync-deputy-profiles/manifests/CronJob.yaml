@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sync-deputy-profiles
+  labels:
+    app: sync-deputy-profiles
+spec:
+  schedule: '3-59/10 * * * *'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 86400
+          containers:
+            - name: sync-deputy-profiles
+              image: democracy/sync-deputy-profiles:0.1.12
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: sync-deputy-profiles

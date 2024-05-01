@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sync-named-polls
+data:
+  DB_URL: ${var.DB_URL}
+  BUNDESTAGIO_SERVER_URL: ${var.BUNDESTAGIO_SERVER_URL}

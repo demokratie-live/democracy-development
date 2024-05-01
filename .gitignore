@@ -13,3 +13,4 @@ docker_volumes/*/*
 out
 build
 /.env
+.garden

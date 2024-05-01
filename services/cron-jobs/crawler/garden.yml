@@ -1,0 +1,54 @@
+kind: Build
+name: import-procedures
+description: Import procedures for the bundestag.io API
+type: container
+source:
+  path: ../../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: crawler
+    SERVICE_PATH: services/cron-jobs/crawler
+
+---
+kind: Deploy
+name: import-procedures
+type: kubernetes
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.import-procedures, deploy.mongo]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+varfiles:
+  - .env
+  - .env.local
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/bundestagio
+
+spec:
+  files:
+    - ./manifests/*
+
+  patchResources:
+    - name: import-procedures
+      kind: CronJob
+      patch:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: import-procedures
+                      image: ${actions.build.import-procedures.outputs.deploymentImageId} # <--- Reference the output from the Build action
+
+    - name: dip-api-token
+      kind: Secret
+      patch:
+        data:
+          DIP_API_KEY: ${base64Encode(var.DIP_API_KEY)}

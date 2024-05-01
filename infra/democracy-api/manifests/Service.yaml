@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: democracy-api
+  name: democracy-api
+spec:
+  type: ClusterIP
+  selector:
+    app: democracy-api
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 3000

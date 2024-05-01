@@ -1,0 +1,43 @@
+kind: Build
+name: queue-pushs-conference-week
+description: Import procedures for the bundestag.io API
+type: container
+source:
+  path: ../../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: queue-pushs-conference-week
+    SERVICE_PATH: services/cron-jobs/queue-pushs-conference-week
+
+---
+kind: Deploy
+name: queue-pushs-conference-week
+type: kubernetes
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.queue-pushs-conference-week, deploy.mongo]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/democracy
+
+spec:
+  files: [./manifests/*]
+
+  patchResources:
+    - name: queue-pushs-conference-week
+      kind: CronJob
+      patch:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: queue-pushs-conference-week
+                      image: ${actions.build.queue-pushs-conference-week.outputs.deploymentImageId}

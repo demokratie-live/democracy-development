@@ -1,0 +1,43 @@
+kind: Build
+name: import-deputy-profiles
+description: Import procedures for the bundestag.io API
+type: container
+source:
+  path: ../../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: import-deputy-profiles
+    SERVICE_PATH: services/cron-jobs/import-deputy-profiles
+
+---
+kind: Deploy
+name: import-deputy-profiles
+type: kubernetes
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.import-deputy-profiles, deploy.mongo]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/bundestagio
+
+spec:
+  files: [./manifests/*]
+
+  patchResources:
+    - name: import-deputy-profiles
+      kind: CronJob
+      patch:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: import-deputy-profiles
+                      image: ${actions.build.import-deputy-profiles.outputs.deploymentImageId}

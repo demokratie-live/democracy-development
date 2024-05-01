@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qr-code-handler
+  labels:
+    app: qr-code-handler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qr-code-handler
+  template:
+    metadata:
+      labels:
+        app: qr-code-handler
+    spec:
+      containers:
+        - name: qr-code-handler
+          image: democracy/qr-code-handler:1.0.9
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PORT
+              value: '3000'
+            - name: DB_URL
+              value: mongodb://democracy-mongo:27017/qr-code
+          ports:
+            - containerPort: 3000
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              cpu: 10m
+              memory: 90Mi

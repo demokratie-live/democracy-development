@@ -1,0 +1,14 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: democracy-api-config
+data:
+  BUNDESTAGIO_SERVER_URL: http://bundestagio-srv:3100/
+  DB_URL: mongodb://democracy-mongo:27017/democracy
+  DEBUG: "true"
+  GRAPHIQL: "true"
+  NODE_ENV: development
+  SMS_SIMULATE: "true"
+  SMS_VERIFICATION: "false"
+  STAGE: internal

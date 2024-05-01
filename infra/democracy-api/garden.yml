@@ -1,0 +1,6 @@
+kind: Deploy
+name: democracy-api
+type: kubernetes
+spec:
+  files:
+    - ./manifests/*

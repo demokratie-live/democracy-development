@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: import-procedures
+  labels:
+    app: import-procedures
+spec:
+  schedule: '0 1 * * *'
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 200
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          activeDeadlineSeconds: 86400
+          containers:
+            - name: import-procedures
+              image: democracy/crawler:1.0.17
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: crawler-config
+                - secretRef:
+                    name: dip-api-token
+                    optional: false

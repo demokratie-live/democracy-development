@@ -144,9 +144,9 @@ const start = async () => {
 
 (async () => {
   console.info('START');
-  console.info('process.env', process.env.BUNDESTAGIO_SERVER_URL, process.env.DB_URL);
-  if (!process.env.BUNDESTAGIO_SERVER_URL) {
-    throw new Error('you have to set environment variable: BUNDESTAGIO_SERVER_URL & DB_URL');
+  console.info('process.env', process.env.DB_URL);
+  if (!process.env.DB_URL) {
+    throw new Error('you have to set environment variable: DB_URL');
   }
   await mongoConnect();
   console.log('procedures', await ProcedureModel.countDocuments({}));

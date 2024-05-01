@@ -1,0 +1,43 @@
+kind: Build
+name: import-conference-week-details
+description: Import procedures for the bundestag.io API
+type: container
+source:
+  path: ../../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: import-conference-week-details
+    SERVICE_PATH: services/cron-jobs/import-conference-week-details
+
+---
+kind: Deploy
+name: import-conference-week-details
+type: kubernetes
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.import-conference-week-details, deploy.mongo]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/bundestagio
+
+spec:
+  files: [./manifests/*]
+
+  patchResources:
+    - name: import-conference-week-details
+      kind: CronJob
+      patch:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                    - name: import-conference-week-details
+                      image: ${actions.build.import-conference-week-details.outputs.deploymentImageId}

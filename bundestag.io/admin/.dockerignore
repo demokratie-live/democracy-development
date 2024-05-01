@@ -5,3 +5,5 @@ logs
 .next
 *.log
 .turbo
+manifests
+.garden

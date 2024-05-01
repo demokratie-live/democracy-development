@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bundestag-io-api
+  labels:
+    app: bundestag-io-api
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: 'bundestag-io-api.${var.hostname}'
+      http:
+        paths:
+          - backend:
+              service:
+                name: bundestag-io-api
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
