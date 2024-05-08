@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.15](https://github.com/demokratie-live/democracy-development/compare/sync-named-polls@v0.1.14...sync-named-polls@v0.1.15) (2024-05-08)
+
+
+* add garden.io ([bc0553d](https://github.com/demokratie-live/democracy-development/commit/bc0553d2dbae414c2d9f418dc06530bcc2ea82e7))
+
 ## [0.1.14](https://github.com/demokratie-live/democracy-development/compare/sync-named-polls@v0.1.12...sync-named-polls@v0.1.14) (2023-10-22)
 
 
