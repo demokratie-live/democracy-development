@@ -1,6 +1,6 @@
 {
   "name": "qr-code-handler",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "main": "build/index.js",
   "scripts": {
     "dev": "tsup src/index.ts --watch --onSuccess 'node build/index.js'",

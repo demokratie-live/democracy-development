@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.10](https://github.com/demokratie-live/democracy-development/compare/qr-code-handler@v1.0.9...qr-code-handler@v1.0.10) (2024-05-08)
+
+
+* add garden.io ([bc0553d](https://github.com/demokratie-live/democracy-development/commit/bc0553d2dbae414c2d9f418dc06530bcc2ea82e7))
+
 ## [1.0.9](https://github.com/demokratie-live/democracy-development/compare/qr-code-handler@v1.0.8...qr-code-handler@v1.0.9) (2023-10-22)
 
 
