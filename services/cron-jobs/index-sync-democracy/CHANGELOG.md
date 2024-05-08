@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.5](https://github.com/demokratie-live/democracy-development/compare/index-sync-democracy@v0.1.4...index-sync-democracy@v0.1.5) (2024-05-08)
+
+
+* add garden.io ([bc0553d](https://github.com/demokratie-live/democracy-development/commit/bc0553d2dbae414c2d9f418dc06530bcc2ea82e7))
+
 ## [0.1.4](https://github.com/demokratie-live/democracy-development/compare/index-sync-democracy@v0.1.3...index-sync-democracy@v0.1.4) (2023-10-22)
 
 
