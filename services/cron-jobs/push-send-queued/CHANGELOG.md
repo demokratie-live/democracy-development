@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.26](https://github.com/demokratie-live/democracy-development/compare/push-send-queued@v0.1.25...push-send-queued@v0.1.26) (2024-05-08)
+
+
+* add garden.io ([bc0553d](https://github.com/demokratie-live/democracy-development/commit/bc0553d2dbae414c2d9f418dc06530bcc2ea82e7))
+
 ## [0.1.25](https://github.com/demokratie-live/democracy-development/compare/push-send-queued@v0.1.24...push-send-queued@v0.1.25) (2024-04-07)
 
 
