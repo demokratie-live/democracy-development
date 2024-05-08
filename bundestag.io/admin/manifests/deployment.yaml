@@ -21,6 +21,20 @@ spec:
           env:
             - name: PORT
               value: '4003'
+            - name: CREDENTIALS
+              value: user:password
+            - name: NEXTAUTH_SECRET
+              value: secret
+            - name: NEXTAUTH_URL
+              value: 'https://admin.${var.hostname}'
+            - name: BUNDESTAGIO_SERVER_URL
+              value: 'http://bundestag-io-api'
+            - name: BIO_EDIT_TOKEN
+              value: ${var.BIO_EDIT_TOKEN}
+            - name: AI_ACCESS_TOKEN
+              value: 'token'
+            - name: AI_SERVER_URL
+              value: 'http://ai'
           ports:
             - containerPort: 4003
               name: http

@@ -25,6 +25,9 @@ type: kubernetes
 description: Deploy the bundestag.io API
 dependencies: [build.bundestag-io-api, deploy.mongo]
 
+variables:
+  BIO_EDIT_TOKEN: local-token
+
 spec:
   files: [./manifests/*] # <--- Tell Garden what manifests to use
 
