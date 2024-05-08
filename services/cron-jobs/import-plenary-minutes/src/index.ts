@@ -34,7 +34,7 @@ const getPlenaryMinutes = (plenaryMinutes: cheerio.Cheerio, period: number): Ple
   plenaryMinutes.each((i, elem) => {
     // Parse Title
     const title = cheerio(elem).find('strong').text().trim();
-    const regex = /Plenarprotokoll der (?<meeting>\d{1,3}).*?dem (?<date>.*?)$/gi;
+    const regex = /protokoll der (?<meeting>\d{1,3}).*?dem (?<date>.*?)$/gi;
     const match = regex.exec(title)!.groups as {
       meeting: string;
       date: string;
