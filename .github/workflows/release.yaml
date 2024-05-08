@@ -185,7 +185,7 @@ jobs:
           fi
 
       - name: Create release
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         if: inputs.dryRun == false
         env:
           TAG: ${{ matrix.package }}@v${{ steps.determine_next_version.outputs.NEXT_VERSION }}
