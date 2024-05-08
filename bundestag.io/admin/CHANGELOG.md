@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.2.1](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.2.0...bundestag.io-admin@v3.2.1) (2024-05-08)
+
+
+* add garden.io ([bc0553d](https://github.com/demokratie-live/democracy-development/commit/bc0553d2dbae414c2d9f418dc06530bcc2ea82e7))
+
 ## [3.2.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.1.0...bundestag.io-admin@v3.2.0) (2024-04-21)
 
 
