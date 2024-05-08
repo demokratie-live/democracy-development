@@ -21,12 +21,21 @@ type: kubernetes
 description: Deploy the Admin
 dependencies: [build.admin, deploy.bundestag-io-api]
 
+variables:
+  BIO_EDIT_TOKEN: ${actions.deploy.bundestag-io-api.var.BIO_EDIT_TOKEN}
+
 spec:
   files: [./manifests/*] # <--- Tell Garden what manifests to use
 
   defaultTarget: # <--- This tells Garden what "target" to use for logs, code syncing and more
     kind: Deployment
     name: admin
+
+  sync:
+    paths:
+      - containerPath: /app/bundestag.io/admin/src
+        sourcePath: src
+        mode: one-way
 
   # Patch the K8s manifests for the api service so that we can set the correct image
   patchResources:

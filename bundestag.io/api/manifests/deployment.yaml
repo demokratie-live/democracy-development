@@ -23,6 +23,9 @@ spec:
               value: '4000'
             - name: DB_URL
               value: mongodb://democracy-mongo:27017/bundestagio
+            - name: BIO_EDIT_TOKEN
+              value: ${var.BIO_EDIT_TOKEN}
+
           ports:
             - containerPort: 4000
               name: http
