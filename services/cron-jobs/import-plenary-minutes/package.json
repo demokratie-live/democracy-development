@@ -12,6 +12,7 @@
     "start": "node ./build/index.js"
   },
   "dependencies": {
+    "@democracy-deutschland/bt-dip-sdk": "1.3.0",
     "@democracy-deutschland/bundestagio-common": "workspace:*",
     "axios": "^1.6.0",
     "cheerio": "^1.0.0-rc.3",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/cheerio": "^0.22.21",
+    "@types/node": "^20.12.5",
     "dotenv": "^16.0.0",
     "ts-node-dev": "^1.0.0-pre.49",
     "ts-unused-exports": "^8.0.0",
