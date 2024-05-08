@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.6](https://github.com/demokratie-live/democracy-development/compare/shedule-bio-resync@v0.1.5...shedule-bio-resync@v0.1.6) (2024-05-08)
+
+
+* add garden.io ([bc0553d](https://github.com/demokratie-live/democracy-development/commit/bc0553d2dbae414c2d9f418dc06530bcc2ea82e7))
+
 ## [0.1.5](https://github.com/demokratie-live/democracy-development/compare/shedule-bio-resync@v0.1.4...shedule-bio-resync@v0.1.5) (2023-10-22)
 
 
