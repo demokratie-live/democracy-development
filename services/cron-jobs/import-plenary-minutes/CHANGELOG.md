@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.9](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.8...import-plenary-minutes@v0.1.9) (2024-05-08)
+
+
+* 🐛 adjust regex to fix regex error ([e58f7eb](https://github.com/demokratie-live/democracy-development/commit/e58f7eb02dc7d537d7d0883755b8f42c57fed6f1))
+
 ## [0.1.8](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.7...import-plenary-minutes@v0.1.8) (2024-05-08)
 
 
