@@ -36,6 +36,7 @@ RUN pnpm install
 COPY --from=builder /app/out/full/ .
 
 FROM installer AS dev
+ENV NEXT_TELEMETRY_DISABLED 1
 CMD cd $SERVICE_PATH && pnpm dev
 
 FROM installer AS installer_prod
