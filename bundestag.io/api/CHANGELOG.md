@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.61](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.60...bundestag.io@v0.1.61) (2024-05-09)
+
+
+* enable garden sync mode for bio-admin ([498d39b](https://github.com/demokratie-live/democracy-development/commit/498d39be4a85d0de5b641d3fd7a6a1fed8314eb2))
+
 ## [0.1.60](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.59...bundestag.io@v0.1.60) (2024-05-08)
 
 
