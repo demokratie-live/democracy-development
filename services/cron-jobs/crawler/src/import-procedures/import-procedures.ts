@@ -67,7 +67,10 @@ export default async function importProcedures(config: typeof CONFIG): Promise<v
     } = await getVorgaenge({
       cursor: variables.cursor,
       limit: variables.limit,
-      filter: { start: new Date(variables.filter.after) },
+      filter: {
+        start: new Date(variables.filter.after),
+        types: ['Antrag', 'Gesetzgebung'],
+      },
       offset: 0,
     });
 
@@ -200,6 +203,7 @@ const getVorgaenge = async (args: ProceduresArgs) => {
       cursor,
       fAktualisiertStart: args.filter?.start?.toISOString(),
       fAktualisiertEnd: args.filter?.end?.toISOString(),
+      fVorgangstyp: args.filter?.types,
     });
     // const res = await this.get(`/api/v1/vorgang`, { ...filter, cursor });
     totalCount = Number(data.numFound);
