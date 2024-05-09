@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: votes-ai
+  labels:
+    app: votes-ai
+spec:
+  selector:
+    matchLabels:
+      app: votes-ai
+  template:
+    metadata:
+      labels:
+        app: votes-ai
+    spec:
+      containers:
+        - name: votes-ai
+          image: democracy/votes-ai:0.0.1
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: votes-ai
+                optional: false
+            - secretRef:
+                name: votes-ai
+                optional: false
+          resources:
+            limits:
+              cpu: '0.5'
+              memory: '512Mi'

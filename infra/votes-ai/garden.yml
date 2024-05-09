@@ -1,0 +1,14 @@
+kind: Deploy
+name: votes-ai
+type: kubernetes
+
+variables:
+  PORT: 3000
+  ACCESS_TOKEN: 'local-token'
+
+varfiles:
+  - ./.env
+
+spec:
+  files:
+    - ./manifests/*
