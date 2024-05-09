@@ -32,17 +32,19 @@ spec:
             - name: BIO_EDIT_TOKEN
               value: ${var.BIO_EDIT_TOKEN}
             - name: AI_ACCESS_TOKEN
-              value: 'token'
+              value: ${var.AI_SERVICE_ACCESS_TOKEN}
             - name: AI_SERVER_URL
-              value: 'http://ai'
+              value: 'http://votes-ai'
+            - name: AI_SIMULATION
+              value: '${var.AI_SIMULATION}'
           ports:
             - containerPort: 4003
               name: http
               protocol: TCP
           resources:
             limits:
-              cpu: '1'
-              memory: 1Gi
+              cpu: '4'
+              memory: 4Gi
             requests:
               cpu: 10m
               memory: 90Mi
