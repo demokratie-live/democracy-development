@@ -5,7 +5,37 @@ import { config } from '@/lib/config';
 import request from 'graphql-request';
 import { ParseDecisionDocument, ParseDecisionQuery, ParseDecisionQueryVariables } from '@/__generated/gql-ai/graphql';
 
+const aiSimulationData = [
+  {
+    name: 'Union',
+    vote: 'YES',
+  },
+  {
+    name: 'SPD',
+    vote: 'ABSTINATION',
+  },
+  {
+    name: 'FDP',
+    vote: 'NO',
+  },
+  {
+    name: 'Grüne',
+    vote: 'YES',
+  },
+  {
+    name: 'AfD',
+    vote: 'NO',
+  },
+  {
+    name: 'Linke',
+    vote: 'YES',
+  },
+];
+
 const graphqlAi = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (config.AI_SIMULATION) {
+    return res.status(200).send(aiSimulationData);
+  }
   const session = await getServerSession(req, res, authOptions);
 
   const { decision, period } = req.body.variables;
@@ -13,7 +43,7 @@ const graphqlAi = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!!session?.user && decision && period) {
     try {
       const response = await request<ParseDecisionQuery, ParseDecisionQueryVariables>(
-        config.AI_SERVER_URL,
+        config.AI_SERVER_URL!,
         ParseDecisionDocument,
         {
           decision,

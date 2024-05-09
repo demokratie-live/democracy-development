@@ -1,7 +1,8 @@
-import React from 'react';
-import { Form, Input, Button, InputNumber, Radio, Row, Col, notification, Switch } from 'antd';
+import React, { useRef, useState } from 'react';
+import { Form, Input, Button, InputNumber, Radio, Row, Col, notification, Switch, FormInstance } from 'antd';
 import { axiosClient } from '../../lib/axios';
-import { AiVotes } from './AiVotes';
+import { AiVotes, AiVotesProps } from './AiVotes';
+import { Vote } from '@/__generated/gql-ai/graphql';
 
 // Ant Design Sub-Elements
 const { TextArea } = Input;
@@ -29,6 +30,8 @@ const FRACTIONS = [
 ];
 
 const VoteResultsForm = ({ data, type, procedureId, period }) => {
+  const [form] = Form.useForm();
+
   const onFinish = (values) => {
     notification.info({
       key: 'saveProcedure',
@@ -85,8 +88,17 @@ const VoteResultsForm = ({ data, type, procedureId, period }) => {
     }));
   }
 
+  const onAiVoteResult: AiVotesProps['onResult'] = (votes) => {
+    const fieldValue = form.getFieldValue('partyVotes');
+    form.setFieldValue(
+      'partyVotes',
+      votes.map((vote, i) => ({ ...fieldValue[i], main: vote.vote })),
+    );
+  };
+
   return (
     <Form
+      form={form}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       className="login-form"
@@ -102,6 +114,7 @@ const VoteResultsForm = ({ data, type, procedureId, period }) => {
         })),
       }}
     >
+      <div>HELLO</div>
       <FormItem
         label="Abstimmung über"
         name="votingDocument"
@@ -124,7 +137,7 @@ const VoteResultsForm = ({ data, type, procedureId, period }) => {
       >
         {({ getFieldValue }) => {
           if (getFieldValue('decisionText') && period) {
-            return <AiVotes decision={getFieldValue('decisionText')} period={period} />;
+            return <AiVotes decision={getFieldValue('decisionText')} period={period} onResult={onAiVoteResult} />;
           }
           return null;
         }}

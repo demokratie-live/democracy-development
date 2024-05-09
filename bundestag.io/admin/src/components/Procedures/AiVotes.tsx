@@ -2,9 +2,10 @@ import { Maybe, Vote, VoteResult } from '@/__generated/gql-ai/graphql';
 import { Button, Spin } from 'antd';
 import { useState } from 'react';
 
-type AiVotesProps = {
+export type AiVotesProps = {
   decision: string;
   period: number;
+  onResult?: (result: Vote[]) => void;
 };
 
 /**
@@ -15,7 +16,7 @@ type AiVotesProps = {
  * @param decision
  * @param period
  */
-export const AiVotes: React.FC<AiVotesProps> = ({ decision, period }) => {
+export const AiVotes: React.FC<AiVotesProps> = ({ decision, period, onResult }) => {
   const [votes, setVotes] = useState<Vote[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -41,6 +42,7 @@ export const AiVotes: React.FC<AiVotesProps> = ({ decision, period }) => {
       });
 
       setVotes(response);
+      onResult?.(response);
     } catch (error) {
       console.error(error);
     } finally {
