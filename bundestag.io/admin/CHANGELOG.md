@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.3.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.2.1...bundestag.io-admin@v3.3.0) (2024-05-09)
+
+
+* enable garden sync mode for bio-admin ([498d39b](https://github.com/demokratie-live/democracy-development/commit/498d39be4a85d0de5b641d3fd7a6a1fed8314eb2))
+* enable sync mode for bio-admin ([5fad2e2](https://github.com/demokratie-live/democracy-development/commit/5fad2e275e7684f6b8c009d7b01c16efff3139b2))
+
+
+### 🚀 Feature
+
+* enable auto select for votes-ai ([012c3b2](https://github.com/demokratie-live/democracy-development/commit/012c3b2c17540b85ab60571c37611bb6d61312a1))
+
 ## [3.2.1](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.2.0...bundestag.io-admin@v3.2.1) (2024-05-08)
 
 
