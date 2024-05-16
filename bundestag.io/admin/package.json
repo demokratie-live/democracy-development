@@ -1,6 +1,7 @@
 {
   "name": "bundestag.io-admin",
   "version": "3.3.0",
+  "description": "Admin interface for bundestag.io",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
