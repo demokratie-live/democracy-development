@@ -1,5 +1,6 @@
 {
   "name": "@democracy-deutschland/bundestagio-common",
+  "description": "Common code for bundestag.io",
   "version": "0.1.16",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,6 +20,7 @@
   },
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
+    "tsconfig": "workspace:*",
     "@types/cron": "^2.4.0",
     "cron": "^3.1.3",
     "jsonwebtoken": "^9.0.2",
