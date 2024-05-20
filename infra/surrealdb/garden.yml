@@ -1,0 +1,61 @@
+kind: Run
+name: surrealdb-sleep-init
+type: exec
+spec:
+  command:
+    - sh
+    - -c
+    - |
+      until kubectl get pods basic-tidb-0 -n "${providers.local-kubernetes.outputs.app-namespace}" > /dev/null 2>&1; do
+        echo "Waiting for pod basic-tidb-0 to be created..."
+        sleep 5
+      done
+      kubectl wait --for=condition=PodScheduled pod/basic-tidb-0 -n "${providers.local-kubernetes.outputs.app-namespace}"
+dependencies:
+  - deploy.tidb-cluster
+---
+kind: Run
+name: surrealdb-sleep-run
+type: exec
+spec:
+  command:
+    [
+      'kubectl',
+      'wait',
+      '--for=condition=Ready',
+      'pod/basic-tidb-0',
+      '-n',
+      '${providers.local-kubernetes.outputs.app-namespace}',
+    ]
+dependencies:
+  - run.surrealdb-sleep-init
+---
+kind: Deploy
+type: helm
+name: surrealdb
+dependencies:
+  - run.surrealdb-sleep-run
+
+spec:
+  chart:
+    repo: https://helm.surrealdb.com
+    name: surrealdb
+    version: 'v0.3.3'
+  values:
+    surrealdb:
+      path: tikv://basic-pd:2379
+      auth: false
+    image:
+      tag: 'v1.5.0'
+    ingress:
+      enabled: true
+      hosts:
+        - host: surrealdb.${var.hostname}
+          paths:
+            - path: /
+              pathType: Prefix
+  portForwards:
+    - name: surrealdb
+      resource: Service/surrealdb
+      targetPort: 8000
+      localPort: 8080
