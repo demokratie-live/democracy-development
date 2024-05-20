@@ -16,7 +16,10 @@
     "@democracy-deutschland/bundestagio-common": "workspace:*",
     "@democracy-deutschland/scapacra": "workspace:*",
     "@democracy-deutschland/scapacra-bt": "workspace:*",
-    "http2": "^3.3.7"
+    "axios": "^1.6.8",
+    "camaro": "^6.2.3",
+    "http2": "^3.3.7",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "dotenv": "^16.3.1",
