@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.2](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.1...crawler@v1.1.2) (2024-05-25)
+
+
+* import only procedures of type Antrag & Gesetzgebung ([9c78de7](https://github.com/demokratie-live/democracy-development/commit/9c78de7155ce8d29d38450c99dddcbfae2e872e2))
+
 ## [1.1.1](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.0...crawler@v1.1.1) (2024-05-08)
 
 
