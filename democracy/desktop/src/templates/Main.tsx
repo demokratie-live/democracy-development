@@ -1,10 +1,8 @@
-import { ReactNode } from 'react';
-
 import { AppConfig } from '@/utils/AppConfig';
 
 type IMainProps = {
-  meta: ReactNode;
-  children: ReactNode;
+  meta: React.ReactNode;
+  children: React.ReactNode;
 };
 
 const Main = (props: IMainProps) => (

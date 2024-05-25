@@ -1,10 +1,10 @@
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 
 import Navigation from '@/components/molecules/Navigation';
 import DonateDialog from '@/components/organisms/DonateDialog';
 
 interface Props {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 const Layout: FC<Props> = ({ children }) => (
