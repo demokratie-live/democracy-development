@@ -5,6 +5,7 @@ on:
     paths:
       - 'services/**'
       - 'bundestag.io/**'
+      - 'democracy/**'
     branches:
       - 'master'
 
