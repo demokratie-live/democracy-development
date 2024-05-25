@@ -3,3 +3,4 @@ packages:
   - 'packages/**/*'
   - 'common/**/*'
   - 'bundestag.io/*'
+  - 'democracy/*'
