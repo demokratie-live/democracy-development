@@ -1,0 +1,61 @@
+kind: Build
+name: democracy-desktop
+type: container
+source:
+  path: ../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  targetStage:
+    $if: ${this.mode == "sync"}
+    $then: dev
+    $else: runner
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: democracy-app.de
+    SERVICE_PATH: democracy/desktop
+
+---
+kind: Deploy
+name: democracy-desktop
+type: kubernetes
+dependencies: [build.democracy-desktop]
+
+varfiles:
+  - path: .env
+
+spec:
+  files: [./manifests/*] # <--- Tell Garden what manifests to use
+
+  defaultTarget: # <--- This tells Garden what "target" to use for logs, code syncing and more
+    kind: Deployment
+    name: democracy-desktop
+
+  sync:
+    paths:
+      - containerPath: /app/democracy/desktop/src
+        sourcePath: src
+        mode: one-way
+    overrides:
+      - command: [pnpm, dev]
+
+  # Patch the K8s manifests for the api service so that we can set the correct image
+  patchResources:
+    - name: democracy-desktop
+      kind: Deployment
+      patch:
+        spec:
+          template:
+            spec:
+              containers:
+                - name: democracy-desktop
+                  image: ${actions.build.democracy-desktop.outputs.deploymentImageId} # <--- Reference the output from the Build action
+                  env:
+                    - name: PORT
+                      value: '3000'
+                    - name: APP_API_URL
+                      value: ${var.APP_API_URL}
+                    - name: APP_HOST
+                      value: ${var.APP_HOST}

@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: democracy-desktop
+  labels:
+    app: democracy-desktop
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: 'desktop.${var.hostname}'
+      http:
+        paths:
+          - backend:
+              service:
+                name: democracy-desktop
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

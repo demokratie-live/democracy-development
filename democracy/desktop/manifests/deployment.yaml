@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democracy-desktop
+  labels:
+    app: democracy-desktop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: democracy-desktop
+  template:
+    metadata:
+      labels:
+        app: democracy-desktop
+    spec:
+      containers:
+        - name: democracy-desktop
+          image: democracy/democracy-desktop:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: '4'
+              memory: 4Gi
+            requests:
+              cpu: 10m
+              memory: 90Mi
