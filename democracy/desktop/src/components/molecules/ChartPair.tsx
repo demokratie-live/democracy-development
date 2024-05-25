@@ -102,10 +102,10 @@ export default function ChartPair({ item, className, large }) {
         partyVotes: item.voteResults.partyVotes.map((p: any) => ({
           party: p.party,
           main: p.main.toLowerCase(),
-          yes: p.deviants.yes ?? 0,
-          no: p.deviants.no ?? 0,
-          abstination: p.deviants.abstination ?? 0,
-          notVoted: p.deviants.notVoted ?? 0,
+          yes: p.deviants?.yes ?? 0,
+          no: p.deviants?.no ?? 0,
+          abstination: p.deviants?.abstination ?? 0,
+          notVoted: p.deviants?.notVoted ?? 0,
         })),
       }
     : undefined;
