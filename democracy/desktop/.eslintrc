@@ -1,10 +1,7 @@
 {
+  "root": true,
   // Configuration for JavaScript files
-  "extends": [
-    "airbnb-base",
-    "next/core-web-vitals",
-    "plugin:prettier/recommended"
-  ],
+  "extends": ["airbnb-base", "next/core-web-vitals", "plugin:prettier/recommended"],
   "rules": {
     "prettier/prettier": [
       "error",
@@ -25,9 +22,6 @@
         "next/core-web-vitals",
         "plugin:prettier/recommended"
       ],
-      "parserOptions": {
-        "project": "./tsconfig.json"
-      },
       "rules": {
         "prettier/prettier": [
           "error",
@@ -70,10 +64,7 @@
         ], // Follow the same ordering as the official plugin `prettier-plugin-tailwindcss`
         "@typescript-eslint/no-unused-vars": "off",
         "unused-imports/no-unused-imports": "error",
-        "unused-imports/no-unused-vars": [
-          "error",
-          { "argsIgnorePattern": "^_" }
-        ]
+        "unused-imports/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
       }
     }
   ]
