@@ -2,11 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { formatVotes } from '@/utils/Helpers';
 
-import DoughnutChart, {
-  PartyVote,
-  VoteCategory,
-  Votes,
-} from '../organisms/DoughnutChart';
+import DoughnutChart, { PartyVote, VoteCategory, Votes } from '../organisms/DoughnutChart';
 
 function sortPartyVotes(partyVotes: PartyVote[], key: string) {
   try {
@@ -117,12 +113,7 @@ export default function ChartPair({ item, className, large }) {
         setDelay(setTimeout(() => close(), 500));
       }}
     >
-      <div
-        ref={ref}
-        className={`flex gap-6 p-2 ${
-          hover1 ? 'bg-white rounded-md overflow-hidden shadow' : ''
-        }`}
-      >
+      <div ref={ref} className={`flex gap-6 p-2 ${hover1 ? 'bg-white rounded-md overflow-hidden shadow' : ''}`}>
         {item.voteResults && (
           <div className="flex flex-col items-center">
             <DoughnutChart
@@ -134,9 +125,7 @@ export default function ChartPair({ item, className, large }) {
                   setDelay(setTimeout(() => close(), 500));
                 } else {
                   setHover1(item1);
-                  setPartyVotes(
-                    sortPartyVotes(officialVotes?.partyVotes ?? [], k1!)
-                  );
+                  setPartyVotes(sortPartyVotes(officialVotes?.partyVotes ?? [], k1!));
                   setKey1(k1 ?? undefined);
                 }
               }}
@@ -153,14 +142,12 @@ export default function ChartPair({ item, className, large }) {
                       item.voteResults.yes +
                         item.voteResults.no +
                         item.voteResults.abstination +
-                        item.voteResults.notVoted
+                        item.voteResults.notVoted,
                     )})`}
                   {!hover1 && (
                     <span>
                       {item.voteResults.namedVote
-                        ? `${formatVotes(
-                            item.voteResults.yes + item.voteResults.no
-                          )} Abgeordnete`
+                        ? `${formatVotes(item.voteResults.yes + item.voteResults.no)} Abgeordnete`
                         : `${item.voteResults.partyVotes.length} Fraktionen`}
                     </span>
                   )}
@@ -202,9 +189,7 @@ export default function ChartPair({ item, className, large }) {
                     {hover2
                       ? `${hover2.label} (${calculatePercent(
                           hover2.count,
-                          item.communityVotes.yes +
-                            item.communityVotes.no +
-                            item.communityVotes.abstination
+                          item.communityVotes.yes + item.communityVotes.no + item.communityVotes.abstination,
                         )})`
                       : formatVotes(item.votes)}
                     {!hover2 && ' Nutzer'}
@@ -218,15 +203,10 @@ export default function ChartPair({ item, className, large }) {
                   {hover1.label}
                 </span> */}
                 {partyVotes.map((p) => (
-                  <div
-                    key={p.party}
-                    className="flex w-full items-center justify-between pb-px"
-                  >
+                  <div key={p.party} className="flex w-full items-center justify-between pb-px">
                     <img
                       src={`/img/parteilogos/unified/${slug(p.party)}.svg`}
-                      className={`${
-                        large ? 'h-6 w-20' : 'h-5 w-14'
-                      } object-cover text-xs italic`}
+                      className={`${large ? 'h-6 w-20' : 'h-5 w-14'} object-cover text-xs italic`}
                       alt={p.party}
                     />
                     <div className="h-full w-full pl-1 text-right text-gray-700">
@@ -245,9 +225,7 @@ export default function ChartPair({ item, className, large }) {
                           }}
                           className="flex h-full"
                         ></div> */}
-                        <small className="absolute inset-0 px-1">
-                          {p[key1!]}
-                        </small>
+                        <small className="absolute inset-0 px-1">{p[key1!]}</small>
                       </div>
                     </div>
                   </div>
