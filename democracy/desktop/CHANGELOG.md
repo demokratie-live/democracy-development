@@ -1,6 +1,17 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+## [1.0.13](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.0.4...democracy-app.de@v1.0.13) (2024-05-25)
+
+
+* 🐛 search crash ([558870c](https://github.com/demokratie-live/democracy-development/commit/558870c92d07dcc02e11861e1d90d4b38e006fec))
+* 🧹 code formatting ([bb03853](https://github.com/demokratie-live/democracy-development/commit/bb03853c96a95a924aa26a043848e7d6c8bf82ca))
+* add garden to democracy-desktop ([78200fa](https://github.com/demokratie-live/democracy-development/commit/78200fa8f266a3c61f7f89b259416c28cc7f583e))
+* cleanup import ([617c477](https://github.com/demokratie-live/democracy-development/commit/617c47704740bc7941570e80815426e90953afc5))
+* eslint issues ([5c97bf0](https://github.com/demokratie-live/democracy-development/commit/5c97bf07a57dadd88bca7cdfdb90e389da61c003))
+* fix versions ([2bea1ac](https://github.com/demokratie-live/democracy-development/commit/2bea1acf21a70bb3c33acc25e83dfcf46b3d720a))
+* update tsconfig ([5c59282](https://github.com/demokratie-live/democracy-development/commit/5c592826eaf15223aab0d5e36561a86288b214b8))
 
 ### [1.0.12](https://github.com/demokratie-live/desktop/compare/v1.0.11...v1.0.12) (2023-12-16)
 
