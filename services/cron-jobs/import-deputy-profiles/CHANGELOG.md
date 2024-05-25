@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.15](https://github.com/demokratie-live/democracy-development/compare/import-deputy-profiles@v0.1.14...import-deputy-profiles@v0.1.15) (2024-05-25)
+
 ## [0.1.14](https://github.com/demokratie-live/democracy-development/compare/import-deputy-profiles@v0.1.13...import-deputy-profiles@v0.1.14) (2024-05-08)
 
 
