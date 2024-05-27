@@ -39,7 +39,7 @@
     "react-infinite-scroll-hook": "4.1.1",
     "react-use": "17.4.0",
     "recoil": "0.7.7",
-    "sharp": "0.30.7",
+    "sharp": "0.32.6",
     "slug": "5.3.0"
   },
   "devDependencies": {
