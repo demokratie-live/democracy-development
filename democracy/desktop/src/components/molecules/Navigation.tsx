@@ -46,38 +46,36 @@ const Navigation = () => {
           <div className="mx-auto max-w-7xl">
             <div className="flex h-16 justify-between">
               <div className="flex">
-                <Link href="/">
-                  <a className="flex shrink-0 items-center rounded">
-                    <img
-                      className="hidden h-[38px] w-auto lg:inline-flex"
-                      height="161"
-                      width="1024"
-                      src="/assets/images/logo-text.svg"
-                      alt="Democracy App"
-                    />
-                    <img
-                      className="inline-flex h-[38px] w-auto lg:hidden"
-                      height="160"
-                      width="161"
-                      src="/assets/images/logo.svg"
-                      alt="Democracy App"
-                    />
-                  </a>
+                <Link href="/" className="flex shrink-0 items-center rounded">
+                  <img
+                    className="hidden h-[38px] w-auto lg:inline-flex"
+                    height="161"
+                    width="1024"
+                    src="/assets/images/logo-text.svg"
+                    alt="Democracy App"
+                  />
+                  <img
+                    className="inline-flex h-[38px] w-auto lg:hidden"
+                    height="160"
+                    width="161"
+                    src="/assets/images/logo.svg"
+                    alt="Democracy App"
+                  />
                 </Link>
                 <div className="hidden md:mx-10 md:flex md:space-x-6">
                   {/* Current: "border-indigo-500 text-gray-900", Default: "" */}
                   {navigation.map((item) => (
-                    <Link href={item.href} key={item.href}>
-                      <a
-                        className={classNames(
-                          router.pathname === item.href
-                            ? 'border-ci-blue text-gray-900'
-                            : 'border-transparent text-gray-500 hover:text-gray-700',
-                          'inline-flex focus:rounded items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-900'
-                        )}
-                      >
-                        {item.name}
-                      </a>
+                    <Link
+                      href={item.href}
+                      key={item.href}
+                      className={classNames(
+                        router.pathname === item.href
+                          ? 'border-ci-blue text-gray-900'
+                          : 'border-transparent text-gray-500 hover:text-gray-700',
+                        'inline-flex focus:rounded items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-900',
+                      )}
+                    >
+                      {item.name}
                     </Link>
                   ))}
                 </div>
@@ -89,10 +87,7 @@ const Navigation = () => {
                   </label>
                   <div className="relative">
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                      <SearchIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
+                      <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                     </div>
                     <input
                       id="search"
@@ -147,7 +142,7 @@ const Navigation = () => {
                       router.pathname === item.href
                         ? 'bg-indigo-50 border-ci-darker text-ci-darker font-bold'
                         : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800',
-                      'block border-l-4 py-2 pl-3 pr-4 text-base font-medium rounded-md'
+                      'block border-l-4 py-2 pl-3 pr-4 text-base font-medium rounded-md',
                       // 'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-900'
                     )}
                   >

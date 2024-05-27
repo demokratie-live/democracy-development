@@ -27,11 +27,9 @@ const Card = ({ item }: any) => {
       className="flex flex-col overflow-hidden rounded-lg border shadow-lg"
       ref={intersectionRef}
     >
-      <Link href={makeLink(item)}>
-        <a
+      <Link href={makeLink(item)} 
           className="relative shrink-0 cursor-pointer bg-white pb-10 "
-          ref={observe}
-        >
+          ref={observe}>
           <div className="relative flex aspect-teaser flex-col justify-center overflow-hidden">
             <Image
               className="object-cover"
@@ -51,7 +49,6 @@ const Card = ({ item }: any) => {
                 large={false}
               />
             ))}
-        </a>
       </Link>
       <div className="flex flex-1 flex-col justify-between bg-white p-6">
         <div className="flex-1">
@@ -66,8 +63,7 @@ const Card = ({ item }: any) => {
               {item.type}
             </div>
           </div>
-          <Link href={makeLink(item)}>
-            <a className="mt-2 block">
+          <Link href={makeLink(item)}  className="mt-2 block">
               <p className="line-clamp-3 hyphens-auto text-xl font-semibold leading-6 text-gray-900">
                 {item.title}
               </p>
@@ -77,7 +73,7 @@ const Card = ({ item }: any) => {
               {/* <p className="mt-3 text-base text-gray-500">
                 {description}
               </p> */}
-            </a>
+
           </Link>
         </div>
         {item.voteDate && (
