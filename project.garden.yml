@@ -11,13 +11,11 @@ environments:
   - name: local
     defaultNamespace: ${var.userNamespace}
     variables:
-      # hostname: local.democracy-app.de
-      hostname: local.app.garden
+      hostname: local.democracy-app.de
   - name: local-prod
     defaultNamespace: ${var.userNamespace}
     variables:
-      # hostname: local.democracy-app.de
-      hostname: local.app.garden
+      hostname: local.democracy-app.de
 
 providers:
   - name: local-kubernetes
