@@ -243,7 +243,7 @@ importers:
         version: 6.0.12
       mongoose-diff-history:
         specifier: github:mimani/mongoose-diff-history#master
-        version: https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86
+        version: git+https://git@github.com:mimani/mongoose-diff-history.git#1fb081a4308d3745ebb2646f2faeaa7ce867ca86
       omit-deep:
         specifier: ^0.3.0
         version: 0.3.0
@@ -924,8 +924,8 @@ importers:
         specifier: ^1.5.17
         version: 1.5.17(graphql@15.8.0)
       cross-fetch:
-        specifier: ^3.1.8
-        version: 3.1.8
+        specifier: ^4.0.0
+        version: 4.0.0
       graphql:
         specifier: ^15.8.0
         version: 15.8.0
@@ -988,8 +988,8 @@ importers:
         specifier: ^1.5.17
         version: 1.5.17(graphql@15.8.0)
       cross-fetch:
-        specifier: ^3.1.8
-        version: 3.1.8
+        specifier: ^4.0.0
+        version: 4.0.0
       graphql:
         specifier: ^15.8.0
         version: 15.8.0
@@ -1046,8 +1046,8 @@ importers:
         specifier: ^1.5.17
         version: 1.5.17(graphql@15.8.0)
       cross-fetch:
-        specifier: ^3.1.8
-        version: 3.1.8
+        specifier: ^4.0.0
+        version: 4.0.0
       graphql:
         specifier: ^15.8.0
         version: 15.8.0
@@ -5174,6 +5174,9 @@ packages:
   cross-fetch@3.1.8:
     resolution: {integrity: sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==}
 
+  cross-fetch@4.0.0:
+    resolution: {integrity: sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==}
+
   cross-inspect@1.0.0:
     resolution: {integrity: sha512-4PFfn4b5ZN6FMNGSZlyb7wUhuN8wvj8t/VQHZdM4JsDcruGJ8L2kf9zao98QIrBPFCpdk27qst/AGTl7pL3ypQ==}
     engines: {node: '>=16.0.0'}
@@ -7926,8 +7929,8 @@ packages:
     resolution: {integrity: sha512-c1tHeuqdkOEM56dfr7WwahzWNIq6C0BK4/3HpibQMQHVA0rFZiWuqprbTXrguMOIMREZJfLLetdODN/TdLiFGQ==}
     engines: {node: '>= 8.0'}
 
-  mongoose-diff-history@https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86:
-    resolution: {tarball: https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86}
+  mongoose-diff-history@git+https://git@github.com:mimani/mongoose-diff-history.git#1fb081a4308d3745ebb2646f2faeaa7ce867ca86:
+    resolution: {commit: 1fb081a4308d3745ebb2646f2faeaa7ce867ca86, repo: git@github.com:mimani/mongoose-diff-history.git, type: git}
     version: 2.1.0
 
   mongoose@6.0.12:
@@ -8198,8 +8201,8 @@ packages:
     resolution: {integrity: sha512-Lbl/Ma59sss2b15DpnWnGmECBRL8cRl/PjPbPMVW+Y8zIQzRrwMaI65Oy6HvxyhYeILVKBJb2LWeG81bj5zbMg==}
     engines: {node: '>=0.10.0'}
 
-  omit-deep@https://codeload.github.com/izigibran/omit-deep/tar.gz/18cd03c66cd267735f09741254b638efba56dce6:
-    resolution: {tarball: https://codeload.github.com/izigibran/omit-deep/tar.gz/18cd03c66cd267735f09741254b638efba56dce6}
+  omit-deep@git+https://git@github.com:izigibran/omit-deep.git#18cd03c66cd267735f09741254b638efba56dce6:
+    resolution: {commit: 18cd03c66cd267735f09741254b638efba56dce6, repo: git@github.com:izigibran/omit-deep.git, type: git}
     version: 0.3.0
     engines: {node: '>=0.10.0'}
 
@@ -16025,6 +16028,12 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
+  cross-fetch@4.0.0:
+    dependencies:
+      node-fetch: 2.7.0
+    transitivePeerDependencies:
+      - encoding
+
   cross-inspect@1.0.0:
     dependencies:
       tslib: 2.6.2
@@ -19653,12 +19662,12 @@ snapshots:
       elasticsearch: 16.7.1
       lodash.clonedeep: 4.5.0
 
-  mongoose-diff-history@https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86:
+  mongoose-diff-history@git+https://git@github.com:mimani/mongoose-diff-history.git#1fb081a4308d3745ebb2646f2faeaa7ce867ca86:
     dependencies:
       deep-empty-object: 1.0.5
       jsondiffpatch: 0.1.43
       lodash.pick: 4.4.0
-      omit-deep: https://codeload.github.com/izigibran/omit-deep/tar.gz/18cd03c66cd267735f09741254b638efba56dce6
+      omit-deep: git+https://git@github.com:izigibran/omit-deep.git#18cd03c66cd267735f09741254b638efba56dce6
       power-assign: 0.2.10
 
   mongoose@6.0.12:
@@ -19956,7 +19965,7 @@ snapshots:
       is-plain-object: 2.0.4
       unset-value: 0.1.2
 
-  omit-deep@https://codeload.github.com/izigibran/omit-deep/tar.gz/18cd03c66cd267735f09741254b638efba56dce6:
+  omit-deep@git+https://git@github.com:izigibran/omit-deep.git#18cd03c66cd267735f09741254b638efba56dce6:
     dependencies:
       is-plain-object: 2.0.4
       unset-value: 0.1.2
