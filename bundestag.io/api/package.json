@@ -21,12 +21,12 @@
     "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@apollo/server": "^4.9.5",
+    "@apollo/server": "^4.10.4",
     "@democracy-deutschland/bundestag.io-definitions": "1.0.2",
     "@democracy-deutschland/bundestagio-common": "workspace:*",
-    "@graphql-tools/merge": "^9.0.0",
-    "@graphql-tools/schema": "^10.0.0",
-    "@graphql-tools/utils": "^10.0.8",
+    "@graphql-tools/merge": "^9.0.4",
+    "@graphql-tools/schema": "^10.0.4",
+    "@graphql-tools/utils": "^10.2.1",
     "axios": "1.6.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
@@ -42,7 +42,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/typescript": "4.0.1",
-    "@graphql-codegen/typescript-operations": "^4.0.1",
+    "@graphql-codegen/typescript-operations": "^4.2.1",
     "@graphql-codegen/typescript-resolvers": "4.0.1",
     "@types/graphql-date": "1.0.8",
     "@types/lodash": "4.14.200",
@@ -52,7 +52,7 @@
     "jest": "29.7.0",
     "prettier": "3.0.3",
     "ts-unused-exports": "10.0.1",
-    "tsx": "^4.8.2",
+    "tsx": "^4.11.0",
     "typescript": "5.2.2"
   }
 }

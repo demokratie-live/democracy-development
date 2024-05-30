@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "ts-node-dev": "^1.1.8",
-    "ts-unused-exports": "^8.0.0",
-    "typescript": "^5.2.2"
+    "ts-unused-exports": "^8.0.5",
+    "typescript": "^5.4.5"
   }
 }
