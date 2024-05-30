@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { formatVotes } from '@/utils/Helpers';
 
 import DoughnutChart, { PartyVote, VoteCategory, Votes } from '../organisms/DoughnutChart';
+import Image from 'next/image';
 
 function sortPartyVotes(partyVotes: PartyVote[], key: string) {
   try {
@@ -204,7 +205,7 @@ export default function ChartPair({ item, className, large }) {
                 </span> */}
                 {partyVotes.map((p) => (
                   <div key={p.party} className="flex w-full items-center justify-between pb-px">
-                    <img
+                    <Image
                       src={`/img/parteilogos/unified/${slug(p.party)}.svg`}
                       className={`${large ? 'h-6 w-20' : 'h-5 w-14'} object-cover text-xs italic`}
                       alt={p.party}

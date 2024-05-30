@@ -19,7 +19,6 @@ function createIsomorphicLink(context: GraphQlContext | { headers: any } | undef
   //     const { graphQlSchema } = require("./schema");
   //     return new SchemaLink({ schema: graphQlSchema, context });
   //   }
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { HttpLink } = require('@apollo/client');
 
   /**

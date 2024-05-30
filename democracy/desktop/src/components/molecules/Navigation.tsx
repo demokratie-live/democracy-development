@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 
 import { searchTermState } from '@/components/state/states';
+import Image from 'next/image';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -47,14 +48,14 @@ const Navigation = () => {
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <Link href="/" className="flex shrink-0 items-center rounded">
-                  <img
+                  <Image
                     className="hidden h-[38px] w-auto lg:inline-flex"
                     height="161"
                     width="1024"
                     src="/assets/images/logo-text.svg"
                     alt="Democracy App"
                   />
-                  <img
+                  <Image
                     className="inline-flex h-[38px] w-auto lg:hidden"
                     height="160"
                     width="161"

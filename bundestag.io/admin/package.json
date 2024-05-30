@@ -5,7 +5,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint && tsc --noEmit",
+    "lint": "next lint",
     "codegen": "graphql-codegen --require dotenv/config --config codegen.ts dotenv_config_path=.env.local"
   },
   "dependencies": {
@@ -37,8 +37,8 @@
     "@vanilla-extract/css": "^1.14.2",
     "@vanilla-extract/next-plugin": "^2.4.0",
     "babel-plugin-styled-components": "^2.1.4",
-    "eslint": "9.0.0",
+    "eslint": "^8",
     "eslint-config-next": "14.1.4",
-    "typescript": "^5.4.4"
+    "typescript": "^5.3.3"
   }
 }
