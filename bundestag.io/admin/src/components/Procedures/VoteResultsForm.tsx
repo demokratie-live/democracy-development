@@ -1,8 +1,7 @@
-import React, { useRef, useState } from 'react';
-import { Form, Input, Button, InputNumber, Radio, Row, Col, notification, Switch, FormInstance } from 'antd';
+import React from 'react';
+import { Form, Input, Button, InputNumber, Radio, Row, Col, notification, Switch } from 'antd';
 import { axiosClient } from '../../lib/axios';
 import { AiVotes, AiVotesProps } from './AiVotes';
-import { Vote } from '@/__generated/gql-ai/graphql';
 
 // Ant Design Sub-Elements
 const { TextArea } = Input;
@@ -74,7 +73,7 @@ const VoteResultsForm = ({ data, type, procedureId, period }) => {
       });
   };
 
-  const onFinishFailed = (...args) => {
+  const onFinishFailed = () => {
     notification.error({
       message: 'Speichern Fehlgeschlagen!',
       description: 'Überprüfe deine eingaben',

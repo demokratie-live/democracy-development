@@ -1,5 +1,5 @@
-import { gql } from "@apollo/client";
-import VoteResults from "../fragments/voteResults";
+import { gql } from '@apollo/client';
+import VoteResults from '../fragments/voteResults';
 
 export const SAVE_VOTE_RESULTS = gql`
   mutation saveProcedureCustomData(
@@ -24,14 +24,8 @@ export const SAVE_VOTE_RESULTS = gql`
 `;
 
 export const SAVE_VOTE_RESULTS_NAMED_POLL = gql`
-  mutation saveProcedurenamedPollCustomData(
-    $procedureId: String!
-    $toggleDecision: Boolean!
-  ) {
-    saveProcedurenamedPollCustomData(
-      procedureId: $procedureId
-      toggleDecision: $toggleDecision
-    ) {
+  mutation saveProcedurenamedPollCustomData($procedureId: String!, $toggleDecision: Boolean!) {
+    saveProcedurenamedPollCustomData(procedureId: $procedureId, toggleDecision: $toggleDecision) {
       ...VoteResults
       procedureId
     }

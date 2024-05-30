@@ -1,7 +1,7 @@
 {
-  "extends": ["next", "next/core-web-vitals"],
+  "root": true,
+  "extends": ["next", "prettier"],
   "rules": {
-    "react/display-name": 0,
-    "@typescript-eslint/no-explicit-any": ["warn"]
+    "react/display-name": 0
   }
 }

@@ -1,4 +1,4 @@
-let errors: string[] = [];
+const errors: string[] = [];
 const AI_SIMULATION = process.env.AI_SIMULATION === 'true';
 
 if (!process.env.BUNDESTAGIO_SERVER_URL) {
