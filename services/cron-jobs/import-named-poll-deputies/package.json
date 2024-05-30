@@ -19,9 +19,9 @@
     "http2": "^3.3.7"
   },
   "devDependencies": {
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.5",
     "ts-node-dev": "^2.0.0",
-    "ts-unused-exports": "^10.0.1",
-    "typescript": "^5.2.2"
+    "ts-unused-exports": "^10.1.0",
+    "typescript": "^5.4.5"
   }
 }

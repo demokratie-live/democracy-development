@@ -13,18 +13,18 @@
     "prepublishOnly": "pnpm build"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.4",
-    "ts-unused-exports": "^10.0.1",
-    "typescript": "^5.2.2"
+    "@types/jsonwebtoken": "^9.0.6",
+    "ts-unused-exports": "^10.1.0",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@types/cron": "^2.4.0",
-    "cron": "^3.1.3",
+    "cron": "^3.1.7",
     "jsonwebtoken": "^9.0.2",
     "mongoosastic": "^4.6.0",
     "mongoose": "6.0.12",
-    "mongoose-diff-history": "mimani/mongoose-diff-history#master",
+    "mongoose-diff-history": "github:mimani/mongoose-diff-history#master",
     "omit-deep": "^0.3.0",
     "ts-mongoose": "^0.0.24"
   }

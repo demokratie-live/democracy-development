@@ -51,7 +51,7 @@
     "autoprefixer": "10.4.19",
     "cross-env": "7.0.3",
     "cssnano": "7.0.1",
-    "eslint": "8",
+    "eslint": "^8.57.0",
     "eslint-config-next": "14.1.4",
     "eslint-config-prettier": "^9.1.0",
     "husky": "9.0.11",

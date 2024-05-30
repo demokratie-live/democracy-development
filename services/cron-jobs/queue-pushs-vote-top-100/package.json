@@ -13,14 +13,14 @@
   },
   "dependencies": {
     "@democracy-deutschland/democracy-common": "workspace:*",
-    "moment": "^2.27.0"
+    "moment": "^2.30.1"
   },
   "devDependencies": {
-    "@types/node": "^20.8.7",
-    "ts-unused-exports": "^6.2.1",
+    "@types/node": "^20.12.13",
+    "ts-unused-exports": "^6.3.0",
     "tsconfig": "workspace:*",
     "tsup": "^7.2.0",
     "tsup-config": "workspace:*",
-    "typescript": "^5.2.2"
+    "typescript": "^5.4.5"
   }
 }
