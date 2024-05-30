@@ -243,7 +243,7 @@ importers:
         version: 6.0.12
       mongoose-diff-history:
         specifier: github:mimani/mongoose-diff-history#master
-        version: https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86
+        version: git+https://git@github.com:mimani/mongoose-diff-history.git#1fb081a4308d3745ebb2646f2faeaa7ce867ca86
       omit-deep:
         specifier: ^0.3.0
         version: 0.3.0
@@ -916,22 +916,22 @@ importers:
         version: link:../../../common/democracy
       apollo-cache-inmemory:
         specifier: ^1.6.6
-        version: 1.6.6(graphql@15.8.0)
+        version: 1.6.6(graphql@16.8.1)
       apollo-client:
         specifier: ^2.6.10
-        version: 2.6.10(graphql@15.8.0)
+        version: 2.6.10(graphql@16.8.1)
       apollo-link-http:
         specifier: ^1.5.17
-        version: 1.5.17(graphql@15.8.0)
+        version: 1.5.17(graphql@16.8.1)
       cross-fetch:
         specifier: ^3.1.8
         version: 3.1.8
       graphql:
-        specifier: ^15.8.0
-        version: 15.8.0
+        specifier: ^16.8.1
+        version: 16.8.1
       graphql-tag:
         specifier: ^2.12.6
-        version: 2.12.6(graphql@15.8.0)
+        version: 2.12.6(graphql@16.8.1)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -980,22 +980,22 @@ importers:
         version: link:../../../common/democracy
       apollo-cache-inmemory:
         specifier: ^1.6.6
-        version: 1.6.6(graphql@15.8.0)
+        version: 1.6.6(graphql@16.8.1)
       apollo-client:
         specifier: ^2.6.10
-        version: 2.6.10(graphql@15.8.0)
+        version: 2.6.10(graphql@16.8.1)
       apollo-link-http:
         specifier: ^1.5.17
-        version: 1.5.17(graphql@15.8.0)
+        version: 1.5.17(graphql@16.8.1)
       cross-fetch:
         specifier: ^3.1.8
         version: 3.1.8
       graphql:
-        specifier: ^15.8.0
-        version: 15.8.0
+        specifier: ^16.8.1
+        version: 16.8.1
       graphql-tag:
         specifier: ^2.12.6
-        version: 2.12.6(graphql@15.8.0)
+        version: 2.12.6(graphql@16.8.1)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -1038,22 +1038,22 @@ importers:
         version: link:../../../common/democracy
       apollo-cache-inmemory:
         specifier: ^1.6.6
-        version: 1.6.6(graphql@15.8.0)
+        version: 1.6.6(graphql@16.8.1)
       apollo-client:
         specifier: ^2.6.10
-        version: 2.6.10(graphql@15.8.0)
+        version: 2.6.10(graphql@16.8.1)
       apollo-link-http:
         specifier: ^1.5.17
-        version: 1.5.17(graphql@15.8.0)
+        version: 1.5.17(graphql@16.8.1)
       cross-fetch:
         specifier: ^3.1.8
         version: 3.1.8
       graphql:
-        specifier: ^15.8.0
-        version: 15.8.0
+        specifier: ^16.8.1
+        version: 16.8.1
       graphql-tag:
         specifier: ^2.12.6
-        version: 2.12.6(graphql@15.8.0)
+        version: 2.12.6(graphql@16.8.1)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -7926,8 +7926,8 @@ packages:
     resolution: {integrity: sha512-c1tHeuqdkOEM56dfr7WwahzWNIq6C0BK4/3HpibQMQHVA0rFZiWuqprbTXrguMOIMREZJfLLetdODN/TdLiFGQ==}
     engines: {node: '>= 8.0'}
 
-  mongoose-diff-history@https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86:
-    resolution: {tarball: https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86}
+  mongoose-diff-history@git+https://git@github.com:mimani/mongoose-diff-history.git#1fb081a4308d3745ebb2646f2faeaa7ce867ca86:
+    resolution: {commit: 1fb081a4308d3745ebb2646f2faeaa7ce867ca86, repo: git@github.com:mimani/mongoose-diff-history.git, type: git}
     version: 2.1.0
 
   mongoose@6.0.12:
@@ -8198,8 +8198,8 @@ packages:
     resolution: {integrity: sha512-Lbl/Ma59sss2b15DpnWnGmECBRL8cRl/PjPbPMVW+Y8zIQzRrwMaI65Oy6HvxyhYeILVKBJb2LWeG81bj5zbMg==}
     engines: {node: '>=0.10.0'}
 
-  omit-deep@https://codeload.github.com/izigibran/omit-deep/tar.gz/18cd03c66cd267735f09741254b638efba56dce6:
-    resolution: {tarball: https://codeload.github.com/izigibran/omit-deep/tar.gz/18cd03c66cd267735f09741254b638efba56dce6}
+  omit-deep@git+https://git@github.com:izigibran/omit-deep.git#18cd03c66cd267735f09741254b638efba56dce6:
+    resolution: {commit: 18cd03c66cd267735f09741254b638efba56dce6, repo: git@github.com:izigibran/omit-deep.git, type: git}
     version: 0.3.0
     engines: {node: '>=0.10.0'}
 
@@ -14822,28 +14822,28 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  apollo-cache-inmemory@1.6.6(graphql@15.8.0):
+  apollo-cache-inmemory@1.6.6(graphql@16.8.1):
     dependencies:
-      apollo-cache: 1.3.5(graphql@15.8.0)
-      apollo-utilities: 1.3.4(graphql@15.8.0)
-      graphql: 15.8.0
+      apollo-cache: 1.3.5(graphql@16.8.1)
+      apollo-utilities: 1.3.4(graphql@16.8.1)
+      graphql: 16.8.1
       optimism: 0.10.3
       ts-invariant: 0.4.4
       tslib: 1.14.1
 
-  apollo-cache@1.3.5(graphql@15.8.0):
+  apollo-cache@1.3.5(graphql@16.8.1):
     dependencies:
-      apollo-utilities: 1.3.4(graphql@15.8.0)
-      graphql: 15.8.0
+      apollo-utilities: 1.3.4(graphql@16.8.1)
+      graphql: 16.8.1
       tslib: 1.14.1
 
-  apollo-client@2.6.10(graphql@15.8.0):
+  apollo-client@2.6.10(graphql@16.8.1):
     dependencies:
       '@types/zen-observable': 0.8.7
-      apollo-cache: 1.3.5(graphql@15.8.0)
-      apollo-link: 1.2.14(graphql@15.8.0)
-      apollo-utilities: 1.3.4(graphql@15.8.0)
-      graphql: 15.8.0
+      apollo-cache: 1.3.5(graphql@16.8.1)
+      apollo-link: 1.2.14(graphql@16.8.1)
+      apollo-utilities: 1.3.4(graphql@16.8.1)
+      graphql: 16.8.1
       symbol-observable: 1.2.0
       ts-invariant: 0.4.4
       tslib: 1.14.1
@@ -14987,6 +14987,13 @@ snapshots:
       ts-invariant: 0.4.4
       tslib: 1.14.1
 
+  apollo-link-http-common@0.2.16(graphql@16.8.1):
+    dependencies:
+      apollo-link: 1.2.14(graphql@16.8.1)
+      graphql: 16.8.1
+      ts-invariant: 0.4.4
+      tslib: 1.14.1
+
   apollo-link-http@1.5.17(graphql@15.8.0):
     dependencies:
       apollo-link: 1.2.14(graphql@15.8.0)
@@ -14994,10 +15001,25 @@ snapshots:
       graphql: 15.8.0
       tslib: 1.14.1
 
+  apollo-link-http@1.5.17(graphql@16.8.1):
+    dependencies:
+      apollo-link: 1.2.14(graphql@16.8.1)
+      apollo-link-http-common: 0.2.16(graphql@16.8.1)
+      graphql: 16.8.1
+      tslib: 1.14.1
+
   apollo-link@1.2.14(graphql@15.8.0):
     dependencies:
       apollo-utilities: 1.3.4(graphql@15.8.0)
       graphql: 15.8.0
+      ts-invariant: 0.4.4
+      tslib: 1.14.1
+      zen-observable-ts: 0.8.21
+
+  apollo-link@1.2.14(graphql@16.8.1):
+    dependencies:
+      apollo-utilities: 1.3.4(graphql@16.8.1)
+      graphql: 16.8.1
       ts-invariant: 0.4.4
       tslib: 1.14.1
       zen-observable-ts: 0.8.21
@@ -15017,6 +15039,14 @@ snapshots:
       '@wry/equality': 0.1.11
       fast-json-stable-stringify: 2.1.0
       graphql: 15.8.0
+      ts-invariant: 0.4.4
+      tslib: 1.14.1
+
+  apollo-utilities@1.3.4(graphql@16.8.1):
+    dependencies:
+      '@wry/equality': 0.1.11
+      fast-json-stable-stringify: 2.1.0
+      graphql: 16.8.1
       ts-invariant: 0.4.4
       tslib: 1.14.1
 
@@ -19653,12 +19683,12 @@ snapshots:
       elasticsearch: 16.7.1
       lodash.clonedeep: 4.5.0
 
-  mongoose-diff-history@https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86:
+  mongoose-diff-history@git+https://git@github.com:mimani/mongoose-diff-history.git#1fb081a4308d3745ebb2646f2faeaa7ce867ca86:
     dependencies:
       deep-empty-object: 1.0.5
       jsondiffpatch: 0.1.43
       lodash.pick: 4.4.0
-      omit-deep: https://codeload.github.com/izigibran/omit-deep/tar.gz/18cd03c66cd267735f09741254b638efba56dce6
+      omit-deep: git+https://git@github.com:izigibran/omit-deep.git#18cd03c66cd267735f09741254b638efba56dce6
       power-assign: 0.2.10
 
   mongoose@6.0.12:
@@ -19956,7 +19986,7 @@ snapshots:
       is-plain-object: 2.0.4
       unset-value: 0.1.2
 
-  omit-deep@https://codeload.github.com/izigibran/omit-deep/tar.gz/18cd03c66cd267735f09741254b638efba56dce6:
+  omit-deep@git+https://git@github.com:izigibran/omit-deep.git#18cd03c66cd267735f09741254b638efba56dce6:
     dependencies:
       is-plain-object: 2.0.4
       unset-value: 0.1.2
