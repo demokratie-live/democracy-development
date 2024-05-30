@@ -17,8 +17,7 @@
     "build": "tsc",
     "dev": "nodemon ./src/Example.ts",
     "lint": "tslint --project tsconfig.json && pnpm typecheck",
-    "typecheck": "tsc --noEmit",
-    "test": "mocha -r ts-node/register test/**/*.test.ts"
+    "typecheck": "tsc --noEmit"
   },
   "bugs": {
     "url": "https://github.com/demokratie-live/scapacra/issues"
