@@ -10,7 +10,6 @@
     "dev": "dotenv -e .env -e .env.local -- tsup src/import-procedures --watch --onSuccess 'node build/index.js'",
     "build": "tsup-node",
     "lint": "eslint .",
-    "test": "jest",
     "start": "node ./build/index.js"
   },
   "dependencies": {

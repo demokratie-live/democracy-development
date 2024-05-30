@@ -1,0 +1,38 @@
+name: 🧪 Test
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@v4
+      - name: 👨‍🔧 Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+      - name: 👨‍🔧 Setup package manager
+        run: corepack enable
+
+      - name: 🫙 Get pnpm store directory
+        id: pnpm-store
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+
+      - name: 🫙 Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: 📦 Install dependencies
+        run: pnpm install
+
+      - name: 🧪 Test
+        run: pnpm test

@@ -10,6 +10,7 @@
   "scripts": {
     "build": "turbo run build",
     "lint": "turbo run lint",
+    "test": "turbo run test",
     "dev": "turbo run dev",
     "infra:setup": "sh infra/minikube/setup.sh || bash infra/minikube/setup.sh || cmd.exe /C infra\\minikube\\setup.sh",
     "infra:start": "minikube start -p mk-democracy"
