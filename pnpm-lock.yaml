@@ -243,7 +243,7 @@ importers:
         version: 6.0.12
       mongoose-diff-history:
         specifier: github:mimani/mongoose-diff-history#master
-        version: https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86
+        version: git+https://git@github.com:mimani/mongoose-diff-history.git#1fb081a4308d3745ebb2646f2faeaa7ce867ca86
       omit-deep:
         specifier: ^0.3.0
         version: 0.3.0
@@ -1142,8 +1142,8 @@ importers:
         specifier: ^20.12.13
         version: 20.12.13
       chai:
-        specifier: ^4.4.1
-        version: 4.4.1
+        specifier: ^5.1.1
+        version: 5.1.1
       mocha:
         specifier: ^10.4.0
         version: 10.4.0
@@ -1209,8 +1209,8 @@ importers:
         specifier: ^0.5.7
         version: 0.5.7
       chai:
-        specifier: ^4.4.1
-        version: 4.4.1
+        specifier: ^5.1.1
+        version: 5.1.1
       mocha:
         specifier: ^10.4.0
         version: 10.4.0
@@ -4558,8 +4558,9 @@ packages:
     resolution: {integrity: sha512-NfJ4UzBCcQGLDlQq7nHxH+tv3kyZ0hHQqF5BO6J7tNJeP5do1llPr8dZ8zHonfhAu0PHAdMkSo+8o0wxg9lZWw==}
     engines: {node: '>=0.8'}
 
-  assertion-error@1.1.0:
-    resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
+  assertion-error@2.0.1:
+    resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
+    engines: {node: '>=12'}
 
   assured@1.0.15:
     resolution: {integrity: sha512-EVb4T+6m5VdlTJ6gbv4WjBM1rHfzXP2BspsQ6VLswcnIQSabjJy7A9YEuG4/KmfF+9OEuT5xhqVJ+V1tClD5ww==}
@@ -4841,9 +4842,9 @@ packages:
     resolution: {integrity: sha512-prMTQVpcns/tzFgFVkVp6ak6RykZyWb3gu8ckUpd6YkTlacOd3DXGJjIpD4Q6zJirizvaiAjSSHlOsA+6sNh2A==}
     engines: {node: '>= 10'}
 
-  chai@4.4.1:
-    resolution: {integrity: sha512-13sOfMv2+DWduEU+/xbun3LScLoqN17nBeTLUsmDfKdoiC1fr0n9PU4guu4AhRcOVFk/sW8LyZWHuhWtQZiF+g==}
-    engines: {node: '>=4'}
+  chai@5.1.1:
+    resolution: {integrity: sha512-pT1ZgP8rPNqUgieVaEY+ryQr6Q4HXNg8Ei9UnLUrjN4IA7dvQC5JB+/kxVcPNDHyBcc/26CXPkbNzq3qwrOEKA==}
+    engines: {node: '>=12'}
 
   chalk@0.5.1:
     resolution: {integrity: sha512-bIKA54hP8iZhyDT81TOsJiQvR1gW+ZYSXFaZUAvoD4wCHdbHY2actmpTE4x344ZlFqHbvoxKOaESULTZN2gstg==}
@@ -4886,8 +4887,9 @@ packages:
     resolution: {integrity: sha512-qK1gkGSRYcJzqrrzdR6a+I0vQ4/R+SoODXyAjscQ/4mzuNzySaMCd+hyVxitSY1+L2fjPD1Gbn+ibNqRmwQeLw==}
     engines: {pnpm: '>=8'}
 
-  check-error@1.0.3:
-    resolution: {integrity: sha512-iKEoDYaRmd1mxM90a2OEfWhjsjPpYPuQ+lMYsoxB126+t8fw7ySEO48nmDg5COTjxDI65/Y2OWpeEHk3ZOe8zg==}
+  check-error@2.1.1:
+    resolution: {integrity: sha512-OAlb+T7V4Op9OwdkjmguYRqncdlx5JiofwOAUkmTF+jNdHwzTaTs4sRAGpzLF3oOz5xAyDGrPgeIDFQmDOTiJw==}
+    engines: {node: '>= 16'}
 
   cheerio-req@1.2.4:
     resolution: {integrity: sha512-onO6miv7HDvjvnqNrdNqokTE8XBjOkzNw6c02P9NC+M/dTgB+szOreVE/iXGwCkJ4bibbCDWffR72cWBAvAZ8g==}
@@ -5490,8 +5492,8 @@ packages:
   deep-empty-object@1.0.5:
     resolution: {integrity: sha512-ZOwLpSWKhAjc+mFngkVKNrzmCuqJg6WToN8G9vRY252VGYkRIGA0KESrzNN/7PljOl4KZLH3AcL3e7Pc94PfIg==}
 
-  deep-eql@4.1.3:
-    resolution: {integrity: sha512-WaEtAOpRA1MQ0eohqZjpGD8zdI0Ovsm8mmFhaDN8dvDZzyoUMcYDnf5Y6iu7HTXxf8JDS23qWa4a+hKCDyOPzw==}
+  deep-eql@5.0.2:
+    resolution: {integrity: sha512-h5k/5U50IJJFpzfL6nO9jaaumfjO/f2NjK/oYB2Djzm4p9L+3T9qWpZqZ2hAbLPuuYq9wrU08WQyBTL5GbPk5Q==}
     engines: {node: '>=6'}
 
   deep-is@0.1.4:
@@ -7640,8 +7642,8 @@ packages:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
 
-  loupe@2.3.7:
-    resolution: {integrity: sha512-zSMINGVYkdpYSOBmLi0D1Uo7JU9nVdQKrHxC8eYlV+9YKK9WePqAlL7lSlorG/U2Fw1w0hTBmaa/jrQ3UbPHtA==}
+  loupe@3.1.1:
+    resolution: {integrity: sha512-edNu/8D5MKVfGVFRhFf8aAxiTM6Wumfz5XsaatSxlD3w4R1d/WEKUTydCdPGbl9K7QG/Ca3GnDV2sIKIpXRQcw==}
 
   lower-case-first@2.0.2:
     resolution: {integrity: sha512-EVm/rR94FJTZi3zefZ82fLWab+GX14LJN4HrWBcuo6Evmsl9hEfnqxgcHCKb9q+mNf6EVdsjx/qucYFIIB84pg==}
@@ -7926,8 +7928,8 @@ packages:
     resolution: {integrity: sha512-c1tHeuqdkOEM56dfr7WwahzWNIq6C0BK4/3HpibQMQHVA0rFZiWuqprbTXrguMOIMREZJfLLetdODN/TdLiFGQ==}
     engines: {node: '>= 8.0'}
 
-  mongoose-diff-history@https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86:
-    resolution: {tarball: https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86}
+  mongoose-diff-history@git+https://git@github.com:mimani/mongoose-diff-history.git#1fb081a4308d3745ebb2646f2faeaa7ce867ca86:
+    resolution: {commit: 1fb081a4308d3745ebb2646f2faeaa7ce867ca86, repo: git@github.com:mimani/mongoose-diff-history.git, type: git}
     version: 2.1.0
 
   mongoose@6.0.12:
@@ -8198,8 +8200,8 @@ packages:
     resolution: {integrity: sha512-Lbl/Ma59sss2b15DpnWnGmECBRL8cRl/PjPbPMVW+Y8zIQzRrwMaI65Oy6HvxyhYeILVKBJb2LWeG81bj5zbMg==}
     engines: {node: '>=0.10.0'}
 
-  omit-deep@https://codeload.github.com/izigibran/omit-deep/tar.gz/18cd03c66cd267735f09741254b638efba56dce6:
-    resolution: {tarball: https://codeload.github.com/izigibran/omit-deep/tar.gz/18cd03c66cd267735f09741254b638efba56dce6}
+  omit-deep@git+https://git@github.com:izigibran/omit-deep.git#18cd03c66cd267735f09741254b638efba56dce6:
+    resolution: {commit: 18cd03c66cd267735f09741254b638efba56dce6, repo: git@github.com:izigibran/omit-deep.git, type: git}
     version: 0.3.0
     engines: {node: '>=0.10.0'}
 
@@ -8410,8 +8412,9 @@ packages:
   pathe@1.1.2:
     resolution: {integrity: sha512-whLdWMYL2TwI08hn8/ZqAbrVemu0LNaNNJZX73O6qaIdCTfXutsLhMkjdENX0qhsQ9uIimo4/aQOmXkoon2nDQ==}
 
-  pathval@1.1.1:
-    resolution: {integrity: sha512-Dp6zGqpTdETdR63lehJYPeIOqpiNBNtc7BpWSLrOje7UaIsE5aY92r/AunQA7rsXvet3lrJ3JnZX29UPTKXyKQ==}
+  pathval@2.0.0:
+    resolution: {integrity: sha512-vE7JKRyES09KiunauX7nd2Q9/L7lhok4smP9RZTDeD4MVs72Dp2qNFVz39Nz5a0FVEW0BJR6C0DYrq6unoziZA==}
+    engines: {node: '>= 14.16'}
 
   pause-stream@0.0.11:
     resolution: {integrity: sha512-e3FBlXLmN/D1S+zHzanP4E/4Z60oFAa3O051qt1pxa7DEJWKAyil6upYVXCWadEnuoqa4Pkc9oUx9zsxYeRv8A==}
@@ -15191,7 +15194,7 @@ snapshots:
 
   assert-plus@1.0.0: {}
 
-  assertion-error@1.1.0: {}
+  assertion-error@2.0.1: {}
 
   assured@1.0.15:
     dependencies:
@@ -15569,15 +15572,13 @@ snapshots:
       lodash: 4.17.21
     optional: true
 
-  chai@4.4.1:
+  chai@5.1.1:
     dependencies:
-      assertion-error: 1.1.0
-      check-error: 1.0.3
-      deep-eql: 4.1.3
-      get-func-name: 2.0.2
-      loupe: 2.3.7
-      pathval: 1.1.1
-      type-detect: 4.0.8
+      assertion-error: 2.0.1
+      check-error: 2.1.1
+      deep-eql: 5.0.2
+      loupe: 3.1.1
+      pathval: 2.0.0
 
   chalk@0.5.1:
     dependencies:
@@ -15649,9 +15650,7 @@ snapshots:
     dependencies:
       '@kurkle/color': 0.3.2
 
-  check-error@1.0.3:
-    dependencies:
-      get-func-name: 2.0.2
+  check-error@2.1.1: {}
 
   cheerio-req@1.2.4:
     dependencies:
@@ -16387,9 +16386,7 @@ snapshots:
 
   deep-empty-object@1.0.5: {}
 
-  deep-eql@4.1.3:
-    dependencies:
-      type-detect: 4.0.8
+  deep-eql@5.0.2: {}
 
   deep-is@0.1.4: {}
 
@@ -19389,7 +19386,7 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
-  loupe@2.3.7:
+  loupe@3.1.1:
     dependencies:
       get-func-name: 2.0.2
 
@@ -19653,12 +19650,12 @@ snapshots:
       elasticsearch: 16.7.1
       lodash.clonedeep: 4.5.0
 
-  mongoose-diff-history@https://codeload.github.com/mimani/mongoose-diff-history/tar.gz/1fb081a4308d3745ebb2646f2faeaa7ce867ca86:
+  mongoose-diff-history@git+https://git@github.com:mimani/mongoose-diff-history.git#1fb081a4308d3745ebb2646f2faeaa7ce867ca86:
     dependencies:
       deep-empty-object: 1.0.5
       jsondiffpatch: 0.1.43
       lodash.pick: 4.4.0
-      omit-deep: https://codeload.github.com/izigibran/omit-deep/tar.gz/18cd03c66cd267735f09741254b638efba56dce6
+      omit-deep: git+https://git@github.com:izigibran/omit-deep.git#18cd03c66cd267735f09741254b638efba56dce6
       power-assign: 0.2.10
 
   mongoose@6.0.12:
@@ -19956,7 +19953,7 @@ snapshots:
       is-plain-object: 2.0.4
       unset-value: 0.1.2
 
-  omit-deep@https://codeload.github.com/izigibran/omit-deep/tar.gz/18cd03c66cd267735f09741254b638efba56dce6:
+  omit-deep@git+https://git@github.com:izigibran/omit-deep.git#18cd03c66cd267735f09741254b638efba56dce6:
     dependencies:
       is-plain-object: 2.0.4
       unset-value: 0.1.2
@@ -20197,7 +20194,7 @@ snapshots:
 
   pathe@1.1.2: {}
 
-  pathval@1.1.1: {}
+  pathval@2.0.0: {}
 
   pause-stream@0.0.11:
     dependencies:
