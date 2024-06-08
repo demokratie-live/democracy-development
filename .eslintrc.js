@@ -19,4 +19,12 @@ module.exports = {
     '@typescript-eslint/interface-name-prefix': 0,
     // '@typescript-eslint/no-unnecessary-condition': ['error'],
   },
+  overrides: [
+    {
+      "files": ["**/*/*.test.ts"],
+      "env": {
+        "jest": true
+      }
+    }
+  ],
 };

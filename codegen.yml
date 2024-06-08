@@ -12,7 +12,8 @@ generates:
       # Vote: ../migrations/2-schemas/Vote#VoteProps
     plugins:
       - 'typescript'
-      - 'typescript-resolvers'
+      - 'typescript-resolvers':
+          makeResolverTypeCallable: true
       # - 'typescript-mongodb'
       - add:
           content:
