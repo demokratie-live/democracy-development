@@ -1,0 +1,43 @@
+kind: Build
+name: democracy-api
+type: container
+spec:
+  targetStage:
+    $if: ${this.mode == "sync"}
+    $then: build_stage
+    $else: production_stage
+---    
+kind: Deploy
+name: democracy-api
+type: kubernetes
+dependencies:
+  - build.democracy-api
+  - deploy.mongo
+
+timeout: 120
+
+spec:
+  defaultTarget:
+    kind: Deployment
+    name: democracy-api
+  files:
+    - ./infra/manifests/*
+
+  sync:
+    paths:
+      - containerPath: /app/src
+        sourcePath: src
+        mode: one-way
+    overrides:
+      - command: [yarn, dev]
+
+  patchResources:
+    - name: democracy-api
+      kind: Deployment
+      patch:
+        spec:
+          template:
+            spec:
+              containers:
+                - name: democracy-api
+                  image: ${actions.build.democracy-api.outputs.deploymentImageId}

@@ -3,3 +3,4 @@ node_modules/
 *.log
 dist
 AuthKey_*.p8
+.garden

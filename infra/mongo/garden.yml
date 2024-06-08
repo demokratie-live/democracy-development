@@ -1,0 +1,10 @@
+kind: Deploy
+name: mongo
+type: kubernetes
+spec:
+  files:
+    - ./manifests/*
+  localMode:
+    ports:
+      - local: 27017
+        remote: 27017
