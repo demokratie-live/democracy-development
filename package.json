@@ -8,8 +8,7 @@
   "scripts": {
     "build": "tsc",
     "serve": "node dist/index.js",
-    "dev": "ts-node-dev -r dotenv/config ./src/index dotenv_config_path=./.env",
-    "dev:local": "ts-node-dev -r dotenv/config src/index.ts",
+    "dev": "ts-node-dev -r dotenv/config src/index.ts --watch src/graphql",
     "generate": "graphql-codegen",
     "apollo:codegen": "apollo client:codegen --endpoint=http://localhost:3000 --excludes=node_modules/* --target typescript --globalTypesFile=./__generated__/globalTypes.ts",
     "lint": "yarn lint:es && yarn lint:ts && yarn lint:exports",
