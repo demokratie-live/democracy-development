@@ -5,6 +5,7 @@ import { logger } from '../../services/logger';
 
 // User & Device is existent in Database
 const isLoggedin = rule({ cache: 'no_cache' })(async (parent, args, { user, device }) => {
+  logger.graphql('isLoggedin', { user, device });
   if (!user || !device) {
     logger.warn('Permission denied: You need to login with your Device');
     return false;

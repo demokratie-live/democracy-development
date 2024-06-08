@@ -1,4 +1,3 @@
-/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { Response, NextFunction } from 'express';
@@ -15,6 +14,7 @@ import { ExpressReqContext } from '../../types/graphqlContext';
 import { logger } from '../../services/logger';
 
 export const createTokens = async (user: string) => {
+  logger.debug('createTokens', { user });
   const token = jwt.sign(
     {
       user,
@@ -39,6 +39,7 @@ export const createTokens = async (user: string) => {
 };
 
 const refreshTokens = async (refreshToken: string) => {
+  logger.debug('refreshTokens', { refreshToken });
   // Verify Token
   try {
     jwt.verify(refreshToken, CONFIG.AUTH_JWT_SECRET);
@@ -79,6 +80,7 @@ export const headerToken = async ({
   token: string;
   refreshToken: string;
 }) => {
+  logger.debug('headerToken', { token, refreshToken });
   res.set('Access-Control-Expose-Headers', 'x-token, x-refresh-token');
   res.set('x-token', token);
   res.set('x-refresh-token', refreshToken);
@@ -90,6 +92,14 @@ export const headerToken = async ({
 };
 
 export const authMiddleware = async (req: ExpressReqContext, res: Response, next: NextFunction) => {
+  logger.graphql(`authMiddleware`, {
+    cookies: req.cookies,
+    headers: req.headers,
+    query: req.query,
+    user: req.user,
+    device: req.device,
+    phone: req.phone,
+  });
   logger.debug(`Server: Connection from: ${req.connection.remoteAddress}`);
   let token: string | null =
     req.headers['x-token'] || (CONFIG.DEBUG ? req.cookies.debugToken : null);

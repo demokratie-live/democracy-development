@@ -10,7 +10,7 @@ import { logger } from '../../services/logger';
 const UserApi: Resolvers = {
   Query: {
     me: async (parent, args, { UserModel, user, device }) => {
-      logger.graphql('User.query.me');
+      logger.graphql('User.query.me', args);
       if (!user) {
         return null;
       }
@@ -24,8 +24,9 @@ const UserApi: Resolvers = {
     } /* ) */,
   },
   Mutation: {
+    // @deprecated singUp function is deprecated
     signUp: async (parent, { deviceHashEncrypted }, { res, UserModel, DeviceModel }) => {
-      logger.graphql('User.mutation.signUp');
+      logger.graphql('User.mutation.signUp', { deviceHashEncrypted });
       if (!CONFIG.JWT_BACKWARD_COMPATIBILITY) {
         return null;
       }

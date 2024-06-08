@@ -28,8 +28,8 @@ const calculateResendTime = ({
 
 const DeviceApi: Resolvers = {
   Query: {
-    notificationSettings: async (_parent, _args, { device }) => {
-      logger.graphql('Device.query.notificationSettings');
+    notificationSettings: async (_parent, args, { device }) => {
+      logger.graphql('Device.query.notificationSettings', args, { device });
       const result: NotificationSettings = {
         ...device.notificationSettings,
         procedures: device.notificationSettings.procedures.map((procedure) => {
@@ -52,7 +52,7 @@ const DeviceApi: Resolvers = {
       { newPhone, oldPhoneHash },
       { user, device, phone, PhoneModel, VerificationModel },
     ) => {
-      logger.graphql('Device.mutation.requestCode');
+      logger.graphql('Device.mutation.requestCode', { newPhone, oldPhoneHash }, { user, device });
       // Check for SMS Verification
       if (!CONFIG.SMS_VERIFICATION) {
         return {
@@ -249,7 +249,11 @@ const DeviceApi: Resolvers = {
       { code, newPhoneHash, newUser },
       { res, device, phone, UserModel, PhoneModel, VerificationModel },
     ) => {
-      logger.graphql('Device.mutation.requestVerification');
+      logger.graphql(
+        'Device.mutation.requestVerification',
+        { code, newPhoneHash, newUser },
+        { device, phone },
+      );
       // Check for SMS Verification
       if (!CONFIG.SMS_VERIFICATION) {
         return {
@@ -403,7 +407,26 @@ const DeviceApi: Resolvers = {
       },
       { phone, device, DeviceModel, VoteModel },
     ) => {
-      logger.graphql('Device.mutation.updateNotificationSettings');
+      logger.graphql(
+        'Device.mutation.updateNotificationSettings',
+        {
+          enabled,
+          disableUntil,
+          procedures,
+          tags,
+          newVote,
+          newPreperation,
+          conferenceWeekPushs,
+          voteConferenceWeekPushs,
+          voteTOP100Pushs,
+          outcomePushs,
+          outcomePushsEnableOld,
+        },
+        {
+          phone,
+          device,
+        },
+      );
 
       device.notificationSettings = {
         ...device.notificationSettings,
@@ -467,7 +490,7 @@ const DeviceApi: Resolvers = {
     },
 
     toggleNotification: async (parent, { procedureId }, { device, ProcedureModel }) => {
-      logger.graphql('Device.mutation.toggleNotification');
+      logger.graphql('Device.mutation.toggleNotification', { procedureId }, { device });
       const procedure = await ProcedureModel.findOne({ procedureId });
       if (procedure) {
         const index = device.notificationSettings.procedures.indexOf(procedure?._id);
