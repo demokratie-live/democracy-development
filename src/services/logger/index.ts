@@ -69,13 +69,16 @@ const myLevels = {
 const logger = winston.createLogger({
   levels: myLevels.levels,
   transports,
-}) as winston.Logger & { jwt: any, graphql: any };
+}) as winston.Logger & { jwt: any; graphql: any };
 winston.addColors(myLevels.colors);
-logger.add(
-  new MongoDB({
-    db: CONFIG.DB_URL,
-    level: 'warn',
-  }),
-);
+
+if (process.env.NODE_ENV !== 'test') {
+  logger.add(
+    new MongoDB({
+      db: CONFIG.DB_URL,
+      level: 'warn',
+    }),
+  );
+}
 
 export { logger };

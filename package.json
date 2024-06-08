@@ -17,7 +17,7 @@
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
     "prepare": "husky install",
     "release": "standard-version",
-    "test": "jest"
+    "test": "jest --config jest.unit.config.js",
   },
   "dependencies": {
     "@bmatei/apollo-prometheus-exporter": "^2.1.1",
