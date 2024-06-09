@@ -219,6 +219,7 @@ export const authMiddleware = async (req: ExpressReqContext, res: Response, next
         }
 
         // Create user
+        logger.debug('Create new User');
         user = new UserModel({ device, phone });
         await user.save();
       }

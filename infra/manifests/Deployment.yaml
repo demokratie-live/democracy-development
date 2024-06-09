@@ -38,3 +38,12 @@ spec:
                 wget --header="Content-Type: application/json" --post-data='{"query":"{ __schema { types { name } } }"}' -O - http://localhost:3000/
             periodSeconds: 10
             initialDelaySeconds: 5
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - >
+                wget --header="Content-Type: application/json" --post-data='{"query":"{ __schema { types { name } } }"}' -O - http://localhost:3000/
+            periodSeconds: 10
+            initialDelaySeconds: 30
