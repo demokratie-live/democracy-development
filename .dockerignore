@@ -6,3 +6,4 @@ AuthKey_*.p8
 logs
 infra
 garden.yaml
+.github
