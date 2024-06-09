@@ -107,10 +107,12 @@ export const authMiddleware = async (req: ExpressReqContext, res: Response, next
   if (CONFIG.JWT_BACKWARD_COMPATIBILITY && !token && req.headers.authorization) {
     token = req.headers.authorization.substr(7);
   }
-  const deviceHash: string | null =
+  let deviceHash =
     req.headers['x-device-hash'] || (CONFIG.DEBUG ? req.query.deviceHash || null : null);
-  const phoneHash: string | null =
+  deviceHash = typeof deviceHash === 'string' ? deviceHash : null;
+  let phoneHash =
     req.headers['x-phone-hash'] || (CONFIG.DEBUG ? req.query.phoneHash || null : null);
+  phoneHash = typeof phoneHash === 'string' ? phoneHash : null;
   if (deviceHash || phoneHash) {
     // logger.jwt(`JWT: Credentials with DeviceHash(${deviceHash}) PhoneHash(${phoneHash})`);
   }
