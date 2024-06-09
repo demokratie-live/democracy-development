@@ -2,10 +2,7 @@ kind: Build
 name: democracy-api
 type: container
 spec:
-  targetStage:
-    $if: ${this.mode == "sync"}
-    $then: build_stage
-    $else: production_stage
+  targetStage: build_stage
 ---    
 kind: Deploy
 name: democracy-api
@@ -14,7 +11,7 @@ dependencies:
   - build.democracy-api
   - deploy.mongo
 
-timeout: 120
+timeout: 30
 
 spec:
   defaultTarget:
@@ -41,3 +38,18 @@ spec:
               containers:
                 - name: democracy-api
                   image: ${actions.build.democracy-api.outputs.deploymentImageId}
+                  resources:
+                    limits:
+                      cpu: '2'
+                      memory: '2048Mi'
+---
+kind: Test
+name: democracy-api-integration
+type: kubernetes-exec
+dependencies:
+  - deploy.democracy-api
+spec:
+  resource:
+    kind: Deployment
+    name: democracy-api
+  command: [yarn, test:integration]

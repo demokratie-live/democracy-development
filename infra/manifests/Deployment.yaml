@@ -36,5 +36,5 @@ spec:
               - -c
               - >
                 wget --header="Content-Type: application/json" --post-data='{"query":"{ __schema { types { name } } }"}' -O - http://localhost:3000/
-            initialDelaySeconds: 30
             periodSeconds: 10
+            initialDelaySeconds: 5

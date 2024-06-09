@@ -4,3 +4,5 @@ node_modules
 dist/*
 AuthKey_*.p8
 logs
+infra
+garden.yaml

@@ -8,7 +8,7 @@ export const addToken: Resolvers['Mutation']['addToken'] = async (
   { token, os },
   { device, version, applicationId },
 ) => {
-  logger.graphql('Device.mutation.addToken', { version, applicationId });
+  logger.graphql('Device.mutation.addToken', { token, os }, { device, version, applicationId });
 
   const oldToken = device.pushTokens.find((pushToken) => pushToken.token === token);
 

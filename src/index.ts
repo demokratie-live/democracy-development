@@ -48,10 +48,10 @@ const main = async () => {
   // Here several Models are included
 
   server.use(authMiddleware);
-  
+
   // add version to graphql context
   server.use(appVersion);
-  
+
   // add application id to graphql context
   server.use(applicationId);
 
@@ -80,9 +80,8 @@ const main = async () => {
 // Async Wrapping Function
 // Catches all errors
 (async () => {
-  try {
-    await main();
-  } catch (error) {
-    logger.error(error.stack);
-  }
-})();
+  await main();
+})().catch((error) => {
+  logger.error('Error in main async function', { error });
+  process.exit(1);
+});

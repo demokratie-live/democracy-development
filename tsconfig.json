@@ -18,7 +18,8 @@
     "noUnusedParameters": false,
     // "noImplicitAny": true,
     "suppressExcessPropertyErrors": false,
-    "suppressImplicitAnyIndexErrors": false
+    "suppressImplicitAnyIndexErrors": false,
+    "sourceMap": true
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules"]

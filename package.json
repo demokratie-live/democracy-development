@@ -18,6 +18,7 @@
     "prepare": "husky install",
     "release": "standard-version",
     "test": "jest --config jest.unit.config.js",
+    "test:integration": "jest --config jest.integration.config.js"
   },
   "dependencies": {
     "@bmatei/apollo-prometheus-exporter": "^2.1.1",
