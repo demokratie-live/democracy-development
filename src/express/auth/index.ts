@@ -213,8 +213,8 @@ export const authMiddleware = async (req: ExpressReqContext, res: Response, next
             deviceHash: crypto.createHash('sha256').update(deviceHash).digest('hex'),
           });
           await device.save().catch((e) => {
-            console.log(e);
-            throw new Error('Error: Save new Device');
+            logger.error("Couldn't save Device")
+            logger.error(e);
           });
         }
 
