@@ -10,7 +10,7 @@ data:
   GRAPHIQL: "true"
   NODE_ENV: development
   SMS_SIMULATE: "true"
-  SMS_VERIFICATION: "false"
+  SMS_VERIFICATION: "true"
   STAGE: internal
   LOGGING_CONSOLE: silly
   # JWT
