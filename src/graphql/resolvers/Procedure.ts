@@ -799,7 +799,7 @@ const ProcedureApi: Resolvers = {
       }
       return null;
     },
-    activityIndex: async (procedure, args, { ActivityModel, phone, device }) => {
+    activityIndex: async (procedure) => {
       return {
         activityIndex: procedure.votes || 0,
         active: false,

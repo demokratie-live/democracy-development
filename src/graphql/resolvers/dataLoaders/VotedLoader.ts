@@ -4,7 +4,6 @@ import { Types } from 'mongoose';
 export const votedLoader = async ({
   procedureObjIds,
   phone,
-  device,
 }: {
   procedureObjIds: readonly Types.ObjectId[];
   phone: Phone | null | undefined;

@@ -16,7 +16,7 @@ describe('ConferenceWeekApi', () => {
     (getCurrentConferenceWeek as jest.Mock).mockReturnValue(mockConferenceWeek);
     (logger.graphql as jest.Mock).mockReturnValue(null);
 
-    const result = await ConferenceWeekApi.Query.currentConferenceWeek!(null, null, null, null);
+    const result = await ConferenceWeekApi.Query.currentConferenceWeek(null, null, null, null);
 
     expect(result).toEqual(mockConferenceWeek);
     expect(getCurrentConferenceWeek).toHaveBeenCalled();

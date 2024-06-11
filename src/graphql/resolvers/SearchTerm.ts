@@ -5,7 +5,7 @@ import { logger } from '../../services/logger';
 
 const SearchTermApi: Resolvers = {
   Query: {
-    mostSearched: async (parent, args, { SearchTermModel }) => {
+    mostSearched: async () => {
       logger.graphql('SearchTerm.query.mostSearched');
       // const result = await SearchTermModel.aggregate([
       //   { $unwind: '$times' },
@@ -24,7 +24,7 @@ const SearchTermApi: Resolvers = {
     },
   },
   Mutation: {
-    finishSearch: async (parent, { term }, { SearchTermModel, user }) => {
+    finishSearch: async (parent, { term }) => {
       logger.graphql('SearchTerm.mutation.finishSearchs');
       // if (user && user.isVerified()) {
       //   return { term };
