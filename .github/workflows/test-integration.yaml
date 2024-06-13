@@ -1,6 +1,5 @@
 name: 🧑‍🌾 Integration-Test
 on:
-  push:
   pull_request:
   workflow_dispatch:
 
@@ -8,16 +7,36 @@ jobs:
   Test-on-cluster:
     runs-on: ubuntu-latest
     steps:
-      - name: 🚀 Testing on a k8s Kind Cluster
+      - name: 🚀 Install Kind Cluster
         uses: helm/kind-action@v1.10.0
+        with:
+          install_only: true
+      - name: 🐳 Create cluster with ingress
+        run: |
+          cat <<EOF | kind create cluster --config=-
+          kind: Cluster
+          apiVersion: kind.x-k8s.io/v1alpha4
+          nodes:
+          - role: control-plane
+            kubeadmConfigPatches:
+            - |
+              kind: InitConfiguration
+              nodeRegistration:
+                kubeletExtraArgs:
+                  node-labels: "ingress-ready=true"
+            extraPortMappings:
+            - containerPort: 80
+              hostPort: 80
+              protocol: TCP
+            - containerPort: 443
+              hostPort: 443
+              protocol: TCP
+          EOF
+      - name: 🐟 set kubectl context
+        run: echo "KUBE_CONTEXT=$(kubectl config current-context)" >> $GITHUB_ENV
       - name: 📥 Checkout code
-        uses: actions/checkout@v3.0.2
-      - run: |
-          cat $HOME/.kube/config
-      - name: 🌱 Deploy preview env with Garden
-        uses: garden-io/garden-action@v1.2
+        uses: actions/checkout@v4
+      - name: 🌱 Run integration test with garden.io
+        uses: garden-io/garden-action@v2
         with:
           command: test
-          kubeconfig-location: $HOME/.kube/config
-      - run: |
-          cat $HOME/.kube/config
