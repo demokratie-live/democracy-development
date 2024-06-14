@@ -1,0 +1,20 @@
+dapr_dashboard:
+  runAsNonRoot: false
+  logLevel: DEBUG
+dapr_placement:
+  runAsNonRoot: false
+  logLevel: DEBUG
+dapr_operator:
+  runAsNonRoot: false
+  logLevel: DEBUG
+dapr_sentry:
+  runAsNonRoot: false
+  logLevel: DEBUG
+dapr_sidecar_injector:
+  hostNetwork: true
+  runAsNonRoot: false
+  logLevel: DEBUG
+global:
+  logAsJson: true
+  mtls:
+    enabled: false
