@@ -70,7 +70,7 @@ const DeviceApi: Resolvers = {
       }
 
       // check newPhone prefix & length, 3 prefix, min. length 10
-      if (isPhoneNumberValid(newPhone)) {
+      if (!isPhoneNumberValid(newPhone)) {
         return {
           reason:
             'newPhone is invalid - does not have the required length of min. 12 digits or does not start with countrycode +49',
