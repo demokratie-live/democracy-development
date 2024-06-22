@@ -120,7 +120,7 @@ describe('Device GraphQL API', () => {
 
   describe('verify device', () => {
     const SOME_DEVICE_HASH = Math.random().toString(36).substring(7);
-    const RANDOM_PHONE_NUMBER = `+49${Math.floor(Math.random() * 10000000000)}`;
+    const PHONE_NUMBER = `+49123456789`;
     it('request verification code via sms', async () => {
       const response = await axios.post(
         GRAPHQL_API_URL,
@@ -137,7 +137,7 @@ describe('Device GraphQL API', () => {
             }
           `,
           variables: {
-            newPhone: RANDOM_PHONE_NUMBER,
+            newPhone: PHONE_NUMBER,
             oldPhoneHash: '',
           },
         },
@@ -172,7 +172,7 @@ describe('Device GraphQL API', () => {
             }
           `,
           variables: {
-            newPhone: RANDOM_PHONE_NUMBER,
+            newPhone: PHONE_NUMBER,
             oldPhoneHash: '',
           },
         },
@@ -192,7 +192,7 @@ describe('Device GraphQL API', () => {
     });
 
     it('try to verify phone number with wrong code', async () => {
-      const newPhoneHash = crypto.createHash('sha256').update(RANDOM_PHONE_NUMBER).digest('hex');
+      const newPhoneHash = crypto.createHash('sha256').update(PHONE_NUMBER).digest('hex');
       const response = await axios.post(
         GRAPHQL_API_URL,
         {
@@ -225,7 +225,7 @@ describe('Device GraphQL API', () => {
     });
 
     it('verify phone number', async () => {
-      const newPhoneHash = crypto.createHash('sha256').update(RANDOM_PHONE_NUMBER).digest('hex');
+      const newPhoneHash = crypto.createHash('sha256').update(PHONE_NUMBER).digest('hex');
       const response = await axios.post(
         GRAPHQL_API_URL,
         {
