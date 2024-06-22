@@ -120,7 +120,7 @@ describe('Device GraphQL API', () => {
 
   describe('verify device', () => {
     const SOME_DEVICE_HASH = Math.random().toString(36).substring(7);
-    const RANDOM_PHONE_NUMBER = `+49${Math.floor(Math.random() * 1000000000)}`;
+    const RANDOM_PHONE_NUMBER = `+49${Math.floor(Math.random() * 10000000000)}`;
     it('request verification code via sms', async () => {
       const response = await axios.post(
         GRAPHQL_API_URL,

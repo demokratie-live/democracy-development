@@ -8,6 +8,7 @@ import { sendSMS, statusSMS } from '../../services/sms';
 import { Resolvers, NotificationSettings } from '../../generated/graphql';
 import { logger } from '../../services/logger';
 import { addToken } from './Device/addToken';
+import { isPhoneNumberValid } from '../../utils/validatePhone';
 
 const calculateResendTime = ({
   latestCodeTime,
@@ -69,7 +70,7 @@ const DeviceApi: Resolvers = {
       }
 
       // check newPhone prefix & length, 3 prefix, min. length 10
-      if (newPhone.substr(0, 3) !== '+49' || newPhone.length < 12) {
+      if (isPhoneNumberValid(newPhone)) {
         return {
           reason:
             'newPhone is invalid - does not have the required length of min. 12 digits or does not start with countrycode +49',
