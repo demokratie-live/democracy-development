@@ -33,7 +33,7 @@ describe('User GraphQL API', () => {
       expect(data.me._id).toBeDefined();
       expect(data.me.verified).toBeFalsy();
     } catch (error) {
-      console.log('haha', error?.response?.data?.errors);
+      console.error(error?.response?.data?.errors);
     }
   });
   it('request unverified user without device', async () => {
