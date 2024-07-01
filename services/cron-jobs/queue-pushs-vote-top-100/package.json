@@ -21,6 +21,6 @@
     "tsconfig": "workspace:*",
     "tsup": "^7.2.0",
     "tsup-config": "workspace:*",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.2"
   }
 }
