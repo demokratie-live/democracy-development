@@ -82,6 +82,7 @@ describe('Device GraphQL API', () => {
       expect(data.updateNotificationSettings.voteTOP100Pushs).toBeTruthy();
       expect(data.updateNotificationSettings.outcomePushs).toBeTruthy();
     });
+
     it('get updated notification settings', async () => {
       const response = await axios.post(
         GRAPHQL_API_URL,
@@ -115,6 +116,45 @@ describe('Device GraphQL API', () => {
       expect(data.notificationSettings.voteConferenceWeekPushs).toBeTruthy();
       expect(data.notificationSettings.voteTOP100Pushs).toBeTruthy();
       expect(data.notificationSettings.outcomePushs).toBeTruthy();
+    });
+
+    it('is not allowed to update notification settings without device hash', async () => {
+      const response = await axios.post(
+        GRAPHQL_API_URL,
+        {
+          query: `
+          mutation UpdateNotificationSettings($enabled: Boolean!, $conferenceWeekPushs: Boolean!, $voteConferenceWeekPushs: Boolean!, $voteTOP100Pushs: Boolean!, $outcomePushs: Boolean!) {
+            updateNotificationSettings(enabled: $enabled, conferenceWeekPushs: $conferenceWeekPushs, voteConferenceWeekPushs: $voteConferenceWeekPushs, voteTOP100Pushs: $voteTOP100Pushs, outcomePushs: $outcomePushs) {
+              enabled
+              conferenceWeekPushs
+              voteConferenceWeekPushs
+              voteTOP100Pushs
+              outcomePushs
+            }
+          }
+        `,
+          variables: {
+            enabled: true,
+            conferenceWeekPushs: true,
+            voteConferenceWeekPushs: true,
+            voteTOP100Pushs: true,
+            outcomePushs: true,
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      const error = response.data.errors.find((e) => e.path.includes('updateNotificationSettings'));
+      if (error) {
+        expect(error.message).toBe('Not Authorised!');
+        expect(response.data.notificationSettings).toBeUndefined();
+      } else {
+        expect(true).toBeFalsy();
+      }
     });
   });
 
