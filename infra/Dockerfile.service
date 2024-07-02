@@ -14,7 +14,7 @@ RUN apk update
 WORKDIR /app
 
 COPY . .
-RUN pnpm dlx turbo prune --scope=$SERVICE --docker
+RUN pnpm dlx turbo@^1 prune --scope=$SERVICE --docker
 # FIX ERROR: failed to solve: cannot copy to non-directory: …/app/services/qr-code-handler/node_modules/tsup-config
 RUN find . -name "node_modules" -type d -exec rm -rf {} +
 
