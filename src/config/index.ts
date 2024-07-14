@@ -55,23 +55,8 @@ const optionalConfigs = {
   LOGGING_DISCORD: process.env.LOGGING_DISCORD,
   LOGGING_DISCORD_TOKEN: process.env.LOGGING_DISCORD_TOKEN,
   LOGGING_DISCORD_WEBHOOK: process.env.LOGGING_DISCORD_WEBHOOK,
-  LOGGING_MONGO: process.env.LOGGING_MONGO || false,
+  LOGGING_MONGO: process.env.LOGGING_MONGO !== 'false' || false,
 };
-
-if (process.env.NODE_ENV === 'development') {
-  console.log(
-    'CONFIG',
-    JSON.stringify(
-      {
-        ...requiredConfigs,
-        ...recommendedConfigs,
-        ...optionalConfigs,
-      },
-      null,
-      2,
-    ),
-  );
-}
 
 export default {
   ...requiredConfigs,
