@@ -8,7 +8,7 @@ const isLoggedin = rule({ cache: 'no_cache' })(async (parent, args, { user, devi
   logger.graphql('isLoggedin', { user, device });
   if (!user || !device) {
     logger.warn('Permission denied: You need to login with your Device');
-    return false;
+    return Error('Not Authorised!');
   }
   return true;
 });
@@ -16,7 +16,7 @@ const isLoggedin = rule({ cache: 'no_cache' })(async (parent, args, { user, devi
 const isVerified = rule({ cache: 'no_cache' })(async (parent, args, { user, phone }) => {
   if (!user || (CONFIG.SMS_VERIFICATION && (!user.isVerified() || !phone))) {
     logger.warn('Permission denied: isVerified = false');
-    return false;
+    return Error('Not Verified!');
   }
   return true;
 });
@@ -26,8 +26,10 @@ export const permissions = shield(
     Query: {
       // procedures: isLoggedin,
       // activityIndex: isLoggedin,
+      // Procedure
       notificationSettings: isLoggedin,
       notifiedProcedures: isLoggedin,
+      // Vote
       votes: isLoggedin,
       votedProcedures: isVerified,
     },
