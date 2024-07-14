@@ -25,6 +25,7 @@ const queryVotes = async (
   },
 ) => {
   logger.graphql('Vote.query.votes');
+
   // Has user voted?
   const voted = await VoteModel.findOne({
     procedure,
@@ -34,12 +35,14 @@ const queryVotes = async (
     },
   });
 
+  const procedureId = Types.ObjectId.isValid(procedure) ? Types.ObjectId(procedure) : null;
+
   // Find global result(cache), not including constituencies
   const votesGlobal = await VoteModel.aggregate([
     // Find Procedure, including type; results in up to two objects for state
     {
       $match: {
-        procedure,
+        procedure: procedureId,
         type: CONFIG.SMS_VERIFICATION ? 'Phone' : 'Device',
       },
     },
