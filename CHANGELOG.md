@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.65-alpha.1 (2024-07-14)
+
+
+### Bug Fixes
+
+* 🐛 ensure procedure id is a valid mongo ObjectId ([4c7b22b](https://github.com/demokratie-live/democracy-api/commit/4c7b22be3addabacc05d228dc635918ccff6fcf6))
+
 ### 0.2.65-alpha.0 (2024-06-09)
 
 ### 0.2.64 (2023-12-16)

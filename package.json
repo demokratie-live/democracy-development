@@ -1,6 +1,6 @@
 {
   "name": "democracy-server",
-  "version": "0.2.65-alpha.0",
+  "version": "0.2.65-alpha.1",
   "main": "dist/index.js",
   "author": "Manuel Ruck",
   "license": "Apache2",
