@@ -4,10 +4,8 @@ const GRAPHQL_API_URL = process.env.GRAPHQL_API_URL || 'http://localhost:3000';
 
 describe('ConferenceWeek GraphQL API', () => {
   it('data with device', async () => {
-    const response = await axios.post(
-      GRAPHQL_API_URL,
-      {
-        query: `
+    const response = await axios.post(GRAPHQL_API_URL, {
+      query: `
         query CurrentConferenceWeek {
           currentConferenceWeek {
             start
@@ -17,8 +15,7 @@ describe('ConferenceWeek GraphQL API', () => {
           }
         }
       `,
-      },
-    );
+    });
 
     const { data } = response.data;
 

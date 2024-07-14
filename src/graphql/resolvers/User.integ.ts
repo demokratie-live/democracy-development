@@ -1,8 +1,25 @@
 import axios from 'axios';
+import { connectDB, disconnectDB } from '../../services/mongoose';
+import { DeviceModel, UserModel } from '@democracy-deutschland/democracy-common';
+import crypto from 'crypto';
+import config from '../../config';
 
 const GRAPHQL_API_URL = process.env.GRAPHQL_API_URL || 'http://localhost:3000';
 
 describe('User GraphQL API', () => {
+  const xDeviceHash = 'SOME_DEVICE_HASH_USER_TESTS';
+  const deviceHash = crypto.createHash('sha256').update(xDeviceHash).digest('hex');
+
+  afterAll(async () => {
+    await connectDB(config.DB_URL, { debug: false });
+    const device = await DeviceModel.findOne({ deviceHash });
+
+    await UserModel.deleteMany({ device });
+    await device.remove();
+
+    await disconnectDB();
+  });
+
   it('request unverified user with device', async () => {
     try {
       const response = await axios.post(
@@ -21,7 +38,7 @@ describe('User GraphQL API', () => {
         {
           headers: {
             'Content-Type': 'application/json',
-            'x-device-hash': 'SOME_DEVICE_HASH',
+            'x-device-hash': xDeviceHash,
           },
         },
       );
