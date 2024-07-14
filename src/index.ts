@@ -14,7 +14,7 @@ import CONFIG from './config';
 
 import { logger } from './services/logger';
 
-import connectDB from './services/mongoose';
+import { connectDB } from './services/mongoose';
 import { appVersion } from './express/appVersion';
 import { applicationId } from './express/applicationId';
 

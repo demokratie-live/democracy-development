@@ -7,29 +7,37 @@ import { mongoose } from '@democracy-deutschland/democracy-common';
 import CONFIG from '../../config';
 import { logger } from '../logger';
 
-export default async () => {
+export const connectDB = async (
+  dbUrl = CONFIG.DB_URL,
+  { debug } = { debug: CONFIG.LOGGING_MONGO },
+) => {
   // Mongo Debug
-  if (CONFIG.LOGGING_MONGO) {
-    mongoose.set('debug', () => {
-      // logger[CONFIG.LOGGING_MONGO](inspect(true));
-    });
+  if (debug) {
+    mongoose.set('debug', true);
+    console.log('mongodbUrl', dbUrl);
   }
 
   // Connect
-  console.log("mongodbUrl", CONFIG.DB_URL);
   try {
-    await mongoose.connect(CONFIG.DB_URL, { useNewUrlParser: true, reconnectTries: 86400 });
+    await mongoose.connect(dbUrl, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
   } catch (err) {
     logger.error(err);
-    await mongoose.createConnection(CONFIG.DB_URL, {});
+    await mongoose.createConnection(dbUrl, {});
   }
 
   // Open
   mongoose.connection
-    .once('open', () => logger.info('MongoDB is running'))
+    .once('open', () => logger.info(`MongoDB is running on ${dbUrl}`))
     .on('error', (e) => {
       // Unknown if this ends up in main - therefore we log here
       logger.error(e.stack);
       throw e;
     });
+};
+
+export const disconnectDB = async () => {
+  await mongoose.disconnect();
 };
