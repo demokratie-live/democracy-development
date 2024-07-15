@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.66 (2024-07-15)
+
+
+### Bug Fixes
+
+* debug mongo only if LOGGING_MONGO set to „true“ ([c51b119](https://github.com/demokratie-live/democracy-api/commit/c51b11958a6287a8d66e58bc871e3a1c8a463572))
+
 ### 0.2.65 (2024-07-15)
 
 ### 0.2.65-alpha.1 (2024-07-14)
