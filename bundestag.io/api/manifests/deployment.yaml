@@ -25,6 +25,8 @@ spec:
               value: mongodb://democracy-mongo:27017/bundestagio
             - name: BIO_EDIT_TOKEN
               value: ${var.BIO_EDIT_TOKEN}
+            - name: OTEL_EXPORTER_OTLP_TRACES_URL
+              value: http://signoz-otel-collector:4318/v1/traces
 
           ports:
             - containerPort: 4000

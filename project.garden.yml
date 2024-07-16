@@ -1,6 +1,6 @@
 apiVersion: garden.io/v1
 kind: Project
-name: democracy-development
+name: democracy
 
 defaultEnvironment: local
 
