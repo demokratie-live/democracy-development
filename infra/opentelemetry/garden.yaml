@@ -1,0 +1,62 @@
+kind: Deploy
+type: helm
+name: cert-manager
+
+spec:
+  chart:
+    name: cert-manager
+    repo: https://charts.jetstack.io
+    version: v1.15.1
+  values:
+    installCRDs: true
+---
+kind: Deploy
+type: helm
+name: opentelemetry
+
+dependencies:
+  - deploy.cert-manager
+
+spec:
+  chart:
+    name: opentelemetry-operator
+    repo: https://open-telemetry.github.io/opentelemetry-helm-charts
+    version: '0.64.2'
+  values:
+    manager:
+      collectorImage:
+        repository: otel/opentelemetry-collector
+---
+kind: Deploy
+type: helm
+name: signoz
+
+dependencies:
+  - deploy.opentelemetry
+
+spec:
+  chart:
+    name: signoz
+    repo: https://charts.signoz.io
+    version: 0.47.0
+  values:
+    frontend:
+      ingress:
+        enabled: true
+        hosts:
+          - host: 'signoz.${var.hostname}'
+            paths:
+              - path: /
+                pathType: Prefix
+                port: 3301
+    otelCollector:
+      ingress:
+        enabled: true
+        hosts:
+          - host: 'otelcollector.${var.hostname}'
+            paths:
+              - path: /
+                pathType: Prefix
+                port: 4318
+    schemaMigrator:
+      enabled: false
