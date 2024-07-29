@@ -53,6 +53,6 @@
     "prettier": "3.0.3",
     "ts-unused-exports": "10.0.1",
     "tsx": "^4.11.0",
-    "typescript": "5.2.2"
+    "typescript": "5.5.4"
   }
 }
