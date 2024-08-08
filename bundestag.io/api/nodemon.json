@@ -1,7 +1,0 @@
-{
-  "verbose": false,
-  "ignore": ["node_modules"],
-  "watch": ["**/src/**/*"],
-  "ext": "js jsx json graphql",
-  "legacyWatch": true
-}
