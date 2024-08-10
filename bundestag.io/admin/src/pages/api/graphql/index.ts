@@ -3,8 +3,11 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { axiosClient } from '../../../lib/axios';
 import { config } from '@/lib/config';
+import { log } from '@/lib/logger';
 
 const graphql = async (req: NextApiRequest, res: NextApiResponse) => {
+  log.debug(`api->graphql ${JSON.stringify(req.body.variables)}`);
+
   const session = await getServerSession(req, res, authOptions);
   const { query, variables } = req.body;
 
@@ -14,7 +17,7 @@ const graphql = async (req: NextApiRequest, res: NextApiResponse) => {
 
       res.status(response.status).send(response.data);
     } catch (error) {
-      console.error(error);
+      log.error(error);
       res.status(500).send("Couldn't fetch data");
     }
   } else {
