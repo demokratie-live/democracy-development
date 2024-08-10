@@ -6,7 +6,7 @@
   "author": "Manuel Ruck <m.ruck@democracy-deutschland.de>",
   "license": "Apache-2.0",
   "private": true,
-  "packageManager": "pnpm@9.1.1",
+  "packageManager": "pnpm@9.7.0",
   "scripts": {
     "build": "turbo run build",
     "lint": "turbo run lint",
