@@ -24,7 +24,7 @@
     "ts-node-dev": "^1.1.8",
     "ts-unused-exports": "^8.0.5",
     "tsconfig": "workspace:*",
-    "tsup": "^7.2.0",
+    "tsup": "catalog:",
     "tsup-config": "workspace:*",
     "typescript": "^5.4.5"
   }
