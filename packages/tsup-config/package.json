@@ -8,7 +8,7 @@
   "private": true,
   "devDependencies": {
     "@swc/core": "^1.5.24",
-    "tsup": "^7.2.0"
+    "tsup": "catalog:"
   },
   "scripts": {
     "build": "tsup"
