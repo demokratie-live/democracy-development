@@ -63,10 +63,14 @@ export const ensureFile = async ({ pdfUrl, file_id }: { pdfUrl: string; file_id?
 
 export const retriveVectorStore = async (vectorStoreId: string) =>
   await openai.beta.vectorStores.retrieve(vectorStoreId);
-export const createVectorStore = async ({ file_ids }: { file_ids: string[] }) =>
-  await openai.beta.vectorStores.create({
+export const createVectorStore = async ({ file_ids }: { file_ids: string[] }) => {
+  const vectorStore = await openai.beta.vectorStores.create({});
+
+  await openai.beta.vectorStores.fileBatches.createAndPoll(vectorStore.id, {
     file_ids,
   });
+  return vectorStore;
+};
 export const ensureVectorStore = async ({
   file_id,
   vector_store_id,
