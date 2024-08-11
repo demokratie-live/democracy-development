@@ -14,7 +14,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     return res.status(401).send('Token missing');
   }
 
-  const secret = process.env.SECRET;
+  const secret = process.env.NON_NAMED_VOTES_AI_SECRET;
 
   if (!secret) {
     return res.status(500).send('Server configuration error');
