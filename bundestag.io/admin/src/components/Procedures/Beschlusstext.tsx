@@ -26,14 +26,16 @@ export const Beschlusstext: React.FC<Props> = ({ pdfUrl, title, drucksachen }) =
   };
 
   return (
-    <FormItem label="Beschlusstext" name="decisionText" rules={[{ required: true, message: 'Beschlusstext fehlt!' }]}>
-      <TextArea placeholder="Beschlusstext" rows={3} />
+    <>
+      <FormItem label="Beschlusstext" name="decisionText" rules={[{ required: true, message: 'Beschlusstext fehlt!' }]}>
+        <TextArea placeholder="Beschlusstext" rows={3} />
+      </FormItem>
       {!aiText && (
         <Button type="dashed" onClick={onGetViaAi} disabled={loading}>
           {!loading ? 'get via AI' : <Spin />}
         </Button>
       )}
       {aiText && <div>{aiText}</div>}
-    </FormItem>
+    </>
   );
 };
