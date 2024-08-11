@@ -1,0 +1,64 @@
+kind: Build
+name: non-named-votes-ai
+type: container
+source:
+  path: ../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile.service
+spec:
+  dockerfile: ./infra/Dockerfile.service
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: non-named-votes-ai
+    SERVICE_PATH: services/non-named-votes-ai
+
+---
+kind: Deploy
+name: non-named-votes-ai
+type: kubernetes
+dependencies: [build.non-named-votes-ai, deploy.mongo]
+
+varfiles:
+  - path: .env.example
+  - path: .env
+    optional: true
+
+spec:
+  files: [./manifests/*] # <--- Tell Garden what manifests to use
+
+  defaultTarget: # <--- This tells Garden what "target" to use for logs, code syncing and more
+    kind: Deployment
+    name: non-named-votes-ai
+
+  sync:
+    paths:
+      - containerPath: /services/non-named-votes-ai/src
+        sourcePath: src
+        mode: one-way
+    overrides:
+      - command: [pnpm, dev]
+
+  patchResources:
+    - name: non-named-votes-ai
+      kind: Deployment
+      patch:
+        spec:
+          template:
+            spec:
+              containers:
+                - name: non-named-votes-ai
+                  image: ${actions.build.non-named-votes-ai.outputs.deploymentImageId}
+                  env:
+                    - name: PORT
+                      value: '3005'
+                    - name: DB_URL
+                      value: mongodb://democracy-mongo:27017/bundestagio
+                    - name: OPENAI_API_KEY
+                      value: ${var.OPENAI_API_KEY}
+                    - name: NON_NAMED_VOTES_AI_SECRET
+                      value: ${var.NON_NAMED_VOTES_AI_SECRET}
+                    - name: PINO_LOG_LEVEL
+                      value: ${var.PINO_LOG_LEVEL}
+                    - name: ALLOWED_DOMAINS
+                      value: ${var.ALLOWED_DOMAINS}

@@ -23,7 +23,7 @@ kind: Deploy
 name: admin
 type: kubernetes
 description: Deploy the Admin
-dependencies: [build.admin, deploy.bundestag-io-api, deploy.votes-ai]
+dependencies: [build.admin, deploy.bundestag-io-api, deploy.votes-ai, deploy.non-named-votes-ai]
 
 variables:
   BIO_EDIT_TOKEN: ${actions.deploy.bundestag-io-api.var.BIO_EDIT_TOKEN}
