@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: non-named-votes-ai
+  labels:
+    app: non-named-votes-ai
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: 'non-named-votes-ai.${var.hostname}'
+      http:
+        paths:
+          - backend:
+              service:
+                name: non-named-votes-ai
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
