@@ -116,7 +116,14 @@ const Procedure: React.FC = () => {
         </dl>
         {!namedVote && <VoteResultTextHelper procedureId={procedureId} importantDocuments={importantDocuments} />}
         {!namedVote && (
-          <VoteResultsForm data={customData.voteResults} type={type} procedureId={procedureId} period={period} />
+          <VoteResultsForm
+            data={customData.voteResults}
+            type={type}
+            procedureId={procedureId}
+            period={period}
+            lastPlenaryProtocoll={plenaryProtocolls?.slice(-1)?.[0]}
+            title={title}
+          />
         )}
         {namedVote && <VoteResultsFormNamedPoll data={customData.voteResults} procedureId={procedureId} />}
       </App>
