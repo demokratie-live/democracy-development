@@ -2,9 +2,9 @@ import React from 'react';
 import { Form, Input, Button, InputNumber, Radio, Row, Col, notification, Switch } from 'antd';
 import { axiosClient } from '../../lib/axios';
 import { AiVotes, AiVotesProps } from './AiVotes';
+import { Beschlusstext } from './Beschlusstext';
 
 // Ant Design Sub-Elements
-const { TextArea } = Input;
 const FormItem = Form.Item;
 
 const FRACTIONS = [
@@ -28,7 +28,7 @@ const FRACTIONS = [
   },
 ];
 
-const VoteResultsForm = ({ data, type, procedureId, period }) => {
+const VoteResultsForm = ({ data, type, procedureId, period, lastPlenaryProtocoll, title }) => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
@@ -113,7 +113,6 @@ const VoteResultsForm = ({ data, type, procedureId, period }) => {
         })),
       }}
     >
-      <div>HELLO</div>
       <FormItem
         label="Abstimmung über"
         name="votingDocument"
@@ -127,9 +126,7 @@ const VoteResultsForm = ({ data, type, procedureId, period }) => {
       <FormItem label="Ergebnis umdrehen" name="toggleDecision">
         <Switch defaultChecked={data.votingRecommendation === false} />
       </FormItem>
-      <FormItem label="Beschlusstext" name="decisionText" rules={[{ required: true, message: 'Beschlusstext fehlt!' }]}>
-        <TextArea placeholder="Beschlusstext" rows={3} />
-      </FormItem>
+      <Beschlusstext pdfUrl={lastPlenaryProtocoll.findSpotUrl} title={title} />
       <FormItem
         noStyle
         shouldUpdate={(prevValues, currentValues) => prevValues.decisionText !== currentValues.decisionText}
