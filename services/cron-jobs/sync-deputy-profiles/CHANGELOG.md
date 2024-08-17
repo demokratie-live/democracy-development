@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.14](https://github.com/demokratie-live/democracy-development/compare/sync-deputy-profiles@v0.1.13...sync-deputy-profiles@v0.1.14) (2024-08-17)
+
+
+* **packages:** 📦 use pnpm catalog for tsup ([28296ef](https://github.com/demokratie-live/democracy-development/commit/28296efc10543878f19af319b92e8b86a07c9fe2))
+* update packages ([956921f](https://github.com/demokratie-live/democracy-development/commit/956921f3fc83f93e606a403d75463d38641fc595))
+
 ## [0.1.13](https://github.com/demokratie-live/democracy-development/compare/sync-deputy-profiles@v0.1.12...sync-deputy-profiles@v0.1.13) (2024-05-08)
 
 

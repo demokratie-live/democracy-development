@@ -1,6 +1,6 @@
 {
   "name": "sync-deputy-profiles",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "main": "build/index.js",
   "license": "MIT",
   "scripts": {
