@@ -1,54 +1,54 @@
 kind: Build
-name: bundestag-io-api
-description: Bundestag.io API
+name: import-procedures
+description: Import procedures for the bundestag.io API
 type: container
 source:
-  path: ../../
+  path: ../../../
 include:
   - ./**/*
-  - ./infra/service.Dockerfile
+  - ./infra/Dockerfile
 spec:
-  dockerfile: ./infra/service.Dockerfile
-  targetStage:
-    $if: ${this.mode == "sync"}
-    $then: dev
-    $else: runner
+  dockerfile: ./infra/Dockerfile
   buildArgs:
     NODE_VERSION: 18.18.2
-    SERVICE: bundestag.io
-    SERVICE_PATH: bundestag.io/api
+    SERVICE: crawler
+    SERVICE_PATH: services/cron-jobs/crawler
 
 ---
 kind: Deploy
-name: bundestag-io-api
+name: import-procedures
 type: kubernetes
-description: Deploy the bundestag.io API
-dependencies: [build.bundestag-io-api, deploy.mongo]
+description: Deploy the importer of procedures for the bundestag.io API
+dependencies: [build.import-procedures, deploy.mongo]
+
+disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+
+varfiles:
+  - .env
+  - .env.local
 
 variables:
-  BIO_EDIT_TOKEN: local-token
+  DB_URL: mongodb://democracy-mongo:27017/bundestagio
 
 spec:
-  files: [./manifests/*] # <--- Tell Garden what manifests to use
+  files:
+    - ./manifests/*
 
-  defaultTarget: # <--- This tells Garden what "target" to use for logs, code syncing and more
-    kind: Deployment
-    name: bundestag-io-api
-
-  sync:
-    paths:
-      - containerPath: /app/bundestag.io/api/src
-        sourcePath: src
-        mode: one-way
-
-  # Patch the K8s manifests for the api service so that we can set the correct image
   patchResources:
-    - name: bundestag-io-api
-      kind: Deployment
+    - name: import-procedures
+      kind: CronJob
       patch:
         spec:
-          template:
+          jobTemplate:
             spec:
-              containers:
-                - name: bundestag-io-api
-                  image: ${actions.build.bundestag-io-api.outputs.deploymentImageId} # <--- Reference the output from the Build action
+              template:
+                spec:
+                  containers:
+                    - name: import-procedures
+                      image: ${actions.build.import-procedures.outputs.deploymentImageId} # <--- Reference the output from the Build action
+
+    - name: dip-api-token
+      kind: Secret
+      patch:
+        data:
+          DIP_API_KEY: ${base64Encode(var.DIP_API_KEY)}

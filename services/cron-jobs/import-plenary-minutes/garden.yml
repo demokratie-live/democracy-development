@@ -6,9 +6,9 @@ source:
   path: ../../../
 include:
   - ./**/*
-  - ./infra/service.Dockerfile
+  - ./infra/Dockerfile
 spec:
-  dockerfile: ./infra/service.Dockerfile
+  dockerfile: ./infra/Dockerfile
   buildArgs:
     NODE_VERSION: 18.18.2
     SERVICE: import-plenary-minutes
