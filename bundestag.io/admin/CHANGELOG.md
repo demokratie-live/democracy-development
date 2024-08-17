@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.4.1](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.4.0...bundestag.io-admin@v3.4.1) (2024-08-17)
+
+
+* 🐛 ai simulation config ([7b1b019](https://github.com/demokratie-live/democracy-development/commit/7b1b0199c44548a020a7e31ef8cb4426fe8cb1eb))
+* 🐛 dockerignore handling ([75b4660](https://github.com/demokratie-live/democracy-development/commit/75b4660fae655d2cf9c3847611707dac177f82cc))
+
+
+### 👷 CI/CD
+
+* 👷 fix dockerignore handling ([0a21f30](https://github.com/demokratie-live/democracy-development/commit/0a21f3020ff68334d259743a87f14bec76dd6b1c))
+
 ## [3.4.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.3.1...bundestag.io-admin@v3.4.0) (2024-08-17)
 
 
