@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.6](https://github.com/demokratie-live/democracy-development/compare/cleanup-push-queue@v1.0.5...cleanup-push-queue@v1.0.6) (2024-08-17)
+
+
+* lint issue ([278c173](https://github.com/demokratie-live/democracy-development/commit/278c173747494d461347ec04f38ca92542f25be7))
+* **packages:** 📦 use pnpm catalog for tsup ([28296ef](https://github.com/demokratie-live/democracy-development/commit/28296efc10543878f19af319b92e8b86a07c9fe2))
+* update packages ([956921f](https://github.com/demokratie-live/democracy-development/commit/956921f3fc83f93e606a403d75463d38641fc595))
+
 ## [1.0.5](https://github.com/demokratie-live/democracy-development/compare/cleanup-push-queue@v1.0.4...cleanup-push-queue@v1.0.5) (2024-05-08)
 
 
