@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.14](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.0.13...democracy-app.de@v1.0.14) (2024-08-17)
+
+
+* **deps:** bump sharp from 0.30.7 to 0.32.6 in /democracy/desktop ([54951d1](https://github.com/demokratie-live/democracy-development/commit/54951d117977697b4cd15a75d8c77faf871ef789))
+* **deps:** update all packages and fix some issue ([de054dd](https://github.com/demokratie-live/democracy-development/commit/de054dd357e2317b8ce486a537df959db7dd9b6b))
+* lint issue ([278c173](https://github.com/demokratie-live/democracy-development/commit/278c173747494d461347ec04f38ca92542f25be7))
+* update packages ([956921f](https://github.com/demokratie-live/democracy-development/commit/956921f3fc83f93e606a403d75463d38641fc595))
+
 ## [1.0.13](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.0.4...democracy-app.de@v1.0.13) (2024-05-25)
 
 
