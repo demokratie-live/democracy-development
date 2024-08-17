@@ -6,9 +6,9 @@ source:
   path: ../../../
 include:
   - ./**/*
-  - ./infra/Dockerfile.service
+  - ./infra/service.Dockerfile
 spec:
-  dockerfile: ./infra/Dockerfile.service
+  dockerfile: ./infra/service.Dockerfile
   buildArgs:
     NODE_VERSION: 18.18.2
     SERVICE: queue-pushs-conference-week

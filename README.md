@@ -143,7 +143,7 @@ docker buildx build \
     --build-arg SERVICE=$SERVICE \
     --build-arg SERVICE_PATH=$SERVICE_PATH \
     --build-arg NODE_VERSION=$(cat .node-version | tr -d 'v') \
-    -f infra/Dockerfile.service \
+    -f infra/service.Dockerfile \
     -t $SERVICE \
     .
 ```
