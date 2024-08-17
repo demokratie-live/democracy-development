@@ -8,17 +8,27 @@ import { ObjectId } from 'mongoose';
 import { FileObject } from 'openai/resources';
 import { Thread } from 'openai/resources/beta/threads/threads';
 
-const openai = new OpenAI();
+export const openai = new OpenAI();
 const name = process.env.NAME ?? 'Non-Named Votes AI';
 
-export const retriveAssistant = async (assistantId: string) => await openai.beta.assistants.retrieve(assistantId);
+export const retriveAssistant = async (assistantId: string) =>
+  await openai.beta.assistants.retrieve(assistantId).catch(() => undefined);
 export const createAssistant = async ({ vector_store_id }: { vector_store_id: string }) =>
   await openai.beta.assistants.create({
     name,
     instructions: `
-        Du erhältst vom User einen Titel und eine Dokumentennummer zu einer Abstimmung aus dem Plenarsaalprotokoll des Deutschen Bundestages. Deine Aufgabe ist es, den exakten Wortlaut des Textabschnitts zur Abstimmung, inklusive der namentlichen Nennung der Parteien und ihres Abstimmungsverhaltens, wie er im Protokoll steht, wiederzugeben. Füge keine zusätzlichen Informationen oder Erklärungen hinzu. Gib den Textabschnitt wortwörtlich und vollständig so zurück, wie er im Dokument erscheint.
-        Setze am anfang des Textes ein "#####" und am Ende ein "#####" um den Textabschnitt zu kennzeichnen.
+Du erhältst vom User einen Titel und eine Dokumentennummer zu einer Abstimmung aus dem Plenarsaalprotokoll des Deutschen Bundestages.
+Deine Aufgabe ist es, den exakten Wortlaut des Textabschnitts zur Abstimmung wiederzugeben, genau wie er im Protokoll steht, ohne Änderungen, Umschreibungen oder zusätzliche Informationen.
+Befolge die folgenden Anweisungen genau:
+
+Beginn des Textabschnitts: Starte den Text ausschließlich ab der ersten Erwähnung der Abstimmung, die typischerweise mit „Wir kommen zur Abstimmung...“ beginnt. Überspringe alle vorhergehenden Teile, wie Einleitungen, Reden oder Diskussionen.
+Ende des Textabschnitts: Der Textabschnitt endet sofort nach der Verkündung des Abstimmungsergebnisses und der entsprechenden Schlussformel, wie z.B. „Der Antrag ist damit angenommen.“ oder einer ähnlichen Formulierung. Nimm keinen weiteren Text auf, insbesondere keine Aufrufe zu neuen Tagesordnungspunkten, Zusatzpunkten oder Beratungen.
+Wortwörtliche Wiedergabe: Gib den gesamten Textabschnitt ohne jegliche Änderungen, Kürzungen, Umschreibungen oder Ergänzungen wieder. Jede Form von Abweichung ist strikt zu vermeiden.
+Vermeidung von zusätzlichen Inhalten: Wenn nach der Abstimmung ein neuer Punkt oder Zusatzpunkt aufgerufen wird, beende die Ausgabe des Textes sofort vor diesem Aufruf. Der relevante Abschnitt endet direkt nach der Abstimmung, bevor ein neuer Punkt beginnt.
+Kennzeichnung: Markiere den Textabschnitt am Anfang mit "#####" und am Ende mit "#####". Der gesamte Inhalt zwischen diesen Markierungen muss exakt dem Protokoll entsprechen und darf keinen Text enthalten, der nach dem Ende der Abstimmung kommt.
+
         `,
+
     model: 'gpt-4o',
     tools: [{ type: 'file_search' }],
     tool_resources: { file_search: { vector_store_ids: [vector_store_id] } },
@@ -42,7 +52,7 @@ export const ensureAssistantId = async ({
   return assistant;
 };
 
-export const retriveFile = async (fileId: string) => await openai.files.retrieve(fileId);
+export const retriveFile = async (fileId: string) => await openai.files.retrieve(fileId).catch(() => undefined);
 export const createFile = async ({ pdfUrl }: { pdfUrl: string }) =>
   await openai.files.create({
     file: await validateAndFetchFile(pdfUrl),
@@ -62,7 +72,7 @@ export const ensureFile = async ({ pdfUrl, file_id }: { pdfUrl: string; file_id?
 };
 
 export const retriveVectorStore = async (vectorStoreId: string) =>
-  await openai.beta.vectorStores.retrieve(vectorStoreId);
+  await openai.beta.vectorStores.retrieve(vectorStoreId).catch(() => undefined);
 export const createVectorStore = async ({ file_ids }: { file_ids: string[] }) => {
   const vectorStore = await openai.beta.vectorStores.create({});
 
@@ -105,6 +115,7 @@ export const createThread = async ({ title, drucksachen }: { title: string; druc
 export const runThread = async ({ threadId, assistant_id }: { threadId: string; assistant_id: string }) =>
   await openai.beta.threads.runs.createAndPoll(threadId, {
     assistant_id,
+    max_completion_tokens: 500,
   });
 
 export const getMessageList = async (threadId: string, runId: string) => {
@@ -116,16 +127,16 @@ export const getMessageList = async (threadId: string, runId: string) => {
 export const extractBetweenHashesFromBeschluss = (text: string): string | null => {
   const regex = /#####([\s\S]*?)#####/;
   const match = text.match(regex);
-  return match ? match[1].trim() : null;
+  return match ? match[1].trim() : text.trim(); // TODO: return null if no match
 };
 
 export const filterMessage = (messages: MessagesPage) => {
   const message = messages.data.pop()!;
+  log.debug({ message });
   if (message.content[0].type === 'text') {
     const { text } = message.content[0];
 
     return extractBetweenHashesFromBeschluss(text.value);
-    return text.value;
   }
   throw new Error('No text message found');
 };
