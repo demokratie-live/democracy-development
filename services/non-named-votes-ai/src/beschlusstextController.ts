@@ -49,7 +49,7 @@ export const getBeschlusstext = async (req: Request, res: Response) => {
   const run = await runThread({ assistant_id: assistant.id, threadId: thread.id });
   log.debug({ run });
   if (run.status === 'failed') {
-    log.error(run);
+    log.error('OpenAI failed');
     return res.status(500).json({ message: 'OpenAI failed' });
   }
   const messages = await getMessageList(thread.id, run.id);
