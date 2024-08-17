@@ -1,3 +1,5 @@
+import { log } from './logger';
+
 const errors: string[] = [];
 const AI_SIMULATION = process.env.AI_SIMULATION === 'true';
 
@@ -13,6 +15,11 @@ if (!AI_SIMULATION && !process.env.AI_ACCESS_TOKEN) {
 
 if (errors.length > 0) {
   throw new Error(errors.join('\n'));
+}
+
+if (AI_SIMULATION) {
+  log.info('AI_SIMULATION is enabled');
+  log.debug(`AI_SIMULATION is set to ${AI_SIMULATION}`);
 }
 
 export const config = {
