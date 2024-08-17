@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.63](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.62...bundestag.io@v0.1.63) (2024-08-17)
+
+
+* **deps:** bump express from 4.18.2 to 4.19.2 in /bundestag.io/api ([77c87b9](https://github.com/demokratie-live/democracy-development/commit/77c87b92af9398a2f0f42724d3c71ab38f0bdb57))
+* update packages ([956921f](https://github.com/demokratie-live/democracy-development/commit/956921f3fc83f93e606a403d75463d38641fc595))
+
 ## [0.1.62](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.61...bundestag.io@v0.1.62) (2024-05-25)
 
 ## [0.1.61](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.60...bundestag.io@v0.1.61) (2024-05-09)
