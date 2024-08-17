@@ -1,0 +1,20 @@
+meta {
+  name: getBeschlusstext 2
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:3005/beschlusstext?title=Gesetz zu dem Protokoll vom 6. Juli 2023 zur Änderung des Abkommens vom 23. April 2012 zwischen der Bundesrepublik Deutschland und dem Großherzogtum Luxemburg zur Vermeidung der Doppelbesteuerung und Verhinderung der Steuerhinterziehung auf dem Gebiet der Steuern vom Einkommen und vom Vermögen (Deutsch-luxemburgisches Steuerabkommen)&pdfUrl=https://dserver.bundestag.de/btp/20/20131.pdf#P.16409
+  body: none
+  auth: none
+}
+
+params:query {
+  title: Gesetz zu dem Protokoll vom 6. Juli 2023 zur Änderung des Abkommens vom 23. April 2012 zwischen der Bundesrepublik Deutschland und dem Großherzogtum Luxemburg zur Vermeidung der Doppelbesteuerung und Verhinderung der Steuerhinterziehung auf dem Gebiet der Steuern vom Einkommen und vom Vermögen (Deutsch-luxemburgisches Steuerabkommen)
+  pdfUrl: https://dserver.bundestag.de/btp/20/20131.pdf#P.16409
+}
+
+headers {
+  authorization: Token {{non-named-votes-ai-token}}
+}
