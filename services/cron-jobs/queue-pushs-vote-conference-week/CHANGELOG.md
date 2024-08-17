@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.9](https://github.com/demokratie-live/democracy-development/compare/queue-pushs-vote-conference-week@v0.1.8...queue-pushs-vote-conference-week@v0.1.9) (2024-08-17)
+
+
+* update packages ([956921f](https://github.com/demokratie-live/democracy-development/commit/956921f3fc83f93e606a403d75463d38641fc595))
+
 ## [0.1.8](https://github.com/demokratie-live/democracy-development/compare/queue-pushs-vote-conference-week@v0.1.7...queue-pushs-vote-conference-week@v0.1.8) (2024-05-08)
 
 
