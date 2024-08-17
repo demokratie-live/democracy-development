@@ -1,10 +1,10 @@
-ARG  NODE_VERSION
+ARG  NODE_VERSION=18
 
 FROM node:${NODE_VERSION}-alpine AS base
 ARG  SERVICE
-ENV SERVICE ${SERVICE}
+ENV SERVICE=${SERVICE}
 ARG  SERVICE_PATH
-ENV SERVICE_PATH ${SERVICE_PATH}
+ENV SERVICE_PATH=${SERVICE_PATH}
 RUN corepack enable
 
 FROM base AS builder
@@ -59,4 +59,4 @@ COPY --from=installer_prod /app .
  
 # USER runuser
 
-CMD cd $SERVICE_PATH && npm start
+CMD ["sh", "-c", "cd $SERVICE_PATH && npm start"]
