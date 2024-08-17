@@ -11,7 +11,7 @@ services:
       - democracy
   bundestag-io:
     build:
-      dockerfile: ./infra/Dockerfile.service
+      dockerfile: ./infra/service.Dockerfile
       target: dev
       args:
         - NODE_VERSION=18.18.2
@@ -32,7 +32,7 @@ services:
       - democracy
   bio-admin:
     build:
-      dockerfile: ./infra/Dockerfile.service
+      dockerfile: ./infra/service.Dockerfile
       target: dev
       args:
         - NODE_VERSION=18.18.2

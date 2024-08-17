@@ -6,9 +6,9 @@ source:
   path: ../../../
 include:
   - ./**/*
-  - ./infra/Dockerfile.service
+  - ./infra/service.Dockerfile
 spec:
-  dockerfile: ./infra/Dockerfile.service
+  dockerfile: ./infra/service.Dockerfile
   buildArgs:
     NODE_VERSION: 18.18.2
     SERVICE: push-send-queued
@@ -51,4 +51,3 @@ spec:
           SERVICE_ACCOUNT_CLIENT_EMAIL: ${base64Encode(var.SERVICE_ACCOUNT_CLIENT_EMAIL)}
           SERVICE_ACCOUNT_PRIVATE_KEY: ${base64Encode(var.SERVICE_ACCOUNT_PRIVATE_KEY)}
           SERVICE_ACCOUNT_PROJECT_ID: ${base64Encode(var.SERVICE_ACCOUNT_PROJECT_ID)}
-            
