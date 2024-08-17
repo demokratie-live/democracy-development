@@ -41,6 +41,6 @@
     "babel-plugin-styled-components": "^2.1.4",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.1.4",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.4"
   }
 }
