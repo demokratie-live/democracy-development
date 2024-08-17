@@ -37,7 +37,7 @@ jobs:
       - name: get directory for package
         id: get-directory
         run: |
-          directory=$(pnpm ls -r --json --filter $MATRIX_PACKAGE | jq -r '.[0] | .path')
+          directory=$(pnpm ls -r --json --filter $MATRIX_PACKAGE --changed-files-ignore-pattern="**/garden.yml" | jq -r '.[0] | .path')
           directory="${directory##*/democracy-development/}"
 
           # Ausgabe
