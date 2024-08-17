@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.30](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.29...import-conference-week-details@v0.1.30) (2024-08-17)
+
+
+* lint issue ([278c173](https://github.com/demokratie-live/democracy-development/commit/278c173747494d461347ec04f38ca92542f25be7))
+* **packages:** 📦 use pnpm catalog for tsup ([28296ef](https://github.com/demokratie-live/democracy-development/commit/28296efc10543878f19af319b92e8b86a07c9fe2))
+* update packages ([956921f](https://github.com/demokratie-live/democracy-development/commit/956921f3fc83f93e606a403d75463d38641fc595))
+
 ## [0.1.29](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.28...import-conference-week-details@v0.1.29) (2024-05-25)
 
 ## [0.1.28](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.27...import-conference-week-details@v0.1.28) (2024-05-08)
