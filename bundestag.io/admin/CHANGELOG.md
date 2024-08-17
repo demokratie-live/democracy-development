@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.4.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.3.1...bundestag.io-admin@v3.4.0) (2024-08-17)
+
+
+* 🐛 show „Fetch AI votes“ button ([e0af397](https://github.com/demokratie-live/democracy-development/commit/e0af39794d091ab67657eb2bba2d180bf626c904))
+* **garden:** 🧑‍🌾 add garden to non-named-votes-ai ([1be3780](https://github.com/demokratie-live/democracy-development/commit/1be3780aa5bfb347917e991b88b9792b7ebd1cab))
+* lint issue ([278c173](https://github.com/demokratie-live/democracy-development/commit/278c173747494d461347ec04f38ca92542f25be7))
+* **logging:** 🧐 add pino logger and logs ([aed5dbc](https://github.com/demokratie-live/democracy-development/commit/aed5dbc0ac40ef2861d7197c77899469e9747d15))
+* **packages:** 📦 use pnpm catalog for tsup ([28296ef](https://github.com/demokratie-live/democracy-development/commit/28296efc10543878f19af319b92e8b86a07c9fe2))
+* update packages ([956921f](https://github.com/demokratie-live/democracy-development/commit/956921f3fc83f93e606a403d75463d38641fc595))
+
+
+### 🚀 Feature
+
+* add get non named votes ai ([de4314a](https://github.com/demokratie-live/democracy-development/commit/de4314a0002a1f349dbef40aeba74aba492f95e8))
+* add indicator to the button of non-named-vote-results ([01d2a27](https://github.com/demokratie-live/democracy-development/commit/01d2a27ab8210bad55ac5e8d8e3e66bb1738c489))
+
 ## [3.3.1](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.3.0...bundestag.io-admin@v3.3.1) (2024-05-25)
 
 ## [3.3.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.2.1...bundestag.io-admin@v3.3.0) (2024-05-09)
