@@ -1,9 +1,0 @@
-.env
-.env.*
-.git
-node_modules
-logs
-*.log
-.turbo
-.garden
-manifests

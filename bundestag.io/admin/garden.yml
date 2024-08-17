@@ -6,9 +6,9 @@ source:
   path: ../../
 include:
   - ./**/*
-  - ./infra/service.Dockerfile
+  - ./infra/Dockerfile
 spec:
-  dockerfile: ./infra/service.Dockerfile
+  dockerfile: ./infra/Dockerfile
   targetStage:
     $if: ${this.mode == "sync"}
     $then: dev

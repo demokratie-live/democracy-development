@@ -29,7 +29,7 @@ jobs:
         id: since
 
       - run: |
-          pnpm list -r --json --filter "...[$SINCE]" --changed-files-ignore-pattern="**/garden.yml" | jq '[.[] | select(.private == false) | {name, path}]' > ./tmp.json
+          pnpm list -r --json --filter "...[$SINCE]" --changed-files-ignore-pattern="**/(garden.yml|.dockerignore)" | jq '[.[] | select(.private == false) | {name, path}]' > ./tmp.json
           CHANGED_PACKAGES=$(jq '[.[] | .name]' ./tmp.json)
           echo CHANGED_PACKAGES=$CHANGED_PACKAGES  >> $GITHUB_OUTPUT
           echo CHANGED_PACKAGES=$CHANGED_PACKAGES
