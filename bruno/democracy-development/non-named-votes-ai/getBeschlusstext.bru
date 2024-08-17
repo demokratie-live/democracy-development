@@ -1,0 +1,21 @@
+meta {
+  name: getBeschlusstext
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3005/beschlusstext?title=Kommission zur Reform des Wahlrechts und zur Modernisierung der Parlamentsarbeit&pdfUrl=https://dserver.bundestag.de/btp/20/20020.pdf#P.1464&drucksachen=20/1023
+  body: none
+  auth: none
+}
+
+params:query {
+  title: Kommission zur Reform des Wahlrechts und zur Modernisierung der Parlamentsarbeit
+  pdfUrl: https://dserver.bundestag.de/btp/20/20020.pdf#P.1464
+  drucksachen: 20/1023
+}
+
+headers {
+  authorization: Token {{non-named-votes-ai-token}}
+}

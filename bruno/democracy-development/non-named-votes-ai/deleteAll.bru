@@ -1,0 +1,15 @@
+meta {
+  name: deleteAll
+  type: http
+  seq: 1
+}
+
+delete {
+  url: http://localhost:3005/all
+  body: none
+  auth: none
+}
+
+headers {
+  authorization: Token {{non-named-votes-ai-token}}
+}
