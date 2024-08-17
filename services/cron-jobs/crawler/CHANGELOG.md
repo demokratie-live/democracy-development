@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.3](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.2...crawler@v1.1.3) (2024-08-17)
+
+
+* fix tests ([667ee5d](https://github.com/demokratie-live/democracy-development/commit/667ee5d83bc8c0f200fbbd6db5cc7fdebea8e881))
+* **packages:** 📦 use pnpm catalog for tsup ([28296ef](https://github.com/demokratie-live/democracy-development/commit/28296efc10543878f19af319b92e8b86a07c9fe2))
+* update packages ([956921f](https://github.com/demokratie-live/democracy-development/commit/956921f3fc83f93e606a403d75463d38641fc595))
+
 ## [1.1.2](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.1...crawler@v1.1.2) (2024-05-25)
 
 
