@@ -5,6 +5,7 @@ import { mongoConnect } from '@democracy-deutschland/bundestagio-common';
 import { log } from './logger';
 import helmet from 'helmet';
 import { limiter } from './rateLimiter';
+import { deleteAll } from './deleteAll';
 
 (async () => {
   await mongoConnect(process.env.DB_URL!);
@@ -21,6 +22,8 @@ import { limiter } from './rateLimiter';
   app.use(limiter);
 
   app.get('/beschlusstext', authMiddleware, getBeschlusstext);
+
+  app.delete('/all', authMiddleware, deleteAll);
 
   const PORT = process.env.PORT || 3005;
   app.listen(PORT, () => {
