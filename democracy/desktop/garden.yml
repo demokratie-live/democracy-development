@@ -1,54 +1,52 @@
 kind: Build
-name: import-procedures
-description: Import procedures for the bundestag.io API
+name: democracy-desktop
 type: container
 source:
-  path: ../../../
+  path: ../../
 include:
   - ./**/*
   - ./infra/Dockerfile
 spec:
   dockerfile: ./infra/Dockerfile
+  targetStage:
+    $if: ${this.mode == "sync"}
+    $then: dev
+    $else: runner
   buildArgs:
     NODE_VERSION: 18.18.2
-    SERVICE: crawler
-    SERVICE_PATH: services/cron-jobs/crawler
+    SERVICE: democracy-app.de
+    SERVICE_PATH: democracy/desktop
 
 ---
 kind: Deploy
-name: import-procedures
+name: democracy-desktop
 type: kubernetes
-description: Deploy the importer of procedures for the bundestag.io API
-dependencies: [build.import-procedures, deploy.mongo]
 
-disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
-
-varfiles:
-  - .env
-  - .env.local
-
-variables:
-  DB_URL: mongodb://democracy-mongo:27017/bundestagio
+dependencies:
+  - build.democracy-desktop
 
 spec:
-  files:
-    - ./manifests/*
+  files: [./manifests/*] # <--- Tell Garden what manifests to use
+
+  defaultTarget: # <--- This tells Garden what "target" to use for logs, code syncing and more
+    kind: Deployment
+    name: democracy-desktop
+
+  sync:
+    paths:
+      - containerPath: /app/democracy/desktop/src
+        sourcePath: src
+        mode: one-way
+    overrides:
+      - command: [pnpm, dev]
 
   patchResources:
-    - name: import-procedures
-      kind: CronJob
+    - name: democracy-desktop
+      kind: Deployment
       patch:
         spec:
-          jobTemplate:
+          template:
             spec:
-              template:
-                spec:
-                  containers:
-                    - name: import-procedures
-                      image: ${actions.build.import-procedures.outputs.deploymentImageId} # <--- Reference the output from the Build action
-
-    - name: dip-api-token
-      kind: Secret
-      patch:
-        data:
-          DIP_API_KEY: ${base64Encode(var.DIP_API_KEY)}
+              containers:
+                - name: democracy-desktop
+                  image: ${actions.build.democracy-desktop.outputs.deploymentImageId}
