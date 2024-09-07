@@ -1,0 +1,50 @@
+# kind: Deploy
+# name: tidb-crds
+# type: kubernetes
+
+# spec:
+#   files:
+#     - ./manifests/tidb-crds.yaml
+# ---
+
+kind: Deploy
+name: tidb-crds
+type: exec
+
+spec:
+  deployCommand:
+    [
+      kubectl,
+      apply,
+      --server-side=true,
+      -n,
+      '${providers.local-kubernetes.outputs.app-namespace}',
+      -f,
+      ./manifests/tidb-crds.yaml,
+    ]
+  cleanupCommand:
+    [kubectl, delete, -n, '${providers.local-kubernetes.outputs.app-namespace}', -f, ./manifests/tidb-crds.yaml]
+---
+kind: Deploy
+type: helm
+name: tidb-operator
+dependencies:
+  - deploy.tidb-crds
+spec:
+  chart:
+    repo: https://charts.pingcap.org/
+    name: tidb-operator
+    version: 'v1.5.3'
+  values:
+    scheduler:
+      create: false
+---
+kind: Deploy
+name: tidb-cluster
+type: kubernetes
+
+dependencies:
+  - deploy.tidb-operator
+spec:
+  files:
+    - ./manifests/tidb-cluster.yaml

@@ -1,0 +1,64 @@
+kind: Build
+name: legislaturperiode
+type: container
+source:
+  path: ../../
+include:
+  - ./**/*
+  - ./infra/Dockerfile
+spec:
+  dockerfile: ./infra/Dockerfile
+  buildArgs:
+    NODE_VERSION: 18.18.2
+    SERVICE: legislaturperiode
+    SERVICE_PATH: services/legislaturperiode
+
+---
+kind: Deploy
+name: legislaturperiode
+type: kubernetes
+dependencies: [build.legislaturperiode, deploy.mongo]
+
+varfiles:
+  - path: .env.example
+  - path: .env
+    optional: true
+
+spec:
+  files: [./manifests/*] # <--- Tell Garden what manifests to use
+
+  defaultTarget: # <--- This tells Garden what "target" to use for logs, code syncing and more
+    kind: Deployment
+    name: legislaturperiode
+
+  sync:
+    paths:
+      - containerPath: /services/legislaturperiode/src
+        sourcePath: src
+        mode: one-way
+    overrides:
+      - command: [pnpm, dev]
+
+  patchResources:
+    - name: legislaturperiode
+      kind: Deployment
+      patch:
+        spec:
+          template:
+            spec:
+              containers:
+                - name: legislaturperiode
+                  image: ${actions.build.legislaturperiode.outputs.deploymentImageId}
+                  env:
+                    - name: PORT
+                      value: '3005'
+                    - name: DB_URL
+                      value: mongodb://democracy-mongo:27017/bundestagio
+                    - name: OPENAI_API_KEY
+                      value: ${var.OPENAI_API_KEY}
+                    - name: NON_NAMED_VOTES_AI_SECRET
+                      value: ${var.NON_NAMED_VOTES_AI_SECRET}
+                    - name: PINO_LOG_LEVEL
+                      value: ${var.PINO_LOG_LEVEL}
+                    - name: ALLOWED_DOMAINS
+                      value: ${var.ALLOWED_DOMAINS}

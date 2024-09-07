@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: non-named-votes-ai
+  labels:
+    app: non-named-votes-ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: non-named-votes-ai
+  template:
+    metadata:
+      labels:
+        app: non-named-votes-ai
+    spec:
+      containers:
+        - name: non-named-votes-ai
+          image: democracy/non-named-votes-ai:pr-592
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3005
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              cpu: 10m
+              memory: 90Mi
