@@ -37,6 +37,10 @@ spec:
               value: 'http://votes-ai'
             - name: AI_SIMULATION
               value: '${var.AI_SIMULATION}'
+            - name: NON_NAMED_VOTES_AI_SERVER_URL
+              value: 'http://non-named-votes-ai'
+            - name: NON_NAMED_VOTES_AI_SECRET
+              value: ${var.NON_NAMED_VOTES_AI_SECRET}
           ports:
             - containerPort: 4003
               name: http
