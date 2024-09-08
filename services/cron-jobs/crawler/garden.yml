@@ -21,8 +21,6 @@ type: kubernetes
 description: Deploy the importer of procedures for the bundestag.io API
 dependencies: [build.import-procedures, deploy.mongo]
 
-disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
-
 varfiles:
   - .env
   - .env.local
@@ -32,23 +30,54 @@ variables:
 
 spec:
   files:
-    - ./manifests/*
+    - ./manifests/ConfigMap.yaml
+    # - ./manifests/CronJob.yaml
+    - ./manifests/Secret.yaml
+    - ./manifests/Deployment.garden.yaml
+
+  defaultTarget:
+    kind: Deployment
+    name: import-procedures
+
+  sync:
+    paths:
+      - containerPath: /services/cron-jobs/crawler/src
+        sourcePath: src
+        mode: one-way
+    overrides:
+      - command: [pnpm, --filter, crawler, run, garden:dev]
 
   patchResources:
-    - name: import-procedures
-      kind: CronJob
-      patch:
-        spec:
-          jobTemplate:
-            spec:
-              template:
-                spec:
-                  containers:
-                    - name: import-procedures
-                      image: ${actions.build.import-procedures.outputs.deploymentImageId} # <--- Reference the output from the Build action
-
-    - name: dip-api-token
-      kind: Secret
-      patch:
-        data:
-          DIP_API_KEY: ${base64Encode(var.DIP_API_KEY)}
+    $if: ${this.mode == "sync"}
+    $then:
+      - name: import-procedures
+        kind: Deployment
+        patch:
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: import-procedures
+                    image: ${actions.build.import-procedures.outputs.deploymentImageId}
+      - name: dip-api-token
+        kind: Secret
+        patch:
+          data:
+            DIP_API_KEY: ${base64Encode(var.DIP_API_KEY)}
+    $else:
+      - name: import-procedures
+        kind: CronJob
+        patch:
+          spec:
+            jobTemplate:
+              spec:
+                template:
+                  spec:
+                    containers:
+                      - name: import-procedures
+                        image: ${actions.build.import-procedures.outputs.deploymentImageId}
+      - name: dip-api-token
+        kind: Secret
+        patch:
+          data:
+            DIP_API_KEY: ${base64Encode(var.DIP_API_KEY)}

@@ -7,7 +7,8 @@
   "author": "Manuel Ruck, Ulf Gebhardt, Robert Schäfer",
   "license": "MIT",
   "scripts": {
-    "dev": "dotenv -e .env -e .env.local -- tsup src/import-procedures --watch --onSuccess 'node build/index.js'",
+    "dev": "tsx --env-file .env --env-file .env.local --watch src/import-procedures/index.ts",
+    "garden:dev": "tsx --watch src/import-procedures/index.ts",
     "build": "tsup-node",
     "lint": "eslint .",
     "start": "node ./build/index.js"
@@ -18,7 +19,8 @@
     "@democracy-deutschland/bundestagio-common": "workspace:*",
     "axios": "^1.7.2",
     "debug": "^4.3.4",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "tsx": "^4.11.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",
