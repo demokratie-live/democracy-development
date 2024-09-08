@@ -37,8 +37,7 @@ spec:
         sourcePath: src
         mode: one-way
     overrides:
-      - command: [pnpm, dev]
-
+      - command: [pnpm, --filter, non-named-votes-ai, run, garden:dev]
   patchResources:
     - name: non-named-votes-ai
       kind: Deployment

@@ -5,6 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "dev": "tsx --env-file .env --watch src/index.ts",
+    "garden:dev": "tsx --watch src/index.ts",
     "build": "tsup-node",
     "start": "node build/index.js"
   },
