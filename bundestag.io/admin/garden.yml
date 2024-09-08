@@ -29,6 +29,7 @@ variables:
   BIO_EDIT_TOKEN: ${actions.deploy.bundestag-io-api.var.BIO_EDIT_TOKEN}
   AI_SERVICE_ACCESS_TOKEN: ${actions.deploy.votes-ai.var.ACCESS_TOKEN}
   AI_SIMULATION: true
+  NON_NAMED_VOTES_AI_SECRET: ${actions.deploy.non-named-votes-ai.var.NON_NAMED_VOTES_AI_SECRET}
 
 spec:
   files: [./manifests/*] # <--- Tell Garden what manifests to use
