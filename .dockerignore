@@ -6,6 +6,7 @@
 **/*.log
 **/.turbo
 **/.garden
+**/garden.yml
 **/manifests
 **/.next
 **/build
