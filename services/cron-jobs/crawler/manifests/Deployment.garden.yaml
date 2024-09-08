@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: import-procedures
+  labels:
+    app: import-procedures
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: import-procedures
+  template:
+    metadata:
+      labels:
+        app: import-procedures
+    spec:
+      containers:
+        - name: import-procedures
+          image: democracy/crawler:1.0.17
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: crawler-config
+            - secretRef:
+                name: dip-api-token
+                optional: false
+          resources:
+            limits:
+              cpu: '4'
+              memory: 4Gi
+            requests:
+              cpu: 10m
+              memory: 90Mi
