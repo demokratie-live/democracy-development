@@ -1,0 +1,16 @@
+meta {
+  name: findAll
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{url}}/procedures
+  body: none
+  auth: none
+}
+
+assert {
+  res.body.procedureId: isString 
+  res.status: eq 200
+}

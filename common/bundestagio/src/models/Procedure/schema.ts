@@ -1,19 +1,14 @@
-import {
-  Schema,
-  Document as MDocument,
-  SchemaTimestampsConfig,
-} from "mongoose";
-import mongoosastic from "mongoosastic";
-import diffHistory from "mongoose-diff-history/diffHistory";
+import { Schema, Document as MDocument, SchemaTimestampsConfig } from 'mongoose';
+import mongoosastic from 'mongoosastic';
 
-import ProcessFlow, { IProcessFlow } from "./Procedure/ProcessFlow";
-import Document, { IDocument } from "./Procedure/Document";
-import PartyVotes, { IPartyVotes } from "./Procedure/PartyVotes";
-import PlenumSchema from "./Procedure/Plenum";
+import ProcessFlow, { IProcessFlow } from './Procedure/ProcessFlow';
+import Document, { IDocument } from './Procedure/Document';
+import PartyVotes, { IPartyVotes } from './Procedure/PartyVotes';
+import PlenumSchema from './Procedure/Plenum';
 
 enum VotingDocument {
-  MainDocument = "mainDocument",
-  RecommendedDecision = "recommendedDecision",
+  MainDocument = 'mainDocument',
+  RecommendedDecision = 'recommendedDecision',
 }
 
 export interface IProcedure extends MDocument, SchemaTimestampsConfig {
@@ -56,32 +51,32 @@ const ProcedureSchema = new Schema(
       type: String,
       index: { unique: true },
       es_indexed: true,
-      es_type: "text",
+      es_type: 'text',
     },
     type: {
       type: String,
       required: true,
       es_indexed: true,
-      es_type: "text",
+      es_type: 'text',
     },
     period: {
       type: Number,
       required: true,
       es_indexed: true,
-      es_type: "integer",
+      es_type: 'integer',
     },
     title: {
       type: String,
       required: true,
       es_indexed: true,
-      es_type: "text",
-      analyzer: "german",
+      es_type: 'text',
+      analyzer: 'german',
       es_fields: {
         completion: {
-          type: "completion",
+          type: 'completion',
         },
         autocomplete: {
-          type: "keyword",
+          type: 'keyword',
           index: true,
         },
       },
@@ -95,8 +90,8 @@ const ProcedureSchema = new Schema(
     abstract: {
       type: String,
       es_indexed: true,
-      es_type: "text",
-      analyzer: "german",
+      es_type: 'text',
+      analyzer: 'german',
     },
     promulgation: [String],
     legalValidity: [String],
@@ -104,16 +99,16 @@ const ProcedureSchema = new Schema(
       {
         type: String,
         es_indexed: true,
-        es_type: "text",
-        analyzer: "german",
+        es_type: 'text',
+        analyzer: 'german',
       },
     ],
     subjectGroups: [
       {
         type: String,
         es_indexed: true,
-        es_type: "text",
-        analyzer: "german",
+        es_type: 'text',
+        analyzer: 'german',
       },
     ],
     importantDocuments: [Document],
@@ -139,7 +134,7 @@ const ProcedureSchema = new Schema(
         decisionText: { type: String, es_indexed: false },
         votingDocument: {
           type: String,
-          enum: ["mainDocument", "recommendedDecision"],
+          enum: ['mainDocument', 'recommendedDecision'],
         },
         votingRecommendation: Boolean,
         partyVotes: {
@@ -150,12 +145,12 @@ const ProcedureSchema = new Schema(
       },
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 ProcedureSchema.index({
-  "importantDocuments.url": 1,
-  "importantDocuments.type": 1,
+  'importantDocuments.url': 1,
+  'importantDocuments.type': 1,
 });
 
 // https://github.com/demokratie-live/democracy-client/issues/1340
