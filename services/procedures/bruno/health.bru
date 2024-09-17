@@ -1,0 +1,20 @@
+meta {
+  name: health
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{url}}/health
+  body: none
+  auth: none
+}
+
+assert {
+  res.body: eq ok!
+  res.status: eq 200
+}
+
+docs {
+  This endpoint is to check if the service is healthy
+}
