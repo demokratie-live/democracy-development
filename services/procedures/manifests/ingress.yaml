@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: procedures
+  labels:
+    app: procedures
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: 'procedures.${var.hostname}'
+      http:
+        paths:
+          - backend:
+              service:
+                name: procedures
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
