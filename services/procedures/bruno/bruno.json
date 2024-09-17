@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "dmcy.procedures",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
