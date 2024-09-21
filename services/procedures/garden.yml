@@ -19,11 +19,6 @@ name: procedures
 type: kubernetes
 dependencies: [build.procedures, deploy.mongo]
 
-varfiles:
-  - path: .env.example
-  - path: .env
-    optional: true
-
 spec:
   files: [./manifests/*]
 
@@ -50,8 +45,6 @@ spec:
                   image: ${actions.build.procedures.outputs.deploymentImageId}
                   env:
                     - name: PORT
-                      value: '${var.PORT}'
+                      value: '3000'
                     - name: DB_URL
-                      value: ${var.DB_URL}
-                    - name: PINO_LOG_LEVEL
-                      value: ${var.PINO_LOG_LEVEL}
+                      value: 'mongodb://democracy-mongo:27017/bundestagio'

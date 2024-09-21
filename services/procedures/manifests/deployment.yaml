@@ -19,9 +19,14 @@ spec:
           image: democracy/procedures:pr-592
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 3005
+            - containerPort: 3000
               name: http
               protocol: TCP
+          env:
+            - name: PORT
+              value: '3000'
+            - name: DB_URL
+              value: 'mongodb://democracy-mongo:27017/bundestagio'
           resources:
             limits:
               cpu: '1'
@@ -29,3 +34,15 @@ spec:
             requests:
               cpu: 10m
               memory: 90Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
