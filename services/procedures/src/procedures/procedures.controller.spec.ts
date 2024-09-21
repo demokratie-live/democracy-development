@@ -20,6 +20,28 @@ describe('ProceduresController', () => {
           importantDocuments: [],
         }) as unknown as Promise<IProcedure & { _id: any }>,
     ),
+    fetchUpcomingProcedures: jest.fn(
+      () =>
+        ({
+          title: 'test',
+          id: 1,
+          procedureId: '123456',
+          type: '',
+          period: '',
+          importantDocuments: [],
+        }) as any,
+    ),
+    fetchPastProcedures: jest.fn(
+      () =>
+        ({
+          title: 'test',
+          id: 1,
+          procedureId: '123456',
+          type: '',
+          period: '',
+          importantDocuments: [],
+        }) as any,
+    ),
   };
 
   beforeEach(async () => {
@@ -39,6 +61,28 @@ describe('ProceduresController', () => {
 
   it('should return an array of procedures', async () => {
     expect(controller.findAll()).toStrictEqual({
+      title: 'test',
+      id: 1,
+      procedureId: '123456',
+      type: '',
+      period: '',
+      importantDocuments: [],
+    });
+  });
+
+  it('should return an array of upcoming procedures', async () => {
+    expect(controller.upcomingProcedures()).toStrictEqual({
+      title: 'test',
+      id: 1,
+      procedureId: '123456',
+      type: '',
+      period: '',
+      importantDocuments: [],
+    });
+  });
+
+  it('should return an array of past procedures', async () => {
+    expect(controller.pastProcedures()).toStrictEqual({
       title: 'test',
       id: 1,
       procedureId: '123456',

@@ -71,4 +71,28 @@ describe('ProceduresService', () => {
       },
     ]);
   });
+
+  it('should return an array of past procedures', () => {
+    (procedureModel.find as jest.Mock).mockReturnValueOnce({
+      sort: jest.fn().mockResolvedValue([
+        {
+          title: 'test',
+          id: 1,
+          type: '',
+          period: '',
+          importantDocuments: [],
+        },
+      ]),
+    });
+
+    expect(service.fetchPastProcedures()).resolves.toStrictEqual([
+      {
+        title: 'test',
+        id: 1,
+        type: '',
+        period: '',
+        importantDocuments: [],
+      },
+    ]);
+  });
 });
