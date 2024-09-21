@@ -8,4 +8,9 @@ export class ProceduresController {
   findAll() {
     return this.proceduresService.findAll();
   }
+
+  @Get('list/upcoming')
+  upcomingProcedures() {
+    return this.proceduresService.fetchUpcomingProcedures();
+  }
 }

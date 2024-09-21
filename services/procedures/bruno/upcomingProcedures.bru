@@ -1,0 +1,16 @@
+meta {
+  name: upcomingProcedures
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{url}}/procedures/list/upcoming
+  body: none
+  auth: none
+}
+
+assert {
+  res.body[0].procedureId: isString
+  res.status: eq 200
+}
