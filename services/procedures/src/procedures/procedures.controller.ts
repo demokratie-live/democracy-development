@@ -13,4 +13,9 @@ export class ProceduresController {
   upcomingProcedures() {
     return this.proceduresService.fetchUpcomingProcedures();
   }
+
+  @Get('list/past')
+  pastProcedures() {
+    return this.proceduresService.fetchPastProcedures();
+  }
 }

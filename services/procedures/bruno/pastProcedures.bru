@@ -1,0 +1,16 @@
+meta {
+  name: pastProcedures
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{url}}/procedures/list/past
+  body: none
+  auth: none
+}
+
+assert {
+  res.body[0].procedureId: isString
+  res.status: eq 200
+}

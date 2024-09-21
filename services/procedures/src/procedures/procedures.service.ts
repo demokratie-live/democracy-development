@@ -30,4 +30,15 @@ export class ProceduresService {
       })
       .sort({ voteDate: 1, voteEnd: 1, votes: -1 });
   }
+
+  async fetchPastProcedures() {
+    return await this.procedureModel
+      .find({
+        $or: [
+          { voteDate: { $lt: new Date() } },
+          { voteEnd: { $lt: new Date() } },
+        ],
+      })
+      .sort({ voteDate: -1, voteEnd: -1, votes: -1 });
+  }
 }
