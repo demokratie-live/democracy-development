@@ -12,4 +12,22 @@ export class ProceduresService {
     const procedures = await this.procedureModel.find();
     return procedures[0];
   }
+
+  async fetchUpcomingProcedures() {
+    return await this.procedureModel
+      .find({
+        $or: [
+          {
+            $and: [
+              { voteDate: { $gte: new Date() } },
+              {
+                $or: [{ voteEnd: { $exists: false } }, { voteEnd: undefined }],
+              },
+            ],
+          },
+          { voteEnd: { $gte: new Date() } },
+        ],
+      })
+      .sort({ voteDate: 1, voteEnd: 1, votes: -1 });
+  }
 }
