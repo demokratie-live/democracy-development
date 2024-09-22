@@ -7,18 +7,24 @@ describe('ProceduresService', () => {
   let procedureModel: Partial<typeof ProcedureModel>;
 
   beforeEach(async () => {
+    const mockResult = [
+      {
+        title: 'test',
+        id: 1,
+        type: '',
+        period: '',
+        importantDocuments: [],
+      },
+    ];
+
+    // Mock the chain of .find().sort().skip().limit()
+    const mockLimit = jest.fn().mockResolvedValue(mockResult);
+    const mockSkip = jest.fn().mockReturnValue({ limit: mockLimit });
+    const mockFind = jest.fn().mockReturnValue({ skip: mockSkip });
+
     procedureModel = {
-      find: jest.fn().mockReturnValue([
-        [
-          {
-            title: 'test',
-            id: 1,
-            type: '',
-            period: '',
-            importantDocuments: [],
-          },
-        ],
-      ]),
+      find: jest.fn().mockImplementation(mockFind),
+      countDocuments: jest.fn().mockResolvedValue(1),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -29,7 +35,7 @@ describe('ProceduresService', () => {
     }).compile();
 
     service = module.get<ProceduresService>(ProceduresService);
-    // jest.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -37,33 +43,27 @@ describe('ProceduresService', () => {
   });
 
   it('should return an array of procedures', () => {
-    expect(service.findAll()).resolves.toStrictEqual([
-      {
-        title: 'test',
-        id: 1,
-        type: '',
-        period: '',
-        importantDocuments: [],
-      },
-    ]);
+    expect(
+      service.findAll({
+        page: 1,
+        limit: 1,
+      }),
+    ).resolves.toStrictEqual({
+      procedures: [
+        {
+          title: 'test',
+          id: 1,
+          type: '',
+          period: '',
+          importantDocuments: [],
+        },
+      ],
+      count: 1,
+    });
   });
 
   it('should return an array of upcoming procedures', () => {
-    (procedureModel.find as jest.Mock).mockReturnValueOnce({
-      sort: jest.fn().mockReturnValueOnce({
-        limit: jest.fn().mockResolvedValue([
-          {
-            title: 'test',
-            id: 1,
-            type: '',
-            period: '',
-            importantDocuments: [],
-          },
-        ]),
-      }),
-    });
-
-    expect(service.fetchUpcomingProcedures()).resolves.toStrictEqual([
+    const mockResult = [
       {
         title: 'test',
         id: 1,
@@ -71,25 +71,38 @@ describe('ProceduresService', () => {
         period: '',
         importantDocuments: [],
       },
-    ]);
+    ];
+
+    // Mock the chain of .find().sort().skip().limit()
+    const mockLimit = jest.fn().mockResolvedValue(mockResult);
+    const mockSkip = jest.fn().mockReturnValue({ limit: mockLimit });
+    const mockSort = jest.fn().mockReturnValue({ skip: mockSkip });
+    const mockFind = jest.fn().mockReturnValue({ sort: mockSort });
+
+    // Assign the mock to procedureModel.find
+    (procedureModel.find as jest.Mock).mockImplementation(mockFind);
+
+    expect(
+      service.fetchUpcomingProcedures({
+        page: 1,
+        limit: 1,
+      }),
+    ).resolves.toStrictEqual({
+      procedures: [
+        {
+          title: 'test',
+          id: 1,
+          type: '',
+          period: '',
+          importantDocuments: [],
+        },
+      ],
+      count: 1,
+    });
   });
 
-  it('should return an array of past procedures', () => {
-    (procedureModel.find as jest.Mock).mockReturnValueOnce({
-      sort: jest.fn().mockReturnValueOnce({
-        limit: jest.fn().mockResolvedValue([
-          {
-            title: 'test',
-            id: 1,
-            type: '',
-            period: '',
-            importantDocuments: [],
-          },
-        ]),
-      }),
-    });
-
-    expect(service.fetchPastProcedures()).resolves.toStrictEqual([
+  it('should return an array of past procedures', async () => {
+    const mockResult = [
       {
         title: 'test',
         id: 1,
@@ -97,6 +110,33 @@ describe('ProceduresService', () => {
         period: '',
         importantDocuments: [],
       },
-    ]);
+    ];
+
+    // Mock the chain of .find().sort().skip().limit()
+    const mockLimit = jest.fn().mockResolvedValue(mockResult);
+    const mockSkip = jest.fn().mockReturnValue({ limit: mockLimit });
+    const mockSort = jest.fn().mockReturnValue({ skip: mockSkip });
+    const mockFind = jest.fn().mockReturnValue({ sort: mockSort });
+
+    // Assign the mock to procedureModel.find
+    (procedureModel.find as jest.Mock).mockImplementation(mockFind);
+
+    await expect(
+      service.fetchPastProcedures({
+        page: 1,
+        limit: 1,
+      }),
+    ).resolves.toStrictEqual({
+      procedures: [
+        {
+          title: 'test',
+          id: 1,
+          type: '',
+          period: '',
+          importantDocuments: [],
+        },
+      ],
+      count: 1,
+    });
   });
 });

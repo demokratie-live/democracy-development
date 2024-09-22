@@ -1,21 +1,33 @@
 import { Controller, Get } from '@nestjs/common';
 import { ProceduresService } from './procedures.service';
+import { Pagination } from '../decorators/pagination';
 
 @Controller('procedures')
 export class ProceduresController {
   constructor(private readonly proceduresService: ProceduresService) {}
   @Get()
-  findAll() {
-    return this.proceduresService.findAll();
+  findAll(@Pagination() pagination: { page: number; limit: number }) {
+    return this.proceduresService.findAll({
+      page: pagination.page,
+      limit: pagination.limit,
+    });
   }
 
   @Get('list/upcoming')
-  upcomingProcedures() {
-    return this.proceduresService.fetchUpcomingProcedures();
+  upcomingProcedures(
+    @Pagination() pagination: { page: number; limit: number },
+  ) {
+    return this.proceduresService.fetchUpcomingProcedures({
+      page: pagination.page,
+      limit: pagination.limit,
+    });
   }
 
   @Get('list/past')
-  pastProcedures() {
-    return this.proceduresService.fetchPastProcedures();
+  pastProcedures(@Pagination() pagination: { page: number; limit: number }) {
+    return this.proceduresService.fetchPastProcedures({
+      page: pagination.page,
+      limit: pagination.limit,
+    });
   }
 }

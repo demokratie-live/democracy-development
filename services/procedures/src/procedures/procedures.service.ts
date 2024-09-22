@@ -8,39 +8,63 @@ export class ProceduresService {
     @InjectModel('Procedure') private procedureModel: typeof ProcedureModel,
   ) {}
 
-  async findAll() {
-    const procedures = await this.procedureModel.find();
-    return procedures[0];
+  async findAll({ page, limit }: { page: number; limit: number }) {
+    const procedures = await this.procedureModel
+      .find()
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const count = await this.procedureModel.countDocuments();
+
+    return { procedures, count };
   }
 
-  async fetchUpcomingProcedures() {
-    return await this.procedureModel
-      .find({
-        $or: [
-          {
-            $and: [
-              { voteDate: { $gte: new Date() } },
-              {
-                $or: [{ voteEnd: { $exists: false } }, { voteEnd: undefined }],
-              },
-            ],
-          },
-          { voteEnd: { $gte: new Date() } },
-        ],
-      })
+  async fetchUpcomingProcedures({
+    page,
+    limit,
+  }: {
+    page: number;
+    limit: number;
+  }) {
+    const filter = {
+      $or: [
+        {
+          $and: [
+            { voteDate: { $gte: new Date() } },
+            {
+              $or: [{ voteEnd: { $exists: false } }, { voteEnd: undefined }],
+            },
+          ],
+        },
+        { voteEnd: { $gte: new Date() } },
+      ],
+    };
+    const procedures = await this.procedureModel
+      .find(filter)
       .sort({ voteDate: 1, voteEnd: 1, votes: -1 })
-      .limit(100);
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const count = await this.procedureModel.countDocuments(filter);
+
+    return { procedures, count };
   }
 
-  async fetchPastProcedures() {
-    return await this.procedureModel
-      .find({
-        $or: [
-          { voteDate: { $lt: new Date() } },
-          { voteEnd: { $lt: new Date() } },
-        ],
-      })
+  async fetchPastProcedures({ page, limit }: { page: number; limit: number }) {
+    const filter = {
+      $or: [
+        { voteDate: { $lt: new Date() } },
+        { voteEnd: { $lt: new Date() } },
+      ],
+    };
+    const procedures = await this.procedureModel
+      .find(filter)
       .sort({ voteDate: -1, voteEnd: -1, votes: -1 })
-      .limit(100);
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const count = await this.procedureModel.countDocuments(filter);
+
+    return { procedures, count };
   }
 }

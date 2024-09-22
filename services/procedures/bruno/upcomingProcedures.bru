@@ -5,12 +5,17 @@ meta {
 }
 
 get {
-  url: {{url}}/procedures/list/upcoming
+  url: {{url}}/procedures/list/upcoming?limit=1&page=2
   body: none
   auth: none
 }
 
+params:query {
+  limit: 1
+  page: 2
+}
+
 assert {
-  res.body[0].procedureId: isString
+  res.body.procedures[0].procedureId: isString
   res.status: eq 200
 }
