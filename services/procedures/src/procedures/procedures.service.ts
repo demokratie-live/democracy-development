@@ -28,7 +28,8 @@ export class ProceduresService {
           { voteEnd: { $gte: new Date() } },
         ],
       })
-      .sort({ voteDate: 1, voteEnd: 1, votes: -1 });
+      .sort({ voteDate: 1, voteEnd: 1, votes: -1 })
+      .limit(100);
   }
 
   async fetchPastProcedures() {
@@ -39,6 +40,7 @@ export class ProceduresService {
           { voteEnd: { $lt: new Date() } },
         ],
       })
-      .sort({ voteDate: -1, voteEnd: -1, votes: -1 });
+      .sort({ voteDate: -1, voteEnd: -1, votes: -1 })
+      .limit(100);
   }
 }

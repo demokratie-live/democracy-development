@@ -50,15 +50,17 @@ describe('ProceduresService', () => {
 
   it('should return an array of upcoming procedures', () => {
     (procedureModel.find as jest.Mock).mockReturnValueOnce({
-      sort: jest.fn().mockResolvedValue([
-        {
-          title: 'test',
-          id: 1,
-          type: '',
-          period: '',
-          importantDocuments: [],
-        },
-      ]),
+      sort: jest.fn().mockReturnValueOnce({
+        limit: jest.fn().mockResolvedValue([
+          {
+            title: 'test',
+            id: 1,
+            type: '',
+            period: '',
+            importantDocuments: [],
+          },
+        ]),
+      }),
     });
 
     expect(service.fetchUpcomingProcedures()).resolves.toStrictEqual([
@@ -74,15 +76,17 @@ describe('ProceduresService', () => {
 
   it('should return an array of past procedures', () => {
     (procedureModel.find as jest.Mock).mockReturnValueOnce({
-      sort: jest.fn().mockResolvedValue([
-        {
-          title: 'test',
-          id: 1,
-          type: '',
-          period: '',
-          importantDocuments: [],
-        },
-      ]),
+      sort: jest.fn().mockReturnValueOnce({
+        limit: jest.fn().mockResolvedValue([
+          {
+            title: 'test',
+            id: 1,
+            type: '',
+            period: '',
+            importantDocuments: [],
+          },
+        ]),
+      }),
     });
 
     expect(service.fetchPastProcedures()).resolves.toStrictEqual([
