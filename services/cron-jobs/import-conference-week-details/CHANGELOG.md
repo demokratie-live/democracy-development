@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.31](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.30...import-conference-week-details@v0.1.31) (2024-09-22)
+
+
+* 🐛 dockerignore handling ([75b4660](https://github.com/demokratie-live/democracy-development/commit/75b4660fae655d2cf9c3847611707dac177f82cc))
+
+
+### 👷 CI/CD
+
+* 👷 fix dockerignore handling ([0a21f30](https://github.com/demokratie-live/democracy-development/commit/0a21f3020ff68334d259743a87f14bec76dd6b1c))
+
 ## [0.1.30](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.29...import-conference-week-details@v0.1.30) (2024-08-17)
 
 
