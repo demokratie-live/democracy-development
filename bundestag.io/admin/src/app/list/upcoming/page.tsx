@@ -24,7 +24,7 @@ export default async function Page() {
 }
 
 async function getData(): Promise<IProcedure[]> {
-  const res = await fetch('http://procedures/procedures/list/upcoming', {
+  const res = await fetch(`${process.env.PROCEDURES_SERVER_URL}/procedures/list/upcoming`, {
     headers: {
       'Cache-Control': 'no-cache',
       cache: 'no-store',

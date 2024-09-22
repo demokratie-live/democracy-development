@@ -41,6 +41,8 @@ spec:
               value: 'http://non-named-votes-ai'
             - name: NON_NAMED_VOTES_AI_SECRET
               value: ${var.NON_NAMED_VOTES_AI_SECRET}
+            - name: PROCEDURES_SERVER_URL
+              value: 'http://procedures'
           ports:
             - containerPort: 4003
               name: http
