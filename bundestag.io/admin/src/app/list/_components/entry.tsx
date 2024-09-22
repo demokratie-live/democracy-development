@@ -8,7 +8,6 @@ interface EntryProps {
 }
 
 export default function Entry({ title, procedureId, votes }: EntryProps) {
-  console.log('Votes: ', votes);
   return (
     <article
       style={{

@@ -1,9 +1,10 @@
 import Entry from '../_components/entry';
 import { IProcedure } from '@democracy-deutschland/bundestagio-common';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
   const data = await getData();
-  console.log('dataVotes', data[0].procedureId, data[0].customData);
   return (
     <>
       <h1>Upcoming procedures</h1>
