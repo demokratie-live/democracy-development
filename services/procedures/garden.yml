@@ -32,7 +32,7 @@ spec:
         sourcePath: src
         mode: one-way
     overrides:
-      - command: [pnpm, --filter, procedures, run, garden:dev]
+      - command: [pnpm, --filter, procedures, run, dev]
   patchResources:
     - name: procedures
       kind: Deployment

@@ -11,6 +11,6 @@ get {
 }
 
 assert {
-  res.body.procedureId: isString 
+  res.body.procedures[0].procedureId: isString
   res.status: eq 200
 }

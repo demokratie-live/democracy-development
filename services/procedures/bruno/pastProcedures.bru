@@ -5,12 +5,16 @@ meta {
 }
 
 get {
-  url: {{url}}/procedures/list/past
+  url: {{url}}/procedures/list/past?limit=2
   body: none
   auth: none
 }
 
+params:query {
+  limit: 2
+}
+
 assert {
-  res.body[0].procedureId: isString
+  res.body.count: gt 0
   res.status: eq 200
 }
