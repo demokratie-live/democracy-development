@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.5.1](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.5.0...bundestag.io-admin@v3.5.1) (2024-09-22)
+
+
+* 🐛 disable cache for procedure lists ([e10d55c](https://github.com/demokratie-live/democracy-development/commit/e10d55c766e1b42a506a008470e7deb646655f89))
+
 ## [3.5.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.4.1...bundestag.io-admin@v3.5.0) (2024-09-22)
 
 
