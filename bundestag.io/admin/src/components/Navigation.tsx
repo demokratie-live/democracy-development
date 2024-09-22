@@ -9,6 +9,7 @@ const { Sider } = Layout;
 
 export const Navigation = () => {
   const pathname = usePathname();
+  const defaultSelectedKeys = pathname ? [pathname] : ['/'];
   return (
     <Sider
       breakpoint="lg"
@@ -18,7 +19,7 @@ export const Navigation = () => {
       }}
     >
       <div className="logo" />
-      <Menu theme="dark" mode="inline" defaultSelectedKeys={[pathname]}>
+      <Menu theme="dark" mode="inline" defaultSelectedKeys={defaultSelectedKeys}>
         <Menu.Item key="/">
           <Link href="/">
             <Icon type="user" />
