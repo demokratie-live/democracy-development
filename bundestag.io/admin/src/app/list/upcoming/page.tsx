@@ -1,9 +1,11 @@
 import Entry from '../_components/entry';
 import { IProcedure } from '@democracy-deutschland/bundestagio-common';
+import { unstable_noStore as noStore } from 'next/cache';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Page() {
+  noStore();
   const data = await getData();
   return (
     <>
