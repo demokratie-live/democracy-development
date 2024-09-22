@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.5.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.4.1...bundestag.io-admin@v3.5.0) (2024-09-22)
+
+
+* 🐛 add config for PROCEDURES_SERVER_URL ([4ad710e](https://github.com/demokratie-live/democracy-development/commit/4ad710ec907dfc767a4a9fb38a92b6a3559a66e8))
+* 🐛 build issues ([50cfc5c](https://github.com/demokratie-live/democracy-development/commit/50cfc5c3bb21b495bfd8311c1f28ae26dd0a1718))
+* 🐛 do not cache past and upcoming lists ([7038e1b](https://github.com/demokratie-live/democracy-development/commit/7038e1b0660d8f35994914e7770aa5700d91a3f5))
+
+
+### 🚀 Feature
+
+* 🚀 add new past and upcoming list ([35b9fe5](https://github.com/demokratie-live/democracy-development/commit/35b9fe56efd2e7159c0fc55b316e6cf3427be084))
+
 ## [3.4.1](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.4.0...bundestag.io-admin@v3.4.1) (2024-08-17)
 
 
