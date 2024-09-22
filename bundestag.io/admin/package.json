@@ -12,6 +12,7 @@
     "@ant-design/icons": "^5.3.7",
     "@apollo/client": "^3.10.4",
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
+    "@democracy-deutschland/bundestagio-common": "workspace:^",
     "@graphql-typed-document-node/core": "^3.2.0",
     "antd": "5.16.1",
     "axios": "^1.7.2",

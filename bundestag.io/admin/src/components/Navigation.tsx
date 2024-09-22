@@ -1,4 +1,5 @@
-import { useRouter } from 'next/router';
+'use client';
+import { usePathname } from 'next/navigation';
 import { Layout, Menu } from 'antd';
 import Link from 'next/link';
 import Icon from '@ant-design/icons/lib/components/Icon';
@@ -7,7 +8,7 @@ import { signOut } from 'next-auth/react';
 const { Sider } = Layout;
 
 export const Navigation = () => {
-  const router = useRouter();
+  const pathname = usePathname();
   return (
     <Sider
       breakpoint="lg"
@@ -17,21 +18,29 @@ export const Navigation = () => {
       }}
     >
       <div className="logo" />
-      <Menu theme="dark" mode="inline" defaultSelectedKeys={[router.pathname]}>
+      <Menu theme="dark" mode="inline" defaultSelectedKeys={[pathname]}>
         <Menu.Item key="/">
-          <Link href="/" legacyBehavior>
-            <a>
-              <Icon type="user" />
-              <span className="nav-text">Home</span>
-            </a>
+          <Link href="/">
+            <Icon type="user" />
+            <span className="nav-text">Home</span>
           </Link>
         </Menu.Item>
         <Menu.Item key="/procedures">
-          <Link href="/procedures" legacyBehavior>
-            <a>
-              <Icon type="pie-chart" />
-              <span className="nav-text">Vorgänge</span>
-            </a>
+          <Link href="/procedures">
+            <Icon type="pie-chart" />
+            <span className="nav-text">Vorgänge</span>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="/list/past">
+          <Link href="/list/past">
+            <Icon type="pie-chart" />
+            <span className="nav-text">Vergangen</span>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="/list/upcoming">
+          <Link href="/list/upcoming">
+            <Icon type="pie-chart" />
+            <span className="nav-text">Kommende</span>
           </Link>
         </Menu.Item>
         <Menu.Item key="/signout" onClick={() => signOut()}>
