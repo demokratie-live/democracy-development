@@ -27,6 +27,7 @@ async function getData(): Promise<IProcedure[]> {
   const res = await fetch('http://procedures/procedures/list/upcoming', {
     headers: {
       'Cache-Control': 'no-cache',
+      cache: 'no-store',
     },
   });
 
