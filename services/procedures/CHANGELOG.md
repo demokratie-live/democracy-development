@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.3](https://github.com/demokratie-live/democracy-development/compare/procedures@v0.0.2...procedures@v0.0.3) (2024-09-23)
+
+
+### 🚀 Feature
+
+* **procedure:** 🚀 add pagination ([5476617](https://github.com/demokratie-live/democracy-development/commit/547661733d1e312b7b19dd6bfe0aa73a6af8c32c))
+
 ## 0.0.2 (2024-09-22)
 
 
