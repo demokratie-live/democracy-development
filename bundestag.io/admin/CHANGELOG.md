@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.6.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.5.1...bundestag.io-admin@v3.6.0) (2024-09-23)
+
+
+* **garden:** 🧑‍🌾 add procedures service as dependency for bio-admin ([26aee6f](https://github.com/demokratie-live/democracy-development/commit/26aee6fcfe0c6a1a9833b739d6b277b5e322892c))
+
+
+### 🚀 Feature
+
+* **procedure:** 🚀 add pagination ([5476617](https://github.com/demokratie-live/democracy-development/commit/547661733d1e312b7b19dd6bfe0aa73a6af8c32c))
+
 ## [3.5.1](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.5.0...bundestag.io-admin@v3.5.1) (2024-09-22)
 
 
