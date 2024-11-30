@@ -19,12 +19,26 @@
       "cwd": "${workspaceFolder}/services/cron-jobs/crawler",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": "Run import-conference-week-details dev",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev"],
+      "cwd": "${workspaceFolder}/services/cron-jobs/import-conference-week-details",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ],
   "compounds": [
     {
       "name": "Debug crawler dev",
       "configurations": ["Run crawler dev", "Attach to Process"]
+    },
+    {
+      "name": "Debug import-conference-week-details dev",
+      "configurations": ["Run import-conference-week-details dev", "Attach to Process"]
     }
   ]
 }
