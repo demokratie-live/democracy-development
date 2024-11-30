@@ -35,21 +35,26 @@ export default async function Page({ searchParams }: { searchParams: { page?: st
     <>
       <h1>Upcoming procedures</h1>
 
-      <PaginationNavigation currentPage={currentPage} totalPages={totalPages} />
+      {totalPages === 0 && <p>There are no upcoming procedures.</p>}
+      {totalPages > 0 && (
+        <>
+          <PaginationNavigation currentPage={currentPage} totalPages={totalPages} />
 
-      {procedures.map((procedure) => (
-        <Entry
-          key={procedure.id}
-          title={procedure.title}
-          procedureId={procedure.procedureId}
-          votes={procedure.customData?.voteResults.partyVotes.map((vote) => ({
-            party: vote.party,
-            decision: vote.main,
-          }))}
-        />
-      ))}
+          {procedures.map((procedure) => (
+            <Entry
+              key={procedure.id}
+              title={procedure.title}
+              procedureId={procedure.procedureId}
+              votes={procedure.customData?.voteResults.partyVotes.map((vote) => ({
+                party: vote.party,
+                decision: vote.main,
+              }))}
+            />
+          ))}
 
-      <PaginationNavigation currentPage={currentPage} totalPages={totalPages} />
+          <PaginationNavigation currentPage={currentPage} totalPages={totalPages} />
+        </>
+      )}
     </>
   );
 }
