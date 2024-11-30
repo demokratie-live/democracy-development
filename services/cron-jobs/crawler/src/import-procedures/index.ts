@@ -1,17 +1,32 @@
-import { getCron, mongoConnect, setCronStart, setCronSuccess } from '@democracy-deutschland/bundestagio-common';
 import { CONFIG } from '../config';
-import importProcedures from './import-procedures';
+import { Logger } from '../logger';
+import { connectToDatabase } from '../database';
+import { handleCronJob } from '../cronJob';
 
-(async () => {
-  await mongoConnect(CONFIG.DB_URL);
-  const cronjob = await getCron({ name: 'import-procedures' });
-  console.log('cronjob', cronjob.lastSuccessStartDate);
-  await setCronStart({ name: 'import-procedures' });
-  await importProcedures({
-    ...CONFIG,
-    IMPORT_PROCEDURES_FILTER_AFTER:
-      cronjob?.lastSuccessStartDate?.toISOString() || CONFIG.IMPORT_PROCEDURES_FILTER_AFTER,
-  });
-  await setCronSuccess({ name: 'import-procedures', successStartDate: cronjob.lastStartDate || new Date() });
-  process.exit(0);
-})();
+/**
+ * Runs the import procedures by connecting to the database, handling the cron job, and exiting the process.
+ * @param config - The configuration object.
+ * @param logger - The logger instance.
+ */
+const logImportStart = (logger: Logger) => {
+  logger.info('Starting import procedures...');
+};
+
+const logImportEnd = (logger: Logger) => {
+  logger.info('Import procedures completed.');
+};
+
+const connectAndRunImport = async (config: typeof CONFIG, logger: Logger) => {
+  await connectToDatabase(config.DB_URL, logger);
+  await handleCronJob(config, logger);
+};
+
+const runImport = async (config: typeof CONFIG, logger: Logger) => {
+  logImportStart(logger);
+  await connectAndRunImport(config, logger);
+  logImportEnd(logger);
+};
+
+export const runImportProcedures = async (config: typeof CONFIG, logger: Logger): Promise<void> => {
+  await runImport(config, logger);
+};

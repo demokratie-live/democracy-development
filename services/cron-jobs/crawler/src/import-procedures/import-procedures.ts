@@ -14,52 +14,167 @@ import axios from '../axios';
 import { IProcedure } from '@democracy-deutschland/bundestagio-common/dist/models/Procedure/schema';
 import { IDocument } from '@democracy-deutschland/bundestagio-common/dist/models/Procedure/Procedure/Document';
 import { IProcessFlow } from '@democracy-deutschland/bundestagio-common/dist/models/Procedure/Procedure/ProcessFlow';
-import { germanDateFormat } from './utils';
+import { formatGermanDate } from './utils';
 
-const config = new Configuration({
-  apiKey: `ApiKey ${CONFIG.DIP_API_KEY}`, // Replace #YOUR_API_KEY# with your api key
-});
-const vorgangApi = new VorgngeApi(config, undefined, axios);
-const vorgangspositionenApi = new VorgangspositionenApi(config, undefined, axios);
+const createConfiguration = (apiKey: string) => {
+  return new Configuration({
+    apiKey: `ApiKey ${apiKey}`,
+  });
+};
 
-export default async function importProcedures(config: typeof CONFIG): Promise<void> {
-  const {
-    IMPORT_PROCEDURES_START_CURSOR,
-    IMPORT_PROCEDURES_CHUNK_SIZE,
-    IMPORT_PROCEDURES_CHUNK_ROUNDS,
-    IMPORT_PROCEDURES_FILTER_BEFORE,
-    IMPORT_PROCEDURES_FILTER_AFTER,
-    IMPORT_PROCEDURES_FILTER_TYPES,
-  } = config;
+const config = createConfiguration(CONFIG.DIP_API_KEY);
 
-  const variables = {
-    cursor: IMPORT_PROCEDURES_START_CURSOR,
-    filter: {
-      after: IMPORT_PROCEDURES_FILTER_AFTER,
-      before: IMPORT_PROCEDURES_FILTER_BEFORE,
-      types: IMPORT_PROCEDURES_FILTER_TYPES,
-    },
-    limit: IMPORT_PROCEDURES_CHUNK_SIZE,
-  };
+const createApiInstances = (config: Configuration) => {
+  const vorgangApi = new VorgngeApi(config, undefined, axios);
+  const vorgangspositionenApi = new VorgangspositionenApi(config, undefined, axios);
+  return { vorgangApi, vorgangspositionenApi };
+};
+
+const { vorgangApi, vorgangspositionenApi } = createApiInstances(config);
+
+const logImportDetails = (
+  rounds: number,
+  size: number,
+  filter: { after: string; before: string; types?: string[] },
+) => {
   log(`
       --------------------------------------
-      Importing ${IMPORT_PROCEDURES_CHUNK_ROUNDS}*${IMPORT_PROCEDURES_CHUNK_SIZE} procedures.
-      Between ${variables.filter.after} and ${variables.filter.before}.
-      Filter: ${
-        variables.filter.types && variables.filter.types.length > 0
-          ? `[types: ${variables.filter.types.join(', ')}]`
-          : 'none'
-      }
+      Importing ${rounds}*${size} procedures.
+      Between ${filter.after} and ${filter.before}.
+      Filter: ${filter.types && filter.types.length > 0 ? `[types: ${filter.types.join(', ')}]` : 'none'}
       --------------------------------------
   `);
+};
 
-  if (variables.limit % 50 !== 0)
+const createHistory = (vorgangspositionen: Vorgangsposition[]): IProcessFlow[] => {
+  return vorgangspositionen.map<IProcessFlow>((d) => {
+    const getFindSpot = (d: Vorgangsposition) => {
+      const { fundstelle } = d;
+      if (!fundstelle) return;
+      const { herausgeber, dokumentart, dokumentnummer } = fundstelle;
+      const datum = formatGermanDate(new Date(fundstelle.datum));
+      const result = `${datum} - ${herausgeber}-${dokumentart} ${dokumentnummer}`;
+      const { anfangsseite, endseite, anfangsquadrant, endquadrant } = fundstelle;
+      if (![anfangsseite, endseite, anfangsquadrant, endquadrant].every(Boolean)) return result;
+      return `${result}, S. ${anfangsseite}${anfangsquadrant} - ${endseite}${endquadrant}`;
+    };
+
+    const getDecision = (d: Vorgangsposition) => {
+      const { beschlussfassung } = d;
+      if (!beschlussfassung) return [];
+      return beschlussfassung.map((b) => ({
+        page: b.seite,
+        tenor: b.beschlusstenor,
+        document: b.dokumentnummer,
+        type: b.abstimmungsart,
+        comment: b.abstimm_ergebnis_bemerkung,
+        foundation: b.grundlage,
+        majority: b.mehrheit,
+      }));
+    };
+
+    return {
+      assignment: d.fundstelle.herausgeber,
+      initiator:
+        d.fundstelle.urheber.length > 0
+          ? `${d.vorgangsposition}, Urheber : ${d.fundstelle.urheber.join(', ')}`
+          : d.vorgangsposition,
+      findSpot: getFindSpot(d),
+      findSpotUrl: d.fundstelle.pdf_url,
+      decision: getDecision(d),
+      abstract: d.abstract,
+      date: new Date(d.fundstelle.datum),
+    };
+  });
+};
+
+const createImportantDocuments = (vorgangspositionen: Vorgangsposition[]): IDocument[] => {
+  return vorgangspositionen
+    .filter((v) => v.fundstelle?.dokumentart === 'Drucksache')
+    .map<IDocument>((d) => ({
+      editor: d.fundstelle.herausgeber,
+      number: d.fundstelle.dokumentnummer,
+      type: d.fundstelle.drucksachetyp!,
+      url: d.fundstelle.pdf_url!,
+    }));
+};
+
+const createLegalValidity = (inkrafttreten: { datum: string; erlaeuterung?: string }[]): string[] => {
+  return inkrafttreten.map((i) => `${i.datum}${i.erlaeuterung ? ` (${i.erlaeuterung})` : ''}`);
+};
+
+const createProcedure = (node: Vorgang, vorgangspositionen: Vorgangsposition[]): Partial<IProcedure> => {
+  const importantDocuments = createImportantDocuments(vorgangspositionen);
+
+  const legalValidity = createLegalValidity(node.inkrafttreten || []);
+
+  const history = createHistory(vorgangspositionen);
+
+  return {
+    ...node,
+    procedureId: node.id,
+    type: node.vorgangstyp,
+    tags: node.deskriptor?.map((d) => d.name) || [],
+    title: node.titel,
+    currentStatus: node.beratungsstand,
+    period: node.wahlperiode,
+    subjectGroups: node.sachgebiet,
+    importantDocuments,
+    gestOrderNumber: node.gesta,
+    legalValidity,
+    history,
+  };
+};
+
+const fetchVorgangspositionen = async (vorgangspositionenApi: VorgangspositionenApi, nodeId: number) => {
+  return vorgangspositionenApi
+    .getVorgangspositionList({
+      fVorgang: nodeId,
+    })
+    .then((res) => res.data.documents);
+};
+
+const processProcedures = async (edges: { node: Vorgang }[], vorgangspositionenApi: VorgangspositionenApi) => {
+  let procedures: Partial<IProcedure>[] = [];
+
+  for (const edge of edges) {
+    log(`${edge.node.aktualisiert} ${edge.node.id} - ${edge.node.titel}`);
+    const { node } = edge;
+    const vorgangspositionen = await fetchVorgangspositionen(vorgangspositionenApi, Number(node.id));
+    const procedure = createProcedure(node, vorgangspositionen);
+    procedures = [...procedures, procedure];
+  }
+
+  await ProcedureModel.bulkWrite(
+    procedures.map((node) => ({
+      updateOne: {
+        filter: { procedureId: node.procedureId },
+        update: { $set: node },
+        upsert: true,
+      },
+    })),
+  );
+};
+
+const validateVariables = (variables: { limit: number }) => {
+  if (variables.limit % 50 !== 0) {
     throw new Error(
-      'DIP has a fixed page size of 50. Make sure your limt is a multiple of 50 to avoid inconsistencies with cursor based pagination.',
+      'DIP has a fixed page size of 50. Make sure your limit is a multiple of 50 to avoid inconsistencies with cursor based pagination.',
     );
+  }
+};
 
-  for (const round of Array.from(Array(IMPORT_PROCEDURES_CHUNK_ROUNDS).keys())) {
-    log(`Round ${round} - Cursor ${variables.cursor}`);
+const logRoundDetails = (round: number, cursor: string) => {
+  log(`Round ${round} - Cursor ${cursor}`);
+};
+
+const handleImportRounds = async (
+  rounds: number,
+  variables: { cursor: string; limit: number; filter: ReturnType<typeof createProcedureFilter> },
+  vorgangspositionenApi: VorgangspositionenApi,
+) => {
+  for (const round of Array.from(Array(rounds).keys())) {
+    logRoundDetails(round, variables.cursor);
 
     const {
       edges,
@@ -74,101 +189,56 @@ export default async function importProcedures(config: typeof CONFIG): Promise<v
       offset: 0,
     });
 
-    let procedures: Partial<IProcedure>[] = [];
+    await processProcedures(edges, vorgangspositionenApi);
 
-    for (const edge of edges) {
-      log(`${edge.node.aktualisiert} ${edge.node.id} - ${edge.node.titel}`);
-      const { node } = edge;
-      const vorgangspositionen = await vorgangspositionenApi
-        .getVorgangspositionList({
-          fVorgang: Number(node.id),
-        })
-        .then((res) => res.data.documents);
-
-      const importantDocuments = vorgangspositionen
-        .filter((v) => v.fundstelle?.dokumentart === 'Drucksache')
-        .map<IDocument>((d) => ({
-          editor: d.fundstelle.herausgeber,
-          number: d.fundstelle.dokumentnummer,
-          type: d.fundstelle.drucksachetyp!,
-          url: d.fundstelle.pdf_url!,
-        }));
-
-      const legalValidity =
-        node.inkrafttreten?.map((i) => `${i.datum}${i.erlaeuterung ? ` (${i.erlaeuterung})` : ''}`) || [];
-
-      const history = vorgangspositionen.map<IProcessFlow>((d) => {
-        const getFindSpot = (d: Vorgangsposition) => {
-          const { fundstelle } = d;
-          if (!fundstelle) return;
-          const { herausgeber, dokumentart, dokumentnummer } = fundstelle;
-          const datum = germanDateFormat.format(new Date(fundstelle.datum));
-          const result = `${datum} - ${herausgeber}-${dokumentart} ${dokumentnummer}`;
-          const { anfangsseite, endseite, anfangsquadrant, endquadrant } = fundstelle;
-          if (![anfangsseite, endseite, anfangsquadrant, endquadrant].every(Boolean)) return result;
-          return `${result}, S. ${anfangsseite}${anfangsquadrant} - ${endseite}${endquadrant}`;
-        };
-
-        const getDecision = (d: Vorgangsposition) => {
-          const { beschlussfassung } = d;
-          if (!beschlussfassung) return [];
-          return beschlussfassung.map((b) => ({
-            page: b.seite,
-            tenor: b.beschlusstenor,
-            document: b.dokumentnummer,
-            type: b.abstimmungsart,
-            comment: b.abstimm_ergebnis_bemerkung,
-            foundation: b.grundlage,
-            majority: b.mehrheit,
-          }));
-        };
-
-        return {
-          assignment: d.fundstelle.herausgeber,
-          initiator:
-            d.fundstelle.urheber.length > 0
-              ? `${d.vorgangsposition}, Urheber : ${d.fundstelle.urheber.join(', ')}`
-              : d.vorgangsposition,
-          findSpot: getFindSpot(d),
-          findSpotUrl: d.fundstelle.pdf_url,
-          decision: getDecision(d),
-          abstract: d.abstract,
-          date: new Date(d.fundstelle.datum),
-        };
-      });
-
-      const procedure: Partial<IProcedure> = {
-        ...node,
-        procedureId: node.id,
-        type: node.vorgangstyp,
-        tags: node.deskriptor?.map((d) => d.name) || [],
-        title: node.titel,
-        currentStatus: node.beratungsstand,
-        period: node.wahlperiode,
-        subjectGroups: node.sachgebiet,
-        importantDocuments,
-        gestOrderNumber: node.gesta,
-        legalValidity,
-        history,
-      };
-
-      procedures = [...procedures, procedure];
-    }
-
-    await ProcedureModel.bulkWrite(
-      procedures.map((node) => ({
-        updateOne: {
-          filter: { procedureId: node.procedureId },
-          update: { $set: node },
-          upsert: true,
-        },
-      })),
-    );
     if (!hasNextPage) {
       break;
     }
     variables.cursor = endCursor;
   }
+};
+
+const createProcedureFilter = (after: string, before: string, types?: string[]) => ({
+  after,
+  before,
+  types,
+});
+
+const createVariables = (
+  startCursor: string,
+  chunkSize: number,
+  filterAfter: string,
+  filterBefore: string,
+  filterTypes?: string[],
+) => ({
+  cursor: startCursor,
+  filter: createProcedureFilter(filterAfter, filterBefore, filterTypes),
+  limit: chunkSize,
+});
+
+export default async function importProcedures(config: typeof CONFIG): Promise<void> {
+  const {
+    IMPORT_PROCEDURES_START_CURSOR,
+    IMPORT_PROCEDURES_CHUNK_SIZE,
+    IMPORT_PROCEDURES_CHUNK_ROUNDS,
+    IMPORT_PROCEDURES_FILTER_BEFORE,
+    IMPORT_PROCEDURES_FILTER_AFTER,
+    IMPORT_PROCEDURES_FILTER_TYPES,
+  } = config;
+
+  const variables = createVariables(
+    IMPORT_PROCEDURES_START_CURSOR,
+    IMPORT_PROCEDURES_CHUNK_SIZE,
+    IMPORT_PROCEDURES_FILTER_AFTER,
+    IMPORT_PROCEDURES_FILTER_BEFORE,
+    IMPORT_PROCEDURES_FILTER_TYPES,
+  );
+
+  logImportDetails(IMPORT_PROCEDURES_CHUNK_ROUNDS, IMPORT_PROCEDURES_CHUNK_SIZE, variables.filter);
+
+  validateVariables(variables);
+
+  await handleImportRounds(IMPORT_PROCEDURES_CHUNK_ROUNDS, variables, vorgangspositionenApi);
 }
 
 export type ProcedureFilter = {
@@ -205,7 +275,6 @@ const getVorgaenge = async (args: ProceduresArgs) => {
       fAktualisiertEnd: args.filter?.end?.toISOString(),
       fVorgangstyp: args.filter?.types,
     });
-    // const res = await this.get(`/api/v1/vorgang`, { ...filter, cursor });
     totalCount = Number(data.numFound);
     documents = documents.concat(data.documents!);
     hasNextPage = cursor !== data.cursor;
