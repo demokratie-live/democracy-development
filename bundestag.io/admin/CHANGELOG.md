@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.7.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.6.0...bundestag.io-admin@v3.7.0) (2024-11-30)
+
+
+* **admin:** reuse duplicate code of new lists ([acab505](https://github.com/demokratie-live/democracy-development/commit/acab505a6afa2b7535eff7c3a634d6b49e77c993))
+
+
+### 🚀 Feature
+
+* **admin:** show description if procedure list is empty ([b30f8ca](https://github.com/demokratie-live/democracy-development/commit/b30f8ca6a0ea2d3475ccfa1051eddd15cbd42b52))
+
 ## [3.6.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.5.1...bundestag.io-admin@v3.6.0) (2024-09-23)
 
 
