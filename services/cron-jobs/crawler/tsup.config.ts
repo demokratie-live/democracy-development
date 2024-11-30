@@ -3,5 +3,5 @@ import { tsupConfig } from 'tsup-config';
 
 export default defineConfig({
   ...tsupConfig,
-  entry: ['./src/import-procedures'],
+  entry: ['./src/main.ts'],
 });
