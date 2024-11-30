@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.32](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.31...import-conference-week-details@v0.1.32) (2024-11-30)
+
+
+* 🐛 duplicate unique key error and start with later week ([b026346](https://github.com/demokratie-live/democracy-development/commit/b026346e6c399a9f783eeb065912efb7014fec0c))
+
 ## [0.1.31](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.30...import-conference-week-details@v0.1.31) (2024-09-22)
 
 
