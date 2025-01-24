@@ -23,7 +23,7 @@
     "cron": "^3.1.7",
     "jsonwebtoken": "^9.0.2",
     "mongoosastic": "^4.6.0",
-    "mongoose": "6.0.12",
+    "mongoose": "6.11.3",
     "mongoose-diff-history": "github:mimani/mongoose-diff-history#master",
     "omit-deep": "^0.3.0",
     "ts-mongoose": "^0.0.24"
