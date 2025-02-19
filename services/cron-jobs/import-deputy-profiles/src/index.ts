@@ -66,7 +66,12 @@ const start = async () => {
             URL: {
               selector: 'div.bt-slide-content > a',
               attr: 'href',
-              convert: (href: string) => `https://www.bundestag.de${href}`,
+              convert: (href: string) => {
+                if (href.startsWith('http')) {
+                  return href;
+                }
+                return `https://www.bundestag.de${href}`;
+              },
             },
             webId: {
               selector: 'div.bt-slide-content > a',
@@ -91,7 +96,12 @@ const start = async () => {
             imgURL: {
               selector: '.bt-bild-standard > img',
               attr: 'data-img-md-normal',
-              convert: (src: string) => `https://www.bundestag.de${src}`,
+              convert: (src: string) => {
+                if (src.startsWith('http')) {
+                  return src;
+                }
+                return `https://www.bundestag.de${src}`;
+              },
             },
             biography: {
               listItem: '#ptv1 p',
@@ -121,6 +131,12 @@ const start = async () => {
                 URL: {
                   selector: 'a',
                   attr: 'href',
+                  convert: (href: string) => {
+                    if (href.startsWith('http')) {
+                      return href;
+                    }
+                    return `https://www.bundestag.de${href}`;
+                  },
                 },
               },
             },
