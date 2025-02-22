@@ -1,25 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getUsername } from '../index';
-import { IDeputyLink } from '@democracy-deutschland/bundestagio-common/dist/models/Deputy/Deputy/Link';
-
-// Mock bundestagio-common
-vi.mock('@democracy-deutschland/bundestagio-common', () => ({
-  mongoConnect: vi.fn(),
-  setCronStart: vi.fn(),
-  setCronSuccess: vi.fn(),
-  setCronError: vi.fn(),
-  DeputyModel: {
-    findOne: vi.fn(),
-    updateOne: vi.fn(),
-    countDocuments: vi.fn(),
-  },
-}));
+import { describe, it, expect } from 'vitest';
+import { getUsername } from '../utils';
+import { IDeputyLink } from '../types';
 
 describe('Unit Tests', () => {
-  beforeEach(() => {
-    vi.resetAllMocks();
-  });
-
   describe('getUsername', () => {
     it('returns Instagram username without prefix', () => {
       const link: IDeputyLink = { URL: 'https://www.instagram.com/johndoe', name: 'Instagram' };
