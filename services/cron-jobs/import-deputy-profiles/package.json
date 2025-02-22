@@ -10,18 +10,21 @@
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
     "build": "tsc",
     "prepublishOnly": "pnpm build",
-    "start": "node ./build/index.js"
+    "start": "node ./build/index.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@democracy-deutschland/bundestagio-common": "workspace:*",
     "http2": "^3.3.7",
-    "scrape-it": "^5.3.2"
+    "scrape-it": "^6.1.4"
   },
   "devDependencies": {
-    "dotenv": "^16.4.5",
-    "ts-node-dev": "^1.1.8",
-    "ts-unused-exports": "^8.0.5",
-    "typescript": "^5.4.5"
+    "dotenv": "^16.4.7",
+    "ts-node-dev": "^2.0.0",
+    "ts-unused-exports": "^11.0.1",
+    "tsx": "^4.11.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.6"
   }
 }
