@@ -48,7 +48,7 @@ const getPlenaryMinutes = (plenaryMinutes: cheerio.Cheerio, period: number): Ple
       date: m.toDate(),
       period,
       meeting: parseInt(match.meeting),
-      xml: `https://www.bundestag.de${xmlLink}`,
+      xml: xmlLink?.startsWith('http') ? xmlLink : `https://www.bundestag.de${xmlLink}`,
     };
     plenaryMinutesItems.push(plenaryMinutesItem);
   });

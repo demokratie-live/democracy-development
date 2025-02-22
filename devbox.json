@@ -1,5 +1,5 @@
 {
-  "packages": ["pnpm@latest", "nodejs_18@latest"],
+  "packages": ["pnpm@latest", "nodejs@22.13.1"],
   "env": {
     "NODE_ENV": "development"
   },

@@ -174,7 +174,11 @@ namespace Parser {
                     // The result can be accessed through the `m`-variable.
                     o.forEach((match, group) => {
                       if (group === 1) {
-                        top.article = `https://www.bundestag.de${match}`;
+                        if (match.startsWith("http")) {
+                          top.article = match;
+                        } else {
+                          top.article = `https://www.bundestag.de${match}`;
+                        }
                       }
                     });
                   }
