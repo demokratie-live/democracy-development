@@ -5,11 +5,14 @@ import readline = require('readline');
 
 export = Documents_Evaluator;
 
+type XmlNode = Node;
+type XmlResult = Record<string, unknown>;
+
 namespace Documents_Evaluator {
   /**
    * Evaluates a xPath-Expression to a xml document and returning the matching content as JSON.
    */
-  export class DocumentEvaluater {
+  export class DocumentEvaluater<T = XmlResult> {
     private readableStream: NodeJS.ReadableStream;
 
     private xml2jsOptions = {
@@ -37,7 +40,7 @@ namespace Documents_Evaluator {
       console.log(`[xmldom warning]: ${msg}`);
     }
 
-    public async evaluate(xPathExpression: string): Promise<any[] | undefined> {
+    public async evaluate(xPathExpression: string): Promise<T[] | undefined> {
       const xml = await this.removeXmlHeader(this.readableStream);
 
       const parser = new DOMParser({
@@ -57,9 +60,9 @@ namespace Documents_Evaluator {
       });
       const doc = parser.parseFromString(xml);
 
-      const nodes = xpath.select(xPathExpression, doc) as any[];
+      const nodes = xpath.select(xPathExpression, doc) as XmlNode[];
 
-      let elements: any[] = [];
+      let elements: T[] = [];
       if (nodes) {
         for (const node of nodes) {
           const value = await this.getValueFromSelectedNode(node);
@@ -70,15 +73,19 @@ namespace Documents_Evaluator {
       }
     }
 
-    protected getValueFromSelectedNode(node: xpath.SelectedValue): Promise<any> {
+    protected getValueFromSelectedNode(node: xpath.SelectedValue): Promise<T> {
       return new Promise((resolve, reject) => {
         if (node == null) {
-          return resolve(null);
+          return resolve({} as T);
         }
 
-        parseString(node, this.xml2jsOptions, (err: any, result: any) => {
+        if (typeof node === 'string') {
+          return resolve(node as unknown as T);
+        }
+
+        parseString(node, this.xml2jsOptions, (err: Error | null, result: XmlResult) => {
           if (err == null) {
-            resolve(result);
+            resolve(result as unknown as T);
           } else {
             reject(err);
           }
@@ -93,7 +100,7 @@ namespace Documents_Evaluator {
     private async removeXmlHeader(stream: NodeJS.ReadableStream): Promise<string> {
       return new Promise((resolve) => {
         const rl = readline.createInterface(stream);
-        let output: string;
+        let output = ''; // Initialize output with empty string
 
         rl.on('line', (line) => {
           const isDeclarationHeader = line.match(/^\<(\?|\!).*$/);

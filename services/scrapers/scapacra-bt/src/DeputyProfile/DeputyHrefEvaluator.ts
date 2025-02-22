@@ -4,7 +4,7 @@ import { SelectedValue } from 'xpath';
 /**
  * Evaluates all href attributes from html list.
  */
-export class DeputyHrefEvaluator extends DocumentEvaluater {
+export class DeputyHrefEvaluator extends DocumentEvaluater<string> {
   /**
    * Finds all href links from the HTML website.
    */
