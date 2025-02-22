@@ -25,6 +25,9 @@
   "[ignore]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   },
-  "conventionalCommits.scopes": ["push-send-queued"],
-  "CodeGPT.apiKey": "OpenAI"
+  "github.copilot.chat.reviewSelection.instructions": [
+    {
+      "file": ".github/prompts/always.prompt.md"
+    }
+  ]
 }
