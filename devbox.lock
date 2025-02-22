@@ -1,0 +1,121 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "resolved": "github:NixOS/nixpkgs/dad564433178067be1fbdfcce23b546254b6d641?lastModified=1740019556&narHash=sha256-vn285HxnnlHLWnv59Og7muqECNMS33mWLM14soFIv2g%3D"
+    },
+    "nodejs_18@latest": {
+      "last_modified": "2025-02-07T11:26:36Z",
+      "plugin_version": "0.0.2",
+      "resolved": "github:NixOS/nixpkgs/d98abf5cf5914e5e4e9d57205e3af55ca90ffc1d#nodejs_18",
+      "source": "devbox-search",
+      "version": "18.20.6",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/23bg0nd47da73sgljxizkg7v9khdw4az-nodejs-18.20.6",
+              "default": true
+            },
+            {
+              "name": "libv8",
+              "path": "/nix/store/dvrqs027ljiya83mys1qv08cjc6fc4h0-nodejs-18.20.6-libv8"
+            }
+          ],
+          "store_path": "/nix/store/23bg0nd47da73sgljxizkg7v9khdw4az-nodejs-18.20.6"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/v9w21arqydxj1hnswv31l2vk7q3cdqq3-nodejs-18.20.6",
+              "default": true
+            },
+            {
+              "name": "libv8",
+              "path": "/nix/store/aikhb8l9qdq6f2fvgcjh6n97y9l6lnrw-nodejs-18.20.6-libv8"
+            }
+          ],
+          "store_path": "/nix/store/v9w21arqydxj1hnswv31l2vk7q3cdqq3-nodejs-18.20.6"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/812qxhp3sz2ilhg9fs02ckbmwpchxd17-nodejs-18.20.6",
+              "default": true
+            },
+            {
+              "name": "libv8",
+              "path": "/nix/store/vwsmzjxmygvkz87v8bz2smvwhxzvsdds-nodejs-18.20.6-libv8"
+            }
+          ],
+          "store_path": "/nix/store/812qxhp3sz2ilhg9fs02ckbmwpchxd17-nodejs-18.20.6"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/qwzy9qniaywm3dm162si7qvivhqvg5r0-nodejs-18.20.6",
+              "default": true
+            },
+            {
+              "name": "libv8",
+              "path": "/nix/store/las0nz6smawdmbrgf4z244v96wpixfzk-nodejs-18.20.6-libv8"
+            }
+          ],
+          "store_path": "/nix/store/qwzy9qniaywm3dm162si7qvivhqvg5r0-nodejs-18.20.6"
+        }
+      }
+    },
+    "pnpm@latest": {
+      "last_modified": "2025-02-16T00:50:12Z",
+      "resolved": "github:NixOS/nixpkgs/1dcdd535fef84d4671129a10e7072d56dca9a4d3#pnpm",
+      "source": "devbox-search",
+      "version": "10.4.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/n4ix9rppd7f0zwxqml2wk41sr0sfiz9f-pnpm-10.4.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/n4ix9rppd7f0zwxqml2wk41sr0sfiz9f-pnpm-10.4.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/y9mq1c88b72vfvrdlfzs1yxb0icgnk6r-pnpm-10.4.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/y9mq1c88b72vfvrdlfzs1yxb0icgnk6r-pnpm-10.4.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/hhkmqp2l3r0x6qllm58432i2yfkzhixh-pnpm-10.4.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/hhkmqp2l3r0x6qllm58432i2yfkzhixh-pnpm-10.4.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ihlqmjc0687gh6y5j3rm0li00xii5gk0-pnpm-10.4.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ihlqmjc0687gh6y5j3rm0li00xii5gk0-pnpm-10.4.0"
+        }
+      }
+    }
+  }
+}

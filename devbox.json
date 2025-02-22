@@ -1,0 +1,9 @@
+{
+  "packages": ["pnpm@latest", "nodejs_18@latest"],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "shell": {
+    "init_hook": ["echo 'Welcome to democracy-development project!'"]
+  }
+}
