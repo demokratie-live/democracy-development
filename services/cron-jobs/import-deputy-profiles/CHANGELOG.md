@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.19](https://github.com/demokratie-live/democracy-development/compare/import-deputy-profiles@v0.1.18...import-deputy-profiles@v0.1.19) (2025-02-22)
+
+
+* import-deputy-profiles ([7814884](https://github.com/demokratie-live/democracy-development/commit/781488412f744baf9194019aaaacb15c49fcf0fe))
+* replace selectors ([a1f7cc5](https://github.com/demokratie-live/democracy-development/commit/a1f7cc58a1e11e61f33dc2e848abbc790fc622e7))
+* split code into multiple files ([bd15362](https://github.com/demokratie-live/democracy-development/commit/bd15362fb2941f1250574c731aca73cbfcdcd94b))
+
 ## [0.1.18](https://github.com/demokratie-live/democracy-development/compare/import-deputy-profiles@v0.1.17...import-deputy-profiles@v0.1.18) (2025-02-19)
 
 
