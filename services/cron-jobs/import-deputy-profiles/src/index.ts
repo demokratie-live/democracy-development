@@ -47,7 +47,11 @@ const main = async () => {
   try {
     await start();
   } catch (error) {
-    await setCronError({ name: CRON_NAME, error: JSON.stringify(error) });
+    console.error('Error running import-deputy-profiles:', error);
+    await setCronError({
+      name: CRON_NAME,
+      error: error instanceof Error ? error.stack || error.message : JSON.stringify(error),
+    });
   }
   process.exit(0);
 };

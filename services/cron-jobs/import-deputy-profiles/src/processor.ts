@@ -15,10 +15,10 @@ const processDeputy = async (deputyListItem: DeputyListItem, period: Period) => 
   );
 
   // Skip if last update is less than 7 days old
-  if (lastUpdate && new Date(lastUpdate).getTime() > Date.now() - 1000 * 60 * 60 * 24 * 7) {
-    console.log('skip', deputyListItem.URL);
-    return;
-  }
+  // if (lastUpdate && new Date(lastUpdate).getTime() > Date.now() - 1000 * 60 * 60 * 24 * 7) {
+  //   console.log('skip', deputyListItem.URL);
+  //   return;
+  // }
 
   if (isDebug) {
     console.log('[DEBUG] lastUpdate', lastUpdate);
