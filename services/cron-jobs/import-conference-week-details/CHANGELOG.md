@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.33](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.32...import-conference-week-details@v0.1.33) (2025-02-22)
+
 ## [0.1.32](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.31...import-conference-week-details@v0.1.32) (2024-11-30)
 
 
