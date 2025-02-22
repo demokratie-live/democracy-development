@@ -1,12 +1,12 @@
 import { DocumentEvaluater } from '@democracy-deutschland/scapacra';
 import { SelectedValue } from 'xpath';
 
-export class NamedPollHrefEvaluator extends DocumentEvaluater {
+export class NamedPollHrefEvaluator extends DocumentEvaluater<string> {
   /**
    * Finds all href links from the HTML website.
    */
   public async getSources(): Promise<string[]> {
-    const sources = await this.evaluate('//a/@href');
+    const sources = await this.evaluate("//a[@class='bt-link-dokument']/@href");
     return sources || [];
   }
 
