@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.15](https://github.com/demokratie-live/democracy-development/compare/import-named-poll-deputies@v0.1.14...import-named-poll-deputies@v0.1.15) (2025-02-23)
+
 ## [0.1.14](https://github.com/demokratie-live/democracy-development/compare/import-named-poll-deputies@v0.1.13...import-named-poll-deputies@v0.1.14) (2025-02-22)
 
 ## [0.1.13](https://github.com/demokratie-live/democracy-development/compare/import-named-poll-deputies@v0.1.12...import-named-poll-deputies@v0.1.13) (2024-09-22)
