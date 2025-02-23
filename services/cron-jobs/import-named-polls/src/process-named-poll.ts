@@ -1,16 +1,25 @@
+import { LeanDocument, UpdateQuery } from 'mongoose';
 import { IProcedure } from '@democracy-deutschland/bundestagio-common/dist/models/Procedure/schema';
+import { INamedPoll } from '@democracy-deutschland/bundestagio-common/dist/models/NamedPoll/schema';
+import { VoteDecision } from '@democracy-deutschland/bundestagio-common/dist/models/Procedure/Procedure/PartyVotes';
+import { CRON_NAME } from './constants';
 import {
   PROCEDURE as PROCEDURE_DEFINITIONS,
   NAMEDPOLL as NAMEDPOLL_DEFINITIONS,
 } from '@democracy-deutschland/bundestag.io-definitions';
-import { CRON_NAME } from './constants';
 import { NamedPollModel, ProcedureModel } from '@democracy-deutschland/bundestagio-common';
+import { PollUserData } from './crawler/types';
 
-export const processNamedPoll = async (data: any) => {
+enum VotingDocument {
+  MainDocument = 'mainDocument',
+  RecommendedDecision = 'recommendedDecision',
+}
+
+export const processNamedPoll = async (data: PollUserData) => {
   process.stdout.write('.');
   let procedureId = null;
   const documentIdsRegexp = /(\d{2}\/\d{2,6})/g;
-  const documentIds = [...new Set([...data.description.matchAll(documentIdsRegexp)].map((m: any) => m[1]))];
+  const documentIds = [...new Set([...data.description.matchAll(documentIdsRegexp)].map((m) => m[1]))];
 
   if (documentIds.length === 0) {
     console.warn(`\n[Cronjob][${CRON_NAME}] no documents on poll ${data.url}`);
@@ -63,21 +72,16 @@ export const processNamedPoll = async (data: any) => {
   // This is retarded - but what u can do? ¯\_(ツ)_/¯
   // Find NamedPoll
   const existingNamedPoll = await NamedPollModel.findOne({
-    webId: data.webId,
+    webId: data.id,
   });
 
-  let existingNamedPollObject: any = existingNamedPoll?.toObject();
+  let existingNamedPollObject: LeanDocument<INamedPoll> | null = null;
 
-  if (existingNamedPollObject) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { _id, ...rest } = existingNamedPollObject;
-    existingNamedPollObject = rest;
-  } else {
-    existingNamedPollObject = {};
+  if (existingNamedPoll) {
+    existingNamedPollObject = existingNamedPoll.toObject();
   }
 
-  // Construct Database object
-  const namedPoll: any = {
+  const namedPoll = {
     ...existingNamedPollObject,
     procedureId,
     URL: data.url,
@@ -85,67 +89,55 @@ export const processNamedPoll = async (data: any) => {
     date: data.date,
     title: data.title,
     description: data.description,
-    detailedDescription: data.detailedDescription,
     documents: data.documents,
     deputyVotesURL: data.deputyVotesURL,
-    membersVoted: data.membersVoted,
-    plenarProtocolURL: data.plenarProtocolURL,
-    media: data.media,
-    speeches: data.speeches,
   };
-  if (existingNamedPoll && existingNamedPoll.votes && existingNamedPoll.votes.all) {
+
+  if (existingNamedPoll?.votes?.all) {
     if (existingNamedPoll.votes.all.total !== data.votes.all.total) {
-      namedPoll['votes.all.total'] = data.votes.all.total;
-    }
-    if (existingNamedPoll.votes.all.yes !== data.votes.all.yes) {
-      namedPoll['votes.all.yes'] = data.votes.all.yes;
-    }
-    if (existingNamedPoll.votes.all.no !== data.votes.all.no) {
-      namedPoll['votes.all.no'] = data.votes.all.no;
-    }
-    if (existingNamedPoll.votes.all.abstain !== data.votes.all.abstain) {
-      namedPoll['votes.all.abstain'] = data.votes.all.abstain;
-    }
-    if (existingNamedPoll.votes.all.na !== data.votes.all.na) {
-      namedPoll['votes.all.na'] = data.votes.all.na;
+      namedPoll.votes = {
+        ...(namedPoll.votes || {}),
+        all: {
+          ...(namedPoll.votes?.all || {}),
+          total: data.votes.all.total,
+          yes: data.votes.all.yes,
+          no: data.votes.all.no,
+          abstain: data.votes.all.abstain,
+          na: data.votes.all.na,
+        },
+        parties: namedPoll.votes?.parties || [],
+        deputies: namedPoll.votes?.deputies || [],
+        inverseVoteDirection: namedPoll.votes?.inverseVoteDirection ?? false,
+      };
     }
   } else {
-    namedPoll['votes.all'] = data.votes.all;
+    namedPoll.votes = {
+      all: data.votes.all,
+      parties: [],
+      deputies: [],
+      inverseVoteDirection: false,
+    };
   }
 
   // Update Procedure Custom Data
-  // TODO This should not be the way we handle this
   const { votes } = data;
   if (procedureId) {
-    const customData = {
+    type CustomData = UpdateQuery<IProcedure>['customData'];
+    const customData: CustomData = {
       voteResults: {
-        partyVotes: votes.parties.map((partyVote: any) => {
-          const main: any = [
-            {
-              decision: 'YES',
-              value: partyVote.votes.yes,
-            },
-            {
-              decision: 'NO',
-              value: partyVote.votes.no,
-            },
-            {
-              decision: 'ABSTINATION',
-              value: partyVote.votes.abstain,
-            },
-            {
-              decision: 'NOTVOTED',
-              value: partyVote.votes.na,
-            },
-          ].reduce(
-            (prev, { decision, value }) => {
-              if (prev.value < value) {
-                return { decision, value };
-              }
-              return prev;
-            },
-            { value: 0 },
-          );
+        partyVotes: votes.parties.map((partyVote) => {
+          const decisions = [
+            { decision: VoteDecision.Yes, value: partyVote.votes.yes },
+            { decision: VoteDecision.No, value: partyVote.votes.no },
+            { decision: VoteDecision.Abstination, value: partyVote.votes.abstain },
+            { decision: VoteDecision.Notvoted, value: partyVote.votes.na },
+          ];
+
+          const main = decisions.reduce((prev, curr) => (prev.value < curr.value ? curr : prev), {
+            decision: VoteDecision.Notvoted,
+            value: 0,
+          });
+
           return {
             deviants: {
               yes: partyVote.votes.yes || 0,
@@ -161,7 +153,10 @@ export const processNamedPoll = async (data: any) => {
         abstination: votes.all.abstain || 0,
         no: votes.all.no || 0,
         notVoted: votes.all.na || 0,
-      } as any,
+        decisionText: '',
+        votingDocument: VotingDocument.MainDocument,
+        votingRecommendation: false,
+      },
     };
 
     // Determin Vote Direction
@@ -183,68 +178,73 @@ export const processNamedPoll = async (data: any) => {
         initiator && initiator.search(PROCEDURE_DEFINITIONS.HISTORY.INITIATOR.FIND_BESCHLUSSEMPFEHLUNG_BERICHT) !== -1,
     );
 
-    customData.voteResults.votingDocument =
+    // Handle voting recommendations
+    if (
       namedHistoryEntry?.comment?.search(
         PROCEDURE_DEFINITIONS.HISTORY.DECISION.COMMENT.FIND_BESCHLUSSEMPFEHLUNG_ABLEHNUNG,
       ) !== -1
-        ? 'recommendedDecision'
-        : 'mainDocument';
+    ) {
+      customData.voteResults.votingDocument = VotingDocument.RecommendedDecision;
+    }
 
-    votingRecommendationEntrys.forEach((votingRecommendationEntry) => {
-      if (votingRecommendationEntry.abstract) {
-        if (
-          votingRecommendationEntry.abstract.search(
-            PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME,
-          ) !== -1
-        ) {
+    votingRecommendationEntrys.forEach((entry) => {
+      if (entry.abstract) {
+        if (entry.abstract.search(PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ANNAHME) !== -1) {
           customData.voteResults.votingRecommendation = true;
-        } else if (
-          votingRecommendationEntry.abstract.search(
-            PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG,
-          ) !== -1
-        ) {
+        } else if (entry.abstract.search(PROCEDURE_DEFINITIONS.HISTORY.ABSTRACT.EMPFEHLUNG_VORLAGE_ABLEHNUNG) !== -1) {
           customData.voteResults.votingRecommendation = false;
         }
       }
     });
 
     if (
-      procedures &&
-      procedures[0] &&
-      procedures[0].currentStatus === 'Abgelehnt' &&
+      procedures?.[0]?.currentStatus === 'Abgelehnt' &&
       customData.voteResults.votingDocument === 'mainDocument' &&
       customData.voteResults.yes > customData.voteResults.no
     ) {
-      // Toggle Voting Document
-      customData.voteResults.votingDocument = 'recommendedDecision';
+      customData.voteResults.votingDocument = VotingDocument.RecommendedDecision;
     }
 
     await ProcedureModel.findOneAndUpdate({ procedureId }, { customData });
 
-    // Define inverseVoteDirection on NamedPoll
+    // Handle inverse vote direction
     const inverseVoteDirection =
-      customData.voteResults.votingDocument === 'recommendedDecision' &&
+      customData.voteResults.votingDocument === VotingDocument.RecommendedDecision &&
       customData.voteResults.votingRecommendation === false;
+
+    if (!namedPoll.votes) {
+      namedPoll.votes = {
+        all: data.votes.all,
+        parties: data.votes.parties,
+        deputies: [],
+        inverseVoteDirection,
+      };
+    } else {
+      namedPoll.votes.parties = data.votes.parties;
+      namedPoll.votes.inverseVoteDirection = inverseVoteDirection;
+    }
+
+    // Update parties if votes exists and changed
     if (
+      namedPoll.votes &&
+      (!existingNamedPoll?.votes?.parties ||
+        JSON.stringify(existingNamedPoll.votes.parties) !== JSON.stringify(data.votes.parties))
+    ) {
+      namedPoll.votes.parties = data.votes.parties;
+    }
+
+    // votes.parties - remove this section since we handle it above
+    /* if (
       !existingNamedPoll ||
       !existingNamedPoll.votes ||
-      !(existingNamedPoll.votes.inverseVoteDirection === inverseVoteDirection)
+      !(JSON.stringify(existingNamedPoll.votes.parties) === JSON.stringify(data.votes.parties))
     ) {
-      namedPoll['votes.inverseVoteDirection'] = inverseVoteDirection;
-    }
+      namedPoll['votes.parties'] = data.votes.parties;
+    } */
   }
 
-  // votes.parties
-  if (
-    !existingNamedPoll ||
-    !existingNamedPoll.votes ||
-    !(JSON.stringify(existingNamedPoll.votes.parties) === JSON.stringify(data.votes.parties))
-  ) {
-    namedPoll['votes.parties'] = data.votes.parties;
-  }
-
-  // Update/Insert
+  // Final update
   await NamedPollModel.findOneAndUpdate({ webId: namedPoll.webId }, { $set: namedPoll }, { upsert: true });
-  // await NamedPollModel.findOneAndUpdate({ webId: namedPoll.webId }, { $set: namedPoll }, { upsert: true });
-  process.stdout.write(namedPoll.webId);
+
+  console.log(`Named poll with webId: ${namedPoll.webId} processed successfully.`);
 };

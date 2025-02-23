@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const getVoteNumber = (
+import { ElementHandle } from 'playwright';
+
+export const getVoteNumber = async (
   type: 'ja' | 'nein' | 'enthalten' | 'na',
-  { votesElement, $ }: { votesElement: any; $: any },
-) =>
-  Number(
-    $(votesElement.find(`.bt-legend-${type}`))
-      .text()
-      .replace(/\D/g, '')
-      .trim(),
-  );
+  { votesElement }: { votesElement: ElementHandle },
+) => {
+  const voteElement = await votesElement.$(`.bt-legend-${type}`);
+  const voteText = (await voteElement?.textContent()) || '0';
+  return Number(voteText.replace(/\D/g, '').trim());
+};
