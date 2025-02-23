@@ -14,16 +14,15 @@
   "dependencies": {
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@democracy-deutschland/bundestagio-common": "workspace:*",
-    "cheerio": "1.0.0-rc.12",
     "crawlee": "^3.10.1",
     "dayjs": "^1.11.11",
     "playwright": "^1.44.1"
   },
   "devDependencies": {
-    "@types/node": "^20.12.13",
+    "@types/node": "^22.13.5",
     "dotenv": "^16.4.5",
     "ts-node-dev": "^2.0.0",
-    "ts-unused-exports": "^10.1.0",
+    "ts-unused-exports": "^11.0.1",
     "typescript": "^5.4.5"
   }
 }
