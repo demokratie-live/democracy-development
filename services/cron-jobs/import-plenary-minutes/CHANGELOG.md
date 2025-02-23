@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.14](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.13...import-plenary-minutes@v0.1.14) (2025-02-23)
+
+
+* handle absolute URLs for Bundestag XML links ([84c6649](https://github.com/demokratie-live/democracy-development/commit/84c6649cc0f17f57b4e1883f74f7ec43328e0b04))
+
 ## [0.1.13](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.12...import-plenary-minutes@v0.1.13) (2025-02-22)
 
 
