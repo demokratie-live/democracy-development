@@ -1,19 +1,25 @@
-import { CheerioCrawler } from 'crawlee';
+import { PlaywrightCrawler, PlaywrightCrawlingContext } from 'crawlee';
 import { BASE_URL, CRAWLER_LABELS, MAX_CONCURRENCY, MAX_REQUESTS_PER_MINUTE } from '../constants';
 import dayjs from 'dayjs';
 import 'dayjs/locale/de';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { getUrlParams } from '../utils/getUrlParams';
 import { processNamedPoll } from '../process-named-poll';
-import { router } from './router';
+import { createPlaywrightRouter } from 'crawlee';
 import { getVoteNumber } from '../utils/getVoteNumber';
 import { NamedPollModel } from '@democracy-deutschland/bundestagio-common';
+import { NamedPollsListResponse } from './types';
+import { ElementHandle } from 'playwright';
 
-const crawler = new CheerioCrawler({
+const router = createPlaywrightRouter();
+
+const crawler = new PlaywrightCrawler({
   requestHandler: router,
   maxConcurrency: MAX_CONCURRENCY,
   maxRequestsPerMinute: MAX_REQUESTS_PER_MINUTE,
   requestHandlerTimeoutSecs: 60,
+  requestQueue: undefined,
+  headless: true,
 });
 
 dayjs.extend(customParseFormat);
@@ -27,7 +33,7 @@ export const crawl = async () => {
   });
   await crawler.run([
     {
-      url: `https://www.bundestag.de/ajax/filterlist/de/parlament/plenum/abstimmung/484422-484422?limit=10&noFilterSet=true&offset=0`,
+      url: `https://bundestag.api.proxy.bund.dev/ajax/filterlist/de/parlament/plenum/abstimmung/484422-484422?&offset=0&noFilterSet=true&view=resultjson`,
       label: CRAWLER_LABELS.LIST,
       userData: {
         offset: 0,
@@ -51,93 +57,93 @@ router.addDefaultHandler(({ log }) => {
   log.info('Route reached.');
 });
 
-router.addHandler(CRAWLER_LABELS.LIST, async ({ $, request, crawler }) => {
-  console.log('List', request.url);
-  const polls = $('.col-xs-12.bt-slide:not(.bt-slide-error)');
-  polls.each((i, poll): boolean | void => {
-    const element = $(poll);
+router.addHandler(CRAWLER_LABELS.LIST, async ({ crawler, response }) => {
+  if (!response) return;
 
-    const urlElement = $(element.find('a'));
-    if (urlElement.attr('href')) {
-      const url = `${BASE_URL}${urlElement.attr('href')}`;
-      const date = dayjs($(element.find('.bt-date')).text().trim(), 'L')
-        .add(1, 'day')
-        .set('hours', 1)
-        .set('minute', 0)
-        .set('second', 0)
-        .set('millisecond', 0)
-        .toDate();
+  // The response body is now JSON.
+  const bodyText = await response.text();
+  const data = JSON.parse(bodyText) as NamedPollsListResponse;
 
-      const votesElement = $(element.find('.bt-chart-legend'));
-      const votesYes = getVoteNumber('ja', { $, votesElement });
-      const votesNo = getVoteNumber('nein', { $, votesElement });
-      const votesAbstain = getVoteNumber('enthalten', { $, votesElement });
-      const votesNA = getVoteNumber('na', { $, votesElement });
+  for (const poll of data.items) {
+    const url = poll.href.startsWith('http') ? poll.href : `${BASE_URL}${poll.href}`;
+    const date = dayjs(poll.date, 'YYYY-MM-DD')
+      .set('hour', 1)
+      .set('minute', 0)
+      .set('second', 0)
+      .set('millisecond', 0)
+      .toDate();
 
-      const { id } = getUrlParams(url);
+    const votesYes = poll.votes.yes;
+    const votesNo = poll.votes.no;
+    const votesAbstain = poll.votes.abstain;
+    const votesNA = poll.votes.absent; // mapped from 'absent' to 'na'.
 
-      const userData = {
-        id,
-        url,
-        date,
-        votes: {
-          all: {
-            total: votesYes + votesNo + votesAbstain + votesNA,
-            yes: votesYes,
-            no: votesNo,
-            abstain: votesAbstain,
-            na: votesNA,
-          },
+    const { id } = getUrlParams(url);
+    const userData = {
+      id,
+      url,
+      date,
+      votes: {
+        all: {
+          total: votesYes + votesNo + votesAbstain + votesNA,
+          yes: votesYes,
+          no: votesNo,
+          abstain: votesAbstain,
+          na: votesNA,
         },
-      };
+      },
+    };
 
-      NamedPollModel.exists({ webId: id }).then((exists) => {
-        if (!exists) {
-          console.log('Poll Details', url);
-          crawler.addRequests([
-            {
-              url,
-              label: CRAWLER_LABELS.POLL,
-              userData,
-            },
-          ]);
-        }
-      });
-    }
-  });
-
-  if (polls.length > 0) {
-    const newOffset = request.userData.offset + 10;
+    NamedPollModel.exists({ webId: id }).then(async (exists) => {
+      if (!exists || true) {
+        console.log(`Poll ${id} exists: ${exists}`);
+        await crawler.addRequests([
+          {
+            url,
+            label: CRAWLER_LABELS.POLL,
+            userData,
+          },
+        ]);
+      }
+    });
+    break;
+  }
+  console.log(data.meta.offset);
+  if (data.items.length > 0 && false) {
+    const newOffset = data.meta.offset + data.meta.limit;
     await crawler.addRequests([
       {
-        url: `https://www.bundestag.de/ajax/filterlist/de/parlament/plenum/abstimmung/484422-484422?limit=10&noFilterSet=true&offset=${newOffset}`,
+        url: `https://bundestag.api.proxy.bund.dev/ajax/filterlist/de/parlament/plenum/abstimmung/484422-484422?&offset=${newOffset}&noFilterSet=true&view=resultjson`,
         label: CRAWLER_LABELS.LIST,
-        userData: {
-          offset: newOffset,
-        },
+        userData: { offset: newOffset },
       },
     ]);
   }
 });
 
-router.addHandler(CRAWLER_LABELS.POLL, async ({ $, request }) => {
-  console.log('Poll', request.url);
-  const descriptionElement = $('.bt-artikel.bt-standard-content p').first();
+router.addHandler(CRAWLER_LABELS.POLL, async ({ page, request }: PlaywrightCrawlingContext): Promise<void> => {
+  console.log('Poll url:', request.url);
+  await page.waitForSelector('.bt-artikel.bt-standard-content p');
+
+  const descriptionElement = await page.$('.bt-artikel.bt-standard-content p');
+  const descriptionText = (await descriptionElement?.textContent()) || '';
+  console.log('descriptionElement', descriptionElement);
 
   const id = request.userData.id;
 
-  const partyVoteElements = $('#abstimmungsergebnis div.col-xs-12.col-sm-3');
+  const partyVoteElements = await page.$$('#abstimmungsergebnis div.col-xs-12.col-sm-3');
 
-  const partyVotes = partyVoteElements
-    .map((i, el) => {
-      const partyVoteElement = $(el);
-      const votesYes = getVoteNumber('ja', { $, votesElement: partyVoteElement });
-      const votesNo = getVoteNumber('nein', { $, votesElement: partyVoteElement });
-      const votesAbstain = getVoteNumber('enthalten', { $, votesElement: partyVoteElement });
-      const votesNA = getVoteNumber('na', { $, votesElement: partyVoteElement });
+  const partyVotes = await Promise.all(
+    partyVoteElements.map(async (element: ElementHandle) => {
+      const votesYes = await getVoteNumber('ja', { $: element, votesElement: element });
+      const votesNo = await getVoteNumber('nein', { $: element, votesElement: element });
+      const votesAbstain = await getVoteNumber('enthalten', { $: element, votesElement: element });
+      const votesNA = await getVoteNumber('na', { $: element, votesElement: element });
+
+      const nameAttr = await element.$eval('.bt-teaser-chart-solo', (el: HTMLElement) => el.getAttribute('data-value'));
 
       return {
-        name: $(partyVoteElement).find('.bt-teaser-chart-solo').attr('data-value'),
+        name: nameAttr || '',
         votes: {
           total: 244,
           yes: votesYes,
@@ -146,17 +152,21 @@ router.addHandler(CRAWLER_LABELS.POLL, async ({ $, request }) => {
           na: votesNA,
         },
       };
-    })
-    .get();
+    }),
+  );
+
+  const title = await page.$eval('.bt-artikel__title', (el: HTMLElement) => el.textContent?.trim() || '');
+  const documents = await page.$$eval(
+    '.bt-artikel.bt-standard-content p a.dipLink',
+    (elements: HTMLAnchorElement[]) =>
+      elements.map((el) => el.getAttribute('href')).filter((href) => href !== null) as string[],
+  );
 
   const userData = {
     ...request.userData,
-    title: $('.bt-artikel__title').first().text().trim(),
-    description: descriptionElement.text().trim(),
-    documents: $(descriptionElement)
-      .find('a.dipLink')
-      .map((i, el) => $(el).attr('href'))
-      .get(),
+    title,
+    description: descriptionText.trim(),
+    documents,
     deputyVotesURL: `https://www.bundestag.de/apps/na/na/namensliste.form?id=${id}&ajax=true`,
     votes: {
       ...request.userData.votes,
@@ -165,6 +175,4 @@ router.addHandler(CRAWLER_LABELS.POLL, async ({ $, request }) => {
   };
 
   await processNamedPoll(userData);
-
-  return userData;
 });
