@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.34](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.33...import-conference-week-details@v0.1.34) (2025-02-23)
+
+
+* handle absolute URLs for Bundestag XML links ([84c6649](https://github.com/demokratie-live/democracy-development/commit/84c6649cc0f17f57b4e1883f74f7ec43328e0b04))
+
 ## [0.1.33](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.32...import-conference-week-details@v0.1.33) (2025-02-22)
 
 ## [0.1.32](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.31...import-conference-week-details@v0.1.32) (2024-11-30)
