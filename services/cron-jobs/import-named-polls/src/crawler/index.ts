@@ -8,7 +8,7 @@ import { processNamedPoll } from '../process-named-poll';
 import { createPlaywrightRouter } from 'crawlee';
 import { getVoteNumber } from '../utils/getVoteNumber';
 import { NamedPollModel } from '@democracy-deutschland/bundestagio-common';
-import { NamedPollsListResponse } from './types';
+import { ListUserData, NamedPollsListResponse } from './types';
 import { ElementHandle } from 'playwright';
 
 const router = createPlaywrightRouter();
@@ -39,17 +39,6 @@ export const crawl = async () => {
         offset: 0,
       },
     },
-    // Test single poll
-    // {
-    //   url: `https://www.bundestag.de/parlament/plenum/abstimmung/abstimmung?id=720`,
-    //   label: CRAWLER_LABELS.POLL,
-    //   userData: {
-    //     id: '720',
-    //     url: 'https://www.bundestag.de/parlament/plenum/abstimmung/abstimmung?id=720',
-    //     date: new Date('2021-03-27T00:00:00.000Z'),
-    //     votes: { all: { total: 708, yes: 382, no: 118, abstain: 67, na: 141 } },
-    //   },
-    // },
   ]);
 };
 
@@ -95,21 +84,18 @@ router.addHandler(CRAWLER_LABELS.LIST, async ({ crawler, response }) => {
     };
 
     NamedPollModel.exists({ webId: id }).then(async (exists) => {
-      if (!exists || true) {
-        console.log(`Poll ${id} exists: ${exists}`);
-        await crawler.addRequests([
-          {
-            url,
-            label: CRAWLER_LABELS.POLL,
-            userData,
-          },
-        ]);
-      }
+      console.log(`Poll ${id} exists: ${exists}`);
+      await crawler.addRequests([
+        {
+          url,
+          label: CRAWLER_LABELS.POLL,
+          userData,
+        },
+      ]);
     });
-    break;
   }
-  console.log(data.meta.offset);
-  if (data.items.length > 0 && false) {
+
+  if (data.items.length > 0) {
     const newOffset = data.meta.offset + data.meta.limit;
     await crawler.addRequests([
       {
@@ -121,58 +107,61 @@ router.addHandler(CRAWLER_LABELS.LIST, async ({ crawler, response }) => {
   }
 });
 
-router.addHandler(CRAWLER_LABELS.POLL, async ({ page, request }: PlaywrightCrawlingContext): Promise<void> => {
-  console.log('Poll url:', request.url);
-  await page.waitForSelector('.bt-artikel.bt-standard-content p');
+router.addHandler(
+  CRAWLER_LABELS.POLL,
+  async ({ page, request }: PlaywrightCrawlingContext<ListUserData>): Promise<void> => {
+    console.log('Poll url:', request.url);
+    await page.waitForSelector('.bt-artikel.bt-standard-content p');
+    const descriptionElement = await page.$('.bt-artikel.bt-standard-content p');
+    const descriptionText = (await descriptionElement?.textContent()) || '';
 
-  const descriptionElement = await page.$('.bt-artikel.bt-standard-content p');
-  const descriptionText = (await descriptionElement?.textContent()) || '';
-  console.log('descriptionElement', descriptionElement);
+    const id = request.userData.id;
 
-  const id = request.userData.id;
+    const partyVoteElements = await page.$$('#abstimmungsergebnis div.col-xs-12.col-sm-3');
 
-  const partyVoteElements = await page.$$('#abstimmungsergebnis div.col-xs-12.col-sm-3');
+    const partyVotes = await Promise.all(
+      partyVoteElements.map(async (element: ElementHandle) => {
+        const votesYes = await getVoteNumber('ja', { votesElement: element });
+        const votesNo = await getVoteNumber('nein', { votesElement: element });
+        const votesAbstain = await getVoteNumber('enthalten', { votesElement: element });
+        const votesNA = await getVoteNumber('na', { votesElement: element });
 
-  const partyVotes = await Promise.all(
-    partyVoteElements.map(async (element: ElementHandle) => {
-      const votesYes = await getVoteNumber('ja', { $: element, votesElement: element });
-      const votesNo = await getVoteNumber('nein', { $: element, votesElement: element });
-      const votesAbstain = await getVoteNumber('enthalten', { $: element, votesElement: element });
-      const votesNA = await getVoteNumber('na', { $: element, votesElement: element });
+        const nameAttr = await element.$eval('.bt-teaser-chart-solo', (el: HTMLElement) =>
+          el.getAttribute('data-value'),
+        );
 
-      const nameAttr = await element.$eval('.bt-teaser-chart-solo', (el: HTMLElement) => el.getAttribute('data-value'));
+        return {
+          name: nameAttr || '',
+          votes: {
+            total: 244,
+            yes: votesYes,
+            no: votesNo,
+            abstain: votesAbstain,
+            na: votesNA,
+          },
+        };
+      }),
+    );
 
-      return {
-        name: nameAttr || '',
-        votes: {
-          total: 244,
-          yes: votesYes,
-          no: votesNo,
-          abstain: votesAbstain,
-          na: votesNA,
-        },
-      };
-    }),
-  );
+    const title = await page.$eval('.bt-artikel__title', (el: HTMLElement) => el.textContent?.trim() || '');
+    const documents = await page.$$eval(
+      '.bt-artikel.bt-standard-content p a.dipLink',
+      (elements: HTMLAnchorElement[]) =>
+        elements.map((el) => el.getAttribute('href')).filter((href) => href !== null) as string[],
+    );
 
-  const title = await page.$eval('.bt-artikel__title', (el: HTMLElement) => el.textContent?.trim() || '');
-  const documents = await page.$$eval(
-    '.bt-artikel.bt-standard-content p a.dipLink',
-    (elements: HTMLAnchorElement[]) =>
-      elements.map((el) => el.getAttribute('href')).filter((href) => href !== null) as string[],
-  );
+    const userData = {
+      ...request.userData,
+      title,
+      description: descriptionText.trim(),
+      documents,
+      deputyVotesURL: `https://www.bundestag.de/apps/na/na/namensliste.form?id=${id}&ajax=true`,
+      votes: {
+        ...request.userData.votes,
+        parties: partyVotes,
+      },
+    };
 
-  const userData = {
-    ...request.userData,
-    title,
-    description: descriptionText.trim(),
-    documents,
-    deputyVotesURL: `https://www.bundestag.de/apps/na/na/namensliste.form?id=${id}&ajax=true`,
-    votes: {
-      ...request.userData.votes,
-      parties: partyVotes,
-    },
-  };
-
-  await processNamedPoll(userData);
-});
+    await processNamedPoll(userData);
+  },
+);

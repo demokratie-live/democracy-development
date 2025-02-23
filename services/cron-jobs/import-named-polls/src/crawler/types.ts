@@ -30,3 +30,38 @@ interface Votes {
   abstain: number;
   absent: number;
 }
+
+export type ListUserData = {
+  id: string;
+  url: string;
+  date: Date;
+  votes: {
+    all: {
+      total: number;
+      yes: number;
+      no: number;
+      abstain: number;
+      na: number;
+    };
+  };
+};
+
+export type PollUserData = ListUserData & {
+  title: string;
+  description: string;
+  documents: string[];
+  deputyVotesURL: string;
+  votes: {
+    parties: {
+      name: string;
+      votes: {
+        total: number;
+        yes: number;
+        no: number;
+        abstain: number;
+        na: number;
+      };
+    }[];
+  };
+  url: string;
+};
