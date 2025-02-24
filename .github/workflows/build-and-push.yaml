@@ -87,12 +87,21 @@ jobs:
         id: node_version
         run: echo "version=$(cat .node-version | tr -d 'v')" >> $GITHUB_OUTPUT
 
+      - name: Check for service-specific Dockerfile
+        id: check-dockerfile
+        run: |
+          if [ -f "${{ steps.get-directory.outputs.directory }}/Dockerfile" ]; then
+            echo "dockerfile=${{ steps.get-directory.outputs.directory }}/Dockerfile" >> $GITHUB_OUTPUT
+          else
+            echo "dockerfile=infra/Dockerfile" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: infra/Dockerfile
+          file: ${{ steps.check-dockerfile.outputs.dockerfile }}
           platforms: linux/amd64,linux/arm64
           push: ${{ github.actor != 'dependabot[bot]' }}
           target: runner
