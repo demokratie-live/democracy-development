@@ -1,9 +1,10 @@
 packages:
-  - 'services/**/*'
-  - 'packages/**/*'
-  - 'common/**/*'
-  - 'bundestag.io/*'
-  - 'democracy/*'
-
+  - services/**/*
+  - packages/**/*
+  - common/**/*
+  - bundestag.io/*
+  - democracy/*
 catalog:
   tsup: ^8.0.2
+onlyBuiltDependencies:
+  - '@nestjs/core'
