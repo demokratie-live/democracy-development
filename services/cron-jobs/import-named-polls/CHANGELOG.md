@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.23](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.22...import-named-polls@v0.1.23) (2025-02-26)
+
+
+* make typesafe and fix issues ([6552169](https://github.com/demokratie-live/democracy-development/commit/655216931516976a3ac30d81e7c32a8c2c2cef82))
+* to playwrith ([120872d](https://github.com/demokratie-live/democracy-development/commit/120872d6fcd9f52f5cea6181a18c32a8eddcd94a))
+
+
+### 🚀 Feature
+
+* add custom dockr image for import-named-polls ([0430123](https://github.com/demokratie-live/democracy-development/commit/04301239399af0647dbe4abbcb06dfd26a1020a5))
+
 ## [0.1.22](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.21...import-named-polls@v0.1.22) (2024-09-22)
 
 
