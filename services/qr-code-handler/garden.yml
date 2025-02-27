@@ -12,6 +12,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: qr-code-handler
     SERVICE_PATH: services/qr-code-handler
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

@@ -13,6 +13,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: queue-pushs-vote-top-100
     SERVICE_PATH: services/cron-jobs/queue-pushs-vote-top-100
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

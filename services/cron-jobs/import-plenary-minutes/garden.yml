@@ -13,6 +13,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: import-plenary-minutes
     SERVICE_PATH: services/cron-jobs/import-plenary-minutes
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

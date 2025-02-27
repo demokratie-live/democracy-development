@@ -12,6 +12,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: non-named-votes-ai
     SERVICE_PATH: services/non-named-votes-ai
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

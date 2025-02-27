@@ -13,6 +13,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: shedule-bio-resync
     SERVICE_PATH: services/cron-jobs/shedule-bio-resync
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

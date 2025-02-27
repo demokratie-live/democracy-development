@@ -13,6 +13,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: import-named-poll-deputies
     SERVICE_PATH: services/cron-jobs/import-named-poll-deputies
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

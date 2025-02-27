@@ -12,6 +12,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: procedures
     SERVICE_PATH: services/procedures
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

@@ -13,6 +13,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: cleanup-push-queue
     SERVICE_PATH: services/cron-jobs/cleanup-push-queue
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

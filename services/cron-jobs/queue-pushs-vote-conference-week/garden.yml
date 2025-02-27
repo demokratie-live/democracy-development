@@ -13,6 +13,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: queue-pushs-vote-conference-week
     SERVICE_PATH: services/cron-jobs/queue-pushs-vote-conference-week
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

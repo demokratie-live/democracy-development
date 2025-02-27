@@ -13,6 +13,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: import-named-polls
     SERVICE_PATH: services/cron-jobs/import-named-polls
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

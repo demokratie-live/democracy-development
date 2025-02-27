@@ -13,6 +13,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: sync-deputy-profiles
     SERVICE_PATH: services/cron-jobs/sync-deputy-profiles
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

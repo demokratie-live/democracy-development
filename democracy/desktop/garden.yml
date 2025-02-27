@@ -16,6 +16,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: democracy-app.de
     SERVICE_PATH: democracy/desktop
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

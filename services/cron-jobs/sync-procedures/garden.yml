@@ -13,6 +13,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: sync-procedures
     SERVICE_PATH: services/cron-jobs/sync-procedures
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

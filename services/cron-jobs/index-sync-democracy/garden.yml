@@ -13,6 +13,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: index-sync-democracy
     SERVICE_PATH: services/cron-jobs/index-sync-democracy
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

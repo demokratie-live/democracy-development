@@ -17,6 +17,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: bundestag.io-admin
     SERVICE_PATH: bundestag.io/admin
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

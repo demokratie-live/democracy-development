@@ -13,6 +13,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: sync-named-polls
     SERVICE_PATH: services/cron-jobs/sync-named-polls
+  extraFlags: ['--load']
 
 ---
 kind: Deploy

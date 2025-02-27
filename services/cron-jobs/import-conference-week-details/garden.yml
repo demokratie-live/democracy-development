@@ -13,6 +13,7 @@ spec:
     NODE_VERSION: 18.18.2
     SERVICE: import-conference-week-details
     SERVICE_PATH: services/cron-jobs/import-conference-week-details
+  extraFlags: ['--load']
 
 ---
 kind: Deploy
