@@ -1,0 +1,23 @@
+{
+  "name": "meilisearch-sync-democracy",
+  "version": "0.1.0",
+  "main": "build/index.js",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "ts-node-dev ./src/index",
+    "lint": "yarn lint:ts && yarn lint:exports",
+    "lint:ts": "tsc --noEmit",
+    "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
+    "build": "tsc",
+    "start": "node ./build/index.js"
+  },
+  "dependencies": {
+    "@democracy-deutschland/democracy-common": "^0.2.8",
+    "meilisearch": "^0.12.0"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.0.0-pre.50",
+    "ts-unused-exports": "^6.2.1",
+    "typescript": "^3.9.6"
+  }
+}
