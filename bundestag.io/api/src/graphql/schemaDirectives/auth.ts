@@ -21,15 +21,31 @@ export const authDirective = (directiveName: string) => {
     authDirectiveTypeDefs: directiveTypeDefs,
     authDirectiveTransformer: (schema: GraphQLSchema) =>
       mapSchema(schema, {
+        [MapperKind.TYPE]: (type) => {
+          // This step is needed to process the enum types before using them
+          return type;
+        },
         [MapperKind.OBJECT_FIELD](fieldConfig) {
-          const authDirective = getDirective(schema, fieldConfig, directiveName)?.[0];
+          // For GraphQL v16+, we need a different approach to get directives
+          let authDirective;
+          try {
+            authDirective = getDirective(schema, fieldConfig, directiveName)?.[0];
+          } catch (e) {
+            // If there's an error getting the directive, we try a fallback approach
+            const directives = fieldConfig.astNode?.directives || [];
+            const directive = directives.find(d => d.name.value === directiveName);
+            if (directive) {
+              const requiresArg = directive.arguments?.find(arg => arg.name.value === 'requires');
+              if (requiresArg && requiresArg.value.kind === 'EnumValue') {
+                authDirective = { requires: requiresArg.value.value };
+              }
+            }
+          }
+
           if (authDirective) {
             const { resolve = defaultFieldResolver } = fieldConfig;
-            console.log(authDirective);
-            const { requires } = authDirective;
             fieldConfig.resolve = async (parent, args, context, info) => {
-              console.log(hasPermissions(context, requires));
-              if (!hasPermissions(context, requires)) {
+              if (!hasPermissions(context, authDirective.requires)) {
                 throw new Error('You have not enough permissions!');
               }
               const result = await resolve(parent, args, context, info);
