@@ -26,7 +26,7 @@ spec:
             - name: NEXTAUTH_SECRET
               value: secret
             - name: NEXTAUTH_URL
-              value: 'https://admin.${var.hostname}'
+              value: 'http://admin.${var.hostname}'
             - name: BUNDESTAGIO_SERVER_URL
               value: 'http://bundestag-io-api'
             - name: BIO_EDIT_TOKEN
