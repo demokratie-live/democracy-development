@@ -126,7 +126,7 @@ const VoteResultsForm = ({ data, type, procedureId, period, lastPlenaryProtocoll
       <FormItem label="Ergebnis umdrehen" name="toggleDecision">
         <Switch defaultChecked={data.votingRecommendation === false} />
       </FormItem>
-      <Beschlusstext pdfUrl={lastPlenaryProtocoll.findSpotUrl} title={title} />
+      <Beschlusstext pdfUrl={lastPlenaryProtocoll?.findSpotUrl} title={title} />
       <FormItem
         noStyle
         shouldUpdate={(prevValues, currentValues) => prevValues.decisionText !== currentValues.decisionText}

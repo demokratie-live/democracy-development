@@ -62,9 +62,10 @@ const Procedure: React.FC = () => {
     );
   }
 
-  const plenaryProtocolls = history.filter(({ findSpot }) => {
-    return findSpot.search(PROCEDURE_DEFINITIONS.HISTORY.FINDSPOT.FIND_BT_PLENARPROTOKOLL) !== -1;
-  });
+  const plenaryProtocolls =
+    history?.filter(({ findSpot }) => {
+      return findSpot?.search(PROCEDURE_DEFINITIONS.HISTORY.FINDSPOT.FIND_BT_PLENARPROTOKOLL) !== -1;
+    }) || [];
 
   return (
     <Layout>
@@ -88,26 +89,36 @@ const Procedure: React.FC = () => {
           <DT>Legislaturperiode</DT>
           <DD>{period}</DD>
           <DT>Dokumente</DT>
-          {importantDocuments.map((document) => {
+          {importantDocuments?.map((document) => {
             return (
               <DD key={document.number}>
-                <Link href={document.url} legacyBehavior>
-                  <a target="_blank">{`${document.type} (${document.editor} – ${document.number})`}</a>
-                </Link>
+                {document.url ? (
+                  <Link href={document.url} legacyBehavior>
+                    <a target="_blank">{`${document.type} (${document.editor} – ${document.number})`}</a>
+                  </Link>
+                ) : (
+                  <span>{`${document.type} (${document.editor} – ${document.number})`}</span>
+                )}
               </DD>
             );
           })}
-          {plenaryProtocolls.length > 0 && (
+          {plenaryProtocolls?.length > 0 && (
             <>
               <DT>Plenarprotokoll</DT>
               {plenaryProtocolls.map(({ initiator, findSpotUrl, findSpot }) => {
                 return (
                   <DD key={findSpot}>
-                    <Link href={findSpotUrl} legacyBehavior>
-                      <a target="_blank">
+                    {findSpotUrl ? (
+                      <Link href={findSpotUrl} legacyBehavior>
+                        <a target="_blank">
+                          {initiator} – {findSpot}
+                        </a>
+                      </Link>
+                    ) : (
+                      <span>
                         {initiator} – {findSpot}
-                      </a>
-                    </Link>
+                      </span>
+                    )}
                   </DD>
                 );
               })}
