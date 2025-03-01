@@ -33,9 +33,9 @@ export const authDirective = (directiveName: string) => {
           } catch (e) {
             // If there's an error getting the directive, we try a fallback approach
             const directives = fieldConfig.astNode?.directives || [];
-            const directive = directives.find(d => d.name.value === directiveName);
+            const directive = directives.find((d) => d.name.value === directiveName);
             if (directive) {
-              const requiresArg = directive.arguments?.find(arg => arg.name.value === 'requires');
+              const requiresArg = directive.arguments?.find((arg) => arg.name.value === 'requires');
               if (requiresArg && requiresArg.value.kind === 'EnumValue') {
                 authDirective = { requires: requiresArg.value.value };
               }
@@ -46,7 +46,7 @@ export const authDirective = (directiveName: string) => {
             const { resolve = defaultFieldResolver } = fieldConfig;
             fieldConfig.resolve = async (parent, args, context, info) => {
               if (!hasPermissions(context, authDirective.requires)) {
-                throw new Error('You have not enough permissions!');
+                throw new Error('You do not have enough permissions!');
               }
               const result = await resolve(parent, args, context, info);
               return result;
