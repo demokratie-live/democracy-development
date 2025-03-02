@@ -1,26 +1,21 @@
-/* eslint-disable import/no-extraneous-dependencies */
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+import bundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
-module.exports = withBundleAnalyzer({
-  experimental: {
-    outputStandalone: true,
-  },
+export default withBundleAnalyzer({
+  output: 'standalone',
   eslint: {
     dirs: ['.'],
   },
   poweredByHeader: false,
   trailingSlash: true,
   basePath: '',
-  // The starter code load resources from `public` folder with `router.basePath` in React components.
-  // So, the source code is "basePath-ready".
-  // You can remove `basePath` if you don't need it.
   reactStrictMode: true,
   images: {
     formats: ['image/avif', 'image/webp'],
   },
-
   async rewrites() {
     return [
       {
@@ -32,8 +27,7 @@ module.exports = withBundleAnalyzer({
         destination: '/api/assetlinks',
       },
       {
-        source:
-          '/.well-known/apple-developer-merchantid-domain-association.txt',
+        source: '/.well-known/apple-developer-merchantid-domain-association.txt',
         destination: '/api/apple-developer-merchantid-domain-association',
       },
     ];

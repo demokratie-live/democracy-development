@@ -2,8 +2,12 @@
   "name": "@democracy-deutschland/scapacra",
   "version": "1.0.6",
   "description": "Scapacra (Scraper Parser Crawler)",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts"
+  },
   "author": "DEMOCRACY Deutschland e.V.",
   "homepage": "https://github.com/demokratie-live/scapacra#readme",
   "keywords": [],
@@ -16,7 +20,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon ./src/Example.ts",
-    "lint": "tslint --project tsconfig.json && pnpm typecheck",
+    "lint": "eslint . --ext .ts",
     "typecheck": "tsc --noEmit"
   },
   "bugs": {
@@ -26,16 +30,21 @@
     "@types/chai": "^4.3.16",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.12.13",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
     "chai": "^4.4.1",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
     "mocha": "^10.4.0",
     "nodemon": "^3.1.2",
-    "ts-node": "^10.9.2",
-    "tslint": "^6.1.3"
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.2"
   },
   "dependencies": {
     "@types/xml2js": "^0.4.14",
     "@types/xmldom": "^0.1.34",
-    "typescript": "^5.4.5",
+    "typescript": "~5.5.0",
     "xml2js": "^0.6.2",
     "xmldom": "^0.6.0",
     "xpath": "0.0.33"
