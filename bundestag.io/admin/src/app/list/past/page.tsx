@@ -4,9 +4,12 @@ import PageTemplate from '../_components/PageTemplate';
 
 export const dynamic = 'force-dynamic';
 
-export default async function Page({ searchParams }: { searchParams: { page?: string } }) {
+type Props = { searchParams: Promise<{ [key: string]: string | string[] | undefined }>; };
+
+export default async function Page({ searchParams }: Props) {
   noStore();
-  const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
+  const searchParamsResolved = await searchParams;
+  const currentPage = searchParamsResolved.page ? parseInt(searchParamsResolved.page.toString(), 10) : 1;
   const { procedures, count } = await fetchProcedures(
     `${process.env.PROCEDURES_SERVER_URL}/procedures/list/past`,
     currentPage,

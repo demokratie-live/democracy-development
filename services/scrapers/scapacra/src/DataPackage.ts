@@ -20,10 +20,10 @@ export class DataPackage<D, M> {
     }
   }
 
-  public setData(data: D | null) {
+  public setData(data: D | null): void {
     this.data = data;
   }
-  public setMeta(meta: M | null) {
+  public setMeta(meta: M | null): void {
     this.meta = meta;
   }
 

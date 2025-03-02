@@ -1,6 +1,6 @@
 {
-  "eslint.packageManager": "pnpm",
-  "eslint.alwaysShowStatus": true,
+  "eslint.workingDirectories": [{ "directory": "./bundestag.io/admin", "changeProcessCWD": true }],
+  "eslint.useFlatConfig": true,
   "search.exclude": {
     "**/node_modules": true,
     "**/bower_components": true,
@@ -13,17 +13,8 @@
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "[dotenv]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[properties]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[ignore]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
   },
   "github.copilot.chat.reviewSelection.instructions": [
     {

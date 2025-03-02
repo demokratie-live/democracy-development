@@ -9,50 +9,44 @@ describe('ProceduresController', () => {
     jest.Mocked<Partial<ProceduresService>>
   > = {
     findAll: jest.fn(
-      ({}: { page: number; limit: number }) =>
+      ({ page, limit }: { page: number; limit: number }) =>
         ({
-          procedures: [
-            {
-              title: 'test',
-              id: 1,
-              procedureId: '123456',
-              type: '',
-              period: '',
-              importantDocuments: [],
-            },
-          ],
+          procedures: Array(limit).fill({
+            title: 'test',
+            id: page,
+            procedureId: '123456',
+            type: '',
+            period: '',
+            importantDocuments: [],
+          }),
           count: 1,
         }) as any,
     ),
     fetchUpcomingProcedures: jest.fn(
-      ({}: { page: number; limit: number }) =>
+      ({ page, limit }: { page: number; limit: number }) =>
         ({
-          procedures: [
-            {
-              title: 'test',
-              id: 1,
-              procedureId: '123456',
-              type: '',
-              period: '',
-              importantDocuments: [],
-            },
-          ],
+          procedures: Array(limit).fill({
+            title: 'test',
+            id: page,
+            procedureId: '123456',
+            type: '',
+            period: '',
+            importantDocuments: [],
+          }),
           count: 1,
         }) as any,
     ),
     fetchPastProcedures: jest.fn(
-      ({}: { page: number; limit: number }) =>
+      ({ page, limit }: { page: number; limit: number }) =>
         ({
-          procedures: [
-            {
-              title: 'test',
-              id: 1,
-              procedureId: '123456',
-              type: '',
-              period: '',
-              importantDocuments: [],
-            },
-          ],
+          procedures: Array(limit).fill({
+            title: 'test',
+            id: page,
+            procedureId: '123456',
+            type: '',
+            period: '',
+            importantDocuments: [],
+          }),
           count: 1,
         }) as any,
     ),
