@@ -1,11 +1,15 @@
 import { Disclosure } from '@headlessui/react';
-import { FunnelIcon as FilterIcon } from '@heroicons/react/24/outline';
+import { FilterIcon } from '@heroicons/react/outline';
 
 import { AppConfig } from '@/utils/AppConfig';
 
 const { filters } = AppConfig;
 
-export default function Filters({ selected = [], onToggle = (_: string, __: string) => {}, onReset = () => {} }) {
+export default function Filters({
+  selected = [],
+  onToggle = (_: string, __: string) => {},
+  onReset = () => {},
+}) {
   return (
     <Disclosure
       as="section"
@@ -28,7 +32,11 @@ export default function Filters({ selected = [], onToggle = (_: string, __: stri
           </div>
           {selected.length > 0 ? (
             <div className="pl-6">
-              <button type="button" className="text-gray-500" onClick={() => onReset()}>
+              <button
+                type="button"
+                className="text-gray-500"
+                onClick={() => onReset()}
+              >
                 Zurücksetzen
               </button>
             </div>
@@ -38,10 +46,15 @@ export default function Filters({ selected = [], onToggle = (_: string, __: stri
       <Disclosure.Panel className="bg-white py-5">
         <div className="mx-auto grid max-w-7xl select-none gap-y-12 px-8 text-sm md:grid-cols-6">
           <fieldset className="col-span-2 lg:col-span-1">
-            <legend className="block font-semibold text-gray-900">{filters.type.label}</legend>
+            <legend className="block font-semibold text-gray-900">
+              {filters.type.label}
+            </legend>
             <div className="space-y-2.5 pt-6 sm:pt-4 md:space-y-1">
               {filters.type.options.map((option, optionIdx) => (
-                <div key={option.value} className="flex items-start text-[1.1em] sm:text-sm">
+                <div
+                  key={option.value}
+                  className="flex items-start text-[1.1em] sm:text-sm"
+                >
                   <input
                     id={`size-${optionIdx}`}
                     name="size[]"
@@ -62,10 +75,15 @@ export default function Filters({ selected = [], onToggle = (_: string, __: stri
             </div>
           </fieldset>
           <fieldset className="col-span-4 lg:col-span-5">
-            <legend className="block font-semibold text-gray-900">{filters.subjectGroups.label}</legend>
+            <legend className="block font-semibold text-gray-900">
+              {filters.subjectGroups.label}
+            </legend>
             <div className="grid auto-cols-min grid-cols-1 gap-x-6 gap-y-2.5 pt-6 sm:pt-4 md:gap-y-1 lg:grid-cols-2 xl:grid-cols-3">
               {filters.subjectGroups.options.map((option, optionIdx) => (
-                <div key={option.value} className="flex items-start text-[1.1em] sm:text-sm">
+                <div
+                  key={option.value}
+                  className="flex items-start text-[1.1em] sm:text-sm"
+                >
                   <input
                     id={`category-${optionIdx}`}
                     name="category[]"
