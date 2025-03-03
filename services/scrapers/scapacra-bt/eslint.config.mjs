@@ -22,6 +22,8 @@ export default [
       globals: {
         ...globals.node,
         NodeJS: 'readonly',
+        AsyncIterableIterator: 'readonly',
+        Attr: 'readonly',
       },
     },
     plugins: {
