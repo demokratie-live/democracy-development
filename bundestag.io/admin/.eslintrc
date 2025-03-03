@@ -1,7 +1,12 @@
 {
+  "extends": "next",
   "root": true,
-  "extends": ["next", "prettier"],
-  "rules": {
-    "react/display-name": 0
-  }
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "parserOptions": {
+        "project": "./tsconfig.json",
+      },
+    },
+  ],
 }

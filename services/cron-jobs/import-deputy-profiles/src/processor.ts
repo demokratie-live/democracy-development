@@ -72,9 +72,11 @@ export const processDeputyList = async (period: Period) => {
   let offset = 0;
   let hasMore = true;
   while (hasMore) {
+    console.log('getDeputyListUrl', getDeputyListUrl({ period, offset }));
     const url = getDeputyListUrl({ period, offset });
     const deputyList = await fetchDeputyList(url);
     for (const deputyListItem of deputyList.deputies) {
+      console.log('deputyListItem', deputyListItem);
       await processDeputy(deputyListItem, period);
     }
     if (deputyList.deputies.length) {

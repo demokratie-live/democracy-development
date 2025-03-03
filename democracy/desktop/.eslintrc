@@ -1,4 +1,12 @@
 {
+  "extends": "next",
   "root": true,
-  "extends": ["next/core-web-vitals", "prettier"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "parserOptions": {
+        "project": "./tsconfig.json",
+      },
+    },
+  ],
 }
