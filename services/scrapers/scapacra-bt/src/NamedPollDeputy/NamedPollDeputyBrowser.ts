@@ -41,11 +41,11 @@ interface NamedPollsListResponse {
 }
 
 /**
- * Abstract browser which implements the base navigation of a Bundestag document list.
+ * Browser which implements the navigation of Bundestag named poll deputy list.
  */
 export class NamedPollDeputyBrowser implements IBrowser<NamedPollDeputiesData, NamedPollDeputiesMeta> {
   private readonly findListURL: string =
-    'https://www.bundestag.de/ajax/filterlist/de/parlament/plenum/abstimmung/484422-484422?&offset=null&noFilterSet=true&view=resultjson';
+    'https://www.bundestag.de/ajax/filterlist/de/parlament/plenum/abstimmung/484422-484422?noFilterSet=true&view=resultjson';
   private readonly nameListURL: string = 'https://www.bundestag.de/apps/na/namensliste.form?id=';
 
   private pollUrls: string[] = [];
@@ -53,24 +53,25 @@ export class NamedPollDeputyBrowser implements IBrowser<NamedPollDeputiesData, N
   private done = false;
 
   public async next(): Promise<IteratorResult<Promise<DataPackage<NamedPollDeputiesData, NamedPollDeputiesMeta>>>> {
-    // First, try to get more URLs if we need them
+    // First, try to get more URLs if the stack is empty and we're not done
     if (this.pollUrls.length === 0 && !this.done) {
       await this.retrieveMore();
-
-      // If we still have no URLs and we're done fetching, we're finished
-      if (this.pollUrls.length === 0 && this.done) {
-        return {
-          done: true,
-          value: undefined,
-        };
-      }
     }
 
-    // We should have URLs available now
+    // After trying to get more URLs, if we still have none and we're done, we're finished
+    if (this.pollUrls.length === 0 && this.done) {
+      return {
+        done: true,
+        value: undefined,
+      };
+    }
+
+    // If we still have no URLs but we're not done, something went wrong
     if (this.pollUrls.length === 0) {
-      throw new Error('URL stack is empty but hasNext() indicated we should have more.');
+      throw new Error('URL stack is empty but we are not done fetching');
     }
 
+    // We have URLs to process
     return {
       done: false,
       value: this.loadNext(),
@@ -103,51 +104,58 @@ export class NamedPollDeputyBrowser implements IBrowser<NamedPollDeputiesData, N
     }
 
     try {
-      console.log('🏃 retrieveMore->get', this.findListURL.replace('offset=null', `offset=${this.offset}`));
-      const response = await axios.get<NamedPollsListResponse>(
-        this.findListURL.replace('offset=null', `offset=${this.offset}`),
-        {
-          method: 'get',
-        },
-      );
+      const url = `${this.findListURL}&offset=${this.offset}`;
+      console.log('🏃 retrieveMore->get', url);
+      const response = await axios.get<NamedPollsListResponse>(url, {
+        method: 'get',
+      });
 
       if (response.status === 200) {
         const data = response.data;
 
         // Process items and extract poll URLs
-        data.items.forEach((item) => {
-          if (item.href) {
-            // The href format is like "/parlament/plenum/abstimmung/abstimmung?id=123"
-            const match = item.href.match(/abstimmung\?id=(\d+)$/);
-            if (match && match[1]) {
-              const pollId = match[1];
-              console.log('🏃 Found poll ID:', pollId);
-              this.pollUrls.push(`${this.nameListURL}${pollId}`);
-            } else {
-              console.log('🏃 No match for href:', item.href);
+        if (data.items && data.items.length > 0) {
+          data.items.forEach((item) => {
+            if (item.href) {
+              // The href format is like "/parlament/plenum/abstimmung/abstimmung?id=123"
+              const match = item.href.match(/abstimmung\?id=(\d+)$/);
+              if (match && match[1]) {
+                const pollId = match[1];
+                console.log('🏃 Found poll ID:', pollId);
+                this.pollUrls.push(`${this.nameListURL}${pollId}`);
+              } else {
+                console.log('🏃 No match for href:', item.href);
+              }
             }
+          });
+
+          const limit = data.meta.limit || 10;
+          // Increase offset by the page size (limit)
+          this.offset += limit;
+
+          // Check if we've reached the end by comparing offset with total hits
+          console.log('🏃 retrieveMore->check', {
+            offset: this.offset,
+            hits: data.meta.hits,
+            items: data.items.length,
+            limit,
+            isLast: data.meta.isLast,
+            pollUrlsCount: this.pollUrls.length,
+          });
+
+          // Only mark as done if we've reached or exceeded the total number of hits
+          // or if we got fewer items than expected
+          if (this.offset >= data.meta.hits || data.items.length < limit) {
+            console.log('🏃 retrieveMore->done', 'Reached end of results');
+            this.done = true;
           }
-        });
-
-        const limit = data.meta.limit;
-        // Increase offset by the page size (limit)
-        this.offset += limit;
-
-        // Check if we've reached the end by comparing offset with total hits
-        console.log('🏃 retrieveMore->check', {
-          offset: this.offset,
-          hits: data.meta.hits,
-          items: data.items.length,
-          limit,
-          isLast: data.meta.isLast,
-          pollUrlsCount: this.pollUrls.length,
-        });
-
-        // Only mark as done if we've reached or exceeded the total number of hits
-        if (this.offset >= data.meta.hits) {
-          console.log('🏃 retrieveMore->done', 'Reached total hits');
+        } else {
+          // No items returned means we're done
+          console.log('🏃 retrieveMore->done', 'No more items');
           this.done = true;
         }
+      } else {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
     } catch (error) {
       console.error('Error fetching poll list:', error);
@@ -156,7 +164,7 @@ export class NamedPollDeputyBrowser implements IBrowser<NamedPollDeputiesData, N
     }
   }
 
-  [Symbol.asyncIterator](): AsyncIterableIterator<Promise<DataPackage<NamedPollDeputiesData, NamedPollDeputiesMeta>>> {
+  [Symbol.asyncIterator](): this {
     return this;
   }
 }
