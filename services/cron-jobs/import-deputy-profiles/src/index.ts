@@ -5,6 +5,7 @@ import { fetchDeputyDetails } from './scraper';
 import { processDeputyList } from './processor';
 
 const start = async () => {
+  console.info('START');
   const startDate = new Date();
   await setCronStart({ name: CRON_NAME, startDate });
 
@@ -25,8 +26,6 @@ const start = async () => {
 };
 
 const main = async () => {
-  console.info('START');
-
   // Filter out dotenv config path from arguments
   const args = process.argv.filter((arg) => !arg.startsWith('dotenv_config_path='));
   const deputyUrl = args[2]; // Index 2 will be the first actual argument after node and script path
