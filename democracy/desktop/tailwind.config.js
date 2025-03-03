@@ -1,8 +1,5 @@
-import forms from '@tailwindcss/forms';
-import lineClamp from '@tailwindcss/line-clamp';
-import typography from '@tailwindcss/typography';
-
-const config = {
+/* eslint-disable global-require */
+module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     fontSize: {
@@ -54,7 +51,9 @@ const config = {
       },
     },
   },
-  plugins: [forms, lineClamp, typography],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/line-clamp'),
+    require('@tailwindcss/typography'),
+  ],
 };
-
-export default config;

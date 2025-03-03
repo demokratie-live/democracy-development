@@ -2,7 +2,7 @@
 import { Fragment, useEffect, useState } from 'react';
 
 import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import { ChevronDownIcon } from '@heroicons/react/solid';
 
 const items = [
   { name: 'Abstimmungsdatum', id: 'voteDate' },
@@ -51,9 +51,11 @@ export default function Example({ onSelect = (_: string) => {} }) {
                   <a
                     onClick={() => setSelectedItem(items[index])}
                     className={classNames(
-                      option.id === selectedItem!.id ? 'font-semibold text-gray-900' : 'text-gray-700',
+                      option.id === selectedItem!.id
+                        ? 'font-semibold text-gray-900'
+                        : 'text-gray-700',
                       active ? 'bg-gray-100' : '',
-                      'block px-4 py-2 text-sm cursor-pointer',
+                      'block px-4 py-2 text-sm cursor-pointer'
                     )}
                   >
                     {option.name}

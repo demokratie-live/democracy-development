@@ -1,4 +1,4 @@
-import { PaperClipIcon } from '@heroicons/react/24/outline';
+import { PaperClipIcon } from '@heroicons/react/outline';
 import dayjs from 'dayjs';
 import { sortBy, truncate } from 'lodash-es';
 
@@ -19,8 +19,11 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
             length: 60,
           })}
           description={truncate(
-            data?.procedure?.sessionTOPHeading ?? data?.procedure?.abstract ?? data?.procedure?.title ?? 'Democracy',
-            { length: 150 },
+            data?.procedure?.sessionTOPHeading ??
+              data?.procedure?.abstract ??
+              data?.procedure?.title ??
+              'Democracy',
+            { length: 150 }
           )}
           canonical={`${AppConfig.url}${resolvedUrl}`}
         />
@@ -53,7 +56,9 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
 
               <div className="mt-10 overflow-hidden border bg-white shadow sm:rounded-lg">
                 <div className="px-4 py-5 sm:px-6">
-                  <h3 className="text-lg font-medium leading-6 text-gray-900">Details</h3>
+                  <h3 className="text-lg font-medium leading-6 text-gray-900">
+                    Details
+                  </h3>
                   {/* <p className="mt-1 max-w-2xl text-sm text-gray-500">
                     Personal details and application.
                   </p> */}
@@ -62,39 +67,57 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                   <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
                     <div className="sm:col-span-1 ">
                       <dt className="text-sm font-medium text-gray-800">Typ</dt>
-                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">{data.procedure.type}</dd>
+                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
+                        {data.procedure.type}
+                      </dd>
                     </div>
                     <div className="sm:col-span-1 ">
-                      <dt className="text-sm font-medium text-gray-800">Vorgang</dt>
-                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">{data.procedure.procedureId}</dd>
+                      <dt className="text-sm font-medium text-gray-800">
+                        Vorgang
+                      </dt>
+                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
+                        {data.procedure.procedureId}
+                      </dd>
                     </div>
                     <div className="sm:col-span-1 ">
-                      <dt className="text-sm font-medium text-gray-800">Sachgebiete</dt>
+                      <dt className="text-sm font-medium text-gray-800">
+                        Sachgebiete
+                      </dt>
                       <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
                         {data.procedure.subjectGroups.join(', ')}
                       </dd>
                     </div>
                     <div className="sm:col-span-1 ">
-                      <dt className="text-sm font-medium text-gray-800">erstellt am</dt>
+                      <dt className="text-sm font-medium text-gray-800">
+                        erstellt am
+                      </dt>
                       <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
-                        {dayjs(data.procedure.submissionDate).format('DD.MM.YYYY')}
+                        {dayjs(data.procedure.submissionDate).format(
+                          'DD.MM.YYYY'
+                        )}
                       </dd>
                     </div>
                     <div className="sm:col-span-1 ">
-                      <dt className="text-sm font-medium text-gray-800">Abstimmung</dt>
+                      <dt className="text-sm font-medium text-gray-800">
+                        Abstimmung
+                      </dt>
                       <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
                         {dayjs(data.procedure.voteDate).format('DD.MM.YYYY')}
                       </dd>
                     </div>
                     <div className="sm:col-span-1 ">
-                      <dt className="text-sm font-medium text-gray-800">Aktueller Stand</dt>
+                      <dt className="text-sm font-medium text-gray-800">
+                        Aktueller Stand
+                      </dt>
                       <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
                         {data.procedure.currentStatus}
                       </dd>
                     </div>
                     {data.procedure.abstract && (
                       <div className="sm:col-span-2 ">
-                        <dt className="text-sm font-medium text-gray-800">Inhalt</dt>
+                        <dt className="text-sm font-medium text-gray-800">
+                          Inhalt
+                        </dt>
                         <dd className="prose mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
                           {data.procedure.abstract}
                         </dd>
@@ -102,9 +125,14 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                     )}
                     <hr className="my-5 border-dashed sm:col-span-3" />
                     <div className="sm:col-span-3 sm:grid sm:grid-cols-3 sm:gap-4 md:col-span-3">
-                      <dt className="text-sm font-medium text-gray-800">Dokumente</dt>
+                      <dt className="text-sm font-medium text-gray-800">
+                        Dokumente
+                      </dt>
                       <dd className="mt-1 text-sm text-gray-700 sm:col-span-3 sm:mt-0">
-                        <ul role="list" className="divide-y divide-gray-200 rounded-md border border-gray-200">
+                        <ul
+                          role="list"
+                          className="divide-y divide-gray-200 rounded-md border border-gray-200"
+                        >
                           {sortBy(data.procedure.importantDocuments, [
                             /*  'number',
                             'url', */
@@ -117,9 +145,14 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                                 rel="noreferrer"
                               >
                                 <div className="flex w-0 flex-1 items-start">
-                                  <PaperClipIcon className="h-5 w-5 shrink-0 text-gray-400" aria-hidden="true" />
+                                  <PaperClipIcon
+                                    className="h-5 w-5 shrink-0 text-gray-400"
+                                    aria-hidden="true"
+                                  />
                                   <div className="ml-2 flex w-full flex-col !pr-8">
-                                    <span className="truncate font-medium">{document.type}</span>
+                                    <span className="truncate font-medium">
+                                      {document.type}
+                                    </span>
                                     <small className="truncate text-gray-700">
                                       {document.editor}&nbsp;{document.number}
                                     </small>
@@ -146,7 +179,10 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
 }
 
 export async function getServerSideProps({ res, query, resolvedUrl }: any) {
-  res.setHeader('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=60');
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=86400, stale-while-revalidate=60'
+  );
 
   const [, id] = query.details ?? ([null, null] as any);
 

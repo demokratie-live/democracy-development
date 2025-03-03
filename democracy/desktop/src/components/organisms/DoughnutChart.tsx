@@ -42,17 +42,18 @@ export interface PartyVote {
 }
 
 export default function DoughnutChart({ className, votes, onHover }: Props) {
-  const isNeutral = votes.yes.count + votes.no.count < (votes?.abstination?.count ?? 0);
-  const isYes = votes.yes.count > votes.no.count;
+  const itsNeutral =
+    votes.yes.count + votes.no.count < (votes?.abstination?.count ?? 0);
+  const itsAYes = votes.yes.count > votes.no.count;
 
-  let ico: string = isYes ? icons.yes : icons.no;
-  let col = isYes ? votes.yes.color : votes.no.color;
+  let ico: string = itsAYes ? icons.yes : icons.no;
+  let col = itsAYes ? votes.yes.color : votes.no.color;
 
-  if (isNeutral) {
+  if (itsNeutral) {
     ico = icons.neutral;
     col = votes?.abstination?.color ?? col;
   }
-  const chartRef = useRef<any>(null);
+  const chartRef = useRef();
 
   const colors = Object.values(votes).map((v) => v?.color);
   const counts = Object.values(votes).map((v) => v?.count);
@@ -129,7 +130,11 @@ export default function DoughnutChart({ className, votes, onHover }: Props) {
         }}
       />
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <svg
+          className="h-6 w-6"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
           <path fill={col} d={ico} />
         </svg>
       </div>
