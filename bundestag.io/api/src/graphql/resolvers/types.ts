@@ -2,7 +2,9 @@ import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from '
 import { GraphQlContext } from '../../types/graphqlContext';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
-export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
+export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & {
+  [P in K]-?: NonNullable<T[P]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -17,7 +19,7 @@ export type Scalars = {
 
 export enum Role {
   Backend = 'BACKEND',
-  User = 'USER'
+  User = 'USER',
 }
 
 export type ConferenceWeekDetailSessionTopTopic = {
@@ -85,29 +87,24 @@ export type Query = {
   proceduresData: ProceduresData;
 };
 
-
 export type QueryConferenceWeekDetailArgs = {
   year: Scalars['Int'];
   week: Scalars['Int'];
 };
-
 
 export type QueryConferenceWeekDetailsArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
 };
 
-
 export type QueryDeputyArgs = {
   webId: Scalars['String'];
 };
-
 
 export type QueryDeputiesArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
 };
-
 
 export type QueryDeputyUpdatesArgs = {
   since: Scalars['Date'];
@@ -115,22 +112,18 @@ export type QueryDeputyUpdatesArgs = {
   offset?: Maybe<Scalars['Int']>;
 };
 
-
 export type QueryLegislativePeriodArgs = {
   period: Scalars['Int'];
 };
-
 
 export type QueryNamedPollArgs = {
   webId: Scalars['String'];
 };
 
-
 export type QueryNamedPollsArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
 };
-
 
 export type QueryNamedPollUpdatesArgs = {
   since: Scalars['Date'];
@@ -139,11 +132,9 @@ export type QueryNamedPollUpdatesArgs = {
   associated?: Maybe<Scalars['Boolean']>;
 };
 
-
 export type QueryProcedureArgs = {
   procedureId: Scalars['String'];
 };
-
 
 export type QueryProceduresArgs = {
   offset?: Maybe<Scalars['Int']>;
@@ -156,13 +147,11 @@ export type QueryProceduresArgs = {
   limit?: Maybe<Scalars['Int']>;
 };
 
-
 export type QueryAllProceduresArgs = {
   offset?: Maybe<Scalars['Int']>;
   period?: Maybe<Array<Scalars['Int']>>;
   type?: Maybe<Array<Scalars['String']>>;
 };
-
 
 export type QueryProcedureUpdatesArgs = {
   since: Scalars['Date'];
@@ -172,11 +161,9 @@ export type QueryProcedureUpdatesArgs = {
   types?: Maybe<Array<Scalars['String']>>;
 };
 
-
 export type QueryVoteResultTextHelperArgs = {
   procedureId: Scalars['String'];
 };
-
 
 export type QueryProceduresDataArgs = {
   offset?: Maybe<Scalars['Int']>;
@@ -385,12 +372,12 @@ export enum VoteDecision {
   Yes = 'YES',
   Abstination = 'ABSTINATION',
   No = 'NO',
-  Notvoted = 'NOTVOTED'
+  Notvoted = 'NOTVOTED',
 }
 
 export enum VotingDocument {
   MainDocument = 'mainDocument',
-  RecommendedDecision = 'recommendedDecision'
+  RecommendedDecision = 'recommendedDecision',
 }
 
 export type ProcedureCustomData = {
@@ -494,7 +481,6 @@ export type Mutation = {
   signIn?: Maybe<User>;
 };
 
-
 export type MutationSaveProcedureCustomDataArgs = {
   procedureId: Scalars['String'];
   partyVotes: Array<PartyVoteInput>;
@@ -503,17 +489,14 @@ export type MutationSaveProcedureCustomDataArgs = {
   toggleDecision: Scalars['Boolean'];
 };
 
-
 export type MutationSaveProcedurenamedPollCustomDataArgs = {
   procedureId: Scalars['String'];
   toggleDecision: Scalars['Boolean'];
 };
 
-
 export type MutationScrapeProceduresArgs = {
   key: Scalars['String'];
 };
-
 
 export type MutationSignInArgs = {
   email: Scalars['String'];
@@ -530,7 +513,6 @@ export type ProcessFlow = {
   date?: Maybe<Scalars['Date']>;
 };
 
-
 export type Schema = {
   __typename?: 'Schema';
   query?: Maybe<Query>;
@@ -538,7 +520,7 @@ export type Schema = {
 
 export enum UserRole {
   Web = 'WEB',
-  Backend = 'BACKEND'
+  Backend = 'BACKEND',
 }
 
 export type User = {
@@ -550,14 +532,10 @@ export type User = {
 
 export enum CacheControlScope {
   Public = 'PUBLIC',
-  Private = 'PRIVATE'
+  Private = 'PRIVATE',
 }
 
-
-
-
 export type ResolverTypeWrapper<T> = Promise<T> | T;
-
 
 export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
   fragment: string;
@@ -568,7 +546,9 @@ export type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
   selectionSet: string;
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export type StitchingResolver<TResult, TParent, TContext, TArgs> = LegacyStitchingResolver<TResult, TParent, TContext, TArgs> | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
+export type StitchingResolver<TResult, TParent, TContext, TArgs> =
+  | LegacyStitchingResolver<TResult, TParent, TContext, TArgs>
+  | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
   | ResolverFn<TResult, TParent, TContext, TArgs>
   | StitchingResolver<TResult, TParent, TContext, TArgs>;
@@ -577,24 +557,30 @@ export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => Promise<TResult> | TResult;
 
 export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => TResult | Promise<TResult>;
 
-export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
+export interface SubscriptionSubscriberObject<
+  TResult,
+  TKey extends string,
+  TParent,
+  TContext,
+  TArgs,
+> {
   subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
   resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
 }
@@ -608,17 +594,26 @@ export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, 
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+export type SubscriptionResolver<
+  TResult,
+  TKey extends string,
+  TParent = {},
+  TContext = {},
+  TArgs = {},
+> =
   | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
 export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   parent: TParent,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}> = (obj: T, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = {}> = (
+  obj: T,
+  info: GraphQLResolveInfo,
+) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
@@ -627,7 +622,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => TResult | Promise<TResult>;
 
 /** Mapping between all available schema types and the resolvers types */
@@ -735,7 +730,11 @@ export type ResolversParentTypes = {
   Upload: Scalars['Upload'];
 };
 
-export type ConferenceWeekDetailSessionTopTopicResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['ConferenceWeekDetailSessionTopTopic'] = ResolversParentTypes['ConferenceWeekDetailSessionTopTopic']> = {
+export type ConferenceWeekDetailSessionTopTopicResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['ConferenceWeekDetailSessionTopTopic'] = ResolversParentTypes['ConferenceWeekDetailSessionTopTopic'],
+> = {
   lines?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   documents?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   isVote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -743,31 +742,59 @@ export type ConferenceWeekDetailSessionTopTopicResolvers<ContextType = GraphQlCo
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type ConferenceWeekDetailSessionTopStatusResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['ConferenceWeekDetailSessionTopStatus'] = ResolversParentTypes['ConferenceWeekDetailSessionTopStatus']> = {
+export type ConferenceWeekDetailSessionTopStatusResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['ConferenceWeekDetailSessionTopStatus'] = ResolversParentTypes['ConferenceWeekDetailSessionTopStatus'],
+> = {
   line?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   documents?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type ConferenceWeekDetailSessionTopResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['ConferenceWeekDetailSessionTop'] = ResolversParentTypes['ConferenceWeekDetailSessionTop']> = {
+export type ConferenceWeekDetailSessionTopResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['ConferenceWeekDetailSessionTop'] = ResolversParentTypes['ConferenceWeekDetailSessionTop'],
+> = {
   time?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   top?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   heading?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   article?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  topic?: Resolver<Maybe<Array<Maybe<ResolversTypes['ConferenceWeekDetailSessionTopTopic']>>>, ParentType, ContextType>;
-  status?: Resolver<Maybe<Array<Maybe<ResolversTypes['ConferenceWeekDetailSessionTopStatus']>>>, ParentType, ContextType>;
+  topic?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['ConferenceWeekDetailSessionTopTopic']>>>,
+    ParentType,
+    ContextType
+  >;
+  status?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['ConferenceWeekDetailSessionTopStatus']>>>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type ConferenceWeekDetailSessionResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['ConferenceWeekDetailSession'] = ResolversParentTypes['ConferenceWeekDetailSession']> = {
+export type ConferenceWeekDetailSessionResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['ConferenceWeekDetailSession'] = ResolversParentTypes['ConferenceWeekDetailSession'],
+> = {
   date?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   dateText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   session?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  tops?: Resolver<Maybe<Array<Maybe<ResolversTypes['ConferenceWeekDetailSessionTop']>>>, ParentType, ContextType>;
+  tops?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['ConferenceWeekDetailSessionTop']>>>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type ConferenceWeekDetailResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['ConferenceWeekDetail'] = ResolversParentTypes['ConferenceWeekDetail']> = {
+export type ConferenceWeekDetailResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['ConferenceWeekDetail'] = ResolversParentTypes['ConferenceWeekDetail'],
+> = {
   URL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   previousYear?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -776,30 +803,119 @@ export type ConferenceWeekDetailResolvers<ContextType = GraphQlContext, ParentTy
   thisWeek?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   nextYear?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   nextWeek?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  sessions?: Resolver<Maybe<Array<Maybe<ResolversTypes['ConferenceWeekDetailSession']>>>, ParentType, ContextType>;
+  sessions?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['ConferenceWeekDetailSession']>>>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type QueryResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  conferenceWeekDetail?: Resolver<Maybe<ResolversTypes['ConferenceWeekDetail']>, ParentType, ContextType, RequireFields<QueryConferenceWeekDetailArgs, 'year' | 'week'>>;
-  conferenceWeekDetails?: Resolver<Maybe<Array<Maybe<ResolversTypes['ConferenceWeekDetail']>>>, ParentType, ContextType, RequireFields<QueryConferenceWeekDetailsArgs, never>>;
-  deputy?: Resolver<Maybe<ResolversTypes['Deputy']>, ParentType, ContextType, RequireFields<QueryDeputyArgs, 'webId'>>;
-  deputies?: Resolver<Maybe<Array<Maybe<ResolversTypes['Deputy']>>>, ParentType, ContextType, RequireFields<QueryDeputiesArgs, never>>;
-  deputyUpdates?: Resolver<Maybe<ResolversTypes['DeputyUpdate']>, ParentType, ContextType, RequireFields<QueryDeputyUpdatesArgs, 'since'>>;
-  legislativePeriod?: Resolver<Maybe<ResolversTypes['LegislativePeriod']>, ParentType, ContextType, RequireFields<QueryLegislativePeriodArgs, 'period'>>;
-  legislativePeriods?: Resolver<Maybe<Array<Maybe<ResolversTypes['LegislativePeriod']>>>, ParentType, ContextType>;
-  namedPoll?: Resolver<Maybe<ResolversTypes['NamedPoll']>, ParentType, ContextType, RequireFields<QueryNamedPollArgs, 'webId'>>;
-  namedPolls?: Resolver<Maybe<Array<Maybe<ResolversTypes['NamedPoll']>>>, ParentType, ContextType, RequireFields<QueryNamedPollsArgs, never>>;
-  namedPollUpdates?: Resolver<Maybe<ResolversTypes['NamedPollUpdate']>, ParentType, ContextType, RequireFields<QueryNamedPollUpdatesArgs, 'since'>>;
-  procedure?: Resolver<Maybe<ResolversTypes['Procedure']>, ParentType, ContextType, RequireFields<QueryProcedureArgs, 'procedureId'>>;
-  procedures?: Resolver<Maybe<Array<Maybe<ResolversTypes['Procedure']>>>, ParentType, ContextType, RequireFields<QueryProceduresArgs, never>>;
-  allProcedures?: Resolver<Maybe<Array<Maybe<ResolversTypes['Procedure']>>>, ParentType, ContextType, RequireFields<QueryAllProceduresArgs, never>>;
-  procedureUpdates?: Resolver<Maybe<ResolversTypes['ProcedureUpdate']>, ParentType, ContextType, RequireFields<QueryProcedureUpdatesArgs, 'since'>>;
-  voteResultTextHelper?: Resolver<Maybe<Array<ResolversTypes['VoteResultTexts']>>, ParentType, ContextType, RequireFields<QueryVoteResultTextHelperArgs, 'procedureId'>>;
-  proceduresData?: Resolver<ResolversTypes['ProceduresData'], ParentType, ContextType, RequireFields<QueryProceduresDataArgs, never>>;
+export type QueryResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query'],
+> = {
+  conferenceWeekDetail?: Resolver<
+    Maybe<ResolversTypes['ConferenceWeekDetail']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryConferenceWeekDetailArgs, 'year' | 'week'>
+  >;
+  conferenceWeekDetails?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['ConferenceWeekDetail']>>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryConferenceWeekDetailsArgs, never>
+  >;
+  deputy?: Resolver<
+    Maybe<ResolversTypes['Deputy']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryDeputyArgs, 'webId'>
+  >;
+  deputies?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['Deputy']>>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryDeputiesArgs, never>
+  >;
+  deputyUpdates?: Resolver<
+    Maybe<ResolversTypes['DeputyUpdate']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryDeputyUpdatesArgs, 'since'>
+  >;
+  legislativePeriod?: Resolver<
+    Maybe<ResolversTypes['LegislativePeriod']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryLegislativePeriodArgs, 'period'>
+  >;
+  legislativePeriods?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['LegislativePeriod']>>>,
+    ParentType,
+    ContextType
+  >;
+  namedPoll?: Resolver<
+    Maybe<ResolversTypes['NamedPoll']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryNamedPollArgs, 'webId'>
+  >;
+  namedPolls?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['NamedPoll']>>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryNamedPollsArgs, never>
+  >;
+  namedPollUpdates?: Resolver<
+    Maybe<ResolversTypes['NamedPollUpdate']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryNamedPollUpdatesArgs, 'since'>
+  >;
+  procedure?: Resolver<
+    Maybe<ResolversTypes['Procedure']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryProcedureArgs, 'procedureId'>
+  >;
+  procedures?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['Procedure']>>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryProceduresArgs, never>
+  >;
+  allProcedures?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['Procedure']>>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryAllProceduresArgs, never>
+  >;
+  procedureUpdates?: Resolver<
+    Maybe<ResolversTypes['ProcedureUpdate']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryProcedureUpdatesArgs, 'since'>
+  >;
+  voteResultTextHelper?: Resolver<
+    Maybe<Array<ResolversTypes['VoteResultTexts']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryVoteResultTextHelperArgs, 'procedureId'>
+  >;
+  proceduresData?: Resolver<
+    ResolversTypes['ProceduresData'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryProceduresDataArgs, never>
+  >;
 };
 
-export type DecisionResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Decision'] = ResolversParentTypes['Decision']> = {
+export type DecisionResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['Decision'] = ResolversParentTypes['Decision'],
+> = {
   page?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tenor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   document?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -810,20 +926,30 @@ export type DecisionResolvers<ContextType = GraphQlContext, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type DeputyLinkResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['DeputyLink'] = ResolversParentTypes['DeputyLink']> = {
+export type DeputyLinkResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['DeputyLink'] = ResolversParentTypes['DeputyLink'],
+> = {
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   URL?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type DeputyFunctionsResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['DeputyFunctions'] = ResolversParentTypes['DeputyFunctions']> = {
+export type DeputyFunctionsResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['DeputyFunctions'] = ResolversParentTypes['DeputyFunctions'],
+> = {
   category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   functions?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type DeputyResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Deputy'] = ResolversParentTypes['Deputy']> = {
+export type DeputyResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['Deputy'] = ResolversParentTypes['Deputy'],
+> = {
   URL?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   webId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   period?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -837,14 +963,25 @@ export type DeputyResolvers<ContextType = GraphQlContext, ParentType extends Res
   constituency?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   constituencyName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   directCandidate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  functions?: Resolver<Maybe<Array<Maybe<ResolversTypes['DeputyFunctions']>>>, ParentType, ContextType>;
+  functions?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['DeputyFunctions']>>>,
+    ParentType,
+    ContextType
+  >;
   speechesURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   votesURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  publicationRequirement?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  publicationRequirement?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['String']>>>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type DeputyUpdateResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['DeputyUpdate'] = ResolversParentTypes['DeputyUpdate']> = {
+export type DeputyUpdateResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['DeputyUpdate'] = ResolversParentTypes['DeputyUpdate'],
+> = {
   beforeCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   afterCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   newCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -853,7 +990,10 @@ export type DeputyUpdateResolvers<ContextType = GraphQlContext, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type DocumentResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Document'] = ResolversParentTypes['Document']> = {
+export type DocumentResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['Document'] = ResolversParentTypes['Document'],
+> = {
   editor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   number?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -861,7 +1001,11 @@ export type DocumentResolvers<ContextType = GraphQlContext, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type LegislativePeriodResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['LegislativePeriod'] = ResolversParentTypes['LegislativePeriod']> = {
+export type LegislativePeriodResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['LegislativePeriod'] = ResolversParentTypes['LegislativePeriod'],
+> = {
   number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   start?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   end?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
@@ -869,20 +1013,36 @@ export type LegislativePeriodResolvers<ContextType = GraphQlContext, ParentType 
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type NamedPollMediaVideoUrlResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['NamedPollMediaVideoURL'] = ResolversParentTypes['NamedPollMediaVideoURL']> = {
+export type NamedPollMediaVideoUrlResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['NamedPollMediaVideoURL'] = ResolversParentTypes['NamedPollMediaVideoURL'],
+> = {
   URL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type NamedPollMediaResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['NamedPollMedia'] = ResolversParentTypes['NamedPollMedia']> = {
+export type NamedPollMediaResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['NamedPollMedia'] = ResolversParentTypes['NamedPollMedia'],
+> = {
   iTunesURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   mediathekURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  videoURLs?: Resolver<Maybe<Array<Maybe<ResolversTypes['NamedPollMediaVideoURL']>>>, ParentType, ContextType>;
+  videoURLs?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['NamedPollMediaVideoURL']>>>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type NamedPollSpeechResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['NamedPollSpeech'] = ResolversParentTypes['NamedPollSpeech']> = {
+export type NamedPollSpeechResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['NamedPollSpeech'] = ResolversParentTypes['NamedPollSpeech'],
+> = {
   deputyName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   deputyImgURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   mediathekURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -891,7 +1051,11 @@ export type NamedPollSpeechResolvers<ContextType = GraphQlContext, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type NamedPollVotesVotesResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['NamedPollVotesVotes'] = ResolversParentTypes['NamedPollVotesVotes']> = {
+export type NamedPollVotesVotesResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['NamedPollVotesVotes'] = ResolversParentTypes['NamedPollVotesVotes'],
+> = {
   total?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   yes?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   no?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -900,13 +1064,21 @@ export type NamedPollVotesVotesResolvers<ContextType = GraphQlContext, ParentTyp
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type NamedPollVotesPartyResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['NamedPollVotesParty'] = ResolversParentTypes['NamedPollVotesParty']> = {
+export type NamedPollVotesPartyResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['NamedPollVotesParty'] = ResolversParentTypes['NamedPollVotesParty'],
+> = {
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   votes?: Resolver<Maybe<ResolversTypes['NamedPollVotesVotes']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type NamedPollDeputyResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['NamedPollDeputy'] = ResolversParentTypes['NamedPollDeputy']> = {
+export type NamedPollDeputyResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['NamedPollDeputy'] = ResolversParentTypes['NamedPollDeputy'],
+> = {
   webId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   URL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   imgURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -917,15 +1089,30 @@ export type NamedPollDeputyResolvers<ContextType = GraphQlContext, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type NamedPollVotesResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['NamedPollVotes'] = ResolversParentTypes['NamedPollVotes']> = {
+export type NamedPollVotesResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['NamedPollVotes'] = ResolversParentTypes['NamedPollVotes'],
+> = {
   all?: Resolver<Maybe<ResolversTypes['NamedPollVotesVotes']>, ParentType, ContextType>;
-  parties?: Resolver<Maybe<Array<Maybe<ResolversTypes['NamedPollVotesParty']>>>, ParentType, ContextType>;
-  deputies?: Resolver<Maybe<Array<Maybe<ResolversTypes['NamedPollDeputy']>>>, ParentType, ContextType>;
+  parties?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['NamedPollVotesParty']>>>,
+    ParentType,
+    ContextType
+  >;
+  deputies?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['NamedPollDeputy']>>>,
+    ParentType,
+    ContextType
+  >;
   inverseVoteDirection?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type NamedPollResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['NamedPoll'] = ResolversParentTypes['NamedPoll']> = {
+export type NamedPollResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['NamedPoll'] = ResolversParentTypes['NamedPoll'],
+> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   webId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   URL?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -937,13 +1124,21 @@ export type NamedPollResolvers<ContextType = GraphQlContext, ParentType extends 
   media?: Resolver<Maybe<ResolversTypes['NamedPollMedia']>, ParentType, ContextType>;
   plenarProtocolURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   procedureId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  speeches?: Resolver<Maybe<Array<Maybe<ResolversTypes['NamedPollSpeech']>>>, ParentType, ContextType>;
+  speeches?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['NamedPollSpeech']>>>,
+    ParentType,
+    ContextType
+  >;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   votes?: Resolver<Maybe<ResolversTypes['NamedPollVotes']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type NamedPollUpdateResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['NamedPollUpdate'] = ResolversParentTypes['NamedPollUpdate']> = {
+export type NamedPollUpdateResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['NamedPollUpdate'] = ResolversParentTypes['NamedPollUpdate'],
+> = {
   beforeCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   afterCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   newCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -952,7 +1147,11 @@ export type NamedPollUpdateResolvers<ContextType = GraphQlContext, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type FilteredConferenceWeekDetailSessionTopTopicResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['FilteredConferenceWeekDetailSessionTopTopic'] = ResolversParentTypes['FilteredConferenceWeekDetailSessionTopTopic']> = {
+export type FilteredConferenceWeekDetailSessionTopTopicResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['FilteredConferenceWeekDetailSessionTopTopic'] = ResolversParentTypes['FilteredConferenceWeekDetailSessionTopTopic'],
+> = {
   lines?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   documents?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   isVote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -960,25 +1159,49 @@ export type FilteredConferenceWeekDetailSessionTopTopicResolvers<ContextType = G
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type FilteredConferenceWeekDetailSessionTopResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['FilteredConferenceWeekDetailSessionTop'] = ResolversParentTypes['FilteredConferenceWeekDetailSessionTop']> = {
+export type FilteredConferenceWeekDetailSessionTopResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['FilteredConferenceWeekDetailSessionTop'] = ResolversParentTypes['FilteredConferenceWeekDetailSessionTop'],
+> = {
   time?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   top?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   heading?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   article?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  topic?: Resolver<Maybe<ResolversTypes['FilteredConferenceWeekDetailSessionTopTopic']>, ParentType, ContextType>;
-  status?: Resolver<Maybe<Array<Maybe<ResolversTypes['ConferenceWeekDetailSessionTopStatus']>>>, ParentType, ContextType>;
+  topic?: Resolver<
+    Maybe<ResolversTypes['FilteredConferenceWeekDetailSessionTopTopic']>,
+    ParentType,
+    ContextType
+  >;
+  status?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['ConferenceWeekDetailSessionTopStatus']>>>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type FilteredConferenceWeekDetailSessionResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['FilteredConferenceWeekDetailSession'] = ResolversParentTypes['FilteredConferenceWeekDetailSession']> = {
+export type FilteredConferenceWeekDetailSessionResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['FilteredConferenceWeekDetailSession'] = ResolversParentTypes['FilteredConferenceWeekDetailSession'],
+> = {
   date?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   dateText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   session?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  top?: Resolver<Maybe<ResolversTypes['FilteredConferenceWeekDetailSessionTop']>, ParentType, ContextType>;
+  top?: Resolver<
+    Maybe<ResolversTypes['FilteredConferenceWeekDetailSessionTop']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type FilteredConferenceWeekDetailResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['FilteredConferenceWeekDetail'] = ResolversParentTypes['FilteredConferenceWeekDetail']> = {
+export type FilteredConferenceWeekDetailResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['FilteredConferenceWeekDetail'] = ResolversParentTypes['FilteredConferenceWeekDetail'],
+> = {
   URL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   previousYear?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -987,17 +1210,28 @@ export type FilteredConferenceWeekDetailResolvers<ContextType = GraphQlContext, 
   thisWeek?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   nextYear?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   nextWeek?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  session?: Resolver<Maybe<ResolversTypes['FilteredConferenceWeekDetailSession']>, ParentType, ContextType>;
+  session?: Resolver<
+    Maybe<ResolversTypes['FilteredConferenceWeekDetailSession']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type ProcedureCustomDataResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['ProcedureCustomData'] = ResolversParentTypes['ProcedureCustomData']> = {
+export type ProcedureCustomDataResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['ProcedureCustomData'] = ResolversParentTypes['ProcedureCustomData'],
+> = {
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   voteResults?: Resolver<Maybe<ResolversTypes['VoteResults']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type VoteResultsResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['VoteResults'] = ResolversParentTypes['VoteResults']> = {
+export type VoteResultsResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['VoteResults'] = ResolversParentTypes['VoteResults'],
+> = {
   yes?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   no?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   abstination?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -1009,14 +1243,20 @@ export type VoteResultsResolvers<ContextType = GraphQlContext, ParentType extend
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type PartyVoteResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['PartyVote'] = ResolversParentTypes['PartyVote']> = {
+export type PartyVoteResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['PartyVote'] = ResolversParentTypes['PartyVote'],
+> = {
   party?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   main?: Resolver<Maybe<ResolversTypes['VoteDecision']>, ParentType, ContextType>;
   deviants?: Resolver<Maybe<ResolversTypes['Deviants']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type DeviantsResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Deviants'] = ResolversParentTypes['Deviants']> = {
+export type DeviantsResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['Deviants'] = ResolversParentTypes['Deviants'],
+> = {
   yes?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   abstination?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   no?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -1024,17 +1264,28 @@ export type DeviantsResolvers<ContextType = GraphQlContext, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type ProcedureResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Procedure'] = ResolversParentTypes['Procedure']> = {
+export type ProcedureResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['Procedure'] = ResolversParentTypes['Procedure'],
+> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   procedureId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   period?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   currentStatus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  currentStatusHistory?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  currentStatusHistory?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['String']>>>,
+    ParentType,
+    ContextType
+  >;
   signature?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   gestOrderNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  approvalRequired?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  approvalRequired?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['String']>>>,
+    ParentType,
+    ContextType
+  >;
   euDocNr?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   abstract?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   promulgation?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
@@ -1042,16 +1293,28 @@ export type ProcedureResolvers<ContextType = GraphQlContext, ParentType extends 
   tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   subjectGroups?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   history?: Resolver<Maybe<Array<Maybe<ResolversTypes['ProcessFlow']>>>, ParentType, ContextType>;
-  importantDocuments?: Resolver<Maybe<Array<Maybe<ResolversTypes['Document']>>>, ParentType, ContextType>;
+  importantDocuments?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['Document']>>>,
+    ParentType,
+    ContextType
+  >;
   customData?: Resolver<Maybe<ResolversTypes['ProcedureCustomData']>, ParentType, ContextType>;
   namedVote?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   voteDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   voteEnd?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  sessions?: Resolver<Maybe<Array<Maybe<ResolversTypes['FilteredConferenceWeekDetail']>>>, ParentType, ContextType>;
+  sessions?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['FilteredConferenceWeekDetail']>>>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type ProcedureUpdateResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['ProcedureUpdate'] = ResolversParentTypes['ProcedureUpdate']> = {
+export type ProcedureUpdateResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['ProcedureUpdate'] = ResolversParentTypes['ProcedureUpdate'],
+> = {
   beforeCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   afterCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   newCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -1060,25 +1323,62 @@ export type ProcedureUpdateResolvers<ContextType = GraphQlContext, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type ProceduresDataResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['ProceduresData'] = ResolversParentTypes['ProceduresData']> = {
+export type ProceduresDataResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['ProceduresData'] = ResolversParentTypes['ProceduresData'],
+> = {
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   nodes?: Resolver<Array<ResolversTypes['Procedure']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type VoteResultTextsResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['VoteResultTexts'] = ResolversParentTypes['VoteResultTexts']> = {
+export type VoteResultTextsResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends
+    ResolversParentTypes['VoteResultTexts'] = ResolversParentTypes['VoteResultTexts'],
+> = {
   results?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type MutationResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  saveProcedureCustomData?: Resolver<Maybe<ResolversTypes['Procedure']>, ParentType, ContextType, RequireFields<MutationSaveProcedureCustomDataArgs, 'procedureId' | 'partyVotes' | 'decisionText' | 'votingDocument' | 'toggleDecision'>>;
-  saveProcedurenamedPollCustomData?: Resolver<Maybe<ResolversTypes['Procedure']>, ParentType, ContextType, RequireFields<MutationSaveProcedurenamedPollCustomDataArgs, 'procedureId' | 'toggleDecision'>>;
-  scrapeProcedures?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationScrapeProceduresArgs, 'key'>>;
-  signIn?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationSignInArgs, 'email' | 'password'>>;
+export type MutationResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
+> = {
+  saveProcedureCustomData?: Resolver<
+    Maybe<ResolversTypes['Procedure']>,
+    ParentType,
+    ContextType,
+    RequireFields<
+      MutationSaveProcedureCustomDataArgs,
+      'procedureId' | 'partyVotes' | 'decisionText' | 'votingDocument' | 'toggleDecision'
+    >
+  >;
+  saveProcedurenamedPollCustomData?: Resolver<
+    Maybe<ResolversTypes['Procedure']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSaveProcedurenamedPollCustomDataArgs, 'procedureId' | 'toggleDecision'>
+  >;
+  scrapeProcedures?: Resolver<
+    Maybe<ResolversTypes['Boolean']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationScrapeProceduresArgs, 'key'>
+  >;
+  signIn?: Resolver<
+    Maybe<ResolversTypes['User']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSignInArgs, 'email' | 'password'>
+  >;
 };
 
-export type ProcessFlowResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['ProcessFlow'] = ResolversParentTypes['ProcessFlow']> = {
+export type ProcessFlowResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['ProcessFlow'] = ResolversParentTypes['ProcessFlow'],
+> = {
   assignment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   initiator?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   findSpot?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1092,12 +1392,18 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'Date';
 }
 
-export type SchemaResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['Schema'] = ResolversParentTypes['Schema']> = {
+export type SchemaResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['Schema'] = ResolversParentTypes['Schema'],
+> = {
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type UserResolvers<ContextType = GraphQlContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+export type UserResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User'],
+> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   role?: Resolver<Maybe<ResolversTypes['UserRole']>, ParentType, ContextType>;
   jwt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1150,7 +1456,6 @@ export type Resolvers<ContextType = GraphQlContext> = {
   User?: UserResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };
-
 
 /**
  * @deprecated

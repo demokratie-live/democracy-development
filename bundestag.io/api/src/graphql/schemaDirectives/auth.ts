@@ -12,7 +12,7 @@ enum Role {
 }
 `;
 
-const hasPermissions = (context, role) =>
+const hasPermissions = (context, _role) =>
   context.req.headers['bio-auth-token'] &&
   context.req.headers['bio-auth-token'] === process.env.BIO_EDIT_TOKEN;
 
@@ -30,7 +30,7 @@ export const authDirective = (directiveName: string) => {
           let authDirective;
           try {
             authDirective = getDirective(schema, fieldConfig, directiveName)?.[0];
-          } catch (e) {
+          } catch {
             // If there's an error getting the directive, we try a fallback approach
             const directives = fieldConfig.astNode?.directives || [];
             const directive = directives.find((d) => d.name.value === directiveName);

@@ -244,13 +244,12 @@ const ProcedureResolvers: Resolvers = {
 
     procedureUpdates: async (
       parent,
-      { since, limit = 99, offset = 0, periods, types },
+      { limit = 99, offset = 0, periods, types },
       { ProcedureModel },
     ) => {
       const periodMatch = periods ? { period: { $in: periods } } : {};
       const typesMatch = types ? { type: { $in: types } } : {};
       const beforeCount = await ProcedureModel.count({
-        // createdAt: { $lte: since },
         ...periodMatch,
         ...typesMatch,
       });
@@ -260,7 +259,6 @@ const ProcedureResolvers: Resolvers = {
       });
 
       const proceduresFindQuery = {
-        // updatedAt: { $gt: since },
         ...periodMatch,
         ...typesMatch,
       };
@@ -270,8 +268,7 @@ const ProcedureResolvers: Resolvers = {
       const procedures = await ProcedureModel.find(
         proceduresFindQuery,
         {},
-        // Even tho the index for createdAt is set - the memory limit is reached - therefore no sort
-        { /* sort: { createdAt: 1 }, */ skip: offset, limit },
+        { skip: offset, limit },
       );
       return {
         beforeCount,
@@ -442,7 +439,7 @@ const ProcedureResolvers: Resolvers = {
       return ProcedureModel.findOne({ procedureId });
     },
     saveProcedurenamedPollCustomData: async (
-      parent,
+      _parent,
       { procedureId, toggleDecision },
       { ProcedureModel },
     ) => {
@@ -463,7 +460,7 @@ const ProcedureResolvers: Resolvers = {
   },
 
   Procedure: {
-    currentStatusHistory: async (procedure) => {
+    currentStatusHistory: async (_procedure) => {
       // TODO find replacement for current status history
       // previously it was resolved by a bad working mongodb history model
       return [];

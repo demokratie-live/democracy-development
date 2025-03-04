@@ -2,43 +2,40 @@ import { Resolvers } from './types';
 
 const NamedPollResolvers: Resolvers = {
   Query: {
-    namedPoll: async (parent: any, { webId }: any, { NamedPollModel }: any) =>
-      NamedPollModel.findOne({ webId }),
-
-    namedPolls: async (parent: any, { limit = 99, offset = 0 }: any, { NamedPollModel }: any) =>
-      // Even tho the index for createdAt is set - the memory limit is reached - therefore no sort
-      NamedPollModel.find({}, {}, { /* sort: { createdAt: 1 }, */ skip: offset, limit }),
-
+    namedPoll: async (_parent, { webId }, { NamedPollModel }) => {
+      const poll = await NamedPollModel.findOne({ webId });
+      return poll ? { ...poll.toObject(), _id: poll._id.toString() } : null;
+    },
+    namedPolls: async (_parent, { limit = 99, offset = 0 }, { NamedPollModel }) => {
+      const polls = await NamedPollModel.find({}, {}, { skip: offset, limit });
+      return polls.map((poll) => ({ ...poll.toObject(), _id: poll._id.toString() }));
+    },
     namedPollUpdates: async (
-      parent: any,
-      { since, limit = 99, offset = 0, associated = true }: any,
-      { NamedPollModel }: any,
+      _parent,
+      { since, limit = 99, offset = 0, associated = true },
+      { NamedPollModel },
     ) => {
-      const beforeCount = await NamedPollModel.count({ createdAt: { $lte: since } });
-      const afterCount = await NamedPollModel.count({});
+      const findQuery = associated ? { procedureId: { $ne: null } } : {};
+      const beforeCount = await NamedPollModel.count({
+        ...findQuery,
+        createdAt: { $lte: since },
+      });
+      const afterCount = await NamedPollModel.count(findQuery);
 
-      // Build find query for namedPolls
-      const namedPollsFindQuery: any = {
-        createdAt: { $gt: since },
-      };
-
-      // if only return accociated polls do filter
-      // without, the api return polls without procedureId
-      if (associated) {
-        namedPollsFindQuery.procedureId = { $ne: null };
-      }
-
-      const namedPolls = await NamedPollModel.find(
-        namedPollsFindQuery,
+      const polls = await NamedPollModel.find(
+        {
+          ...findQuery,
+          createdAt: { $gt: since },
+        },
         {},
-        // Even tho the index for createdAt is set - the memory limit is reached - therefore no sort
-        { /* sort: { createdAt: 1 }, */ skip: offset, limit },
+        { skip: offset, limit },
       );
+
       return {
         beforeCount,
         afterCount,
         newCount: afterCount - beforeCount,
-        namedPolls,
+        namedPolls: polls.map((poll) => ({ ...poll.toObject(), _id: poll._id.toString() })),
       };
     },
   },
