@@ -25,6 +25,7 @@
     "url": "https://github.com/demokratie-live/bt-scapacra/issues"
   },
   "devDependencies": {
+    "@eslint/js": "^9.21.0",
     "@types/chai": "^5.0.1",
     "@types/mocha": "^10.0.6",
     "@types/node": "^22.13.8",
