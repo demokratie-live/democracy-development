@@ -14,8 +14,9 @@
     "start": "node build/index.js",
     "dev": "tsx watch src/index.ts",
     "predev": "pnpm run generate",
-    "lint": "pnpm lint:ts && pnpm lint:exports",
-    "lint:es": "pnpm run prebuild && eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint": "pnpm lint:es && pnpm lint:ts && pnpm lint:exports",
+    "prelint": "pnpm run generate",
+    "lint:es": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas --excludePathsFromReport=graphqlContext.ts",
     "generate": "graphql-codegen --config codegen.yml",
@@ -41,6 +42,7 @@
     "xml-js": "1.6.11"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
     "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/typescript": "4.0.1",
     "@graphql-codegen/typescript-operations": "^4.2.1",
@@ -48,13 +50,16 @@
     "@graphql-tools/schema": "^10.0.19",
     "@types/graphql-date": "1.0.8",
     "@types/lodash": "4.14.200",
-    "eslint": "8.52.0",
+    "@typescript-eslint/eslint-plugin": "^8.26.0",
+    "@typescript-eslint/parser": "^8.26.0",
+    "eslint": "9.21.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-prettier": "5.0.1",
+    "globals": "^16.0.0",
     "prettier": "3.0.3",
     "ts-unused-exports": "10.0.1",
     "tsx": "^4.11.0",
-    "typescript": "5.2.2",
+    "typescript": "^5.7.0",
     "vitest": "^1.4.0"
   }
 }
