@@ -23,6 +23,7 @@
     "url": "https://github.com/demokratie-live/scapacra/issues"
   },
   "devDependencies": {
+    "@eslint/js": "^9.21.0",
     "@types/chai": "^4.3.16",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.12.13",

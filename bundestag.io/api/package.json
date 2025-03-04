@@ -15,7 +15,7 @@
     "dev": "tsx watch src/index.ts",
     "predev": "pnpm run generate",
     "lint": "pnpm lint:ts && pnpm lint:exports",
-    "lint:es": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint:es": "pnpm run prebuild && eslint src --ext .js,.jsx,.ts,.tsx",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas --excludePathsFromReport=graphqlContext.ts",
     "generate": "graphql-codegen --config codegen.yml",
