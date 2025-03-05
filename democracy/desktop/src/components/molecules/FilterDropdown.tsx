@@ -35,7 +35,6 @@ export default function Example({ onSelect = (_: string) => {} }) {
       </div>
 
       <Transition
-        as={Fragment}
         enter="transition ease-out duration-100"
         enterFrom="transform opacity-0 scale-95"
         enterTo="transform opacity-100 scale-100"
@@ -51,11 +50,9 @@ export default function Example({ onSelect = (_: string) => {} }) {
                   <a
                     onClick={() => setSelectedItem(items[index])}
                     className={classNames(
-                      option.id === selectedItem!.id
-                        ? 'font-semibold text-gray-900'
-                        : 'text-gray-700',
+                      option.id === selectedItem!.id ? 'font-semibold text-gray-900' : 'text-gray-700',
                       active ? 'bg-gray-100' : '',
-                      'block px-4 py-2 text-sm cursor-pointer'
+                      'block px-4 py-2 text-sm cursor-pointer',
                     )}
                   >
                     {option.name}

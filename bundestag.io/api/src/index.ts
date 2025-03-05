@@ -23,6 +23,7 @@ import CONFIG from './config';
 // Allow global Log
 import './services/logger';
 
+// Test-Kommentar für den pre-commit Hook
 const app = express();
 const httpServer = http.createServer(app);
 const server = createServer({ httpServer });

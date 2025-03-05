@@ -6,7 +6,7 @@ export default defineConfig({
     outDir: 'build',
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
-      formats: ['esm'],
+      formats: ['es'],
       fileName: () => 'index.js',
     },
     rollupOptions: {

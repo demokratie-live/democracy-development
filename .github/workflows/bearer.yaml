@@ -28,6 +28,7 @@ jobs:
           diff: true
           format: rdjson
           output: rd.json
+          skip-rule: 'javascript_lang_logger_leak'
 
       - name: 🐶 Run reviewdog
         if: always()

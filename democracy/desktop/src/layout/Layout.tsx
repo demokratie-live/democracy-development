@@ -1,5 +1,4 @@
-import { FC } from 'react';
-
+import React from 'react';
 import Navigation from '@/components/molecules/Navigation';
 import DonateDialog from '@/components/organisms/DonateDialog';
 
@@ -7,7 +6,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const Layout: FC<Props> = ({ children }) => (
+const Layout = ({ children }: Props) => (
   <div className="h-full w-full">
     <Navigation />
     <div className="min-h-full">{children}</div>

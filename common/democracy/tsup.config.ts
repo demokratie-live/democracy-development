@@ -1,6 +1,7 @@
-import { defineConfig } from 'tsup';
+import { defineConfig, Options } from 'tsup';
 import { tsupConfig } from 'tsup-config';
 
-export default defineConfig({
-  ...tsupConfig,
-});
+export default defineConfig((options) => ({
+  ...(tsupConfig as Options),
+  ...options,
+}));
