@@ -29,6 +29,16 @@
       "cwd": "${workspaceFolder}/services/cron-jobs/import-conference-week-details",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": "Run ConferenceWeekDetail dev",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev", "ConferenceWeekDetail"],
+      "cwd": "${workspaceFolder}/services/scrapers/scapacra-bt",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ],
   "compounds": [
@@ -39,6 +49,10 @@
     {
       "name": "Debug import-conference-week-details dev",
       "configurations": ["Run import-conference-week-details dev", "Attach to Process"]
+    },
+    {
+      "name": "Debug ConferenceWeekDetail dev",
+      "configurations": ["Run ConferenceWeekDetail dev", "Attach to Process"]
     }
   ]
 }
