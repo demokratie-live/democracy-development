@@ -24,257 +24,12 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
   public async parse(
     data: DataPackage<ConferenceWeekDetailsData, ConferenceWeekDetailsMeta>,
   ): Promise<DataPackage<object, object>> {
-    const d = data.getData();
-    const string: string = d ? d : '';
+    const string = data.getData() || '';
+    const { lastYear, lastWeek, nextYear, nextWeek } = this.parseYearsAndWeeks(string);
+    const sessions = this.parseSessions(string);
+    const { thisYear, thisWeek } = this.getThisYearAndWeek(sessions);
 
-    let m;
-
-    let lastYear: number | null = null;
-    let lastWeek: number | null = null;
-    let thisYear: number | null = null;
-    let thisWeek: number | null = null;
-    let nextYear: number | null = null;
-    let nextWeek: number | null = null;
-    let id: string =
-      data.meta && data.meta.currentYear && data.meta.currentWeek
-        ? `${data.meta.currentYear}_${data.meta.currentWeek}`
-        : 'no_id';
-    const regex_YearsWeeks =
-      /data-previousyear="(\d*)" data-previousweeknumber="(\d*)" data-nextyear="(\d*)" data-nextweeknumber="(\d*)"/gm;
-    while ((m = regex_YearsWeeks.exec(string)) !== null) {
-      // This is necessary to avoid infinite loops with zero-width matches
-      if (m.index === regex_YearsWeeks.lastIndex) {
-        regex_YearsWeeks.lastIndex++;
-      }
-      // The result can be accessed through the `m`-variable.
-      m.forEach((match, group) => {
-        if (group === 1) {
-          lastYear = parseInt(match, 10) || null;
-        }
-        if (group === 2) {
-          lastWeek = parseInt(match, 10) || null;
-        }
-        if (group === 3) {
-          nextYear = parseInt(match, 10) || null;
-        }
-        if (group === 4) {
-          nextWeek = parseInt(match, 10) || null;
-        }
-      });
-    }
-
-    let sessions: Session[] = [];
-    const regex_DateSession =
-      /<caption>[\s\S]*?<div class="bt-conference-title".*?>([\s\S]*?)\((\d*)\. Sitzung\)<\/div>[\s\S]*?<\/caption>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/gm;
-    while ((m = regex_DateSession.exec(string)) !== null) {
-      // This is necessary to avoid infinite loops with zero-width matches
-      if (m.index === regex_DateSession.lastIndex) {
-        regex_DateSession.lastIndex++;
-      }
-      let session: Session = {
-        date: null,
-        dateText: null,
-        session: null,
-        tops: [],
-      };
-      // The result can be accessed through the `m`-variable.
-      m.forEach((match, group) => {
-        if (group === 1) {
-          session.dateText = match.trim();
-          session.date = moment.utc(session.dateText, 'DD MMM YYYY', 'de').toDate();
-
-          if (session.date) {
-            thisYear = session.date.getFullYear();
-            thisWeek = moment(session.date).week();
-            if (thisWeek) {
-              id = `${thisYear}_${thisWeek.toString().padStart(2, '0')}`;
-            }
-          }
-        }
-        if (group === 2) {
-          session.session = match;
-        }
-        if (group === 3) {
-          const sessionData: string = match;
-          let n;
-          const regex_tops =
-            /<tr>[\s\S]*?<td data-th="Uhrzeit">[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?<td data-th="TOP">[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?<td data-th="Thema">[\s\S]*?<div class="bt-documents-description">([\s\S]*?)<\/div>[\s\S]*?<\/td>[\s\S]*?<td data-th="Status\/ Abstimmung">([\s\S]*?)<\/td>[\s\S]*?<\/tr>/gm;
-          let lastTopTime: Date | null = null;
-          let newDay: boolean = false;
-          while ((n = regex_tops.exec(sessionData)) !== null) {
-            // This is necessary to avoid infinite loops with zero-width matches
-            if (n.index === regex_tops.lastIndex) {
-              regex_tops.lastIndex++;
-            }
-            let top: Top = {
-              time: null,
-              top: null,
-              heading: null,
-              article: null,
-              topic: [],
-              status: [],
-            };
-            // The result can be accessed through the `m`-variable.
-            n.forEach((match, group) => {
-              if (group === 1) {
-                top.time = moment.utc(`${session.dateText} ${match.trim()}`, 'DD MMM YYYY HH:mm', 'de').toDate();
-                // Determin if the session is spanning into the new Day
-                if (top.time && lastTopTime && lastTopTime.getUTCHours() > top.time.getUTCHours()) {
-                  newDay = true;
-                }
-                // If a new Day is detected just increase day by one for each following top
-                if (top.time && newDay) {
-                  top.time.setDate(top.time.getDate() + 1);
-                }
-                lastTopTime = top.time;
-              }
-              if (group === 2) {
-                top.top = match.trim();
-              }
-              if (group === 3) {
-                let topic: string = match.trim();
-                let o;
-
-                const regex_topHeading =
-                  /<a href="#" class="bt-top-collapser collapser collapsed"[\s\S]*?>([\s\S]*?)<\/a>/gm;
-                while ((o = regex_topHeading.exec(topic)) !== null) {
-                  // This is necessary to avoid infinite loops with zero-width matches
-                  if (o.index === regex_topHeading.lastIndex) {
-                    regex_topHeading.lastIndex++;
-                  }
-                  // The result can be accessed through the `m`-variable.
-                  o.forEach((match, group) => {
-                    if (group === 1) {
-                      top.heading = match.trim();
-                    }
-                  });
-                }
-
-                const regex_article = /<button[\s\S]*?data-url="([\s\S]*?)">/gm;
-                while ((o = regex_article.exec(topic)) !== null) {
-                  // This is necessary to avoid infinite loops with zero-width matches
-                  if (o.index === regex_article.lastIndex) {
-                    regex_article.lastIndex++;
-                  }
-                  // The result can be accessed through the `m`-variable.
-                  o.forEach((match, group) => {
-                    if (group === 1) {
-                      if (match.startsWith('http')) {
-                        top.article = match;
-                      } else {
-                        top.article = `https://www.bundestag.de${match}`;
-                      }
-                    }
-                  });
-                }
-
-                const regex_topTopic = /<p>([\s\S]*?)<\/p>/gm;
-                while ((o = regex_topTopic.exec(topic)) !== null) {
-                  // This is necessary to avoid infinite loops with zero-width matches
-                  if (o.index === regex_topTopic.lastIndex) {
-                    regex_topTopic.lastIndex++;
-                  }
-                  // The result can be accessed through the `m`-variable.
-                  o.forEach((match, group) => {
-                    if (group === 1) {
-                      topic = match.trim();
-                    }
-                  });
-                }
-                let topicLines = topic.split('<br/>');
-                let topicPart: Topic = { lines: [], documents: [] };
-
-                const regex_newTopicPart = /^(ZP )?(\d{1,2})?\.?\S?\)/gm;
-                topicLines.forEach((line) => {
-                  if (topicPart.lines.length !== 0 && (line === '' || line.match(regex_newTopicPart) !== null)) {
-                    top.topic.push(topicPart);
-                    topicPart = { lines: [], documents: [] };
-                    if (line !== '') {
-                      topicPart.lines.push(line.trim());
-                    }
-                  } else {
-                    if (line !== '') {
-                      topicPart.lines.push(line.trim());
-                    }
-                  }
-
-                  let p;
-                  const regex_documents = /href="([\s\S]*?)"/gm;
-                  while ((p = regex_documents.exec(line)) !== null) {
-                    // This is necessary to avoid infinite loops with zero-width matches
-                    if (p.index === regex_documents.lastIndex) {
-                      regex_documents.lastIndex++;
-                    }
-                    // The result can be accessed through the `m`-variable.
-                    p.forEach((match, group) => {
-                      if (group === 1) {
-                        topicPart.documents.push(match);
-                      }
-                    });
-                  }
-                });
-
-                if (topicPart.lines.length > 0) {
-                  top.topic.push(topicPart);
-                }
-              }
-              if (group === 4) {
-                let statusText = match.trim();
-                let o;
-                const regex_topTopic = /<p>([\s\S]*?)<\/p>/gm;
-                while ((o = regex_topTopic.exec(statusText)) !== null) {
-                  // This is necessary to avoid infinite loops with zero-width matches
-                  if (o.index === regex_topTopic.lastIndex) {
-                    regex_topTopic.lastIndex++;
-                  }
-                  // The result can be accessed through the `m`-variable.
-                  o.forEach((match, group) => {
-                    if (group === 1) {
-                      statusText = match.trim();
-                    }
-                  });
-                }
-                let stati = statusText.split('<br />');
-                stati.forEach((line) => {
-                  if (line !== '') {
-                    let status: { line: string; documents: string[] } = {
-                      line,
-                      documents: [],
-                    };
-                    let q;
-                    const regex_documents = /href="([\s\S]*?)"/gm;
-                    while ((q = regex_documents.exec(line)) !== null) {
-                      // This is necessary to avoid infinite loops with zero-width matches
-                      if (q.index === regex_documents.lastIndex) {
-                        regex_documents.lastIndex++;
-                      }
-                      // The result can be accessed through the `m`-variable.
-                      q.forEach((match, group) => {
-                        if (group === 1) {
-                          status.documents.push(match);
-                        }
-                      });
-                    }
-                    top.status.push(status);
-                  }
-                });
-                session.tops.push(top);
-                top = {
-                  time: null,
-                  top: null,
-                  heading: null,
-                  article: null,
-                  topic: [],
-                  status: [],
-                };
-              }
-            });
-          }
-          sessions.push(session);
-          session = { date: null, dateText: null, session: null, tops: [] };
-        }
-      });
-    }
+    const id = this.generateId(data, thisYear, thisWeek);
 
     return new DataPackage<object, object>(
       {
@@ -295,6 +50,229 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
       },
       data.getMeta(),
     );
+  }
+
+  private generateId(
+    data: DataPackage<ConferenceWeekDetailsData, ConferenceWeekDetailsMeta>,
+    thisYear: number | null,
+    thisWeek: number | null,
+  ): string {
+    if (data.meta?.currentYear && data.meta?.currentWeek) {
+      return `${data.meta.currentYear}_${data.meta.currentWeek}`;
+    }
+    if (thisYear && thisWeek) {
+      return `${thisYear}_${thisWeek.toString().padStart(2, '0')}`;
+    }
+    return 'no_id';
+  }
+
+  private parseYearsAndWeeks(string: string): {
+    lastYear: number | null;
+    lastWeek: number | null;
+    nextYear: number | null;
+    nextWeek: number | null;
+  } {
+    let lastYear: number | null = null;
+    let lastWeek: number | null = null;
+    let nextYear: number | null = null;
+    let nextWeek: number | null = null;
+
+    const regex_YearsWeeks =
+      /data-previousyear="(\d*)" data-previousweeknumber="(\d*)" data-nextyear="(\d*)" data-nextweeknumber="(\d*)"/gm;
+    let m;
+    while ((m = regex_YearsWeeks.exec(string)) !== null) {
+      if (m.index === regex_YearsWeeks.lastIndex) {
+        regex_YearsWeeks.lastIndex++;
+      }
+      lastYear = parseInt(m[1], 10) || null;
+      lastWeek = parseInt(m[2], 10) || null;
+      nextYear = parseInt(m[3], 10) || null;
+      nextWeek = parseInt(m[4], 10) || null;
+    }
+
+    return { lastYear, lastWeek, nextYear, nextWeek };
+  }
+
+  private getThisYearAndWeek(sessions: Session[]): { thisYear: number | null; thisWeek: number | null } {
+    if (sessions.length === 0 || !sessions[0].date) {
+      return { thisYear: null, thisWeek: null };
+    }
+
+    const firstSessionDate = sessions[0].date;
+    const thisYear = firstSessionDate.getFullYear();
+    const thisWeek = moment(firstSessionDate).week();
+
+    return { thisYear, thisWeek };
+  }
+
+  private parseSessions(string: string): Session[] {
+    const sessions: Session[] = [];
+    const regex_DateSession =
+      /<caption>[\s\S]*?<div class="bt-conference-title".*?>([\s\S]*?)\((\d*)\. Sitzung\)<\/div>[\s\S]*?<\/caption>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/gm;
+
+    let m;
+    while ((m = regex_DateSession.exec(string)) !== null) {
+      if (m.index === regex_DateSession.lastIndex) {
+        regex_DateSession.lastIndex++;
+      }
+
+      const session = this.parseSession(m[1], m[2], m[3]);
+      sessions.push(session);
+    }
+
+    return sessions;
+  }
+
+  private parseSession(dateText: string, sessionNumber: string, sessionData: string): Session {
+    const session: Session = {
+      date: null,
+      dateText: null,
+      session: sessionNumber,
+      tops: [],
+    };
+
+    session.dateText = dateText.trim();
+    session.date = moment.utc(session.dateText, 'DD MMM YYYY', 'de').toDate();
+    session.tops = this.parseTops(sessionData, session.dateText);
+
+    return session;
+  }
+
+  private parseTops(sessionData: string, sessionDateText: string): Top[] {
+    const tops: Top[] = [];
+    const regex_tops =
+      /<tr>[\s\S]*?<td data-th="Uhrzeit">[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?<td data-th="TOP">[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?<td data-th="Thema">[\s\S]*?<div class="bt-documents-description">([\s\S]*?)<\/div>[\s\S]*?<\/td>[\s\S]*?<td data-th="Status\/ Abstimmung">([\s\S]*?)<\/td>[\s\S]*?<\/tr>/gm;
+
+    let lastTopTime: Date | null = null;
+    let newDay = false;
+    let n;
+
+    while ((n = regex_tops.exec(sessionData)) !== null) {
+      if (n.index === regex_tops.lastIndex) {
+        regex_tops.lastIndex++;
+      }
+
+      const top = this.parseTop(n[1], n[2], n[3], n[4], sessionDateText);
+
+      if (top.time && lastTopTime) {
+        const currentHour = top.time.getUTCHours();
+        const lastHour = lastTopTime.getUTCHours();
+
+        // Tageswechsel erkennen: Wenn aktuelle Stunde kleiner ist als letzte Stunde
+        // und der Unterschied größer als 6 Stunden ist (um Mitternacht zu erkennen)
+        if (currentHour < lastHour && lastHour - currentHour > 6) {
+          newDay = true;
+        }
+      }
+
+      if (newDay && top.time) {
+        const nextDay = new Date(top.time);
+        nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+        top.time = nextDay;
+      }
+
+      lastTopTime = top.time;
+      tops.push(top);
+    }
+
+    return tops;
+  }
+
+  private parseTop(timeStr: string, topStr: string, topicStr: string, statusStr: string, sessionDateText: string): Top {
+    const top: Top = {
+      time: null,
+      top: topStr.trim(),
+      heading: null,
+      article: null,
+      topic: [],
+      status: [],
+    };
+
+    top.time = moment.utc(`${sessionDateText} ${timeStr.trim()}`, 'DD MMM YYYY HH:mm', 'de').toDate();
+
+    this.parseTopicData(topicStr.trim(), top);
+    this.parseStatusData(statusStr.trim(), top);
+
+    return top;
+  }
+
+  private parseTopicData(topic: string, top: Top): void {
+    const headingMatch = /<a href="#" class="bt-top-collapser collapser collapsed"[\s\S]*?>([\s\S]*?)<\/a>/gm.exec(
+      topic,
+    );
+    if (headingMatch) {
+      top.heading = headingMatch[1].trim();
+    }
+
+    const articleMatch = /<button[\s\S]*?data-url="([\s\S]*?)">/gm.exec(topic);
+    if (articleMatch) {
+      top.article = articleMatch[1].startsWith('http') ? articleMatch[1] : `https://www.bundestag.de${articleMatch[1]}`;
+    }
+
+    const topicContent = this.extractTopicContent(topic);
+    top.topic = this.parseTopicParts(topicContent);
+  }
+
+  private extractTopicContent(topic: string): string {
+    const contentMatch = /<p>([\s\S]*?)<\/p>/gm.exec(topic);
+    return contentMatch ? contentMatch[1].trim() : topic;
+  }
+
+  private parseTopicParts(topicContent: string): Topic[] {
+    const topicLines = topicContent.split('<br/>');
+    const topics: Topic[] = [];
+    let currentTopic: Topic = { lines: [], documents: [] };
+    const regex_newTopicPart = /^(ZP )?(\d{1,2})?\.?\S?\)/gm;
+
+    topicLines.forEach((line) => {
+      if (line === '') return;
+
+      if (currentTopic.lines.length !== 0 && line.match(regex_newTopicPart)) {
+        topics.push(currentTopic);
+        currentTopic = { lines: [], documents: [] };
+      }
+
+      currentTopic.lines.push(line.trim());
+      currentTopic.documents = [...currentTopic.documents, ...this.extractDocuments(line)];
+    });
+
+    if (currentTopic.lines.length > 0) {
+      topics.push(currentTopic);
+    }
+
+    return topics;
+  }
+
+  private parseStatusData(statusText: string, top: Top): void {
+    const cleanedStatus = this.extractStatusContent(statusText);
+    const stati = cleanedStatus.split('<br />');
+
+    stati.forEach((line) => {
+      if (line === '') return;
+
+      const status = {
+        line: line.trim(),
+        documents: this.extractDocuments(line),
+      };
+      top.status.push(status);
+    });
+  }
+
+  private extractStatusContent(statusText: string): string {
+    const contentMatch = /<p>([\s\S]*?)<\/p>/gm.exec(statusText);
+    return contentMatch ? contentMatch[1].trim() : statusText;
+  }
+
+  private extractDocuments(text: string): string[] {
+    const documents: string[] = [];
+    const regex_documents = /href="([\s\S]*?)"/gm;
+    let match;
+
+    while ((match = regex_documents.exec(text)) !== null) {
+      documents.push(match[1]);
+    }
+
+    return documents;
   }
 }
 
