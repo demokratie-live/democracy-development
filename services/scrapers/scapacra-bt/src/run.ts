@@ -1,10 +1,8 @@
 import * as fs from 'fs';
 import { Scraper, IScraper } from '@democracy-deutschland/scapacra';
-import { DeputyProfileScraper, NamedPollScraper, NamedPollDeputyScraper, ConferenceWeekDetailScraper } from './';
+import { NamedPollDeputyScraper, ConferenceWeekDetailScraper } from './';
 
 enum AvailableScrapers {
-  DeputyProfile = 'DeputyProfile',
-  NamedPollScraper = 'NamedPoll',
   NamedPollDeputyScraper = 'NamedPollDeputy',
   ConferenceWeekDetailScraper = 'ConferenceWeekDetail',
 }
@@ -13,12 +11,6 @@ async function scrape(dataset: string, out: string = './out'): Promise<void> {
   let scraper: IScraper<unknown, unknown> | null = null;
 
   switch (dataset) {
-    case AvailableScrapers.DeputyProfile:
-      scraper = new DeputyProfileScraper();
-      break;
-    case AvailableScrapers.NamedPollScraper:
-      scraper = new NamedPollScraper();
-      break;
     case AvailableScrapers.NamedPollDeputyScraper:
       scraper = new NamedPollDeputyScraper();
       break;

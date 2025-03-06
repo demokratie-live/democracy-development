@@ -18,7 +18,7 @@
     "link": "cd build && npm link",
     "dev": "tsx ./src/run.ts",
     "lint": "eslint . --ext .ts",
-    "typecheck": "tsc --noEmit",
+    "lint:ts": "tsc --noEmit",
     "prepublish": "pnpm build",
     "test": "vitest"
   },
