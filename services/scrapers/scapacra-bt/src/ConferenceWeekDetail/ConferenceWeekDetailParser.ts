@@ -108,7 +108,7 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
   private parseSessions(string: string): Session[] {
     const sessions: Session[] = [];
     const regex_DateSession =
-      /<caption>[\s\S]*?<div class="bt-conference-title".*?>([\s\S]*?)\((\d*)\. Sitzung\)<\/div>[\s\S]*?<\/caption>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/gm;
+      /<caption>[^]*?<div class="bt-conference-title"[^>]*?>([^(]*?)\((\d+)\. Sitzung\)<\/div>[^]*?<\/caption>[^]*?<tbody>([^]*?)<\/tbody>/gm;
 
     let m;
     while ((m = regex_DateSession.exec(string)) !== null) {
@@ -141,7 +141,7 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
   private parseTops(sessionData: string, sessionDateText: string): Top[] {
     const tops: Top[] = [];
     const regex_tops =
-      /<tr>[\s\S]*?<td data-th="Uhrzeit">[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?<td data-th="TOP">[\s\S]*?<p>([\s\S]*?)<\/p>[\s\S]*?<td data-th="Thema">[\s\S]*?<div class="bt-documents-description">([\s\S]*?)<\/div>[\s\S]*?<\/td>[\s\S]*?<td data-th="Status\/ Abstimmung">([\s\S]*?)<\/td>[\s\S]*?<\/tr>/gm;
+      /<tr>\s*<td data-th="Uhrzeit">\s*<p>([^<]+)<\/p>\s*<\/td>\s*<td data-th="TOP">\s*<p>([^<]+)<\/p>\s*<\/td>\s*<td data-th="Thema">\s*<div class="bt-documents-description">([^]*?)<\/div>\s*<\/td>\s*<td data-th="Status\/ Abstimmung">\s*([^]*?)\s*<\/td>\s*<\/tr>/gm;
 
     let lastTopTime: Date | null = null;
     let newDay = false;
@@ -197,14 +197,12 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
   }
 
   private parseTopicData(topic: string, top: Top): void {
-    const headingMatch = /<a href="#" class="bt-top-collapser collapser collapsed"[\s\S]*?>([\s\S]*?)<\/a>/gm.exec(
-      topic,
-    );
+    const headingMatch = /<a href="#" class="bt-top-collapser collapser collapsed">([^<]+)<\/a>/g.exec(topic);
     if (headingMatch) {
       top.heading = headingMatch[1].trim();
     }
 
-    const articleMatch = /<button[\s\S]*?data-url="([\s\S]*?)">/gm.exec(topic);
+    const articleMatch = /<button[^>]*?data-url="([^"]+)">/gm.exec(topic);
     if (articleMatch) {
       top.article = articleMatch[1].startsWith('http') ? articleMatch[1] : `https://www.bundestag.de${articleMatch[1]}`;
     }
@@ -214,7 +212,7 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
   }
 
   private extractTopicContent(topic: string): string {
-    const contentMatch = /<p>([\s\S]*?)<\/p>/gm.exec(topic);
+    const contentMatch = /<p>([^<]*(?:<(?!\/p>)[^<]*)*?)<\/p>/i.exec(topic);
     return contentMatch ? contentMatch[1].trim() : topic;
   }
 
@@ -222,7 +220,7 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
     const topicLines = topicContent.split('<br/>');
     const topics: Topic[] = [];
     let currentTopic: Topic = { lines: [], documents: [] };
-    const regex_newTopicPart = /^(ZP )?(\d{1,2})?\.?\S?\)/gm;
+    const regex_newTopicPart = /^(?:ZP )?(?:\d{1,2})?\.?\S?\)/;
 
     topicLines.forEach((line) => {
       if (line === '') return;
@@ -245,13 +243,14 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
 
   private parseStatusData(statusText: string, top: Top): void {
     const cleanedStatus = this.extractStatusContent(statusText);
-    const stati = cleanedStatus.split('<br />');
+    const stati = cleanedStatus
+      .split(/<br\s*\/?>/i)
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0); // Remove empty lines
 
     stati.forEach((line) => {
-      if (line === '') return;
-
       const status = {
-        line: line.trim(),
+        line,
         documents: this.extractDocuments(line),
       };
       top.status.push(status);
@@ -259,13 +258,13 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
   }
 
   private extractStatusContent(statusText: string): string {
-    const contentMatch = /<p>([\s\S]*?)<\/p>/gm.exec(statusText);
+    const contentMatch = /<p>([^<]*(?:<(?!\/p>)[^<]*)*?)<\/p>/i.exec(statusText);
     return contentMatch ? contentMatch[1].trim() : statusText;
   }
 
   private extractDocuments(text: string): string[] {
     const documents: string[] = [];
-    const regex_documents = /href="([\s\S]*?)"/gm;
+    const regex_documents = /href="([^"]+)"/g;
     let match;
 
     while ((match = regex_documents.exec(text)) !== null) {
