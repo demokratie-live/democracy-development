@@ -1,5 +1,7 @@
 import { DataPackage, IParser } from '@democracy-deutschland/scapacra';
 import moment from 'moment';
+import { JSDOM } from 'jsdom';
+import { DOMParser } from 'xmldom';
 
 import { ConferenceWeekDetailsData, ConferenceWeekDetailsMeta } from './ConferenceWeekDetailBrowser';
 
@@ -19,6 +21,10 @@ type Top = {
 };
 type Topic = { lines: string[]; documents: string[] };
 type Status = { line: string; documents: string[] };
+
+// Use DOM types instead of directly importing from xmldom
+type XmldomNode = globalThis.Node;
+type XmldomElement = globalThis.Element;
 
 export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetailsData, ConferenceWeekDetailsMeta> {
   public async parse(
@@ -77,17 +83,16 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
     let nextYear: number | null = null;
     let nextWeek: number | null = null;
 
-    const regex_YearsWeeks =
-      /data-previousyear="(\d*)" data-previousweeknumber="(\d*)" data-nextyear="(\d*)" data-nextweeknumber="(\d*)"/gm;
-    let m;
-    while ((m = regex_YearsWeeks.exec(string)) !== null) {
-      if (m.index === regex_YearsWeeks.lastIndex) {
-        regex_YearsWeeks.lastIndex++;
-      }
-      lastYear = parseInt(m[1], 10) || null;
-      lastWeek = parseInt(m[2], 10) || null;
-      nextYear = parseInt(m[3], 10) || null;
-      nextWeek = parseInt(m[4], 10) || null;
+    const dom = new JSDOM(string);
+    const element = dom.window.document.querySelector(
+      '[data-previousyear][data-previousweeknumber][data-nextyear][data-nextweeknumber]',
+    );
+
+    if (element) {
+      lastYear = parseInt(element.getAttribute('data-previousyear') || '', 10) || null;
+      lastWeek = parseInt(element.getAttribute('data-previousweeknumber') || '', 10) || null;
+      nextYear = parseInt(element.getAttribute('data-nextyear') || '', 10) || null;
+      nextWeek = parseInt(element.getAttribute('data-nextweeknumber') || '', 10) || null;
     }
 
     return { lastYear, lastWeek, nextYear, nextWeek };
@@ -107,18 +112,81 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
 
   private parseSessions(string: string): Session[] {
     const sessions: Session[] = [];
-    const regex_DateSession =
-      /<caption>[^]*?<div class="bt-conference-title"[^>]*?>([^(]*?)\((\d+)\. Sitzung\)<\/div>[^]*?<\/caption>[^]*?<tbody>([^]*?)<\/tbody>/gm;
 
-    let m;
-    while ((m = regex_DateSession.exec(string)) !== null) {
-      if (m.index === regex_DateSession.lastIndex) {
-        regex_DateSession.lastIndex++;
+    if (!string || string.trim() === '') {
+      return sessions;
+    }
+
+    const parser = new DOMParser();
+    const dom = parser.parseFromString(string, 'text/html');
+
+    // Funktion zum Finden aller caption-Elemente im XML-DOM
+    const findCaptions = (node: XmldomNode | null | undefined): XmldomElement[] => {
+      const captions: XmldomElement[] = [];
+      if (!node) {
+        return captions;
       }
 
-      const session = this.parseSession(m[1], m[2], m[3]);
+      if (node.nodeName === 'caption') {
+        captions.push(node as XmldomElement);
+      }
+      if (node.childNodes) {
+        for (let i = 0; i < node.childNodes.length; i++) {
+          captions.push(...findCaptions(node.childNodes[i]));
+        }
+      }
+      return captions;
+    };
+
+    const captions = findCaptions(dom);
+
+    captions.forEach((caption) => {
+      // Suche nach .bt-conference-title innerhalb des caption elements
+      let titleElement = null;
+      for (let i = 0; i < caption.childNodes.length; i++) {
+        const child = caption.childNodes[i];
+        if (
+          child.nodeName === 'div' &&
+          (child as XmldomElement).attributes &&
+          (child as XmldomElement).getAttribute('class') === 'bt-conference-title'
+        ) {
+          titleElement = child;
+          break;
+        }
+      }
+
+      if (!titleElement) return;
+
+      // Zur Tabelle und zum tbody navigieren
+      const tableElement = caption.parentNode;
+      if (!tableElement) return;
+
+      let tbodyElement = null;
+      if (tableElement.childNodes) {
+        for (let i = 0; i < tableElement.childNodes.length; i++) {
+          if (tableElement.childNodes[i].nodeName === 'tbody') {
+            tbodyElement = tableElement.childNodes[i];
+            break;
+          }
+        }
+      }
+
+      if (!tbodyElement) return;
+
+      // Daten aus dem title Element extrahieren
+      const titleText = titleElement.textContent || '';
+      const dateTextMatch = titleText.match(/^([^(]*)/);
+      const sessionNumberMatch = titleText.match(/\((\d+)\. Sitzung\)/);
+
+      const dateText = dateTextMatch ? dateTextMatch[1].trim() : '';
+      const sessionNumber = sessionNumberMatch ? sessionNumberMatch[1] : '';
+
+      // Daten des Sitzungskörpers extrahieren
+      const sessionData = tbodyElement.toString();
+
+      const session = this.parseSession(dateText, sessionNumber, sessionData);
       sessions.push(session);
-    }
+    });
 
     return sessions;
   }
@@ -134,46 +202,53 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
     session.dateText = dateText.trim();
     session.date = moment.utc(session.dateText, 'DD MMM YYYY', 'de').toDate();
     session.tops = this.parseTops(sessionData, session.dateText);
-
     return session;
   }
 
   private parseTops(sessionData: string, sessionDateText: string): Top[] {
     const tops: Top[] = [];
-    const regex_tops =
-      /<tr>\s*<td data-th="Uhrzeit">\s*<p>([^<]+)<\/p>\s*<\/td>\s*<td data-th="TOP">\s*<p>([^<]+)<\/p>\s*<\/td>\s*<td data-th="Thema">\s*<div class="bt-documents-description">([^]*?)<\/div>\s*<\/td>\s*<td data-th="Status\/ Abstimmung">\s*([^]*?)\s*<\/td>\s*<\/tr>/gm;
-
     let lastTopTime: Date | null = null;
     let newDay = false;
-    let n;
 
-    while ((n = regex_tops.exec(sessionData)) !== null) {
-      if (n.index === regex_tops.lastIndex) {
-        regex_tops.lastIndex++;
-      }
+    // Create a DOM from the session data
+    const dom = new JSDOM(`<table><tbody>${sessionData}</tbody></table>`);
+    const rows = dom.window.document.querySelectorAll('tr');
 
-      const top = this.parseTop(n[1], n[2], n[3], n[4], sessionDateText);
+    rows.forEach((row) => {
+      const timeCell = row.querySelector('td[data-th="Uhrzeit"] p');
+      const topCell = row.querySelector('td[data-th="TOP"] p');
+      const themaCell = row.querySelector('td[data-th="Thema"] .bt-documents-description');
+      const statusCell = row.querySelector('td[data-th="Status/ Abstimmung"]');
 
-      if (top.time && lastTopTime) {
-        const currentHour = top.time.getUTCHours();
-        const lastHour = lastTopTime.getUTCHours();
+      if (timeCell && topCell && themaCell && statusCell) {
+        const timeStr = timeCell.textContent || '';
+        const topStr = topCell.textContent || '';
+        const topicStr = themaCell.outerHTML || '';
+        const statusStr = statusCell.outerHTML || '';
 
-        // Tageswechsel erkennen: Wenn aktuelle Stunde kleiner ist als letzte Stunde
-        // und der Unterschied größer als 6 Stunden ist (um Mitternacht zu erkennen)
-        if (currentHour < lastHour && lastHour - currentHour > 6) {
-          newDay = true;
+        const top = this.parseTop(timeStr, topStr, topicStr, statusStr, sessionDateText);
+
+        if (top.time && lastTopTime) {
+          const currentHour = top.time.getUTCHours();
+          const lastHour = lastTopTime.getUTCHours();
+
+          // Tageswechsel erkennen: Wenn aktuelle Stunde kleiner ist als letzte Stunde
+          // und der Unterschied größer als 6 Stunden ist (um Mitternacht zu erkennen)
+          if (currentHour < lastHour && lastHour - currentHour > 6) {
+            newDay = true;
+          }
         }
-      }
 
-      if (newDay && top.time) {
-        const nextDay = new Date(top.time);
-        nextDay.setUTCDate(nextDay.getUTCDate() + 1);
-        top.time = nextDay;
-      }
+        if (newDay && top.time) {
+          const nextDay = new Date(top.time);
+          nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+          top.time = nextDay;
+        }
 
-      lastTopTime = top.time;
-      tops.push(top);
-    }
+        lastTopTime = top.time;
+        tops.push(top);
+      }
+    });
 
     return tops;
   }
@@ -197,14 +272,23 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
   }
 
   private parseTopicData(topic: string, top: Top): void {
-    const headingMatch = /<a href="#" class="bt-top-collapser collapser collapsed">([^<]+)<\/a>/g.exec(topic);
-    if (headingMatch) {
-      top.heading = headingMatch[1].trim();
+    // Use JSDOM to parse the HTML content
+    const dom = new JSDOM(`<div>${topic}</div>`);
+    const document = dom.window.document;
+
+    // Extract heading from the collapser link
+    const headingElement = document.querySelector('a.bt-top-collapser.collapser');
+    if (headingElement && headingElement.textContent) {
+      top.heading = headingElement.textContent.trim();
     }
 
-    const articleMatch = /<button[^>]*?data-url="([^"]+)">/gm.exec(topic);
-    if (articleMatch) {
-      top.article = articleMatch[1].startsWith('http') ? articleMatch[1] : `https://www.bundestag.de${articleMatch[1]}`;
+    // Extract article URL from button with data-url attribute
+    const articleElement = document.querySelector('button[data-url]');
+    if (articleElement) {
+      const url = articleElement.getAttribute('data-url');
+      if (url) {
+        top.article = url.startsWith('http') ? url : `https://www.bundestag.de${url}`;
+      }
     }
 
     const topicContent = this.extractTopicContent(topic);
@@ -212,8 +296,11 @@ export class ConferenceWeekDetailParser implements IParser<ConferenceWeekDetails
   }
 
   private extractTopicContent(topic: string): string {
+    // First try to extract content from <p> tags
     const contentMatch = /<p>([^<]*(?:<(?!\/p>)[^<]*)*?)<\/p>/i.exec(topic);
-    return contentMatch ? contentMatch[1].trim() : topic;
+    // Standardize all line break formats to <br/>
+    const content = contentMatch ? contentMatch[1].trim() : topic;
+    return content.replace(/<br\s*\/?>/gi, '<br/>');
   }
 
   private parseTopicParts(topicContent: string): Topic[] {
