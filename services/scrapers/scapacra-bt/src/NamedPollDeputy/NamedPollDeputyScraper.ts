@@ -1,17 +1,15 @@
 import { IParser, IBrowser, IScraper } from '@democracy-deutschland/scapacra';
 import { NamedPollDeputiesData, NamedPollDeputiesMeta, NamedPollDeputyBrowser } from './NamedPollDeputyBrowser';
-import { NamedPollDeputyParser } from './NamedPollDeputyParser';
-export = Scraper;
+import NamedPollDeputyParser from './NamedPollDeputyParser';
 
-namespace Scraper {
-    export class NamedPollDeputyScraper implements IScraper<NamedPollDeputiesData,NamedPollDeputiesMeta> {
+export class NamedPollDeputyScraper implements IScraper<NamedPollDeputiesData, NamedPollDeputiesMeta> {
+  public getBrowser(): IBrowser<NamedPollDeputiesData, NamedPollDeputiesMeta> {
+    return new NamedPollDeputyBrowser();
+  }
 
-        public getBrowser(): IBrowser<NamedPollDeputiesData,NamedPollDeputiesMeta> {
-            return new NamedPollDeputyBrowser();
-        }
-
-        public getParser(): IParser<NamedPollDeputiesData,NamedPollDeputiesMeta> {
-            return new NamedPollDeputyParser();
-        };
-    }
+  public getParser(): IParser<NamedPollDeputiesData, NamedPollDeputiesMeta> {
+    return new NamedPollDeputyParser();
+  }
 }
+
+export default NamedPollDeputyScraper;
