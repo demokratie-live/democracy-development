@@ -303,6 +303,43 @@ const conferenceWeeks = [
     start: parseDate('16.12.2024'),
     end: parseDate('20.12.2024'),
   },
+  // 2025
+  {
+    start: parseDate('27.01.2025'),
+    end: parseDate('31.01.2025'),
+  },
+  {
+    start: parseDate('10.02.2025'),
+    end: parseDate('11.02.2025'),
+  },
+  {
+    start: parseDate('24.03.2025'),
+    end: parseDate('28.03.2025'),
+  },
+  {
+    start: parseDate('07.04.2025'),
+    end: parseDate('11.04.2025'),
+  },
+  {
+    start: parseDate('12.05.2025'),
+    end: parseDate('16.05.2025'),
+  },
+  {
+    start: parseDate('19.05.2025'),
+    end: parseDate('23.05.2025'),
+  },
+  {
+    start: parseDate('02.06.2025'),
+    end: parseDate('06.06.2025'),
+  },
+  {
+    start: parseDate('23.06.2025'),
+    end: parseDate('27.06.2025'),
+  },
+  {
+    start: parseDate('07.07.2025'),
+    end: parseDate('11.07.2025'),
+  },
 ];
 
 // return the current or next conference week
