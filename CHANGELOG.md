@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.67-alpha.0 (2025-03-13)
+
+
+### Features
+
+* add conference weeks for 2025 ([d9fade8](https://github.com/demokratie-live/democracy-api/commit/d9fade8904b78db974725f644657f7f788798c34))
+
 ### 0.2.66 (2024-07-15)
 
 
