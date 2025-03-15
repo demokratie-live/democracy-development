@@ -155,7 +155,7 @@ router.addHandler(
       title,
       description: descriptionText.trim(),
       documents,
-      deputyVotesURL: `https://www.bundestag.de/apps/na/na/namensliste.form?id=${id}&ajax=true`,
+      deputyVotesURL: `https://www.bundestag.de/apps/na/namensliste.form?id=${id}&ajax=true`,
       votes: {
         ...request.userData.votes,
         parties: partyVotes,

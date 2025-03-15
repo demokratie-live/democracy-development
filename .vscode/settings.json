@@ -1,6 +1,6 @@
 {
-  "eslint.packageManager": "pnpm",
-  "eslint.alwaysShowStatus": true,
+  "eslint.workingDirectories": [{ "directory": "./bundestag.io/admin", "changeProcessCWD": true }],
+  "eslint.useFlatConfig": true,
   "search.exclude": {
     "**/node_modules": true,
     "**/bower_components": true,
@@ -13,21 +13,34 @@
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "[dotenv]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[properties]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[ignore]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
   "github.copilot.chat.reviewSelection.instructions": [
+    {
+      "file": ".github/review-selection-instructions.md"
+    },
     {
       "file": ".github/prompts/always.prompt.md"
     }
-  ]
+  ],
+  "github.copilot.chat.testGeneration.instructions": [
+    {
+      "file": ".github/test-generation-instructions.md"
+    }
+  ],
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "file": ".github/commit-message-instructions.md"
+    }
+  ],
+  "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
+    {
+      "file": ".github/pr-description-instructions.md"
+    }
+  ],
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml"
+  },
+  "vitest.disableWorkspaceWarning": true
 }

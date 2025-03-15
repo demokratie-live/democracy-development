@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Nur geänderte Dateien linten mit Turborepo
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -n "$STAGED_FILES" ]; then
+  # Turbo mit filter-Flag für betroffene Pakete ausführen
+  # Verwendung von --filter mit Anführungszeichen, um Shell-Expansion zu vermeiden
+  pnpm turbo lint --filter="...[$(git rev-parse --abbrev-ref HEAD)]"
+  pnpm turbo test --filter="...[$(git rev-parse --abbrev-ref HEAD)]"
+else
+  echo "Keine Dateien gestaged, Lint wird übersprungen."
+fi

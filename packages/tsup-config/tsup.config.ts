@@ -1,6 +1,6 @@
-import { defineConfig } from 'tsup';
+import { defineConfig, Options } from 'tsup';
 import { tsupConfig } from './src';
 
 export default defineConfig({
-  ...tsupConfig,
+  ...(tsupConfig as Options),
 });
