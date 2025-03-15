@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.15](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.14...import-plenary-minutes@v0.1.15) (2025-03-15)
+
+
+* fix garden by adding —load to docker buildx ([0c712e1](https://github.com/demokratie-live/democracy-development/commit/0c712e1734116275badbde2c82aadc4515845759))
+* upgrade from eslint 8 to 9 ([356ccbf](https://github.com/demokratie-live/democracy-development/commit/356ccbfad9dff32191f38be383b24d515d4a87fb))
+
 ## [0.1.14](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.13...import-plenary-minutes@v0.1.14) (2025-02-23)
 
 
