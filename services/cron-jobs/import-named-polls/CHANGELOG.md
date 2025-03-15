@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.24](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.23...import-named-polls@v0.1.24) (2025-03-15)
+
+
+* fix garden by adding —load to docker buildx ([0c712e1](https://github.com/demokratie-live/democracy-development/commit/0c712e1734116275badbde2c82aadc4515845759))
+* **import-named-polls:** adjust to bundestag.de html changes ([4563e1a](https://github.com/demokratie-live/democracy-development/commit/4563e1add8c9f2ec852b7e5f68451576bc62001f))
+
 ## [0.1.23](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.22...import-named-polls@v0.1.23) (2025-02-26)
 
 
