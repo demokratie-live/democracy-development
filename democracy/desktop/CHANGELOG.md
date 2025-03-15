@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.15](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.0.14...democracy-app.de@v1.0.15) (2025-03-15)
+
+
+* 🐛 dockerignore handling ([75b4660](https://github.com/demokratie-live/democracy-development/commit/75b4660fae655d2cf9c3847611707dac177f82cc))
+* fix garden by adding —load to docker buildx ([0c712e1](https://github.com/demokratie-live/democracy-development/commit/0c712e1734116275badbde2c82aadc4515845759))
+* **garden:** 🐛 fix garden configurations ([58b2085](https://github.com/demokratie-live/democracy-development/commit/58b20852d0ca6d6fc1f81650766f64211a273aa5))
+* lint and build ([f6007e9](https://github.com/demokratie-live/democracy-development/commit/f6007e92017b20aed2aa1b860ff7b12abd6ab437))
+* upgrade from eslint 8 to 9 ([356ccbf](https://github.com/demokratie-live/democracy-development/commit/356ccbfad9dff32191f38be383b24d515d4a87fb))
+
+
+### 👷 CI/CD
+
+* 👷 fix dockerignore handling ([0a21f30](https://github.com/demokratie-live/democracy-development/commit/0a21f3020ff68334d259743a87f14bec76dd6b1c))
+
 ## [1.0.14](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.0.13...democracy-app.de@v1.0.14) (2024-08-17)
 
 
