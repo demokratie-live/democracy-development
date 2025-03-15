@@ -31,7 +31,7 @@ export async function run(): Promise<void> {
       console.log('Saving conference week to MongoDB...');
       for (const result of results) {
         const data = {
-          id: `${result.year}-${result.week}`,
+          id: `${result.year}_${String(result.week).padStart(2, '0')}`,
           URL: result.url,
           thisYear: result.year,
           thisWeek: result.week,
