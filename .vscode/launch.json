@@ -31,6 +31,19 @@
       "internalConsoleOptions": "neverOpen"
     },
     {
+      "name": "Test import-conference-week-details",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["test"],
+      "cwd": "${workspaceFolder}/services/cron-jobs/import-conference-week-details",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "env": {
+        "NODE_ENV": "debug"
+      }
+    },
+    {
       "name": "Run ConferenceWeekDetail dev",
       "type": "node",
       "request": "launch",
@@ -49,6 +62,10 @@
     {
       "name": "Debug import-conference-week-details dev",
       "configurations": ["Run import-conference-week-details dev", "Attach to Process"]
+    },
+    {
+      "name": "Debug import-conference-week-details test",
+      "configurations": ["Test import-conference-week-details", "Attach to Process"]
     },
     {
       "name": "Debug ConferenceWeekDetail dev",

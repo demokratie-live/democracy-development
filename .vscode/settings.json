@@ -18,7 +18,29 @@
   },
   "github.copilot.chat.reviewSelection.instructions": [
     {
+      "file": ".github/review-selection-instructions.md"
+    },
+    {
       "file": ".github/prompts/always.prompt.md"
     }
-  ]
+  ],
+  "github.copilot.chat.testGeneration.instructions": [
+    {
+      "file": ".github/test-generation-instructions.md"
+    }
+  ],
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "file": ".github/commit-message-instructions.md"
+    }
+  ],
+  "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
+    {
+      "file": ".github/pr-description-instructions.md"
+    }
+  ],
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml"
+  },
+  "vitest.disableWorkspaceWarning": true
 }
