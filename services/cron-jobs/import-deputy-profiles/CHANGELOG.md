@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.20](https://github.com/demokratie-live/democracy-development/compare/import-deputy-profiles@v0.1.19...import-deputy-profiles@v0.1.20) (2025-03-15)
+
+
+* add eslint to import-deputy-profiles ([4d5fbcb](https://github.com/demokratie-live/democracy-development/commit/4d5fbcb95b184286817322167831973ca8f3c5f6))
+* eslint in pipeline ([f49db56](https://github.com/demokratie-live/democracy-development/commit/f49db5692231ddbac345ed5c35ac0516c2e43bb3))
+* fix garden by adding —load to docker buildx ([0c712e1](https://github.com/demokratie-live/democracy-development/commit/0c712e1734116275badbde2c82aadc4515845759))
+
 ## [0.1.19](https://github.com/demokratie-live/democracy-development/compare/import-deputy-profiles@v0.1.18...import-deputy-profiles@v0.1.19) (2025-02-22)
 
 
