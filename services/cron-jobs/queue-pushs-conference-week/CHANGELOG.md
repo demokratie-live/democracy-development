@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.12](https://github.com/demokratie-live/democracy-development/compare/queue-pushs-conference-week@v0.1.11...queue-pushs-conference-week@v0.1.12) (2025-03-15)
+
+
+* 🐛 dockerignore handling ([75b4660](https://github.com/demokratie-live/democracy-development/commit/75b4660fae655d2cf9c3847611707dac177f82cc))
+* fix garden by adding —load to docker buildx ([0c712e1](https://github.com/demokratie-live/democracy-development/commit/0c712e1734116275badbde2c82aadc4515845759))
+
+
+### 👷 CI/CD
+
+* 👷 fix dockerignore handling ([0a21f30](https://github.com/demokratie-live/democracy-development/commit/0a21f3020ff68334d259743a87f14bec76dd6b1c))
+
 ## [0.1.11](https://github.com/demokratie-live/democracy-development/compare/queue-pushs-conference-week@v0.1.10...queue-pushs-conference-week@v0.1.11) (2024-08-17)
 
 
