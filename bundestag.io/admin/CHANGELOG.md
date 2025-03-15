@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.7.1](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.7.0...bundestag.io-admin@v3.7.1) (2025-03-15)
+
+
+* admin detail page error ([3bc7638](https://github.com/demokratie-live/democracy-development/commit/3bc763825f7a60683317aeddc5d1769fa44a1890))
+* fix garden by adding —load to docker buildx ([0c712e1](https://github.com/demokratie-live/democracy-development/commit/0c712e1734116275badbde2c82aadc4515845759))
+* upgrade from eslint 8 to 9 ([356ccbf](https://github.com/demokratie-live/democracy-development/commit/356ccbfad9dff32191f38be383b24d515d4a87fb))
+* use http instead of https for local development ([0d8cab7](https://github.com/demokratie-live/democracy-development/commit/0d8cab7da63ed7ce0a5cf2d58b90bab272bf9e00))
+
 ## [3.7.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.6.0...bundestag.io-admin@v3.7.0) (2024-11-30)
 
 
