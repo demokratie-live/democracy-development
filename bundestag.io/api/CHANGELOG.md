@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.66](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.65...bundestag.io@v0.1.66) (2025-03-15)
+
+
+* 🔧 add pre-commit hook to enforce linting ([a900306](https://github.com/demokratie-live/democracy-development/commit/a90030651227510e8adfa0d951d1b3bc0f4a5f70))
+* add auth tests for bundestag.io api ([182bce0](https://github.com/demokratie-live/democracy-development/commit/182bce07c6e87a7f6e74995a3f4ad37f5cdce09c))
+* eslint in pipeline ([f49db56](https://github.com/demokratie-live/democracy-development/commit/f49db5692231ddbac345ed5c35ac0516c2e43bb3))
+* fix garden by adding —load to docker buildx ([0c712e1](https://github.com/demokratie-live/democracy-development/commit/0c712e1734116275badbde2c82aadc4515845759))
+* lint and build ([f6007e9](https://github.com/demokratie-live/democracy-development/commit/f6007e92017b20aed2aa1b860ff7b12abd6ab437))
+* require backend auth handling ([42042ae](https://github.com/demokratie-live/democracy-development/commit/42042ae719e5dca6bdfa42566dd30fc7bac74862))
+* upgrade from eslint 8 to 9 ([356ccbf](https://github.com/demokratie-live/democracy-development/commit/356ccbfad9dff32191f38be383b24d515d4a87fb))
+
 ## [0.1.65](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.64...bundestag.io@v0.1.65) (2025-02-22)
 
 
