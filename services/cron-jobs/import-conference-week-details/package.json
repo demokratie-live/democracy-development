@@ -1,10 +1,10 @@
 {
   "name": "import-conference-week-details",
-  "version": "0.1.0",
+  "version": "0.1.34",
   "description": "Import conference week details",
   "author": "Manuel Ruck <m.ruck@democracy-deutschland.de>",
   "license": "Apache-2.0",
-  "private": true,
+  "private": false,
   "main": "build/index.js",
   "type": "module",
   "scripts": {
@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@crawlee/cheerio": "^3.13.0",
+    "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@democracy-deutschland/bundestagio-common": "workspace:^",
     "axios": "^1.8.2",
     "cheerio": "1.0.0-rc.12",

@@ -30,8 +30,18 @@ interface DefaultHandlerContext {
 }
 
 // Export the handler functions for testing
-export const startHandler = async ({ $, request, enqueueLinks, log }: HandlerContext): Promise<void> => {
+export const startHandler = async ({ $, request, enqueueLinks, log, response }: HandlerContext): Promise<void> => {
   log.info(`Processing start URL: ${request.url}`);
+
+  log.info(`Response status:`);
+  console.log(Object.entries(response.headers));
+  if (String(response.headers[':status']) !== '200') {
+    log.error(`Failed to fetch start URL: ${request.url}`);
+    log.error(`Response status: ${response.headers[':status']}`);
+    log.error(`Response headers: ${JSON.stringify(response.headers)}`);
+    log.error(`Response body: ${$('body').text()}`);
+    throw new Error(`Failed to fetch start URL: ${request.url}`);
+  }
 
   // Extract conference week URLs
   const entryUrls = extractEntryUrls($);
