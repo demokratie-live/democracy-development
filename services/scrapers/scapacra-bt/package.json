@@ -19,8 +19,7 @@
     "dev": "tsx ./src/run.ts",
     "lint": "eslint . --ext .ts",
     "lint:ts": "tsc --noEmit",
-    "prepublish": "pnpm build",
-    "test": "vitest"
+    "prepublish": "pnpm build"
   },
   "bugs": {
     "url": "https://github.com/demokratie-live/bt-scapacra/issues"
