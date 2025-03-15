@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.6](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.5...crawler@v1.1.6) (2025-03-15)
+
+
+* eslint in pipeline ([f49db56](https://github.com/demokratie-live/democracy-development/commit/f49db5692231ddbac345ed5c35ac0516c2e43bb3))
+* fix garden by adding —load to docker buildx ([0c712e1](https://github.com/demokratie-live/democracy-development/commit/0c712e1734116275badbde2c82aadc4515845759))
+* upgrade from eslint 8 to 9 ([356ccbf](https://github.com/demokratie-live/democracy-development/commit/356ccbfad9dff32191f38be383b24d515d4a87fb))
+
 ## [1.1.5](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.4...crawler@v1.1.5) (2024-11-30)
 
 
