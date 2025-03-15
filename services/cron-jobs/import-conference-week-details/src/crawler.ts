@@ -5,6 +5,12 @@ import { router } from './routes';
 export const DEFAULT_CONFIG: CrawlerConfig = {
   baseUrl: 'https://www.bundestag.de/tagesordnung',
   maxConcurrency: 1,
+  retryOnBlocked: true,
+  maxRequestRetries: 10,
+  maxRequestsPerMinute: 60,
+  maxRequestsPerCrawl: process.env.CRAWL_MAX_REQUESTS_PER_CRAWL
+    ? parseInt(process.env.CRAWL_MAX_REQUESTS_PER_CRAWL)
+    : 10,
 };
 
 /**

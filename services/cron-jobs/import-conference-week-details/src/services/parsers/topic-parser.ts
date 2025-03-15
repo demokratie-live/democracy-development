@@ -129,16 +129,60 @@ const extractTopicDetails = ($: CheerioAPI, row: Element): ConferenceWeekDetailS
           // Process each part
           parts.forEach((part) => {
             const currentLines: string[] = [];
+
+            // First, replace each link with its text content and a placeholder
+            // This ensures we can extract documents but also keep the link text in the lines
+            let partHtml = $(part).html() || '';
+            const linkReplacements: Map<string, string> = new Map();
+            let linkCounter = 0;
+
             $(part)
-              .contents()
-              .each((_, node) => {
-                if (node.type === 'text') {
-                  const text = $(node).text().trim();
-                  if (text.length > 0) {
-                    currentLines.push(text);
-                  }
-                }
+              .find('a.dipLink')
+              .each((_, link) => {
+                const linkText = $(link).text().trim();
+                const placeholder = `__LINK_${linkCounter}__`;
+                linkReplacements.set(placeholder, linkText);
+                linkCounter++;
+
+                // Replace the link in HTML with the placeholder
+                partHtml = partHtml.replace($(link).prop('outerHTML') || '', ` ${placeholder} `);
               });
+
+            // Mark single br tags with a line break placeholder
+            partHtml = partHtml.replace(/<br\s*\/?>/gi, '§LINE_BREAK§');
+
+            // Create a new element with our modified HTML
+            const processedPart = $('<div></div>').html(partHtml);
+
+            // Now extract text with our placeholders intact
+            let lineText = '';
+            processedPart.contents().each((_, node) => {
+              if (node.type === 'text') {
+                const text = $(node).text().trim();
+                if (text) lineText += ' ' + text;
+              }
+            });
+
+            // Replace placeholders with actual link text
+            if (lineText.trim()) {
+              linkReplacements.forEach((linkText, placeholder) => {
+                lineText = lineText.replace(placeholder, linkText);
+              });
+
+              // Clean up whitespace
+              lineText = lineText.replace(/\s+/g, ' ').trim();
+
+              // Split by line break markers and add each as a separate line
+              if (lineText.includes('§LINE_BREAK§')) {
+                const splitLines = lineText.split('§LINE_BREAK§');
+                splitLines.forEach((line) => {
+                  const trimmedLine = line.trim();
+                  if (trimmedLine) currentLines.push(trimmedLine);
+                });
+              } else if (lineText) {
+                currentLines.push(lineText);
+              }
+            }
 
             const { documents, documentIds } = extractDocumentLinks($, part);
             const topic = createTopic(currentLines, documents, documentIds);

@@ -620,6 +620,9 @@ importers:
       '@crawlee/cheerio':
         specifier: ^3.13.0
         version: 3.13.0
+      '@democracy-deutschland/bundestag.io-definitions':
+        specifier: ^1.0.2
+        version: 1.0.2
       '@democracy-deutschland/bundestagio-common':
         specifier: workspace:^
         version: link:../../../common/bundestagio
