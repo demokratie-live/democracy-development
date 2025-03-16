@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.21](https://github.com/demokratie-live/democracy-development/compare/import-deputy-profiles@v0.1.20...import-deputy-profiles@v0.1.21) (2025-03-16)
+
+
+### 🚀 Feature
+
+* add deputies for legislaturepreiod 21 ([46062f2](https://github.com/demokratie-live/democracy-development/commit/46062f21cc5f24c5f0d3d3511dcf7fe9672b4127))
+
 ## [0.1.20](https://github.com/demokratie-live/democracy-development/compare/import-deputy-profiles@v0.1.19...import-deputy-profiles@v0.1.20) (2025-03-15)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "import-deputy-profiles",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "main": "build/index.js",
   "type": "module",
   "license": "Apache-2.0",
