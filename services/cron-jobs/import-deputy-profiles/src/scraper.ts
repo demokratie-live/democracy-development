@@ -66,6 +66,8 @@ const deputyDetailsScrapeConfig = {
 };
 
 export const fetchDeputyDetails = async (deputyUrl: string): Promise<DeputyScrapedData> => {
+  // timeout for 1 second
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   return scrapeIt<DeputyScrapedData>(
     {
       url: encodeURI(deputyUrl),

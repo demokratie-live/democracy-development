@@ -25,7 +25,9 @@ export const getDeputyListUrl = ({ period, offset }: { period: Period; offset: n
     case 19:
       return `https://www.bundestag.de/ajax/filterlist/webarchiv/abgeordnete/biografien19/525246-525246?limit=12&noFilterSet=true&offset=${offset}`;
     case 20:
-    default:
       return `https://www.bundestag.de/ajax/filterlist/de/abgeordnete/biografien/862712-862712?limit=20&noFilterSet=true&offset=${offset}`;
+    case 21:
+    default:
+      return `https://www.bundestag.de/ajax/filterlist/de/abgeordnete/biografien/Abgeordnete21/1040594-1040594?limit=20&noFilterSet=true&offset=${offset}`;
   }
 };
