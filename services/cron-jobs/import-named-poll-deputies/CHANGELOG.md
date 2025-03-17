@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.17](https://github.com/demokratie-live/democracy-development/compare/import-named-poll-deputies@v0.1.16...import-named-poll-deputies@v0.1.17) (2025-03-17)
+
+
+### 🚀 Feature
+
+* configure TypeScript and build setup for import-named-poll-deputies ([7f4a143](https://github.com/demokratie-live/democracy-development/commit/7f4a143201747f3e590cd0d7b4fbb36cd64e4161))
+
 ## [0.1.16](https://github.com/demokratie-live/democracy-development/compare/import-named-poll-deputies@v0.1.15...import-named-poll-deputies@v0.1.16) (2025-03-15)
 
 
