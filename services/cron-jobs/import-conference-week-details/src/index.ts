@@ -230,6 +230,7 @@ export async function run(): Promise<void> {
       }
 
       log.info('Successfully saved all conference weeks to MongoDB');
+      process.exit(0);
     } catch (dbError) {
       log.error('Error saving to MongoDB:', {
         message: dbError instanceof Error ? dbError.message : String(dbError),
