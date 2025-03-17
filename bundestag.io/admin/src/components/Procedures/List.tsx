@@ -25,7 +25,7 @@ const procedureStatis = [
 ];
 
 export const ProcedureList: React.FC = () => {
-  const [period, setPeriod] = useState(20);
+  const [period, setPeriod] = useState(21);
   const [pageSize, setPageSize] = useState(10);
   const [pageCurrent, setPageCurrent] = useState(1);
   const { data, loading } = useQuery(PROCEDURE_LIST, {
@@ -191,9 +191,10 @@ export const ProcedureList: React.FC = () => {
     <div>
       <div>
         Period:
-        <Select defaultValue={20} onChange={(value) => setPeriod(value)}>
+        <Select defaultValue={21} onChange={(value) => setPeriod(value)}>
           <Option value={19}>19</Option>
           <Option value={20}>20</Option>
+          <Option value={21}>21</Option>
         </Select>
       </div>
       <Table
