@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.8.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.7.1...bundestag.io-admin@v3.8.0) (2025-03-17)
+
+
+### 🚀 Feature
+
+* add legislatur preiod 21 ([0129f2c](https://github.com/demokratie-live/democracy-development/commit/0129f2ce22b53299d3b41bf95172c70ef91c2563))
+
 ## [3.7.1](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.7.0...bundestag.io-admin@v3.7.1) (2025-03-15)
 
 
