@@ -8,7 +8,8 @@
     "lint": "pnpm lint:ts && pnpm lint:exports",
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas",
-    "build": "tsc",
+    "prebuild": "rimraf build",
+    "build": "tsup src/index.ts --format cjs --dts --clean",
     "start": "node ./build/index.js"
   },
   "dependencies": {
@@ -16,12 +17,25 @@
     "@democracy-deutschland/bundestagio-common": "workspace:*",
     "@democracy-deutschland/scapacra": "workspace:*",
     "@democracy-deutschland/scapacra-bt": "workspace:*",
-    "http2": "^3.3.7"
+    "axios": "^1.8.1",
+    "cron": "^2.4.4",
+    "http2": "^3.3.7",
+    "jsonschema": "^1.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
+    "mongoose": "^6.0.12",
+    "mongoose-diff-history": "^2.1.0",
+    "mongoosastic": "^5.0.0",
+    "xml2js": "^0.6.2",
+    "xmldom": "^0.6.0",
+    "xpath": "^0.0.34"
   },
   "devDependencies": {
     "dotenv": "^16.4.5",
+    "rimraf": "^5.0.7",
     "ts-node-dev": "^2.0.0",
     "ts-unused-exports": "^10.1.0",
+    "tsup": "^8.0.2",
     "typescript": "^5.4.5"
   }
 }
