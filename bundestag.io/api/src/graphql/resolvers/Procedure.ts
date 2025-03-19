@@ -505,6 +505,22 @@ const ProcedureResolvers: Resolvers = {
         { $match: { 'session.top.topic.procedureId': procedure.procedureId } },
       ]),
   },
+
+  LegislativePeriod: {
+    parties: async (legislativePeriod, _, { DeputyModel }) => {
+      const deputies = await DeputyModel.find({ period: legislativePeriod.number });
+      const parties = deputies.reduce((acc, deputy) => {
+        const party = acc.find((p) => p.name === deputy.party);
+        if (party) {
+          party.deputies.push(deputy);
+        } else {
+          acc.push({ name: deputy.party, deputies: [deputy] });
+        }
+        return acc;
+      }, []);
+      return parties;
+    },
+  },
 };
 
 export default ProcedureResolvers;

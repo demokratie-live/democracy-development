@@ -3,6 +3,12 @@ type LegislativePeriod {
   start: Date!
   end: Date
   deputies: Int!
+  parties: [Party]
+}
+
+type Party {
+  name: String!
+  deputies: [Deputy]
 }
 
 type Query {

@@ -160,6 +160,7 @@ type Query {
     voteDate: [Boolean!]
     manageVoteDate: Boolean
   ): ProceduresData!
+  partiesByLegislaturePeriod(period: Int!): [Party]
 }
 
 type Mutation {

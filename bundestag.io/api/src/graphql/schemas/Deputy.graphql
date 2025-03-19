@@ -27,6 +27,7 @@ type Deputy {
   speechesURL: String
   votesURL: String
   publicationRequirement: [String]
+  party: Party
 }
 
 type DeputyUpdate {

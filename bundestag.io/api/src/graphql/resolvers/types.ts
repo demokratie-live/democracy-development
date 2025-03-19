@@ -244,6 +244,13 @@ export type LegislativePeriod = {
   start: Scalars['Date'];
   end?: Maybe<Scalars['Date']>;
   deputies: Scalars['Int'];
+  parties?: Maybe<Array<Maybe<Party>>>;
+};
+
+export type Party = {
+  __typename?: 'Party';
+  name: Scalars['String'];
+  deputies?: Maybe<Array<Maybe<Deputy>>>;
 };
 
 export type NamedPollMediaVideoUrl = {
@@ -1010,6 +1017,16 @@ export type LegislativePeriodResolvers<
   start?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   end?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   deputies?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  parties?: Resolver<Maybe<Array<Maybe<ResolversTypes['Party']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type PartyResolvers<
+  ContextType = GraphQlContext,
+  ParentType extends ResolversParentTypes['Party'] = ResolversParentTypes['Party'],
+> = {
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  deputies?: Resolver<Maybe<Array<Maybe<ResolversTypes['Deputy']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -1428,6 +1445,7 @@ export type Resolvers<ContextType = GraphQlContext> = {
   DeputyUpdate?: DeputyUpdateResolvers<ContextType>;
   Document?: DocumentResolvers<ContextType>;
   LegislativePeriod?: LegislativePeriodResolvers<ContextType>;
+  Party?: PartyResolvers<ContextType>;
   NamedPollMediaVideoURL?: NamedPollMediaVideoUrlResolvers<ContextType>;
   NamedPollMedia?: NamedPollMediaResolvers<ContextType>;
   NamedPollSpeech?: NamedPollSpeechResolvers<ContextType>;
