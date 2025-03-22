@@ -7,26 +7,45 @@ import { Beschlusstext } from './Beschlusstext';
 // Ant Design Sub-Elements
 const FormItem = Form.Item;
 
-const FRACTIONS = [
-  {
-    name: 'Union',
-  },
-  {
-    name: 'SPD',
-  },
-  {
-    name: 'AfD',
-  },
-  {
-    name: 'Grüne',
-  },
-  {
-    name: 'FDP',
-  },
-  {
-    name: 'Linke',
-  },
-];
+export const getFractions = (period: number) =>
+  period === 21
+    ? [
+        {
+          name: 'Union',
+        },
+        {
+          name: 'AfD',
+        },
+        {
+          name: 'SPD',
+        },
+        {
+          name: 'Grüne',
+        },
+        {
+          name: 'Linke',
+        },
+      ]
+    : [
+        {
+          name: 'Union',
+        },
+        {
+          name: 'SPD',
+        },
+        {
+          name: 'AfD',
+        },
+        {
+          name: 'Grüne',
+        },
+        {
+          name: 'FDP',
+        },
+        {
+          name: 'Linke',
+        },
+      ];
 
 const VoteResultsForm = ({ data, type, procedureId, period, lastPlenaryProtocoll, title }) => {
   const [form] = Form.useForm();
@@ -80,7 +99,7 @@ const VoteResultsForm = ({ data, type, procedureId, period, lastPlenaryProtocoll
     });
   };
 
-  let parties = FRACTIONS;
+  let parties = getFractions(period);
   if (data.partyVotes && data.partyVotes.length > 0) {
     parties = data.partyVotes.map(({ party }) => ({
       name: party,

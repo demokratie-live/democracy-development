@@ -1,6 +1,7 @@
 import { Maybe, Vote, VoteResult } from '@/__generated/gql-ai/graphql';
 import { Button, Spin } from 'antd';
 import { useState } from 'react';
+import { getFractions } from './VoteResultsForm';
 
 export type AiVotesProps = {
   decision: string;
@@ -37,14 +38,14 @@ export const AiVotes: React.FC<AiVotesProps> = ({ decision, period, onResult }) 
       }).then((data) => data.json());
 
       response.sort((a, b) => {
-        const partiesOrder = ['Union', 'SPD', 'AfD', 'Grüne', 'FDP', 'Linke'];
+        const partiesOrder = getFractions(period).map((party) => party.name);
         return partiesOrder.indexOf(a.name) - partiesOrder.indexOf(b.name);
       });
 
       setVotes(response);
       onResult?.(response);
     } catch (error) {
-      console.error(error);
+      console.error('Error fetching votes:', error);
     } finally {
       setLoading(false);
     }
