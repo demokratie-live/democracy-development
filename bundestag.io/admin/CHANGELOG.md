@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.8.1](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.8.0...bundestag.io-admin@v3.8.1) (2025-03-24)
+
+
+* update next dependency to version 15.2.3 ([9d9154d](https://github.com/demokratie-live/democracy-development/commit/9d9154dfefbb869f3a6295028f56a63afc677bb3))
+
 ## [3.8.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.7.1...bundestag.io-admin@v3.8.0) (2025-03-17)
 
 
