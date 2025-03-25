@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.16](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.0.15...democracy-app.de@v1.0.16) (2025-03-25)
+
+
+* remove experimental output option and streamline config ([8f1ed00](https://github.com/demokratie-live/democracy-development/commit/8f1ed0049bc7b5fa20ca8a90e956729a7dd61ea7))
+* update next dependency to version 14.2.25 ([3d04179](https://github.com/demokratie-live/democracy-development/commit/3d04179687cedeb86f53d5a898bfdb0d931a5738))
+
 ## [1.0.15](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.0.14...democracy-app.de@v1.0.15) (2025-03-15)
 
 
