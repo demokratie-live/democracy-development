@@ -4,9 +4,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 module.exports = withBundleAnalyzer({
-  experimental: {
-    outputStandalone: true,
-  },
+  output: 'standalone',
   eslint: {
     dirs: ['.'],
   },
@@ -32,8 +30,7 @@ module.exports = withBundleAnalyzer({
         destination: '/api/assetlinks',
       },
       {
-        source:
-          '/.well-known/apple-developer-merchantid-domain-association.txt',
+        source: '/.well-known/apple-developer-merchantid-domain-association.txt',
         destination: '/api/apple-developer-merchantid-domain-association',
       },
     ];
