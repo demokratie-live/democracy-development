@@ -1,0 +1,24 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Values.configmap.name }}
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+{{if eq .Values.storageMethod "cassandra3"}}
+
+{{if eq .Values.configmap.username.name .Values.configmap.name}}
+  cassandra.username: "{{ .Values.cassandra.username }}"
+{{ end }}
+
+{{if eq .Values.configmap.localdc.name .Values.configmap.name}}
+  cassandra.localdc: "{{ .Values.cassandra.localdc }}"
+{{ end }}
+
+{{if eq .Values.configmap.contactPoints.name .Values.configmap.name}}
+  cassandra.contactpoints: "{{ .Release.Name }}-{{ .Values.cassandra.contactPoints }}"
+{{ end }}
+
+{{ end }}
