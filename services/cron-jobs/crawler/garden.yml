@@ -1,3 +1,23 @@
+kind: Deploy
+name: crawler-config
+type: kubernetes
+
+varfiles:
+  - .env
+  - .env.local
+
+variables:
+  DB_URL: mongodb://democracy-mongo:27017/bundestagio
+
+source:
+  path: manifests # Manifeste liegen hier außerhalb des Action‑Verzeichnisses
+
+spec:
+  manifestTemplates:
+    - configmap.yaml # ---> infra/manifests/configmap.yaml wird angewendet
+    - secret.yaml
+
+---
 kind: Build
 name: import-procedures
 description: Import procedures for the bundestag.io API
@@ -16,69 +36,33 @@ spec:
   extraFlags: ['--load']
 
 ---
-kind: Deploy
+# 2) Run-Aktion: Ad-hoc Kubernetes-Pod für einmalige Imports
+#    Sync wird hier nicht unterstützt. Für Hot-Reload und Entwicklungsmodus siehe Deploy-Aktion.
+kind: Run
 name: import-procedures
-type: kubernetes
-description: Deploy the importer of procedures for the bundestag.io API
-dependencies: [build.import-procedures, deploy.mongo]
+description: Ad-hoc Import-Job für Prozeduren
+# Abhängigkeit zu Mongo-Deploy beibehalten, damit die DB verfügbar ist
+dependencies:
+  - build.import-procedures
+  - deploy.mongo
+  - deploy.crawler-config
 
 varfiles:
   - .env
   - .env.local
 
-variables:
-  DB_URL: mongodb://democracy-mongo:27017/bundestagio
-
+type: kubernetes-pod
 spec:
-  files:
-    - ./manifests/ConfigMap.yaml
-    # - ./manifests/CronJob.yaml
-    - ./manifests/Secret.yaml
-    - ./manifests/Deployment.garden.yaml
-
-  defaultTarget:
-    kind: Deployment
-    name: import-procedures
-
-  sync:
-    paths:
-      - containerPath: /services/cron-jobs/crawler/src
-        sourcePath: src
-        mode: one-way
-    overrides:
-      - command: [pnpm, --filter, crawler, run, garden:dev]
-
-  patchResources:
-    $if: ${this.mode == "sync"}
-    $then:
+  podSpec:
+    restartPolicy: Never
+    containers:
       - name: import-procedures
-        kind: Deployment
-        patch:
-          spec:
-            template:
-              spec:
-                containers:
-                  - name: import-procedures
-                    image: ${actions.build.import-procedures.outputs.deploymentImageId}
-      - name: dip-api-token
-        kind: Secret
-        patch:
-          data:
-            DIP_API_KEY: ${base64Encode(var.DIP_API_KEY)}
-    $else:
-      - name: import-procedures
-        kind: CronJob
-        patch:
-          spec:
-            jobTemplate:
-              spec:
-                template:
-                  spec:
-                    containers:
-                      - name: import-procedures
-                        image: ${actions.build.import-procedures.outputs.deploymentImageId}
-      - name: dip-api-token
-        kind: Secret
-        patch:
-          data:
-            DIP_API_KEY: ${base64Encode(var.DIP_API_KEY)}
+        image: ${actions.build.import-procedures.outputs.deploymentImageId}
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - configMapRef:
+              name: crawler-config
+          - secretRef:
+              name: dip-api-token
+# Optional: TTL für automatische Aufräumung (wenn unterstützt)
+#    ttlSecondsAfterFinished: 300

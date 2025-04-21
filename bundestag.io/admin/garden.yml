@@ -33,7 +33,8 @@ variables:
   NON_NAMED_VOTES_AI_SECRET: ${actions.deploy.non-named-votes-ai.var.NON_NAMED_VOTES_AI_SECRET}
 
 spec:
-  files: [./manifests/*] # <--- Tell Garden what manifests to use
+  manifestTemplates:
+    - ./manifests/*
 
   defaultTarget: # <--- This tells Garden what "target" to use for logs, code syncing and more
     kind: Deployment

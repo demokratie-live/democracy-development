@@ -2,5 +2,5 @@ kind: Deploy
 name: democracy-api
 type: kubernetes
 spec:
-  files:
+  manifestTemplates:
     - ./manifests/*

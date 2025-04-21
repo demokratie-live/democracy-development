@@ -21,7 +21,8 @@ type: kubernetes
 dependencies: [build.procedures, deploy.mongo]
 
 spec:
-  files: [./manifests/*]
+  manifestTemplates:
+    - ./manifests/*
 
   defaultTarget:
     kind: Deployment

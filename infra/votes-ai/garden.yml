@@ -10,5 +10,5 @@ varfiles:
   - ./.env
 
 spec:
-  files:
+  manifestTemplates:
     - ./manifests/*
