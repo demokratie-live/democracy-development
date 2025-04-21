@@ -29,7 +29,8 @@ variables:
   BUNDESTAGIO_SERVER_URL: http://bundestag-io-api
 
 spec:
-  files: [./manifests/*]
+  manifestTemplates:
+    - ./manifests/*
 
   patchResources:
     - name: sync-procedures

@@ -28,7 +28,8 @@ variables:
   DB_URL: mongodb://democracy-mongo:27017/democracy
 
 spec:
-  files: [./manifests/*]
+  manifestTemplates:
+    - ./manifests/*
 
   patchResources:
     - name: cleanup-push-queue

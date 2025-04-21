@@ -27,7 +27,8 @@ dependencies:
   - build.democracy-desktop
 
 spec:
-  files: [./manifests/*] # <--- Tell Garden what manifests to use
+  manifestTemplates:
+    - ./manifests/*
 
   defaultTarget: # <--- This tells Garden what "target" to use for logs, code syncing and more
     kind: Deployment

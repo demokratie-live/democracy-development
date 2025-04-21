@@ -30,7 +30,8 @@ variables:
   BIO_EDIT_TOKEN: 'TOP_SECRET_LOCAL_TOKEN'
 
 spec:
-  files: [./manifests/*] # <--- Tell Garden what manifests to use
+  manifestTemplates:
+    - ./manifests/*
 
   defaultTarget: # <--- This tells Garden what "target" to use for logs, code syncing and more
     kind: Deployment
