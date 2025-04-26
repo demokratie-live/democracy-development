@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.17](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.0.16...democracy-app.de@v1.0.17) (2025-04-26)
+
+
+* update garden configuration to use manifestTemplates instead of files ([f38615d](https://github.com/demokratie-live/democracy-development/commit/f38615dd5400bad734139f5363a6a6d9fa6a3db3))
+
 ## [1.0.16](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.0.15...democracy-app.de@v1.0.16) (2025-03-25)
 
 
