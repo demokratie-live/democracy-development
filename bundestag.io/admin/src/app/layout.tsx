@@ -1,3 +1,4 @@
+import 'antd/dist/reset.css';
 import { Navigation } from '@/components/Navigation';
 import { Layout as AntLayout, Breadcrumb } from 'antd';
 
