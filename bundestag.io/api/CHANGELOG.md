@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.67](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.66...bundestag.io@v0.1.67) (2025-04-26)
+
+
+* update garden configuration to use manifestTemplates instead of files ([f38615d](https://github.com/demokratie-live/democracy-development/commit/f38615dd5400bad734139f5363a6a6d9fa6a3db3))
+
 ## [0.1.66](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.65...bundestag.io@v0.1.66) (2025-03-15)
 
 
