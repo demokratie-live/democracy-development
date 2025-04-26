@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.3](https://github.com/demokratie-live/democracy-development/compare/non-named-votes-ai@v1.1.2...non-named-votes-ai@v1.1.3) (2025-04-26)
+
+
+* update garden configuration to use manifestTemplates instead of files ([f38615d](https://github.com/demokratie-live/democracy-development/commit/f38615dd5400bad734139f5363a6a6d9fa6a3db3))
+
 ## [1.1.2](https://github.com/demokratie-live/democracy-development/compare/non-named-votes-ai@v1.1.1...non-named-votes-ai@v1.1.2) (2025-03-15)
 
 
