@@ -7,6 +7,25 @@ import { Beschlusstext } from './Beschlusstext';
 // Ant Design Sub-Elements
 const FormItem = Form.Item;
 
+// Props-Interface
+interface VoteResultsFormProps {
+  data: {
+    votingDocument?: string;
+    decisionText?: string;
+    partyVotes: {
+      party: string;
+      main?: 'YES' | 'NO' | 'ABSTINATION' | null;
+      deviants: { yes: number; abstination: number; no: number };
+    }[];
+    votingRecommendation?: boolean;
+  };
+  type: string;
+  procedureId: number;
+  period: number;
+  lastPlenaryProtocoll?: { findSpotUrl: string };
+  title: string;
+}
+
 export const getFractions = (period: number) =>
   period === 21
     ? [
@@ -47,19 +66,29 @@ export const getFractions = (period: number) =>
         },
       ];
 
-const VoteResultsForm = ({ data, type, procedureId, period, lastPlenaryProtocoll, title }) => {
+// Component-Typisierung und Form-Layout
+const VoteResultsForm: React.FC<VoteResultsFormProps> = ({
+  data,
+  type,
+  procedureId,
+  period,
+  lastPlenaryProtocoll,
+  title,
+}) => {
+  // 1. useNotification-Hook
+  const [notificationApi, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    notification.info({
+  const onFinish = (values: any) => {
+    notificationApi.info({
       key: 'saveProcedure',
       message: 'Vorgang wird gespeichert!',
       duration: 0,
     });
 
-    const data = {
+    const payload = {
       ...values,
-      partyVotes: values.partyVotes.map((party) => ({
+      partyVotes: values.partyVotes.map((party: any) => ({
         party: party.party,
         main: party.main,
         deviants: {
@@ -72,18 +101,18 @@ const VoteResultsForm = ({ data, type, procedureId, period, lastPlenaryProtocoll
 
     axiosClient
       .post('/api/procedures/save', {
-        ...data,
+        ...payload,
         toggleDecision: !values.toggleDecision,
         procedureId,
       })
       .then(() => {
-        notification.success({
+        notificationApi.success({
           key: 'saveProcedure',
           message: 'Vorgang wurde gespeichert!',
         });
       })
       .catch((err) => {
-        notification.error({
+        notificationApi.error({
           key: 'saveProcedure',
           message: 'Ein Fehler ist vorgefallen',
           // description: err
@@ -93,7 +122,7 @@ const VoteResultsForm = ({ data, type, procedureId, period, lastPlenaryProtocoll
   };
 
   const onFinishFailed = () => {
-    notification.error({
+    notificationApi.warning({
       message: 'Speichern Fehlgeschlagen!',
       description: 'Überprüfe deine eingaben',
     });
@@ -115,121 +144,127 @@ const VoteResultsForm = ({ data, type, procedureId, period, lastPlenaryProtocoll
   };
 
   return (
-    <Form
-      form={form}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      className="login-form"
-      initialValues={{
-        votingDocument: data.votingDocument,
-        decisionText: data.decisionText,
-        partyVotes: parties.map((p, i) => ({
-          party: p.name,
-          main: data.partyVotes.length > 0 ? data.partyVotes[i].main : null,
-          yes: data.partyVotes.length > 0 ? data.partyVotes[i].deviants.yes : 0,
-          abstination: data.partyVotes.length > 0 ? data.partyVotes[i].deviants.abstination : 0,
-          no: data.partyVotes.length > 0 ? data.partyVotes[i].deviants.no : 0,
-        })),
-      }}
-    >
-      <FormItem
-        label="Abstimmung über"
-        name="votingDocument"
-        rules={[{ required: true, message: 'Abstimmung über fehlt!' }]}
+    <>
+      {contextHolder}
+      <Form
+        form={form}
+        layout="vertical"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        className="login-form"
+        initialValues={{
+          votingDocument: data.votingDocument ?? '',
+          decisionText: data.decisionText ?? '',
+          partyVotes: parties.map((p, i) => ({
+            party: p.name,
+            main: data.partyVotes.length > 0 ? data.partyVotes[i].main : null,
+            yes: data.partyVotes.length > 0 ? data.partyVotes[i].deviants.yes : 0,
+            abstination: data.partyVotes.length > 0 ? data.partyVotes[i].deviants.abstination : 0,
+            no: data.partyVotes.length > 0 ? data.partyVotes[i].deviants.no : 0,
+          })),
+        }}
       >
-        <Radio.Group>
-          <Radio.Button value="mainDocument">{type}</Radio.Button>
-          <Radio.Button value="recommendedDecision">Beschlussempfehlung</Radio.Button>
-        </Radio.Group>
-      </FormItem>
-      <FormItem label="Ergebnis umdrehen" name="toggleDecision">
-        <Switch defaultChecked={data.votingRecommendation === false} />
-      </FormItem>
-      <Beschlusstext pdfUrl={lastPlenaryProtocoll?.findSpotUrl} title={title} />
-      <FormItem
-        noStyle
-        shouldUpdate={(prevValues, currentValues) => prevValues.decisionText !== currentValues.decisionText}
-      >
-        {({ getFieldValue }) => {
-          if (getFieldValue('decisionText') && period) {
-            return <AiVotes decision={getFieldValue('decisionText')} period={period} onResult={onAiVoteResult} />;
+        <FormItem
+          label="Abstimmung über"
+          name="votingDocument"
+          rules={[{ required: true, message: 'Abstimmung über fehlt!' }]}
+        >
+          <Radio.Group>
+            <Radio.Button value="mainDocument">{type}</Radio.Button>
+            <Radio.Button value="recommendedDecision">Beschlussempfehlung</Radio.Button>
+          </Radio.Group>
+        </FormItem>
+        <Form.Item label="Ergebnis umdrehen" name="toggleDecision" valuePropName="checked">
+          <Switch />
+        </Form.Item>
+        <Beschlusstext pdfUrl={lastPlenaryProtocoll?.findSpotUrl ?? ''} title={title} />
+        <Form.Item noStyle dependencies={['decisionText']}>
+          {({ getFieldValue }) =>
+            getFieldValue('decisionText') && period ? (
+              <AiVotes decision={getFieldValue('decisionText')} period={period} onResult={onAiVoteResult} />
+            ) : null
           }
-          return null;
-        }}
-      </FormItem>
-      <Form.List name="partyVotes">
-        {(parties) => {
-          return (
+        </Form.Item>
+        <Form.List name="partyVotes">
+          {(fields) => (
             <Row gutter={8}>
-              {parties.map((field, i) => {
-                const mainDecision =
-                  // form.getFieldValue(`partyVotes[${i}].main`) ||
-                  data.partyVotes.length > 0 ? data.partyVotes[i].main : null;
-                return (
-                  <Col span={8} key={field.name}>
-                    <FormItem name={[field.name, 'party']} rules={[{ required: true, message: 'Beschluss fehlt!' }]}>
-                      <Input readOnly />
-                    </FormItem>
-                    <FormItem
-                      className="collection-create-form_last-form-item"
-                      name={[field.name, 'main']}
-                      rules={[{ required: true, message: 'Beschluss fehlt!' }]}
-                    >
-                      <Radio.Group>
-                        <Radio.Button value="YES" style={{ backgroundColor: '#f6ffed' }}>
-                          Ja
-                        </Radio.Button>
-                        <Radio.Button value="ABSTINATION" style={{ backgroundColor: '#e6f7ff' }}>
-                          Enthaltung
-                        </Radio.Button>
-                        <Radio.Button value="NO" style={{ backgroundColor: '#fff1f0' }}>
-                          Nein
-                        </Radio.Button>
-                      </Radio.Group>
-                    </FormItem>
-                    <FormItem
-                      label="Ja"
-                      name={[field.name, 'yes']}
-                      labelCol={{
-                        xs: { span: 24 },
-                        sm: { span: 8 },
-                      }}
-                    >
-                      <InputNumber min={0} max={999} disabled={mainDecision === 'YES'} />
-                    </FormItem>
-                    <FormItem
-                      label="Enth."
-                      name={[field.name, 'abstination']}
-                      labelCol={{
-                        xs: { span: 24 },
-                        sm: { span: 8 },
-                      }}
-                    >
-                      <InputNumber min={0} max={999} disabled={mainDecision === 'ABSTINATION'} />
-                    </FormItem>
-                    <FormItem
-                      label="Nein"
-                      name={[field.name, 'no']}
-                      labelCol={{
-                        xs: { span: 24 },
-                        sm: { span: 8 },
-                      }}
-                    >
-                      <InputNumber min={0} max={999} disabled={mainDecision === 'NO'} />
-                    </FormItem>
-                  </Col>
-                );
-              })}
+              {fields.map((field) => (
+                <Col span={8} key={`${field.key ?? field.name}`}>
+                  <Form.Item {...field} name={[field.name, 'party']} rules={[{ required: true }]}>
+                    <Input readOnly />
+                  </Form.Item>
+                  <Form.Item {...field} name={[field.name, 'main']} rules={[{ required: true }]}>
+                    <Radio.Group>
+                      <Radio.Button value="YES" style={{ backgroundColor: '#f6ffed' }}>
+                        Ja
+                      </Radio.Button>
+                      <Radio.Button value="ABSTINATION" style={{ backgroundColor: '#e6f7ff' }}>
+                        Enthaltung
+                      </Radio.Button>
+                      <Radio.Button value="NO" style={{ backgroundColor: '#fff1f0' }}>
+                        Nein
+                      </Radio.Button>
+                    </Radio.Group>
+                  </Form.Item>
+                  <Form.Item
+                    {...field}
+                    label="Ja"
+                    name={[field.name, 'yes']}
+                    labelCol={{
+                      xs: { span: 24 },
+                      sm: { span: 8 },
+                    }}
+                  >
+                    <InputNumber
+                      min={0}
+                      max={999}
+                      disabled={form.getFieldValue(['partyVotes', field.name, 'main']) === 'YES'}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    {...field}
+                    label="Enth."
+                    name={[field.name, 'abstination']}
+                    labelCol={{
+                      xs: { span: 24 },
+                      sm: { span: 8 },
+                    }}
+                  >
+                    <InputNumber
+                      min={0}
+                      max={999}
+                      disabled={form.getFieldValue(['partyVotes', field.name, 'main']) === 'ABSTINATION'}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    {...field}
+                    label="Nein"
+                    name={[field.name, 'no']}
+                    labelCol={{
+                      xs: { span: 24 },
+                      sm: { span: 8 },
+                    }}
+                  >
+                    <InputNumber
+                      min={0}
+                      max={999}
+                      disabled={form.getFieldValue(['partyVotes', field.name, 'main']) === 'NO'}
+                    />
+                  </Form.Item>
+                </Col>
+              ))}
             </Row>
-          );
-        }}
-      </Form.List>
-      <FormItem>
-        <Button type="primary" htmlType="submit" className="login-form-button">
-          Speichern
-        </Button>
-      </FormItem>
-    </Form>
+          )}
+        </Form.List>
+        <FormItem>
+          <Button type="primary" htmlType="submit" className="login-form-button">
+            Speichern
+          </Button>
+        </FormItem>
+      </Form>
+    </>
   );
 };
 
