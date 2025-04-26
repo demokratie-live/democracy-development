@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.8.2](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.8.1...bundestag.io-admin@v3.8.2) (2025-04-26)
+
+
+* update garden configuration to use manifestTemplates instead of files ([f38615d](https://github.com/demokratie-live/democracy-development/commit/f38615dd5400bad734139f5363a6a6d9fa6a3db3))
+* update party order in AI votes sorting ([bd63bd8](https://github.com/demokratie-live/democracy-development/commit/bd63bd8ba4a2f53d049062c083e2a0cf3df08df9))
+* update VoteResultsForm component with improved type definitions ([4b23092](https://github.com/demokratie-live/democracy-development/commit/4b2309266428b9ed65493ce021fa9ac19343b870))
+
 ## [3.8.1](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.8.0...bundestag.io-admin@v3.8.1) (2025-03-24)
 
 
