@@ -15,7 +15,7 @@
   "dependencies": {
     "@democracy-deutschland/democracy-common": "workspace:*",
     "apn": "^2.2.0",
-    "axios": "^1.7.2",
+    "axios": "^1.9.0",
     "firebase-admin": "^11.11.1",
     "http2": "^3.3.7",
     "node-gcm": "^1.1.4"
