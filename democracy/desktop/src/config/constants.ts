@@ -1,3 +1,3 @@
 export const config = {
-  period: 20,
+  period: 21,
 };
