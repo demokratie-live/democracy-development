@@ -254,7 +254,7 @@ const start = async () => {
         since,
         limit,
         offset,
-        periods: [18, 19, 20],
+        periods: [18, 19, 20, 21],
         types: [PROCEDURE_DEFINITIONS.TYPE.GESETZGEBUNG, PROCEDURE_DEFINITIONS.TYPE.ANTRAG],
       };
       const {
