@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.0](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.0.17...democracy-app.de@v1.1.0) (2025-06-27)
+
+
+### 🚀 Feature
+
+* update period to 21 in configuration and add to periods list ([ca9f0f0](https://github.com/demokratie-live/democracy-development/commit/ca9f0f06a67083c3ae76ede8e4653351363de2e7))
+
 ## [1.0.17](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.0.16...democracy-app.de@v1.0.17) (2025-04-26)
 
 
