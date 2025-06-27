@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.23](https://github.com/demokratie-live/democracy-development/compare/sync-procedures@v0.1.22...sync-procedures@v0.1.23) (2025-06-27)
+
+
+* update garden configuration to use manifestTemplates instead of files ([f38615d](https://github.com/demokratie-live/democracy-development/commit/f38615dd5400bad734139f5363a6a6d9fa6a3db3))
+
+
+### 🚀 Feature
+
+* sync procedures of period 21 ([7e1be8a](https://github.com/demokratie-live/democracy-development/commit/7e1be8aa91277460f422681eb8911edc77602698))
+
 ## [0.1.22](https://github.com/demokratie-live/democracy-development/compare/sync-procedures@v0.1.21...sync-procedures@v0.1.22) (2025-03-15)
 
 
