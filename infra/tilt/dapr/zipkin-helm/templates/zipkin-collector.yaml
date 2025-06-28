@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-zipkin-collector
+  labels:
+    app: zipkin-collector
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.collector.replicaCount }}
+  selector:
+    matchLabels:
+      app: zipkin-collector
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: {{ .Values.collector.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: zipkin-collector
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "docker.io/openzipkin/zipkin:{{ .Values.collector.imageVersion }}"
+          ports:
+            - containerPort: {{ .Values.collector.queryPort }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.collector.probeStartupDelay }}
+            tcpSocket:
+              port: {{ .Values.collector.queryPort }}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.collector.probeStartupDelay }}
+            httpGet:
+              path: /health
+              port: {{ .Values.collector.queryPort }}
+          resources:
+            limits:
+              cpu: "{{ .Values.collector.resources.cpuLimit }}"
+              memory: "{{ .Values.collector.resources.ramMb }}Mi" # TODO fix this, this field id mi but the value is mb. There will be slight wastage
+            requests:
+              cpu: "{{ .Values.collector.resources.cpuRequest }}"
+              memory: "{{ .Values.collector.resources.ramMb }}Mi" # TODO fix this, this field id mi but the value is mb. There will be slight wastage
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: QUERY_PORT
+              value: "{{ .Values.collector.queryPort }}"
+            - name: JAVA_OPTS
+              value: "-XX:ConcGCThreads={{ .Values.node.cpus }} -XX:ParallelGCThreads={{ .Values.node.cpus }} -Djava.util.concurrent.ForkJoinPool.common.parallelism={{ .Values.node.cpus }} -Xms{{ .Values.collector.resources.javaOptsHeap }}M -Xmx{{ .Values.collector.resources.javaOptsHeap }}M -XX:+UseG1GC -server"
+            - name: COLLECTOR_SAMPLE_RATE
+              value: "{{ .Values.collector.sampleRate }}"
+            - name: QUERY_ENABLED
+              value: "false"
+            - name: STORAGE_TYPE
+              value: "{{ .Values.storageMethod }}"
+{{if eq .Values.storageMethod "cassandra3"}}
+            - name: CASSANDRA_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.username.name }}
+                  key: {{ .Values.configmap.username.key }}
+            - name: CASSANDRA_CONTACT_POINTS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.contactPoints.name }}
+                  key: {{ .Values.configmap.contactPoints.key }}
+            - name: CASSANDRA_LOCAL_DC
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.localdc.name }}
+                  key: {{ .Values.configmap.localdc.key }}
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zipkin
+                  key: cassandra.password
+            - name: CASSANDRA_ENSURE_SCHEMA
+              value: "false"
+{{ end }}

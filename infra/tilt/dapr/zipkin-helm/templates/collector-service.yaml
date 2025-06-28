@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: zipkin
+  labels:
+    app: zipkin
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: collector
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  ports:
+   - port: {{ .Values.collector.queryPort }}
+     name: "http"
+     targetPort: {{ .Values.collector.queryPort }}
+  selector:
+    app: zipkin-collector
