@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.68](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.67...bundestag.io@v0.1.68) (2025-07-08)
+
+
+### 🚀 Feature
+
+* add deputies number for period 21 ([64fc920](https://github.com/demokratie-live/democracy-development/commit/64fc9204340a65b452431f05b9e4ea49a7ab605e))
+
 ## [0.1.67](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.66...bundestag.io@v0.1.67) (2025-04-26)
 
 
