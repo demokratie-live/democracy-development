@@ -37,6 +37,19 @@ const deputiesNumber = {
     Andere: 2,
     Fraktionslos: 2,
   },
+  21: {
+    Linke: 64,
+    SPD: 120,
+    Grüne: 85,
+    'B90/Grüne': 85,
+    CDU: 208,
+    Union: 208,
+    'CDU/CSU': 208,
+    AFD: 151,
+    AfD: 151,
+    Andere: 2,
+    Fraktionslos: 2,
+  },
 };
 
 const ProcedureResolvers: Resolvers = {
