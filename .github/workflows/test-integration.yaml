@@ -40,3 +40,4 @@ jobs:
         uses: garden-io/garden-action@v2
         with:
           command: test
+          garden-version: 0.13.61
