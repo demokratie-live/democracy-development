@@ -141,3 +141,51 @@ src/
 4. **Test GraphQL endpoint** manually after server changes
 5. **Generate GraphQL types** when schema changes (requires running server)
 6. **Focus on unit tests** rather than integration tests for validation
+
+## Commit Message Convention
+
+This project uses **Conventional Commits** enforced by commitlint and husky hooks.
+
+### Commit Message Format
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+### Required Types
+- **feat**: A new feature
+- **fix**: A bug fix
+- **docs**: Documentation only changes
+- **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- **refactor**: A code change that neither fixes a bug nor adds a feature
+- **perf**: A code change that improves performance
+- **test**: Adding missing tests or correcting existing tests
+- **build**: Changes that affect the build system or external dependencies
+- **ci**: Changes to CI configuration files and scripts
+- **chore**: Other changes that don't modify src or test files
+- **revert**: Reverts a previous commit
+
+### Examples
+```bash
+feat: add user authentication
+fix: resolve GraphQL schema validation error
+docs: update API documentation
+chore: upgrade dependencies
+ci: add integration tests workflow
+```
+
+### Validation
+- **Automatic validation**: Husky pre-commit hook runs `commitlint` to validate commit messages
+- **Configuration**: `.commitlintrc.json` extends `@commitlint/config-conventional`
+- **Breaking changes**: Use `BREAKING CHANGE:` in footer or `!` after type (e.g., `feat!: remove deprecated API`)
+- **Scope examples**: `feat(auth):`, `fix(graphql):`, `docs(readme):`
+
+### Best Practices
+- Use imperative mood: "add" not "added" or "adds"
+- Keep description under 72 characters
+- Don't capitalize first letter of description
+- No period at the end of description
+- Use body to explain what and why, not how
