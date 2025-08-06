@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.68 (2025-08-06)
+
+
+### Bug Fixes
+
+* pin Garden version to 0.13.61 to resolve version compatibility issue ([0f1c13c](https://github.com/demokratie-live/democracy-api/commit/0f1c13c45b96a35f4c78e652be6ff8970fe3ab51))
+
 ### 0.2.67 (2025-03-14)
 
 ### 0.2.67-alpha.0 (2025-03-13)
