@@ -313,12 +313,8 @@ const conferenceWeeks = [
     end: parseDate('11.02.2025'),
   },
   {
-    start: parseDate('24.03.2025'),
-    end: parseDate('28.03.2025'),
-  },
-  {
-    start: parseDate('07.04.2025'),
-    end: parseDate('11.04.2025'),
+    start: parseDate('25.03.2025'),
+    end: parseDate('25.03.2025'),
   },
   {
     start: parseDate('12.05.2025'),
@@ -339,6 +335,135 @@ const conferenceWeeks = [
   {
     start: parseDate('07.07.2025'),
     end: parseDate('11.07.2025'),
+  },
+  {
+    start: parseDate('08.09.2025'),
+    end: parseDate('12.09.2025'),
+  },
+  {
+    start: parseDate('15.09.2025'),
+    end: parseDate('18.09.2025'),
+  },
+  {
+    start: parseDate('22.09.2025'),
+    end: parseDate('26.09.2025'),
+  },
+  {
+    start: parseDate('06.10.2025'),
+    end: parseDate('10.10.2025'),
+  },
+  {
+    start: parseDate('13.10.2025'),
+    end: parseDate('17.10.2025'),
+  },
+  {
+    start: parseDate('03.11.2025'),
+    end: parseDate('07.11.2025'),
+  },
+  {
+    start: parseDate('10.11.2025'),
+    end: parseDate('14.11.2025'),
+  },
+  {
+    start: parseDate('24.11.2025'),
+    end: parseDate('28.11.2025'),
+  },
+  {
+    start: parseDate('01.12.2025'),
+    end: parseDate('05.12.2025'),
+  },
+  {
+    start: parseDate('15.12.2025'),
+    end: parseDate('19.12.2025'),
+  },
+  // https://www.bundestag.de/parlament/plenum/sitzungskalender/bt2026-1084980
+  {
+    start: parseDate('12.01.2026'),
+    end: parseDate('16.01.2026'),
+  },
+  {
+    start: parseDate('26.01.2026'),
+    end: parseDate('30.01.2026'),
+  },
+  {
+    start: parseDate('23.02.2026'),
+    end: parseDate('27.02.2026'),
+  },
+  {
+    start: parseDate('02.03.2026'),
+    end: parseDate('06.03.2026'),
+  },
+  {
+    start: parseDate('16.03.2026'),
+    end: parseDate('20.03.2026'),
+  },
+  {
+    start: parseDate('23.03.2026'),
+    end: parseDate('27.03.2026'),
+  },
+  {
+    start: parseDate('13.04.2026'),
+    end: parseDate('17.04.2026'),
+  },
+  {
+    start: parseDate('20.04.2026'),
+    end: parseDate('24.04.2026'),
+  },
+  {
+    start: parseDate('04.05.2026'),
+    end: parseDate('08.05.2026'),
+  },
+  {
+    start: parseDate('18.05.2026'),
+    end: parseDate('22.05.2026'),
+  },
+  {
+    start: parseDate('08.06.2026'),
+    end: parseDate('12.06.2026'),
+  },
+  {
+    start: parseDate('22.06.2026'),
+    end: parseDate('26.06.2026'),
+  },
+  {
+    start: parseDate('06.07.2026'),
+    end: parseDate('10.07.2026'),
+  },
+  {
+    start: parseDate('07.09.2026'),
+    end: parseDate('11.09.2026'),
+  },
+  {
+    start: parseDate('21.09.2026'),
+    end: parseDate('25.09.2026'),
+  },
+  {
+    start: parseDate('05.10.2026'),
+    end: parseDate('09.10.2026'),
+  },
+  {
+    start: parseDate('12.10.2026'),
+    end: parseDate('16.10.2026'),
+  },
+  {
+    start: parseDate('02.11.2026'),
+    end: parseDate('06.11.2026'),
+  },
+  {
+    start: parseDate('09.11.2026'),
+    end: parseDate('13.11.2026'),
+  },
+  {
+    start: parseDate('23.11.2026'),
+    end: parseDate('27.11.2026'),
+  },
+  {
+    start: parseDate('07.12.2026'),
+    end: parseDate('11.12.2026'),
+  },
+  {
+    start: parseDate('14.12.2026'),
+    end: parseDate('18.12.2026'),
   },
 ];
 
