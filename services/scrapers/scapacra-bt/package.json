@@ -52,7 +52,7 @@
     "@types/axios": "^0.14.4",
     "@types/xml2js": "^0.4.14",
     "@types/xmldom": "^0.1.34",
-    "axios": "^1.8.1",
+    "axios": "^1.11.0",
     "jsonschema": "^1.4.1",
     "moment": "^2.30.1",
     "typescript": "^5.7.0",
