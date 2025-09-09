@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.8](https://github.com/demokratie-live/democracy-development/compare/cleanup-push-queue@v1.0.7...cleanup-push-queue@v1.0.8) (2025-09-09)
+
+
+* update garden configuration to use manifestTemplates instead of files ([f38615d](https://github.com/demokratie-live/democracy-development/commit/f38615dd5400bad734139f5363a6a6d9fa6a3db3))
+
 ## [1.0.7](https://github.com/demokratie-live/democracy-development/compare/cleanup-push-queue@v1.0.6...cleanup-push-queue@v1.0.7) (2025-03-15)
 
 
