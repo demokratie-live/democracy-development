@@ -14,3 +14,4 @@ out
 build
 /.env
 .garden
+tsconfig.tsbuildinfo
