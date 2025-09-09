@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.14](https://github.com/demokratie-live/democracy-development/compare/qr-code-handler@v1.0.13...qr-code-handler@v1.0.14) (2025-09-09)
+
 ## [1.0.13](https://github.com/demokratie-live/democracy-development/compare/qr-code-handler@v1.0.12...qr-code-handler@v1.0.13) (2025-04-26)
 
 
