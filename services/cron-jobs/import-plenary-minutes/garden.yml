@@ -17,29 +17,37 @@ spec:
 
 ---
 kind: Deploy
-name: import-plenary-minutes
+name: import-plenary-minutes-config
 type: kubernetes
-description: Deploy the importer of procedures for the bundestag.io API
-dependencies: [build.import-plenary-minutes, deploy.mongo]
-
-disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
 
 variables:
   DB_URL: mongodb://democracy-mongo:27017/bundestagio
 
+source:
+  path: manifests
+
 spec:
   manifestTemplates:
-    - ./manifests/*
+    - ConfigMap.yaml
 
-  patchResources:
-    - name: import-plenary-minutes
-      kind: CronJob
-      patch:
-        spec:
-          jobTemplate:
-            spec:
-              template:
-                spec:
-                  containers:
-                    - name: import-plenary-minutes
-                      image: ${actions.build.import-plenary-minutes.outputs.deploymentImageId}
+---
+kind: Run
+name: import-plenary-minutes
+description: Ad-hoc Import-Job für Plenarprotokolle
+dependencies:
+  - build.import-plenary-minutes
+  - deploy.mongo
+  - deploy.import-plenary-minutes-config
+
+type: kubernetes-pod
+
+spec:
+  podSpec:
+    restartPolicy: Never
+    containers:
+      - name: import-plenary-minutes
+        image: ${actions.build.import-plenary-minutes.outputs.deploymentImageId}
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - configMapRef:
+              name: import-plenary-minutes

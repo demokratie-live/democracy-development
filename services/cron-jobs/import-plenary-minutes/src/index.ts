@@ -82,6 +82,7 @@ const periods = [
 
 const start = async (period: number) => {
   const periodId = periods.find((p) => p.period === period)!.id;
+  console.log('start import for period', period);
 
   let url: string | false = getUrl({ offset: 0, id: periodId });
   const data: PlenaryMinutesItem[] = [];
@@ -116,7 +117,8 @@ const start = async (period: number) => {
   }
   await mongoConnect(process.env.DB_URL);
   console.log('PlenaryMinutes', await PlenaryMinuteModel.countDocuments({}));
-  await start(19);
-  await start(20);
+  for (const period of periods) {
+    await start(period.period);
+  }
   process.exit(0);
 })();
