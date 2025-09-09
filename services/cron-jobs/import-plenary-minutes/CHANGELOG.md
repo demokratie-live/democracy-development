@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.17](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.16...import-plenary-minutes@v0.1.17) (2025-09-09)
+
+
+### 🚀 Feature
+
+* rename deployment and update configuration for import-plenary-minutes ([0b07fe4](https://github.com/demokratie-live/democracy-development/commit/0b07fe48aa3fadfecfc6abe23951708486d52729))
+
 ## [0.1.16](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.15...import-plenary-minutes@v0.1.16) (2025-06-27)
 
 
