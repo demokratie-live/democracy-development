@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.13](https://github.com/demokratie-live/democracy-development/compare/queue-pushs-conference-week@v0.1.12...queue-pushs-conference-week@v0.1.13) (2025-09-09)
+
+
+* update garden configuration to use manifestTemplates instead of files ([f38615d](https://github.com/demokratie-live/democracy-development/commit/f38615dd5400bad734139f5363a6a6d9fa6a3db3))
+
 ## [0.1.12](https://github.com/demokratie-live/democracy-development/compare/queue-pushs-conference-week@v0.1.11...queue-pushs-conference-week@v0.1.12) (2025-03-15)
 
 
