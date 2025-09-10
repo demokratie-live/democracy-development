@@ -1,5 +1,6 @@
 import { createCheerioRouter, CheerioCrawlingContext } from 'crawlee';
 import { extractNavigationData, extractSessionInfo } from './services/html-parser.js';
+import { config } from './config.js';
 import { processConferenceWeekDetailUrl } from './utils/url.js';
 import { ConferenceWeekDetail } from './types.js';
 
@@ -43,13 +44,9 @@ export const startHandler = async ({ $, request, enqueueLinks, log, response }: 
     throw new Error(`Failed to fetch start URL: ${request.url}`);
   }
 
-  // Configurable defaults (can be overridden via environment variables)
-  const CONFERENCE_YEAR = process.env.CONFERENCE_YEAR ?? '2025';
-  const CONFERENCE_WEEK = process.env.CONFERENCE_WEEK ?? '37';
-  const CONFERENCE_LIMIT = process.env.CONFERENCE_LIMIT ?? '10';
-
+  // Build initial detail URL from central configuration
   const absoluteUrl = new URL(
-    `/apps/plenar/plenar/conferenceweekDetail.form?year=${CONFERENCE_YEAR}&week=${CONFERENCE_WEEK}&limit=${CONFERENCE_LIMIT}`,
+    `/apps/plenar/plenar/conferenceweekDetail.form?year=${config.conference.year}&week=${config.conference.week}&limit=${config.conference.limit}`,
     'https://www.bundestag.de',
   ).href;
 

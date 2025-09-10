@@ -1,6 +1,7 @@
 import { CheerioCrawler, RequestQueue } from 'crawlee';
 import { CrawlerConfig, ConferenceWeekDetail } from './types';
 import { router } from './routes';
+import { config } from './config.js';
 
 export const DEFAULT_CONFIG: CrawlerConfig = {
   baseUrl: 'https://www.bundestag.de/tagesordnung',
@@ -8,9 +9,7 @@ export const DEFAULT_CONFIG: CrawlerConfig = {
   retryOnBlocked: true,
   maxRequestRetries: 10,
   maxRequestsPerMinute: 60,
-  maxRequestsPerCrawl: process.env.CRAWL_MAX_REQUESTS_PER_CRAWL
-    ? parseInt(process.env.CRAWL_MAX_REQUESTS_PER_CRAWL)
-    : 10,
+  maxRequestsPerCrawl: config.crawl.maxRequestsPerCrawl,
 };
 
 /**
