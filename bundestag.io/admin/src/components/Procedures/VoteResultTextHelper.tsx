@@ -10,6 +10,8 @@ export const VoteResultTextHelper = ({ procedureId, importantDocuments }) => {
     variables: { procedureId },
   });
 
+  console.log('voteResultTextHelper', { data, loading });
+
   if (loading) {
     return <div>…loading</div>;
   }

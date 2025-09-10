@@ -1,7 +1,10 @@
 import { createCheerioRouter, CheerioCrawlingContext } from 'crawlee';
+import axios from 'axios';
 import { extractEntryUrls, extractNavigationData, extractSessionInfo } from './services/html-parser.js';
 import { processConferenceWeekDetailUrl } from './utils/url.js';
 import { ConferenceWeekDetail } from './types.js';
+import { parseConferenceWeekJson, JsonWeek } from './services/json-parser.js';
+import { parseUrlParams } from './utils/url.js';
 
 // Storage for crawled results
 const crawledResults: ConferenceWeekDetail[] = [];
@@ -81,63 +84,119 @@ export const detailHandler = async ({ $, request, enqueueLinks, log }: HandlerCo
     return;
   }
 
-  // Extract conference week details
-  const detail = processConferenceWeekDetailUrl(request.url);
+  // Try new JSON-based interface first
+  const params = parseUrlParams(request.url);
+  let usedJson = false;
+  if (params) {
+    const { year, week } = params;
+    const jsonUrl = `https://www.bundestag.de/tagesordnung?week=${encodeURIComponent(week)}&year=${encodeURIComponent(
+      year,
+    )}`;
 
-  // Extract navigation data
-  const navigationData = extractNavigationData($);
+    try {
+      const response = await axios.get(jsonUrl, {
+        headers: { Accept: 'application/json' },
+        // Sometimes the site requires same-origin; but axios from server is fine
+        validateStatus: (status) => status >= 200 && status < 300,
+      });
 
-  // Extract session information
-  const sessions = extractSessionInfo($);
+      const data = response.data as unknown as Partial<JsonWeek>;
+      if (data && typeof data === 'object' && Array.isArray(data.conferences)) {
+        const urlPath = `/tagesordnung?week=${week}&year=${year}`;
+        const parsed = parseConferenceWeekJson(urlPath, year, week, data as JsonWeek);
 
-  // Combine data
-  if (detail && detail.length > 0) {
-    const conferenceWeek = {
-      ...detail[0],
-      previousWeek:
-        navigationData?.previousYear && navigationData?.previousWeek
-          ? { year: navigationData.previousYear, week: navigationData.previousWeek }
-          : undefined,
-      nextWeek:
-        navigationData?.nextYear && navigationData?.nextWeek
-          ? { year: navigationData.nextYear, week: navigationData.nextWeek }
-          : undefined,
-      sessions,
-    };
+        crawledResults.push(parsed);
+        log.info(
+          `Processed conference week (JSON) for ${parsed.year} week ${parsed.week} with ${parsed.sessions.length} sessions`,
+        );
 
-    // Store the result
-    crawledResults.push(conferenceWeek);
-    log.info(
-      `Processed conference week for ${conferenceWeek.year} week ${conferenceWeek.week} with ${sessions.length} sessions`,
-    );
+        // enqueue navigation
+        const navUrls: string[] = [];
+        if (parsed.previousWeek) {
+          navUrls.push(
+            new URL(
+              `/tagesordnung?week=${parsed.previousWeek.week}&year=${parsed.previousWeek.year}`,
+              'https://www.bundestag.de',
+            ).href,
+          );
+        }
+        if (parsed.nextWeek) {
+          navUrls.push(
+            new URL(
+              `/tagesordnung?week=${parsed.nextWeek.week}&year=${parsed.nextWeek.year}`,
+              'https://www.bundestag.de',
+            ).href,
+          );
+        }
 
-    // Enqueue navigation links if they exist
-    const urls = [];
-    if (navigationData?.previousYear && navigationData?.previousWeek) {
-      const prevUrl = `/apps/plenar/plenar/conferenceweekDetail.form?year=${navigationData.previousYear}&week=${navigationData.previousWeek}`;
-      urls.push(new URL(prevUrl, 'https://www.bundestag.de').href);
-    }
-    if (navigationData?.nextYear && navigationData?.nextWeek) {
-      const nextUrl = `/apps/plenar/plenar/conferenceweekDetail.form?year=${navigationData.nextYear}&week=${navigationData.nextWeek}`;
-      urls.push(new URL(nextUrl, 'https://www.bundestag.de').href);
-    }
+        if (navUrls.length > 0) {
+          const newUrls = navUrls.filter((u) => !processedUrls.has(u));
+          if (newUrls.length > 0) {
+            await enqueueLinks({
+              urls: newUrls,
+              label: 'DETAIL',
+              userData: { sourceUrl: request.url },
+            });
+            log.info(`Enqueued ${newUrls.length} navigation URLs (JSON)`);
+          }
+        }
 
-    if (urls.length > 0) {
-      // Filter out already processed URLs
-      const newUrls = urls.filter((url) => !processedUrls.has(url));
-      if (newUrls.length > 0) {
-        await enqueueLinks({
-          urls: newUrls,
-          label: 'DETAIL',
-          userData: {
-            sourceUrl: request.url,
-          },
-        });
-        log.info(`Enqueued ${newUrls.length} navigation URLs`);
+        usedJson = true;
       }
+    } catch {
+      log.warning(`JSON fetch failed for ${jsonUrl}, falling back to HTML parsing`);
     }
-  } else {
-    log.warning(`Failed to extract conference week details from ${request.url}`);
+  }
+
+  if (!usedJson) {
+    // Fallback: old HTML-based parsing (kept for backward compatibility and tests)
+    const detail = processConferenceWeekDetailUrl(request.url);
+    const navigationData = extractNavigationData($);
+    const sessions = extractSessionInfo($);
+
+    if (detail && detail.length > 0) {
+      const conferenceWeek = {
+        ...detail[0],
+        previousWeek:
+          navigationData?.previousYear && navigationData?.previousWeek
+            ? { year: navigationData.previousYear, week: navigationData.previousWeek }
+            : undefined,
+        nextWeek:
+          navigationData?.nextYear && navigationData?.nextWeek
+            ? { year: navigationData.nextYear, week: navigationData.nextWeek }
+            : undefined,
+        sessions,
+      };
+
+      crawledResults.push(conferenceWeek);
+      log.info(
+        `Processed conference week (HTML) for ${conferenceWeek.year} week ${conferenceWeek.week} with ${sessions.length} sessions`,
+      );
+
+      const urls = [] as string[];
+      if (navigationData?.previousYear && navigationData?.previousWeek) {
+        const prevUrl = `/apps/plenar/plenar/conferenceweekDetail.form?year=${navigationData.previousYear}&week=${navigationData.previousWeek}`;
+        urls.push(new URL(prevUrl, 'https://www.bundestag.de').href);
+      }
+      if (navigationData?.nextYear && navigationData?.nextWeek) {
+        const nextUrl = `/apps/plenar/plenar/conferenceweekDetail.form?year=${navigationData.nextYear}&week=${navigationData.nextWeek}`;
+        urls.push(new URL(nextUrl, 'https://www.bundestag.de').href);
+      }
+
+      if (urls.length > 0) {
+        const newUrls = urls.filter((url) => !processedUrls.has(url));
+        if (newUrls.length > 0) {
+          await enqueueLinks({
+            urls: newUrls,
+            label: 'DETAIL',
+            userData: { sourceUrl: request.url },
+          });
+          log.info(`Enqueued ${newUrls.length} navigation URLs (HTML)`);
+        }
+      }
+    } else {
+      log.warning(`Failed to extract conference week details from ${request.url}`);
+    }
   }
 
   // Only mark the URL as processed AFTER we've actually processed it

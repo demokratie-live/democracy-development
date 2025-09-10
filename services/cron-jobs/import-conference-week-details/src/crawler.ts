@@ -1,4 +1,4 @@
-import { CheerioCrawler, RequestQueue } from 'crawlee';
+import { CheerioCrawler, log, RequestQueue } from 'crawlee';
 import { CrawlerConfig, ConferenceWeekDetail } from './types';
 import { router } from './routes';
 
@@ -23,6 +23,8 @@ export const createCrawler = async (config: Partial<CrawlerConfig> = {}) => {
 
   // Create a request queue that will automatically persist
   const requestQueue = await RequestQueue.open();
+
+  log.info('Crawler configuration', { config: fullConfig });
 
   // Add the starting URL to the queue
   await requestQueue.addRequest({

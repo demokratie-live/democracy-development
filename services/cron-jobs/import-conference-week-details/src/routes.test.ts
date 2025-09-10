@@ -5,6 +5,7 @@ import * as urlUtils from './utils/url';
 import { ConferenceWeekDetail } from './types';
 import { load } from 'cheerio';
 import { CheerioCrawlingContext } from 'crawlee';
+import axios from 'axios';
 
 // Mock dependencies
 vi.mock('./services/html-parser', () => ({
@@ -15,7 +16,20 @@ vi.mock('./services/html-parser', () => ({
 
 vi.mock('./utils/url', () => ({
   processConferenceWeekDetailUrl: vi.fn(),
+  parseUrlParams: vi.fn((url: string) => {
+    try {
+      const u = new URL(url);
+      const year = parseInt(u.searchParams.get('year') || '');
+      const week = parseInt(u.searchParams.get('week') || '');
+      if (!isNaN(year) && !isNaN(week)) return { year, week };
+    } catch {
+      // ignore
+    }
+    return null;
+  }),
 }));
+
+vi.mock('axios');
 
 interface TestDefaultContext {
   request: { url: string };
@@ -127,6 +141,65 @@ describe('Router', () => {
         await defaultHandler(resetCtx);
         expect(getResults()).toHaveLength(0);
       });
+    });
+  });
+
+  describe('detailHandler JSON path', () => {
+    it('should use JSON endpoint and enqueue navigation', async () => {
+      // Arrange axios mock
+      const mocked = axios as unknown as { get: ReturnType<typeof vi.fn> };
+      mocked.get = vi.fn().mockResolvedValue({
+        status: 200,
+        data: {
+          previous: { year: 2025, week: 24 },
+          next: { year: 2025, week: 26 },
+          conferences: [
+            {
+              conferenceNumber: 999,
+              conferenceDate: { date: '24. Juni 2025' },
+              rows: [
+                {
+                  time: '12.30',
+                  top: 'TOP 1',
+                  topic: {
+                    title: 'Test',
+                    detail:
+                      'Line<br><br><a class="dipLink" href="https://dserver.bundestag.de/btd/20/038/2003858.pdf">Doc</a>',
+                  },
+                  status: { title: 'Status', detail: 'Beschluss' },
+                },
+              ],
+            },
+          ],
+        },
+      });
+
+      const enqueued: string[] = [];
+      const ctx = createContext('https://www.bundestag.de/tagesordnung?year=2025&week=25');
+      // Patch enqueueLinks onto ctx
+      (ctx as unknown as { enqueueLinks: ({ urls }: { urls: string[] }) => Promise<void> }).enqueueLinks = async ({
+        urls,
+      }: {
+        urls: string[];
+      }) => {
+        enqueued.push(...urls);
+      };
+
+      // Act
+      await detailHandler(ctx);
+
+      // Assert results
+      const results = getResults();
+      expect(results).toHaveLength(1);
+      expect(results[0].year).toBe(2025);
+      expect(results[0].week).toBe(25);
+      expect(results[0].sessions).toHaveLength(1);
+      expect(results[0].previousWeek).toEqual({ year: 2025, week: 24 });
+      expect(results[0].nextWeek).toEqual({ year: 2025, week: 26 });
+
+      // Assert enqueue navigation
+      expect(enqueued).toContain('https://www.bundestag.de/tagesordnung?week=24&year=2025');
+      expect(enqueued).toContain('https://www.bundestag.de/tagesordnung?week=26&year=2025');
     });
   });
 });

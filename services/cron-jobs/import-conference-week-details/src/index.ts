@@ -13,7 +13,7 @@ import {
 } from '@democracy-deutschland/bundestag.io-definitions';
 
 // Configure logging
-log.setLevel(log.LEVELS.INFO);
+log.setLevel(log.LEVELS.DEBUG);
 
 /**
  * Interface for status items used in isVote function
@@ -144,6 +144,7 @@ const getProcedureIds = async (documents: string[]) => {
 };
 
 export async function run(): Promise<void> {
+  console.log('Import Conference Week Details - Starting process');
   try {
     if (!process.env.TEST) {
       await mongoConnect(process.env.DB_URL || 'mongodb://localhost:27017/bundestagio');

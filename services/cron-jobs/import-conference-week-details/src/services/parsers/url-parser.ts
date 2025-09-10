@@ -5,7 +5,7 @@ import { CheerioAPI, Element } from 'cheerio';
  */
 export const isValidConferenceWeekUrl = (url: string | null | undefined): boolean => {
   if (!url) return false;
-  return url.startsWith('/apps/plenar/plenar/conferenceweekDetail.form');
+  return url.startsWith('/apps/plenar/plenar/conferenceweekDetail.form') || url.startsWith('/tagesordnung?');
 };
 
 /**
@@ -13,7 +13,9 @@ export const isValidConferenceWeekUrl = (url: string | null | undefined): boolea
  */
 export const getEntryPageUrl = ($: CheerioAPI, element: Element): string | null => {
   const el = $(element);
+  console.log('Processing element:', element);
   const url = el.attr('data-dataloader-url');
+  console.log('Extracted URL:', url);
   // Convert undefined to null to match return type
   if (typeof url === 'undefined') return null;
   return isValidConferenceWeekUrl(url) ? url : null;
@@ -25,6 +27,7 @@ export const getEntryPageUrl = ($: CheerioAPI, element: Element): string | null 
 export const extractEntryUrls = ($: CheerioAPI): string[] => {
   // Look for the URL directly on the bt-module-row-sitzungsablauf div
   const mainElement = $('.bt-module-row-sitzungsablauf');
+  console.log('Found main element:', mainElement.length);
   const mainUrl = getEntryPageUrl($, mainElement[0]);
 
   if (mainUrl) {
