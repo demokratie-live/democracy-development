@@ -1,5 +1,5 @@
 import { createCheerioRouter, CheerioCrawlingContext } from 'crawlee';
-import { extractEntryUrls, extractNavigationData, extractSessionInfo } from './services/html-parser.js';
+import { extractNavigationData, extractSessionInfo } from './services/html-parser.js';
 import { processConferenceWeekDetailUrl } from './utils/url.js';
 import { ConferenceWeekDetail } from './types.js';
 
@@ -43,29 +43,25 @@ export const startHandler = async ({ $, request, enqueueLinks, log, response }: 
     throw new Error(`Failed to fetch start URL: ${request.url}`);
   }
 
-  // Extract conference week URLs
-  const entryUrls = extractEntryUrls($);
+  // Configurable defaults (can be overridden via environment variables)
+  const CONFERENCE_YEAR = process.env.CONFERENCE_YEAR ?? '2025';
+  const CONFERENCE_WEEK = process.env.CONFERENCE_WEEK ?? '37';
+  const CONFERENCE_LIMIT = process.env.CONFERENCE_LIMIT ?? '10';
 
-  if (entryUrls.length > 0) {
-    // Enqueue all detail URLs with a label
-    for (const relativeUrl of entryUrls) {
-      const absoluteUrl = new URL(relativeUrl, 'https://www.bundestag.de').href;
+  const absoluteUrl = new URL(
+    `/apps/plenar/plenar/conferenceweekDetail.form?year=${CONFERENCE_YEAR}&week=${CONFERENCE_WEEK}&limit=${CONFERENCE_LIMIT}`,
+    'https://www.bundestag.de',
+  ).href;
 
-      // Skip already processed URLs
-      if (processedUrls.has(absoluteUrl)) continue;
+  await enqueueLinks({
+    urls: [absoluteUrl],
+    label: 'DETAIL',
+    userData: {
+      sourceUrl: request.url,
+    },
+  });
 
-      await enqueueLinks({
-        urls: [absoluteUrl],
-        label: 'DETAIL',
-        userData: {
-          sourceUrl: request.url,
-        },
-      });
-    }
-    log.info(`Enqueued ${entryUrls.length} conference week detail URLs`);
-  } else {
-    log.warning('No conference week URLs found on the start page');
-  }
+  log.info(`Enqueued conference week detail URLs`);
 
   // Mark the start URL as processed after we've handled it
   processedUrls.add(request.url);

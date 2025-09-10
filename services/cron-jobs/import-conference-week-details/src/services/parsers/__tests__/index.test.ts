@@ -2,12 +2,6 @@ import { describe, it, expect } from 'vitest';
 import * as parsers from '../index';
 
 describe('Parser Modules Integration', () => {
-  it('should export all URL parser functions', () => {
-    expect(parsers.isValidConferenceWeekUrl).toBeDefined();
-    expect(parsers.getEntryPageUrl).toBeDefined();
-    expect(parsers.extractEntryUrls).toBeDefined();
-  });
-
   it('should export all navigation parser functions', () => {
     expect(parsers.extractNavigationData).toBeDefined();
   });
