@@ -1,6 +1,7 @@
 // Main entry point with error handling
 import { log } from 'crawlee';
 import { main } from './main.js';
+import { config } from './config.js';
 import { getResults } from './routes.js';
 import { ConferenceWeekDetailModel, mongoConnect, ProcedureModel } from '@democracy-deutschland/bundestagio-common';
 import { IConferenceWeekDetail } from '@democracy-deutschland/bundestagio-common/dist/models/ConferenceWeekDetail/schema.js';
@@ -145,8 +146,8 @@ const getProcedureIds = async (documents: string[]) => {
 
 export async function run(): Promise<void> {
   try {
-    if (!process.env.TEST) {
-      await mongoConnect(process.env.DB_URL || 'mongodb://localhost:27017/bundestagio');
+    if (!config.runtime.isTest) {
+      await mongoConnect(config.db.url);
     }
     // Run the crawler
     await main();
@@ -156,7 +157,7 @@ export async function run(): Promise<void> {
     log.info('Fetched conference weeks:', results);
 
     // if test return here
-    if (process.env.TEST) {
+    if (config.runtime.isTest) {
       log.info('Test mode: Skipping MongoDB save');
       return;
     }
