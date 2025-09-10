@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.38](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.37...import-conference-week-details@v0.1.38) (2025-09-10)
+
+
+* remove entry URL extraction logic and related tests ([ffe074f](https://github.com/demokratie-live/democracy-development/commit/ffe074ff6f8a7101ad8968d0fcaacaada66fd940))
+
+
+### 🚀 Feature
+
+* implement central configuration management for crawler service ([013e821](https://github.com/demokratie-live/democracy-development/commit/013e8211ce070b775b7ff64bb07dd4a03c552546))
+
 ## [0.1.37](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.36...import-conference-week-details@v0.1.37) (2025-09-09)
 
 ## [0.1.36](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.35...import-conference-week-details@v0.1.36) (2025-03-17)
