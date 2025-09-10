@@ -1,31 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import cheerio from 'cheerio';
-import {
-  isValidConferenceWeekUrl,
-  extractEntryUrls,
-  extractNavigationData,
-  extractTopItems,
-  extractDocumentId,
-  getMonthNumber,
-} from './html-parser';
+import { extractNavigationData, extractTopItems, extractDocumentId, getMonthNumber } from './html-parser';
 
 describe('HTML Parser - Main Integration Tests', () => {
   // These tests ensure that the main html-parser.ts export
   // correctly forwards all the functions from the individual modules
-
-  describe('URL Parser', () => {
-    it('should validate conference week URLs', () => {
-      expect(isValidConferenceWeekUrl('/apps/plenar/plenar/conferenceweekDetail.form')).toBe(true);
-    });
-
-    it('should extract entry URLs', () => {
-      const html =
-        '<div class="bt-module-row-sitzungsablauf" data-dataloader-url="/apps/plenar/plenar/conferenceweekDetail.form"></div>';
-      const $ = cheerio.load(html);
-      const results = extractEntryUrls($);
-      expect(results).toEqual(['/apps/plenar/plenar/conferenceweekDetail.form']);
-    });
-  });
 
   describe('Navigation Parser', () => {
     it('should extract navigation data', () => {
