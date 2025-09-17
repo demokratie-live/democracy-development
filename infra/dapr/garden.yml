@@ -1,0 +1,79 @@
+# 1) CRDs mit Run/exec (keine Dateien im Repo nötig)
+---
+kind: Run
+type: exec
+name: dapr-crds
+spec:
+  command:
+    - bash
+    - -lc
+    - |
+      set -euo pipefail
+      NS=dapr-system
+      kubectl create namespace "$NS" --dry-run=client -o yaml | kubectl apply -f -
+
+      # Dapr v1.16.0 CRDs anwenden
+      for f in components configuration subscription resiliency httpendpoints; do
+        kubectl apply -f "https://raw.githubusercontent.com/dapr/dapr/v1.16.0/charts/dapr/crds/$${f}.yaml"
+      done
+
+      # Auf CRD-Registrierung warten (CRDs sind cluster-scoped)
+      kubectl wait --for=condition=Established --timeout=180s \
+        crd/components.dapr.io \
+        crd/configurations.dapr.io \
+        crd/subscriptions.dapr.io \
+        crd/resiliencies.dapr.io \
+        crd/httpendpoints.dapr.io
+
+
+# 2) Dapr Control Plane via Helm (hängt von CRDs ab)
+---
+kind: Deploy
+type: helm
+name: dapr
+dependencies: [run.dapr-crds]
+timeout: 600
+spec:
+  namespace: dapr-system
+  releaseName: dapr
+  chart:
+    name: dapr
+    repo: https://dapr.github.io/helm-charts
+    version: '1.16.0'
+  atomic: true
+  values:
+    global:
+      ha:
+        enabled: true
+      priorityClassName: system-cluster-critical
+    dapr_placement:
+      ha: true
+      metadataEnabled: false
+      cluster:
+        forceInMemoryLog: true
+
+# 3) Dashboard wie gehabt (hängt vom Control Plane ab)
+---
+kind: Deploy
+type: helm
+name: dapr-dashboard
+dependencies: [deploy.dapr]
+spec:
+  namespace: dapr-system
+  releaseName: dapr-dashboard
+  chart:
+    repo: https://dapr.github.io/helm-charts
+    name: dapr-dashboard
+    version: '0.15.0'
+  values:
+    runAsNonRoot: false
+    ingress:
+      enabled: true
+      hosts:
+        # http://dapr-dashboard.local.democracy-app.de
+        - host: 'dapr-dashboard.${var.hostname}'
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        enabled: false
