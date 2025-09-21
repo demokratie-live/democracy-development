@@ -1,1 +1,0 @@
-{"version":3,"file":"DevLogsScreen.d.ts","sourceRoot":"","sources":["../../src/screens/DevLogsScreen.tsx"],"names":[],"mappings":"AAAA;;;;;GAKG;AAEH,OAAO,KAA2C,MAAM,OAAO,CAAC;AAahE,OAAO,EAAE,UAAU,EAAsB,MAAM,uBAAuB,CAAC;AAEvE,UAAU,kBAAkB;IAC1B,UAAU,EAAE,UAAU,CAAC;CACxB;AA+CD,eAAO,MAAM,aAAa,EAAE,KAAK,CAAC,EAAE,CAAC,kBAAkB,CAsRtD,CAAC;AA0LF,eAAe,aAAa,CAAC"}
