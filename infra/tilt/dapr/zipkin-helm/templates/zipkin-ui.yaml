@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-zipkin-ui
+  labels:
+    app: {{ .Release.Name }}-zipkin-ui
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.ui.replicaCount }}
+  selector:
+    matchLabels:
+      app: zipkin-ui
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 2
+  template:
+    metadata:
+      labels:
+        app: zipkin-ui
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "docker.io/openzipkin/zipkin:{{ .Values.ui.imageVersion }}"
+          ports:
+            - containerPort: {{ .Values.ui.queryPort }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.ui.probeStartupDelay }}
+            tcpSocket:
+              port: {{ .Values.ui.queryPort }}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.ui.probeStartupDelay }}
+            httpGet:
+              path: /health
+              port: {{ .Values.ui.queryPort }}
+          resources:
+            limits:
+              cpu: "{{ .Values.ui.resources.cpuLimit }}"
+              memory: "{{ .Values.ui.resources.ramMb }}Mi" # TODO fix this, this field id mi but the value is mb. There will be slight wastage
+            requests:
+              cpu: "{{ .Values.ui.resources.cpuRequest }}"
+              memory: "{{ .Values.ui.resources.ramMb }}Mi" # TODO fix this, this field id mi but the value is mb. There will be slight wastage
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: QUERY_PORT
+              value: "{{ .Values.ui.queryPort }}"
+            - name: JAVA_OPTS
+              value: "-XX:ConcGCThreads={{ .Values.node.cpus }} -XX:ParallelGCThreads={{ .Values.node.cpus }} -Djava.util.concurrent.ForkJoinPool.common.parallelism={{ .Values.node.cpus }} -Xms{{ .Values.ui.resources.javaOptsHeap }}M -Xmx{{ .Values.ui.resources.javaOptsHeap }}M -XX:+UseG1GC -server"
+            - name: QUERY_ENABLED
+              value: "true"
+            - name: STORAGE_TYPE
+              value: "{{ .Values.storageMethod }}"
+{{if eq .Values.storageMethod "cassandra3"}}
+            - name: CASSANDRA_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.username.name }}
+                  key: {{ .Values.configmap.username.key }}
+            - name: CASSANDRA_CONTACT_POINTS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.contactPoints.name }}
+                  key: {{ .Values.configmap.contactPoints.key }}
+            - name: CASSANDRA_LOCAL_DC
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.localdc.name }}
+                  key: {{ .Values.configmap.localdc.key }}
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zipkin
+                  key: cassandra.password
+            - name: CASSANDRA_ENSURE_SCHEMA
+              value: "false"
+{{ end }}

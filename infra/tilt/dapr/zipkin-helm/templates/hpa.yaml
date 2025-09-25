@@ -1,0 +1,17 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: zipkin-collector
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: {{ template "name" . }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: zipkin-collector
+  minReplicas: {{ .Values.collector.replicaCount }}
+  maxReplicas: {{ .Values.collector.maxReplicaCount }}
+  targetCPUUtilizationPercentage: {{ .Values.collector.targetCPUUtilizationPercentage }}
