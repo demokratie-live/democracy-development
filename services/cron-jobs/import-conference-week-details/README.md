@@ -72,6 +72,58 @@ The package follows a functional programming approach with clear separation of c
 - `src/routes.ts` - Request routing and handler logic
 - `src/index.ts` - Main entry point with error handling
 
+## Documentation
+
+Comprehensive architecture documentation is available in the `docs/` directory:
+
+- **[Architecture Overview](./docs/ARCHITECTURE.md)** - System architecture, components, and design patterns
+- **[Data Flow](./docs/DATA_FLOW.md)** - Detailed data processing pipeline and flow diagrams
+- **[API Documentation](./docs/API.md)** - Internal APIs, data structures, and interfaces
+- **[Deployment Guide](./docs/DEPLOYMENT.md)** - Deployment, configuration, and operations guide
+
+### Architecture Diagram
+
+```mermaid
+graph TB
+    subgraph "External Systems"
+        BT[Bundestag Website]
+        DB[(MongoDB Database)]
+    end
+    
+    subgraph "Import Service"
+        subgraph "Entry Point"
+            MAIN[main.ts]
+            INDEX[index.ts]
+        end
+        
+        subgraph "Core Components"
+            CONFIG[config.ts]
+            ROUTES[routes.ts] 
+            CRAWLER[crawler.ts]
+        end
+        
+        subgraph "Data Processing"
+            HTMLP[HTML Parser]
+            JSONP[JSON Parser]
+            URLB[URL Builder]
+        end
+    end
+    
+    MAIN --> INDEX
+    INDEX --> CONFIG
+    INDEX --> ROUTES
+    INDEX --> DB
+    
+    ROUTES --> CRAWLER
+    ROUTES --> HTMLP
+    ROUTES --> JSONP
+    ROUTES --> URLB
+    
+    CRAWLER --> BT
+    HTMLP --> BT
+    JSONP --> BT
+```
+
 ## Data Sources
 
 ### HTML Endpoint (Default)
