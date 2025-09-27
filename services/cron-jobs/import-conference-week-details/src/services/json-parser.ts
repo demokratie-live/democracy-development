@@ -59,19 +59,26 @@ const extractDocumentIds = (documents: string[]): string[] => {
 };
 
 /**
- * Parse date/time string to Date object
+ * Parse date/time string to Date object using the session date as base
  */
-const parseDateTime = (timeStr: string | undefined): Date | null => {
+const parseDateTime = (timeStr: string | undefined, sessionDate?: string): Date | null => {
   if (!timeStr) return null;
 
   try {
     // Handle various time formats that might come from JSON
     if (/^\d{2}:\d{2}$/.test(timeStr)) {
-      // Format: "09:00"
-      const today = new Date();
+      // Format: "09:00" - use session date as base if available
+      let baseDate: Date;
+      if (sessionDate) {
+        baseDate = new Date(`${sessionDate}T00:00:00.000Z`);
+      } else {
+        baseDate = new Date();
+        baseDate.setHours(0, 0, 0, 0);
+      }
+
       const [hours, minutes] = timeStr.split(':').map(Number);
-      today.setHours(hours, minutes, 0, 0);
-      return today;
+      baseDate.setHours(hours, minutes, 0, 0);
+      return baseDate;
     }
 
     // Try parsing as ISO string or other formats
@@ -115,20 +122,26 @@ export const extractSessionInfoFromJSON = (jsonData: ConferenceWeekJSON): Confer
     dateText: session.dateText || null,
     session: session.session || null,
     tops: (session.tops || []).map((top) => ({
-      time: parseDateTime(top.time),
+      time: parseDateTime(top.time, session.date),
       top: top.top || null,
       heading: top.heading || null,
       article: top.article || null,
-      topic: (top.topic || []).map((topic) => ({
-        lines: topic.lines || [],
-        documents: topic.documents || [],
-        documentIds: extractDocumentIds(topic.documents || []),
-      })),
-      status: (top.status || []).map((status) => ({
-        lines: status.lines || [],
-        documents: status.documents || [],
-        documentIds: extractDocumentIds(status.documents || []),
-      })),
+      topic: (top.topic || []).map((topic) => {
+        const documentIds = extractDocumentIds(topic.documents || []);
+        return {
+          lines: topic.lines || [],
+          documents: topic.documents || [],
+          documentIds: documentIds.length > 0 ? documentIds : undefined,
+        };
+      }),
+      status: (top.status || []).map((status) => {
+        const documentIds = extractDocumentIds(status.documents || []);
+        return {
+          lines: status.lines || [],
+          documents: status.documents || [],
+          documentIds: documentIds.length > 0 ? documentIds : undefined,
+        };
+      }),
     })),
   }));
 };
