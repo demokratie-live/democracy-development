@@ -1,7 +1,9 @@
 import { createCheerioRouter, CheerioCrawlingContext } from 'crawlee';
 import { extractNavigationData, extractSessionInfo } from './services/html-parser.js';
+import { parseConferenceWeekJSON } from './services/json-parser.js';
 import { config } from './config.js';
 import { processConferenceWeekDetailUrl } from './utils/url.js';
+import { buildConferenceWeekUrl, getUrlDataSource } from './utils/url-builder.js';
 import { ConferenceWeekDetail } from './types.js';
 
 // Storage for crawled results
@@ -44,11 +46,8 @@ export const startHandler = async ({ $, request, enqueueLinks, log, response }: 
     throw new Error(`Failed to fetch start URL: ${request.url}`);
   }
 
-  // Build initial detail URL from central configuration
-  const absoluteUrl = new URL(
-    `/apps/plenar/plenar/conferenceweekDetail.form?year=${config.conference.year}&week=${config.conference.week}&limit=${config.conference.limit}`,
-    'https://www.bundestag.de',
-  ).href;
+  // Build initial detail URL from central configuration using new URL builder
+  const absoluteUrl = buildConferenceWeekUrl(config);
 
   await enqueueLinks({
     urls: [absoluteUrl],
@@ -65,7 +64,7 @@ export const startHandler = async ({ $, request, enqueueLinks, log, response }: 
 };
 
 // Export the detail handler for testing
-export const detailHandler = async ({ $, request, enqueueLinks, log }: HandlerContext): Promise<void> => {
+export const detailHandler = async ({ $, request, enqueueLinks, log, response }: HandlerContext): Promise<void> => {
   log.info(`Processing detail page: ${request.url}`);
 
   // Skip already processed URLs
@@ -74,14 +73,37 @@ export const detailHandler = async ({ $, request, enqueueLinks, log }: HandlerCo
     return;
   }
 
-  // Extract conference week details
+  // Extract conference week details from URL
   const detail = processConferenceWeekDetailUrl(request.url);
 
-  // Extract navigation data
-  const navigationData = extractNavigationData($);
+  // Determine data source type from URL
+  const dataSourceType = getUrlDataSource(request.url);
 
-  // Extract session information
-  const sessions = extractSessionInfo($);
+  let navigationData;
+  let sessions;
+
+  if (dataSourceType === 'json') {
+    // Parse JSON response
+    try {
+      const responseBody = response.body || $('body').text();
+      const jsonResult = parseConferenceWeekJSON(responseBody);
+      navigationData = jsonResult.navigationData;
+      sessions = jsonResult.sessions;
+
+      // Override year/week from JSON if available
+      if (jsonResult.year && jsonResult.week && detail.length > 0) {
+        detail[0].year = jsonResult.year;
+        detail[0].week = jsonResult.week;
+      }
+    } catch (error) {
+      log.error(`Failed to parse JSON response: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return;
+    }
+  } else {
+    // Parse HTML response (existing functionality)
+    navigationData = extractNavigationData($);
+    sessions = extractSessionInfo($);
+  }
 
   // Combine data
   if (detail && detail.length > 0) {
@@ -101,18 +123,18 @@ export const detailHandler = async ({ $, request, enqueueLinks, log }: HandlerCo
     // Store the result
     crawledResults.push(conferenceWeek);
     log.info(
-      `Processed conference week for ${conferenceWeek.year} week ${conferenceWeek.week} with ${sessions.length} sessions`,
+      `Processed conference week for ${conferenceWeek.year} week ${conferenceWeek.week} with ${sessions.length} sessions (${dataSourceType} source)`,
     );
 
     // Enqueue navigation links if they exist
     const urls = [];
     if (navigationData?.previousYear && navigationData?.previousWeek) {
-      const prevUrl = `/apps/plenar/plenar/conferenceweekDetail.form?year=${navigationData.previousYear}&week=${navigationData.previousWeek}`;
-      urls.push(new URL(prevUrl, 'https://www.bundestag.de').href);
+      const prevUrl = buildConferenceWeekUrl(config, navigationData.previousYear, navigationData.previousWeek);
+      urls.push(prevUrl);
     }
     if (navigationData?.nextYear && navigationData?.nextWeek) {
-      const nextUrl = `/apps/plenar/plenar/conferenceweekDetail.form?year=${navigationData.nextYear}&week=${navigationData.nextWeek}`;
-      urls.push(new URL(nextUrl, 'https://www.bundestag.de').href);
+      const nextUrl = buildConferenceWeekUrl(config, navigationData.nextYear, navigationData.nextWeek);
+      urls.push(nextUrl);
     }
 
     if (urls.length > 0) {
