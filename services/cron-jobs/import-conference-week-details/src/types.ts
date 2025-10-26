@@ -49,6 +49,10 @@ export interface ConferenceWeekDetail {
 // Configuration options for the crawler
 export interface CrawlerConfig extends CheerioCrawlerOptions {
   baseUrl: string;
+  maxConcurrency: number;
+  retryOnBlocked: boolean;
+  maxRequestRetries: number;
+  maxRequestsPerMinute: number;
 }
 
 // Handler context for request processing

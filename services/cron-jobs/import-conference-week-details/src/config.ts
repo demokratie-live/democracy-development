@@ -13,7 +13,7 @@ interface RawEnv {
   CONFERENCE_YEAR?: string;
   CONFERENCE_WEEK?: string;
   CONFERENCE_LIMIT?: string;
-  CRAWL_MAX_REQUESTS_PER_CRAWL?: string;
+  FULL_CRAWL?: string; // Enable full crawl mode (crawl back to legislature start)
   DB_URL?: string;
   TEST?: string; // presence indicates test mode
 }
@@ -25,23 +25,31 @@ export interface AppConfig {
     week: number; // Week number to start crawling
     limit: number; // Pagination limit or item limit when requesting detail page
   };
-  crawl: {
-    maxRequestsPerCrawl: number; // Upper bound of requests per crawl run
-  };
   db: {
     url: string; // Mongo connection string (only used outside of TEST mode)
   };
   runtime: {
     isTest: boolean; // Indicates test mode (skips DB interaction etc.)
+    fullCrawl: boolean; // Enable full crawl mode (crawl back to legislature start)
   };
 }
 
 // Defaults centralised here for easy visibility & single source of truth
+// Calculate current week number to always start from recent data
+const getCurrentWeek = (): number => {
+  const now = new Date();
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const days = Math.floor((now.getTime() - startOfYear.getTime()) / (24 * 60 * 60 * 1000));
+  // ISO week calculation: week starts on Monday
+  const weekNumber = Math.ceil((days + startOfYear.getDay() + 1) / 7);
+  return weekNumber;
+};
+
 const DEFAULTS = Object.freeze({
   CONFERENCE_YEAR: 2025,
-  CONFERENCE_WEEK: 37,
+  CONFERENCE_WEEK: getCurrentWeek(), // Start from current week to catch latest data
   CONFERENCE_LIMIT: 10,
-  CRAWL_MAX_REQUESTS_PER_CRAWL: 10,
+  FULL_CRAWL: false, // Default to normal mode (last 3 conference weeks)
   DB_URL: 'mongodb://localhost:27017/bundestagio',
 });
 
@@ -60,7 +68,7 @@ const rawEnv: RawEnv = Object.freeze({
   CONFERENCE_YEAR: process.env.CONFERENCE_YEAR,
   CONFERENCE_WEEK: process.env.CONFERENCE_WEEK,
   CONFERENCE_LIMIT: process.env.CONFERENCE_LIMIT,
-  CRAWL_MAX_REQUESTS_PER_CRAWL: process.env.CRAWL_MAX_REQUESTS_PER_CRAWL,
+  FULL_CRAWL: process.env.FULL_CRAWL,
   DB_URL: process.env.DB_URL,
   TEST: process.env.TEST,
 });
@@ -85,18 +93,12 @@ const buildConfig = (env: RawEnv): AppConfig =>
       week: parseIntSafe(env.CONFERENCE_WEEK, DEFAULTS.CONFERENCE_WEEK, 'CONFERENCE_WEEK'),
       limit: parseIntSafe(env.CONFERENCE_LIMIT, DEFAULTS.CONFERENCE_LIMIT, 'CONFERENCE_LIMIT'),
     },
-    crawl: {
-      maxRequestsPerCrawl: parseIntSafe(
-        env.CRAWL_MAX_REQUESTS_PER_CRAWL,
-        DEFAULTS.CRAWL_MAX_REQUESTS_PER_CRAWL,
-        'CRAWL_MAX_REQUESTS_PER_CRAWL',
-      ),
-    },
     db: {
       url: env.DB_URL || DEFAULTS.DB_URL,
     },
     runtime: {
       isTest: Boolean(env.TEST),
+      fullCrawl: env.FULL_CRAWL === 'true' || env.FULL_CRAWL === '1',
     },
   }) as AppConfig;
 

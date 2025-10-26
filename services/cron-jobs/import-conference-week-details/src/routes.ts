@@ -44,9 +44,13 @@ export const startHandler = async ({ $, request, enqueueLinks, log, response }: 
     throw new Error(`Failed to fetch start URL: ${request.url}`);
   }
 
-  // Build initial detail URL from central configuration
+  // Use environment variables if set (for dynamic start week), otherwise fall back to config
+  const startYear = process.env.CONFERENCE_YEAR ? parseInt(process.env.CONFERENCE_YEAR, 10) : config.conference.year;
+  const startWeek = process.env.CONFERENCE_WEEK ? parseInt(process.env.CONFERENCE_WEEK, 10) : config.conference.week;
+
+  // Build initial detail URL from configuration (possibly overridden by env vars)
   const absoluteUrl = new URL(
-    `/apps/plenar/plenar/conferenceweekDetail.form?year=${config.conference.year}&week=${config.conference.week}&limit=${config.conference.limit}`,
+    `/apps/plenar/plenar/conferenceweekDetail.form?year=${startYear}&week=${startWeek}&limit=${config.conference.limit}`,
     'https://www.bundestag.de',
   ).href;
 

@@ -7,6 +7,7 @@ import { ConferenceWeekDetailModel, mongoConnect, ProcedureModel } from '@democr
 import { IConferenceWeekDetail } from '@democracy-deutschland/bundestagio-common/dist/models/ConferenceWeekDetail/schema.js';
 import { UpdateQuery } from 'mongoose';
 import url from 'url';
+import { determineStartWeek } from './utils/determine-start-week.js';
 
 import {
   PROCEDURE as PROCEDURE_DEFINITIONS,
@@ -148,6 +149,21 @@ export async function run(): Promise<void> {
   try {
     if (!config.runtime.isTest) {
       await mongoConnect(config.db.url);
+
+      // Log crawler mode
+      if (config.runtime.fullCrawl) {
+        log.info('🔄 Running in FULL CRAWL mode - crawling back to legislature start (Week 37/2025)');
+      } else {
+        log.info('⚡ Running in NORMAL mode - crawling from last 3 conference weeks with sessions');
+      }
+
+      // Determine optimal start week based on database state
+      const startWeek = await determineStartWeek(config.runtime.isTest, config.runtime.fullCrawl);
+      log.info(`📍 Starting crawler at week ${startWeek.week}/${startWeek.year}`);
+
+      // Override config for this run
+      process.env.CONFERENCE_WEEK = String(startWeek.week);
+      process.env.CONFERENCE_YEAR = String(startWeek.year);
     }
     // Run the crawler
     await main();

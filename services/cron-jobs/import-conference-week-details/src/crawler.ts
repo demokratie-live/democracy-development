@@ -1,21 +1,18 @@
 import { CheerioCrawler, RequestQueue } from 'crawlee';
 import { CrawlerConfig, ConferenceWeekDetail } from './types';
 import { router } from './routes';
-import { config } from './config.js';
 
 export const DEFAULT_CONFIG: CrawlerConfig = {
   baseUrl: 'https://www.bundestag.de/tagesordnung',
   maxConcurrency: 1,
   retryOnBlocked: true,
   maxRequestRetries: 10,
-  maxRequestsPerMinute: 60,
-  maxRequestsPerCrawl: config.crawl.maxRequestsPerCrawl,
+  maxRequestsPerMinute: 30, // Conservative: 30 requests per minute to avoid overwhelming the server
 };
 
 /**
- * Creates a configured CheerioCrawler instance
- * This function allows reusing the same crawler configuration in both
- * development mode and test scripts
+ * Creates a configured CheerioCrawler instance with intelligent rate limiting
+ * Handles HTTP 429 (Too Many Requests) automatically through retries
  */
 export const createCrawler = async (config: Partial<CrawlerConfig> = {}) => {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };
@@ -31,17 +28,31 @@ export const createCrawler = async (config: Partial<CrawlerConfig> = {}) => {
     },
   });
 
+  // Track rate-limiting events for monitoring
+  let rateLimitCount = 0;
+
   // Create the crawler with router as request handler
   const crawler = new CheerioCrawler({
     requestQueue,
-    // Use limited concurrency to avoid rate limiting
-    maxConcurrency: 2,
+    // Conservative concurrency to avoid overwhelming the server
+    maxConcurrency: fullConfig.maxConcurrency,
     // Set a reasonable request timeout
     requestHandlerTimeoutSecs: 60,
-    // Use a reasonable limit for requests per crawl
-    maxRequestsPerCrawl: fullConfig.maxRequestsPerCrawl,
+    // Rate limiting: max requests per minute
+    maxRequestsPerMinute: fullConfig.maxRequestsPerMinute,
+    // Retry on blocked (HTTP 429, 503, etc.)
+    maxRequestRetries: fullConfig.maxRequestRetries,
+    // No artificial request limit - crawl all necessary pages
+    // The crawler will stop when the queue is empty
     // Define a request handler that routes requests
     requestHandler: router,
+    // Monitor failed requests for rate-limiting
+    failedRequestHandler: async ({ request }, error) => {
+      if (error.message.includes('429') || error.message.includes('Too Many Requests')) {
+        rateLimitCount++;
+        console.warn(`⚠️  Rate limit hit (HTTP 429) - Total: ${rateLimitCount} | URL: ${request.url}`);
+      }
+    },
   });
 
   return crawler;
