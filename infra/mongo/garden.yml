@@ -4,3 +4,9 @@ type: kubernetes
 spec:
   manifestTemplates:
     - ./manifests/*
+
+  portForwards:
+    - name: mongo-local
+      resource: Service/democracy-mongo
+      targetPort: 27017
+      localPort: 27017
