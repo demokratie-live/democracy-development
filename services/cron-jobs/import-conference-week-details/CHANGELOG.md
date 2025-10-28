@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.39](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.38...import-conference-week-details@v0.1.39) (2025-10-28)
+
+
+* extract vote-date logic into pure functions and add tests ([f6c3edd](https://github.com/demokratie-live/democracy-development/commit/f6c3eddce661dc2179cbdf317f209c48efb2179c))
+* **garden:** improve garden configs ([28be330](https://github.com/demokratie-live/democracy-development/commit/28be330cd3496a720f51248d79e768639ec3d1ac))
+
+
+### 🚀 Feature
+
+* **conference-week:** update procedure voteDate after crawl ([10f91e1](https://github.com/demokratie-live/democracy-development/commit/10f91e1a14010e5119da840b8a00d5e510dc4bc6))
+
 ## [0.1.38](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.37...import-conference-week-details@v0.1.38) (2025-09-10)
 
 
