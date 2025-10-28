@@ -33,7 +33,7 @@ spec:
 ---
 kind: Run
 name: import-plenary-minutes
-description: Ad-hoc Import-Job für Plenarprotokolle
+description: Ad-hoc import-Job for Plenarprotokolle
 dependencies:
   - build.import-plenary-minutes
   - deploy.mongo

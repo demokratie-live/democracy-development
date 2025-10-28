@@ -16,31 +16,30 @@ spec:
   extraFlags: ['--load']
 
 ---
-kind: Deploy
+kind: Run
 name: sync-procedures
-type: kubernetes
-description: Deploy the importer of procedures for the bundestag.io API
-dependencies: [build.sync-procedures, deploy.mongo, deploy.bundestag-io-api]
-
-disabled: ${!(environment.name == "prod" || environment.name == "local-prod")}
+description: Ad-hoc import-Job for Procedures
+dependencies:
+  - build.sync-procedures
+  - deploy.mongo
+  - deploy.bundestag-io-api
 
 variables:
   DB_URL: mongodb://democracy-mongo:27017/democracy
   BUNDESTAGIO_SERVER_URL: http://bundestag-io-api
 
+type: kubernetes-pod
 spec:
-  manifestTemplates:
-    - ./manifests/*
-
-  patchResources:
-    - name: sync-procedures
-      kind: CronJob
-      patch:
-        spec:
-          jobTemplate:
-            spec:
-              template:
-                spec:
-                  containers:
-                    - name: sync-procedures
-                      image: ${actions.build.sync-procedures.outputs.deploymentImageId}
+  podSpec:
+    restartPolicy: Never
+    containers:
+      - name: sync-procedures
+        image: ${actions.build.sync-procedures.outputs.deploymentImageId}
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: DB_URL
+            value: ${var.DB_URL}
+          - name: BUNDESTAGIO_SERVER_URL
+            value: ${var.BUNDESTAGIO_SERVER_URL}
+          - name: DEBUG
+            value: '${var.DEBUG || "false"}'
