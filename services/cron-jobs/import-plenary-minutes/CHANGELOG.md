@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.18](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.17...import-plenary-minutes@v0.1.18) (2025-10-28)
+
+
+* **garden:** improve garden configs ([28be330](https://github.com/demokratie-live/democracy-development/commit/28be330cd3496a720f51248d79e768639ec3d1ac))
+
 ## [0.1.17](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.16...import-plenary-minutes@v0.1.17) (2025-09-09)
 
 
