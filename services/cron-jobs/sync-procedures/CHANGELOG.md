@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.25](https://github.com/demokratie-live/democracy-development/compare/sync-procedures@v0.1.24...sync-procedures@v0.1.25) (2025-10-28)
+
+
+* **garden:** improve garden configs ([28be330](https://github.com/demokratie-live/democracy-development/commit/28be330cd3496a720f51248d79e768639ec3d1ac))
+
 ## [0.1.24](https://github.com/demokratie-live/democracy-development/compare/sync-procedures@v0.1.23...sync-procedures@v0.1.24) (2025-09-09)
 
 ## [0.1.23](https://github.com/demokratie-live/democracy-development/compare/sync-procedures@v0.1.22...sync-procedures@v0.1.23) (2025-06-27)
