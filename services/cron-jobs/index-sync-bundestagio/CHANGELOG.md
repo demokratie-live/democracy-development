@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.12](https://github.com/demokratie-live/democracy-development/compare/index-sync-bundestagio@v0.1.11...index-sync-bundestagio@v0.1.12) (2025-10-28)
+
 ## [0.1.11](https://github.com/demokratie-live/democracy-development/compare/index-sync-bundestagio@v0.1.10...index-sync-bundestagio@v0.1.11) (2025-09-09)
 
 
