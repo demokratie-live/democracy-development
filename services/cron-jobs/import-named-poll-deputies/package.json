@@ -17,7 +17,7 @@
     "@democracy-deutschland/bundestagio-common": "workspace:*",
     "@democracy-deutschland/scapacra": "workspace:*",
     "@democracy-deutschland/scapacra-bt": "workspace:*",
-    "axios": "^1.8.1",
+    "axios": "^1.12.0",
     "cron": "^2.4.4",
     "http2": "^3.3.7",
     "jsonschema": "^1.4.1",
