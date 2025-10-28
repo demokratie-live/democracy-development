@@ -16,6 +16,7 @@ interface RawEnv {
   CRAWL_MAX_REQUESTS_PER_CRAWL?: string;
   DB_URL?: string;
   TEST?: string; // presence indicates test mode
+  DATA_SOURCE?: string; // 'html' or 'json' - controls which endpoint to use
 }
 
 // Public, typed configuration shape consumed by the application
@@ -34,6 +35,9 @@ export interface AppConfig {
   runtime: {
     isTest: boolean; // Indicates test mode (skips DB interaction etc.)
   };
+  dataSource: {
+    type: 'html' | 'json'; // Controls which endpoint to use (html = conferenceweekDetail.form, json = conferenceWeekJSON)
+  };
 }
 
 // Defaults centralised here for easy visibility & single source of truth
@@ -43,6 +47,7 @@ const DEFAULTS = Object.freeze({
   CONFERENCE_LIMIT: 10,
   CRAWL_MAX_REQUESTS_PER_CRAWL: 10,
   DB_URL: 'mongodb://localhost:27017/bundestagio',
+  DATA_SOURCE: 'html', // Default to HTML parsing for backward compatibility
 });
 
 // Minimal integer parser with safe fallback
@@ -55,6 +60,14 @@ const parseIntSafe = (value: string | undefined, fallback: number, fieldName: st
   return parsed;
 };
 
+// Validate data source type
+const validateDataSource = (value: string): 'html' | 'json' => {
+  if (value === 'html' || value === 'json') {
+    return value;
+  }
+  throw new Error(`Invalid DATA_SOURCE: '${value}'. Must be 'html' or 'json'.`);
+};
+
 // Extract & freeze raw env (shallow) to prevent mutation during runtime
 const rawEnv: RawEnv = Object.freeze({
   CONFERENCE_YEAR: process.env.CONFERENCE_YEAR,
@@ -63,6 +76,7 @@ const rawEnv: RawEnv = Object.freeze({
   CRAWL_MAX_REQUESTS_PER_CRAWL: process.env.CRAWL_MAX_REQUESTS_PER_CRAWL,
   DB_URL: process.env.DB_URL,
   TEST: process.env.TEST,
+  DATA_SOURCE: process.env.DATA_SOURCE,
 });
 
 // Recursively freeze an object (simple deep freeze for plain objects/arrays)
@@ -97,6 +111,9 @@ const buildConfig = (env: RawEnv): AppConfig =>
     },
     runtime: {
       isTest: Boolean(env.TEST),
+    },
+    dataSource: {
+      type: validateDataSource(env.DATA_SOURCE || DEFAULTS.DATA_SOURCE),
     },
   }) as AppConfig;
 
