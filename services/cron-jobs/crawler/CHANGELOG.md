@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.9](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.8...crawler@v1.1.9) (2025-10-28)
+
+
+* **garden:** improve garden configs ([28be330](https://github.com/demokratie-live/democracy-development/commit/28be330cd3496a720f51248d79e768639ec3d1ac))
+
 ## [1.1.8](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.7...crawler@v1.1.8) (2025-09-09)
 
 ## [1.1.7](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.6...crawler@v1.1.7) (2025-04-26)
