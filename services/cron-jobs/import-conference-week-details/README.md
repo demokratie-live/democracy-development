@@ -4,10 +4,14 @@ This package crawls and imports conference week details from the Bundestag websi
 
 ## Features
 
-- Functional programming approach with pure functions and minimal state
-- Strong TypeScript typing and error handling
-- Comprehensive test coverage including unit, integration, and error handling tests
-- Uses shared configurations from workspace packages
+- **Conference Week Scraping:** Extracts sessions and agenda items from bundestag.de
+- **Vote Detection:** Automatically identifies votes (2nd/3rd reading, recommendations) using text patterns
+- **Procedure Linking:** Links agenda items with procedures from DIP API
+- **VoteDate Update:** Automatically sets voteDate field in procedures based on session dates
+
+## Documentation
+
+- 📊 [VoteDate Flow Documentation](./docs/votedate-flow.md) - Complete voteDate data flow with Mermaid diagrams
 
 ## Setup
 

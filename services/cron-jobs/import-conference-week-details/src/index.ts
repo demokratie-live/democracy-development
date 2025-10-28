@@ -7,6 +7,7 @@ import { ConferenceWeekDetailModel, mongoConnect, ProcedureModel } from '@democr
 import { IConferenceWeekDetail } from '@democracy-deutschland/bundestagio-common/dist/models/ConferenceWeekDetail/schema.js';
 import { UpdateQuery } from 'mongoose';
 import url from 'url';
+import { updateProcedureVoteDates } from './utils/update-vote-dates.js';
 
 import {
   PROCEDURE as PROCEDURE_DEFINITIONS,
@@ -231,6 +232,19 @@ export async function run(): Promise<void> {
       }
 
       log.info('Successfully saved all conference weeks to MongoDB');
+
+      // Step 2: Update voteDate in procedures based on saved conference weeks
+      log.info('🗳️  Updating voteDate in procedures from conference weeks...');
+      try {
+        const updateResult = await updateProcedureVoteDates();
+        log.info(`✅ Successfully updated ${updateResult.modifiedCount} procedures with voteDates`);
+      } catch (voteDateError) {
+        log.error('⚠️  Error updating voteDates in procedures:', {
+          message: voteDateError instanceof Error ? voteDateError.message : String(voteDateError),
+        });
+        // Continue execution - conference weeks are saved even if voteDate update fails
+      }
+
       process.exit(0);
     } catch (dbError) {
       log.error('Error saving to MongoDB:', {

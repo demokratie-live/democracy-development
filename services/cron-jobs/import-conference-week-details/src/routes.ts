@@ -105,11 +105,8 @@ export const detailHandler = async ({ $, request, enqueueLinks, log }: HandlerCo
     );
 
     // Enqueue navigation links if they exist
+    // Only crawl forward (future weeks) to focus on upcoming session weeks
     const urls = [];
-    if (navigationData?.previousYear && navigationData?.previousWeek) {
-      const prevUrl = `/apps/plenar/plenar/conferenceweekDetail.form?year=${navigationData.previousYear}&week=${navigationData.previousWeek}`;
-      urls.push(new URL(prevUrl, 'https://www.bundestag.de').href);
-    }
     if (navigationData?.nextYear && navigationData?.nextWeek) {
       const nextUrl = `/apps/plenar/plenar/conferenceweekDetail.form?year=${navigationData.nextYear}&week=${navigationData.nextWeek}`;
       urls.push(new URL(nextUrl, 'https://www.bundestag.de').href);
