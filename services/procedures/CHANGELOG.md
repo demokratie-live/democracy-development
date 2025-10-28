@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.7](https://github.com/demokratie-live/democracy-development/compare/procedures@v0.0.6...procedures@v0.0.7) (2025-10-28)
+
 ## [0.0.6](https://github.com/demokratie-live/democracy-development/compare/procedures@v0.0.5...procedures@v0.0.6) (2025-09-09)
 
 ## [0.0.5](https://github.com/demokratie-live/democracy-development/compare/procedures@v0.0.4...procedures@v0.0.5) (2025-04-26)
