@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - chore/yarn-to-pnpm
   workflow_dispatch:
     inputs:
       release_type:
@@ -38,13 +37,13 @@ jobs:
           git push --follow-tags
 
       - name: Bump and Commit (Alpha)
-        if: (github.event_name == 'push' && github.ref == 'refs/heads/chore/yarn-to-pnpm') || (github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha')
+      - name: Bump and Commit (Alpha)
+        if: github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha'
         run: |
           branch=$(git rev-parse --abbrev-ref HEAD | sed 's/feature\///')
           branch=${branch//[^a-zA-Z0-9_-]/-}
           npx standard-version --prerelease "alpha-$branch" --skip.tag
           git push --follow-tags
-
   push:
     needs: create-new-release
     runs-on: ubuntu-latest
@@ -68,7 +67,7 @@ jobs:
         run: echo "image_tag=${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Generate image tag (Alpha)
-        if: (github.event_name == 'push' && github.ref == 'refs/heads/chore/yarn-to-pnpm') || (github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha')
+        if: github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha'
         id: tag-alpha
         run: echo "image_tag=${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
 
@@ -89,7 +88,7 @@ jobs:
           docker push democracy/democracy-server:${{ steps.tag-stable.outputs.image_tag || steps.tag-alpha.outputs.image_tag }}
 
       - name: Push to Docker Hub (Alpha)
-        if: (github.event_name == 'push' && github.ref == 'refs/heads/chore/yarn-to-pnpm') || (github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha')
+        if: github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha'
         run: docker push democracy/democracy-server:${{ steps.tag-stable.outputs.image_tag || steps.tag-alpha.outputs.image_tag }}
 
   create-pull-request-to-infrastructure:
