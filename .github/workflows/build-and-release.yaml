@@ -40,7 +40,9 @@ jobs:
       - name: Bump and Commit (Alpha)
         if: (github.event_name == 'push' && github.ref == 'refs/heads/chore/yarn-to-pnpm') || (github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha')
         run: |
-          npx standard-version --prerelease alpha --skip.tag
+          branch=$(git rev-parse --abbrev-ref HEAD | sed 's/feature\///')
+          branch=${branch//[^a-zA-Z0-9_-]/-}
+          npx standard-version --prerelease "alpha-$branch" --skip.tag
           git push --follow-tags
 
   push:
@@ -68,11 +70,7 @@ jobs:
       - name: Generate image tag (Alpha)
         if: (github.event_name == 'push' && github.ref == 'refs/heads/chore/yarn-to-pnpm') || (github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha')
         id: tag-alpha
-        run: |
-          version=${{ steps.version.outputs.version }}
-          branch=$(git rev-parse --abbrev-ref HEAD | sed 's/feature\///')
-          branch=${branch//[^a-zA-Z0-9_-]/-}
-          echo "image_tag=$version-$branch" >> $GITHUB_OUTPUT
+        run: echo "image_tag=${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Build Docker image
         run: docker build --cache-from democracy/democracy-server:latest -t democracy/democracy-server:${{ steps.tag-stable.outputs.image_tag || steps.tag-alpha.outputs.image_tag }} .
