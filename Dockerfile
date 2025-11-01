@@ -1,4 +1,4 @@
-FROM node:16-alpine AS base_stage
+FROM node:20-alpine AS base_stage
 WORKDIR /app
 
 FROM base_stage as build_stage
