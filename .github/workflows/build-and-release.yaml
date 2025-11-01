@@ -109,9 +109,20 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
+      - name: Determine branch name
+        id: branch
+        run: |
+          SOURCE_BRANCH="${GITHUB_REF#refs/heads/}"
+          if [ "$SOURCE_BRANCH" = "main" ]; then
+            INFRA_BRANCH="democracy-server-stable"
+          else
+            INFRA_BRANCH="democracy-server-${SOURCE_BRANCH//\//-}"
+          fi
+          echo "name=$INFRA_BRANCH" >> $GITHUB_OUTPUT
+
       - name: Create or update branch
         run: |
-          BRANCH_NAME="democracy-server-${{ needs.push.outputs.image_tag }}"
+          BRANCH_NAME="${{ steps.branch.outputs.name }}"
 
           # Check if branch exists remotely
           if git ls-remote --heads origin $BRANCH_NAME | grep -q $BRANCH_NAME; then
@@ -128,8 +139,8 @@ jobs:
         run: |
           sed -i -E "s/image: democracy\/democracy-server:.*$/image: democracy\/democracy-server:${{ needs.push.outputs.image_tag }}/g" kustomize/base/main/democracy-api-depl.yaml
           git add kustomize/base/main/democracy-api-depl.yaml
-          git commit -m "chore(infrastructure): update Docker container version in Kubernetes YAML" || echo "No changes to commit"
-          git push --set-upstream origin democracy-server-${{ needs.push.outputs.image_tag }}
+          git commit -m "chore(infrastructure): update Docker container version to ${{ needs.push.outputs.image_tag }}" || echo "No changes to commit"
+          git push --set-upstream origin ${{ steps.branch.outputs.name }}
 
       - name: Create Pull Request
         continue-on-error: true
@@ -138,8 +149,8 @@ jobs:
           route: POST /repos/{owner}/{repo}/pulls
           owner: 'demokratie-live'
           repo: infrastructure
-          title: 'New version for democracy-server ${{ needs.push.outputs.image_tag }}'
+          title: 'Update democracy-server from ${{ github.ref_name }}'
           base: main
-          head: democracy-server-${{ needs.push.outputs.image_tag }}
+          head: ${{ steps.branch.outputs.name }}
         env:
           GITHUB_TOKEN: ${{ secrets.ACTION_INFRASTRUCTURE_PR }}
