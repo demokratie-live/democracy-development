@@ -1,6 +1,6 @@
 {
   "name": "democracy-server",
-  "version": "0.2.69-alpha-chore-yarn-to-pnpm.2",
+  "version": "0.2.69-alpha-chore-yarn-to-pnpm.3",
   "main": "dist/index.js",
   "author": "Manuel Ruck",
   "license": "Apache2",
