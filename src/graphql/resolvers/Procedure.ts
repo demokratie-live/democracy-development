@@ -437,7 +437,7 @@ const ProcedureApi: Resolvers = {
           // Filter Andere(fraktionslos) from partyVotes array in result, rename party(CDU -> Union)
           return procedures.map((p) => {
             // MongoObject to JS Object
-            const procedure: IProcedure = p.toObject();
+            const procedure = p.toObject() as any;
             // eslint-disable-next-line no-param-reassign
             if (procedure.voteResults) {
               procedure.voteResults.partyVotes = procedure.voteResults.partyVotes?.filter(
@@ -465,7 +465,7 @@ const ProcedureApi: Resolvers = {
       return { total, procedures };
     },
 
-    procedure: async (parent, { id }, { user, device, ProcedureModel }) => {
+    procedure: async (parent, { id }, { user, device, ProcedureModel }): Promise<any> => {
       // logger.graphql('Procedure.query.procedure');
       const procedure = await ProcedureModel.findOne({ procedureId: id });
       // TODO fail here of procedure is null
@@ -608,7 +608,7 @@ const ProcedureApi: Resolvers = {
       return ProcedureModel.find({ procedureId: { $in: procedureIds } });
     },
 
-    notifiedProcedures: async (parent, args, { device, ProcedureModel }) => {
+    notifiedProcedures: async (parent, args, { device, ProcedureModel }): Promise<any> => {
       // logger.graphql('Procedure.query.notifiedProcedures');
       const procedures = await ProcedureModel.find({
         _id: { $in: device.notificationSettings.procedures },

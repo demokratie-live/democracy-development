@@ -473,9 +473,9 @@ const DeviceApi: Resolvers = {
         );
         // TODO this additional read operation is also not nessecarily required
         // if the calculation is done serverside
-        device = await DeviceModel.findOne({ _id: device._id }).then((d) =>
+        device = (await DeviceModel.findOne({ _id: device._id }).then((d) =>
           d ? d.toObject() : null,
-        );
+        )) as any;
       }
 
       const result: NotificationSettings = {
@@ -490,7 +490,11 @@ const DeviceApi: Resolvers = {
       return result;
     },
 
-    toggleNotification: async (parent, { procedureId }, { device, ProcedureModel }) => {
+    toggleNotification: async (
+      parent,
+      { procedureId },
+      { device, ProcedureModel },
+    ): Promise<any> => {
       logger.graphql('Device.mutation.toggleNotification', { procedureId }, { device });
       const procedure = await ProcedureModel.findOne({ procedureId });
       if (procedure) {

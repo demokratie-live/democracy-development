@@ -9,19 +9,19 @@ Always reference these instructions first and fallback to search or bash command
 ### Prerequisites and Setup
 - Node.js 16+ is required (GitHub Actions use Node 16, but Node 20+ works with workarounds)
 - MongoDB database is REQUIRED for development and integration testing
-- Yarn package manager
+- pnpm package manager (v10.19.0)
 - Docker (optional, for containerized MongoDB)
 
 ### Bootstrap and Build Process
 - `cp .env.example .env` -- Create environment configuration
-- `yarn install --ignore-engines` -- Install dependencies. Takes ~19 seconds. ALWAYS use --ignore-engines flag due to Node.js version incompatibilities with @apollo/federation package
-- `yarn build` -- Compile TypeScript. Takes 3-4 seconds. NEVER CANCEL
-- `yarn lint` -- Run all linting (ESLint + TypeScript + unused exports). Takes ~7 seconds. NEVER CANCEL  
-- `yarn test` -- Run unit tests. Takes 2-3 seconds. NEVER CANCEL
+- `pnpm install` -- Install dependencies. Takes ~19 seconds. Uses `.npmrc` with `engine-strict=false` to handle Node.js version incompatibilities with @apollo/federation package
+- `pnpm build` -- Compile TypeScript. Takes 3-4 seconds. NEVER CANCEL
+- `pnpm lint` -- Run all linting (ESLint + TypeScript + unused exports). Takes ~7 seconds. NEVER CANCEL  
+- `pnpm test` -- Run unit tests. Takes 2-3 seconds. NEVER CANCEL
 
 ### Development Server
 - **CRITICAL**: Development server requires MongoDB to start successfully
-- `yarn dev` -- Start development server on port 3000. Fails immediately without MongoDB connection
+- `pnpm dev` -- Start development server on port 3000. Fails immediately without MongoDB connection
 - Server starts at http://localhost:3000/ with GraphQL endpoint at root path
 - **Apollo Prometheus metrics** server runs on port 3400
 - Hot reloading enabled for src/graphql directory changes
@@ -30,7 +30,7 @@ Always reference these instructions first and fallback to search or bash command
 **Option 1: Docker (Recommended)**
 ```bash
 docker run -d --name mongo-dev -p 27017:27017 mongo:4.4
-yarn dev
+pnpm dev
 ```
 
 **Option 2: Docker Compose (Advanced)**
@@ -41,18 +41,18 @@ docker-compose up
 ```
 
 ### GraphQL Code Generation
-- `yarn generate` -- Generate GraphQL types from running server. Takes ~1 second. REQUIRES development server to be running on port 3000
+- `pnpm generate` -- Generate GraphQL types from running server. Takes ~1 second. REQUIRES development server to be running on port 3000
 - **ALWAYS start development server BEFORE running code generation**
 - Generates files: `src/generated/graphql.ts` and `graphql.schema.json`
 
 ### Testing
-- `yarn test` -- Unit tests (3 suites, 8 tests). Takes 2-3 seconds. NEVER CANCEL
-- `yarn test:integration` -- Integration tests. Takes 3-18 seconds. REQUIRES MongoDB connection. Currently fails due to GraphQL endpoint issues and deprecated MongoDB methods
+- `pnpm test` -- Unit tests (3 suites, 8 tests). Takes 2-3 seconds. NEVER CANCEL
+- `pnpm test:integration` -- Integration tests. Takes 3-18 seconds. REQUIRES MongoDB connection. Currently fails due to GraphQL endpoint issues and deprecated MongoDB methods
 - **Integration tests are not reliable** -- focus on unit tests and manual testing
 
 ### Validation and Quality Assurance
-- ALWAYS run `yarn lint` before committing changes or CI will fail
-- ALWAYS run `yarn build` to verify TypeScript compilation
+- ALWAYS run `pnpm lint` before committing changes or CI will fail
+- ALWAYS run `pnpm build` to verify TypeScript compilation
 - **Manual Testing Scenarios**: 
   - Start development server with MongoDB
   - Test GraphQL endpoint: `curl -X POST -H "Content-Type: application/json" -d '{"query":"{ __typename }"}' http://localhost:3000/`
@@ -68,8 +68,9 @@ docker-compose up
 ## Common Tasks and Troubleshooting
 
 ### Node.js Version Issues
-- **ALWAYS use `yarn install --ignore-engines`** -- Standard `yarn install` fails due to @apollo/federation requiring Node <17
-- Current Node 20+ works fine for development despite package warnings
+- **Uses `.npmrc` with `engine-strict=false`** -- This handles @apollo/federation requiring Node <17 while allowing Node 20+ for development
+- pnpm version is pinned to 10.19.0 via `packageManager` field in package.json
+- Current Node 20+ works fine for development with this configuration
 
 ### Development Server Won't Start
 - **Check MongoDB**: Server fails immediately with clear MongoDB connection error if database unavailable
@@ -79,7 +80,7 @@ docker-compose up
 ### GraphQL Generation Fails
 - **Cause**: Server not running on port 3000
 - **Error**: `Failed to load schema from http://localhost:3000: ECONNREFUSED`
-- **Solution**: Start development server first with `yarn dev`, then run `yarn generate`
+- **Solution**: Start development server first with `pnpm dev`, then run `pnpm generate`
 
 ### Integration Tests Failing
 - **Known Issue**: Integration tests fail due to deprecated MongoDB methods and GraphQL endpoint configuration
@@ -90,7 +91,7 @@ docker-compose up
 - TypeScript compilation: ~3-4 seconds (very fast)
 - Linting: ~7 seconds
 - Unit tests: ~2-3 seconds
-- Package installation: ~19 seconds with --ignore-engines
+- Package installation: ~19 seconds with pnpm
 
 ## Repository Structure
 
@@ -99,7 +100,7 @@ docker-compose up
 src/
 ├── config/           # Configuration files (JWT, SMS, cron jobs)
 ├── express/          # Express middleware and routes
-├── generated/        # Generated GraphQL types (yarn generate)
+├── generated/        # Generated GraphQL types (pnpm generate)
 ├── graphql/          # GraphQL schema and resolvers
 ├── services/         # Core services (MongoDB, logging, cron jobs)
 ├── types/            # TypeScript type definitions
@@ -108,6 +109,7 @@ src/
 
 ### Configuration Files
 - `.env` -- Environment variables (copy from .env.example)
+- `.npmrc` -- pnpm configuration (engine-strict=false for Node.js compatibility)
 - `package.json` -- Dependencies and scripts
 - `tsconfig.json` -- TypeScript configuration
 - `jest.unit.config.js` -- Unit test configuration
@@ -136,7 +138,7 @@ src/
 
 ## Development Workflow Best Practices
 1. **Always check MongoDB is running** before starting development server
-2. **Use --ignore-engines flag** for yarn install
+2. **Engine compatibility handled by `.npmrc`** -- No need for manual flags with pnpm install
 3. **Run linting** before committing changes
 4. **Test GraphQL endpoint** manually after server changes
 5. **Generate GraphQL types** when schema changes (requires running server)

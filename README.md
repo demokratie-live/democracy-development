@@ -8,7 +8,7 @@ The Serversoftware for the DEMOCRACY APP. This is an API Defintion and Server fo
 
 ## Tech Stack
 
-- [Node.js][node], [Yarn][yarn], [JavaScript][js]
+- [Node.js][node], [pnpm][pnpm], [JavaScript][js]
 
 [More Dependecies](https://github.com/demokratie-live/democracy-server/network/dependencies)
 
@@ -26,7 +26,7 @@ Clone the git repo & run the project
 ```
 git clone git@github.com:demokratie-live/democracy-server.git
 cd democracy-server
-yarn install
+pnpm install
 ```
 
 Rename the `.env.example` file to `.env` (Windows: `.env.`)
@@ -34,7 +34,7 @@ Rename the `.env.example` file to `.env` (Windows: `.env.`)
 ### Compile and start
 
 ```
-yarn dev
+pnpm dev
 ```
 
 ### Import Data from local Bundestag.io Server
@@ -48,7 +48,7 @@ job to finish.
 ### Test Project
 
 ```
-yarn lint
+pnpm lint
 ```
 
 ## Diagrams
@@ -87,5 +87,5 @@ Copyright © 2017-present DEMOCRACY Deutschland e.V.. This source code is licens
 Made with ♥ by Team DEMOCRACY ([democracy-deutschland.de](https://www.democracy-deutschland.de)), [startnext contributors](https://www.startnext.com/democracy/unterstuetzer/) and [contributors](https://github.com/demokratie-live/democracy-server/graphs/contributors)
 
 [node]: https://nodejs.org
-[yarn]: https://yarnpkg.com
+[pnpm]: https://pnpm.io
 [js]: https://developer.mozilla.org/docs/Web/JavaScript
