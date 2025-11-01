@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ACTIONS_PUSH_TO_PROTECTED_BRANCH }}
 
       - uses: actions/setup-node@v3
         with:
@@ -36,7 +38,6 @@ jobs:
           npx standard-version
           git push --follow-tags
 
-      - name: Bump and Commit (Alpha)
       - name: Bump and Commit (Alpha)
         if: github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha'
         run: |
