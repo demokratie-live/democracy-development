@@ -26,7 +26,7 @@ spec:
         sourcePath: src
         mode: one-way
     overrides:
-      - command: [yarn, dev]
+      - command: [pnpm, dev]
 
   patchResources:
     - name: democracy-api
@@ -52,4 +52,4 @@ spec:
   resource:
     kind: Deployment
     name: democracy-api
-  command: [yarn, test:integration]
+  command: [pnpm, test:integration]

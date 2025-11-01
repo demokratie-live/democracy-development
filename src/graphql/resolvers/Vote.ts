@@ -408,7 +408,7 @@ const VoteApi: Resolvers = {
           // Add the constituency bucket selector conditionally
           ...(constituency && { 'votes.constituencies.constituency': constituency }),
         },
-        { ...voteUpdate },
+        { ...voteUpdate } as any,
       );
 
       // Recalculate Votes Cache
