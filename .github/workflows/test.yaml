@@ -18,7 +18,7 @@ jobs:
       - name: 🔧 Enable Corepack
         run: corepack enable
 
-      - name: �📦 Cache dependencies
+      - name: 📦 Cache dependencies
         uses: actions/cache@v4
         with:
           path: ~/.local/share/pnpm/store
