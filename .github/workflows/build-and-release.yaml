@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - chore/yarn-to-pnpm # just for testing
   workflow_dispatch:
     inputs:
       release_type:
