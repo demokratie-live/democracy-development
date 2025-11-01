@@ -1,6 +1,6 @@
 {
   "name": "democracy-server",
-  "version": "0.2.69-alpha.0",
+  "version": "0.2.69-alpha.1",
   "main": "dist/index.js",
   "author": "Manuel Ruck",
   "license": "Apache2",
@@ -80,7 +80,6 @@
     "@types/node": "^16",
     "@types/request": "^2.48.4",
     "@types/winston": "^2.4.4",
-    "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "apollo": "^2.33.9",
