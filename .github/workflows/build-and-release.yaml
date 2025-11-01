@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - chore/yarn-to-pnpm
   workflow_dispatch:
     inputs:
       release_type:
@@ -31,13 +32,13 @@ jobs:
           git config --local user.name "GitHub Action"
 
       - name: Bump and Commit (Stable)
-        if: github.event_name == 'push' || inputs.release_type == 'stable'
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || inputs.release_type == 'stable'
         run: |
           npx standard-version
           git push --follow-tags
 
       - name: Bump and Commit (Alpha)
-        if: github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha'
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/chore/yarn-to-pnpm') || (github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha')
         run: |
           npx standard-version --prerelease alpha --skip.tag
           git push --follow-tags
@@ -47,26 +48,25 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
-      image_tag: ${{ steps.tag.outputs.image_tag }}
+      image_tag: ${{ steps.tag-stable.outputs.image_tag || steps.tag-alpha.outputs.image_tag }}
     environment: docker
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: ${{ github.ref }}
 
       - name: Get version from package.json
         id: version
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
 
       - name: Generate image tag (Stable)
-        if: inputs.release_type == 'stable'
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || inputs.release_type == 'stable'
         id: tag-stable
         run: echo "image_tag=${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Generate image tag (Alpha)
-        if: inputs.release_type == 'alpha'
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/chore/yarn-to-pnpm') || (github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha')
         id: tag-alpha
         run: |
           version=${{ steps.version.outputs.version }}
@@ -74,17 +74,8 @@ jobs:
           branch=${branch//[^a-zA-Z0-9_-]/-}
           echo "image_tag=$version-$branch" >> $GITHUB_OUTPUT
 
-      - name: Set final image tag
-        id: tag
-        run: |
-          if [ "${{ inputs.release_type }}" == "stable" ]; then
-            echo "image_tag=${{ steps.tag-stable.outputs.image_tag }}" >> $GITHUB_OUTPUT
-          else
-            echo "image_tag=${{ steps.tag-alpha.outputs.image_tag }}" >> $GITHUB_OUTPUT
-          fi
-
       - name: Build Docker image
-        run: docker build --cache-from democracy/democracy-server:latest -t democracy/democracy-server:${{ steps.tag.outputs.image_tag }} .
+        run: docker build --cache-from democracy/democracy-server:latest -t democracy/democracy-server:${{ steps.tag-stable.outputs.image_tag || steps.tag-alpha.outputs.image_tag }} .
 
       - name: Push image to Docker Hub
         uses: docker/login-action@v2
@@ -93,15 +84,15 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push to Docker Hub (Stable)
-        if: inputs.release_type == 'stable'
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || inputs.release_type == 'stable'
         run: |
-          docker tag democracy/democracy-server:${{ steps.tag.outputs.image_tag }} democracy/democracy-server:latest
+          docker tag democracy/democracy-server:${{ steps.tag-stable.outputs.image_tag || steps.tag-alpha.outputs.image_tag }} democracy/democracy-server:latest
           docker push democracy/democracy-server:latest
-          docker push democracy/democracy-server:${{ steps.tag.outputs.image_tag }}
+          docker push democracy/democracy-server:${{ steps.tag-stable.outputs.image_tag || steps.tag-alpha.outputs.image_tag }}
 
       - name: Push to Docker Hub (Alpha)
-        if: inputs.release_type == 'alpha'
-        run: docker push democracy/democracy-server:${{ steps.tag.outputs.image_tag }}
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/chore/yarn-to-pnpm') || (github.event_name == 'workflow_dispatch' && inputs.release_type == 'alpha')
+        run: docker push democracy/democracy-server:${{ steps.tag-stable.outputs.image_tag || steps.tag-alpha.outputs.image_tag }}
 
   create-pull-request-to-infrastructure:
     needs: push

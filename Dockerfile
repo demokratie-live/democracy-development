@@ -17,7 +17,7 @@ RUN corepack enable && corepack prepare pnpm@10.19.0 --activate
 RUN apk --update --no-cache add curl
 RUN curl -sf https://gobinaries.com/tj/node-prune | sh
 RUN rm -rf node_modules
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --prod --ignore-scripts
 RUN node-prune node_modules
 
 FROM base_stage as production_stage
@@ -27,4 +27,4 @@ COPY package.json pnpm-lock.yaml ./
 COPY --from=build_stage /app/dist ./dist
 COPY --from=install_stage /app/node_modules ./node_modules
 
-ENTRYPOINT [ "pnpm", "serve" ]
+ENTRYPOINT [ "node", "dist/index.js" ]
