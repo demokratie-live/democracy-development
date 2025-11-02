@@ -34,4 +34,10 @@ export interface GraphQlContext {
   votedLoader: DataLoader<string, boolean, unknown>;
 }
 
-export type ExpressReqContext = Request;
+export type ExpressReqContext = Request & {
+  user?: User | null;
+  phone?: Phone | null;
+  device?: Device | null;
+  version?: string;
+  applicationId?: string;
+};

@@ -7,14 +7,14 @@ Always reference these instructions first and fallback to search or bash command
 ## Working Effectively
 
 ### Prerequisites and Setup
-- Node.js 16+ is required (GitHub Actions use Node 16, but Node 20+ works with workarounds)
+- Node.js 20+ is required (required by @typescript-eslint packages)
 - MongoDB database is REQUIRED for development and integration testing
 - pnpm package manager (v10.19.0)
 - Docker (optional, for containerized MongoDB)
 
 ### Bootstrap and Build Process
 - `cp .env.example .env` -- Create environment configuration
-- `pnpm install` -- Install dependencies. Takes ~19 seconds. Uses `.npmrc` with `engine-strict=false` to handle Node.js version incompatibilities with @apollo/federation package
+- `pnpm install` -- Install dependencies. Takes ~19 seconds. Uses `.npmrc` with `engine-strict=false` for compatibility with older dependencies (e.g., @apollo/federation)
 - `pnpm build` -- Compile TypeScript. Takes 3-4 seconds. NEVER CANCEL
 - `pnpm lint` -- Run all linting (ESLint + TypeScript + unused exports). Takes ~7 seconds. NEVER CANCEL  
 - `pnpm test` -- Run unit tests. Takes 2-3 seconds. NEVER CANCEL
@@ -68,9 +68,10 @@ docker-compose up
 ## Common Tasks and Troubleshooting
 
 ### Node.js Version Issues
-- **Uses `.npmrc` with `engine-strict=false`** -- This handles @apollo/federation requiring Node <17 while allowing Node 20+ for development
+- **Node.js 20.9.0+ is required** -- @typescript-eslint packages require Node.js ^18.18.0 || ^20.9.0 || >=21.1.0
+- **Uses `.npmrc` with `engine-strict=false`** -- This handles compatibility with older dependencies (e.g., @apollo/federation)
 - pnpm version is pinned to 10.19.0 via `packageManager` field in package.json
-- Current Node 20+ works fine for development with this configuration
+- `engines` field in package.json specifies Node >=20.9.0
 
 ### Development Server Won't Start
 - **Check MongoDB**: Server fails immediately with clear MongoDB connection error if database unavailable
@@ -120,7 +121,7 @@ src/
 ### GitHub Actions
 - `.github/workflows/test.yaml` -- Main CI (lint, test, build)
 - `.github/workflows/test-integration.yaml` -- Kubernetes integration tests with Garden.io
-- **Node 16** specified in CI workflows
+- **Node 20** specified in CI workflows
 
 ## External Dependencies
 
