@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### 0.2.77-alpha-chore-fix-release.0 (2025-11-04)
 
+### 0.2.77-alpha-chore-knip.0 (2025-11-02)
+
 ### 0.2.77-alpha-main.0 (2025-11-02)
 
 ### 0.2.77-alpha-chore-upgrade-typescript.0 (2025-11-02)
