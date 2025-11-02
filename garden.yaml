@@ -17,8 +17,8 @@ spec:
   defaultTarget:
     kind: Deployment
     name: democracy-api
-  files:
-    - ./infra/manifests/*
+  manifestTemplates:
+    - infra/manifests/*
 
   sync:
     paths:
