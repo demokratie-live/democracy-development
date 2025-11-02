@@ -9,6 +9,8 @@ on:
 jobs:
   create-new-release:
     runs-on: ubuntu-latest
+    # Skip workflow if triggered by a release commit to prevent infinite loop
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -26,7 +28,7 @@ jobs:
       - name: Bump and Commit (Stable)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          npx standard-version
+          npx standard-version --release-commit-message-format "chore(release): {{currentTag}} [skip ci]"
           git push --follow-tags
 
       - name: Bump and Commit (Alpha)
@@ -34,7 +36,7 @@ jobs:
         run: |
           branch=$(git rev-parse --abbrev-ref HEAD | sed 's/feature\///')
           branch=${branch//[^a-zA-Z0-9_-]/-}
-          npx standard-version --prerelease "alpha-$branch" --skip.tag
+          npx standard-version --prerelease "alpha-$branch" --skip.tag --release-commit-message-format "chore(release): {{currentTag}} [skip ci]"
           git push --follow-tags
   push:
     needs: create-new-release
