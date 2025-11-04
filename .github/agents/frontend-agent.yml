@@ -304,7 +304,7 @@ instructions: |
   - Nest components inside other components
   - Use index as key in lists with dynamic data
   - Forget to handle loading and error states
-  - Over-use useEffect (many cases can be handled differently)
+  - Overuse useEffect (many cases can be handled differently)
   - Create god components (break them down)
   
   ✅ **Do**:
