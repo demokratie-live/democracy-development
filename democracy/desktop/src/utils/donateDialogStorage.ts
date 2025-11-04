@@ -1,3 +1,5 @@
+import { BrowserStorage, type IStorage } from './storage.interface';
+
 const DONATE_DIALOG_DISMISS_KEY = 'donateDialogDismissUntil';
 
 /**
@@ -9,64 +11,112 @@ export const DISMISS_DURATION = {
 } as const;
 
 /**
- * Check if the donate dialog should be shown
- * @returns true if dialog should be shown, false if it should be hidden
+ * Pure function to check if a timestamp has expired
+ * @param dismissTime The timestamp to check
+ * @param currentTime The current timestamp
+ * @returns true if the timestamp has expired or is invalid
  */
-export const shouldShowDonateDialog = (): boolean => {
-  // If localStorage is not available, always show the dialog
-  if (typeof window === 'undefined' || !window.localStorage) {
+export const isTimestampExpired = (
+  dismissTime: number | null,
+  currentTime: number
+): boolean => {
+  if (dismissTime === null || isNaN(dismissTime)) {
     return true;
   }
-
-  try {
-    const dismissUntil = localStorage.getItem(DONATE_DIALOG_DISMISS_KEY);
-    
-    // If no dismiss timestamp exists, show the dialog
-    if (!dismissUntil) {
-      return true;
-    }
-
-    const dismissTime = parseInt(dismissUntil, 10);
-    
-    // If parsed value is not a valid number, show the dialog
-    if (isNaN(dismissTime)) {
-      localStorage.removeItem(DONATE_DIALOG_DISMISS_KEY);
-      return true;
-    }
-
-    const now = Date.now();
-
-    // If dismiss time has passed, show the dialog
-    if (now >= dismissTime) {
-      // Clean up expired timestamp
-      localStorage.removeItem(DONATE_DIALOG_DISMISS_KEY);
-      return true;
-    }
-
-    // Still within dismiss period
-    return false;
-  } catch (error) {
-    // If localStorage throws an error, show the dialog
-    console.error('Error reading donate dialog state:', error);
-    return true;
-  }
+  return currentTime >= dismissTime;
 };
 
 /**
- * Set the dismiss time for the donate dialog
+ * Pure function to parse a dismiss timestamp from storage
+ * @param value The stored value
+ * @returns The parsed timestamp or null if invalid
+ */
+export const parseDismissTime = (value: string | null): number | null => {
+  if (!value) {
+    return null;
+  }
+
+  const parsed = parseInt(value, 10);
+  return isNaN(parsed) ? null : parsed;
+};
+
+/**
+ * Core business logic: Determine if the dialog should be shown
+ * @param dismissTime The stored dismiss timestamp (or null)
+ * @param currentTime The current timestamp
+ * @returns true if dialog should be shown, false otherwise
+ */
+export const shouldShowDialog = (
+  dismissTime: number | null,
+  currentTime: number
+): boolean => {
+  return isTimestampExpired(dismissTime, currentTime);
+};
+
+/**
+ * Calculate the future timestamp for dismissal
+ * @param duration Duration in milliseconds
+ * @param currentTime The current timestamp
+ * @returns The future timestamp
+ */
+export const calculateDismissTime = (
+  duration: number,
+  currentTime: number
+): number => {
+  return currentTime + duration;
+};
+
+/**
+ * Service class for managing donate dialog state
+ * Encapsulates storage operations and business logic
+ */
+export class DonateDialogService {
+  constructor(private storage: IStorage) {}
+
+  /**
+   * Check if the donate dialog should be shown
+   * @returns true if dialog should be shown, false if it should be hidden
+   */
+  shouldShowDonateDialog(): boolean {
+    const storedValue = this.storage.getItem(DONATE_DIALOG_DISMISS_KEY);
+    const dismissTime = parseDismissTime(storedValue);
+    const currentTime = Date.now();
+    const shouldShow = shouldShowDialog(dismissTime, currentTime);
+
+    // Clean up expired timestamp
+    if (shouldShow && storedValue !== null) {
+      this.storage.removeItem(DONATE_DIALOG_DISMISS_KEY);
+    }
+
+    return shouldShow;
+  }
+
+  /**
+   * Set the dismiss time for the donate dialog
+   * @param duration Duration in milliseconds to dismiss the dialog
+   */
+  setDonateDialogDismissTime(duration: number): void {
+    const currentTime = Date.now();
+    const dismissUntil = calculateDismissTime(duration, currentTime);
+    this.storage.setItem(DONATE_DIALOG_DISMISS_KEY, dismissUntil.toString());
+  }
+}
+
+// Default instance using browser storage for backward compatibility
+const defaultService = new DonateDialogService(new BrowserStorage());
+
+/**
+ * Check if the donate dialog should be shown (backward compatible)
+ * @returns true if dialog should be shown, false if it should be hidden
+ */
+export const shouldShowDonateDialog = (): boolean => {
+  return defaultService.shouldShowDonateDialog();
+};
+
+/**
+ * Set the dismiss time for the donate dialog (backward compatible)
  * @param duration Duration in milliseconds to dismiss the dialog
  */
 export const setDonateDialogDismissTime = (duration: number): void => {
-  // If localStorage is not available, do nothing
-  if (typeof window === 'undefined' || !window.localStorage) {
-    return;
-  }
-
-  try {
-    const dismissUntil = Date.now() + duration;
-    localStorage.setItem(DONATE_DIALOG_DISMISS_KEY, dismissUntil.toString());
-  } catch (error) {
-    // If localStorage throws an error, silently fail
-    console.error('Error setting donate dialog dismiss time:', error);
-  }
+  defaultService.setDonateDialogDismissTime(duration);
 };

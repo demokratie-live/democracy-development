@@ -10,7 +10,9 @@
     "build-prod": "run-s clean build export",
     "clean": "rimraf .next out",
     "lint": "next lint",
-    "build-types": "tsc --noEmit --pretty"
+    "build-types": "tsc --noEmit --pretty",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@apollo/client": "3.10.4",
@@ -48,6 +50,7 @@
     "@types/node": "20.12.12",
     "@types/react": "18.3.3",
     "@types/slug": "5.0.8",
+    "@vitest/ui": "^3.0.8",
     "autoprefixer": "10.4.19",
     "cross-env": "7.0.3",
     "cssnano": "7.0.1",
@@ -55,13 +58,15 @@
     "eslint-config-next": "14.1.4",
     "eslint-config-prettier": "^9.1.0",
     "husky": "9.0.11",
+    "jsdom": "^24.0.0",
     "lint-staged": "15.2.5",
     "npm-run-all": "4.1.5",
     "postcss": "8.4.38",
     "prettier": "3.2.5",
     "rimraf": "5.0.7",
     "tailwindcss": "3.4.3",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "vitest": "^3.0.8"
   },
   "license": "ISC"
 }
