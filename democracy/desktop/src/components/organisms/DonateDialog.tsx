@@ -1,11 +1,21 @@
 import { Fragment, useMemo, useRef, useState } from 'react';
 
 import { Dialog, Transition } from '@headlessui/react';
+import {
+  shouldShowDonateDialog,
+  setDonateDialogDismissTime,
+  DISMISS_DURATION,
+} from '@/utils/donateDialogStorage';
 // import { CheckIcon } from '@heroicons/react/24/outline';
 
 export default function DonateDialog() {
   const [open, setOpen] = useState(false);
   useMemo(() => {
+    // Check if dialog should be shown based on localStorage
+    if (!shouldShowDonateDialog()) {
+      return;
+    }
+
     const timeout = setTimeout(() => {
       setOpen(true);
     }, 800);
@@ -80,6 +90,7 @@ export default function DonateDialog() {
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-ci-blue-dark px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-ci-blue-darker focus:outline-none focus:ring-2 focus:ring-ci-blue-darker focus:ring-offset-2 sm:col-start-2 sm:text-sm"
                     ref={acceptButtonRef}
                     onClick={() => {
+                      setDonateDialogDismissTime(DISMISS_DURATION.DONATED);
                       window.open('https://www.paypal.com/donate/?hosted_button_id=PR4PJL4AY8RSL', '_blank');
                       setOpen(false);
                     }}
@@ -89,7 +100,10 @@ export default function DonateDialog() {
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-normal text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-ci-blue-darker focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
-                    onClick={() => setOpen(false)}
+                    onClick={() => {
+                      setDonateDialogDismissTime(DISMISS_DURATION.NOT_NOW);
+                      setOpen(false);
+                    }}
                     ref={cancelButtonRef}
                   >
                     Jetzt Nicht
