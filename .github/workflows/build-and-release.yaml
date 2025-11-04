@@ -128,6 +128,7 @@ jobs:
           git push --set-upstream origin ${{ steps.branch.outputs.name }}
 
       - name: Create Pull Request
+        id: create-pr
         continue-on-error: true
         uses: octokit/request-action@v2.x
         with:
@@ -139,3 +140,25 @@ jobs:
           head: ${{ steps.branch.outputs.name }}
         env:
           GITHUB_TOKEN: ${{ secrets.ACTION_INFRASTRUCTURE_PR }}
+
+      - name: Generate Summary
+        run: |
+          echo "## Build and Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Release Information" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: ${{ needs.push.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Image Tag**: \`democracy/democracy-server:${{ needs.push.outputs.image_tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Source Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Infrastructure Branch**: ${{ steps.branch.outputs.name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Infrastructure Update" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.create-pr.outcome }}" = "success" ]; then
+            PR_NUMBER=$(echo '${{ steps.create-pr.outputs.data }}' | jq -r '.number')
+            PR_URL=$(echo '${{ steps.create-pr.outputs.data }}' | jq -r '.html_url')
+            echo "✅ Pull Request created successfully" >> $GITHUB_STEP_SUMMARY
+            echo "- **PR #${PR_NUMBER}**: [View Pull Request](${PR_URL})" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ Pull Request may already exist" >> $GITHUB_STEP_SUMMARY
+            echo "- **Branch**: [democracy-server-${{ github.ref_name }}](https://github.com/demokratie-live/infrastructure/tree/${{ steps.branch.outputs.name }})" >> $GITHUB_STEP_SUMMARY
+            echo "- **Compare**: [View Changes](https://github.com/demokratie-live/infrastructure/compare/main...${{ steps.branch.outputs.name }})" >> $GITHUB_STEP_SUMMARY
+          fi
