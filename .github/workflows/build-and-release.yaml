@@ -1,16 +1,11 @@
 name: Build and Release
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
   create-new-release:
     runs-on: ubuntu-latest
-    # Skip workflow if triggered by a release commit to prevent infinite loop
-    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -26,13 +21,13 @@ jobs:
           git config --local user.name "GitHub Action"
 
       - name: Bump and Commit (Stable)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         run: |
           npx standard-version --release-commit-message-format "chore(release): {{currentTag}} [skip ci]"
           git push --follow-tags
 
       - name: Bump and Commit (Alpha)
-        if: github.event_name == 'workflow_dispatch'
+        if: github.ref != 'refs/heads/main'
         run: |
           branch=$(git rev-parse --abbrev-ref HEAD | sed 's/feature\///')
           branch=${branch//[^a-zA-Z0-9_-]/-}
@@ -57,12 +52,12 @@ jobs:
         run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
 
       - name: Generate image tag (Stable)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         id: tag-stable
         run: echo "image_tag=${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Generate image tag (Alpha)
-        if: github.event_name == 'workflow_dispatch'
+        if: github.ref != 'refs/heads/main'
         id: tag-alpha
         run: echo "image_tag=${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
 
@@ -76,14 +71,14 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push to Docker Hub (Stable)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         run: |
           docker tag democracy/democracy-server:${{ steps.tag-stable.outputs.image_tag || steps.tag-alpha.outputs.image_tag }} democracy/democracy-server:latest
           docker push democracy/democracy-server:latest
           docker push democracy/democracy-server:${{ steps.tag-stable.outputs.image_tag || steps.tag-alpha.outputs.image_tag }}
 
       - name: Push to Docker Hub (Alpha)
-        if: github.event_name == 'workflow_dispatch'
+        if: github.ref != 'refs/heads/main'
         run: docker push democracy/democracy-server:${{ steps.tag-stable.outputs.image_tag || steps.tag-alpha.outputs.image_tag }}
 
   create-pull-request-to-infrastructure:
@@ -107,11 +102,7 @@ jobs:
         id: branch
         run: |
           SOURCE_BRANCH="${GITHUB_REF#refs/heads/}"
-          if [ "$SOURCE_BRANCH" = "main" ]; then
-            INFRA_BRANCH="democracy-server-stable"
-          else
-            INFRA_BRANCH="democracy-server-${SOURCE_BRANCH//\//-}"
-          fi
+          INFRA_BRANCH="democracy-server-${SOURCE_BRANCH//\//-}"
           echo "name=$INFRA_BRANCH" >> $GITHUB_OUTPUT
 
       - name: Create or update branch
