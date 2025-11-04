@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 
 import { Dialog, Transition } from '@headlessui/react';
 import {
@@ -10,7 +10,7 @@ import {
 
 export default function DonateDialog() {
   const [open, setOpen] = useState(false);
-  useMemo(() => {
+  useEffect(() => {
     // Check if dialog should be shown based on localStorage
     if (!shouldShowDonateDialog()) {
       return;

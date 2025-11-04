@@ -27,6 +27,13 @@ export const shouldShowDonateDialog = (): boolean => {
     }
 
     const dismissTime = parseInt(dismissUntil, 10);
+    
+    // If parsed value is not a valid number, show the dialog
+    if (isNaN(dismissTime)) {
+      localStorage.removeItem(DONATE_DIALOG_DISMISS_KEY);
+      return true;
+    }
+
     const now = Date.now();
 
     // If dismiss time has passed, show the dialog
