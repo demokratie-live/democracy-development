@@ -1,6 +1,6 @@
 {
   "name": "democracy-server",
-  "version": "0.2.77",
+  "version": "0.2.78-alpha-chore-knip.0",
   "main": "dist/index.js",
   "author": "Manuel Ruck",
   "license": "Apache2",

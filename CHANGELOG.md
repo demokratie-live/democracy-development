@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.78-alpha-chore-knip.0 (2025-11-08)
+
 ### 0.2.77 (2025-11-04)
 
 ### 0.2.77-alpha-chore-fix-release.1 (2025-11-04)
