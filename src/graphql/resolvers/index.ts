@@ -1,6 +1,24 @@
-import path from 'path';
-import { fileLoader, mergeResolvers } from 'merge-graphql-schemas';
+import { mergeResolvers } from '@graphql-tools/merge';
+import Activity from './Activity';
+import ConferenceWeek from './ConferenceWeek';
+import Date from './Date';
+import Deputy from './Deputy';
+import Device from './Device';
+import Procedure from './Procedure';
+import SearchTerm from './SearchTerm';
+import User from './User';
+import Vote from './Vote';
 
-const resolversArray = fileLoader(path.join(__dirname, './'), { extensions: ['.js', '.ts'], ignoredExtensions: ['test', 'integ']});
+const resolvers = [
+  Activity,
+  ConferenceWeek,
+  Date,
+  Deputy,
+  Device,
+  Procedure,
+  SearchTerm,
+  User,
+  Vote,
+];
 
-export default mergeResolvers(resolversArray);
+export default mergeResolvers(resolvers);

@@ -1,20 +1,12 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
-  "entry": [
-    "src/index.ts",
-    "src/services/graphql/index.ts",
-    "src/graphql/resolvers/index.ts",
-    "src/graphql/schemas/index.ts"
-  ],
   "project": ["src/**/*.ts"],
-  "ignore": [
-    "src/generated/**",
-    "src/types/*.d.ts"
-  ],
+  "ignore": ["src/generated/**", "src/types/*.d.ts"],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true
   },
+  "ignoreDependencies": ["@types/mongoose", "babel-jest", "dotenv-cli", "ts-jest"],
   "jest": {
     "config": ["jest.unit.config.js", "jest.integration.config.js"],
     "entry": ["jest.unit.setup.js", "jest.integration.setup.js"]
@@ -22,6 +14,5 @@
   "eslint": true,
   "babel": true,
   "prettier": true,
-  "typescript": true,
-  "ignoreBinaries": ["ts-node-dev"]
+  "typescript": true
 }

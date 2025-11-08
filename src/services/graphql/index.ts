@@ -4,7 +4,8 @@ import CONFIG from '../../config';
 import { ExpressReqContext } from '../../types/graphqlContext';
 
 import typeDefs from '../../graphql/schemas';
-import resolvers from '../../graphql/resolvers';
+import resolversImport from '../../graphql/resolvers';
+import { Resolvers } from '../../generated/graphql';
 import { permissions } from '../../express/auth/permissions';
 import DataLoader from 'dataloader';
 import { votedLoader } from '../../graphql/resolvers/dataLoaders';
@@ -39,6 +40,8 @@ import {
   DeputyModel,
 } from '@democracy-deutschland/democracy-common';
 import { Types } from 'mongoose';
+
+const resolvers: Resolvers = resolversImport;
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
