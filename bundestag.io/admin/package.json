@@ -22,7 +22,7 @@
     "next": "^15.2.3",
     "next-auth": "^4.24.7",
     "pino": "^9.3.2",
-    "pino-pretty": "^13.0.0",
+    "pino-pretty": "^13.1.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "styled-components": "^6.1.11"
