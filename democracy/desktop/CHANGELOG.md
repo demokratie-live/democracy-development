@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.0](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.1.1...democracy-app.de@v1.2.0) (2025-11-15)
+
+
+* **garden:** improve garden configs ([28be330](https://github.com/demokratie-live/democracy-development/commit/28be330cd3496a720f51248d79e768639ec3d1ac))
+
+
+### 🚀 Feature
+
+* Implement JSON fetching and mapping for conference week details ([4d24d7e](https://github.com/demokratie-live/democracy-development/commit/4d24d7e5c05591cd6b2ca8fed5c26af35ccc6b2f))
+
 ## [1.1.1](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.1.0...democracy-app.de@v1.1.1) (2025-09-09)
 
 ## [1.1.0](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.0.17...democracy-app.de@v1.1.0) (2025-06-27)
