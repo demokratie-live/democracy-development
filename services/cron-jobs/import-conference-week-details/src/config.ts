@@ -102,9 +102,6 @@ const buildConfig = (env: RawEnv): AppConfig =>
 
 export const config: AppConfig = deepFreeze(buildConfig(rawEnv));
 
-// Convenience accessor (pure) – mainly useful for tests when mocking
-export const getConfig = (): AppConfig => config;
-
 // For advanced usage one could export a function to rebuild config from custom env
 export const buildConfigFrom = (partial: Partial<RawEnv>): AppConfig => buildConfig({ ...rawEnv, ...partial });
 

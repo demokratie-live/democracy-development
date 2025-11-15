@@ -1,0 +1,10 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "project": ["src/**/*.ts"],
+  "ignore": ["build/**", "storage/**"],
+  "ignoreDependencies": ["@crawlee/cheerio", "@democracy-deutschland/bundestagio-common", "tsup-config"],
+  "ignoreExportsUsedInFile": true,
+  "vitest": {
+    "entry": ["**/*.test.ts", "tests/**/*.ts"]
+  }
+}
