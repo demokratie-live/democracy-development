@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.6](https://github.com/demokratie-live/democracy-development/compare/non-named-votes-ai@v1.1.5...non-named-votes-ai@v1.1.6) (2025-11-15)
+
 ## [1.1.5](https://github.com/demokratie-live/democracy-development/compare/non-named-votes-ai@v1.1.4...non-named-votes-ai@v1.1.5) (2025-10-28)
 
 ## [1.1.4](https://github.com/demokratie-live/democracy-development/compare/non-named-votes-ai@v1.1.3...non-named-votes-ai@v1.1.4) (2025-09-09)
