@@ -1,5 +1,4 @@
 import { log } from 'crawlee';
-import url from 'url';
 import { ProcedureModel } from '@democracy-deutschland/bundestagio-common';
 import {
   PROCEDURE as PROCEDURE_DEFINITIONS,
@@ -63,9 +62,17 @@ export function isVote(
  */
 export async function getProcedureIds(documents: string[]): Promise<string[]> {
   log.info('getProcedureIds', { documents });
-  const docs = documents.map((document: string) => {
-    return `${url.parse(document).path?.split('/').slice(-1)[0]}$`;
-  });
+  const docs = documents
+    .map((document: string) => {
+      try {
+        const pathname = new URL(document).pathname;
+        const lastSegment = pathname.split('/').filter(Boolean).slice(-1)[0];
+        return lastSegment ? `${lastSegment}$` : null;
+      } catch {
+        return null;
+      }
+    })
+    .filter((doc): doc is string => doc !== null);
   log.info('getProcedureIds', { docs });
 
   if (docs.length === 0) {

@@ -39,7 +39,7 @@ export interface AppConfig {
 // Defaults centralised here for easy visibility & single source of truth
 const DEFAULTS = Object.freeze({
   CONFERENCE_YEAR: 2025,
-  CONFERENCE_WEEK: 46, // Updated to current week (November 2025)
+  CONFERENCE_WEEK: 46,
   CONFERENCE_LIMIT: 10,
   CRAWL_MAX_REQUESTS_PER_CRAWL: 10,
   DB_URL: 'mongodb://localhost:27017/bundestagio',
