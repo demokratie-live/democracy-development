@@ -1,6 +1,3 @@
-import { CheerioAPI } from 'cheerio';
-import { CheerioCrawlerOptions, CrawlerAddRequestsResult } from 'crawlee';
-
 // Conference week detail session information
 export interface ConferenceWeekDetailSession {
   date: string | null;
@@ -44,20 +41,6 @@ export interface ConferenceWeekDetail {
     week: number;
   };
   sessions: ConferenceWeekDetailSession[];
-}
-
-// Configuration options for the crawler
-export interface CrawlerConfig extends CheerioCrawlerOptions {
-  baseUrl: string;
-}
-
-// Handler context for request processing
-export interface HandlerContext {
-  $: CheerioAPI;
-  request: { url: string };
-  crawler?: {
-    addRequests: (requests: { url: string }[]) => Promise<CrawlerAddRequestsResult>;
-  };
 }
 
 // Navigation data from meta slider
