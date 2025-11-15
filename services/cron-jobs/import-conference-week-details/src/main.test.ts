@@ -6,19 +6,18 @@ import { crawlConferenceWeeks } from './crawler';
 vi.mock('./crawler', () => ({
   crawlConferenceWeeks: vi.fn().mockResolvedValue([
     {
-      url: '/apps/plenar/plenar/conferenceweekDetail.form?year=2024&week=20',
-      year: 2024,
-      week: 20,
+      id: '2024-20',
+      thisYear: 2024,
+      thisWeek: 20,
       sessions: [],
     },
     {
-      url: '/apps/plenar/plenar/conferenceweekDetail.form?year=2024&week=21',
-      year: 2024,
-      week: 21,
+      id: '2024-21',
+      thisYear: 2024,
+      thisWeek: 21,
       sessions: [],
     },
   ]),
-  createCrawler: vi.fn(),
 }));
 
 // Mock Crawlee modules
@@ -57,9 +56,9 @@ describe('Crawler Main Function', () => {
 
     // Check that we got the expected results
     expect(results).toHaveLength(2);
-    expect(results[0].year).toBe(2024);
-    expect(results[0].week).toBe(20);
-    expect(results[1].year).toBe(2024);
-    expect(results[1].week).toBe(21);
+    expect(results[0].thisYear).toBe(2024);
+    expect(results[0].thisWeek).toBe(20);
+    expect(results[1].thisYear).toBe(2024);
+    expect(results[1].thisWeek).toBe(21);
   });
 });

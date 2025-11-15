@@ -1,76 +1,52 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createCrawler, crawlConferenceWeeks } from './crawler';
-import { resetForTests } from './routes';
-import { RequestQueue } from 'crawlee';
+import { crawlConferenceWeeks } from './crawler';
 
-// Mock crawlee
-vi.mock('crawlee', async () => {
-  // Use importActual to keep most of the functionality
-  const actual = await vi.importActual('crawlee');
-
-  return {
-    ...actual,
-    // Override CheerioCrawler with a mock implementation
-    CheerioCrawler: vi.fn().mockImplementation(() => ({
-      run: vi.fn().mockResolvedValue({
-        requestsFinished: 5,
-        requestsFailed: 0,
-        retryHistogram: [0, 0, 0],
-      }),
-    })),
-    RequestQueue: {
-      open: vi.fn().mockResolvedValue({
-        addRequest: vi.fn().mockResolvedValue({}),
-        addRequests: vi.fn().mockResolvedValue({}),
-      }),
-    },
-  };
-});
-
-// Mock router results
-vi.mock('./routes.js', async () => {
-  const actual = await vi.importActual('./routes.js');
-
-  // Mock crawl results for testing
-  const mockResults = [
+// Mock the JSON fetcher
+vi.mock('./services/json-fetcher', () => ({
+  fetchConferenceWeeks: vi.fn().mockResolvedValue([
     {
-      url: '/apps/plenar/plenar/conferenceweekDetail.form?year=2024&week=20',
+      data: {
+        next: null,
+        previous: null,
+        conferences: [],
+      },
       year: 2024,
       week: 20,
-      sessions: [],
     },
     {
-      url: '/apps/plenar/plenar/conferenceweekDetail.form?year=2024&week=21',
+      data: {
+        next: null,
+        previous: null,
+        conferences: [],
+      },
       year: 2024,
       week: 21,
-      sessions: [],
     },
-  ];
+  ]),
+}));
 
-  return {
-    ...actual,
-    getResults: vi.fn().mockReturnValue(mockResults),
-    resetForTests: vi.fn(),
-  };
-});
+// Mock the JSON-to-session mapper
+vi.mock('./services/json-to-session-mapper', () => ({
+  mapJSONToConferenceWeekDetail: vi.fn().mockImplementation((_data, year, week) => ({
+    id: `${year}-${week}`,
+    thisYear: year,
+    thisWeek: week,
+    sessions: [],
+  })),
+}));
+
+// Mock vote detection
+vi.mock('./utils/vote-detection', () => ({
+  getProcedureIds: vi.fn().mockResolvedValue([]),
+}));
 
 describe('Crawler', () => {
   beforeEach(() => {
-    // Reset any state between tests
-    resetForTests();
-  });
-
-  afterEach(() => {
-    // Clear all mocks after each test
     vi.clearAllMocks();
   });
 
-  it('should create a properly configured crawler', async () => {
-    const crawler = await createCrawler();
-    expect(crawler).toBeDefined();
-
-    // Verify that the crawler was created with the right configuration
-    expect(vi.mocked(RequestQueue.open)).toHaveBeenCalled();
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   it('should return conference week details from crawlConferenceWeeks', async () => {
@@ -78,9 +54,9 @@ describe('Crawler', () => {
 
     // Check that we got the expected results
     expect(results).toHaveLength(2);
-    expect(results[0].year).toBe(2024);
-    expect(results[0].week).toBe(20);
-    expect(results[1].year).toBe(2024);
-    expect(results[1].week).toBe(21);
+    expect(results[0].thisYear).toBe(2024);
+    expect(results[0].thisWeek).toBe(20);
+    expect(results[1].thisYear).toBe(2024);
+    expect(results[1].thisWeek).toBe(21);
   });
 });

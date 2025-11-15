@@ -29,6 +29,10 @@
 
 Dieses Dokument beschreibt den vollständigen Datenfluss für die Ermittlung und Speicherung des `voteDate` Feldes in Procedures.
 
+**Datenquelle:** Bundestag JSON API  
+**Endpoint:** `https://www.bundestag.de/apps/plenar/plenar/conferenceWeekJSON?year=YYYY&week=WW`  
+**Methode:** REST API (GET Request)
+
 ## Problemstellung
 
 Procedures aus der DIP API haben initial **kein voteDate**. Dieses Datum ist jedoch essentiell für:
@@ -59,23 +63,24 @@ Der Conference Week Crawler crawlt **nur zukünftige Wochen** ab der konfigurier
 
 ```mermaid
 flowchart TD
-    A[bundestag.de/tagesordnung] -->|1. Crawling| B[Conference Week Scraper]
-    B -->|HTML Parsing| C[Extract Sessions & TOPs]
-    C -->|Text Analysis| D{isVote Check}
-    D -->|"Erste Beratung"| E[isVote: false]
-    D -->|"Zweite/Dritte Beratung"| F[isVote: true]
-    D -->|"Beschlussempfehlung"| F
-    E -->|Save| G[(conferenceweekdetails)]
-    F -->|Save| G
-    G -->|Read all weeks| H[updateProcedureVoteDates]
-    H -->|Filter isVote=true| I[Collect procedureIds]
-    I -->|Batch Update| J[(procedures)]
-    J -->|Sync| K[Frontend Display]
+    A[Bundestag JSON API] -->|1. Fetch| B[json-fetcher.ts]
+    B -->|JSON Response| C[json-to-session-mapper.ts]
+    C -->|Extract Sessions & TOPs| D[Parse Topic/Status HTML]
+    D -->|Text Analysis| E{isVote Check}
+    E -->|"Erste Beratung"| F[isVote: false]
+    E -->|"Zweite/Dritte Beratung"| G[isVote: true]
+    E -->|"Beschlussempfehlung"| G
+    F -->|Save| H[(conferenceweekdetails)]
+    G -->|Save| H
+    H -->|Read last 5 weeks| I[updateProcedureVoteDates]
+    I -->|Filter isVote=true| J[Collect procedureIds]
+    J -->|Batch Update| K[(procedures)]
+    K -->|Sync| L[Frontend Display]
 
-    style D fill:#ff999999
-    style F fill:#99ff9999
-    style E fill:#ffcccc99
-    style J fill:#99ccff99
+    style E fill:#ff999999
+    style G fill:#99ff9999
+    style F fill:#ffcccc99
+    style K fill:#99ccff99
 ```
 
 ---
@@ -84,17 +89,21 @@ flowchart TD
 
 ```mermaid
 graph LR
-    A[index.ts] -->|calls| B[isVote Function]
-    A -->|saves to| C[ConferenceWeekDetailModel]
-    A -->|calls| D[updateProcedureVoteDates]
-    D -->|queries| C
-    D -->|updates| E[ProcedureModel]
-    B -->|uses| F[CONFERENCEWEEKDETAIL_DEFINITIONS]
-    F -->|Regex Patterns| B
+    A[index.ts] -->|calls| B[main.ts]
+    B -->|calls| C[crawler.ts]
+    C -->|fetches| D[json-fetcher.ts]
+    C -->|maps| E[json-to-session-mapper.ts]
+    E -->|uses| F[isVote Function]
+    A -->|saves to| G[ConferenceWeekDetailModel]
+    A -->|calls| H[updateProcedureVoteDates]
+    H -->|queries| G
+    H -->|updates| I[ProcedureModel]
+    F -->|uses| J[CONFERENCEWEEKDETAIL_DEFINITIONS]
+    J -->|Regex Patterns| F
 
     style A fill:#e1f5ff99
-    style B fill:#fff4e199
-    style D fill:#e8f5e999
+    style F fill:#fff4e199
+    style H fill:#e8f5e999
 ```
 
 ---
@@ -103,17 +112,22 @@ graph LR
 
 ### Phase 1: Conference Week Crawling
 
-**Datei:** [`src/index.ts`](../src/index.ts)
+**Dateien:**
 
-**Funktion:** `isVote()`
+- [`src/crawler.ts`](../src/crawler.ts) - Orchestriert den Fetch-Prozess
+- [`src/services/json-fetcher.ts`](../src/services/json-fetcher.ts) - Ruft JSON API auf
+- [`src/services/json-to-session-mapper.ts`](../src/services/json-to-session-mapper.ts) - Mappt JSON zu DB-Schema
 
-Der Crawler extrahiert aus der HTML-Struktur:
+**Funktion:** `isVote()` in [`src/utils/vote-detection.ts`](../src/utils/vote-detection.ts)
 
-1. **Sessions** (Sitzungstage mit Datum)
-2. **TOPs** (Tagesordnungspunkte)
-3. **Topics** (Themen innerhalb der TOPs)
+Der Prozess läuft wie folgt:
 
-Für jedes Topic wird die `isVote()` Funktion aufgerufen, die den **Text analysiert**:
+1. **Fetch:** JSON-Daten von `/apps/plenar/plenar/conferenceWeekJSON?year=YYYY&week=WW` abrufen
+2. **Parse:** Extrahiere aus JSON:
+   - **Conferences** → **Sessions** (Sitzungstage mit Datum)
+   - **Rows** → **TOPs** (Tagesordnungspunkte)
+   - **Topic/Status detail** (HTML-Strings) werden mit `html-detail-parser.ts` geparst
+3. **Analyze:** Für jedes Topic wird die `isVote()` Funktion aufgerufen, die den **Text analysiert**:
 
 ```mermaid
 flowchart TD
@@ -155,12 +169,12 @@ Verwendete Pattern-Konstanten:
 **isVote-Funktion Signatur:**
 
 ```typescript
-const isVote = (
-  topic: string,
-  heading: string | null | undefined,
-  documents: string[],
-  status: StatusItem[] | null | undefined,
-)
+export function isVote(
+  topic: string[], // Array of topic text lines
+  heading: string | null | undefined, // First line (heading)
+  _documents: string[], // Document URLs (not used in logic)
+  status: string[] | null | undefined, // Array of status text lines
+): boolean | null;
 ```
 
 **Komplexe Logik für "Beratung des Antrags":**
@@ -182,13 +196,23 @@ Nach dem Speichern der Conference Weeks wird automatisch `updateProcedureVoteDat
 
 ```mermaid
 sequenceDiagram
-    participant CW as Conference Week Crawler
-    participant UVD as updateProcedureVoteDates
+    participant JF as json-fetcher.ts
+    participant CR as crawler.ts
+    participant VD as vote-detection.ts
+    participant IX as index.ts
     participant DB as MongoDB (conferenceweekdetails)
+    participant UVD as updateProcedureVoteDates
     participant PM as ProcedureModel
 
-    CW->>DB: Save conference weeks with isVote flags
-    CW->>UVD: Call updateProcedureVoteDates()
+    JF->>JF: Fetch JSON from API
+    JF->>CR: Return BundestagJSONResponse
+    CR->>CR: Map JSON to ConferenceWeekDetail
+    CR->>VD: Call getProcedureIds(documents)
+    VD->>PM: Query procedures by documents
+    VD->>CR: Return procedureIds[]
+    CR->>IX: Return conference weeks
+    IX->>DB: Save conference weeks with isVote flags
+    IX->>UVD: Call updateProcedureVoteDates()
     UVD->>DB: Query last 5 weeks with sessions
     loop For each week → session → topic
         UVD->>UVD: Filter topics where isVote=true
@@ -196,8 +220,8 @@ sequenceDiagram
         UVD->>UVD: Deduplicate IDs per session
         UVD->>PM: Batch update voteDate for session
     end
-    UVD->>CW: Return { modifiedCount }
-    CW->>CW: Log success
+    UVD->>IX: Return { modifiedCount }
+    IX->>IX: Log success
 ```
 
 **Algorithmus:**
@@ -305,16 +329,16 @@ if (topic.isVote && topic.procedureIds && Array.isArray(topic.procedureIds))
 
 **Mögliche Ursachen:**
 
-1. **Conference Week nicht gecrawlt**
+1. **Conference Week nicht gefetcht**
 
    - Prüfe: `db.conferenceweekdetails.findOne({ thisYear: 2025, thisWeek: 45 })`
-   - Lösung: Crawler mit `CONFERENCE_WEEK=45` ausführen
+   - Lösung: Importer mit `CONFERENCE_YEAR=2025 CONFERENCE_WEEK=45` ausführen
 
 2. **isVote Flag ist false**
 
    - Prüfe: `db.conferenceweekdetails.findOne(...).sessions[0].tops[0].topic[0].isVote`
    - Ursache: Text enthält nicht "Zweite/Dritte Beratung"
-   - Lösung: Regex-Pattern erweitern oder Text-Extraktion prüfen
+   - Lösung: Regex-Pattern in `@democracy-deutschland/bundestag.io-definitions` prüfen oder HTML-Detail-Parser verbessern
 
 3. **procedureIds fehlen**
 
@@ -351,5 +375,10 @@ if (topic.isVote && topic.procedureIds && Array.isArray(topic.procedureIds))
 
 ## Weitere Dokumentation
 
-- [src/index.ts](../src/index.ts) - Haupt-Implementierung
+- [src/index.ts](../src/index.ts) - Entry Point mit MongoDB Integration
+- [src/main.ts](../src/main.ts) - Crawler Orchestrierung
+- [src/crawler.ts](../src/crawler.ts) - Core Crawler Logik
+- [src/services/json-fetcher.ts](../src/services/json-fetcher.ts) - JSON API Client
+- [src/services/json-to-session-mapper.ts](../src/services/json-to-session-mapper.ts) - JSON zu DB Schema Mapping
+- [src/utils/vote-detection.ts](../src/utils/vote-detection.ts) - isVote() und getProcedureIds() Funktionen
 - [src/utils/update-vote-dates.ts](../src/utils/update-vote-dates.ts) - VoteDate Update Utility

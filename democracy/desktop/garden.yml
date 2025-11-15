@@ -54,6 +54,6 @@ spec:
                   image: ${actions.build.democracy-desktop.outputs.deploymentImageId}
                   env:
                     - name: APP_HOST
-                      value: http://democracy-api
+                      value: http://democracy-api.local.democracy-app.de
                     - name: APP_API_URL
-                      value: http://democracy-api
+                      value: http://democracy-api.local.democracy-app.de

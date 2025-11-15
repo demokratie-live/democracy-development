@@ -1,10 +1,21 @@
-import { CheerioCrawler, RequestQueue } from 'crawlee';
-import { CrawlerConfig, ConferenceWeekDetail } from './types';
-import { router } from './routes';
+import { log } from 'crawlee';
 import { config } from './config.js';
+import type { IConferenceWeekDetail } from '@democracy-deutschland/bundestagio-common';
+import { fetchConferenceWeeks, type FetchConferenceWeekOptions } from './services/json-fetcher';
+import { mapJSONToConferenceWeekDetail } from './services/json-to-session-mapper';
+import { getProcedureIds } from './utils/vote-detection';
+
+export interface CrawlerConfig {
+  baseUrl?: string;
+  maxConcurrency?: number;
+  retryOnBlocked?: boolean;
+  maxRequestRetries?: number;
+  maxRequestsPerMinute?: number;
+  maxRequestsPerCrawl?: number;
+}
 
 export const DEFAULT_CONFIG: CrawlerConfig = {
-  baseUrl: 'https://www.bundestag.de/tagesordnung',
+  baseUrl: 'https://www.bundestag.de/apps/plenar/plenar',
   maxConcurrency: 1,
   retryOnBlocked: true,
   maxRequestRetries: 10,
@@ -13,51 +24,60 @@ export const DEFAULT_CONFIG: CrawlerConfig = {
 };
 
 /**
- * Creates a configured CheerioCrawler instance
- * This function allows reusing the same crawler configuration in both
- * development mode and test scripts
- */
-export const createCrawler = async (config: Partial<CrawlerConfig> = {}) => {
-  const fullConfig = { ...DEFAULT_CONFIG, ...config };
-
-  // Create a request queue that will automatically persist
-  const requestQueue = await RequestQueue.open();
-
-  // Add the starting URL to the queue
-  await requestQueue.addRequest({
-    url: fullConfig.baseUrl,
-    userData: {
-      label: 'START',
-    },
-  });
-
-  // Create the crawler with router as request handler
-  const crawler = new CheerioCrawler({
-    requestQueue,
-    // Use limited concurrency to avoid rate limiting
-    maxConcurrency: 2,
-    // Set a reasonable request timeout
-    requestHandlerTimeoutSecs: 60,
-    // Use a reasonable limit for requests per crawl
-    maxRequestsPerCrawl: fullConfig.maxRequestsPerCrawl,
-    // Define a request handler that routes requests
-    requestHandler: router,
-  });
-
-  return crawler;
-};
-
-/**
- * Main crawler function to crawl conference weeks
- * This is the function that should be called from main.ts or test scripts
+ * Fetches and processes conference weeks from Bundestag JSON API
+ * Replaces the old CheerioCrawler-based implementation
  */
 export const crawlConferenceWeeks = async (
-  config: Partial<CrawlerConfig> = {},
-): Promise<readonly ConferenceWeekDetail[]> => {
-  const crawler = await createCrawler(config);
-  await crawler.run();
+  crawlerConfig: Partial<CrawlerConfig> = {},
+): Promise<Partial<IConferenceWeekDetail>[]> => {
+  const fullConfig = { ...DEFAULT_CONFIG, ...crawlerConfig };
+  const results: Partial<IConferenceWeekDetail>[] = [];
 
-  // Import from routes.js to get the results
-  const { getResults } = await import('./routes.js');
-  return getResults();
+  // Determine starting point (current year/week or configured)
+  const fetchOptions: FetchConferenceWeekOptions = {
+    year: config.conference.year,
+    week: config.conference.week,
+  };
+
+  log.info('Starting conference week import', {
+    startYear: fetchOptions.year,
+    startWeek: fetchOptions.week,
+    maxRequests: fullConfig.maxRequestsPerCrawl,
+  });
+
+  try {
+    // Fetch multiple weeks from JSON API
+    const fetchedWeeks = await fetchConferenceWeeks(fetchOptions, fullConfig.maxRequestsPerCrawl || 10);
+
+    // Process each fetched week
+    for (const { data, year, week } of fetchedWeeks) {
+      log.info(`Processing conference week ${year}-${week}`);
+
+      // Map JSON to database schema
+      const conferenceWeek = mapJSONToConferenceWeekDetail(data, year, week);
+
+      // Populate procedureIds for topics with documents
+      // This requires async database lookup
+      for (const session of conferenceWeek.sessions || []) {
+        for (const top of session.tops) {
+          for (const topic of top.topic) {
+            if (topic.documents.length > 0) {
+              topic.procedureIds = await getProcedureIds(topic.documents);
+            }
+          }
+        }
+      }
+
+      results.push(conferenceWeek);
+    }
+
+    log.info(`Successfully processed ${results.length} conference weeks`);
+  } catch (error) {
+    log.error('Error during conference week import', {
+      error: error instanceof Error ? error.message : String(error),
+    });
+    throw error;
+  }
+
+  return results;
 };
