@@ -51,12 +51,6 @@ Daher haben wir eine Roadmap entwickelt, was wir wann erreichen möchten: [Roadm
 
 ## Entwicklung & Werkzeuge
 
-[MeisterTask](https://www.meistertask.com/app/project/p7zXoSfq/demokratie)
-
-[Analysetool Dateistruktur](https://veniversum.me/git-visualizer/?owner=demokratie-live&repo=demokratie-app)
-
-[Analysetool Commits](http://ghv.artzub.com/#repo=demokratie-app&climit=10000&user=demokratie-live)
-
 [Malwerkzeug zur Planung](https://www.draw.io/)
 
 ## Open Source
@@ -149,11 +143,35 @@ docker buildx build \
 ```
 
 ## Contributing
+# Running the Dev Environment
+
+First clone this repository
+
+## Tilt (Kuberneetes)
+
+### Prerequirements
+
+- local kubernetes cluster
+  - [Docker Desktop](https://www.docker.com/products/docker-desktop/) - _the easiest way_
+  - [colima](https://github.com/abiosoft/colima) - _for Apple Silicon (M1)_
+  - or your favourite
+- [local docker registry](https://docs.docker.com/registry/deploying/#native-basic-auth)
+- [tilt.dev](https://docs.tilt.dev/install.html)
+
+### Start
+
+`tilt up`
+
+### Clean Up
+
+`tilt down`
+
+# Contributing
 
 Anyone and everyone is welcome to [contribute](https://github.com/demokratie-live/democracy-development/blob/master/CONTRIBUTE.md). Start by checking out the list of
 [open issues](https://github.com/demokratie-live/democracy-development/issues).
 
-## License
+# License
 
 Copyright © 2017-present DEMOCRACY Deutschland e.V.. This source code is licensed under the Apache 2.0 license found in the
 [LICENSE](https://github.com/demokratie-live/democracy-development/blob/master/LICENSE) file.
