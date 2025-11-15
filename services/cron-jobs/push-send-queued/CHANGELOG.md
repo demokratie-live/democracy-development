@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.30](https://github.com/demokratie-live/democracy-development/compare/push-send-queued@v0.1.29...push-send-queued@v0.1.30) (2025-11-15)
+
 ## [0.1.29](https://github.com/demokratie-live/democracy-development/compare/push-send-queued@v0.1.28...push-send-queued@v0.1.29) (2025-09-09)
 
 
