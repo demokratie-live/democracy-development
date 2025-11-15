@@ -1,6 +1,6 @@
 {
   "name": "import-conference-week-details",
-  "version": "0.1.39",
+  "version": "0.1.40",
   "description": "Import conference week details",
   "author": "Manuel Ruck <m.ruck@democracy-deutschland.de>",
   "license": "Apache-2.0",

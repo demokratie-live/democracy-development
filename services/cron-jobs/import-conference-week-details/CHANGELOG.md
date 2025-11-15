@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.40](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.39...import-conference-week-details@v0.1.40) (2025-11-15)
+
+
+* Update conference week constant and improve URL parsing in vote detection ([083fd56](https://github.com/demokratie-live/democracy-development/commit/083fd56c85c07c46f62f40b899ae625186e1619c))
+* update linting and remove unused code ([af5bb7e](https://github.com/demokratie-live/democracy-development/commit/af5bb7eb08436eed8db30d0ade1be70875b87c50))
+
+
+### 🚀 Feature
+
+* Implement JSON fetching and mapping for conference week details ([4d24d7e](https://github.com/demokratie-live/democracy-development/commit/4d24d7e5c05591cd6b2ca8fed5c26af35ccc6b2f))
+
 ## [0.1.39](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.38...import-conference-week-details@v0.1.39) (2025-10-28)
 
 
