@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.9](https://github.com/demokratie-live/democracy-development/compare/cleanup-push-queue@v1.0.8...cleanup-push-queue@v1.0.9) (2025-11-15)
+
 ## [1.0.8](https://github.com/demokratie-live/democracy-development/compare/cleanup-push-queue@v1.0.7...cleanup-push-queue@v1.0.8) (2025-09-09)
 
 
