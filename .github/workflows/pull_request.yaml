@@ -54,3 +54,253 @@ jobs:
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  update-infrastructure:
+    runs-on: ubuntu-latest
+    needs: [analyse-changed-services]
+    if: ${{ needs.analyse-changed-services.outputs.CHANGED_PACKAGES != '[]' }}
+    steps:
+      - name: Checkout Infrastructure Repository
+        uses: actions/checkout@v4
+        with:
+          repository: demokratie-live/infrastructure
+          token: ${{ secrets.ACTION_INFRASTRUCTURE_PR }}
+          path: infrastructure
+
+      - run: ls -l
+        working-directory: ./infrastructure
+
+      - name: Setup Git Config
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Install kustomize
+        run: |
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+          sudo mv kustomize /usr/local/bin/
+          kustomize version
+
+      - name: Generate Branch Name
+        id: branch
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          BRANCH_NAME="update-images-pr-${PR_NUMBER}"
+          echo "name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Create Branch
+        working-directory: ./infrastructure
+        run: |
+          git checkout -b ${{ steps.branch.outputs.name }}
+
+      - name: Update Kubernetes Manifests
+        working-directory: ./infrastructure
+        run: |
+          PACKAGES=$(echo '${{ needs.analyse-changed-services.outputs.CHANGED_PACKAGES }}' | jq -r '.[]')
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          SHA_SHORT=$(echo ${{ github.sha }} | cut -c1-7)
+          KUSTOMIZE_DIR="kustomize/base/main"
+
+          echo "Changed packages: $PACKAGES"
+
+          if [ ! -d "$KUSTOMIZE_DIR" ]; then
+            echo "Error: Kustomize directory $KUSTOMIZE_DIR not found"
+            exit 1
+          fi
+
+          cd $KUSTOMIZE_DIR
+
+          CHANGES_MADE=false
+
+          # Update all changed packages at once using kustomize edit set image
+          if [ -n "$PACKAGES" ]; then
+            echo "Updating image tags for all changed packages"
+            
+            for PACKAGE in $(echo $PACKAGES | tr '\n' ' '); do
+              # Use democracy/$PACKAGE as the image name
+              IMAGE_NAME="democracy/$PACKAGE"
+              NEW_TAG="pr-$PR_NUMBER-$SHA_SHORT"
+              
+              echo "Running: kustomize edit set image $IMAGE_NAME=$IMAGE_NAME:$NEW_TAG"
+              
+              # Update the image using kustomize
+              if kustomize edit set image "$IMAGE_NAME=$IMAGE_NAME:$NEW_TAG"; then
+                CHANGES_MADE=true
+                echo "Updated image tag for $IMAGE_NAME to $NEW_TAG"
+              else
+                echo "Failed to update image tag for $IMAGE_NAME"
+              fi
+            done
+          fi
+
+          echo "CHANGES_MADE=$CHANGES_MADE" >> $GITHUB_ENV
+
+      - name: Commit and Push Changes
+        id: commit
+        working-directory: ./infrastructure
+        if: env.CHANGES_MADE == 'true'
+        run: |
+          git add .
+          git status
+
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            echo "committed=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Commit changes
+          git commit -m "Update image tags for PR #${{ github.event.pull_request.number }}"
+
+          # Fetch and handle remote branch if it exists
+          if git ls-remote --heads origin ${{ steps.branch.outputs.name }} | grep -q "${{ steps.branch.outputs.name }}"; then
+            echo "Remote branch exists, fetching and rebasing..."
+            git fetch origin ${{ steps.branch.outputs.name }}
+            git rebase origin/${{ steps.branch.outputs.name }}
+            
+            # If rebase failed due to conflicts, use force push
+            if [ $? -ne 0 ]; then
+              echo "Rebase failed, using force push instead"
+              git rebase --abort
+              git pull --rebase=false origin ${{ steps.branch.outputs.name }}
+              git reset --soft HEAD~1
+              git add .
+              git commit -m "Update image tags for PR #${{ github.event.pull_request.number }}"
+              git push --force-with-lease origin ${{ steps.branch.outputs.name }}
+            else
+              git push origin ${{ steps.branch.outputs.name }}
+            fi
+          else
+            echo "Creating new remote branch..."
+            git push --set-upstream origin ${{ steps.branch.outputs.name }}
+          fi
+
+          echo "committed=true" >> $GITHUB_OUTPUT
+
+      - run: git status
+        working-directory: ./infrastructure
+
+      - name: Create or Update Pull Request
+        if: env.CHANGES_MADE == 'true' && steps.commit.outputs.committed == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.ACTION_INFRASTRUCTURE_PR }}
+          script: |
+            const core = require('@actions/core');
+
+            // First, check if there's an existing PR for this branch
+            const branchName = '${{ steps.branch.outputs.name }}';
+            const prTitle = `Update image tags for PR #${{ github.event.pull_request.number }}`;
+            const prBody = `This PR updates Kubernetes manifests with new image tags for services changed in PR #${{ github.event.pull_request.number }}.
+
+            Changes:
+            ${{ needs.analyse-changed-services.outputs.CHANGED_PACKAGES }}
+
+            Original PR: https://github.com/demokratie-live/democracy-development/pull/${{ github.event.pull_request.number }}`;
+
+            try {
+              // Check for existing PRs from this branch to main
+              console.log(`Checking for existing PRs from branch ${branchName} to main...`);
+              const existingPrs = await github.rest.pulls.list({
+                owner: 'demokratie-live',
+                repo: 'infrastructure',
+                head: `demokratie-live:${branchName}`,
+                base: 'main',
+                state: 'open'
+              });
+              
+              // Also check if there are any commits between branches
+              console.log('Checking if branches have diverged...');
+              const comparison = await github.rest.repos.compareCommits({
+                owner: 'demokratie-live',
+                repo: 'infrastructure',
+                base: 'main',
+                head: branchName
+              });
+              
+              if (comparison.data.files && comparison.data.files.length === 0) {
+                console.log('No changes detected between branches. Skipping PR creation.');
+                return;
+              }
+
+              if (existingPrs.data.length === 0) {
+                console.log('No existing PR found. Creating a new one...');
+                
+                try {
+                  const newPr = await github.rest.pulls.create({
+                    owner: 'demokratie-live',
+                    repo: 'infrastructure',
+                    title: prTitle,
+                    body: prBody,
+                    head: branchName,
+                    base: 'main',
+                    maintainer_can_modify: true
+                  });
+                  
+                  console.log(`PR created: ${newPr.data.html_url} (PR #${newPr.data.number})`);
+                  
+                  // Add labels to the new PR
+                  await github.rest.issues.addLabels({
+                    owner: 'demokratie-live',
+                    repo: 'infrastructure',
+                    issue_number: newPr.data.number,
+                    labels: ['automated-pr', 'infrastructure-update']
+                  });
+                  
+                  console.log('Labels added to the PR');
+                } catch (createError) {
+                  console.error('Error creating PR:', createError);
+                  if (createError.message.includes('No commits between')) {
+                    console.log('No changes to commit - branches are identical');
+                  } else {
+                    core.setFailed(`Failed to create PR: ${createError.message}`);
+                  }
+                }
+              } else {
+                // Update the existing PR if needed
+                const pr = existingPrs.data[0];
+                console.log(`Existing PR found: ${pr.html_url} (PR #${pr.number})`);
+                
+                // Update the PR title and body if needed
+                if (pr.title !== prTitle || pr.body !== prBody) {
+                  await github.rest.pulls.update({
+                    owner: 'demokratie-live',
+                    repo: 'infrastructure',
+                    pull_number: pr.number,
+                    title: prTitle,
+                    body: prBody
+                  });
+                  console.log('Updated PR title and description');
+                }
+                
+                // Make sure labels are applied
+                const currentLabels = await github.rest.issues.listLabelsOnIssue({
+                  owner: 'demokratie-live',
+                  repo: 'infrastructure',
+                  issue_number: pr.number
+                });
+                
+                const hasAutomatedLabel = currentLabels.data.some(label => label.name === 'automated-pr');
+                const hasInfraLabel = currentLabels.data.some(label => label.name === 'infrastructure-update');
+                
+                if (!hasAutomatedLabel || !hasInfraLabel) {
+                  const labelsToAdd = [];
+                  if (!hasAutomatedLabel) labelsToAdd.push('automated-pr');
+                  if (!hasInfraLabel) labelsToAdd.push('infrastructure-update');
+                  
+                  if (labelsToAdd.length > 0) {
+                    await github.rest.issues.addLabels({
+                      owner: 'demokratie-live',
+                      repo: 'infrastructure',
+                      issue_number: pr.number,
+                      labels: labelsToAdd
+                    });
+                    console.log(`Added missing labels: ${labelsToAdd.join(', ')}`);
+                  }
+                }
+              }
+            } catch (error) {
+              console.error('Unexpected error in PR creation/update process:', error);
+              core.setFailed(`Workflow failed: ${error.message}`);
+            }
