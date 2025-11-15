@@ -1,9 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { ConferenceWeekDetail } from './types';
 
-// Mock the main and routes modules
+// Mock the main module
 const mockMain = vi.fn();
-const mockGetResults = vi.fn();
 
 // Mock the Crawlee log module
 const mockLogInfo = vi.fn();
@@ -11,10 +10,6 @@ const mockLogError = vi.fn();
 
 vi.mock('./main.js', () => ({
   main: mockMain,
-}));
-
-vi.mock('./routes.js', () => ({
-  getResults: mockGetResults,
 }));
 
 vi.mock('crawlee', () => ({
@@ -46,13 +41,8 @@ describe('Main Process', () => {
       },
     ];
 
-    // Setup mocks
-    mockMain.mockResolvedValueOnce({
-      processedRequests: 10,
-      failedRequests: 0,
-      retryRequests: 0,
-    });
-    mockGetResults.mockReturnValueOnce(mockData);
+    // Setup mocks - main() now directly returns the results
+    mockMain.mockResolvedValueOnce(mockData);
 
     // Import the module under test after mocks are set up
     const { run } = await import('./index');
@@ -60,8 +50,7 @@ describe('Main Process', () => {
 
     // Verify expectations
     expect(mockMain).toHaveBeenCalled();
-    expect(mockGetResults).toHaveBeenCalled();
-    expect(mockLogInfo).toHaveBeenCalledWith('Fetched conference weeks:', mockData);
+    expect(mockLogInfo).toHaveBeenCalledWith('Fetched conference weeks:', { count: mockData.length });
     expect(mockLogError).not.toHaveBeenCalled();
     expect(mockProcessExit).not.toHaveBeenCalled();
   });
