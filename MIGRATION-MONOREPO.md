@@ -143,10 +143,10 @@ Dieses Dokument beschreibt die vollständige Migration des `democracy-api` Repos
   - [x] Alle bestehenden Services auf Node 20 Kompatibilität prüfen (alle 23 Services erfolgreich gebaut)
   - [x] CI/CD Workflows aktualisieren (uses: actions/setup-node@v4 mit node-version-file: '.node-version')
 
-- [ ] **pnpm Version angleichen**
-  - [ ] democracy-development/package.json: `packageManager: pnpm@10.19.0`
-  - [ ] pnpm-lock.yaml neu generieren mit pnpm@10.19.0
-  - [ ] CI/CD: pnpm/action-setup@v3 prüfen
+- [x] **pnpm Version angleichen**
+  - [x] democracy-development/package.json: `packageManager: pnpm@10.19.0`
+  - [x] pnpm-lock.yaml neu generieren mit pnpm@10.19.0
+  - [x] CI/CD: Workflows auf `corepack enable` migriert (build-and-push.yaml, release.yaml)
 
 - [ ] **Testing Framework entscheiden**
   - [ ] Entscheidung: Jest behalten vs. Vitest Migration
