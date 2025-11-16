@@ -8,6 +8,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "lib": ["ESNext"],
+    "types": ["vitest/globals"],
     // "typeRoots": ["./src/types", "./node_modules/@types"],
     "downlevelIteration": true,
     "allowUnreachableCode": false,

@@ -148,10 +148,15 @@ Dieses Dokument beschreibt die vollständige Migration des `democracy-api` Repos
   - [x] pnpm-lock.yaml neu generieren mit pnpm@10.19.0
   - [x] CI/CD: Workflows auf `corepack enable` migriert (build-and-push.yaml, release.yaml)
 
-- [ ] **Testing Framework entscheiden**
-  - [ ] Entscheidung: Jest behalten vs. Vitest Migration
-  - [ ] Falls Vitest: Migration-Plan für 3 Testsuites (8 Tests)
-  - [ ] Falls Jest: Ausnahme in Monorepo-Konventionen dokumentieren
+- [x] **Testing Framework entscheiden**
+  - [x] Entscheidung: Jest behalten vs. Vitest Migration → **Vitest gewählt**
+  - [x] Falls Vitest: Migration-Plan für 13 Testdateien (3 Unit-Tests, 9 Integration-Tests)
+  - [x] Vitest Migration durchgeführt:
+    - [x] Vitest Konfiguration erstellt (vitest.config.unit.ts, vitest.config.integration.ts)
+    - [x] package.json aktualisiert (Jest entfernt, Vitest hinzugefügt)
+    - [x] Unit-Tests migriert (validatePhone.test.ts, Activity.test.ts, ConferenceWeek.test.ts)
+    - [x] Integration-Tests kompatibel (keine Änderungen nötig dank globals: true)
+    - [x] Jest/Babel Konfigurationsdateien entfernt
 
 - [ ] **ESLint Migration planen**
   - [ ] democracy-api auf ESLint v9 Flat Config migrieren

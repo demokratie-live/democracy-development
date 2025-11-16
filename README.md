@@ -49,7 +49,16 @@ job to finish.
 
 ```
 pnpm lint
+pnpm test              # Run unit tests
+pnpm test:integration  # Run integration tests (requires MongoDB and running server)
 ```
+
+**Testing Framework:** This project uses [Vitest](https://vitest.dev/) for testing.
+
+- **Unit Tests:** Located alongside source files with `.test.ts` extension
+- **Integration Tests:** Located in `src/graphql/resolvers/` with `.integ.ts` extension
+- **Configuration:** See `vitest.config.unit.ts` and `vitest.config.integration.ts`
+
 
 ## Diagrams
 

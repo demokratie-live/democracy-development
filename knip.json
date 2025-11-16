@@ -6,13 +6,12 @@
     "interface": true,
     "type": true
   },
-  "ignoreDependencies": ["@types/mongoose", "babel-jest", "dotenv-cli", "ts-jest"],
-  "jest": {
-    "config": ["jest.unit.config.js", "jest.integration.config.js"],
-    "entry": ["jest.unit.setup.js", "jest.integration.setup.js"]
+  "ignoreDependencies": ["@types/mongoose", "dotenv-cli"],
+  "vitest": {
+    "config": ["vitest.config.unit.ts", "vitest.config.integration.ts"],
+    "entry": ["vitest.unit.setup.ts", "vitest.integration.setup.ts"]
   },
   "eslint": true,
-  "babel": true,
   "prettier": true,
   "typescript": true
 }

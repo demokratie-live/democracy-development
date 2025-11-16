@@ -21,8 +21,11 @@
     "lint:knip": "knip",
     "prepare": "husky install",
     "release": "standard-version",
-    "test": "jest --config jest.unit.config.js",
-    "test:integration": "jest --config jest.integration.config.js"
+    "test": "vitest run --config vitest.config.unit.ts",
+    "test:unit": "vitest run --config vitest.config.unit.ts",
+    "test:integration": "vitest run --config vitest.config.integration.ts",
+    "test:watch": "vitest --config vitest.config.unit.ts",
+    "test:coverage": "vitest run --config vitest.config.unit.ts --coverage"
   },
   "dependencies": {
     "@bmatei/apollo-prometheus-exporter": "^2.1.1",
@@ -56,9 +59,6 @@
     "winston-mongodb": "^5.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.6",
-    "@babel/preset-env": "^7.24.6",
-    "@babel/preset-typescript": "^7.24.6",
     "@commitlint/cli": "^17.4.0",
     "@commitlint/config-conventional": "^17.4.0",
     "@graphql-codegen/add": "^5.0.2",
@@ -70,7 +70,6 @@
     "@types/cron": "^1.7.2",
     "@types/elasticsearch": "^5.0.36",
     "@types/graphql-date": "^1.0.5",
-    "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^8.3.8",
     "@types/lodash": "^4.14.149",
     "@types/mongoose": "^5.7.6",
@@ -79,17 +78,16 @@
     "@typescript-eslint/eslint-plugin": "^8.15.0",
     "@typescript-eslint/parser": "^8.15.0",
     "apollo": "^2.33.9",
-    "babel-jest": "^29.7.0",
     "dotenv-cli": "^10.0.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^8.0.3",
-    "jest": "^29.7.0",
     "knip": "^5.39.4",
     "standard-version": "^9.5.0",
-    "ts-jest": "^29.1.4",
     "ts-node-dev": "^2.0.0",
     "typescript": "5.7.3",
-    "utility-types": "^3.10.0"
+    "utility-types": "^3.10.0",
+    "vitest": "^3.0.8",
+    "@vitest/coverage-v8": "^3.0.8"
   }
 }

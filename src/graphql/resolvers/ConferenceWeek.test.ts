@@ -1,9 +1,10 @@
+import { vi, describe, it, expect, type Mock } from 'vitest';
 import { getCurrentConferenceWeek } from '../../data/conference-weeks';
 import ConferenceWeekApi from './ConferenceWeek';
 import { logger } from '../../services/logger';
 
-jest.mock('../../data/conference-weeks');
-jest.mock('../../services/logger');
+vi.mock('../../data/conference-weeks');
+vi.mock('../../services/logger');
 
 describe('ConferenceWeekApi', () => {
   it('should return the current conference week', async () => {
@@ -13,8 +14,8 @@ describe('ConferenceWeekApi', () => {
       end: new Date(),
     };
 
-    (getCurrentConferenceWeek as jest.Mock).mockReturnValue(mockConferenceWeek);
-    (logger.graphql as jest.Mock).mockReturnValue(null);
+    (getCurrentConferenceWeek as Mock).mockReturnValue(mockConferenceWeek);
+    (logger.graphql as Mock).mockReturnValue(null);
 
     const result = await ConferenceWeekApi.Query.currentConferenceWeek(null, null, null, null);
 
