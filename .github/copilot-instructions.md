@@ -19,7 +19,7 @@ Always reference these instructions first and fallback to search or bash command
 - `pnpm install` -- Install dependencies. Takes ~19 seconds. Uses `.npmrc` with `engine-strict=false` for compatibility with older dependencies (e.g., @apollo/federation)
 - `pnpm build` -- Compile TypeScript. Takes 3-4 seconds. NEVER CANCEL
 - `pnpm lint` -- Run all linting (ESLint + TypeScript + unused exports). Takes ~7 seconds. NEVER CANCEL
-- `pnpm test` -- Run unit tests. Takes 2-3 seconds. NEVER CANCEL
+- `pnpm test` -- Run unit tests with Vitest. Takes 2-3 seconds. NEVER CANCEL
 
 ### Development Server
 
@@ -54,8 +54,13 @@ docker-compose up
 
 ### Testing
 
-- `pnpm test` -- Unit tests (3 suites, 8 tests). Takes 2-3 seconds. NEVER CANCEL
-- `pnpm test:integration` -- Integration tests using Garden.io (requires Kubernetes cluster and Garden CLI)
+- **Testing Framework**: Vitest (migrated from Jest)
+- `pnpm test` -- Run unit tests (3 test files, 8 tests). Takes 2-3 seconds. NEVER CANCEL
+- `pnpm test:unit` -- Alias for `pnpm test`
+- `pnpm test:integration` -- Run integration tests with Vitest (9 test files). Requires running Apollo Server on port 3000 and MongoDB
+- `pnpm test:watch` -- Run unit tests in watch mode
+- `pnpm test:coverage` -- Run unit tests with coverage report
+- **Garden.io Integration**: Full integration tests can also be run via `garden test` (requires Kubernetes cluster and Garden CLI)
 
 ### Validation and Quality Assurance
 
@@ -105,7 +110,7 @@ docker-compose up
 
 - TypeScript compilation: ~3-4 seconds (very fast)
 - Linting: ~7 seconds
-- Unit tests: ~2-3 seconds
+- Unit tests (Vitest): ~2-3 seconds
 - Package installation: ~19 seconds with pnpm
 
 ## Repository Structure
@@ -128,9 +133,11 @@ src/
 - `.env` -- Environment variables (copy from .env.example)
 - `.npmrc` -- pnpm configuration (engine-strict=false for Node.js compatibility)
 - `package.json` -- Dependencies and scripts
-- `tsconfig.json` -- TypeScript configuration
-- `jest.unit.config.js` -- Unit test configuration
-- `jest.integration.config.js` -- Integration test configuration
+- `tsconfig.json` -- TypeScript configuration (includes vitest/globals types)
+- `vitest.config.unit.ts` -- Unit test configuration (Vitest)
+- `vitest.config.integration.ts` -- Integration test configuration (Vitest)
+- `vitest.unit.setup.ts` -- Unit test setup file
+- `vitest.integration.setup.ts` -- Integration test setup file
 - `docker-compose.yaml` -- Docker development environment
 - `garden.yaml` -- Kubernetes integration testing (Garden.io)
 

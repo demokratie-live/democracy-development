@@ -540,7 +540,7 @@ git checkout main  # oder master
 
 ## Offene Fragen
 
-1. **Testing Framework**: Jest beibehalten oder zu Vitest migrieren?
+1. ~~**Testing Framework**: Jest beibehalten oder zu Vitest migrieren?~~ **✅ ERLEDIGT** - Vitest Migration abgeschlossen (16. November 2025)
 2. **Commitlint**: Monorepo-weit aktivieren oder nur für democracy-api?
 3. **Docker Image Name**: `democracy-api` oder `democracy-server` beibehalten?
 4. **ESLint Config**: Shared Config oder Service-spezifisch?
@@ -551,8 +551,8 @@ git checkout main  # oder master
 ## Nächste Schritte
 
 1. **Team-Alignment**: Offene Fragen klären
-2. **Node.js 20 Migration**: Für gesamtes Monorepo durchführen
-3. **Testing-Strategie**: Jest vs. Vitest Entscheidung
+2. ~~**Node.js 20 Migration**: Für gesamtes Monorepo durchführen~~ **✅ ERLEDIGT**
+3. ~~**Testing-Strategie**: Jest vs. Vitest Entscheidung~~ **✅ ERLEDIGT** - Vitest gewählt und migriert
 4. **Proof of Concept**: Kleine Test-Migration in separatem Branch
 5. **Go/No-Go Decision**: Basierend auf PoC-Ergebnissen
 

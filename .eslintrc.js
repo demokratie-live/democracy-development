@@ -24,9 +24,16 @@ module.exports = {
   },
   overrides: [
     {
-      "files": ["**/*/*.test.ts"],
-      "env": {
-        "jest": true
+      "files": ["**/*.test.ts", "**/*.integ.ts"],
+      "globals": {
+        "describe": "readonly",
+        "it": "readonly",
+        "expect": "readonly",
+        "beforeAll": "readonly",
+        "afterAll": "readonly",
+        "beforeEach": "readonly",
+        "afterEach": "readonly",
+        "vi": "readonly"
       }
     }
   ],
