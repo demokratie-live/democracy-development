@@ -6,7 +6,7 @@
   "author": "Manuel Ruck <m.ruck@democracy-deutschland.de>",
   "license": "Apache-2.0",
   "private": true,
-  "packageManager": "pnpm@10.5.1",
+  "packageManager": "pnpm@10.19.0",
   "engines": {
     "node": ">=20.9.0"
   },
