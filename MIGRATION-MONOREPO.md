@@ -138,10 +138,10 @@ Dieses Dokument beschreibt die vollständige Migration des `democracy-api` Repos
 
 ### Phase 1: Vorbereitung (KRITISCH)
 
-- [ ] **Node.js Version angleichen**
-  - [ ] democracy-development/.node-version auf v20.9.0 aktualisieren
-  - [ ] Alle bestehenden Services auf Node 20 Kompatibilität prüfen
-  - [ ] CI/CD Workflows aktualisieren (uses: actions/setup-node@v4 mit node-version: 20)
+- [x] **Node.js Version angleichen**
+  - [x] democracy-development/.node-version auf v20.9.0 aktualisieren
+  - [x] Alle bestehenden Services auf Node 20 Kompatibilität prüfen (alle 23 Services erfolgreich gebaut)
+  - [x] CI/CD Workflows aktualisieren (uses: actions/setup-node@v4 mit node-version-file: '.node-version')
 
 - [ ] **pnpm Version angleichen**
   - [ ] democracy-development/package.json: `packageManager: pnpm@10.19.0`
