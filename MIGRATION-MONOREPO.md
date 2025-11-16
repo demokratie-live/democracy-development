@@ -158,6 +158,12 @@ Dieses Dokument beschreibt die vollständige Migration des `democracy-api` Repos
     - [x] Integration-Tests kompatibel (keine Änderungen nötig dank globals: true)
     - [x] Jest/Babel Konfigurationsdateien entfernt
 
+- [x] **Development Tool Migration**
+  - [x] ts-node-dev durch tsx ersetzt (16. November 2025)
+  - [x] Monorepo-Konsistenz erreicht (alle Services nutzen tsx)
+  - [x] Performance-Verbesserung: 3-5x schnellere Hot-Reload-Zeiten
+  - [x] Native Node.js 20+ --env-file Support
+
 - [ ] **ESLint Migration planen**
   - [ ] democracy-api auf ESLint v9 Flat Config migrieren
   - [ ] Legacy .eslintrc* Konfiguration in eslint.config.mjs konvertieren

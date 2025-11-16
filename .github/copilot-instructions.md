@@ -24,10 +24,10 @@ Always reference these instructions first and fallback to search or bash command
 ### Development Server
 
 - **CRITICAL**: Development server requires MongoDB to start successfully
-- `pnpm dev` -- Start development server on port 3000. Fails immediately without MongoDB connection
+- `pnpm dev` -- Start development server with tsx on port 3000. Fails immediately without MongoDB connection
 - Server starts at http://localhost:3000/ with GraphQL endpoint at root path
 - **Apollo Prometheus metrics** server runs on port 3400
-- Hot reloading enabled for src/graphql directory changes
+- Hot reloading enabled via tsx watch mode
 
 ### MongoDB Setup Options
 

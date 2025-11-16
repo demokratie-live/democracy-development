@@ -5,7 +5,6 @@
   "author": "Manuel Ruck",
   "license": "Apache2",
   "private": true,
-  "type": "module",
   "packageManager": "pnpm@10.19.0",
   "engines": {
     "node": ">=20.9.0"
@@ -13,7 +12,8 @@
   "scripts": {
     "build": "tsc",
     "serve": "node dist/index.js",
-    "dev": "ts-node-dev -r dotenv/config src/index.ts --watch src/graphql",
+    "dev": "tsx --watch src/index.ts",
+    "dev:local": "tsx --env-file .env --watch src/index.ts",
     "generate": "graphql-codegen",
     "apollo:codegen": "apollo client:codegen --endpoint=http://localhost:3000 --excludes=node_modules/* --target typescript --globalTypesFile=./__generated__/globalTypes.ts",
     "lint": "pnpm lint:es && pnpm lint:ts && pnpm lint:knip",
@@ -85,7 +85,7 @@
     "husky": "^8.0.3",
     "knip": "^5.39.4",
     "standard-version": "^9.5.0",
-    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.11.0",
     "typescript": "5.7.3",
     "utility-types": "^3.10.0",
     "vitest": "^3.0.8",

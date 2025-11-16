@@ -59,6 +59,8 @@ pnpm test:integration  # Run integration tests (requires MongoDB and running ser
 - **Integration Tests:** Located in `src/graphql/resolvers/` with `.integ.ts` extension
 - **Configuration:** See `vitest.config.unit.ts` and `vitest.config.integration.ts`
 
+**Development Server:** Uses [tsx](https://github.com/privatenumber/tsx) for fast TypeScript execution with hot-reload.
+
 
 ## Diagrams
 
