@@ -29,10 +29,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: pnpm/action-setup@v3
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
-          version: 8
-          run_install: false
+          node-version-file: '.node-version'
+      - name: Setup package manager
+        run: corepack enable
       - run: echo "package=${{ matrix.package }}"
       - name: get directory for package
         id: get-directory
