@@ -3,7 +3,6 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    globals: true,
     environment: 'node',
     include: ['src/**/*.integ.ts'],
     setupFiles: ['./vitest.integration.setup.ts'],

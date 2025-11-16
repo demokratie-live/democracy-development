@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { isPhoneNumberValid } from './validatePhone';
 
 describe('validatePhone', () => {

@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import axios from 'axios';
 import { connectDB, disconnectDB } from '../../services/mongoose';
 import config from '../../config';

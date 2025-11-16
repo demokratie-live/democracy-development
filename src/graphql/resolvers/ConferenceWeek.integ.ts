@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import axios from 'axios';
 
 const GRAPHQL_API_URL = process.env.GRAPHQL_API_URL || 'http://localhost:3000';

@@ -1,3 +1,4 @@
+import { describe, it, afterAll } from 'vitest';
 import { DeviceModel, UserModel } from '@democracy-deutschland/democracy-common';
 import axios from 'axios';
 import { connectDB, disconnectDB } from '../../../services/mongoose';

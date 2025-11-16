@@ -22,19 +22,4 @@ module.exports = {
     '@typescript-eslint/no-unsafe-function-type': 0,
     // '@typescript-eslint/no-unnecessary-condition': ['error'],
   },
-  overrides: [
-    {
-      "files": ["**/*.test.ts", "**/*.integ.ts"],
-      "globals": {
-        "describe": "readonly",
-        "it": "readonly",
-        "expect": "readonly",
-        "beforeAll": "readonly",
-        "afterAll": "readonly",
-        "beforeEach": "readonly",
-        "afterEach": "readonly",
-        "vi": "readonly"
-      }
-    }
-  ],
 };
