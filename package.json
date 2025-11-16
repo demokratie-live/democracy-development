@@ -7,6 +7,9 @@
   "license": "Apache-2.0",
   "private": true,
   "packageManager": "pnpm@10.5.1",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "build": "turbo run build",
     "lint": "turbo run lint",
