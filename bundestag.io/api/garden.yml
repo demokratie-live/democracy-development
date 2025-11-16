@@ -13,7 +13,7 @@ spec:
     $then: dev
     $else: runner
   buildArgs:
-    NODE_VERSION: 18.18.2
+    NODE_VERSION: 20.9.0
     SERVICE: bundestag.io
     SERVICE_PATH: bundestag.io/api
   extraFlags: ['--load']

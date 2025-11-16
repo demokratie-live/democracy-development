@@ -10,7 +10,7 @@ include:
 spec:
   dockerfile: ./infra/Dockerfile
   buildArgs:
-    NODE_VERSION: 18.18.2
+    NODE_VERSION: 20.9.0
     SERVICE: queue-pushs-vote-conference-week
     SERVICE_PATH: services/cron-jobs/queue-pushs-vote-conference-week
   extraFlags: ['--load']

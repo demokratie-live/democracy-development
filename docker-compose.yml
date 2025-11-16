@@ -14,7 +14,7 @@ services:
       dockerfile: ./infra/Dockerfile
       target: dev
       args:
-        - NODE_VERSION=18.18.2
+        - NODE_VERSION=20.9.0
         - SERVICE=bundestag.io
         - SERVICE_PATH=bundestag.io/api
     ports:
@@ -35,7 +35,7 @@ services:
       dockerfile: ./infra/Dockerfile
       target: dev
       args:
-        - NODE_VERSION=18.18.2
+        - NODE_VERSION=20.9.0
         - SERVICE=bundestag.io-admin
         - SERVICE_PATH=bundestag.io/admin
         - BUNDESTAGIO_SERVER_URL=http://bundestag-io:4000

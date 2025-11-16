@@ -8,9 +8,9 @@ include:
   - ./**/*
   - ./infra/Dockerfile
 spec:
-  dockerfile: ./infra/Dockerfile
+  dockerfile: ./services/cron-jobs/import-named-polls/Dockerfile
   buildArgs:
-    NODE_VERSION: 18.18.2
+    NODE_VERSION: 20.9.0
     SERVICE: import-named-polls
     SERVICE_PATH: services/cron-jobs/import-named-polls
   extraFlags: ['--load']
