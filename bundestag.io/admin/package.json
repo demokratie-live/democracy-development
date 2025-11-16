@@ -15,7 +15,7 @@
     "@democracy-deutschland/bundestagio-common": "workspace:^",
     "@graphql-typed-document-node/core": "^3.2.0",
     "antd": "5.24.2",
-    "axios": "^1.8.1",
+    "axios": "^1.13.2",
     "graphql": "^16.8.1",
     "graphql-request": "^7.1.2",
     "graphql-tag": "^2.12.6",
