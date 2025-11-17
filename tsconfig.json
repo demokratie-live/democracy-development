@@ -8,7 +8,6 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "lib": ["ESNext"],
-    "types": ["vitest/globals"],
     // "typeRoots": ["./src/types", "./node_modules/@types"],
     "downlevelIteration": true,
     "allowUnreachableCode": false,
@@ -22,6 +21,16 @@
     "suppressImplicitAnyIndexErrors": false,
     "sourceMap": true
   },
-  "include": ["./src/**/*"],
-  "exclude": ["node_modules"]
+  "include": [
+    "./src/**/*",
+    "./vitest.config.unit.ts",
+    "./vitest.config.integration.ts",
+    "./vitest.unit.setup.ts",
+    "./vitest.integration.setup.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "vitest.config.*.ts",
+    "vitest.*.setup.ts"
+  ]
 }
