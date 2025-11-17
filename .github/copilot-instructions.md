@@ -55,6 +55,7 @@ docker-compose up
 ### Testing
 
 - **Testing Framework**: Vitest (migrated from Jest)
+- **Module System**: ES Modules (`"type": "module"` in package.json, required for Vite 7.2.2)
 - `pnpm test` -- Run unit tests (3 test files, 8 tests). Takes 2-3 seconds. NEVER CANCEL
 - `pnpm test:unit` -- Alias for `pnpm test`
 - `pnpm test:integration` -- Run integration tests with Vitest (9 test files). Requires running Apollo Server on port 3000 and MongoDB
@@ -83,7 +84,11 @@ docker-compose up
 
 ### Node.js Version Issues
 
-- **Node.js 20.9.0+ is required** -- @typescript-eslint packages require Node.js ^18.18.0 || ^20.9.0 || >=21.1.0
+### Node.js Version and Module System
+
+- **Node.js 20.9.0+ is required** -- Project now uses ES Modules (`"type": "module"`)
+- **Vite 7.2.2 requires ESM** -- Vitest dependency Vite 7.2.2 is a pure ES Module, requiring `"type": "module"` in package.json
+- **TypeScript outputs ES Modules** -- `tsconfig.json` configured with `"module": "ESNext"` and `"moduleResolution": "bundler"`
 - **Uses `.npmrc` with `engine-strict=false`** -- This handles compatibility with older dependencies (e.g., @apollo/federation)
 - pnpm version is pinned to 10.19.0 via `packageManager` field in package.json
 - `engines` field in package.json specifies Node >=20.9.0
