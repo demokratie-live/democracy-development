@@ -8,7 +8,7 @@
   },
   "ignoreDependencies": ["@types/mongoose", "dotenv-cli"],
   "vitest": {
-    "config": ["vitest.config.unit.ts", "vitest.config.integration.ts"],
+    "config": ["vitest.config.unit.mts", "vitest.config.integration.mts"],
     "entry": ["vitest.unit.setup.ts", "vitest.integration.setup.ts"]
   },
   "eslint": true,

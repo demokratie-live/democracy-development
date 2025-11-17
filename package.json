@@ -5,6 +5,7 @@
   "author": "Manuel Ruck",
   "license": "Apache2",
   "private": true,
+  "type": "module",
   "packageManager": "pnpm@10.19.0",
   "engines": {
     "node": ">=20.9.0"
@@ -22,11 +23,11 @@
     "lint:knip": "knip",
     "prepare": "husky install",
     "release": "standard-version",
-    "test": "vitest run --config vitest.config.unit.ts",
-    "test:unit": "vitest run --config vitest.config.unit.ts",
-    "test:integration": "vitest run --config vitest.config.integration.ts",
-    "test:watch": "vitest --config vitest.config.unit.ts",
-    "test:coverage": "vitest run --config vitest.config.unit.ts --coverage"
+    "test": "vitest run --config vitest.config.unit.mts",
+    "test:unit": "vitest run --config vitest.config.unit.mts",
+    "test:integration": "vitest run --config vitest.config.integration.mts",
+    "test:watch": "vitest --config vitest.config.unit.mts",
+    "test:coverage": "vitest run --config vitest.config.unit.mts --coverage"
   },
   "dependencies": {
     "@bmatei/apollo-prometheus-exporter": "^2.1.1",
