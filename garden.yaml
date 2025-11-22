@@ -95,8 +95,8 @@ spec:
                       optional: false
                 resources:
                   limits:
-                    cpu: '2'
-                    memory: '2048Mi'
+                    cpu: '1'
+                    memory: '1024Mi'
                 readinessProbe:
                   exec:
                     command:
@@ -127,8 +127,8 @@ spec:
                       optional: false
                 resources:
                   limits:
-                    cpu: '1'
-                    memory: '1024Mi'
+                    cpu: '500m'
+                    memory: '512Mi'
 ---
 kind: Test
 name: democracy-api-integration
