@@ -73,7 +73,6 @@
     "@types/graphql-date": "^1.0.5",
     "@types/jsonwebtoken": "^8.3.8",
     "@types/lodash": "^4.14.149",
-    "@types/mongoose": "^5.7.6",
     "@types/node": "^20",
     "@types/request": "^2.48.4",
     "@typescript-eslint/eslint-plugin": "^8.15.0",

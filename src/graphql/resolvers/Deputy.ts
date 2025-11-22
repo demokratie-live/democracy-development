@@ -1,4 +1,4 @@
-import { FilterQuery, MongooseFilterQuery } from 'mongoose';
+import { FilterQuery } from 'mongoose';
 import { parseResolveInfo } from 'graphql-parse-resolve-info';
 import { Resolvers, VoteSelection } from '../../generated/graphql';
 import {
@@ -15,7 +15,7 @@ const DeputyApi: Resolvers = {
       parent,
       { constituency, period = 19, directCandidate = false },
     ) => {
-      const query: MongooseFilterQuery<IDeputy> = {
+      const query: FilterQuery<IDeputy> = {
         constituency,
         period,
       };

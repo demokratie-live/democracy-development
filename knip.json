@@ -6,7 +6,7 @@
     "interface": true,
     "type": true
   },
-  "ignoreDependencies": ["@types/mongoose", "dotenv-cli"],
+  "ignoreDependencies": ["dotenv-cli"],
   "vitest": {
     "config": ["vitest.config.unit.ts", "vitest.config.integration.ts"],
     "entry": ["vitest.unit.setup.ts", "vitest.integration.setup.ts"]

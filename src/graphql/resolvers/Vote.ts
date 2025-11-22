@@ -3,7 +3,7 @@
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 import { Vote, IDeputy } from '@democracy-deutschland/democracy-common';
 import { Types } from 'mongoose';
-import { MongooseFilterQuery } from 'mongoose';
+import { FilterQuery } from 'mongoose';
 import CONFIG from '../../config';
 import PROCEDURE_STATES from '../../config/procedureStates';
 import { Resolvers, VoteSelection } from '../../generated/graphql';
@@ -366,7 +366,7 @@ const VoteApi: Resolvers = {
       }
 
       // Cast Vote
-      const voteUpdate: MongooseFilterQuery<Vote> = {
+      const voteUpdate: FilterQuery<Vote> = {
         $push: {
           voters: {
             voter: CONFIG.SMS_VERIFICATION ? phone._id : device._id,
@@ -510,7 +510,7 @@ const VoteApi: Resolvers = {
         ((constituencies && constituencies.length > 0) || constituencies === undefined)
       ) {
         // Match procedureId
-        const match: MongooseFilterQuery<IDeputy> = {
+        const match: FilterQuery<IDeputy> = {
           $match: {
             'votes.procedureId': voteResult.procedureId,
           },

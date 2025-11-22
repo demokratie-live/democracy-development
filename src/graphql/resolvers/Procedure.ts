@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 import { IProcedure } from '@democracy-deutschland/democracy-common';
-import { MongooseFilterQuery } from 'mongoose';
+import { FilterQuery } from 'mongoose';
 import { parseResolveInfo } from 'graphql-parse-resolve-info';
 import PROCEDURE_STATES from '../../config/procedureStates';
 import CONFIG from '../../config';
@@ -60,7 +60,7 @@ const ProcedureApi: Resolvers = {
         }
       }
 
-      const filterQuery: MongooseFilterQuery<IProcedure> = {};
+      const filterQuery: FilterQuery<IProcedure> = {};
       if (filter && filter.type && filter.type.length > 0) {
         filterQuery.type = { $in: filter.type as string[] };
       }
@@ -341,7 +341,7 @@ const ProcedureApi: Resolvers = {
       { ProcedureModel },
     ) => {
       // Vote Results are present Filter
-      const voteResultsQuery: MongooseFilterQuery<IProcedure> = {
+      const voteResultsQuery: FilterQuery<IProcedure> = {
         'voteResults.yes': { $ne: null },
         'voteResults.no': { $ne: null },
         'voteResults.abstination': { $ne: null },
@@ -349,7 +349,7 @@ const ProcedureApi: Resolvers = {
       };
 
       // Timespan Selection
-      const timespanQuery: MongooseFilterQuery<IProcedure> = {};
+      const timespanQuery: FilterQuery<IProcedure> = {};
       switch (timespan) {
         case 'CurrentSittingWeek':
         case 'LastSittingWeek':
@@ -401,14 +401,14 @@ const ProcedureApi: Resolvers = {
       timespanQuery.period = { $in: [period] };
 
       // WOM Filter
-      const filterQuery: MongooseFilterQuery<IProcedure> = {};
+      const filterQuery: FilterQuery<IProcedure> = {};
       // WOM Filter Subject Group
       if (filter && filter.subjectGroups && filter.subjectGroups.length > 0) {
         filterQuery.subjectGroups = { $in: filter.subjectGroups as string[] };
       }
 
       // Prepare Find Query
-      const findQuery: MongooseFilterQuery<IProcedure> = {
+      const findQuery: FilterQuery<IProcedure> = {
         // Vote Results are present
         ...voteResultsQuery,
         // Timespan Selection
