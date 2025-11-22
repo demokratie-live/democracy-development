@@ -45,4 +45,4 @@ const cronJobs = async () => {
   return jobs;
 };
 
-module.exports = cronJobs;
+export default cronJobs;

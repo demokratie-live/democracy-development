@@ -88,4 +88,4 @@ const graphql = new ApolloServer({
   tracing: CONFIG.DEBUG,
 });
 
-module.exports = graphql;
+export default graphql;

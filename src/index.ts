@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-console */
 
 import express from 'express';
@@ -27,7 +26,8 @@ const main = async () => {
   const server = express();
 
   if (process.env.EXPRESS_STATUS === 'true') {
-    server.use(require('express-status-monitor')()); // eslint-disable-line global-require
+    const expressStatusMonitor = await import('express-status-monitor');
+    server.use(expressStatusMonitor.default());
   }
 
   // Cors
@@ -61,8 +61,8 @@ const main = async () => {
 
   // Graphql
   // Here several Models are included for graphql
-  const graphql = require('./services/graphql'); // eslint-disable-line global-require
-  graphql.applyMiddleware({ app: server, path: CONFIG.GRAPHQL_PATH });
+  const graphql = await import('./services/graphql');
+  graphql.default.applyMiddleware({ app: server, path: CONFIG.GRAPHQL_PATH });
 
   // Start Server
   server.listen({ port: CONFIG.PORT }, () => {
@@ -73,7 +73,7 @@ const main = async () => {
 
   // Start CronJobs (Bundestag Importer)
   // Serveral Models are included
-  const cronJobs = require('./services/cronJobs'); // eslint-disable-line global-require
+  const { default: cronJobs } = await import('./services/cronJobs');
   cronJobs();
 };
 
@@ -82,6 +82,14 @@ const main = async () => {
 (async () => {
   await main();
 })().catch((error) => {
-  logger.error('Error in main async function', { error });
+  // Log error with full details including stack trace
+  logger.error('Error in main async function', {
+    message: error.message,
+    stack: error.stack,
+    name: error.name,
+    ...(error.cause && { cause: error.cause }),
+  });
+  // Also log to console for immediate visibility
+  console.error('Fatal error:', error);
   process.exit(1);
 });

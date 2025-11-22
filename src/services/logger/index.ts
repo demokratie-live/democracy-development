@@ -6,6 +6,7 @@ import CONFIG from '../../config';
 const alignedWithColorsAndTime = winston.format.combine(
   winston.format.colorize(),
   winston.format.timestamp(),
+  winston.format.errors({ stack: true }), // Properly serialize errors
   winston.format.align(),
   winston.format.printf((info) => {
     const { timestamp, level, message, ...args } = info as any;
