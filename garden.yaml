@@ -50,13 +50,94 @@ spec:
                       cpu: '2'
                       memory: '2048Mi'
 ---
+kind: Deploy
+name: democracy-api-test
+type: kubernetes
+dependencies:
+  - build.democracy-api
+  - build.democracy-api-dev
+  - deploy.democracy-api
+  - deploy.mongo
+
+timeout: 30
+
+spec:
+  defaultTarget:
+    kind: Deployment
+    name: democracy-api-test
+  manifests:
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: democracy-api-test
+        labels:
+          app: democracy-api-test
+      spec:
+        selector:
+          matchLabels:
+            app: democracy-api-test
+        template:
+          metadata:
+            labels:
+              app: democracy-api-test
+          spec:
+            containers:
+              - name: democracy-api
+                image: ${actions.build.democracy-api.outputs.deploymentImageId}
+                ports:
+                  - containerPort: 3000
+                envFrom:
+                  - configMapRef:
+                      name: democracy-api-config
+                      optional: false
+                  - secretRef:
+                      name: democracy-api-secrets
+                      optional: false
+                resources:
+                  limits:
+                    cpu: '2'
+                    memory: '2048Mi'
+                readinessProbe:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - >
+                        wget --header="Content-Type: application/json" --post-data='{"query":"{ __schema { types { name } } }"}' -O - http://localhost:3000/
+                  periodSeconds: 10
+                  initialDelaySeconds: 5
+                livenessProbe:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - >
+                        wget --header="Content-Type: application/json" --post-data='{"query":"{ __schema { types { name } } }"}' -O - http://localhost:3000/
+                  periodSeconds: 10
+                  initialDelaySeconds: 30
+              - name: test-runner
+                image: ${actions.build.democracy-api-dev.outputs.deploymentImageId}
+                command: [sh, -c, 'sleep infinity']
+                envFrom:
+                  - configMapRef:
+                      name: democracy-api-config
+                      optional: false
+                  - secretRef:
+                      name: democracy-api-secrets
+                      optional: false
+                resources:
+                  limits:
+                    cpu: '1'
+                    memory: '1024Mi'
+---
 kind: Test
 name: democracy-api-integration
 type: kubernetes-exec
 dependencies:
-  - deploy.democracy-api
+  - deploy.democracy-api-test
 spec:
   resource:
     kind: Deployment
-    name: democracy-api
+    name: democracy-api-test
+    containerName: test-runner
   command: [pnpm, test:integration]
