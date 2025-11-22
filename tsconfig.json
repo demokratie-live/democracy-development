@@ -27,7 +27,8 @@
     "./vitest.config.unit.ts",
     "./vitest.config.integration.ts",
     "./vitest.unit.setup.ts",
-    "./vitest.integration.setup.ts"
+    "./vitest.integration.setup.ts",
+    "./tsup.config.ts"
   ],
   "exclude": [
     "node_modules",

@@ -2,6 +2,12 @@ kind: Build
 name: democracy-api
 type: container
 spec:
+  targetStage: production_stage
+---
+kind: Build
+name: democracy-api-dev
+type: container
+spec:
   targetStage: build_stage
 ---
 kind: Deploy
@@ -26,6 +32,7 @@ spec:
         sourcePath: src
         mode: one-way
     overrides:
+      - image: ${actions.build.democracy-api-dev.outputs.deploymentImageId}
       - command: [pnpm, tsx, --watch, src/index.ts]
 
   patchResources:

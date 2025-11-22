@@ -11,7 +11,7 @@
     "node": ">=20.9.0"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "serve": "node dist/index.js",
     "dev": "tsx --env-file .env --watch src/index.ts",
     "generate": "graphql-codegen",
@@ -86,6 +86,7 @@
     "husky": "^8.0.3",
     "knip": "^5.39.4",
     "standard-version": "^9.5.0",
+    "tsup": "^8.5.1",
     "tsx": "^4.11.0",
     "typescript": "5.7.3",
     "utility-types": "^3.10.0",
