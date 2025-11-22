@@ -164,10 +164,10 @@ Dieses Dokument beschreibt die vollständige Migration des `democracy-api` Repos
   - [x] Performance-Verbesserung: 3-5x schnellere Hot-Reload-Zeiten
   - [x] Native Node.js 20+ --env-file Support
 
-- [ ] **ESLint Migration planen**
-  - [ ] democracy-api auf ESLint v9 Flat Config migrieren
-  - [ ] Legacy .eslintrc* Konfiguration in eslint.config.mjs konvertieren
-  - [ ] Lint-Ergebnisse vor/nach Migration vergleichen
+- [x] **ESLint Migration planen**
+  - [x] democracy-api auf ESLint v9 Flat Config migrieren
+  - [x] Legacy .eslintrc* Konfiguration in eslint.config.mjs konvertieren
+  - [x] Lint-Ergebnisse vor/nach Migration vergleichen
 
 ### Phase 2: Repository-Vorbereitung
 

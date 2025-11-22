@@ -54,11 +54,7 @@ describe('Activity Resolvers', () => {
       });
 
       afterAll(async () => {
-        await Promise.all([
-          ActivityModel.deleteOne({ procedure: procedure }),
-          procedure.remove(),
-          user.remove(),
-        ]);
+        await Promise.all([ActivityModel.deleteOne({ procedure: procedure }), procedure.remove(), user.remove()]);
 
         await disconnectDB();
       });
@@ -114,12 +110,8 @@ describe('Activity Resolvers', () => {
       const xDeviceHash = 'SOME_DEVICE_HASH_ACTIVITY_RESOLVER_INCREASE_ACTIVITY';
       const deviceHash = crypto.createHash('sha256').update(xDeviceHash).digest('hex');
       let device: Device;
-      const xDeviceHashNotVerified =
-        'SOME_DEVICE_HASH_ACTIVITY_RESOLVER_INCREASE_ACTIVITY_NOT_VERIFIED';
-      const deviceHashNotVerified = crypto
-        .createHash('sha256')
-        .update(xDeviceHashNotVerified)
-        .digest('hex');
+      const xDeviceHashNotVerified = 'SOME_DEVICE_HASH_ACTIVITY_RESOLVER_INCREASE_ACTIVITY_NOT_VERIFIED';
+      const deviceHashNotVerified = crypto.createHash('sha256').update(xDeviceHashNotVerified).digest('hex');
       let deviceNotVerified: Device;
       const PHONE_NUMBER = `+49111111111`;
       const xPhoneHash = crypto.createHash('sha256').update(PHONE_NUMBER).digest('hex');

@@ -83,16 +83,12 @@ const ProcedureApi: Resolvers = {
         if (filter.activity.indexOf('notVoted') !== -1) {
           if (Array.isArray(votedProcedures)) {
             filterQuery._id = {
-              $nin: votedProcedures.map(({ procedure }) =>
-                '_id' in procedure ? procedure._id : procedure,
-              ),
+              $nin: votedProcedures.map(({ procedure }) => ('_id' in procedure ? procedure._id : procedure)),
             };
           }
         } else if (filter.activity.indexOf('voted') !== -1) {
           filterQuery._id = {
-            $in: votedProcedures.map(({ procedure }) =>
-              '_id' in procedure ? procedure._id : procedure,
-            ),
+            $in: votedProcedures.map(({ procedure }) => ('_id' in procedure ? procedure._id : procedure)),
           };
         }
       }
@@ -204,10 +200,7 @@ const ProcedureApi: Resolvers = {
                 },
                 {
                   currentStatus: {
-                    $in: [
-                      PROCEDURE_DEFINITIONS.STATUS.BESCHLUSSEMPFEHLUNG,
-                      PROCEDURE_DEFINITIONS.STATUS.UEBERWIESEN,
-                    ],
+                    $in: [PROCEDURE_DEFINITIONS.STATUS.BESCHLUSSEMPFEHLUNG, PROCEDURE_DEFINITIONS.STATUS.UEBERWIESEN],
                   },
                   voteDate: { $gte: new Date() },
                 },
@@ -254,10 +247,7 @@ const ProcedureApi: Resolvers = {
               : 0;
 
           pastVotings = await ProcedureModel.find({
-            $or: [
-              { voteDate: { $lt: new Date() } },
-              { currentStatus: { $in: PROCEDURE_STATES.COMPLETED } },
-            ],
+            $or: [{ voteDate: { $lt: new Date() } }, { currentStatus: { $in: PROCEDURE_STATES.COMPLETED } }],
             period,
             ...filterQuery,
           })
@@ -438,24 +428,22 @@ const ProcedureApi: Resolvers = {
           return procedures.map((p) => {
             // MongoObject to JS Object
             const procedure = p.toObject() as any;
-            // eslint-disable-next-line no-param-reassign
+
             if (procedure.voteResults) {
               procedure.voteResults.partyVotes = procedure.voteResults.partyVotes?.filter(
                 ({ party }) => !['Andere', 'fraktionslos'].includes(party.trim()),
               );
 
               // Rename Fractions
-              procedure.voteResults.partyVotes = procedure.voteResults.partyVotes?.map(
-                ({ party, ...rest }) => {
-                  switch (party.trim()) {
-                    case 'CDU':
-                      return { ...rest, party: 'Union' };
+              procedure.voteResults.partyVotes = procedure.voteResults.partyVotes?.map(({ party, ...rest }) => {
+                switch (party.trim()) {
+                  case 'CDU':
+                    return { ...rest, party: 'Union' };
 
-                    default:
-                      return { ...rest, party };
-                  }
-                },
-              );
+                  default:
+                    return { ...rest, party };
+                }
+              });
             }
             return procedure;
           });
@@ -561,8 +549,7 @@ const ProcedureApi: Resolvers = {
       //   autocomplete = suggest.autocomplete[0].options.map(({ text }) => text);
       // }
       return {
-        procedures:
-          _.sortBy(procedures, ({ procedureId }) => procedureIds.indexOf(procedureId)) || [],
+        procedures: _.sortBy(procedures, ({ procedureId }) => procedureIds.indexOf(procedureId)) || [],
         autocomplete: [],
       };
     },
@@ -624,10 +611,7 @@ const ProcedureApi: Resolvers = {
     recommendedProcedures: async (parent, args, { ProcedureModel }) => {
       return {
         hasMore: false,
-        total: recommendedProcedures.reduce<number>(
-          (sum, group) => sum + group.procedures.length,
-          0,
-        ),
+        total: recommendedProcedures.reduce<number>((sum, group) => sum + group.procedures.length, 0),
         data: await Promise.all(
           recommendedProcedures.map(async (group) => {
             return {
@@ -648,8 +632,7 @@ const ProcedureApi: Resolvers = {
       const requestedFields = parseResolveInfo(info);
       let getConstituencyResults = true;
       if (requestedFields && requestedFields.fieldsByTypeName) {
-        getConstituencyResults =
-          'constituencies' in requestedFields.fieldsByTypeName.CommunityVotes;
+        getConstituencyResults = 'constituencies' in requestedFields.fieldsByTypeName.CommunityVotes;
       }
 
       // Use cached community results
@@ -872,9 +855,7 @@ const ProcedureApi: Resolvers = {
     currentStatusHistory: ({ currentStatusHistory }) => {
       // logger.graphql('Procedure.field.currentStatusHistory');
       const cleanHistory = [...new Set(currentStatusHistory)];
-      const referStatusIndex = cleanHistory.findIndex(
-        (status) => status === PROCEDURE_DEFINITIONS.STATUS.UEBERWIESEN,
-      );
+      const referStatusIndex = cleanHistory.findIndex((status) => status === PROCEDURE_DEFINITIONS.STATUS.UEBERWIESEN);
       if (referStatusIndex !== -1) {
         cleanHistory.splice(referStatusIndex, 0, '1. Beratung');
       }
@@ -905,11 +886,7 @@ const ProcedureApi: Resolvers = {
     // Propagate procedureId if present
     voteResults: ({ voteResults, procedureId }) => {
       // logger.graphql('Procedure.field.voteResults');
-      if (
-        voteResults &&
-        typeof voteResults.yes === 'number' &&
-        typeof voteResults.no === 'number'
-      ) {
+      if (voteResults && typeof voteResults.yes === 'number' && typeof voteResults.no === 'number') {
         return { ...voteResults, procedureId };
       }
       return null;

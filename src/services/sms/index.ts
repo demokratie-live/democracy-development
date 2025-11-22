@@ -165,7 +165,7 @@ export const sendSMS = async (
       }
       const bodyResult = body.split(',');
       statusCode = parseInt(bodyResult[0], 10);
-      SMSID = bodyResult[1]; // eslint-disable-line
+      SMSID = bodyResult[1];
       switch (statusCode) {
         case 100:
           // Standard Rückgabewert // Standard return value

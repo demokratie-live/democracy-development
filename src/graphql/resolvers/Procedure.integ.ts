@@ -67,13 +67,7 @@ describe('Resolver: Procedure', () => {
     });
 
     afterAll(async () => {
-      await Promise.all([
-        procedure.remove(),
-        phone.remove(),
-        device.remove(),
-        user.remove(),
-        userNotVerified.remove(),
-      ]);
+      await Promise.all([procedure.remove(), phone.remove(), device.remove(), user.remove(), userNotVerified.remove()]);
 
       await disconnectDB();
     });

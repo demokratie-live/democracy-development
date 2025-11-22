@@ -7,10 +7,7 @@ import { mongoose } from '@democracy-deutschland/democracy-common';
 import CONFIG from '../../config';
 import { logger } from '../logger';
 
-export const connectDB = async (
-  dbUrl = CONFIG.DB_URL,
-  { debug } = { debug: CONFIG.LOGGING_MONGO },
-) => {
+export const connectDB = async (dbUrl = CONFIG.DB_URL, { debug } = { debug: CONFIG.LOGGING_MONGO }) => {
   // Mongo Debug
   if (debug) {
     mongoose.set('debug', true);

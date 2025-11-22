@@ -20,11 +20,7 @@ const calculateResendTime = ({
   expires: number;
 }): Date =>
   new Date(
-    Math.min(
-      expires,
-      latestCodeTime +
-        (ms(CONFIG.SMS_VERIFICATION_CODE_RESEND_BASETIME) / 1000) ** codesCount * 1000,
-    ),
+    Math.min(expires, latestCodeTime + (ms(CONFIG.SMS_VERIFICATION_CODE_RESEND_BASETIME) / 1000) ** codesCount * 1000),
   );
 
 const DeviceApi: Resolvers = {
@@ -48,11 +44,7 @@ const DeviceApi: Resolvers = {
     // ************
     // REQUEST CODE
     // ************
-    requestCode: async (
-      parent,
-      { newPhone, oldPhoneHash },
-      { user, device, phone, PhoneModel, VerificationModel },
-    ) => {
+    requestCode: async (parent, { newPhone, oldPhoneHash }, { user, device, phone, PhoneModel, VerificationModel }) => {
       logger.graphql('Device.mutation.requestCode', { newPhone, oldPhoneHash }, { user, device });
       // Check for SMS Verification
       if (!CONFIG.SMS_VERIFICATION) {
@@ -81,9 +73,7 @@ const DeviceApi: Resolvers = {
       // Check for invalid transfere
       const newPhoneHash = crypto.createHash('sha256').update(newPhone).digest('hex');
       const newPhoneDBHash = crypto.createHash('sha256').update(newPhoneHash).digest('hex');
-      const oldPhoneDBHash = oldPhoneHash
-        ? crypto.createHash('sha256').update(oldPhoneHash).digest('hex')
-        : null;
+      const oldPhoneDBHash = oldPhoneHash ? crypto.createHash('sha256').update(oldPhoneHash).digest('hex') : null;
       if (newPhoneHash === oldPhoneHash) {
         return {
           reason: 'newPhoneHash equals oldPhoneHash',
@@ -112,7 +102,7 @@ const DeviceApi: Resolvers = {
       const minVal = 100000;
       const maxVal = 999999;
 
-      let code: string = (Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal).toString(); // eslint-disable-line
+      let code: string = (Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal).toString();
       if (CONFIG.SMS_SIMULATE) {
         code = '000000';
       }
@@ -126,17 +116,12 @@ const DeviceApi: Resolvers = {
         // ***********
         // Find Code Count & latest Code Time
         const codesCount = activeCode.codes?.length || 0;
-        const latestCode = activeCode.codes?.reduce(
-          (max, p) => (p.time > max.time ? p : max),
-          activeCode.codes[0],
-        );
+        const latestCode = activeCode.codes?.reduce((max, p) => (p.time > max.time ? p : max), activeCode.codes[0]);
 
         // Check code time
         if (
           latestCode &&
-          latestCode.time.getTime() +
-            ms(CONFIG.SMS_VERIFICATION_CODE_RESEND_BASETIME) ** codesCount >=
-            now.getTime()
+          latestCode.time.getTime() + ms(CONFIG.SMS_VERIFICATION_CODE_RESEND_BASETIME) ** codesCount >= now.getTime()
         ) {
           return {
             reason: 'You have to wait till you can request another Code',
@@ -205,8 +190,7 @@ const DeviceApi: Resolvers = {
       let allowNewUser = false; // Is only set if there was a user registered
       if (
         verificationPhone &&
-        verificationPhone.updatedAt <
-          new Date(now.getTime() - ms(CONFIG.SMS_VERIFICATION_NEW_USER_DELAY))
+        verificationPhone.updatedAt < new Date(now.getTime() - ms(CONFIG.SMS_VERIFICATION_NEW_USER_DELAY))
       ) {
         // Older then 6 Months
         allowNewUser = true;
@@ -250,11 +234,7 @@ const DeviceApi: Resolvers = {
       { code, newPhoneHash, newUser },
       { res, device, phone, UserModel, PhoneModel, VerificationModel },
     ) => {
-      logger.graphql(
-        'Device.mutation.requestVerification',
-        { code, newPhoneHash, newUser },
-        { device, phone },
-      );
+      logger.graphql('Device.mutation.requestVerification', { code, newPhoneHash, newUser }, { device, phone });
       // Check for SMS Verification
       if (!CONFIG.SMS_VERIFICATION) {
         return {
@@ -300,8 +280,7 @@ const DeviceApi: Resolvers = {
       // User has phoneHash, but no oldPhoneHash?
       if (
         verification.oldPhoneHash &&
-        (!phone ||
-          (typeof phone.phoneHash === 'string' && phone.phoneHash !== verification.oldPhoneHash))
+        (!phone || (typeof phone.phoneHash === 'string' && phone.phoneHash !== verification.oldPhoneHash))
       ) {
         return {
           reason: 'User phoneHash and oldPhoneHash inconsistent',
@@ -341,9 +320,7 @@ const DeviceApi: Resolvers = {
         // We found an old phone and no new User is requested
         if (
           oldPhone &&
-          (!newUser ||
-            oldPhone.updatedAt >=
-              new Date(now.getTime() - ms(CONFIG.SMS_VERIFICATION_NEW_USER_DELAY)))
+          (!newUser || oldPhone.updatedAt >= new Date(now.getTime() - ms(CONFIG.SMS_VERIFICATION_NEW_USER_DELAY)))
         ) {
           newPhone = oldPhone;
           newPhone.phoneHash = newPhoneHash;
@@ -441,8 +418,7 @@ const DeviceApi: Resolvers = {
             newPreperation,
             // traversal of old settings -> new settings
             conferenceWeekPushs,
-            voteConferenceWeekPushs:
-              newVote && !voteConferenceWeekPushs ? newVote : voteConferenceWeekPushs,
+            voteConferenceWeekPushs: newVote && !voteConferenceWeekPushs ? newVote : voteConferenceWeekPushs,
             voteTOP100Pushs: newPreperation && !voteTOP100Pushs ? newPreperation : voteTOP100Pushs,
             // new setting
             outcomePushs,
@@ -460,10 +436,7 @@ const DeviceApi: Resolvers = {
       if (outcomePushs && outcomePushsEnableOld) {
         const actor = CONFIG.SMS_VERIFICATION ? phone._id : device._id;
         const kind = CONFIG.SMS_VERIFICATION ? 'Phone' : 'Device';
-        const votedProcedures = await VoteModel.find(
-          { type: kind, 'voters.voter': actor },
-          { procedure: 1 },
-        );
+        const votedProcedures = await VoteModel.find({ type: kind, 'voters.voter': actor }, { procedure: 1 });
 
         const proceduresOld = votedProcedures.map(({ procedure }) => procedure);
 
@@ -473,9 +446,7 @@ const DeviceApi: Resolvers = {
         );
         // TODO this additional read operation is also not nessecarily required
         // if the calculation is done serverside
-        device = (await DeviceModel.findOne({ _id: device._id }).then((d) =>
-          d ? d.toObject() : null,
-        )) as any;
+        device = (await DeviceModel.findOne({ _id: device._id }).then((d) => (d ? d.toObject() : null))) as any;
       }
 
       const result: NotificationSettings = {
@@ -490,11 +461,7 @@ const DeviceApi: Resolvers = {
       return result;
     },
 
-    toggleNotification: async (
-      parent,
-      { procedureId },
-      { device, ProcedureModel },
-    ): Promise<any> => {
+    toggleNotification: async (parent, { procedureId }, { device, ProcedureModel }): Promise<any> => {
       logger.graphql('Device.mutation.toggleNotification', { procedureId }, { device });
       const procedure = await ProcedureModel.findOne({ procedureId });
       if (procedure) {

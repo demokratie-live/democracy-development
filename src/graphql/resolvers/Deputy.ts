@@ -1,20 +1,13 @@
 import { FilterQuery } from 'mongoose';
 import { parseResolveInfo } from 'graphql-parse-resolve-info';
 import { Resolvers, VoteSelection } from '../../generated/graphql';
-import {
-  IProcedure,
-  DeputyModel,
-  IDeputy,
-} from '@democracy-deutschland/democracy-common';
+import { IProcedure, DeputyModel, IDeputy } from '@democracy-deutschland/democracy-common';
 import { logger } from '../../services/logger';
 import pReduce from 'p-reduce';
 
 const DeputyApi: Resolvers = {
   Query: {
-    deputiesOfConstituency: async (
-      parent,
-      { constituency, period = 19, directCandidate = false },
-    ) => {
+    deputiesOfConstituency: async (parent, { constituency, period = 19, directCandidate = false }) => {
       const query: FilterQuery<IDeputy> = {
         constituency,
         period,
@@ -27,15 +20,7 @@ const DeputyApi: Resolvers = {
     },
     deputies: async (
       _parent,
-      {
-        period = 19,
-        limit = 10,
-        offset = 0,
-        filterTerm,
-        filterIds,
-        filterConstituency,
-        excludeIds,
-      },
+      { period = 19, limit = 10, offset = 0, filterTerm, filterIds, filterConstituency, excludeIds },
     ) => {
       if (limit > 100) {
         throw new Error('limit must not exceed 100');
@@ -62,17 +47,12 @@ const DeputyApi: Resolvers = {
 
       const total = await DeputyModel.count(conditions);
 
-      const deputies = await DeputyModel.find(conditions)
-        .sort({ name: 1 })
-        .limit(limit)
-        .skip(offset);
+      const deputies = await DeputyModel.find(conditions).sort({ name: 1 }).limit(limit).skip(offset);
 
       return {
         total,
         hasMore: offset + limit < total,
-        data: filterIds
-          ? deputies.sort((a, b) => filterIds?.indexOf(a.webId) - filterIds?.indexOf(b.webId))
-          : deputies,
+        data: filterIds ? deputies.sort((a, b) => filterIds?.indexOf(a.webId) - filterIds?.indexOf(b.webId)) : deputies,
       };
     },
     deputy: async (_parent, { id }) => {
@@ -82,12 +62,7 @@ const DeputyApi: Resolvers = {
   Deputy: {
     totalProcedures: ({ votes }) => votes.length,
     period: (parent) => (parent as any).toObject().period,
-    procedures: async (
-      { votes },
-      { procedureIds, offset = 0, pageSize = 9999999 },
-      { ProcedureModel },
-      info,
-    ) => {
+    procedures: async ({ votes }, { procedureIds, offset = 0, pageSize = 9999999 }, { ProcedureModel }, info) => {
       logger.graphql('Deputy.field.procedures');
       const requestedFields = parseResolveInfo(info);
       let didRequestOnlyProcedureId = false;
@@ -95,19 +70,14 @@ const DeputyApi: Resolvers = {
         requestedFields &&
         requestedFields.name === 'procedures' &&
         'procedure' in requestedFields.fieldsByTypeName.DeputyProcedure &&
-        'procedureId' in
-          requestedFields.fieldsByTypeName.DeputyProcedure.procedure.fieldsByTypeName.Procedure &&
-        Object.keys(
-          requestedFields.fieldsByTypeName.DeputyProcedure.procedure.fieldsByTypeName.Procedure,
-        ).length === 1
+        'procedureId' in requestedFields.fieldsByTypeName.DeputyProcedure.procedure.fieldsByTypeName.Procedure &&
+        Object.keys(requestedFields.fieldsByTypeName.DeputyProcedure.procedure.fieldsByTypeName.Procedure).length === 1
       ) {
         didRequestOnlyProcedureId = true;
       }
 
       // if procedureIds is given filter procedures to given procedureIds
-      const filteredVotes = votes.filter(({ procedureId: pId }) =>
-        procedureIds ? procedureIds.includes(pId) : true,
-      );
+      const filteredVotes = votes.filter(({ procedureId: pId }) => (procedureIds ? procedureIds.includes(pId) : true));
 
       // flattern procedureId's
       const procedureIdsSelected = filteredVotes.map(({ procedureId }) => procedureId);
@@ -153,9 +123,7 @@ const DeputyApi: Resolvers = {
 
       const result = await Promise.all(
         procedures.map(async (procedure) => {
-          const p = await filteredVotes.find(
-            ({ procedureId }) => procedure.procedureId === procedureId,
-          );
+          const p = await filteredVotes.find(({ procedureId }) => procedure.procedureId === procedureId);
           return {
             decision: p?.decision,
             procedure: { ...procedure.toObject(), activityIndex: undefined, voted: undefined },

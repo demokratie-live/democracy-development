@@ -3,5 +3,4 @@
  * @param phone The phone number to validate.
  * @returns An object indicating whether the validation succeeded and a reason if it did not.
  */
-export const isPhoneNumberValid = (phone: string): boolean =>
-  phone.substring(0, 3) === '+49' && phone.length >= 12;
+export const isPhoneNumberValid = (phone: string): boolean => phone.substring(0, 3) === '+49' && phone.length >= 12;

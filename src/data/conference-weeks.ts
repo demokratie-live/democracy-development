@@ -488,6 +488,6 @@ export const getCurrentConferenceWeek = (): {
   const nextConferenceWeek = conferenceWeeks.find(({ start }) => {
     return curDate < start;
   });
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
   return { ...nextConferenceWeek, calendarWeek: getWeekNumber(nextConferenceWeek!.start) };
 };

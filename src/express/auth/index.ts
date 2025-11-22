@@ -2,14 +2,7 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { Response, NextFunction } from 'express';
 import CONFIG from '../../config';
-import {
-  UserModel,
-  DeviceModel,
-  PhoneModel,
-  User,
-  Device,
-  Phone,
-} from '@democracy-deutschland/democracy-common';
+import { UserModel, DeviceModel, PhoneModel, User, Device, Phone } from '@democracy-deutschland/democracy-common';
 import { ExpressReqContext } from '../../types/graphqlContext';
 import { logger } from '../../services/logger';
 
@@ -101,17 +94,14 @@ export const authMiddleware = async (req: ExpressReqContext, res: Response, next
     phone: req.phone,
   });
   logger.debug(`Server: Connection from: ${req.connection.remoteAddress}`);
-  let token: string | null =
-    req.headers['x-token'] || (CONFIG.DEBUG ? req.cookies.debugToken : null);
+  let token: string | null = req.headers['x-token'] || (CONFIG.DEBUG ? req.cookies.debugToken : null);
   // In some cases the old Client transmitts the token via authorization header as 'Bearer [token]'
   if (CONFIG.JWT_BACKWARD_COMPATIBILITY && !token && req.headers.authorization) {
     token = req.headers.authorization.substr(7);
   }
-  let deviceHash =
-    req.headers['x-device-hash'] || (CONFIG.DEBUG ? req.query.deviceHash || null : null);
+  let deviceHash = req.headers['x-device-hash'] || (CONFIG.DEBUG ? req.query.deviceHash || null : null);
   deviceHash = typeof deviceHash === 'string' ? deviceHash : null;
-  let phoneHash =
-    req.headers['x-phone-hash'] || (CONFIG.DEBUG ? req.query.phoneHash || null : null);
+  let phoneHash = req.headers['x-phone-hash'] || (CONFIG.DEBUG ? req.query.phoneHash || null : null);
   phoneHash = typeof phoneHash === 'string' ? phoneHash : null;
   if (deviceHash || phoneHash) {
     // logger.jwt(`JWT: Credentials with DeviceHash(${deviceHash}) PhoneHash(${phoneHash})`);
@@ -152,8 +142,7 @@ export const authMiddleware = async (req: ExpressReqContext, res: Response, next
       logger.error(err);
       // Check for JWT Refresh Ability
       logger.jwt(`JWT: Token Error: ${err}`);
-      const refreshToken =
-        req.headers['x-refresh-token'] || (CONFIG.DEBUG ? req.cookies.debugRefreshToken : null);
+      const refreshToken = req.headers['x-refresh-token'] || (CONFIG.DEBUG ? req.cookies.debugRefreshToken : null);
       const newTokens = await refreshTokens(refreshToken);
       if (newTokens.token && newTokens.refreshToken) {
         headerToken({ res, token: newTokens.token, refreshToken: newTokens.refreshToken });
@@ -213,7 +202,7 @@ export const authMiddleware = async (req: ExpressReqContext, res: Response, next
             deviceHash: crypto.createHash('sha256').update(deviceHash).digest('hex'),
           });
           await device.save().catch((e) => {
-            logger.error("Couldn't save Device")
+            logger.error("Couldn't save Device");
             logger.error(e);
           });
         }

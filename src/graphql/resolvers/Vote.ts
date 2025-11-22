@@ -74,9 +74,7 @@ const queryVotes = async (
 
   // Find constituency results if constituencies are given
   const votesConstituencies =
-    (constituencies && constituencies.length > 0) ||
-    constituencies === undefined ||
-    constituencies === null
+    (constituencies && constituencies.length > 0) || constituencies === undefined || constituencies === null
       ? await VoteModel.aggregate([
           // Find Procedure, including type; results in up to two objects for state
           {
@@ -151,11 +149,7 @@ const VoteApi: Resolvers = {
       return queryVotes(_parent, { procedure, constituencies }, { VoteModel, device, phone });
     },
     // Used by Browserverion -> TODO Remove
-    communityVotes: async (
-      parent,
-      { procedure: procedureId, constituencies },
-      { VoteModel, ProcedureModel },
-    ) => {
+    communityVotes: async (parent, { procedure: procedureId, constituencies }, { VoteModel, ProcedureModel }) => {
       logger.graphql('Vote.query.communityVotes');
       const procedure = await ProcedureModel.findOne({ procedureId }, { _id: 1 });
       if (!procedure) {
@@ -279,10 +273,7 @@ const VoteApi: Resolvers = {
           },
           {
             currentStatus: {
-              $in: [
-                PROCEDURE_DEFINITIONS.STATUS.BESCHLUSSEMPFEHLUNG,
-                PROCEDURE_DEFINITIONS.STATUS.UEBERWIESEN,
-              ],
+              $in: [PROCEDURE_DEFINITIONS.STATUS.BESCHLUSSEMPFEHLUNG, PROCEDURE_DEFINITIONS.STATUS.UEBERWIESEN],
             },
             voteDate: { $gte: new Date() },
           },
@@ -498,17 +489,10 @@ const VoteApi: Resolvers = {
       }
     },
 
-    deputyVotes: async (
-      voteResult,
-      { constituencies, directCandidate, webIds },
-      { DeputyModel },
-    ) => {
+    deputyVotes: async (voteResult, { constituencies, directCandidate, webIds }, { DeputyModel }) => {
       logger.graphql('VoteResult.deputyVotes');
       // Do we have a procedureId and not an empty array for constituencies?
-      if (
-        voteResult.procedureId &&
-        ((constituencies && constituencies.length > 0) || constituencies === undefined)
-      ) {
+      if (voteResult.procedureId && ((constituencies && constituencies.length > 0) || constituencies === undefined)) {
         // Match procedureId
         const match: FilterQuery<IDeputy> = {
           $match: {
@@ -543,9 +527,7 @@ const VoteApi: Resolvers = {
               deputy: IDeputy;
             }[]
           >((pre, deputy) => {
-            const pDeputyVote = deputy.votes.find(
-              ({ procedureId }) => procedureId === voteResult.procedureId,
-            );
+            const pDeputyVote = deputy.votes.find(({ procedureId }) => procedureId === voteResult.procedureId);
             if (pDeputyVote) {
               const deputyVote = {
                 decision: pDeputyVote.decision,

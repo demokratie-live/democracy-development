@@ -31,7 +31,7 @@ const recommendedConfigs = {
       case 'production':
         return 'de.democracy-deutschland.clientapp';
       default:
-        console.error('ERROR: no STAGE defined!'); // eslint-disable-line no-console
+        console.error('ERROR: no STAGE defined!');
         return 'de.democracy-deutschland.clientapp';
     }
   })(),

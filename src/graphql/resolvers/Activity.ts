@@ -25,11 +25,7 @@ const ActivityApi: Resolvers = {
   },
 
   Mutation: {
-    increaseActivity: async (
-      parent,
-      { procedureId },
-      { ProcedureModel, ActivityModel, device, phone },
-    ) => {
+    increaseActivity: async (parent, { procedureId }, { ProcedureModel, ActivityModel, device, phone }) => {
       logger.graphql('Activity.mutation.increaseActivity');
       let searchQuery;
       if (Types.ObjectId.isValid(procedureId)) {

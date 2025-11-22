@@ -2,10 +2,7 @@ import { CronJob } from 'cron';
 
 import CONFIG from '../../config';
 
-import {
-  resetCronSuccessStartDate,
-  resetCronRunningState,
-} from '@democracy-deutschland/democracy-common';
+import { resetCronSuccessStartDate, resetCronRunningState } from '@democracy-deutschland/democracy-common';
 import { logger } from '../logger';
 
 // global variable to store cronjobs

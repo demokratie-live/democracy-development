@@ -9,16 +9,6 @@ import SearchTerm from './SearchTerm';
 import User from './User';
 import Vote from './Vote';
 
-const resolvers = [
-  Activity,
-  ConferenceWeek,
-  Date,
-  Deputy,
-  Device,
-  Procedure,
-  SearchTerm,
-  User,
-  Vote,
-];
+const resolvers = [Activity, ConferenceWeek, Date, Deputy, Device, Procedure, SearchTerm, User, Vote];
 
 export default mergeResolvers(resolvers);

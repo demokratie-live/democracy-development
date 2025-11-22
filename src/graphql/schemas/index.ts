@@ -10,17 +10,6 @@ import SearchTerms from './SearchTerms';
 import User from './User';
 import Vote from './Vote';
 
-const typeDefs = [
-  Activity,
-  ConferenceWeek,
-  Deputy,
-  Device,
-  Documents,
-  Procedure,
-  Schema,
-  SearchTerms,
-  User,
-  Vote,
-];
+const typeDefs = [Activity, ConferenceWeek, Deputy, Device, Documents, Procedure, Schema, SearchTerms, User, Vote];
 
 export default mergeTypeDefs(typeDefs);

@@ -17,11 +17,11 @@ export const recommendedProcedures = [
   },
   {
     title: 'Gesellschaft',
-    procedures: ['268834', '263606', '240087', "232655"],
+    procedures: ['268834', '263606', '240087', '232655'],
   },
   {
     title: 'Menschenrechte & Asyl',
-    procedures: ['235321', '267303', '230141', "242020"],
+    procedures: ['235321', '267303', '230141', '242020'],
   },
   {
     title: 'Verkehr & Mobilität',
@@ -53,7 +53,7 @@ export const recommendedProcedures = [
   },
   {
     title: 'Arbeitsrecht',
-    procedures: ['265668', '230294', '244890' , "230300"],
+    procedures: ['265668', '230294', '244890', '230300'],
   },
   {
     title: 'Innere Sicherheit',

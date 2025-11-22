@@ -39,18 +39,12 @@ const UserApi: Resolvers = {
       }
 
       let device = await DeviceModel.findOne({
-        deviceHash: crypto
-          .createHash('sha256')
-          .update(deviceHash)
-          .digest('hex'),
+        deviceHash: crypto.createHash('sha256').update(deviceHash).digest('hex'),
       });
       if (!device) {
         device = await DeviceModel.create({
-          deviceHash: crypto
-            .createHash('sha256')
-            .update(deviceHash)
-            .digest('hex'),
-        }).catch(e => {
+          deviceHash: crypto.createHash('sha256').update(deviceHash).digest('hex'),
+        }).catch((e) => {
           console.log(e);
           throw new Error('Error on save device');
         });
