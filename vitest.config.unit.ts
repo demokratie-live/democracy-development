@@ -6,9 +6,9 @@ export default defineConfig({
     include: ['src/**/*.test.ts'],
     setupFiles: ['./vitest.unit.setup.ts'],
     coverage: {
-      enabled: false, // Enable after migration
+      enabled: true,
       provider: 'v8',
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'json', 'html', 'lcov'],
       include: ['src/**/*.ts'],
       exclude: [
         'node_modules/**',
@@ -17,6 +17,12 @@ export default defineConfig({
         'src/**/*.integ.ts',
         'src/generated/**',
       ],
+      thresholds: {
+        lines: 15,
+        functions: 35,
+        branches: 30,
+        statements: 15,
+      },
     },
   },
 });

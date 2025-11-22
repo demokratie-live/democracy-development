@@ -33,7 +33,7 @@ jobs:
         run: pnpm lint
 
       - name: 🧪 Test
-        run: pnpm test
+        run: pnpm test:coverage
 
       - name: 🏗️ Build
         run: pnpm build

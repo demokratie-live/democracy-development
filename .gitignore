@@ -4,3 +4,4 @@ node_modules/
 dist
 AuthKey_*.p8
 .garden
+coverage/
