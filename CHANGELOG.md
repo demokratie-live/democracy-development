@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.79-alpha-chore-jest-to-vitest.1 (2025-11-22)
+
+
+### Bug Fixes
+
+* reduce resource limits for democracy-api container ([ae41893](https://github.com/demokratie-live/democracy-api/commit/ae41893c09c21c0a3b99fcda5d50001d8531f470))
+
 ### 0.2.79-alpha-chore-jest-to-vitest.0 (2025-11-22)
 
 ### 0.2.78 (2025-11-08)
