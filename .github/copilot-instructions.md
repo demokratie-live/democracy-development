@@ -138,7 +138,7 @@ src/
 - `.env` -- Environment variables (copy from .env.example)
 - `.npmrc` -- pnpm configuration (engine-strict=false for Node.js compatibility)
 - `package.json` -- Dependencies and scripts
-- `tsconfig.json` -- TypeScript configuration (includes vitest/globals types)
+- `tsconfig.json` -- TypeScript configuration
 - `vitest.config.unit.ts` -- Unit test configuration (Vitest)
 - `vitest.config.integration.ts` -- Integration test configuration (Vitest)
 - `vitest.unit.setup.ts` -- Unit test setup file
