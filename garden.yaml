@@ -47,8 +47,8 @@ spec:
                   image: ${actions.build.democracy-api.outputs.deploymentImageId}
                   resources:
                     limits:
-                      cpu: '2'
-                      memory: '2048Mi'
+                      cpu: '500m'
+                      memory: '1024Mi'
 ---
 kind: Deploy
 name: democracy-api-test
