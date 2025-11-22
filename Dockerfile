@@ -9,7 +9,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm build
-ENTRYPOINT [ "pnpm", "dev" ]
+ENTRYPOINT [ "pnpm", "tsx", "src/index.ts" ]
 
 FROM build_stage as install_stage
 WORKDIR /app

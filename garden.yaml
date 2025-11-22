@@ -3,7 +3,7 @@ name: democracy-api
 type: container
 spec:
   targetStage: build_stage
----    
+---
 kind: Deploy
 name: democracy-api
 type: kubernetes
@@ -26,7 +26,7 @@ spec:
         sourcePath: src
         mode: one-way
     overrides:
-      - command: [pnpm, dev]
+      - command: [pnpm, tsx, --watch, src/index.ts]
 
   patchResources:
     - name: democracy-api
