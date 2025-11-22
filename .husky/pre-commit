@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running ESLint on staged files..."
+pnpm lint-staged
+
+if [ $? -eq 0 ]; then
+  echo "✅ Lint passed!"
+fi
