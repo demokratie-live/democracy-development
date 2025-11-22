@@ -5,10 +5,9 @@ import {
   IProcedure,
   DeputyModel,
   IDeputy,
-  IDeputyVote,
 } from '@democracy-deutschland/democracy-common';
-import { reduce } from 'p-iteration';
 import { logger } from '../../services/logger';
+import pReduce from 'p-reduce';
 
 const DeputyApi: Resolvers = {
   Query: {
@@ -115,13 +114,7 @@ const DeputyApi: Resolvers = {
 
       // get needed procedure Data only from votes object
       if (didRequestOnlyProcedureId) {
-        const returnValue = reduce<
-          IDeputyVote,
-          {
-            procedure: Pick<IProcedure, 'procedureId'>;
-            decision: VoteSelection;
-          }[]
-        >(
+        const returnValue = pReduce(
           filteredVotes,
           async (prev, { procedureId, decision }) => {
             const procedure = { procedureId };
@@ -135,7 +128,10 @@ const DeputyApi: Resolvers = {
             }
             return prev;
           },
-          [],
+          [] as {
+            procedure: Pick<IProcedure, 'procedureId'>;
+            decision: VoteSelection;
+          }[],
         ).then((r) => r.slice(offset as number, (offset as number) + (pageSize as number)));
         // .slice(offset, offset + pageSize);
 
