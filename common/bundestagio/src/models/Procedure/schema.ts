@@ -49,36 +49,18 @@ const ProcedureSchema = new Schema(
     procedureId: {
       type: String,
       index: { unique: true },
-      es_indexed: true,
-      es_type: 'text',
     },
     type: {
       type: String,
       required: true,
-      es_indexed: true,
-      es_type: 'text',
     },
     period: {
       type: Number,
       required: true,
-      es_indexed: true,
-      es_type: 'integer',
     },
     title: {
       type: String,
       required: true,
-      es_indexed: true,
-      es_type: 'text',
-      analyzer: 'german',
-      es_fields: {
-        completion: {
-          type: 'completion',
-        },
-        autocomplete: {
-          type: 'keyword',
-          index: true,
-        },
-      },
     },
     initiative: [String],
     currentStatus: String,
@@ -88,49 +70,29 @@ const ProcedureSchema = new Schema(
     euDocNr: String,
     abstract: {
       type: String,
-      es_indexed: true,
-      es_type: 'text',
-      analyzer: 'german',
     },
     promulgation: [String],
     legalValidity: [String],
-    tags: [
-      {
-        type: String,
-        es_indexed: true,
-        es_type: 'text',
-        analyzer: 'german',
-      },
-    ],
-    subjectGroups: [
-      {
-        type: String,
-        es_indexed: true,
-        es_type: 'text',
-        analyzer: 'german',
-      },
-    ],
+    tags: [String],
+    subjectGroups: [String],
     importantDocuments: [Document],
     plenums: [PlenumSchema],
     history: {
       type: [ProcessFlow],
       default: undefined,
-      es_indexed: false,
-      es_include_in_parent: true,
     },
     voteDate: Date,
     voteEnd: Date,
     customData: {
       title: {
         type: String,
-        es_indexed: false,
       },
       voteResults: {
         yes: Number,
         no: Number,
         abstination: Number,
         notVoted: Number,
-        decisionText: { type: String, es_indexed: false },
+        decisionText: { type: String },
         votingDocument: {
           type: String,
           enum: ['mainDocument', 'recommendedDecision'],
@@ -138,8 +100,6 @@ const ProcedureSchema = new Schema(
         votingRecommendation: Boolean,
         partyVotes: {
           type: [PartyVotes],
-          es_indexed: false,
-          es_include_in_parent: true,
         },
       },
     },

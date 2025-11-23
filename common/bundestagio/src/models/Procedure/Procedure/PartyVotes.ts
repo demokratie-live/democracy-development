@@ -1,10 +1,10 @@
-import { Schema } from "mongoose";
+import { Schema } from 'mongoose';
 
 export enum VoteDecision {
-  Yes = "YES",
-  Abstination = "ABSTINATION",
-  No = "NO",
-  Notvoted = "NOTVOTED",
+  Yes = 'YES',
+  Abstination = 'ABSTINATION',
+  No = 'NO',
+  Notvoted = 'NOTVOTED',
 }
 
 export interface IPartyVotes {
@@ -20,11 +20,10 @@ export interface IPartyVotes {
 
 const PartyVotesSchema = new Schema<IPartyVotes>(
   {
-    party: { type: String, es_indexed: false },
+    party: { type: String },
     main: {
       type: String,
-      es_indexed: false,
-      enum: ["YES", "NO", "ABSTINATION", "NOTVOTED"],
+      enum: ['YES', 'NO', 'ABSTINATION', 'NOTVOTED'],
     },
     deviants: {
       yes: Number,
@@ -33,7 +32,7 @@ const PartyVotesSchema = new Schema<IPartyVotes>(
       notVoted: Number,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 export default PartyVotesSchema;
