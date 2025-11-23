@@ -41,6 +41,7 @@ CMD cd $SERVICE_PATH && pnpm dev
 
 FROM installer AS installer_prod
 RUN pnpm turbo run build --filter=$SERVICE
+ENV CI=true
 RUN pnpm install --prod --frozen-lockfile --ignore-scripts --prefer-offline
  
 FROM base AS runner
