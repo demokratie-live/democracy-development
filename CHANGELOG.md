@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.80-alpha-chore-eslint-9.0 (2025-11-23)
+
+
+### Features
+
+* add pre-commit hook for ESLint linting ([9d73747](https://github.com/demokratie-live/democracy-api/commit/9d737470d32aa4f89320151cd54aefbe17ed67ce))
+
 ### 0.2.79 (2025-11-22)
 
 ### 0.2.79-alpha-chore-jest-to-vitest.1 (2025-11-22)
