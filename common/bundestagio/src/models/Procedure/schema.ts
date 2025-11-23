@@ -1,5 +1,4 @@
 import { Schema, Document as MDocument, SchemaTimestampsConfig } from 'mongoose';
-import mongoosastic from 'mongoosastic';
 
 import ProcessFlow, { IProcessFlow } from './Procedure/ProcessFlow';
 import Document, { IDocument } from './Procedure/Document';
@@ -155,6 +154,5 @@ ProcedureSchema.index({
 
 // https://github.com/demokratie-live/democracy-client/issues/1340
 // ProcedureSchema.plugin(diffHistory.plugin, { omit: ["updatedAt"] });
-ProcedureSchema.plugin(mongoosastic, { host: process.env.ELASTICSEARCH_URL });
 
 export default ProcedureSchema;
