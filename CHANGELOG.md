@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.80 (2025-11-23)
+
 ### 0.2.80-alpha-chore-eslint-9.0 (2025-11-23)
 
 
