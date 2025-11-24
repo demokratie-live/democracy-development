@@ -45,7 +45,7 @@
     "@crawlee/cheerio": "^3.13.0",
     "@democracy-deutschland/bundestag.io-definitions": "^1.0.2",
     "@democracy-deutschland/bundestagio-common": "workspace:^",
-    "axios": "^1.8.2",
+    "axios": "^1.13.2",
     "cheerio": "1.0.0-rc.12",
     "crawlee": "^3.10.1"
   }
