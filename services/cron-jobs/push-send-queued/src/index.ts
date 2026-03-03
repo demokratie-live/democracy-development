@@ -7,6 +7,7 @@ import {
   mongoConnect,
 } from '@democracy-deutschland/democracy-common';
 import admin from 'firebase-admin';
+import apn from 'apn';
 
 admin.initializeApp({
   credential: admin.credential.cert({
@@ -16,6 +17,20 @@ admin.initializeApp({
   }),
 });
 
+const apnsProvider =
+  process.env.APPLE_APN_KEY && process.env.APPLE_APN_KEY_ID && process.env.APPLE_TEAMID
+    ? new apn.Provider({
+        token: {
+          key: process.env.APPLE_APN_KEY.replace(/\\n/gm, '\n'),
+          keyId: process.env.APPLE_APN_KEY_ID,
+          teamId: process.env.APPLE_TEAMID,
+        },
+        production: process.env.NODE_ENV === 'production',
+      })
+    : null;
+
+const isApnsToken = (token: string) => /^[0-9a-f]{64}$/i.test(token);
+
 const getUnsendPushs = async (limit: number) => {
   return PushNotificationModel.find({
     sent: false,
@@ -23,7 +38,25 @@ const getUnsendPushs = async (limit: number) => {
   }).limit(limit);
 };
 
-const sendPush = async (push: Awaited<ReturnType<typeof getUnsendPushs>>[0]) => {
+const sendPushViaApns = async (push: Awaited<ReturnType<typeof getUnsendPushs>>[0]) => {
+  if (!apnsProvider) throw new Error('APNs provider not configured (missing APPLE_APN_KEY, APPLE_APN_KEY_ID or APPLE_TEAMID)');
+  const { type, category, title, message, procedureIds, token } = push;
+
+  const notification = new apn.Notification();
+  notification.expiry = Math.floor(Date.now() / 1000) + 3600;
+  notification.sound = 'push.aiff';
+  notification.alert = { title, body: message };
+  notification.topic = process.env.APN_TOPIC ?? '';
+  notification.payload = { data: { type, action: type, category, title, message, procedureId: procedureIds[0] } };
+
+  const result = await apnsProvider.send(notification, token);
+  if (result.failed.length > 0) {
+    const failure = result.failed[0];
+    throw new Error(failure.response?.reason ?? failure.error?.message ?? 'APNs send failed');
+  }
+};
+
+const sendPushViaFcm = async (push: Awaited<ReturnType<typeof getUnsendPushs>>[0]) => {
   const { type, category, title, message, procedureIds, token } = push;
 
   await admin.messaging().send({
@@ -50,8 +83,16 @@ const sendPush = async (push: Awaited<ReturnType<typeof getUnsendPushs>>[0]) => 
   });
 };
 
+const sendPush = async (push: Awaited<ReturnType<typeof getUnsendPushs>>[0]) => {
+  if (isApnsToken(push.token)) {
+    await sendPushViaApns(push);
+  } else {
+    await sendPushViaFcm(push);
+  }
+};
+
 const handleSendError = async (push: Awaited<ReturnType<typeof getUnsendPushs>>[0], error: unknown) => {
-  console.error('errorASDF', error);
+  console.error('send error', error);
   await DeviceModel.updateMany(
     {
       'pushTokens.token': push.token,
@@ -95,5 +136,6 @@ const start = async () => {
   await mongoConnect();
   console.log("outstanding push's", await PushNotificationModel.countDocuments({ sent: false }));
   await start();
+  apnsProvider?.shutdown();
   process.exit(0);
 })();
