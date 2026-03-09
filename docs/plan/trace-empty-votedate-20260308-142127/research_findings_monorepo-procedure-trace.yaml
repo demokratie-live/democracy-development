@@ -1,0 +1,15 @@
+{
+  "task_id": "monorepo-procedure-trace",
+  "status": "SUCCESS",
+  "summary": "The monorepo can persist procedures without voteDate, and past-procedure selection can still surface them when voteEnd is past or completion logic applies.",
+  "key_findings": [
+    "services/procedures/src/procedures/procedures.service.ts marks records as past when voteDate < now OR voteEnd < now.",
+    "common/bundestagio/src/models/Procedure/schema.ts does not require voteDate or voteEnd.",
+    "services/cron-jobs/crawler/src/import-procedures/import-procedures.ts stores upstream procedure fields as-is and does not synthesize a missing voteDate.",
+    "services/cron-jobs/import-conference-week-details/src/utils/update-vote-dates.ts backfills voteDate only for matched vote topics in recent conference weeks with valid session dates.",
+    "services/cron-jobs/sync-procedures/src/index.ts preserves null voteDate values because it omits only undefined before upsert."
+  ],
+  "open_questions": [
+    "Which concrete stored records currently have voteEnd without voteDate in the running environment."
+  ]
+}

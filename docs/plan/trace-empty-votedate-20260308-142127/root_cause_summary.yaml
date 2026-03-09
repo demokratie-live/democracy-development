@@ -1,0 +1,20 @@
+{
+  "task_id": "synthesize-votedate-root-cause",
+  "status": "SUCCESS",
+  "root_cause_summary": "voteDate is not guaranteed end-to-end. A procedure can be imported/stored without voteDate, remain unfilled because conference-week backfill is conditional, be exposed by downstream APIs anyway, and finally be grouped by the desktop vergangen page without validation.",
+  "chain": [
+    "Desktop /vergangen groups procedures by dayjs(item.voteDate).isoWeek()/year() without checking isValid().",
+    "democracy-api exposes Procedure.voteDate as nullable and its resolvers can include records whose voteDate is not a Mongo date.",
+    "Monorepo past-procedure logic can return records that are past because voteEnd is in the past even when voteDate is absent.",
+    "voteDate originates from conference-week session dates and is backfilled only when a vote topic is detected, procedureIds are matched, the session has a date, the relevant week is in scope, and the update step succeeds.",
+    "sync-procedures also accepts null voteDate from bundestag.io procedureUpdates and persists null unchanged because only undefined is stripped."
+  ],
+  "earliest_upstream_nullable_points": [
+    "Conference-week topic cannot be matched back to a procedure.",
+    "Conference-week session has no date.",
+    "Relevant week lies outside the importer window.",
+    "bundestag.io procedureUpdates returns voteDate = null.",
+    "Downstream sync persists null as-is."
+  ],
+  "fix_direction": "A frontend guard is sensible but only defensive; the underlying data issue is that voteDate remains optional and nullable throughout the ingestion and API chain."
+}

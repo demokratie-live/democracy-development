@@ -1,0 +1,16 @@
+{
+  "task_id": "research-conference-week-votedate",
+  "status": "SUCCESS",
+  "summary": "import-conference-week-details still owns voteDate generation, but the flow is conditional and currently contains a likely document-link resolution bug/gap.",
+  "verdict": {
+    "generates_votedate": true,
+    "guarantees_votedate": false,
+    "likely_gap_or_regression": "gap"
+  },
+  "key_findings": [
+    "services/cron-jobs/import-conference-week-details/src/utils/update-vote-dates.ts contains the only in-repo write path that sets procedure.voteDate.",
+    "The backfill requires a dated session, a topic detected as a vote, non-empty resolved procedureIds, and a match during ProcedureModel.updateMany.",
+    "services/cron-jobs/import-conference-week-details/src/services/parsers/html-detail-parser.ts stores raw href values, while getProcedureIds in src/utils/vote-detection.ts calls new URL(document) without a base and drops unparsable relative links.",
+    "Vote-date update errors in src/index.ts are logged and swallowed, so conference weeks can be imported while voteDate remains unset."
+  ]
+}

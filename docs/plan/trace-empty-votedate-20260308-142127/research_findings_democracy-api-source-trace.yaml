@@ -1,0 +1,14 @@
+{
+  "task_id": "democracy-api-source-trace",
+  "status": "SUCCESS",
+  "summary": "The external democracy-api repository does not derive voteDate itself; it exposes stored procedure documents with nullable voteDate and intentionally includes some records without a real date.",
+  "key_findings": [
+    "/Users/manuelruck/Work/democracy/repos/democracy-api/src/graphql/schemas/Procedure.ts exposes voteDate as nullable Date.",
+    "/Users/manuelruck/Work/democracy/repos/democracy-api/src/graphql/resolvers/Procedure.ts includes records with voteDate $not type date for some procedure lists.",
+    "The real upstream voteDate source is the conference-week session date backfill path, not democracy-api itself.",
+    "bundestag.io procedureUpdates and sync-procedures treat voteDate as nullable and can propagate null downstream unchanged."
+  ],
+  "open_questions": [
+    "Whether current production data is primarily missing voteDate because of skipped backfill, upstream null payloads, or both."
+  ]
+}

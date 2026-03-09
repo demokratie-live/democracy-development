@@ -1,0 +1,281 @@
+plan_id: trace-empty-votedate-20260308-142127
+objective: Commit the remaining worktree changes in sensible groups.
+created_at: 2026-03-09T19:26:56Z
+created_by: gem-planner
+status: pending_approval
+research_confidence: high
+
+tldr: |
+  The voteDate work is already completed; this follow-up plan only groups the remaining unrelated worktree changes into four clean commits.
+  Proposed commit order:
+    1. chore: align container tooling, ignore rules, and CI runner smoke coverage
+    2. fix: align democracy desktop local runtime host resolution
+    3. refactor: share crawler runtime config across Garden deploy/run paths
+    4. docs: add voteDate walkthroughs and refreshed planning artifacts
+  For every future commit, stage only the listed files, review `git diff --cached`, and include this trailer:
+  Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+
+open_questions:
+  - Should the docs/plan artifacts remain a dedicated final docs commit, or should they be folded into the closest functional commit? Default: keep them separate.
+
+pre_mortem:
+  overall_risk_level: medium
+  critical_failure_modes:
+    - scenario: A broad tooling commit mixes unrelated runtime behavior and becomes hard to review or revert.
+      likelihood: medium
+      impact: high
+      mitigation: Keep the first commit limited to devcontainer, ignore, Docker, workflow, and bundestag.io runner-smoke files; verify the staged file list before committing.
+    - scenario: The tracked democracy/desktop/.env change encodes a machine-local assumption that breaks another local workflow.
+      likelihood: medium
+      impact: high
+      mitigation: Verify the APP_HOST fallback intent against next.config.js and Client.ts before committing, and keep all desktop host changes in one isolated commit for easy rollback.
+    - scenario: The crawler Garden refactor is committed without the manifest deploy dependency or var interpolation defaults, causing ad-hoc runs to lose required env.
+      likelihood: low
+      impact: high
+      mitigation: Commit the crawler garden.yml and both manifests together, then verify the staged diff still includes deploy.crawler-runtime-config plus envFrom wiring.
+  assumptions:
+    - The listed remaining files are intended to be committed now, including the tracked democracy/desktop/.env change.
+    - The untracked docs/plan artifacts may be committed as documentation without reopening the already-finished voteDate implementation work.
+    - No additional hidden worktree changes need to be folded into these commit groups.
+
+implementation_specification:
+  code_structure: Group the remaining dirty files by delivery outcome rather than by directory, using four commits that each represent one reviewable user-facing or operator-facing change set.
+  affected_areas:
+    - .devcontainer, ignore rules, infra Docker build, bundestag.io/api package scripts, and GitHub Actions build pipeline
+    - democracy/desktop local runtime configuration and server-side host resolution
+    - services/cron-jobs/crawler Garden deploy/run manifests and runtime secrets/config wiring
+    - docs/plan artifacts for the completed voteDate work and this remaining-commit walkthrough
+  component_details:
+    - component: Tooling and CI commit
+      responsibility: Bundle devcontainer bootstrap, cache ignores, production Docker CI hardening, and the bundestag.io runner smoke test into one infrastructure-focused commit.
+      interfaces:
+        - chore: align container tooling, ignore rules, and CI runner smoke coverage
+        - pnpm --dir bundestag.io/api smoke:runner
+        - GitHub workflow build-and-push bundestag.io matrix job
+    - component: Desktop runtime commit
+      responsibility: Keep all democracy/desktop local host and SSR URL handling changes together so local runtime behavior can be reviewed and reverted independently.
+      interfaces:
+        - fix: align democracy desktop local runtime host resolution
+        - democracy/desktop/garden.yml deploy dependency and APP_API_URL wiring
+        - democracy/desktop/src/utils/Client.ts server-side host fallback
+    - component: Crawler runtime config commit
+      responsibility: Move crawler runtime env wiring to shared Garden manifests so local runs and scheduled deploys consume the same config and secret sources.
+      interfaces:
+        - refactor: share crawler runtime config across Garden deploy/run paths
+        - services/cron-jobs/crawler/garden.yml deploy.crawler-runtime-config dependency
+        - services/cron-jobs/crawler/manifests/ConfigMap.yaml and Secret.yaml defaults
+    - component: Planning artifacts commit
+      responsibility: Preserve the walkthrough and refreshed planning artifacts as a final documentation-only commit after the functional commits land.
+      interfaces:
+        - docs: add voteDate walkthroughs and refreshed planning artifacts
+        - docs/plan/trace-empty-votedate-20260308-142127/**
+  dependencies:
+    - component: Tooling and CI commit
+      relationship: Independent; can land before the application-specific commits.
+    - component: Desktop runtime commit
+      relationship: Independent of crawler runtime config; should stay separate because it changes desktop host semantics.
+    - component: Crawler runtime config commit
+      relationship: Independent of desktop runtime changes; should stay separate because it changes Garden manifests and run/deploy behavior.
+    - component: Planning artifacts commit
+      relationship: Depends on the final commit grouping decision so the walkthrough matches the executed sequence.
+  integration_points:
+    - Git index staging boundaries for the remaining dirty files
+    - GitHub Actions build-and-push workflow for bundestag.io images
+    - Local democracy/desktop Garden deploy plus SSR GraphQL host resolution
+    - Garden deploy/run wiring for services/cron-jobs/crawler
+    - docs/plan/trace-empty-votedate-20260308-142127 documentation trail
+
+tasks:
+  - id: task-001
+    title: Commit container tooling and CI hygiene
+    description: |
+      Stage these files together as one infrastructure-focused commit because they all tighten containerized development/build behavior and add explicit runner smoke coverage:
+        - .devcontainer/Dockerfile
+        - .devcontainer/devcontainer.json
+        - .dockerignore
+        - .gardenignore
+        - .github/workflows/build-and-push.yaml
+        - .gitignore
+        - bundestag.io/api/package.json
+        - infra/Dockerfile
+        - pnpm-lock.yaml
+      Proposed commit message: `chore: align container tooling and CI runner smoke coverage`
+      Required trailer:
+      Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+    agent: gem-implementer
+    priority: high
+    status: pending
+    dependencies: []
+    context_files:
+      - .devcontainer/Dockerfile: Devcontainer base image now installs pnpm and Copilot tooling.
+      - .devcontainer/devcontainer.json: Devcontainer mounts pnpm store and bootstraps the gem-team plugin.
+      - .dockerignore: Docker context now excludes pnpm store and coverage output.
+      - .gardenignore: Garden source staging now drops local caches and build artifacts.
+      - .github/workflows/build-and-push.yaml: CI now smoke-tests the bundestag.io runner image before pushing.
+      - .gitignore: Repository ignore list now excludes the local pnpm store directory.
+      - bundestag.io/api/package.json: Adds the runner smoke script and promotes schema dependency ordering.
+      - infra/Dockerfile: Production installer stage now runs with CI=true.
+      - pnpm-lock.yaml: Lockfile reflects the package manifest dependency ordering.
+    estimated_effort: medium
+    estimated_files: 9
+    estimated_lines: 80
+    focus_area: tooling-and-ci
+    verification:
+      - Review `git diff --cached --stat` and confirm only the nine tooling/CI files are staged.
+      - Run `pnpm --dir bundestag.io/api smoke:runner` if Docker is available, or record why it was skipped before committing.
+      - Re-read the commit message and ensure the Copilot trailer is appended exactly once.
+    acceptance_criteria:
+      - The commit contains only devcontainer, ignore, infra Docker, workflow, bundestag.io package, and lockfile changes.
+      - The commit message clearly communicates container/tooling plus runner smoke intent.
+      - The commit body includes `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`.
+    failure_modes:
+      - scenario: A stray app/runtime file is accidentally staged into the broad tooling commit.
+        likelihood: medium
+        impact: high
+        mitigation: Stage by explicit path list and inspect `git diff --cached --name-only` before commit.
+      - scenario: The smoke script is committed without validating Docker runner behavior, leaving CI failure risk hidden.
+        likelihood: medium
+        impact: medium
+        mitigation: Run the smoke command locally when possible, or note the unverified risk in the commit handoff.
+    tech_stack:
+      - Docker
+      - pnpm
+      - GitHub Actions
+      - Dev Containers
+    test_coverage: Smoke validation via `pnpm --dir bundestag.io/api smoke:runner`; no new automated unit tests in this commit.
+    requires_review: false
+    review_depth: null
+    security_sensitive: false
+
+  - id: task-002
+    title: Commit desktop local runtime host alignment
+    description: |
+      Stage the democracy/desktop files together so the local runtime host semantics stay isolated in one reversible commit:
+        - democracy/desktop/.env
+        - democracy/desktop/garden.yml
+        - democracy/desktop/next.config.js
+        - democracy/desktop/src/utils/Client.ts
+      Proposed commit message: `fix: align democracy desktop local runtime host resolution`
+      Required trailer:
+      Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+    agent: gem-implementer
+    priority: high
+    status: pending
+    dependencies: []
+    context_files:
+      - democracy/desktop/.env: Default APP_HOST now points at the local Next.js server instead of the internal API URL.
+      - democracy/desktop/garden.yml: Desktop deploy now depends on democracy-api and uses APP_API_URL=http://democracy-api.
+      - democracy/desktop/next.config.js: Bundle analyzer is now conditionally required without wrapping the default export path.
+      - democracy/desktop/src/utils/Client.ts: SSR host detection now trims trailing slashes and falls back to localhost by PORT.
+    estimated_effort: medium
+    estimated_files: 4
+    estimated_lines: 50
+    focus_area: desktop-local-runtime
+    verification:
+      - Review `git diff --cached --stat` and confirm only the four democracy/desktop files are staged.
+      - Verify APP_HOST and APP_API_URL responsibilities still make sense for local SSR versus browser requests.
+      - Re-read the commit message and ensure the Copilot trailer is appended exactly once.
+    acceptance_criteria:
+      - The commit contains only democracy/desktop runtime-host changes.
+      - Server-side host fallback and Garden wiring remain consistent with the .env defaults.
+      - The commit body includes `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`.
+    failure_modes:
+      - scenario: The tracked .env change is actually machine-specific and should not become the repository default.
+        likelihood: medium
+        impact: high
+        mitigation: Confirm the new localhost APP_HOST is intended for shared local development before committing.
+      - scenario: Garden deploy wiring and SSR host fallback diverge, causing server-rendered requests to target a different host than browser requests.
+        likelihood: low
+        impact: high
+        mitigation: Review the four staged files together and keep them in the same commit so the semantics stay synchronized.
+    tech_stack:
+      - Next.js
+      - Apollo Client
+      - Garden
+      - Node.js
+    test_coverage: Manual local SSR/API reachability check after staging; no dedicated automated test changes in this commit.
+    requires_review: false
+    review_depth: null
+    security_sensitive: false
+
+  - id: task-003
+    title: Commit crawler runtime config consolidation
+    description: |
+      Stage the crawler Garden files together so shared runtime config deployment and ad-hoc import execution land in one manifest-focused commit:
+        - services/cron-jobs/crawler/garden.yml
+        - services/cron-jobs/crawler/manifests/ConfigMap.yaml
+        - services/cron-jobs/crawler/manifests/Secret.yaml
+      Proposed commit message: `refactor: share crawler runtime config across Garden paths`
+      Required trailer:
+      Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+    agent: gem-implementer
+    priority: medium
+    status: pending
+    dependencies: []
+    context_files:
+      - services/cron-jobs/crawler/garden.yml: Adds a shared crawler-runtime-config deploy and switches import-procedures to envFrom.
+      - services/cron-jobs/crawler/manifests/ConfigMap.yaml: Supplies defaults for DB_URL and import procedure variables.
+      - services/cron-jobs/crawler/manifests/Secret.yaml: Aligns the DIP API key reference with Garden var usage.
+    estimated_effort: medium
+    estimated_files: 3
+    estimated_lines: 70
+    focus_area: crawler-garden-runtime
+    verification:
+      - Review `git diff --cached --stat` and confirm only the three crawler Garden files are staged.
+      - Verify `deploy.crawler-runtime-config` remains a dependency of the import-procedures run action.
+      - Re-read the commit message and ensure the Copilot trailer is appended exactly once.
+    acceptance_criteria:
+      - The commit contains only crawler Garden runtime-config refactor files.
+      - ConfigMap defaults and Secret references match the envFrom wiring in garden.yml.
+      - The commit body includes `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`.
+    failure_modes:
+      - scenario: The shared runtime deploy is committed without the import-procedures dependency, so ad-hoc runs miss their config.
+        likelihood: low
+        impact: high
+        mitigation: Keep garden.yml and both manifests in the same commit and verify the dependency in the staged diff.
+    tech_stack:
+      - Garden
+      - Kubernetes manifests
+      - MongoDB connection configuration
+    test_coverage: Configuration-only change; validate by reviewing staged dependency and envFrom wiring before commit.
+    requires_review: false
+    review_depth: null
+    security_sensitive: false
+
+  - id: task-004
+    title: Commit voteDate walkthrough and planning artifacts
+    description: |
+      After the functional commits are ready, stage the remaining docs/plan artifacts together as one documentation-only commit.
+      Include at minimum the refreshed `docs/plan/trace-empty-votedate-20260308-142127/plan.yaml` plus the remaining walkthrough and research summary files under `docs/plan/trace-empty-votedate-20260308-142127/**` that are still untracked.
+      Proposed commit message: `docs: add voteDate completion walkthrough and commit plan`
+      Required trailer:
+      Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+    agent: gem-documentation-writer
+    priority: low
+    status: pending
+    dependencies:
+      - task-001
+      - task-002
+      - task-003
+    context_files:
+      - docs/plan/trace-empty-votedate-20260308-142127/plan.yaml: Refreshed plan for grouping the remaining worktree changes.
+      - docs/plan/trace-empty-votedate-20260308-142127/walkthrough-completion-20260309-180551.md: Documents the completed voteDate follow-up commits.
+      - docs/plan/trace-empty-votedate-20260308-142127/**: Remaining untracked walkthrough and research artifacts to preserve alongside the refreshed plan.
+    estimated_effort: small
+    estimated_files: 8
+    estimated_lines: 250
+    focus_area: planning-artifacts
+    verification:
+      - Review `git diff --cached --name-only -- docs/plan` and confirm only docs/plan artifacts are staged.
+      - Ensure the docs commit does not accidentally include the external session-state plan.md file.
+      - Re-read the commit message and ensure the Copilot trailer is appended exactly once.
+    acceptance_criteria:
+      - The commit is documentation-only and limited to docs/plan artifacts inside the repository.
+      - The refreshed plan matches the intended commit sequence and trailer requirement.
+      - The commit body includes `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`.
+    failure_modes: []
+    audience: developers
+    coverage_matrix:
+      - Completed voteDate follow-up walkthroughs are preserved in-repo.
+      - Remaining-worktree commit grouping is documented.
+      - Future executor can see the required Copilot trailer for every commit.

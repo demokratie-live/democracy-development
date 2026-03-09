@@ -1,0 +1,16 @@
+{
+  "task_id": "synthesize-import-votedate-contract",
+  "status": "SUCCESS",
+  "verdict": "The intended split still exists: import-procedures imports procedures, and import-conference-week-details generates voteDate. However, the voteDate generation path is not reliable today; it is conditional by design and likely misses some records due to a current relative-document-link parsing mismatch, plus swallowed backfill errors and a limited crawl window.",
+  "contract_assessment": {
+    "import_procedures_boundary_intact": true,
+    "conference_week_owns_votedate": true,
+    "current_behavior_fully_reliable": false,
+    "most_likely_issue": "Relative hrefs from conference-week parsing are incompatible with getProcedureIds URL parsing, which can leave procedureIds empty and prevent voteDate backfill."
+  },
+  "next_steps": [
+    "Normalize relative document hrefs before getProcedureIds or parse them with a known base URL.",
+    "Consider surfacing or failing voteDate update errors instead of only logging them.",
+    "Review whether the limited conference-week backfill window is intentional for procedures still missing voteDate."
+  ]
+}

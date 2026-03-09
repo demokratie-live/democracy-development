@@ -1,0 +1,14 @@
+{
+  "task_id": "desktop-consumer-trace",
+  "status": "SUCCESS",
+  "summary": "The /vergangen page groups by dayjs(item.voteDate) without any null or validity guard, so a null/invalid voteDate renders as KW NaN - NaN.",
+  "key_findings": [
+    "democracy/desktop/src/pages/vergangen.tsx derives isoWeek/year directly from item.voteDate.",
+    "FilteredPage groups and renders every returned procedure without filtering invalid voteDate values.",
+    "GET_PROCEDURES requests voteDate unchanged, and the local /api/graphql proxy forwards it unchanged to APP_API_URL.",
+    "Card hides empty voteDate on the card body via a truthiness check, which masks the missing date visually while the broken group header remains visible."
+  ],
+  "open_questions": [
+    "Whether the backend contract is supposed to guarantee a parseable voteDate for PAST procedures."
+  ]
+}

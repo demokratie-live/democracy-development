@@ -1,0 +1,15 @@
+{
+  "task_id": "research-import-procedures-role",
+  "status": "SUCCESS",
+  "summary": "import-procedures still acts as a pure procedure importer and does not generate or backfill voteDate.",
+  "verdict": {
+    "only_imports_procedures": true,
+    "touches_votedate": false,
+    "touches_voteweek_year": false
+  },
+  "key_findings": [
+    "services/cron-jobs/crawler/src/import-procedures/import-procedures.ts createProcedure maps DIP procedure fields plus derived metadata like documents/history, but not voteDate.",
+    "The importer upserts mapped procedure payloads with ProcedureModel.bulkWrite and $set, so it persists only what createProcedure returns.",
+    "The bt-dip-sdk Vorgang type used by the importer has no voteDate or conference-week fields."
+  ]
+}
