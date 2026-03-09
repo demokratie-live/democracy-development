@@ -91,6 +91,11 @@ jobs:
             echo "dockerfile=infra/Dockerfile" >> $GITHUB_OUTPUT
           fi
 
+      - name: Smoke test bundestag.io runner
+        if: ${{ matrix.package == 'bundestag.io' }}
+        run: pnpm smoke:runner
+        working-directory: ${{ steps.get-directory.outputs.directory }}
+
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v5

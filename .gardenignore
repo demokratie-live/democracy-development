@@ -1,7 +1,9 @@
+# Exclude generated caches and local-only artifacts from Garden source staging.
 *.log
 /data/
 .vs
 node_modules
+.pnpm-store
 .github/workflows/*.env
 infra/*.yaml
 configuration/*
@@ -10,7 +12,13 @@ docker_volumes/*/*
 !/**/.gitkeep
 /services/cron-jobs/push-send-queued/.env
 .turbo
+.garden
+.next
 out
 build
+built
+dist
+coverage
+logs
 /.env
 manifests

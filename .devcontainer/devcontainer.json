@@ -1,0 +1,45 @@
+{
+  "name": "democracy-development",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": false
+    }
+  },
+  "postCreateCommand": "pnpm install && copilot plugin install gem-team@awesome-copilot",
+  "mounts": [
+    "source=democracy-pnpm-store,target=/pnpm-store,type=volume"
+  ],
+  "remoteEnv": {
+    "NODE_ENV": "development",
+    "COPILOT_GITHUB_TOKEN": "${localEnv:COPILOT_GITHUB_TOKEN}",
+    "PNPM_STORE_DIR": "/pnpm-store"
+  },
+  "forwardPorts": [
+    4000,
+    4001,
+    4003,
+    27017
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "vitest.explorer",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
+        "github.copilot",
+        "github.copilot-chat"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "npm.packageManager": "pnpm"
+      }
+    }
+  }
+}
