@@ -25,6 +25,7 @@ type: kubernetes
 
 dependencies:
   - build.democracy-desktop
+  - deploy.democracy-api
 
 spec:
   manifestTemplates:
@@ -53,7 +54,5 @@ spec:
                 - name: democracy-desktop
                   image: ${actions.build.democracy-desktop.outputs.deploymentImageId}
                   env:
-                    - name: APP_HOST
-                      value: http://democracy-api.local.democracy-app.de
                     - name: APP_API_URL
-                      value: http://democracy-api.local.democracy-app.de
+                      value: http://democracy-api
