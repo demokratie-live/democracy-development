@@ -1,9 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies */
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
-
-module.exports = withBundleAnalyzer({
+const nextConfig = {
   output: 'standalone',
   eslint: {
     dirs: ['.'],
@@ -35,4 +30,15 @@ module.exports = withBundleAnalyzer({
       },
     ];
   },
-});
+};
+
+if (process.env.ANALYZE === 'true') {
+  /* eslint-disable global-require, import/no-extraneous-dependencies */
+  const withBundleAnalyzer = require('@next/bundle-analyzer')({
+    enabled: true,
+  });
+
+  module.exports = withBundleAnalyzer(nextConfig);
+} else {
+  module.exports = nextConfig;
+}
