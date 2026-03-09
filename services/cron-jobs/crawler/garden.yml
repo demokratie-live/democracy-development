@@ -16,12 +16,10 @@ spec:
   extraFlags: ['--load']
 
 ---
-kind: Run
-name: import-procedures
-description: Ad-hoc import-Job for Prozeduren
-dependencies:
-  - build.import-procedures
-  - deploy.mongo
+kind: Deploy
+name: crawler-runtime-config
+description: Shared crawler runtime ConfigMap and Secret for local and scheduled runs
+type: kubernetes
 
 varfiles:
   - path: .env
@@ -29,8 +27,23 @@ varfiles:
   - path: .env.local
     optional: true
 
-variables:
-  DB_URL: mongodb://democracy-mongo:27017/bundestagio
+source:
+  path: manifests
+
+spec:
+  manifestTemplates:
+    - ConfigMap.yaml
+    - Secret.yaml
+
+---
+kind: Run
+name: import-procedures
+description: Ad-hoc import-Job for Prozeduren
+dependencies:
+  - build.import-procedures
+  - deploy.mongo
+  - deploy.crawler-runtime-config
+timeout: 1800
 
 type: kubernetes-pod
 spec:
@@ -40,23 +53,9 @@ spec:
       - name: import-procedures
         image: ${actions.build.import-procedures.outputs.deploymentImageId}
         imagePullPolicy: IfNotPresent
-        env:
-          - name: DB_URL
-            value: ${var.DB_URL}
-          - name: DIP_API_KEY
-            valueFrom:
-              secretKeyRef:
-                name: dip-api-token
-                key: DIP_API_KEY
-          - name: DEBUG
-            value: '${var.DEBUG || "false"}'
-          - name: IMPORT_PROCEDURES_CHUNK_ROUNDS
-            value: '${var.IMPORT_PROCEDURES_CHUNK_ROUNDS || "5"}'
-          - name: IMPORT_PROCEDURES_CHUNK_SIZE
-            value: '${var.IMPORT_PROCEDURES_CHUNK_SIZE || "100"}'
-          - name: IMPORT_PROCEDURES_FILTER_AFTER
-            value: '${var.IMPORT_PROCEDURES_FILTER_AFTER || ""}'
-          - name: IMPORT_PROCEDURES_FILTER_TYPES
-            value: '${var.IMPORT_PROCEDURES_FILTER_TYPES || ""}'
-          - name: IMPORT_PROCEDURES_START_CURSOR
-            value: '${var.IMPORT_PROCEDURES_START_CURSOR || "*"}'
+        envFrom:
+          - configMapRef:
+              name: crawler-config
+          - secretRef:
+              name: dip-api-token
+              optional: false
