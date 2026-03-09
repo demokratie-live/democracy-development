@@ -47,6 +47,7 @@ const importProcedures = async (bIoProcedure: ProcedureUpdates_procedureUpdates_
     procedureId: nullToUndefined(bIoProcedure.procedureId),
     period: nullToUndefined(bIoProcedure.period),
     type: nullToUndefined(bIoProcedure.type),
+    voteDate: nullToUndefined(bIoProcedure.voteDate),
     currentStatus: nullToUndefined(bIoProcedure.currentStatus),
     abstract: nullToUndefined(bIoProcedure.abstract),
     currentStatusHistory: bIoProcedure.currentStatusHistory
