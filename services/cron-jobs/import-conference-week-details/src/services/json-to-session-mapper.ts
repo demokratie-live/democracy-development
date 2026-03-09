@@ -118,7 +118,10 @@ function parseGermanDate(dateString: string): Date | null {
   };
 
   // Match pattern: "12. November 2025"
-  const match = dateString.match(/(\d+)\.\s+(\w+)\s+(\d{4})/);
+  const match = dateString
+    .trim()
+    .normalize('NFC')
+    .match(/^(\d{1,2})\.\s+([\p{L}]+)\s+(\d{4})$/u);
   if (!match) return null;
 
   const day = parseInt(match[1], 10);
