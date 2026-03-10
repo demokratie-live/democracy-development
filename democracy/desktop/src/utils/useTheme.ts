@@ -35,8 +35,13 @@ export const useTheme = () => {
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  }, [theme, setTheme]);
+    setThemeState((current) => {
+      const next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(STORAGE_KEY, next);
+      applyTheme(next);
+      return next;
+    });
+  }, []);
 
   return { theme, toggleTheme };
 };

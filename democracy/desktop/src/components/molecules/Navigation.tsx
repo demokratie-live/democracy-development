@@ -104,7 +104,7 @@ const Navigation = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center px-2 space-x-2">
+              <div className="flex items-center space-x-2 px-2">
                 <button
                   type="button"
                   onClick={toggleTheme}
