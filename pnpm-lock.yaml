@@ -174,6 +174,9 @@ importers:
       '@graphql-tools/merge':
         specifier: ^9.0.4
         version: 9.0.20(graphql@16.8.1)
+      '@graphql-tools/schema':
+        specifier: ^10.0.19
+        version: 10.0.19(graphql@16.8.1)
       '@graphql-tools/utils':
         specifier: ^10.2.1
         version: 10.8.2(graphql@16.8.1)
@@ -226,9 +229,6 @@ importers:
       '@graphql-codegen/typescript-resolvers':
         specifier: 4.0.1
         version: 4.0.1(graphql@16.8.1)
-      '@graphql-tools/schema':
-        specifier: ^10.0.19
-        version: 10.0.19(graphql@16.8.1)
       '@types/graphql-date':
         specifier: 1.0.8
         version: 1.0.8

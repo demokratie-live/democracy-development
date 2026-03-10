@@ -20,6 +20,7 @@
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas --excludePathsFromReport=graphqlContext.ts",
     "generate": "graphql-codegen --config codegen.yml",
+    "smoke:runner": "NODE_VERSION=$(cat ../../.node-version | tr -d 'v') && docker build --file ../../infra/Dockerfile --target runner --build-arg NODE_VERSION=$NODE_VERSION --build-arg SERVICE=bundestag.io --build-arg SERVICE_PATH=bundestag.io/api -t bundestag-io-api-runner-smoke ../.. && docker run --rm --entrypoint node bundestag-io-api-runner-smoke /app/bundestag.io/api/build/services/graphql/index.js",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -28,6 +29,7 @@
     "@democracy-deutschland/bundestag.io-definitions": "1.0.2",
     "@democracy-deutschland/bundestagio-common": "workspace:*",
     "@graphql-tools/merge": "^9.0.4",
+    "@graphql-tools/schema": "^10.0.19",
     "@graphql-tools/utils": "^10.2.1",
     "axios": "1.6.0",
     "body-parser": "^1.20.2",
@@ -47,7 +49,6 @@
     "@graphql-codegen/typescript": "4.0.1",
     "@graphql-codegen/typescript-operations": "^4.2.1",
     "@graphql-codegen/typescript-resolvers": "4.0.1",
-    "@graphql-tools/schema": "^10.0.19",
     "@types/graphql-date": "1.0.8",
     "@types/lodash": "4.14.200",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
