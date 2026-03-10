@@ -21,7 +21,7 @@ const navigation = [
 
 const Navigation = () => {
   const router = useRouter();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, initialized, toggleTheme } = useTheme();
 
   const [searchTerm, setSearchTerm] = useRecoilState(searchTermState);
 
@@ -114,18 +114,20 @@ const Navigation = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-2 px-2">
-                <button
-                  type="button"
-                  onClick={toggleTheme}
-                  className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-ci-blue dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                  aria-label={theme === 'dark' ? 'Zu hellem Modus wechseln' : 'Zu dunklem Modus wechseln'}
-                >
-                  {theme === 'dark' ? (
-                    <SunIcon className="h-5 w-5" aria-hidden="true" />
-                  ) : (
-                    <MoonIcon className="h-5 w-5" aria-hidden="true" />
-                  )}
-                </button>
+                {initialized && (
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
+                    className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-ci-blue dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                    aria-label={theme === 'dark' ? 'Zu hellem Modus wechseln' : 'Zu dunklem Modus wechseln'}
+                  >
+                    {theme === 'dark' ? (
+                      <SunIcon className="h-5 w-5" aria-hidden="true" />
+                    ) : (
+                      <MoonIcon className="h-5 w-5" aria-hidden="true" />
+                    )}
+                  </button>
+                )}
                 <a
                   href="https://www.democracy-deutschland.de/#!donate"
                   target="_blank"

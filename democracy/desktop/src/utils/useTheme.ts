@@ -25,11 +25,13 @@ const getInitialTheme = (): Theme => {
 
 export const useTheme = () => {
   const [theme, setThemeState] = useState<Theme>('light');
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     const initial = getInitialTheme();
     setThemeState(initial);
     applyTheme(initial);
+    setInitialized(true);
   }, []);
 
   const toggleTheme = useCallback(() => {
@@ -45,5 +47,5 @@ export const useTheme = () => {
     });
   }, []);
 
-  return { theme, toggleTheme };
+  return { theme, initialized, toggleTheme };
 };
