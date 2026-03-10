@@ -32,7 +32,7 @@ describe('getProcedureIds', () => {
             $and: expect.arrayContaining([
               {
                 url: {
-                  $regex: '2012345.pdf$',
+                  $regex: '2012345\\.pdf$',
                 },
               },
             ]),

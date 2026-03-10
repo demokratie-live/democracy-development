@@ -71,7 +71,7 @@ export async function getProcedureIds(documents: string[]): Promise<string[]> {
         .map((document) => {
           const pathname = new URL(document).pathname;
           const lastSegment = pathname.split('/').filter(Boolean).slice(-1)[0];
-          return lastSegment ? `${lastSegment}$` : null;
+          return lastSegment ? `${lastSegment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$` : null;
         })
         .filter((doc): doc is string => doc !== null),
     ),
