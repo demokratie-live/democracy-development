@@ -14,6 +14,7 @@ interface RawEnv {
   CONFERENCE_WEEK?: string;
   CONFERENCE_LIMIT?: string;
   CRAWL_MAX_REQUESTS_PER_CRAWL?: string;
+  VOTEDATE_RECOVERY_MODE?: string;
   DB_URL?: string;
   TEST?: string; // presence indicates test mode
 }
@@ -28,6 +29,9 @@ export interface AppConfig {
   crawl: {
     maxRequestsPerCrawl: number; // Upper bound of requests per crawl run
   };
+  voteDateBackfill: {
+    recoveryMode: boolean; // Replays the configured crawl window instead of the latest stored weeks
+  };
   db: {
     url: string; // Mongo connection string (only used outside of TEST mode)
   };
@@ -36,10 +40,27 @@ export interface AppConfig {
   };
 }
 
+const getCurrentIsoWeekAndYear = (date: Date = new Date()): { year: number; week: number } => {
+  const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = utcDate.getUTCDay() || 7;
+
+  utcDate.setUTCDate(utcDate.getUTCDate() + 4 - day);
+
+  const yearStart = new Date(Date.UTC(utcDate.getUTCFullYear(), 0, 1));
+  const week = Math.ceil(((utcDate.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+
+  return {
+    year: utcDate.getUTCFullYear(),
+    week,
+  };
+};
+
 // Defaults centralised here for easy visibility & single source of truth
+const currentConferenceWeek = getCurrentIsoWeekAndYear();
+
 const DEFAULTS = Object.freeze({
-  CONFERENCE_YEAR: 2025,
-  CONFERENCE_WEEK: 46,
+  CONFERENCE_YEAR: currentConferenceWeek.year,
+  CONFERENCE_WEEK: currentConferenceWeek.week,
   CONFERENCE_LIMIT: 10,
   CRAWL_MAX_REQUESTS_PER_CRAWL: 10,
   DB_URL: 'mongodb://localhost:27017/bundestagio',
@@ -55,12 +76,19 @@ const parseIntSafe = (value: string | undefined, fallback: number, fieldName: st
   return parsed;
 };
 
+const parseBoolean = (value: string | undefined): boolean => {
+  if (!value) return false;
+
+  return ['1', 'true', 'yes', 'on'].includes(value.toLowerCase());
+};
+
 // Extract & freeze raw env (shallow) to prevent mutation during runtime
 const rawEnv: RawEnv = Object.freeze({
   CONFERENCE_YEAR: process.env.CONFERENCE_YEAR,
   CONFERENCE_WEEK: process.env.CONFERENCE_WEEK,
   CONFERENCE_LIMIT: process.env.CONFERENCE_LIMIT,
   CRAWL_MAX_REQUESTS_PER_CRAWL: process.env.CRAWL_MAX_REQUESTS_PER_CRAWL,
+  VOTEDATE_RECOVERY_MODE: process.env.VOTEDATE_RECOVERY_MODE,
   DB_URL: process.env.DB_URL,
   TEST: process.env.TEST,
 });
@@ -91,6 +119,9 @@ const buildConfig = (env: RawEnv): AppConfig =>
         DEFAULTS.CRAWL_MAX_REQUESTS_PER_CRAWL,
         'CRAWL_MAX_REQUESTS_PER_CRAWL',
       ),
+    },
+    voteDateBackfill: {
+      recoveryMode: parseBoolean(env.VOTEDATE_RECOVERY_MODE),
     },
     db: {
       url: env.DB_URL || DEFAULTS.DB_URL,

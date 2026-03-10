@@ -1,6 +1,57 @@
-import { describe, it, expect } from 'vitest';
-import { extractProcedureIdsFromSession, groupProcedureIdsByDate } from './update-vote-dates';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { extractProcedureIdsFromSession, groupProcedureIdsByDate, updateProcedureVoteDates } from './update-vote-dates';
 import type { IConferenceWeekDetail, ISession } from '@democracy-deutschland/bundestagio-common';
+
+const { findMock, sortMock, limitMock, leanMock, updateManyMock, logInfoMock } = vi.hoisted(() => ({
+  findMock: vi.fn(),
+  sortMock: vi.fn(),
+  limitMock: vi.fn(),
+  leanMock: vi.fn(),
+  updateManyMock: vi.fn(),
+  logInfoMock: vi.fn(),
+}));
+
+vi.mock('../config.js', () => ({
+  config: {
+    conference: {
+      year: 2026,
+      week: 12,
+    },
+    crawl: {
+      maxRequestsPerCrawl: 10,
+    },
+    voteDateBackfill: {
+      recoveryMode: false,
+    },
+  },
+}));
+
+vi.mock('crawlee', () => ({
+  log: {
+    info: logInfoMock,
+  },
+}));
+
+vi.mock('@democracy-deutschland/bundestagio-common', () => ({
+  ConferenceWeekDetailModel: {
+    find: findMock,
+  },
+  ProcedureModel: {
+    updateMany: updateManyMock,
+  },
+}));
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  sortMock.mockReturnThis();
+  limitMock.mockReturnThis();
+  leanMock.mockResolvedValue([]);
+  findMock.mockReturnValue({
+    sort: sortMock,
+    limit: limitMock,
+    lean: leanMock,
+  });
+});
 
 describe('extractProcedureIdsFromSession', () => {
   it('should extract unique procedure IDs from vote topics', () => {
@@ -459,5 +510,214 @@ describe('groupProcedureIdsByDate', () => {
 
     expect(result.size).toBe(1);
     expect(result.get('2024-10-15')?.procedureIds).toEqual(['proc-1', 'proc-2']);
+  });
+});
+
+describe('updateProcedureVoteDates', () => {
+  it('should return structured counters for successful backfill work', async () => {
+    leanMock.mockResolvedValue([
+      {
+        thisWeek: 42,
+        thisYear: 2024,
+        sessions: [
+          {
+            date: new Date('2024-10-15'),
+            session: 'Session 1',
+            tops: [
+              {
+                topic: [
+                  {
+                    lines: [],
+                    documents: [],
+                    isVote: true,
+                    procedureIds: ['proc-1', 'proc-2'],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ] as unknown as IConferenceWeekDetail[]);
+    updateManyMock.mockResolvedValue({
+      matchedCount: 2,
+      modifiedCount: 1,
+    });
+
+    const result = await updateProcedureVoteDates();
+
+    expect(result).toEqual({
+      conferenceWeekCount: 1,
+      dateGroupCount: 1,
+      attemptedProcedureCount: 2,
+      matchedProcedureCount: 2,
+      modifiedCount: 1,
+      unmatchedProcedureCount: 0,
+    });
+  });
+
+  it('should surface zero-match backfill work in structured counters', async () => {
+    leanMock.mockResolvedValue([
+      {
+        thisWeek: 42,
+        thisYear: 2024,
+        sessions: [
+          {
+            date: new Date('2024-10-15'),
+            session: 'Session 1',
+            tops: [
+              {
+                topic: [
+                  {
+                    lines: [],
+                    documents: [],
+                    isVote: true,
+                    procedureIds: ['missing-1', 'missing-2'],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ] as unknown as IConferenceWeekDetail[]);
+    updateManyMock.mockResolvedValue({
+      matchedCount: 0,
+      modifiedCount: 0,
+    });
+
+    const result = await updateProcedureVoteDates();
+
+    expect(result).toEqual({
+      conferenceWeekCount: 1,
+      dateGroupCount: 1,
+      attemptedProcedureCount: 2,
+      matchedProcedureCount: 0,
+      modifiedCount: 0,
+      unmatchedProcedureCount: 2,
+    });
+  });
+
+  it.each([
+    {
+      mode: 'recent-mode ordering',
+      weeks: [
+        {
+          thisWeek: 42,
+          thisYear: 2024,
+          sessions: [
+            {
+              date: new Date('2024-10-16'),
+              session: 'Later session',
+              tops: [
+                {
+                  topic: [
+                    {
+                      lines: [],
+                      documents: [],
+                      isVote: true,
+                      procedureIds: ['shared-proc'],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          thisWeek: 41,
+          thisYear: 2024,
+          sessions: [
+            {
+              date: new Date('2024-10-15'),
+              session: 'Earlier session',
+              tops: [
+                {
+                  topic: [
+                    {
+                      lines: [],
+                      documents: [],
+                      isVote: true,
+                      procedureIds: ['shared-proc'],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      mode: 'recovery-mode ordering',
+      weeks: [
+        {
+          thisWeek: 41,
+          thisYear: 2024,
+          sessions: [
+            {
+              date: new Date('2024-10-15'),
+              session: 'Earlier session',
+              tops: [
+                {
+                  topic: [
+                    {
+                      lines: [],
+                      documents: [],
+                      isVote: true,
+                      procedureIds: ['shared-proc'],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          thisWeek: 42,
+          thisYear: 2024,
+          sessions: [
+            {
+              date: new Date('2024-10-16'),
+              session: 'Later session',
+              tops: [
+                {
+                  topic: [
+                    {
+                      lines: [],
+                      documents: [],
+                      isVote: true,
+                      procedureIds: ['shared-proc'],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ])('should choose the latest detected voteDate regardless of %s', async ({ weeks }) => {
+    leanMock.mockResolvedValue(weeks as unknown as IConferenceWeekDetail[]);
+    updateManyMock.mockResolvedValue({
+      matchedCount: 1,
+      modifiedCount: 1,
+    });
+
+    const result = await updateProcedureVoteDates();
+
+    expect(updateManyMock).toHaveBeenCalledTimes(1);
+    expect(updateManyMock).toHaveBeenCalledWith(
+      { procedureId: { $in: ['shared-proc'] } },
+      { $set: { voteDate: new Date('2024-10-16') } },
+    );
+    expect(result).toEqual({
+      conferenceWeekCount: 2,
+      dateGroupCount: 1,
+      attemptedProcedureCount: 1,
+      matchedProcedureCount: 1,
+      modifiedCount: 1,
+      unmatchedProcedureCount: 0,
+    });
   });
 });
