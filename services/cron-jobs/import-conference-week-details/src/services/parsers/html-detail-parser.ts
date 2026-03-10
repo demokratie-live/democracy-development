@@ -1,6 +1,7 @@
 import * as cheerio from 'cheerio';
 import type { AnyNode, Text } from 'domhandler';
 import type { ParsedTopicDetail, ParsedStatusDetail } from '../../types-json';
+import { normalizeBundestagDocumentUrl } from '../../utils/url';
 
 /**
  * Parses HTML detail strings from the JSON API to extract lines and documents.
@@ -38,7 +39,10 @@ export function parseTopicDetail(html: string): ParsedTopicDetail {
       }
 
       if (href) {
-        documents.push(href);
+        const normalizedDocumentUrl = normalizeBundestagDocumentUrl(href);
+        if (normalizedDocumentUrl) {
+          documents.push(normalizedDocumentUrl);
+        }
       }
     } else if (node.type === 'tag' && node.name === 'br') {
       // <br> tags separate lines, no action needed (handled by text node extraction)
@@ -88,7 +92,10 @@ export function parseStatusDetail(html: string): ParsedStatusDetail {
   $('a').each((_, element) => {
     const href = $(element).attr('href');
     if (href) {
-      documents.push(href);
+      const normalizedDocumentUrl = normalizeBundestagDocumentUrl(href);
+      if (normalizedDocumentUrl) {
+        documents.push(normalizedDocumentUrl);
+      }
     }
   });
 

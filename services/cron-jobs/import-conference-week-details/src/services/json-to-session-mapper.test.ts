@@ -97,6 +97,45 @@ describe('json-to-session-mapper', () => {
       expect(top.status[0].line).toBe('beendet');
     });
 
+    it('should parse conference dates with umlaut month names', () => {
+      const json: BundestagJSONResponse = {
+        next: null,
+        previous: null,
+        conferences: [
+          {
+            conferenceNumber: 82,
+            conferenceDate: { date: '4. März 2026' },
+            rows: [
+              {
+                time: '09:00',
+                top: '1',
+                topic: {
+                  title: 'Fragestunde',
+                  detail: '',
+                },
+                status: {
+                  title: 'beendet',
+                  detail: '',
+                },
+                isProtocol: false,
+              },
+            ],
+          },
+        ],
+      };
+
+      const result = mapJSONToConferenceWeekDetail(json, 2026, 10);
+      const session = result.sessions![0];
+
+      expect(session.date).toBeInstanceOf(Date);
+      expect(session.date!.getFullYear()).toBe(2026);
+      expect(session.date!.getMonth()).toBe(2);
+      expect(session.date!.getDate()).toBe(4);
+      expect(session.tops[0].time).toBeInstanceOf(Date);
+      expect(session.tops[0].time!.getHours()).toBe(9);
+      expect(session.tops[0].time!.getMinutes()).toBe(0);
+    });
+
     it('should extract document URLs and procedure IDs', () => {
       const json: BundestagJSONResponse = {
         next: null,
@@ -126,7 +165,7 @@ describe('json-to-session-mapper', () => {
       const result = mapJSONToConferenceWeekDetail(json, 2025, 46);
       const top = result.sessions![0].tops[0];
 
-      expect(top.topic[0].documents).toContain('/dokument/drucksache-20-12345');
+      expect(top.topic[0].documents).toContain('https://www.bundestag.de/dokument/drucksache-20-12345');
       // Note: procedureIds will be populated later via async getProcedureIds call
       expect(top.topic[0].procedureIds).toEqual([]);
     });

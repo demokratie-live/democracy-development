@@ -27,7 +27,7 @@ describe('html-detail-parser', () => {
       const result = parseTopicDetail(html);
       expect(result.lines).toContain('Antrag der Fraktion');
       expect(result.lines).toContain('Drucksache 20/12345');
-      expect(result.documents).toContain('/dokumente/drucksache-20-12345');
+      expect(result.documents).toContain('https://www.bundestag.de/dokumente/drucksache-20-12345');
     });
 
     it('should handle multiple links', () => {
@@ -35,8 +35,8 @@ describe('html-detail-parser', () => {
       const result = parseTopicDetail(html);
       expect(result.lines).toHaveLength(2);
       expect(result.documents).toHaveLength(2);
-      expect(result.documents).toContain('/dok1');
-      expect(result.documents).toContain('/dok2');
+      expect(result.documents).toContain('https://www.bundestag.de/dok1');
+      expect(result.documents).toContain('https://www.bundestag.de/dok2');
     });
 
     it('should handle real-world example', () => {
@@ -47,7 +47,30 @@ describe('html-detail-parser', () => {
       expect(result.lines).toContain('auf Verlangen der Fraktion der CDU/CSU');
       expect(result.lines).toContain('Wirtschaftspolitik der Bundesregierung');
       expect(result.lines).toContain('Zu den Reden');
-      expect(result.documents).toContain('/dokumente/textarchiv/2025/kw46-de-aktuelle-stunde-1117316');
+      expect(result.documents).toContain(
+        'https://www.bundestag.de/dokumente/textarchiv/2025/kw46-de-aktuelle-stunde-1117316',
+      );
+    });
+
+    it('should drop malformed and non-Bundestag links', () => {
+      const html = [
+        '<a href="https://example.com/dokumente/drucksache-20-12345">Extern</a>',
+        '<a href="javascript:alert(1)">Bad</a>',
+        '<a href="/dokumente/drucksache-20-12345">Bundestag</a>',
+      ].join('<br/>');
+
+      const result = parseTopicDetail(html);
+
+      expect(result.documents).toEqual(['https://www.bundestag.de/dokumente/drucksache-20-12345']);
+    });
+
+    it('should keep dserver document links through normalization', () => {
+      const html = '<a href="https://dserver.bundestag.de/btd/21/001/2100123.pdf">Drucksache 21/123</a>';
+
+      const result = parseTopicDetail(html);
+
+      expect(result.lines).toContain('Drucksache 21/123');
+      expect(result.documents).toEqual(['https://www.bundestag.de/btd/21/001/2100123.pdf']);
     });
   });
 
