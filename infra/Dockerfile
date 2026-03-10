@@ -40,6 +40,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 CMD cd $SERVICE_PATH && pnpm dev
 
 FROM installer AS installer_prod
+ENV CI=true
 RUN pnpm turbo run build --filter=$SERVICE
 RUN pnpm install --prod --frozen-lockfile --ignore-scripts --prefer-offline
  
