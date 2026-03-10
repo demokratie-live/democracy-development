@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseUrlParams, processConferenceWeekDetailUrl } from './url';
+import { normalizeBundestagDocumentUrl, parseUrlParams, processConferenceWeekDetailUrl } from './url';
 
 describe('URL Processing', () => {
   describe('parseUrlParams', () => {
@@ -55,6 +55,30 @@ describe('URL Processing', () => {
     it('should return empty array for invalid URLs', () => {
       expect(processConferenceWeekDetailUrl('invalid-url')).toEqual([]);
       expect(processConferenceWeekDetailUrl('https://www.bundestag.de/invalid')).toEqual([]);
+    });
+  });
+
+  describe('normalizeBundestagDocumentUrl', () => {
+    it('should normalize relative Bundestag URLs to absolute URLs', () => {
+      expect(normalizeBundestagDocumentUrl('/dip21/btd/20/123/2012345.pdf')).toBe(
+        'https://www.bundestag.de/dip21/btd/20/123/2012345.pdf',
+      );
+    });
+
+    it('should keep absolute Bundestag URLs canonical', () => {
+      expect(normalizeBundestagDocumentUrl('https://bundestag.de/dip21/btd/20/123/2012345.pdf')).toBe(
+        'https://www.bundestag.de/dip21/btd/20/123/2012345.pdf',
+      );
+    });
+
+    it('should return null for non-Bundestag URLs', () => {
+      expect(normalizeBundestagDocumentUrl('https://example.com/dip21/btd/20/123/2012345.pdf')).toBeNull();
+    });
+
+    it('should return null for malformed URLs', () => {
+      expect(normalizeBundestagDocumentUrl('https://')).toBeNull();
+      expect(normalizeBundestagDocumentUrl('javascript:alert(1)')).toBeNull();
+      expect(normalizeBundestagDocumentUrl('')).toBeNull();
     });
   });
 });
