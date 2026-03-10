@@ -1,0 +1,42 @@
+import { useCallback, useEffect, useState } from 'react';
+
+type Theme = 'light' | 'dark';
+
+const STORAGE_KEY = 'democracy-theme';
+
+const applyTheme = (theme: Theme) => {
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+};
+
+const getInitialTheme = (): Theme => {
+  if (typeof window === 'undefined') return 'light';
+  const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
+  if (stored === 'dark' || stored === 'light') return stored;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+};
+
+export const useTheme = () => {
+  const [theme, setThemeState] = useState<Theme>('light');
+
+  useEffect(() => {
+    const initial = getInitialTheme();
+    setThemeState(initial);
+    applyTheme(initial);
+  }, []);
+
+  const setTheme = useCallback((next: Theme) => {
+    setThemeState(next);
+    localStorage.setItem(STORAGE_KEY, next);
+    applyTheme(next);
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  }, [theme, setTheme]);
+
+  return { theme, toggleTheme };
+};

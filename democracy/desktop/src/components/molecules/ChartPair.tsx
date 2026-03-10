@@ -114,7 +114,7 @@ export default function ChartPair({ item, className, large }) {
         setDelay(setTimeout(() => close(), 500));
       }}
     >
-      <div ref={ref} className={`flex gap-6 p-2 ${hover1 ? 'bg-white rounded-md overflow-hidden shadow' : ''}`}>
+      <div ref={ref} className={`flex gap-6 p-2 ${hover1 ? 'bg-white dark:bg-gray-800 rounded-md overflow-hidden shadow' : ''}`}>
         {item.voteResults && (
           <div className="flex flex-col items-center">
             <DoughnutChart
@@ -131,11 +131,11 @@ export default function ChartPair({ item, className, large }) {
                 }
               }}
               votes={officialVotes!}
-              className={`rounded-full bg-white p-0.5 ${sizes}`}
+              className={`rounded-full bg-white dark:bg-gray-700 p-0.5 ${sizes}`}
             />
             <p className="flex flex-col items-center pb-1 pt-px text-xs leading-[1.1em]">
               <span className="text-[1.1em] font-bold">Bundestag</span>
-              <span className="text-sm font-semibold tracking-wide text-gray-600">
+              <span className="text-sm font-semibold tracking-wide text-gray-600 dark:text-gray-400">
                 <small>
                   {hover1 &&
                     `${hover1.label} (${calculatePercent(
@@ -161,7 +161,7 @@ export default function ChartPair({ item, className, large }) {
           <div className="relative flex flex-col items-center">
             <div className={`${partyVotes.length > 0 ? 'opacity-0' : ''}`}>
               <DoughnutChart
-                className={`rounded-full bg-white p-0.5 ${sizes}`}
+                className={`rounded-full bg-white dark:bg-gray-700 p-0.5 ${sizes}`}
                 onHover={(item2) => {
                   setHover2(item2);
                 }}
@@ -185,7 +185,7 @@ export default function ChartPair({ item, className, large }) {
               />
               <p className="flex flex-col items-center pb-1 pt-px text-xs leading-[1.1em]">
                 <span className="text-[1.1em] font-bold">Community</span>
-                <span className="text-sm font-semibold tracking-wide text-gray-600">
+                <span className="text-sm font-semibold tracking-wide text-gray-600 dark:text-gray-400">
                   <small>
                     {hover2
                       ? `${hover2.label} (${calculatePercent(
@@ -210,9 +210,9 @@ export default function ChartPair({ item, className, large }) {
                       className={`${large ? 'h-6 w-20' : 'h-5 w-14'} object-cover text-xs italic`}
                       alt={p.party}
                     />
-                    <div className="h-full w-full pl-1 text-right text-gray-700">
+                    <div className="h-full w-full pl-1 text-right text-gray-700 dark:text-gray-300">
                       <div
-                        className="relative h-full w-full text-sm font-semibold tracking-wide text-gray-600"
+                        className="relative h-full w-full text-sm font-semibold tracking-wide text-gray-600 dark:text-gray-400"
                         style={{ borderColor: hover1.color }}
                       >
                         {/* <div

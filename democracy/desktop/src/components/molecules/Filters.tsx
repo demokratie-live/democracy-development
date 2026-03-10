@@ -14,17 +14,17 @@ export default function Filters({
     <Disclosure
       as="section"
       aria-labelledby="filter-heading"
-      className="relative z-10 grid items-center border-y border-gray-200"
+      className="relative z-10 grid items-center border-y border-gray-200 dark:border-gray-700"
     >
       <h2 id="filter-heading" className="sr-only">
         Filters
       </h2>
-      <div className="relative col-start-1 row-start-1 border-b border-gray-300 py-4 ">
-        <div className="mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8">
+      <div className="relative col-start-1 row-start-1 border-b border-gray-300 py-4 dark:border-gray-700">
+        <div className="mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm dark:divide-gray-700 sm:px-6 lg:px-8">
           <div>
-            <Disclosure.Button className="group flex items-center font-medium text-gray-700">
+            <Disclosure.Button className="group flex items-center font-medium text-gray-700 dark:text-gray-300">
               <FilterIcon
-                className="mr-2 h-5 w-5 flex-none text-gray-400 group-hover:text-gray-500"
+                className="mr-2 h-5 w-5 flex-none text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
                 aria-hidden="true"
               />
               {selected.length} Filter
@@ -34,7 +34,7 @@ export default function Filters({
             <div className="pl-6">
               <button
                 type="button"
-                className="text-gray-500"
+                className="text-gray-500 dark:text-gray-400"
                 onClick={() => onReset()}
               >
                 Zurücksetzen
@@ -43,10 +43,10 @@ export default function Filters({
           ) : null}
         </div>
       </div>
-      <Disclosure.Panel className="bg-white py-5">
+      <Disclosure.Panel className="bg-white py-5 dark:bg-gray-800">
         <div className="mx-auto grid max-w-7xl select-none gap-y-12 px-8 text-sm md:grid-cols-6">
           <fieldset className="col-span-2 lg:col-span-1">
-            <legend className="block font-semibold text-gray-900">
+            <legend className="block font-semibold text-gray-900 dark:text-gray-100">
               {filters.type.label}
             </legend>
             <div className="space-y-2.5 pt-6 sm:pt-4 md:space-y-1">
@@ -60,13 +60,13 @@ export default function Filters({
                     name="size[]"
                     defaultValue={option.value}
                     type="checkbox"
-                    className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-ci-blue-darker focus:ring-ci-blue-darker"
+                    className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-ci-blue-darker focus:ring-ci-blue-darker dark:border-gray-600 dark:bg-gray-700"
                     checked={selected.includes(option.value as never)}
                     onChange={() => onToggle('type', option.value)}
                   />
                   <label
                     htmlFor={`size-${optionIdx}`}
-                    className="min-w-0 flex-1 cursor-pointer py-1 pl-2 leading-4 text-gray-800 lg:text-[0.90em]"
+                    className="min-w-0 flex-1 cursor-pointer py-1 pl-2 leading-4 text-gray-800 dark:text-gray-200 lg:text-[0.90em]"
                   >
                     {option.label}
                   </label>
@@ -75,7 +75,7 @@ export default function Filters({
             </div>
           </fieldset>
           <fieldset className="col-span-4 lg:col-span-5">
-            <legend className="block font-semibold text-gray-900">
+            <legend className="block font-semibold text-gray-900 dark:text-gray-100">
               {filters.subjectGroups.label}
             </legend>
             <div className="grid auto-cols-min grid-cols-1 gap-x-6 gap-y-2.5 pt-6 sm:pt-4 md:gap-y-1 lg:grid-cols-2 xl:grid-cols-3">
@@ -89,13 +89,13 @@ export default function Filters({
                     name="category[]"
                     defaultValue={option.value}
                     type="checkbox"
-                    className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-ci-blue-darker focus:ring-ci-blue-darker"
+                    className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-ci-blue-darker focus:ring-ci-blue-darker dark:border-gray-600 dark:bg-gray-700"
                     checked={selected.includes(option.value as never)}
                     onChange={() => onToggle('subject', option.value)}
                   />
                   <label
                     htmlFor={`category-${optionIdx}`}
-                    className="min-w-0 flex-1 cursor-pointer py-1 pl-2 leading-4 text-gray-800 lg:text-[0.90em]"
+                    className="min-w-0 flex-1 cursor-pointer py-1 pl-2 leading-4 text-gray-800 dark:text-gray-200 lg:text-[0.90em]"
                   >
                     {option.label}
                   </label>
