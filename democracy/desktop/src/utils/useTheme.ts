@@ -28,12 +28,6 @@ export const useTheme = () => {
     applyTheme(initial);
   }, []);
 
-  const setTheme = useCallback((next: Theme) => {
-    setThemeState(next);
-    localStorage.setItem(STORAGE_KEY, next);
-    applyTheme(next);
-  }, []);
-
   const toggleTheme = useCallback(() => {
     setThemeState((current) => {
       const next = current === 'dark' ? 'light' : 'dark';
