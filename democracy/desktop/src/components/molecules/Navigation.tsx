@@ -50,11 +50,20 @@ const Navigation = () => {
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <Link href="/" className="flex shrink-0 items-center rounded">
+                  {/* Light mode logo (black text) */}
                   <Image
-                    className="hidden h-[38px] w-auto lg:inline-flex"
+                    className="hidden h-[38px] w-auto lg:inline-flex dark:lg:hidden"
                     height="161"
                     width="1024"
                     src="/assets/images/logo-text.svg"
+                    alt="Democracy App"
+                  />
+                  {/* Dark mode logo (white text) */}
+                  <Image
+                    className="hidden h-[38px] w-auto dark:lg:inline-flex"
+                    height="161"
+                    width="1024"
+                    src="/assets/images/logo-text-dark.svg"
                     alt="Democracy App"
                   />
                   <Image

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 type Theme = 'light' | 'dark';
 
-const STORAGE_KEY = 'democracy-theme';
+export const STORAGE_KEY = 'democracy-theme';
 
 const applyTheme = (theme: Theme) => {
   if (theme === 'dark') {
@@ -14,8 +14,12 @@ const applyTheme = (theme: Theme) => {
 
 const getInitialTheme = (): Theme => {
   if (typeof window === 'undefined') return 'light';
-  const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-  if (stored === 'dark' || stored === 'light') return stored;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
+    if (stored === 'dark' || stored === 'light') return stored;
+  } catch {
+    // localStorage unavailable (e.g. Safari private mode)
+  }
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };
 
@@ -31,7 +35,11 @@ export const useTheme = () => {
   const toggleTheme = useCallback(() => {
     setThemeState((current) => {
       const next = current === 'dark' ? 'light' : 'dark';
-      localStorage.setItem(STORAGE_KEY, next);
+      try {
+        localStorage.setItem(STORAGE_KEY, next);
+      } catch {
+        // localStorage unavailable (e.g. Safari private mode)
+      }
       applyTheme(next);
       return next;
     });

@@ -1,11 +1,12 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 import { AppConfig } from '@/utils/AppConfig';
+import { STORAGE_KEY } from '@/utils/useTheme';
 
 const themeScript = `
 (function() {
   try {
-    var stored = localStorage.getItem('democracy-theme');
+    var stored = localStorage.getItem('${STORAGE_KEY}');
     var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     if (stored === 'dark' || (!stored && prefersDark)) {
       document.documentElement.classList.add('dark');
