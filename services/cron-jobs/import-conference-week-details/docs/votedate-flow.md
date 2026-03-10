@@ -18,7 +18,7 @@
     - [Conference Week Detail](#conference-week-detail)
     - [Procedure](#procedure)
   - [Performance-Optimierungen](#performance-optimierungen)
-    - [Limitierung auf letzte 5 Conference Weeks](#limitierung-auf-letzte-5-conference-weeks)
+    - [Limitierung auf das Crawl-Fenster](#limitierung-auf-das-crawl-fenster)
   - [Häufige Probleme \& Lösungen](#häufige-probleme--lösungen)
     - [Problem: Procedures haben kein voteDate](#problem-procedures-haben-kein-votedate)
     - [Problem: "Updated 0/X procedures"](#problem-updated-0x-procedures)
@@ -28,6 +28,8 @@
 ## Übersicht
 
 Dieses Dokument beschreibt den vollständigen Datenfluss für die Ermittlung und Speicherung des `voteDate` Feldes in Procedures.
+
+`import-conference-week-details` bleibt dabei der Owner für die Generierung und das Backfill von `voteDate`: Die Conference-Week-Details werden hier importiert, gespeichert und direkt danach in dasselbe Backfill überführt.
 
 **Datenquelle:** Bundestag JSON API  
 **Endpoint:** `https://www.bundestag.de/apps/plenar/plenar/conferenceWeekJSON?year=YYYY&week=WW`  
@@ -72,7 +74,7 @@ flowchart TD
     E -->|"Beschlussempfehlung"| G
     F -->|Save| H[(conferenceweekdetails)]
     G -->|Save| H
-    H -->|Read last 5 weeks| I[updateProcedureVoteDates]
+    H -->|Read imported crawl window| I[updateProcedureVoteDates]
     I -->|Filter isVote=true| J[Collect procedureIds]
     J -->|Batch Update| K[(procedures)]
     K -->|Sync| L[Frontend Display]
@@ -213,27 +215,45 @@ sequenceDiagram
     CR->>IX: Return conference weeks
     IX->>DB: Save conference weeks with isVote flags
     IX->>UVD: Call updateProcedureVoteDates()
-    UVD->>DB: Query last 5 weeks with sessions
+    UVD->>DB: Query latest crawl window or explicit recovery replay window
     loop For each week → session → topic
         UVD->>UVD: Filter topics where isVote=true
         UVD->>UVD: Collect procedureIds
-        UVD->>UVD: Deduplicate IDs per session
-        UVD->>PM: Batch update voteDate for session
+        UVD->>UVD: Deduplicate IDs per session/date
+        UVD->>UVD: Resolve multi-date conflicts to latest session date
+        UVD->>PM: Batch update canonical voteDate per procedure
     end
-    UVD->>IX: Return { modifiedCount }
-    IX->>IX: Log success
+    UVD->>IX: Return structured backfill counters
+    IX->>IX: Log summary or fail job on unexpected backfill error
 ```
 
 **Algorithmus:**
 
-1. **Query:** Die letzten 5 Conference Weeks mit Sessions (sortiert nach Jahr/Woche absteigend)
+1. **Query:** Standardmäßig die letzten `CRAWL_MAX_REQUESTS_PER_CRAWL` Conference Weeks mit Sessions (sortiert nach Jahr/Woche absteigend)
 2. **Filter:** Nur Sessions mit `date` ≠ null
 3. **Extract:** Alle Topics wo `isVote === true`
 4. **Collect:** Alle `procedureIds` aus diesen Topics
 5. **Deduplicate:** `[...new Set(procedureIds)]`
-6. **Batch Update:** `ProcedureModel.updateMany({ procedureId: { $in: ids } }, { voteDate: sessionDate })`
+6. **Resolve conflicts deterministically:** Wenn dieselbe `procedureId` im verarbeiteten Fenster auf mehreren Abstimmungsdaten auftaucht, gewinnt immer das **neueste erkannte Sitzungsdatum**
+7. **Batch Update:** `ProcedureModel.updateMany({ procedureId: { $in: ids } }, { voteDate: canonicalSessionDate })`
+8. **Report:** Das Backfill liefert strukturierte Zähler zurück:
 
-**Performance-Optimierung:** Durch die Beschränkung auf die letzten 5 Wochen wird die Update-Performance verbessert und der Fokus auf aktuelle/bevorstehende Abstimmungen gelegt.
+   ```typescript
+   {
+     conferenceWeekCount,
+     dateGroupCount,
+     attemptedProcedureCount,
+     matchedProcedureCount,
+     modifiedCount,
+     unmatchedProcedureCount,
+   }
+   ```
+
+9. **Recovery-Replay (optional):** Mit `VOTEDATE_RECOVERY_MODE=1` verwendet das Backfill statt des neuesten DB-Fensters die explizit gecrawlte Range ab `CONFERENCE_YEAR`/`CONFERENCE_WEEK`, weiterhin begrenzt durch `CRAWL_MAX_REQUESTS_PER_CRAWL`.
+
+10. **Fail-Fast:** Schlägt das Backfill unerwartet fehl, beendet `src/index.ts` den Import mit Exit-Code `1`, auch wenn die Conference Weeks bereits gespeichert wurden.
+
+**Performance-Optimierung:** Im Normalbetrieb bleibt das Update auf das aktuelle Crawl-Fenster begrenzt. Für historische Korrekturen gibt es nur ein explizites, ebenfalls begrenztes Recovery-Replay-Fenster.
 
 ---
 
@@ -312,7 +332,7 @@ if (topic.isVote && topic.procedureIds && Array.isArray(topic.procedureIds))
 
 ## Performance-Optimierungen
 
-### Limitierung auf letzte 5 Conference Weeks
+### Limitierung auf das Crawl-Fenster
 
 **Rationale:**
 
@@ -320,6 +340,34 @@ if (topic.isVote && topic.procedureIds && Array.isArray(topic.procedureIds))
 - Fokus auf aktuelle und bevorstehende Abstimmungen (die für Nutzer relevant sind)
 - Historische voteDates bleiben unverändert in der Datenbank
 - Verbessert die Gesamt-Performance des Update-Prozesses
+
+**Recovery-Replay:** Falls historische `voteDate`-Lücken repariert werden müssen, wird kein unbounded Scan verwendet. Stattdessen wird ein explizites Replay-Fenster gestartet.
+
+**Unter Garden (unterstützter Operator-Run):**
+
+```bash
+garden run import-conference-week-details -e local --var VOTEDATE_RECOVERY_MODE=1 --var CONFERENCE_YEAR=2025 --var CONFERENCE_WEEK=8 --var CRAWL_MAX_REQUESTS_PER_CRAWL=4
+```
+
+**Direkt lokal (äquivalenter Dev-Run):**
+
+```bash
+VOTEDATE_RECOVERY_MODE=1 \
+CONFERENCE_YEAR=2025 \
+CONFERENCE_WEEK=8 \
+CRAWL_MAX_REQUESTS_PER_CRAWL=4 \
+pnpm run:dev
+```
+
+Dabei gilt:
+
+- `VOTEDATE_RECOVERY_MODE=1` schaltet vom Default-Modus "letzte gespeicherte Wochen" auf das explizite Replay-Fenster um
+- `CONFERENCE_YEAR` und `CONFERENCE_WEEK` definieren die erste historische Sitzungswoche des Replays
+- `CRAWL_MAX_REQUESTS_PER_CRAWL` begrenzt Crawl und Backfill auf dieselbe Anzahl Wochen
+- Der Crawler lädt nur diese konfigurierte Range
+- `updateProcedureVoteDates()` liest genau dieselbe Range wieder aus MongoDB
+- Mehrfaches Ausführen ist idempotent, weil Conference Weeks per Upsert gespeichert und `voteDate` deterministisch aus den Session-Daten gesetzt wird
+- Falls dieselbe Procedure in diesem Fenster auf mehreren Abstimmungstagen erkannt wird, speichert das Backfill immer das neueste erkannte Sitzungsdatum – unabhängig davon, ob die Wochen im Normalmodus absteigend oder im Recovery-Modus aufsteigend verarbeitet wurden
 
 ---
 
@@ -332,7 +380,7 @@ if (topic.isVote && topic.procedureIds && Array.isArray(topic.procedureIds))
 1. **Conference Week nicht gefetcht**
 
    - Prüfe: `db.conferenceweekdetails.findOne({ thisYear: 2025, thisWeek: 45 })`
-   - Lösung: Importer mit `CONFERENCE_YEAR=2025 CONFERENCE_WEEK=45` ausführen
+   - Lösung: Für aktuelle Wochen Importer normal ausführen; für historische Reparaturen explizit mit `VOTEDATE_RECOVERY_MODE=1 CONFERENCE_YEAR=2025 CONFERENCE_WEEK=45 CRAWL_MAX_REQUESTS_PER_CRAWL=1`
 
 2. **isVote Flag ist false**
 
@@ -349,6 +397,8 @@ if (topic.isVote && topic.procedureIds && Array.isArray(topic.procedureIds))
 ### Problem: "Updated 0/X procedures"
 
 **Bedeutung:** Conference Week hat procedureIds, aber Procedures existieren nicht in DB.
+
+**Erkennbar an den Backfill-Zählern:** `attemptedProcedureCount > 0`, aber `matchedProcedureCount === 0` und `unmatchedProcedureCount > 0`.
 
 **Ursache:**
 

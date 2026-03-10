@@ -45,3 +45,11 @@ spec:
             value: ${var.DB_URL}
           - name: DEBUG
             value: '${var.DEBUG || "false"}'
+          - name: VOTEDATE_RECOVERY_MODE
+            value: '${var.VOTEDATE_RECOVERY_MODE || ""}'
+          - name: CONFERENCE_YEAR
+            value: '${var.CONFERENCE_YEAR || ""}'
+          - name: CONFERENCE_WEEK
+            value: '${var.CONFERENCE_WEEK || ""}'
+          - name: CRAWL_MAX_REQUESTS_PER_CRAWL
+            value: '${var.CRAWL_MAX_REQUESTS_PER_CRAWL || ""}'

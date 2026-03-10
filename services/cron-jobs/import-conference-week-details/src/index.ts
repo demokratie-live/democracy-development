@@ -55,15 +55,16 @@ export async function run(): Promise<void> {
       log.info('🗳️  Updating voteDate in procedures from conference weeks...');
       try {
         const updateResult = await updateProcedureVoteDates();
-        log.info(`✅ Successfully updated ${updateResult.modifiedCount} procedures with voteDates`);
+        log.info('✅ VoteDate backfill summary', updateResult);
+        process.exit(0);
+        return;
       } catch (voteDateError) {
-        log.error('⚠️  Error updating voteDates in procedures:', {
+        log.error('❌ voteDate backfill failed after saving conference weeks:', {
           message: voteDateError instanceof Error ? voteDateError.message : String(voteDateError),
         });
-        // Continue execution - conference weeks are saved even if voteDate update fails
+        process.exit(1);
+        return;
       }
-
-      process.exit(0);
     } catch (dbError) {
       log.error('Error saving to MongoDB:', {
         message: dbError instanceof Error ? dbError.message : String(dbError),

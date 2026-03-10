@@ -4,6 +4,7 @@ import {
   PROCEDURE as PROCEDURE_DEFINITIONS,
   CONFERENCEWEEKDETAIL as CONFERENCEWEEKDETAIL_DEFINITIONS,
 } from '@democracy-deutschland/bundestag.io-definitions';
+import { normalizeBundestagDocumentUrl } from './url';
 
 /**
  * Determines if a topic is a vote based on content analysis
@@ -62,17 +63,19 @@ export function isVote(
  */
 export async function getProcedureIds(documents: string[]): Promise<string[]> {
   log.info('getProcedureIds', { documents });
-  const docs = documents
-    .map((document: string) => {
-      try {
-        const pathname = new URL(document).pathname;
-        const lastSegment = pathname.split('/').filter(Boolean).slice(-1)[0];
-        return lastSegment ? `${lastSegment}$` : null;
-      } catch {
-        return null;
-      }
-    })
-    .filter((doc): doc is string => doc !== null);
+  const docs = [
+    ...new Set(
+      documents
+        .map((document: string) => normalizeBundestagDocumentUrl(document))
+        .filter((document): document is string => document !== null)
+        .map((document) => {
+          const pathname = new URL(document).pathname;
+          const lastSegment = pathname.split('/').filter(Boolean).slice(-1)[0];
+          return lastSegment ? `${lastSegment}$` : null;
+        })
+        .filter((doc): doc is string => doc !== null),
+    ),
+  ];
   log.info('getProcedureIds', { docs });
 
   if (docs.length === 0) {
