@@ -7,6 +7,7 @@
  *  - Tests can reliably override configuration
  *  - Future refactors (e.g. to use dotenv, secret managers) are localized
  */
+import { getCurrentISOWeek } from './utils/date.js';
 
 // Define the raw shape of required & optional environment variables
 interface RawEnv {
@@ -36,10 +37,14 @@ export interface AppConfig {
   };
 }
 
+// Compute the current ISO week once at module-load time so that the default
+// start week is always "today" rather than a hard-coded historical value.
+const { year: _currentYear, week: _currentWeek } = getCurrentISOWeek();
+
 // Defaults centralised here for easy visibility & single source of truth
 const DEFAULTS = Object.freeze({
-  CONFERENCE_YEAR: 2025,
-  CONFERENCE_WEEK: 46,
+  CONFERENCE_YEAR: _currentYear,
+  CONFERENCE_WEEK: _currentWeek,
   CONFERENCE_LIMIT: 10,
   CRAWL_MAX_REQUESTS_PER_CRAWL: 10,
   DB_URL: 'mongodb://localhost:27017/bundestagio',
