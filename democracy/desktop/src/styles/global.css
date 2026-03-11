@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    @apply bg-gray-100;
+  }
+  html.dark {
+    @apply bg-gray-900;
+  }
+}
+
 @layer components {
   .hyphens-none {
     hyphens: none;

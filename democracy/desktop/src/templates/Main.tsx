@@ -6,12 +6,12 @@ type IMainProps = {
 };
 
 const Main = (props: IMainProps) => (
-  <div className="flex min-h-screen w-full flex-col text-gray-700 antialiased">
+  <div className="flex min-h-screen w-full flex-col text-gray-700 antialiased dark:text-gray-200">
     {props.meta}
 
     <div className="grow text-xl">{props.children}</div>
 
-    <footer className="border-t border-gray-300 bg-gray-200 pt-3 pb-5 text-center text-sm">
+    <footer className="border-t border-gray-300 bg-gray-200 pt-3 pb-5 text-center text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
       {/* <div>
         © Copyright {new Date().getFullYear()} – {AppConfig.site_name}
       </div> */}
@@ -41,7 +41,7 @@ const Main = (props: IMainProps) => (
           Datenschutz
         </a>
       </div>
-      <div className="text-gray-600">
+      <div className="text-gray-600 dark:text-gray-400">
         <span>Made {new Date().getFullYear()} with </span>
         <span className="text-red-500" role="img" aria-label="Love">
           ♥
