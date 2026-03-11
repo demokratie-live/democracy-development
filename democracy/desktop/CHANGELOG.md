@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.1](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.2.0...democracy-app.de@v1.2.1) (2026-03-11)
+
+
+* align democracy desktop local runtime host resolution ([c43d1d8](https://github.com/demokratie-live/democracy-development/commit/c43d1d831d59f774059524dd92299997cfbad347))
+
 ## [1.2.0](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.1.1...democracy-app.de@v1.2.0) (2025-11-15)
 
 
