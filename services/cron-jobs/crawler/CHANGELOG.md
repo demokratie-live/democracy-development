@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.11](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.10...crawler@v1.1.11) (2026-03-11)
+
+
+* share crawler runtime config across Garden paths ([27a3d7c](https://github.com/demokratie-live/democracy-development/commit/27a3d7c8dabe14bee828dd833c8005dbfe54929c))
+* update Node.js version to 20.9.0 across configurations ([dc8cf3a](https://github.com/demokratie-live/democracy-development/commit/dc8cf3a5deae32ad1f897dcbb98ce895ab3ecb7f))
+
 ## [1.1.10](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.9...crawler@v1.1.10) (2025-11-15)
 
 ## [1.1.9](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.8...crawler@v1.1.9) (2025-10-28)
