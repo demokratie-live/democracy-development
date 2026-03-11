@@ -148,6 +148,29 @@ docker buildx build \
     .
 ```
 
+## GitHub Copilot Integration
+
+This repository is optimized for GitHub Copilot with custom agents and instructions.
+
+### Available Copilot Resources
+
+- **Custom Agents** (`.github/agents/`): Specialized AI assistants for specific tasks
+  - `test-agent` - Test generation and maintenance
+  - `code-review-agent` - Code quality and security reviews
+  - `documentation-agent` - Documentation creation and updates
+  - `frontend-agent` - Next.js and React development
+  - `backend-agent` - NestJS and GraphQL development
+
+- **Instructions** (`.github/`):
+  - `copilot-instructions.md` - General coding guidelines
+  - `test-generation-instructions.md` - Testing best practices
+  - `code-generation-instructions.md` - Code generation rules
+  - `commit-message-instructions.md` - Commit message standards
+  - `pr-description-instructions.md` - PR description format
+  - `review-selection-instructions.md` - Code review guidelines
+
+For more details, see [.github/agents/README.md](.github/agents/README.md).
+
 ## Contributing
 
 Anyone and everyone is welcome to [contribute](https://github.com/demokratie-live/democracy-development/blob/master/CONTRIBUTE.md). Start by checking out the list of
