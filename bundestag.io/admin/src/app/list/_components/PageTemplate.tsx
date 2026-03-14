@@ -1,11 +1,10 @@
 import Entry from '../_components/entry';
 import { PaginationNavigation } from '../_components/pagination-navigation';
-import { IProcedure } from '@democracy-deutschland/bundestagio-common';
-import { ITEMS_PER_PAGE } from '../_utils/fetchProcedures';
+import { ITEMS_PER_PAGE, ProcedureListEntry } from '../_utils/fetchProcedures';
 
 interface PageTemplateProps {
   title: string;
-  procedures: IProcedure[];
+  procedures: ProcedureListEntry[];
   count: number;
   currentPage: number;
 }
