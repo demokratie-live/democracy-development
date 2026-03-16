@@ -25,7 +25,6 @@
     "moment": "^2.30.1",
     "mongoose": "^6.0.12",
     "mongoose-diff-history": "^2.1.0",
-    "mongoosastic": "^5.0.0",
     "xml2js": "^0.6.2",
     "xmldom": "^0.6.0",
     "xpath": "^0.0.34"
