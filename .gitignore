@@ -2,6 +2,7 @@
 /data/
 .vs
 node_modules
+.pnpm-store/
 .github/workflows/*.env
 infra/*.yaml
 configuration/*

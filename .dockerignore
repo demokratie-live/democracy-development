@@ -2,6 +2,7 @@
 **/.env
 **/.env.*
 **/node_modules
+**/.pnpm-store
 **/logs
 **/*.log
 **/.turbo
@@ -12,4 +13,5 @@
 **/build
 **/built
 **/dist
+**/coverage
 **/Dockerfile
