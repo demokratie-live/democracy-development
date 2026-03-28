@@ -20,7 +20,7 @@
     "graphql-request": "^7.1.2",
     "graphql-tag": "^2.12.6",
     "next": "^15.2.3",
-    "next-auth": "^4.24.7",
+    "next-auth": "^4.24.12",
     "pino": "^9.3.2",
     "pino-pretty": "^13.0.0",
     "react": "^19.0.0",
