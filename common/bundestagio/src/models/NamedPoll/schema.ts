@@ -1,5 +1,4 @@
 import { Schema, Document } from "mongoose";
-import diffHistory from "mongoose-diff-history/diffHistory";
 
 import NamedPollVotes, { INamedPollVotes } from "./NamedPoll/Votes";
 import NamedPollSpeech, { INamedPollSpeech } from "./NamedPoll/Speech";
@@ -40,7 +39,6 @@ const NamedPollSchema = new Schema(
   { timestamps: true }
 );
 
-NamedPollSchema.plugin(diffHistory.plugin, { omit: ["updatedAt"] });
 NamedPollSchema.index({ createdAt: 1 });
 NamedPollSchema.index({ webId: 1, "votes.parties.name": 1 }, { unique: true });
 NamedPollSchema.index(
