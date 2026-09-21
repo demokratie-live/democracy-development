@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.72](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.71...bundestag.io@v0.1.72) (2026-09-21)
+
+* update Node.js version to 20.9.0 across configurations ([dc8cf3a](https://github.com/demokratie-live/democracy-development/commit/dc8cf3a5deae32ad1f897dcbb98ce895ab3ecb7f))
+
 ## [0.1.71](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.70...bundestag.io@v0.1.71) (2025-11-15)
 
 ## [0.1.70](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.69...bundestag.io@v0.1.70) (2025-10-28)
