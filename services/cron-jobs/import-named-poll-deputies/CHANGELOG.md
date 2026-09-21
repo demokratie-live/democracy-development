@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.22](https://github.com/demokratie-live/democracy-development/compare/import-named-poll-deputies@v0.1.21...import-named-poll-deputies@v0.1.22) (2026-09-21)
+
+* tslib in import-named-poll-deputies deklarieren ([a98dbb9](https://github.com/demokratie-live/democracy-development/commit/a98dbb9a7a8d6ff096781ec5d93dca8e871eb727))
+
 ## [0.1.21](https://github.com/demokratie-live/democracy-development/compare/import-named-poll-deputies@v0.1.20...import-named-poll-deputies@v0.1.21) (2026-09-21)
 
 * update Node.js version to 20.9.0 across configurations ([dc8cf3a](https://github.com/demokratie-live/democracy-development/commit/dc8cf3a5deae32ad1f897dcbb98ce895ab3ecb7f))
