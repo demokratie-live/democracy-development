@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.12](https://github.com///compare/crawler@v1.1.11...crawler@v1.1.12) (2026-09-21)
+
 ## [1.1.11](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.10...crawler@v1.1.11) (2026-03-11)
 
 
