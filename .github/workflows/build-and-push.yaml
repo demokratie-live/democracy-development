@@ -91,6 +91,43 @@ jobs:
             echo "dockerfile=infra/Dockerfile" >> $GITHUB_OUTPUT
           fi
 
+      # Ein Image, dem Laufzeit-Module fehlen, faellt erst im Cluster auf.
+      # Deshalb zuerst nur amd64 bauen, laden und den Container einmal starten.
+      - name: Build for smoke test
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{ steps.check-dockerfile.outputs.dockerfile }}
+          platforms: linux/amd64
+          load: true
+          push: false
+          target: runner
+          tags: smoke-test:${{ matrix.package }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            SERVICE=${{ matrix.package }}
+            SERVICE_PATH=${{ steps.get-directory.outputs.directory }}
+            NODE_VERSION=${{ steps.node_version.outputs.version }}
+
+      - name: Smoke test
+        run: |
+          docker run -d --name smoke-test smoke-test:${{ matrix.package }}
+          sleep 30
+          docker logs smoke-test > smoke.log 2>&1 || true
+          docker rm -f smoke-test > /dev/null 2>&1 || true
+
+          # Ein Dienst, der ohne DB_URL o. ae. abbricht, ist in Ordnung.
+          # Ein fehlendes Modul nicht.
+          if grep -q "Cannot find module" smoke.log; then
+            echo "::error::Dem Image fehlen Laufzeit-Module - es wird nicht gepusht"
+            grep -B2 -A8 "Cannot find module" smoke.log | head -40
+            exit 1
+          fi
+
+          echo "Keine fehlenden Module." >> $GITHUB_STEP_SUMMARY
+          head -c 2000 smoke.log
+
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v5
