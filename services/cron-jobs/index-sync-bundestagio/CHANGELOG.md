@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.14](https://github.com/demokratie-live/democracy-development/compare/index-sync-bundestagio@v0.1.13...index-sync-bundestagio@v0.1.14) (2026-09-21)
+
+* update Node.js version to 20.9.0 across configurations ([dc8cf3a](https://github.com/demokratie-live/democracy-development/commit/dc8cf3a5deae32ad1f897dcbb98ce895ab3ecb7f))
+
 ## [0.1.13](https://github.com/demokratie-live/democracy-development/compare/index-sync-bundestagio@v0.1.12...index-sync-bundestagio@v0.1.13) (2025-11-15)
 
 ## [0.1.12](https://github.com/demokratie-live/democracy-development/compare/index-sync-bundestagio@v0.1.11...index-sync-bundestagio@v0.1.12) (2025-10-28)
