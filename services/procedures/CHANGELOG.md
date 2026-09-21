@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.9](https://github.com/demokratie-live/democracy-development/compare/procedures@v0.0.8...procedures@v0.0.9) (2026-09-21)
+
+* update Node.js version to 20.9.0 across configurations ([dc8cf3a](https://github.com/demokratie-live/democracy-development/commit/dc8cf3a5deae32ad1f897dcbb98ce895ab3ecb7f))
+
 ## [0.0.8](https://github.com/demokratie-live/democracy-development/compare/procedures@v0.0.7...procedures@v0.0.8) (2025-11-15)
 
 ## [0.0.7](https://github.com/demokratie-live/democracy-development/compare/procedures@v0.0.6...procedures@v0.0.7) (2025-10-28)
