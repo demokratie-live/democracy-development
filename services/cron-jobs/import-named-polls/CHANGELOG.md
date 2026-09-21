@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.29](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.28...import-named-polls@v0.1.29) (2026-09-21)
+
+* Laufzeit-Abhängigkeiten für Prod-Images korrigieren ([38bfeef](https://github.com/demokratie-live/democracy-development/commit/38bfeefa837bd69fda3d2b2241f46cb74f2f6fe8))
+
 ## [0.1.28](https://github.com/demokratie-live/democracy-development/compare/import-named-polls@v0.1.27...import-named-polls@v0.1.28) (2026-09-21)
 
 * update Node.js version to 20.9.0 across configurations ([dc8cf3a](https://github.com/demokratie-live/democracy-development/commit/dc8cf3a5deae32ad1f897dcbb98ce895ab3ecb7f))
