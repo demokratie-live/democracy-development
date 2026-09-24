@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.21](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.20...import-plenary-minutes@v0.1.21) (2026-09-24)
+
+* DIP-Zugriff und Konfiguration auslagern ([796dd99](https://github.com/demokratie-live/democracy-development/commit/796dd99888ac470a6b74e839b9b476bd6be8cf10))
+* Plenarprotokolle über die DIP-API importieren ([9b816fb](https://github.com/demokratie-live/democracy-development/commit/9b816fbe72a6ee004054779c39a5dcec31ec1a48))
+
 ## [0.1.20](https://github.com/demokratie-live/democracy-development/compare/import-plenary-minutes@v0.1.19...import-plenary-minutes@v0.1.20) (2026-09-21)
 
 * update Node.js version to 20.9.0 across configurations ([dc8cf3a](https://github.com/demokratie-live/democracy-development/commit/dc8cf3a5deae32ad1f897dcbb98ce895ab3ecb7f))
