@@ -23,8 +23,8 @@ const Card = ({ item }: any) => {
   });
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-lg border shadow-lg" ref={intersectionRef}>
-      <Link href={makeLink(item)} className="relative shrink-0 cursor-pointer bg-white pb-10 " ref={observe}>
+    <div className="flex flex-col overflow-hidden rounded-lg border border-gray-200 shadow-lg dark:border-gray-700 dark:shadow-gray-900" ref={intersectionRef}>
+      <Link href={makeLink(item)} className="relative shrink-0 cursor-pointer bg-white pb-10 dark:bg-gray-800" ref={observe}>
         <div className="relative flex aspect-teaser flex-col justify-center overflow-hidden">
           <Image
             className="object-cover"
@@ -45,7 +45,7 @@ const Card = ({ item }: any) => {
             />
           ))}
       </Link>
-      <div className="flex flex-1 flex-col justify-between bg-white p-6">
+      <div className="flex flex-1 flex-col justify-between bg-white p-6 dark:bg-gray-800">
         <div className="flex-1">
           <div className="text-sm font-medium text-ci-blue-darker">
             <div
@@ -59,8 +59,8 @@ const Card = ({ item }: any) => {
             </div>
           </div>
           <Link href={makeLink(item)} className="mt-2 block">
-            <p className="line-clamp-3 hyphens-auto text-xl font-semibold leading-6 text-gray-900">{item.title}</p>
-            <p className="line-clamp-3 hyphens-auto pt-2 text-base leading-5 text-gray-700">{item.sessionTOPHeading}</p>
+            <p className="line-clamp-3 hyphens-auto text-xl font-semibold leading-6 text-gray-900 dark:text-gray-100">{item.title}</p>
+            <p className="line-clamp-3 hyphens-auto pt-2 text-base leading-5 text-gray-700 dark:text-gray-300">{item.sessionTOPHeading}</p>
             {/* <p className="mt-3 text-base text-gray-500">
                 {description}
               </p> */}
@@ -74,7 +74,7 @@ const Card = ({ item }: any) => {
                 {author.name}
               </a>
             </p> */}
-              <div className="flex space-x-1 text-sm text-gray-500">
+              <div className="flex space-x-1 text-sm text-gray-500 dark:text-gray-400">
                 <time dateTime={item.voteDate}>{dayjs(item.voteDate).format('DD.MM.YYYY')}</time>
                 {/* {subjectGroups[0]?.replace(' ', '_').toLowerCase()} */}
                 {/* <span aria-hidden="true">&middot;</span>

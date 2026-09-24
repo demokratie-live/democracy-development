@@ -117,12 +117,12 @@ export default function FilteredPage({
       }
     >
       <div className="mb-20">
-        <div className="bg-gray-200">
+        <div className="bg-gray-200 dark:bg-gray-800">
           <div className="mx-auto max-w-7xl px-4 pb-7 pt-28 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
+            <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
               {title}
             </h1>
-            <h2 className="max-w-xl text-sm leading-5 text-gray-600">
+            <h2 className="max-w-xl text-sm leading-5 text-gray-600 dark:text-gray-400">
               {description}
             </h2>
           </div>
@@ -165,7 +165,7 @@ export default function FilteredPage({
               Object.keys(grouped).map((key: string) => {
                 return (
                   <div key={key}>
-                    <div className=" sticky top-16 z-10 col-span-full mb-5 bg-gray-100/90 px-5 py-3 text-base font-medium backdrop-blur-lg sm:-mx-8">
+                    <div className=" sticky top-16 z-10 col-span-full mb-5 bg-gray-100/90 px-5 py-3 text-base font-medium backdrop-blur-lg dark:bg-gray-900/90 sm:-mx-8">
                       <div className="mx-auto !max-w-7xl">{key}</div>
                     </div>
                     <div className="3xl:grid-cols-4 col-span-full mx-auto grid !max-w-7xl gap-5 pb-10 sm:grid-cols-2 lg:grid-cols-3">
