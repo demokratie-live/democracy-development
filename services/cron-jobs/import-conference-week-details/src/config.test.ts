@@ -3,8 +3,15 @@ import { buildConfigFrom, config, defaults } from './config.js';
 
 describe('config', () => {
   it('provides default values when env not set', () => {
+    // Year and week are dynamic (current ISO week at module-load time).
     expect(config.conference.year).toBe(defaults.CONFERENCE_YEAR);
     expect(config.conference.week).toBe(defaults.CONFERENCE_WEEK);
+    // Sanity-check: the dynamic defaults must be plausible numbers.
+    const currentYear = new Date().getFullYear();
+    expect(config.conference.year).toBeGreaterThanOrEqual(currentYear - 1);
+    expect(config.conference.year).toBeLessThanOrEqual(currentYear + 1);
+    expect(config.conference.week).toBeGreaterThanOrEqual(1);
+    expect(config.conference.week).toBeLessThanOrEqual(53);
     expect(config.conference.limit).toBe(defaults.CONFERENCE_LIMIT);
     expect(config.crawl.maxRequestsPerCrawl).toBe(defaults.CRAWL_MAX_REQUESTS_PER_CRAWL);
     expect(typeof config.db.url).toBe('string');
