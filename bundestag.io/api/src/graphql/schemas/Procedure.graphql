@@ -91,6 +91,7 @@ type Procedure {
   procedureId: String
   type: String
   period: Int
+  activities: Int
   currentStatus: String
   currentStatusHistory: [String]
   signature: String
@@ -106,6 +107,7 @@ type Procedure {
   importantDocuments: [Document]
   customData: ProcedureCustomData
   namedVote: Boolean
+  lastUpdateDate: Date
   voteDate: Date
   voteEnd: Date
   sessions: [FilteredConferenceWeekDetail]

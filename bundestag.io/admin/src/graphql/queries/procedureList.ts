@@ -12,6 +12,7 @@ const proceduresQuery = gql`
         period
         currentStatus
         namedVote
+        activities
         importantDocuments {
           type
           editor
@@ -27,7 +28,9 @@ const proceduresQuery = gql`
             type
           }
         }
+        lastUpdateDate
         voteDate
+        voteEnd
         ...VoteResults
       }
     }
