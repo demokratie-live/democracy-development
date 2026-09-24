@@ -1,100 +1,66 @@
 import axios from 'axios';
-import cheerio from 'cheerio';
-import moment from 'moment';
 import { PlenaryMinuteModel, mongoConnect } from '@democracy-deutschland/bundestagio-common';
 
-import { MetaData, PlenaryMinutesItem } from './types';
+import { DipPlenarprotokoll, DipPlenarprotokollResponse, PlenaryMinutesItem } from './types';
 
-const AxiosInstance = axios.create();
+const DIP_URL = 'https://search.dip.bundestag.de/api/v1/plenarprotokoll';
 
-const getMeta = (meta: cheerio.Cheerio): MetaData => {
-  let hits: number;
-  let nextOffset: number;
-  let staticItemCount: number;
-  const dataHits = meta.attr('data-hits');
-  const dataNextOffset = meta.attr('data-nextoffset');
-  const dataStaticItemCount = meta.attr('data-staticitemcount');
-  if (dataHits && dataNextOffset && dataStaticItemCount) {
-    hits = parseInt(dataHits);
-    nextOffset = parseInt(dataNextOffset);
-    staticItemCount = parseInt(dataStaticItemCount);
-  } else {
-    throw new Error('meta data not valid');
+const periods = [19, 20, 21];
+
+const fetchPage = async (apiKey: string, period: number, cursor?: string) => {
+  try {
+    const { data } = await axios.get<DipPlenarprotokollResponse>(DIP_URL, {
+      headers: { Authorization: `ApiKey ${apiKey}` },
+      params: { 'f.wahlperiode': period, 'f.zuordnung': 'BT', cursor },
+    });
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(`DIP request for period ${period} failed: ${error.response?.status ?? error.code} ${error.message}`);
+    }
+    throw error;
   }
+};
 
+const fetchPeriod = async (apiKey: string, period: number) => {
+  const documents: DipPlenarprotokoll[] = [];
+  let cursor: string | undefined;
+  let numFound = 0;
+  for (;;) {
+    const page = await fetchPage(apiKey, period, cursor);
+    numFound = page.numFound;
+    documents.push(...page.documents);
+    // DIP returns the same cursor again once the last page is reached
+    if (page.documents.length === 0 || page.cursor === cursor) break;
+    cursor = page.cursor;
+  }
+  if (numFound === 0 || documents.length === 0) {
+    throw new Error(`DIP returned no plenary minutes for period ${period}`);
+  }
+  return documents;
+};
+
+const toItem = (doc: DipPlenarprotokoll): PlenaryMinutesItem | null => {
+  // future sessions are listed before their protocol is published
+  const xml = doc.fundstelle.xml_url;
+  if (!xml) return null;
+
+  const match = /^(\d+)\/(\d+)$/.exec(doc.dokumentnummer);
+  if (!match) {
+    throw new Error(`unexpected dokumentnummer "${doc.dokumentnummer}" (id ${doc.id})`);
+  }
   return {
-    hits,
-    nextOffset,
-    staticItemCount,
+    period: parseInt(match[1]),
+    meeting: parseInt(match[2]),
+    date: new Date(`${doc.datum}T00:00:00Z`),
+    xml,
   };
 };
 
-const getPlenaryMinutes = (plenaryMinutes: cheerio.Cheerio, period: number): PlenaryMinutesItem[] => {
-  const plenaryMinutesItems: PlenaryMinutesItem[] = [];
-  plenaryMinutes.each((i, elem) => {
-    // Parse Title
-    const title = cheerio(elem).find('strong').text().trim();
-    const regex = /protokoll der (?<meeting>\d{1,3}).*?dem (?<date>.*?)$/gi;
-    const match = regex.exec(title)!.groups as {
-      meeting: string;
-      date: string;
-    };
-    const m = moment(match.date, 'DD MMMM YYYY', 'de');
-
-    // Parse link
-    const xmlLink = cheerio(elem).find('.bt-link-dokument').attr('href');
-
-    const plenaryMinutesItem: PlenaryMinutesItem = {
-      date: m.toDate(),
-      period,
-      meeting: parseInt(match.meeting),
-      xml: xmlLink?.startsWith('http') ? xmlLink : `https://www.bundestag.de${xmlLink}`,
-    };
-    plenaryMinutesItems.push(plenaryMinutesItem);
-  });
-
-  return plenaryMinutesItems;
-};
-
-const parsePage = async (url: string, period: number) => {
-  return await AxiosInstance.get(url).then((response) => {
-    const html = response.data;
-    const $ = cheerio.load(html);
-    const meta: cheerio.Cheerio = $('.meta-slider');
-    const plenaryMinutesTable: cheerio.Cheerio = $('.bt-table-data > tbody > tr');
-    const metaData = getMeta(meta);
-    const plenaryMinutes = getPlenaryMinutes(plenaryMinutesTable, period);
-    return {
-      meta: metaData,
-      plenaryMinutes,
-    };
-  });
-};
-
-const getUrl = ({ offset, id }: { offset: number; id: string }) =>
-  `https://www.bundestag.de/ajax/filterlist/de/services/opendata/${id}?offset=${offset}`;
-
-const periods = [
-  { period: 19, id: '543410-543410' },
-  { period: 20, id: '866354-866354' },
-  { period: 21, id: '1058442-1058442' },
-];
-
-const start = async (period: number) => {
-  const periodId = periods.find((p) => p.period === period)!.id;
+const start = async (apiKey: string, period: number) => {
   console.log('start import for period', period);
-
-  let url: string | false = getUrl({ offset: 0, id: periodId });
-  const data: PlenaryMinutesItem[] = [];
-  do {
-    const { meta, plenaryMinutes } = await parsePage(url, period);
-    data.push(...plenaryMinutes);
-    if (meta.nextOffset < meta.hits) {
-      url = getUrl({ offset: meta.nextOffset, id: periodId });
-    } else {
-      url = false;
-    }
-  } while (url);
+  const documents = await fetchPeriod(apiKey, period);
+  const data = documents.map(toItem).filter((item): item is PlenaryMinutesItem => item !== null);
   await PlenaryMinuteModel.collection.bulkWrite(
     data.map((item) => ({
       updateOne: {
@@ -106,7 +72,7 @@ const start = async (period: number) => {
       },
     })),
   );
-  console.log(`found for period ${period}: `, data.length);
+  console.log(`found for period ${period}: ${documents.length}, imported: ${data.length}`);
 };
 
 (async () => {
@@ -115,10 +81,14 @@ const start = async (period: number) => {
   if (!process.env.DB_URL) {
     throw new Error('you have to set environment variable: DB_URL');
   }
+  const apiKey = process.env.DIP_API_KEY;
+  if (!apiKey) {
+    throw new Error('you have to set environment variable: DIP_API_KEY');
+  }
   await mongoConnect(process.env.DB_URL);
   console.log('PlenaryMinutes', await PlenaryMinuteModel.countDocuments({}));
   for (const period of periods) {
-    await start(period.period);
+    await start(apiKey, period);
   }
   process.exit(0);
 })();

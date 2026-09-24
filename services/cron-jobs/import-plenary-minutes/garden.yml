@@ -38,6 +38,7 @@ dependencies:
   - build.import-plenary-minutes
   - deploy.mongo
   - deploy.import-plenary-minutes-config
+  - deploy.crawler-runtime-config
 
 type: kubernetes-pod
 
@@ -51,3 +52,6 @@ spec:
         envFrom:
           - configMapRef:
               name: import-plenary-minutes
+          - secretRef:
+              name: dip-api-token
+              optional: false
