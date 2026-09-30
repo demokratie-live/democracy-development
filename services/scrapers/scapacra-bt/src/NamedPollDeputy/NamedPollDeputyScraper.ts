@@ -1,10 +1,17 @@
 import { IParser, IBrowser, IScraper } from '@democracy-deutschland/scapacra';
-import { NamedPollDeputiesData, NamedPollDeputiesMeta, NamedPollDeputyBrowser } from './NamedPollDeputyBrowser';
+import {
+  NamedPollDeputiesData,
+  NamedPollDeputiesMeta,
+  NamedPollDeputyBrowser,
+  NamedPollDeputyBrowserOptions,
+} from './NamedPollDeputyBrowser';
 import NamedPollDeputyParser from './NamedPollDeputyParser';
 
 export class NamedPollDeputyScraper implements IScraper<NamedPollDeputiesData, NamedPollDeputiesMeta> {
+  constructor(private readonly options: NamedPollDeputyBrowserOptions = {}) {}
+
   public getBrowser(): IBrowser<NamedPollDeputiesData, NamedPollDeputiesMeta> {
-    return new NamedPollDeputyBrowser();
+    return new NamedPollDeputyBrowser(this.options);
   }
 
   public getParser(): IParser<NamedPollDeputiesData, NamedPollDeputiesMeta> {
