@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.23](https://github.com/demokratie-live/democracy-development/compare/import-named-poll-deputies@v0.1.22...import-named-poll-deputies@v0.1.23) (2026-09-30)
+
+* import-named-poll-deputies nur neue Abstimmungen laden und drosseln ([7d65d63](https://github.com/demokratie-live/democracy-development/commit/7d65d639b03b4008469cdc44b2795c5523872c9e))
+
 ## [0.1.22](https://github.com/demokratie-live/democracy-development/compare/import-named-poll-deputies@v0.1.21...import-named-poll-deputies@v0.1.22) (2026-09-21)
 
 * tslib in import-named-poll-deputies deklarieren ([a98dbb9](https://github.com/demokratie-live/democracy-development/commit/a98dbb9a7a8d6ff096781ec5d93dca8e871eb727))
