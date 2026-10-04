@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { log } from 'crawlee';
 import type { BundestagJSONResponse } from '../types-json';
+import { getNextISOWeek } from '../utils/date.js';
 
 const BUNDESTAG_API_BASE = 'https://www.bundestag.de/apps/plenar/plenar';
 
@@ -62,13 +63,24 @@ export async function fetchConferenceWeek(options: FetchConferenceWeekOptions): 
 }
 
 /**
- * Fetches multiple conference weeks in sequence
- * Stops when encountering a 404 (week not available yet)
+ * Fetches multiple conference weeks in sequence starting from `options`.
+ *
+ * Navigation strategy:
+ *  1. If the API returns a response, follow the `next` pointer to reach the
+ *     next session week (the API skips non-session weeks automatically).
+ *  2. If the API returns 404 for the starting week (e.g. the current week has
+ *     no sessions yet), advance one ISO week at a time for up to
+ *     MAX_LOOKAHEAD_WEEKS consecutive misses before giving up.  This ensures
+ *     the crawler can always find the next upcoming session even when starting
+ *     from a non-session week.
  */
 export async function fetchConferenceWeeks(
   options: FetchConferenceWeekOptions,
   limit: number = 10,
 ): Promise<Array<{ data: BundestagJSONResponse; year: number; week: number }>> {
+  /** How many consecutive 404s we tolerate before giving up entirely */
+  const MAX_LOOKAHEAD_WEEKS = 4;
+
   const results: Array<{
     data: BundestagJSONResponse;
     year: number;
@@ -77,17 +89,20 @@ export async function fetchConferenceWeeks(
 
   let currentYear = options.year;
   let currentWeek = options.week;
+  let consecutiveMisses = 0;
 
-  for (let i = 0; i < limit; i++) {
+  while (results.length < limit) {
     try {
       const data = await fetchConferenceWeek({
         year: currentYear,
         week: currentWeek,
       });
 
+      // A successful response resets the consecutive-miss counter.
+      consecutiveMisses = 0;
       results.push({ data, year: currentYear, week: currentWeek });
 
-      // Navigate to next week (forward to newer weeks)
+      // Navigate to next week via the API's own pointer (fastest path).
       if (data.next) {
         currentYear = data.next.year;
         currentWeek = data.next.week;
@@ -97,8 +112,22 @@ export async function fetchConferenceWeeks(
       }
     } catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
-        log.info(`Stopping at ${currentYear}-${currentWeek}: Week not available`);
-        break;
+        consecutiveMisses++;
+        if (consecutiveMisses >= MAX_LOOKAHEAD_WEEKS) {
+          log.info(
+            `No session data found for ${MAX_LOOKAHEAD_WEEKS} consecutive weeks starting at ` +
+              `${options.year}-W${String(options.week).padStart(2, '0')}, stopping`,
+          );
+          break;
+        }
+        // Advance one ISO week manually and retry.
+        const next = getNextISOWeek(currentYear, currentWeek);
+        log.info(
+          `Week ${currentYear}-W${String(currentWeek).padStart(2, '0')} not found, trying ${next.year}-W${String(next.week).padStart(2, '0')}`,
+        );
+        currentYear = next.year;
+        currentWeek = next.week;
+        continue;
       }
       throw error;
     }
