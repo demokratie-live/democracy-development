@@ -1,0 +1,121 @@
+# GitHub Copilot Workspace Configuration
+# This file configures Copilot behavior for the entire workspace
+
+# Project Information
+name: democracy-development
+description: Democracy Deutschland - Open source platform for democratic participation
+
+# Technology Stack
+stack:
+  languages:
+    - TypeScript
+    - JavaScript
+  frameworks:
+    - Next.js
+    - React
+    - NestJS
+  tools:
+    - pnpm
+    - TurboRepo
+    - Vitest
+    - Docker
+  databases:
+    - MongoDB
+
+# Code Style
+codeStyle:
+  indentation: 2 spaces
+  quotes: single
+  semicolons: true
+  trailingComma: all
+  
+# File Patterns
+patterns:
+  tests:
+    unit: "**/*.test.ts"
+    integration: "tests/integration/**/*.ts"
+    e2e: "tests/e2e/**/*.ts"
+  components:
+    - "src/components/**/*.tsx"
+    - "src/components/**/*.ts"
+  services:
+    - "src/services/**/*.ts"
+    - "services/**/*.ts"
+
+# Custom Agents
+agents:
+  - name: test-agent
+    trigger: ["test", "testing", "unit test", "integration test"]
+    file: .github/agents/test-agent.yml
+    
+  - name: code-review-agent
+    trigger: ["review", "code review", "quality check"]
+    file: .github/agents/code-review-agent.yml
+    
+  - name: documentation-agent
+    trigger: ["docs", "documentation", "readme", "comments"]
+    file: .github/agents/documentation-agent.yml
+    
+  - name: frontend-agent
+    trigger: ["react", "next.js", "frontend", "component", "ui"]
+    file: .github/agents/frontend-agent.yml
+    
+  - name: backend-agent
+    trigger: ["nestjs", "backend", "api", "graphql", "service"]
+    file: .github/agents/backend-agent.yml
+
+# Instructions
+instructions:
+  global: .github/copilot-instructions.md
+  testing: .github/test-generation-instructions.md
+  code: .github/code-generation-instructions.md
+  commits: .github/commit-message-instructions.md
+  prs: .github/pr-description-instructions.md
+  reviews: .github/review-selection-instructions.md
+
+# Prompts
+prompts:
+  always: .github/prompts/always.prompt.md
+
+# Quality Standards
+quality:
+  linting: true
+  typeChecking: true
+  testing: required
+  coverage:
+    minimum: 80
+    target: 90
+
+# Development Commands
+commands:
+  install: "pnpm install"
+  dev: "devbox run -- pnpm --filter=PACKAGE_NAME run dev"
+  build: "devbox run -- pnpm --filter=PACKAGE_NAME run build"
+  test: "devbox run -- pnpm --filter=PACKAGE_NAME test"
+  lint: "devbox run -- pnpm --filter=PACKAGE_NAME lint"
+  typecheck: "devbox run -- pnpm --filter=PACKAGE_NAME typecheck"
+
+# Monorepo Structure
+monorepo:
+  tool: turborepo
+  packageManager: pnpm
+  workspaces:
+    - packages/*
+    - services/*
+    - bundestag.io
+    - democracy
+    - common
+
+# Best Practices Enforced
+bestPractices:
+  - Functional programming over OOP
+  - Test-driven development (TDD)
+  - Colocated unit tests
+  - Loose coupling, high cohesion
+  - Separation of concerns
+  - Type safety with TypeScript
+  - No 'any' types without justification
+  - Comprehensive error handling
+  - Security-first approach
+  - Performance optimization
+  - Accessibility compliance
