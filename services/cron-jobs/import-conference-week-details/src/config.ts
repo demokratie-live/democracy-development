@@ -36,10 +36,27 @@ export interface AppConfig {
   };
 }
 
+/**
+ * Returns the ISO 8601 year and week number for the given date (defaults to today).
+ * ISO week 1 is the week containing the first Thursday of the year.
+ * Weeks start on Monday.
+ */
+export const getISOWeekForDate = (date: Date = new Date()): { year: number; week: number } => {
+  const day = date.getUTCDay() || 7; // 1 (Mon) … 7 (Sun)
+  // Thursday of the current ISO week determines the ISO year
+  const thursday = new Date(date);
+  thursday.setUTCDate(date.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(thursday.getUTCFullYear(), 0, 1));
+  const week = Math.ceil(((thursday.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  return { year: thursday.getUTCFullYear(), week };
+};
+
+const currentISOWeek = getISOWeekForDate();
+
 // Defaults centralised here for easy visibility & single source of truth
 const DEFAULTS = Object.freeze({
-  CONFERENCE_YEAR: 2025,
-  CONFERENCE_WEEK: 46,
+  CONFERENCE_YEAR: currentISOWeek.year,
+  CONFERENCE_WEEK: currentISOWeek.week,
   CONFERENCE_LIMIT: 10,
   CRAWL_MAX_REQUESTS_PER_CRAWL: 10,
   DB_URL: 'mongodb://localhost:27017/bundestagio',
