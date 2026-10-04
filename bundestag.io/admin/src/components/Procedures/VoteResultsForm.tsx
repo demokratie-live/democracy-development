@@ -155,8 +155,9 @@ const VoteResultsForm: React.FC<VoteResultsFormProps> = ({
         onFinishFailed={onFinishFailed}
         className="login-form"
         initialValues={{
-          votingDocument: data.votingDocument ?? '',
+          votingDocument: data.votingDocument ?? 'mainDocument',
           decisionText: data.decisionText ?? '',
+          toggleDecision: data.votingRecommendation === false,
           partyVotes: parties.map((p, i) => ({
             party: p.name,
             main: data.partyVotes.length > 0 ? data.partyVotes[i].main : null,
