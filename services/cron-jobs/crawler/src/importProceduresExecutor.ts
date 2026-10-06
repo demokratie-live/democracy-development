@@ -23,6 +23,32 @@ const handleImportError = (error: unknown, logger: Logger) => {
   process.exit(1);
 };
 
+// DIP changes can become visible in the search index after their `aktualisiert` timestamp.
+const LAST_RUN_OVERLAP_MS = 60 * 60 * 1000;
+
+/**
+ * Determines the start of the DIP filter (`f.aktualisiert.start`) and the reason for it.
+ */
+export const getFilterAfter = (cronjob: ICronJob, config: typeof CONFIG): { filterAfter: string; reason: string } => {
+  const lastSuccessStartDate = cronjob?.lastSuccessStartDate;
+  if (config.IMPORT_PROCEDURES_IGNORE_LAST_RUN) {
+    return {
+      filterAfter: config.IMPORT_PROCEDURES_FILTER_AFTER,
+      reason: `IMPORT_PROCEDURES_FILTER_AFTER, last successful run (${lastSuccessStartDate?.toISOString() ?? 'none'}) ignored because IMPORT_PROCEDURES_IGNORE_LAST_RUN=true`,
+    };
+  }
+  if (!lastSuccessStartDate) {
+    return {
+      filterAfter: config.IMPORT_PROCEDURES_FILTER_AFTER,
+      reason: 'IMPORT_PROCEDURES_FILTER_AFTER, no successful run recorded',
+    };
+  }
+  return {
+    filterAfter: new Date(lastSuccessStartDate.getTime() - LAST_RUN_OVERLAP_MS).toISOString(),
+    reason: `start of last successful run (${lastSuccessStartDate.toISOString()}) minus ${LAST_RUN_OVERLAP_MS / 60000} min overlap`,
+  };
+};
+
 /**
  * Executes the import procedures.
  * @param cronjob - The cron job details.
@@ -36,10 +62,11 @@ export const executeImportProcedures = async (
 ): Promise<void> => {
   try {
     logger.info('Executing import procedures...');
+    const { filterAfter, reason } = getFilterAfter(cronjob, config);
+    logger.info(`Importing procedures updated after ${filterAfter} (${reason})`);
     await importProcedures({
       ...config,
-      IMPORT_PROCEDURES_FILTER_AFTER:
-        cronjob?.lastSuccessStartDate?.toISOString() || config.IMPORT_PROCEDURES_FILTER_AFTER,
+      IMPORT_PROCEDURES_FILTER_AFTER: filterAfter,
     });
     logger.info('Import procedures executed successfully.');
   } catch (error) {

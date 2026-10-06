@@ -11,6 +11,7 @@
     "garden:dev": "tsx --watch src/main.ts",
     "build": "tsup-node",
     "lint": "eslint .",
+    "test": "jest",
     "start": "node ./build/main.js"
   },
   "dependencies": {

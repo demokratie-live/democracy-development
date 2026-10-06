@@ -28,6 +28,14 @@ export default [
       },
     },
   },
+  {
+    files: ['**/*.test.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+  },
   js.configs.recommended,
   ...compat.extends('prettier'),
   {
