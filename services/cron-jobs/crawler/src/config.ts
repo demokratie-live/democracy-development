@@ -15,6 +15,7 @@ const parseEnvVariables = () => {
   const IMPORT_PROCEDURES_FILTER_TYPES = process.env.IMPORT_PROCEDURES_FILTER_TYPES
     ? process.env.IMPORT_PROCEDURES_FILTER_TYPES.split(',')
     : undefined;
+  const IMPORT_PROCEDURES_IGNORE_LAST_RUN = process.env.IMPORT_PROCEDURES_IGNORE_LAST_RUN === 'true';
 
   return {
     DB_URL,
@@ -24,6 +25,7 @@ const parseEnvVariables = () => {
     IMPORT_PROCEDURES_CHUNK_SIZE,
     IMPORT_PROCEDURES_CHUNK_ROUNDS,
     IMPORT_PROCEDURES_FILTER_TYPES,
+    IMPORT_PROCEDURES_IGNORE_LAST_RUN,
   };
 };
 
