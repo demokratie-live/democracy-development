@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.13](https://github.com///compare/crawler@v1.1.12...crawler@v1.1.13) (2026-10-06)
+
+* **crawler:** add procedures backfill switch ([5accfa1](https://github.com///commit/5accfa1061c0fa577c24dfc9b3576ce21f431fac))
+* **crawler:** set procedures chunk size to 100 ([c5206a7](https://github.com///commit/c5206a75ea3523f82118b07b93327512a676a336))
+
 ## [1.1.12](https://github.com///compare/crawler@v1.1.11...crawler@v1.1.12) (2026-09-21)
 
 ## [1.1.11](https://github.com/demokratie-live/democracy-development/compare/crawler@v1.1.10...crawler@v1.1.11) (2026-03-11)
