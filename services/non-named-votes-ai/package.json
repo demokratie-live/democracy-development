@@ -12,6 +12,9 @@
   "keywords": [],
   "author": "",
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "dependencies": {
     "@democracy-deutschland/bundestagio-common": "workspace:*",
     "express": "^4.19.2",

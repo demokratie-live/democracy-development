@@ -3,6 +3,9 @@
   "version": "1.0.9",
   "main": "build/index.js",
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "scripts": {
     "dev": "tsup src/index.ts --watch --onSuccess 'node build/index.js'",
     "build": "tsup-node",

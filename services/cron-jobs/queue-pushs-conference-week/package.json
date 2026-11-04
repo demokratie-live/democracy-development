@@ -3,6 +3,9 @@
   "version": "0.1.14",
   "main": "build/index.js",
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "scripts": {
     "dev": "ts-node-dev -r dotenv/config ./src/index dotenv_config_path=./.env.local",
     "lint": "pnpm lint:ts && pnpm lint:exports",

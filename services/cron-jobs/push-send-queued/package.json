@@ -3,6 +3,9 @@
   "version": "0.1.31",
   "main": "build/index.js",
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "scripts": {
     "dev": "tsup src/index.ts --watch --onSuccess 'node build/index.js'",
     "lint": "pnpm lint:ts && pnpm lint:exports",

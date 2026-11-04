@@ -4,6 +4,9 @@
   "description": "Import conference week details",
   "author": "Manuel Ruck <m.ruck@democracy-deutschland.de>",
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "private": false,
   "main": "build/index.js",
   "type": "module",

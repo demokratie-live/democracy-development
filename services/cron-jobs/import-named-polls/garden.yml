@@ -10,7 +10,7 @@ include:
 spec:
   dockerfile: ./services/cron-jobs/import-named-polls/Dockerfile
   buildArgs:
-    NODE_VERSION: 20.9.0
+    NODE_VERSION: 22.23.4
     SERVICE: import-named-polls
     SERVICE_PATH: services/cron-jobs/import-named-polls
   extraFlags: ['--load']
