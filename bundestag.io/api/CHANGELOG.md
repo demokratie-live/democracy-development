@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.74](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.73...bundestag.io@v0.1.74) (2026-11-04)
+
+* update node to 22.23.4 ([7a97c62](https://github.com/demokratie-live/democracy-development/commit/7a97c62cc40b763a4f19f675978ac430e3d499ce))
+
 ## [0.1.73](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.72...bundestag.io@v0.1.73) (2026-09-21)
 
 * Laufzeit-Abhängigkeiten für Prod-Images korrigieren ([38bfeef](https://github.com/demokratie-live/democracy-development/commit/38bfeefa837bd69fda3d2b2241f46cb74f2f6fe8))
