@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.8](https://github.com/demokratie-live/democracy-development/compare/non-named-votes-ai@v1.1.7...non-named-votes-ai@v1.1.8) (2026-11-04)
+
+* update node to 22.23.4 ([7a97c62](https://github.com/demokratie-live/democracy-development/commit/7a97c62cc40b763a4f19f675978ac430e3d499ce))
+
 ## [1.1.7](https://github.com/demokratie-live/democracy-development/compare/non-named-votes-ai@v1.1.6...non-named-votes-ai@v1.1.7) (2026-09-21)
 
 * update Node.js version to 20.9.0 across configurations ([dc8cf3a](https://github.com/demokratie-live/democracy-development/commit/dc8cf3a5deae32ad1f897dcbb98ce895ab3ecb7f))
