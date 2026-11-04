@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.14](https://github.com///compare/crawler@v1.1.13...crawler@v1.1.14) (2026-11-04)
+
+* update node to 22.23.4 ([7a97c62](https://github.com///commit/7a97c62cc40b763a4f19f675978ac430e3d499ce))
+
 ## [1.1.13](https://github.com///compare/crawler@v1.1.12...crawler@v1.1.13) (2026-10-06)
 
 * **crawler:** add procedures backfill switch ([5accfa1](https://github.com///commit/5accfa1061c0fa577c24dfc9b3576ce21f431fac))
