@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.28](https://github.com/demokratie-live/democracy-development/compare/sync-procedures@v0.1.27...sync-procedures@v0.1.28) (2026-11-04)
+
+* update node to 22.23.4 ([7a97c62](https://github.com/demokratie-live/democracy-development/commit/7a97c62cc40b763a4f19f675978ac430e3d499ce))
+
 ## [0.1.27](https://github.com/demokratie-live/democracy-development/compare/sync-procedures@v0.1.26...sync-procedures@v0.1.27) (2026-03-11)
 
 
