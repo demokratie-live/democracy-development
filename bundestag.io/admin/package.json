@@ -23,12 +23,12 @@
     "graphql": "^16.8.1",
     "graphql-request": "^7.1.2",
     "graphql-tag": "^2.12.6",
-    "next": "^15.2.3",
+    "next": "^15.5.29",
     "next-auth": "^4.24.7",
     "pino": "^9.3.2",
     "pino-pretty": "^13.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "styled-components": "^6.1.11"
   },
   "devDependencies": {
@@ -48,7 +48,7 @@
     "@vanilla-extract/css": "^1.15.2",
     "babel-plugin-styled-components": "^2.1.4",
     "eslint": "^9.21.0",
-    "eslint-config-next": "15.2.0",
+    "eslint-config-next": "15.5.29",
     "typescript": "5.7.3"
   }
 }
