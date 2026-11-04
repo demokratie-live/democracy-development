@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.26](https://github.com/demokratie-live/democracy-development/compare/import-deputy-profiles@v0.1.25...import-deputy-profiles@v0.1.26) (2026-11-04)
+
+* update node to 22.23.4 ([7a97c62](https://github.com/demokratie-live/democracy-development/commit/7a97c62cc40b763a4f19f675978ac430e3d499ce))
+
 ## [0.1.25](https://github.com/demokratie-live/democracy-development/compare/import-deputy-profiles@v0.1.24...import-deputy-profiles@v0.1.25) (2026-09-21)
 
 * update Node.js version to 20.9.0 across configurations ([dc8cf3a](https://github.com/demokratie-live/democracy-development/commit/dc8cf3a5deae32ad1f897dcbb98ce895ab3ecb7f))
