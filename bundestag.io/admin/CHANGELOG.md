@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.8.10](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.8.9...bundestag.io-admin@v3.8.10) (2026-11-04)
+
+* **admin:** update next and react ([dd1c6a3](https://github.com/demokratie-live/democracy-development/commit/dd1c6a3adfdfb522ebd07dad9885c6d157fbd9cf))
+
 ## [3.8.9](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.8.8...bundestag.io-admin@v3.8.9) (2026-11-04)
 
 * update node to 22.23.4 ([7a97c62](https://github.com/demokratie-live/democracy-development/commit/7a97c62cc40b763a4f19f675978ac430e3d499ce))
