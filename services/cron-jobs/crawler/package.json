@@ -6,6 +6,9 @@
   "repository": "https://github.com/demokratie-live/democracy-development/",
   "author": "Manuel Ruck, Ulf Gebhardt, Robert Schäfer",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "scripts": {
     "dev": "tsx --env-file .env --env-file .env.local --watch src/main.ts",
     "garden:dev": "tsx --watch src/main.ts",

@@ -3,6 +3,9 @@
   "version": "0.1.14",
   "main": "build/index.js",
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "scripts": {
     "dev": "ts-node-dev ./src/index",
     "lint": "pnpm lint:ts && pnpm lint:exports",

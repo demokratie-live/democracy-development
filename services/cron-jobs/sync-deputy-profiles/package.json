@@ -3,6 +3,9 @@
   "version": "0.1.17",
   "main": "build/index.js",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "scripts": {
     "dev": "tsup src/index.ts --watch --onSuccess 'node build/index.js'",
     "build": "tsup-node",

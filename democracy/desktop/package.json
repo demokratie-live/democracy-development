@@ -63,5 +63,8 @@
     "tailwindcss": "3.4.3",
     "typescript": "5.3.3"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": ">=22.23.4"
+  }
 }
