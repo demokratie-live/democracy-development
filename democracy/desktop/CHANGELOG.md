@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.2](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.2.1...democracy-app.de@v1.2.2) (2026-11-04)
+
+* update node to 22.23.4 ([7a97c62](https://github.com/demokratie-live/democracy-development/commit/7a97c62cc40b763a4f19f675978ac430e3d499ce))
+
 ## [1.2.1](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.2.0...democracy-app.de@v1.2.1) (2026-03-11)
 
 
