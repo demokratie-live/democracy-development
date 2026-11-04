@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.20](https://github.com/demokratie-live/democracy-development/compare/sync-named-polls@v0.1.19...sync-named-polls@v0.1.20) (2026-11-04)
+
+* update node to 22.23.4 ([7a97c62](https://github.com/demokratie-live/democracy-development/commit/7a97c62cc40b763a4f19f675978ac430e3d499ce))
+* update Node.js version to 20.9.0 across configurations ([dc8cf3a](https://github.com/demokratie-live/democracy-development/commit/dc8cf3a5deae32ad1f897dcbb98ce895ab3ecb7f))
+
 ## [0.1.19](https://github.com/demokratie-live/democracy-development/compare/sync-named-polls@v0.1.18...sync-named-polls@v0.1.19) (2025-11-15)
 
 ## [0.1.18](https://github.com/demokratie-live/democracy-development/compare/sync-named-polls@v0.1.17...sync-named-polls@v0.1.18) (2025-09-09)
