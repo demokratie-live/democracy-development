@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.8.11](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.8.10...bundestag.io-admin@v3.8.11) (2026-11-05)
+
+* **admin:** cover load errors ([4965b3c](https://github.com/demokratie-live/democracy-development/commit/4965b3c56aa0f86208c0a5a80e4990011143ce1d))
+* **admin:** keep vote result toggle on save ([f309db3](https://github.com/demokratie-live/democracy-development/commit/f309db31decf7f758528a9803fa1b2539299f9ff))
+
 ## [3.8.10](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.8.9...bundestag.io-admin@v3.8.10) (2026-11-04)
 
 * **admin:** update next and react ([dd1c6a3](https://github.com/demokratie-live/democracy-development/commit/dd1c6a3adfdfb522ebd07dad9885c6d157fbd9cf))
