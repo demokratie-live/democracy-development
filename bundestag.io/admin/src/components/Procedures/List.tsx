@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Table, Input, Button, Select } from 'antd';
+import { Table, Input, Button, Select, Alert } from 'antd';
 import Link from 'next/link';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
@@ -28,7 +28,7 @@ export const ProcedureList: React.FC = () => {
   const [period, setPeriod] = useState(21);
   const [pageSize, setPageSize] = useState(10);
   const [pageCurrent, setPageCurrent] = useState(1);
-  const { data, loading } = useQuery(PROCEDURE_LIST, {
+  const { data, loading, error } = useQuery(PROCEDURE_LIST, {
     variables: {
       period,
       manageVoteDate: true,
@@ -197,6 +197,7 @@ export const ProcedureList: React.FC = () => {
           <Option value={21}>21</Option>
         </Select>
       </div>
+      {error && <Alert type="error" showIcon message="Liste konnte nicht geladen werden" description={error.message} />}
       <Table
         pagination={{
           onChange: (page, pageSize) => {
