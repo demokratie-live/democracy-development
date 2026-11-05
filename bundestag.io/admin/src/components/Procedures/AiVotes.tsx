@@ -13,6 +13,7 @@ export type AiVotesProps = {
  *
  * AiVotes
  * This is a component which shows a button to fetch the AI votes for a given decision.
+ * Currently not rendered: the votes-ai service depends on the shut down gpt-4 model.
  *
  * @param decision
  * @param period

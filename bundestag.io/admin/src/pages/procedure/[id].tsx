@@ -3,6 +3,7 @@ import App from '../../components/App';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { Alert } from 'antd';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 
@@ -25,7 +26,7 @@ const DD = styled.dt`
 const Procedure: React.FC = () => {
   const router = useRouter();
 
-  const { data, loading } = useQuery(PROCEDURE, {
+  const { data, loading, error } = useQuery(PROCEDURE, {
     variables: {
       procedureId: router.query.id || '',
     },
@@ -35,6 +36,9 @@ const Procedure: React.FC = () => {
 
   if (loading) {
     return <div>…loading</div>;
+  }
+  if (error) {
+    return <Alert type="error" showIcon message="Vorgang konnte nicht geladen werden" description={error.message} />;
   }
   if (!data || !data.procedure) {
     return <div>no data</div>;
@@ -127,14 +131,7 @@ const Procedure: React.FC = () => {
         </dl>
         {!namedVote && <VoteResultTextHelper procedureId={procedureId} importantDocuments={importantDocuments} />}
         {!namedVote && (
-          <VoteResultsForm
-            data={customData.voteResults}
-            type={type}
-            procedureId={procedureId}
-            period={period}
-            lastPlenaryProtocoll={plenaryProtocolls?.slice(-1)?.[0]}
-            title={title}
-          />
+          <VoteResultsForm data={customData.voteResults} type={type} procedureId={procedureId} period={period} />
         )}
         {namedVote && <VoteResultsFormNamedPoll data={customData.voteResults} procedureId={procedureId} />}
       </App>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, Button, InputNumber, Radio, Row, Col, notification, Switch } from 'antd';
 import { axiosClient } from '../../lib/axios';
-import { AiVotes, AiVotesProps } from './AiVotes';
+import { errorMessage } from '../../lib/errorMessage';
 import { Beschlusstext } from './Beschlusstext';
 
 // Ant Design Sub-Elements
@@ -17,13 +17,11 @@ interface VoteResultsFormProps {
       main?: 'YES' | 'NO' | 'ABSTINATION' | null;
       deviants: { yes: number; abstination: number; no: number };
     }[];
-    votingRecommendation?: boolean;
+    votingRecommendation?: boolean | null;
   };
   type: string;
   procedureId: number;
   period: number;
-  lastPlenaryProtocoll?: { findSpotUrl: string };
-  title: string;
 }
 
 export const getFractions = (period: number) =>
@@ -67,14 +65,7 @@ export const getFractions = (period: number) =>
       ];
 
 // Component-Typisierung und Form-Layout
-const VoteResultsForm: React.FC<VoteResultsFormProps> = ({
-  data,
-  type,
-  procedureId,
-  period,
-  lastPlenaryProtocoll,
-  title,
-}) => {
+const VoteResultsForm: React.FC<VoteResultsFormProps> = ({ data, type, procedureId, period }) => {
   // 1. useNotification-Hook
   const [notificationApi, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
@@ -115,7 +106,8 @@ const VoteResultsForm: React.FC<VoteResultsFormProps> = ({
         notificationApi.error({
           key: 'saveProcedure',
           message: 'Ein Fehler ist vorgefallen',
-          // description: err
+          description: errorMessage(err),
+          duration: 0,
         });
         console.error('Error:', err);
       });
@@ -135,14 +127,6 @@ const VoteResultsForm: React.FC<VoteResultsFormProps> = ({
     }));
   }
 
-  const onAiVoteResult: AiVotesProps['onResult'] = (votes) => {
-    const fieldValue = form.getFieldValue('partyVotes');
-    form.setFieldValue(
-      'partyVotes',
-      votes.map((vote, i) => ({ ...fieldValue[i], main: vote.vote })),
-    );
-  };
-
   return (
     <>
       {contextHolder}
@@ -157,6 +141,8 @@ const VoteResultsForm: React.FC<VoteResultsFormProps> = ({
         initialValues={{
           votingDocument: data.votingDocument ?? '',
           decisionText: data.decisionText ?? '',
+          // the API stores the inverse: votingRecommendation === false means "flip"
+          toggleDecision: data.votingRecommendation === false,
           partyVotes: parties.map((p, i) => ({
             party: p.name,
             main: data.partyVotes.length > 0 ? data.partyVotes[i].main : null,
@@ -179,14 +165,7 @@ const VoteResultsForm: React.FC<VoteResultsFormProps> = ({
         <Form.Item label="Ergebnis umdrehen" name="toggleDecision" valuePropName="checked">
           <Switch />
         </Form.Item>
-        <Beschlusstext pdfUrl={lastPlenaryProtocoll?.findSpotUrl ?? ''} title={title} />
-        <Form.Item noStyle dependencies={['decisionText']}>
-          {({ getFieldValue }) =>
-            getFieldValue('decisionText') && period ? (
-              <AiVotes decision={getFieldValue('decisionText')} period={period} onResult={onAiVoteResult} />
-            ) : null
-          }
-        </Form.Item>
+        <Beschlusstext />
         <Form.List name="partyVotes">
           {(fields) => (
             <Row gutter={8}>
