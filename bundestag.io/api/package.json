@@ -23,6 +23,7 @@
     "lint:ts": "tsc --noEmit",
     "lint:exports": "ts-unused-exports ./tsconfig.json --excludePathsFromReport=generated --excludePathsFromReport=resolvers --excludePathsFromReport=/schemas --excludePathsFromReport=graphqlContext.ts",
     "generate": "graphql-codegen --config codegen.yml",
+    "pretest": "pnpm run generate",
     "test": "vitest run",
     "test:watch": "vitest"
   },
