@@ -7,19 +7,17 @@ import resolvers from '../../graphql/resolvers';
 import { mergeTypeDefs } from '@graphql-tools/merge';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 
-const typeDefsAuth = authDirective('auth').authDirectiveTypeDefs;
+const { authDirectiveTypeDefs, authDirectiveTransformer, assertAuthDirectiveApplied } =
+  authDirective('auth');
 
-const typeDefs = mergeTypeDefs([typeDefsBase, typeDefsAuth]);
+const typeDefs = mergeTypeDefs([typeDefsBase, authDirectiveTypeDefs]);
 
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers,
-});
+export const buildSchema = () =>
+  authDirectiveTransformer(makeExecutableSchema({ typeDefs, resolvers }));
 
 export const createServer = ({ httpServer }) =>
   new ApolloServer<GraphQlContext>({
-    schema: authDirective('auth').authDirectiveTransformer(schema),
-    // schema,
+    schema: assertAuthDirectiveApplied(buildSchema()),
     introspection: true,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });

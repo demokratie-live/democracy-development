@@ -324,4 +324,88 @@ describe('Auth Directive', () => {
     const result = await field.resolve({}, {}, context, {} as any);
     expect(result).toBe(resolverValue);
   });
+
+  it('should handle string values for requires parameter', async () => {
+    const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth');
+    const schema = authDirectiveTransformer(
+      makeExecutableSchema({
+        typeDefs: `
+          ${authDirectiveTypeDefs}
+
+          type Query {
+            protectedField: String @auth(requires: "BACKEND")
+          }
+        `,
+        resolvers: { Query: { protectedField: () => 'protected data' } },
+      }),
+    );
+
+    const field = (schema.getType('Query') as GraphQLObjectType).getFields().protectedField;
+    await expect(field.resolve({}, {}, { req: { headers: {} } }, {} as any)).rejects.toThrow(
+      'You do not have enough permissions!',
+    );
+    await expect(
+      field.resolve({}, {}, { req: { headers: { 'bio-auth-token': 'test-token' } } }, {} as any),
+    ).resolves.toBe('protected data');
+  });
+
+  it('should reject unknown roles', () => {
+    const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth');
+    const schema = makeExecutableSchema({
+      typeDefs: `
+        ${authDirectiveTypeDefs}
+
+        type Query {
+          protectedField: String @auth(requires: "ADMIN")
+        }
+      `,
+    });
+
+    expect(() => authDirectiveTransformer(schema)).toThrow(
+      'Invalid role in @auth on Query.protectedField',
+    );
+  });
+
+  it('should deny access when no token is configured', async () => {
+    const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective('auth');
+    const schema = authDirectiveTransformer(
+      makeExecutableSchema({
+        typeDefs: `
+          ${authDirectiveTypeDefs}
+
+          type Query {
+            protectedField: String @auth(requires: BACKEND)
+          }
+        `,
+        resolvers: { Query: { protectedField: () => 'protected data' } },
+      }),
+    );
+    const field = (schema.getType('Query') as GraphQLObjectType).getFields().protectedField;
+
+    process.env.BIO_EDIT_TOKEN = '';
+    try {
+      await expect(
+        field.resolve({}, {}, { req: { headers: { 'bio-auth-token': '' } } }, {} as any),
+      ).rejects.toThrow('You do not have enough permissions!');
+    } finally {
+      process.env.BIO_EDIT_TOKEN = 'test-token';
+    }
+  });
+
+  it('should fail if a directive is not applied', () => {
+    const { authDirectiveTypeDefs, assertAuthDirectiveApplied } = authDirective('auth');
+    const schema = makeExecutableSchema({
+      typeDefs: `
+        ${authDirectiveTypeDefs}
+
+        type Query {
+          protectedField: String @auth(requires: BACKEND)
+        }
+      `,
+    });
+
+    expect(() => assertAuthDirectiveApplied(schema)).toThrow(
+      '@auth is not applied to: Query.protectedField',
+    );
+  });
 });
