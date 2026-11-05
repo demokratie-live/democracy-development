@@ -65,8 +65,6 @@ jobs:
         run: |
           echo "🏷️ Tags: ${{ steps.meta.outputs.tags }}
           " >> $GITHUB_STEP_SUMMARY
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
@@ -130,7 +128,6 @@ jobs:
           echo "Keine fehlenden Module." >> $GITHUB_STEP_SUMMARY
           head -c 2000 smoke.log
 
-      # arm64 laeuft unter QEMU und bleibt gelegentlich haengen (sonst max. ~20 Min.)
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v5
@@ -138,7 +135,7 @@ jobs:
         with:
           context: .
           file: ${{ steps.check-dockerfile.outputs.dockerfile }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: ${{ github.actor != 'dependabot[bot]' }}
           target: runner
           tags: ${{ steps.meta.outputs.tags }}
