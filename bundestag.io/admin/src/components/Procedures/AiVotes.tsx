@@ -1,5 +1,5 @@
 import { Maybe, Vote, VoteResult } from '@/__generated/gql-ai/graphql';
-import { Button, Spin } from 'antd';
+import { Alert, Button, Spin } from 'antd';
 import { useState } from 'react';
 import { getFractions } from './VoteResultsForm';
 
@@ -13,7 +13,6 @@ export type AiVotesProps = {
  *
  * AiVotes
  * This is a component which shows a button to fetch the AI votes for a given decision.
- * Currently not rendered: the votes-ai service depends on the shut down gpt-4 model.
  *
  * @param decision
  * @param period
@@ -21,9 +20,11 @@ export type AiVotesProps = {
 export const AiVotes: React.FC<AiVotesProps> = ({ decision, period, onResult }) => {
   const [votes, setVotes] = useState<Vote[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchVotes = async () => {
     setLoading(true);
+    setError(null);
     try {
       const response = await fetch('/api/graphql-ai', {
         method: 'POST',
@@ -38,6 +39,10 @@ export const AiVotes: React.FC<AiVotesProps> = ({ decision, period, onResult }) 
         }),
       }).then((data) => data.json());
 
+      if (!Array.isArray(response)) {
+        throw new Error('Die KI hat kein Ergebnis geliefert');
+      }
+
       response.sort((a, b) => {
         const partiesOrder = getFractions(period).map((party) => party.name);
         return partiesOrder.indexOf(a.name) - partiesOrder.indexOf(b.name);
@@ -47,6 +52,7 @@ export const AiVotes: React.FC<AiVotesProps> = ({ decision, period, onResult }) 
       onResult?.(response);
     } catch (error) {
       console.error('Error fetching votes:', error);
+      setError((error as Error).message);
     } finally {
       setLoading(false);
     }
@@ -71,6 +77,7 @@ export const AiVotes: React.FC<AiVotesProps> = ({ decision, period, onResult }) 
       {votes.length === 0 && !loading && (
         <Button onClick={fetchVotes}>{loading ? 'Loading...' : 'Fetch AI Votes'}</Button>
       )}
+      {error && <Alert type="error" showIcon message="KI-Stimmen fehlgeschlagen" description={error} />}
       {votes.length > 0 && (
         <>
           <h3>AI Votes</h3>
