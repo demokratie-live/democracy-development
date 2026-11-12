@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { log } from './logger';
 
 const anthropic = new Anthropic();
-const model = process.env.ANTHROPIC_MODEL ?? 'claude-opus-5-5';
+const model = process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5-5';
 
 const instructions = `
 Du erhältst ein Plenarprotokoll des Deutschen Bundestages als PDF sowie vom User einen Titel und Drucksachennummern zu einer Abstimmung.
