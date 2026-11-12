@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, Button, InputNumber, Radio, Row, Col, notification, Switch } from 'antd';
 import { axiosClient } from '../../lib/axios';
 import { errorMessage } from '../../lib/errorMessage';
+import { AiVotes, AiVotesProps } from './AiVotes';
 import { Beschlusstext } from './Beschlusstext';
 
 // Ant Design Sub-Elements
@@ -22,6 +23,9 @@ interface VoteResultsFormProps {
   type: string;
   procedureId: number;
   period: number;
+  lastPlenaryProtocoll?: { findSpotUrl?: string | null };
+  title?: string;
+  drucksachen?: string[];
 }
 
 export const getFractions = (period: number) =>
@@ -65,7 +69,15 @@ export const getFractions = (period: number) =>
       ];
 
 // Component-Typisierung und Form-Layout
-const VoteResultsForm: React.FC<VoteResultsFormProps> = ({ data, type, procedureId, period }) => {
+const VoteResultsForm: React.FC<VoteResultsFormProps> = ({
+  data,
+  type,
+  procedureId,
+  period,
+  lastPlenaryProtocoll,
+  title,
+  drucksachen,
+}) => {
   // 1. useNotification-Hook
   const [notificationApi, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
@@ -127,6 +139,17 @@ const VoteResultsForm: React.FC<VoteResultsFormProps> = ({ data, type, procedure
     }));
   }
 
+  const onAiVoteResult: AiVotesProps['onResult'] = (votes) => {
+    const fieldValue: { party: string; main?: string | null }[] = form.getFieldValue('partyVotes');
+    form.setFieldValue(
+      'partyVotes',
+      fieldValue.map((partyVote) => {
+        const vote = votes.find(({ name }) => name === partyVote.party)?.vote;
+        return vote ? { ...partyVote, main: vote } : partyVote;
+      }),
+    );
+  };
+
   return (
     <>
       {contextHolder}
@@ -165,7 +188,18 @@ const VoteResultsForm: React.FC<VoteResultsFormProps> = ({ data, type, procedure
         <Form.Item label="Ergebnis umdrehen" name="toggleDecision" valuePropName="checked">
           <Switch />
         </Form.Item>
-        <Beschlusstext />
+        <Beschlusstext
+          pdfUrl={lastPlenaryProtocoll?.findSpotUrl ?? undefined}
+          title={title}
+          drucksachen={drucksachen}
+        />
+        <Form.Item noStyle shouldUpdate={(prev, next) => prev.decisionText !== next.decisionText}>
+          {({ getFieldValue }) =>
+            getFieldValue('decisionText') && period ? (
+              <AiVotes decision={getFieldValue('decisionText')} period={period} onResult={onAiVoteResult} />
+            ) : null
+          }
+        </Form.Item>
         <Form.List name="partyVotes">
           {(fields) => (
             <Row gutter={8}>
