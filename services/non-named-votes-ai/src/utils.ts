@@ -71,20 +71,28 @@ export const getBeschlusstextFromPdf = async ({
   return extractBetweenHashesFromBeschluss(text);
 };
 
-// Überprüft, ob die Domain in der Whitelist enthalten ist
-const isValidDomain = (url: string): boolean => {
-  const allowedDomains = process.env.ALLOWED_DOMAINS?.split(',') ?? [];
-  const parsedUrl = new URL(url);
-  return allowedDomains.includes(parsedUrl.origin);
+const PDF_PATH = /^\/[\w./-]+\.pdf$/;
+
+// Baut die PDF-URL aus einer konfigurierten Origin und einem geprüften Pfad,
+// damit Host und Schema nie aus der Anfrage stammen
+export const toAllowedPdfUrl = (pdfUrl: string): string => {
+  const parsedUrl = new URL(pdfUrl.trim());
+  const allowedOrigins = process.env.ALLOWED_DOMAINS?.split(',').map((origin) => origin.trim()) ?? [];
+  const origin = allowedOrigins.find((allowed) => allowed === parsedUrl.origin);
+  if (!origin) {
+    throw new Error('Domain ist nicht erlaubt');
+  }
+  if (!PDF_PATH.test(parsedUrl.pathname) || parsedUrl.pathname.includes('..')) {
+    throw new Error('Pfad ist nicht erlaubt');
+  }
+  return `${origin}${parsedUrl.pathname}`;
 };
 
 // Lädt das PDF von einer erlaubten Domain und gibt es base64-kodiert zurück
 export const fetchPdfAsBase64 = async (pdfUrl: string) => {
-  const url = pdfUrl.trim();
-  if (!isValidDomain(url)) {
-    throw new Error('Domain ist nicht erlaubt');
-  }
-  const response = await fetch(url);
+  const url = toAllowedPdfUrl(pdfUrl);
+  // keine Weiterleitungen auf andere Hosts
+  const response = await fetch(url, { redirect: 'error' });
   if (!response.ok) {
     throw new Error(`PDF konnte nicht geladen werden (${response.status})`);
   }
