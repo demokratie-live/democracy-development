@@ -55,8 +55,8 @@ spec:
                       value: '3005'
                     - name: DB_URL
                       value: mongodb://democracy-mongo:27017/bundestagio
-                    - name: OPENAI_API_KEY
-                      value: ${var.OPENAI_API_KEY}
+                    - name: ANTHROPIC_API_KEY
+                      value: ${var.ANTHROPIC_API_KEY}
                     - name: NON_NAMED_VOTES_AI_SECRET
                       value: ${var.NON_NAMED_VOTES_AI_SECRET}
                     - name: PINO_LOG_LEVEL
