@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.0](https://github.com/demokratie-live/democracy-development/compare/non-named-votes-ai@v1.1.8...non-named-votes-ai@v1.2.0) (2026-11-13)
+
+* **non-named-votes-ai:** build PDF URL from allowed origin ([980ee17](https://github.com/demokratie-live/democracy-development/commit/980ee17e8af05da680cd4506a9449cbbb956419a))
+* **non-named-votes-ai:** default to Sonnet ([27d0795](https://github.com/demokratie-live/democracy-development/commit/27d0795f91c30a557c45657bea2aeb0defa4ebe1))
+
+### 🚀 Feature
+
+* **non-named-votes-ai:** use Claude instead of OpenAI Assistants ([e5dd09c](https://github.com/demokratie-live/democracy-development/commit/e5dd09c49aa2e1cfa9331260f46dc8cad21e32c3))
+
 ## [1.1.8](https://github.com/demokratie-live/democracy-development/compare/non-named-votes-ai@v1.1.7...non-named-votes-ai@v1.1.8) (2026-11-04)
 
 * update node to 22.23.4 ([7a97c62](https://github.com/demokratie-live/democracy-development/commit/7a97c62cc40b763a4f19f675978ac430e3d499ce))
