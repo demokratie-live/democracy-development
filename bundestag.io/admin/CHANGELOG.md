@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.8.12](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.8.11...bundestag.io-admin@v3.8.12) (2026-11-13)
+
+* **admin:** restore AI helpers for non-named votes ([3092d20](https://github.com/demokratie-live/democracy-development/commit/3092d2099c881cc923065e6605253664999de1a3))
+
 ## [3.8.11](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.8.10...bundestag.io-admin@v3.8.11) (2026-11-05)
 
 * **admin:** cover load errors ([4965b3c](https://github.com/demokratie-live/democracy-development/commit/4965b3c56aa0f86208c0a5a80e4990011143ce1d))
