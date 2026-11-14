@@ -1,29 +1,29 @@
 import Head from 'next/head';
-import { Layout as AntLayout, Breadcrumb } from 'antd';
 
 import { Navigation } from '../Navigation';
 
-const { Content } = AntLayout;
-
-type Props = {
+type ShellProps = {
+  title?: string;
   children: React.ReactNode;
 };
 
-export const Layout: React.FC<Props> = ({ children }) => (
+// shared by the pages router (Layout) and the app router (app/layout.tsx)
+export const Shell: React.FC<ShellProps> = ({ title, children }) => (
+  <div className="min-h-screen">
+    <Navigation />
+    <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+      {title && <h1 className="mb-4 text-2xl font-semibold tracking-tight">{title}</h1>}
+      <div className="rounded-lg border bg-card p-4 sm:p-6">{children}</div>
+    </main>
+  </div>
+);
+
+export const Layout: React.FC<ShellProps> = ({ title, children }) => (
   <>
     <Head>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <meta charSet="utf-8" />
-      {/* <link rel="stylesheet" href="/_next/static/style.css" /> */}
+      <title>{title ? `${title} · bundestag.io Admin` : 'bundestag.io Admin'}</title>
     </Head>
-    <AntLayout>
-      <Navigation />
-      <Content style={{ padding: '0 50px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Backend</Breadcrumb.Item>
-        </Breadcrumb>
-        <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>{children}</div>
-      </Content>
-    </AntLayout>
+    <Shell title={title}>{children}</Shell>
   </>
 );

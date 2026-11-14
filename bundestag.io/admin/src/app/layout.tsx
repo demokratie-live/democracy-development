@@ -1,8 +1,7 @@
-import 'antd/dist/reset.css';
-import { Navigation } from '@/components/Navigation';
-import { Layout as AntLayout, Breadcrumb } from 'antd';
+import '../styles/globals.css';
+import { Shell } from '@/components/Layout';
 
-const { Content } = AntLayout;
+export const metadata = { title: 'bundestag.io Admin' };
 
 export default function AdminLayout({
   children, // will be a page or nested layout
@@ -10,12 +9,9 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
+    <html lang="de">
       <body>
-        <AntLayout>
-          <Navigation />
-          <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>{children}</div>
-        </AntLayout>
+        <Shell>{children}</Shell>
       </body>
     </html>
   );
