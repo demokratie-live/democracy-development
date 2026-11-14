@@ -5,9 +5,6 @@
  * Farben aus dem DEMOCRACY Design System (Web-App, democracy/desktop).
  * Weiß auf ci-blue erreicht nur 3,3:1, deshalb ist primary das dunklere
  * ci-blue-darker; ci-blue bleibt Markenfarbe für Flächen ohne kleinen Text.
- *
- * Tailwind liegt in Cascade Layers. Die ungelayerten Styles von antd
- * gewinnen dadurch weiter, solange beide nebeneinander laufen.
  */
 :root {
   --radius: 0.375rem;

@@ -15,5 +15,14 @@ export default async function Page({ searchParams }: Props) {
     currentPage,
   );
 
-  return <PageTemplate title="Upcoming procedures" procedures={procedures} count={count} currentPage={currentPage} />;
+  return (
+    <PageTemplate
+      title="Kommende Abstimmungen"
+      empty="Keine kommenden Abstimmungen."
+      upcoming
+      procedures={procedures}
+      count={count}
+      currentPage={currentPage}
+    />
+  );
 }

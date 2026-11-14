@@ -4,16 +4,22 @@ import { Navigation } from '../Navigation';
 
 type ShellProps = {
   title?: string;
+  // pages that render their own heading and card pass false
+  card?: boolean;
   children: React.ReactNode;
 };
 
+export const Card: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="rounded-lg border bg-card p-4 sm:p-6">{children}</div>
+);
+
 // shared by the pages router (Layout) and the app router (app/layout.tsx)
-export const Shell: React.FC<ShellProps> = ({ title, children }) => (
+export const Shell: React.FC<ShellProps> = ({ title, card = true, children }) => (
   <div className="min-h-screen">
     <Navigation />
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
       {title && <h1 className="mb-4 text-2xl font-semibold tracking-tight">{title}</h1>}
-      <div className="rounded-lg border bg-card p-4 sm:p-6">{children}</div>
+      {card ? <Card>{children}</Card> : children}
     </main>
   </div>
 );
