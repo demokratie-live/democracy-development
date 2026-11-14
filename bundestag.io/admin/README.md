@@ -10,6 +10,28 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### Without backends (mocks)
+
+```bash
+pnpm dev:mock
+```
+
+Starts a mock server on `localhost:4010` and `next dev` pointed at it, so no
+bundestag.io API, procedures service or AI services are needed. Login still uses
+`CREDENTIALS` from `.env`.
+
+- `mocks/handlers.ts`: [MSW](https://mswjs.io) handlers, also used by the Vitest tests
+  (`mocks/__tests__`).
+- `mocks/schema.ts`: answers GraphQL against the real SDL in `../api/src/graphql/schemas`,
+  so queries that don't match the API fail here too.
+- `mocks/db.ts`: in-memory data with the API's to-do and save rules. Saved data is
+  lost when the mock restarts.
+- `mocks/fixtures/procedures.json`: real procedures from the public DEMOCRACY API.
+  Rebuild with `pnpm mocks:fixtures`. Fields the public API doesn't have
+  (history, votingDocument) are derived and listed per procedure in `mock`.
+- The AI helpers return fixed example answers; no Claude calls.
+- `pnpm mocks:server` starts only the mock server.
+
 You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
 [API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.

@@ -1,0 +1,2129 @@
+[
+  {
+    "_id": "mock-340931",
+    "procedureId": "340931",
+    "title": "Fortsetzung der Beteiligung bewaffneter deutscher Streitkräfte an der NATO-geführten Maritimen Sicherheitsoperation SEA GUARDIAN\r\n",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Beschlussempfehlung liegt vor",
+    "voteDate": "2026-11-13T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/8819",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/088/2108819.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9152",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109152.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9177",
+        "type": "Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109177.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/340931.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "offen, Beschlussempfehlung",
+    "mock": [
+      "history"
+    ]
+  },
+  {
+    "_id": "mock-338341",
+    "procedureId": "338341",
+    "title": "Gesetz zur Reform des Nachrichtendienstrechts",
+    "type": "Gesetzgebung",
+    "period": 21,
+    "currentStatus": "Beschlussempfehlung liegt vor",
+    "voteDate": "2026-11-13T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BR",
+        "number": "453/26",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/brd/2026/0453-26.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/7868",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/btd/21/078/2107868.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "453/1/26",
+        "type": "Empfehlungen",
+        "url": "https://dserver.bundestag.de/brd/2026/0453-1-26.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "453/26(B)",
+        "type": "Stellungnahme",
+        "url": "https://dserver.bundestag.de/brd/2026/0453-26B.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/8295",
+        "type": "Unterrichtung",
+        "url": "https://dserver.bundestag.de/btd/21/082/2108295.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9161",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109161.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9163",
+        "type": "Änderungsantrag",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109163.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9164",
+        "type": "Änderungsantrag",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109164.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9173",
+        "type": "Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109173.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/338341.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "offen, Gesetz",
+    "mock": [
+      "history"
+    ]
+  },
+  {
+    "_id": "mock-335886",
+    "procedureId": "335886",
+    "title": "Leere Büros zu Wohnungen umwandeln - Günstiger Wohnraum statt Büroleerstand",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Beschlussempfehlung liegt vor",
+    "voteDate": "2026-11-13T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/6341",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/063/2106341.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/8636",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/086/2108636.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/335886.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "offen, Antrag",
+    "mock": [
+      "history"
+    ]
+  },
+  {
+    "_id": "mock-338410",
+    "procedureId": "338410",
+    "title": "Gesetz zu dem Partnerschaftsabkommen vom 17. Januar 2026 zwischen der Europäischen Union und ihren Mitgliedstaaten einerseits und dem Gemeinsamen Markt des Südens, der Argentinischen Republik, der Föderativen Republik Brasilien, der Republik Paraguay und der Republik Östlich des Uruguay andererseits",
+    "type": "Gesetzgebung",
+    "period": 21,
+    "currentStatus": "Beschlussempfehlung liegt vor",
+    "voteDate": "2026-11-13T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BR",
+        "number": "476/26",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/brd/2026/0476-26.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "476/26(B)",
+        "type": "Stellungnahme",
+        "url": "https://dserver.bundestag.de/brd/2026/0476-26B.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/8240",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/btd/21/082/2108240.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/8634",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/086/2108634.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/338410.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "offen, sehr langer Titel",
+    "mock": [
+      "history"
+    ]
+  },
+  {
+    "_id": "mock-335476",
+    "procedureId": "335476",
+    "title": "Gesetz zur Stärkung der Cybersicherheit",
+    "type": "Gesetzgebung",
+    "period": 21,
+    "currentStatus": "Verabschiedet",
+    "voteDate": "2026-11-12T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BR",
+        "number": "323/26",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/brd/2026/0323-26.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/6585",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/btd/21/065/2106585.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "323/1/26",
+        "type": "Empfehlungen",
+        "url": "https://dserver.bundestag.de/brd/2026/0323-1-26.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "323/26(B)",
+        "type": "Stellungnahme",
+        "url": "https://dserver.bundestag.de/brd/2026/0323-26B.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/7406",
+        "type": "Unterrichtung",
+        "url": "https://dserver.bundestag.de/btd/21/074/2107406.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9159",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109159.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9174",
+        "type": "Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109174.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "654/26",
+        "type": "Gesetzesbeschluss",
+        "url": "https://dserver.bundestag.de/brd/2026/0654-26.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "zu654/26",
+        "type": "Beschluss",
+        "url": "https://dserver.bundestag.de/brd/2026/0654-26(zu).pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/335476.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "offen, verabschiedet",
+    "mock": [
+      "history"
+    ]
+  },
+  {
+    "_id": "mock-341113",
+    "procedureId": "341113",
+    "title": "EUNAVFOR MED IRINI stoppen - Seenotrettung stärken",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Abgelehnt",
+    "voteDate": "2026-11-12T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/8909",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/089/2108909.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9151",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109151.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/341113.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "offen, abgelehnt",
+    "mock": [
+      "history"
+    ]
+  },
+  {
+    "_id": "mock-329212",
+    "procedureId": "329212",
+    "title": "Finanzkriminalität bekämpfen - Geldwäsche und organisierte Steuerhinterziehung effektiv verhindern",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Abgelehnt",
+    "voteDate": "2026-11-12T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/3248",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/032/2103248.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9136",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109136.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/329212.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "offen, abgelehnt",
+    "mock": [
+      "history"
+    ]
+  },
+  {
+    "_id": "mock-340932",
+    "procedureId": "340932",
+    "title": "Fortsetzung der Beteiligung bewaffneter deutscher Streitkräfte an der durch die Europäische Union geführten Operation EUNAVFOR MED IRINI",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Angenommen",
+    "voteDate": "2026-11-12T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/8821",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/088/2108821.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9149",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109149.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9178",
+        "type": "Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109178.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/340932.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "offen, angenommen",
+    "mock": [
+      "history"
+    ]
+  },
+  {
+    "_id": "mock-338349",
+    "procedureId": "338349",
+    "title": "Jahressteuergesetz 2026",
+    "type": "Gesetzgebung",
+    "period": 21,
+    "currentStatus": "Verabschiedet",
+    "voteDate": "2026-11-12T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BR",
+        "number": "447/26",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/brd/2026/0447-26.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "447/1/26",
+        "type": "Empfehlungen",
+        "url": "https://dserver.bundestag.de/brd/2026/0447-1-26.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "447/2/26",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/brd/2026/0447-2-26.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "447/26(B)",
+        "type": "Stellungnahme",
+        "url": "https://dserver.bundestag.de/brd/2026/0447-26B.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/8283",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/btd/21/082/2108283.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9139",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109139.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9182",
+        "type": "Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109182.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/338349.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "offen, kurzer Titel",
+    "mock": [
+      "history"
+    ]
+  },
+  {
+    "_id": "mock-336979",
+    "procedureId": "336979",
+    "title": "Gesetz zur Änderung des Erneuerbare-Energien-Gesetzes und weiterer Vorschriften zur Umsetzung unionsrechtlicher Vorgaben im Stromsektor",
+    "type": "Gesetzgebung",
+    "period": 21,
+    "currentStatus": "Abgelehnt",
+    "voteDate": "2026-11-12T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/6914",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/btd/21/069/2106914.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9137",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109137.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/336979.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "offen, Gesetz abgelehnt",
+    "mock": [
+      "history"
+    ]
+  },
+  {
+    "_id": "mock-340627",
+    "procedureId": "340627",
+    "title": "Fossile Profite finanziell heranziehen - Weltklimakonferenz als Unabhängigkeitsmotor nutzen",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Überwiesen",
+    "voteDate": "2026-11-06T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/8580",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/085/2108580.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/340627.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "offen, überwiesen",
+    "mock": [
+      "history"
+    ]
+  },
+  {
+    "_id": "mock-334215",
+    "procedureId": "334215",
+    "title": "Gesetz zur Aussetzung des Anpassungsverfahrens gemäß § 11 Absatz 4 des Abgeordnetengesetzes für das Jahr 2026 (Anpassungsverfahrensaussetzungsgesetz 2026)",
+    "type": "Gesetzgebung",
+    "period": 21,
+    "currentStatus": "Für erledigt erklärt",
+    "voteDate": "2026-07-10T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/5588",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/btd/21/055/2105588.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/6851",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/068/2106851.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/334215.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "offen, für erledigt erklärt",
+    "mock": [
+      "history"
+    ]
+  },
+  {
+    "_id": "mock-341459",
+    "procedureId": "341459",
+    "title": "Für ein international rechtsverbindliches Instrument zum Verbot und zur Regulierung von autonomen Waffensystemen",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Abgelehnt",
+    "voteDate": "2026-11-12T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/9071",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/090/2109071.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/341459.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "yes": 0,
+        "no": 0,
+        "abstination": 0,
+        "decisionText": "Beispieltext: Der Antrag ist abgelehnt.",
+        "votingDocument": "mainDocument",
+        "votingRecommendation": true,
+        "partyVotes": [
+          {
+            "party": "Union",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "AfD",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "SPD",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Grüne",
+            "main": "ABSTINATION",
+            "deviants": {
+              "yes": 0,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Linke",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 0,
+              "abstination": 0
+            }
+          }
+        ]
+      }
+    },
+    "note": "Ergebnis mit Ja = 0, bleibt in der Liste",
+    "mock": [
+      "history",
+      "voteResults"
+    ]
+  },
+  {
+    "_id": "mock-325644",
+    "procedureId": "325644",
+    "title": "Bildungsfinanzierung dauerhaft sichern - Kooperationsverbot abschaffen",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Abgelehnt",
+    "voteDate": "2026-11-11T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/1594",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/015/2101594.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/6803",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/068/2106803.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/325644.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "yes": 64,
+        "no": 479,
+        "abstination": 85,
+        "decisionText": "Wir kommen zur Abstimmung über die Beschlussempfehlung des Ausschusses für Bildung, Familie, Senioren, Frauen und Jugend zu dem Antrag der Fraktion Die Linke mit dem Titel: „Bildungsfinanzierung dauerhaft sichern – Kooperationsverbot abschaffen“. Der Ausschuss empfiehlt in seiner Beschlussempfehlung auf der Drucksache 21/6803, den Antrag der Fraktion Die Linke auf der Drucksache 21/1594 abzulehnen. Wer stimmt für diese Beschlussempfehlung? – Das ist die AfD-Fraktion, die CDU/CSU-Fraktion und die SPD-Fraktion. Die Gegenprobe! – Das ist die Fraktion Die Linke. Und Enthaltungen? – Bündnis 90/Die Grünen. Damit ist die Beschlussempfehlung angenommen.",
+        "votingDocument": "recommendedDecision",
+        "votingRecommendation": true,
+        "partyVotes": [
+          {
+            "party": "Union",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 208,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "AfD",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 151,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "SPD",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 120,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Grüne",
+            "main": "ABSTINATION",
+            "deviants": {
+              "yes": 0,
+              "no": 0,
+              "abstination": 85
+            }
+          },
+          {
+            "party": "Linke",
+            "main": "YES",
+            "deviants": {
+              "yes": 64,
+              "no": 0,
+              "abstination": 0
+            }
+          }
+        ]
+      }
+    },
+    "note": "Ergebnis, Antrag abgelehnt",
+    "mock": [
+      "history",
+      "votingDocument",
+      "votingRecommendation"
+    ]
+  },
+  {
+    "_id": "mock-335465",
+    "procedureId": "335465",
+    "title": "... Gesetz zur Änderung des Strafgesetzbuches - Stärkung des strafrechtlichen Schutzes vor sogenannten K.-o.-Tropfen",
+    "type": "Gesetzgebung",
+    "period": 21,
+    "currentStatus": "Verabschiedet",
+    "voteDate": "2026-11-06T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BR",
+        "number": "325/26",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/brd/2026/0325-26.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "325/1/26",
+        "type": "Empfehlungen",
+        "url": "https://dserver.bundestag.de/brd/2026/0325-1-26.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "325/26(B)",
+        "type": "Stellungnahme",
+        "url": "https://dserver.bundestag.de/brd/2026/0325-26B.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/7560",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/btd/21/075/2107560.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/8947",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/089/2108947.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/8971",
+        "type": "Änderungsantrag",
+        "url": "https://dserver.bundestag.de/btd/21/089/2108971.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/335465.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "yes": 477,
+        "no": 0,
+        "abstination": 151,
+        "decisionText": "Dritte Beratung\nund Schlussabstimmung. Ich bitte diejenigen, die dem Gesetzentwurf zustimmen wollen, sich zu erheben. – Wer stimmt dagegen? – Wer enthält sich? – Der Gesetzentwurf ist angenommen worden mit den Stimmen von CDU/CSU, Bündnis 90/Die Grünen, SPD und Fraktion Die Linke bei Enthaltung der AfD-Fraktion. So, geschafft!",
+        "votingDocument": "mainDocument",
+        "votingRecommendation": true,
+        "partyVotes": [
+          {
+            "party": "Union",
+            "main": "YES",
+            "deviants": {
+              "yes": 208,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "AfD",
+            "main": "ABSTINATION",
+            "deviants": {
+              "yes": 0,
+              "no": 0,
+              "abstination": 151
+            }
+          },
+          {
+            "party": "SPD",
+            "main": "YES",
+            "deviants": {
+              "yes": 120,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Grüne",
+            "main": "YES",
+            "deviants": {
+              "yes": 85,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Linke",
+            "main": "YES",
+            "deviants": {
+              "yes": 64,
+              "no": 0,
+              "abstination": 0
+            }
+          }
+        ]
+      }
+    },
+    "note": "Ergebnis, Gesetz verabschiedet",
+    "mock": [
+      "history",
+      "votingDocument",
+      "votingRecommendation"
+    ]
+  },
+  {
+    "_id": "mock-332038",
+    "procedureId": "332038",
+    "title": "Beendigung der Mitwirkung der Bundesrepublik Deutschland am Zwischenstaatlichen Ausschuss für Klimaänderungen und Neuausrichtung der nationalen wissenschaftlichen Politikberatung zu Umwelt- und Klimathemen",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Abgelehnt",
+    "voteDate": "2026-11-06T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/4464",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/044/2104464.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/4891",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/048/2104891.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/332038.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "yes": 151,
+        "no": 477,
+        "abstination": 0,
+        "decisionText": "Abstimmung über die Beschlussempfehlung des Ausschusses für Umwelt, Klimaschutz, Naturschutz und nukleare Sicherheit zu dem Antrag der Fraktion der AfD mit dem Titel „Beendigung der Mitwirkung der Bundesrepublik Deutschland am Zwischenstaatlichen Ausschuss für Klimaänderungen und Neuausrichtung der nationalen wissenschaftlichen Politikberatung zu Umwelt- und Klimathemen“. Der Ausschuss empfiehlt in seiner Beschlussempfehlung auf der Drucksache 21/4891, den Antrag der Fraktion der AfD auf der Drucksache 21/4464 abzulehnen. Wer stimmt für die Beschlussempfehlung? – CDU/CSU, Bündnis 90/Die Grünen, SPD und Die Linke. Die Gegenprobe! – Das ist die AfD-Fraktion. Möchte sich jemand enthalten? – Das ist nicht der Fall. Damit ist die Beschlussempfehlung angenommen.",
+        "votingDocument": "recommendedDecision",
+        "votingRecommendation": true,
+        "partyVotes": [
+          {
+            "party": "Union",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 208,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "AfD",
+            "main": "YES",
+            "deviants": {
+              "yes": 151,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "SPD",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 120,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Grüne",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 85,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Linke",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 64,
+              "abstination": 0
+            }
+          }
+        ]
+      }
+    },
+    "note": "Ergebnis, langer Titel",
+    "mock": [
+      "history",
+      "votingDocument",
+      "votingRecommendation"
+    ]
+  },
+  {
+    "_id": "mock-341116",
+    "procedureId": "341116",
+    "title": "Weltklimakonferenz in Antalya - Klimaschutz als Zukunftsinvestition und Wettbewerbsfaktor",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Angenommen",
+    "voteDate": "2026-11-06T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/8913",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/089/2108913.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/341116.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "yes": 413,
+        "no": 215,
+        "abstination": 0,
+        "decisionText": "Wir kommen zur Abstimmung über den Antrag der Fraktionen der CDU/CSU und der SPD auf Drucksache 21/8913 mit dem Titel „Weltklimakonferenz in Antalya – Klimaschutz als Zukunftsinvestition und Wettbewerbsfaktor“. Wer stimmt dafür? – Das sind die CDU/CSU, Bündnis 90/Die Grünen und die SPD. Wer stimmt dagegen? – Das sind Die Linke und die AfD. Wer möchte sich enthalten? – Das ist niemand. Damit ist der Antrag angenommen.",
+        "votingDocument": "mainDocument",
+        "votingRecommendation": true,
+        "partyVotes": [
+          {
+            "party": "Union",
+            "main": "YES",
+            "deviants": {
+              "yes": 208,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "AfD",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 151,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "SPD",
+            "main": "YES",
+            "deviants": {
+              "yes": 120,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Grüne",
+            "main": "YES",
+            "deviants": {
+              "yes": 85,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Linke",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 64,
+              "abstination": 0
+            }
+          }
+        ]
+      }
+    },
+    "note": "Ergebnis, Antrag angenommen",
+    "mock": [
+      "history",
+      "votingDocument",
+      "votingRecommendation"
+    ]
+  },
+  {
+    "_id": "mock-321717",
+    "procedureId": "321717",
+    "title": "Ein Tierschutzgesetz, das Tiere wirksam schützt",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Abgelehnt",
+    "voteDate": "2026-11-05T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/139",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/001/2100139.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/8969",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/089/2108969.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/321717.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "yes": 64,
+        "no": 479,
+        "abstination": 85,
+        "decisionText": "Beschlussempfehlung des Ausschusses für Landwirtschaft, Ernährung und Heimat zum Antrag der Fraktion Die Linke mit dem Titel „Ein Tierschutzgesetz, das Tiere wirksam schützt“. Der Ausschuss empfiehlt in seiner Beschlussempfehlung auf Drucksache 21/8969, den Antrag der Fraktion Die Linke auf Drucksache 21/139 abzulehnen. Wer stimmt für diese Beschlussempfehlung? – Die AfD, die Unionsfraktion und die SPD-Fraktion. Wer stimmt dagegen? – Das ist die Fraktion Die Linke. Wer enthält sich? – Das ist die Fraktion Bündnis 90/Die Grünen. Die Beschlussempfehlung ist damit angenommen.",
+        "votingDocument": "recommendedDecision",
+        "votingRecommendation": true,
+        "partyVotes": [
+          {
+            "party": "Union",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 208,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "AfD",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 151,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "SPD",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 120,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Grüne",
+            "main": "ABSTINATION",
+            "deviants": {
+              "yes": 0,
+              "no": 0,
+              "abstination": 85
+            }
+          },
+          {
+            "party": "Linke",
+            "main": "YES",
+            "deviants": {
+              "yes": 64,
+              "no": 0,
+              "abstination": 0
+            }
+          }
+        ]
+      }
+    },
+    "note": "Ergebnis, Antrag abgelehnt",
+    "mock": [
+      "history",
+      "votingDocument",
+      "votingRecommendation"
+    ]
+  },
+  {
+    "_id": "mock-338848",
+    "procedureId": "338848",
+    "title": "Gesetz zu dem Abkommen vom 19. Mai 2026 zwischen der Bundesrepublik Deutschland und der Ukraine zur Beseitigung der Doppelbesteuerung auf dem Gebiet der Steuern vom Einkommen sowie zur Verhinderung der Steuerverkürzung und -umgehung",
+    "type": "Gesetzgebung",
+    "period": 21,
+    "currentStatus": "Verabschiedet",
+    "voteDate": "2026-11-05T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BR",
+        "number": "510/26",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/brd/2026/0510-26.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/8245",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/btd/21/082/2108245.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "510/26(B)",
+        "type": "Stellungnahme",
+        "url": "https://dserver.bundestag.de/brd/2026/0510-26B.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/8665",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/086/2108665.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/8686",
+        "type": "Unterrichtung",
+        "url": "https://dserver.bundestag.de/btd/21/086/2108686.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "643/26",
+        "type": "Gesetzesbeschluss",
+        "url": "https://dserver.bundestag.de/brd/2026/0643-26.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/338848.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "yes": 477,
+        "no": 151,
+        "abstination": 0,
+        "decisionText": "Zweite Beratung\nund Schlussabstimmung. Ich bitte diejenigen, die dem Gesetzentwurf zustimmen wollen, sich zu erheben. – Das sind die Unionsfraktion, die SPD, Bündnis 90/Die Grünen und Die Linke. Wer stimmt dagegen? – Das ist die AfD-Fraktion. Enthaltungen? – Sehe ich nicht. Damit ist der Gesetzentwurf angenommen.",
+        "votingDocument": "mainDocument",
+        "votingRecommendation": true,
+        "partyVotes": [
+          {
+            "party": "Union",
+            "main": "YES",
+            "deviants": {
+              "yes": 208,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "AfD",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 151,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "SPD",
+            "main": "YES",
+            "deviants": {
+              "yes": 120,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Grüne",
+            "main": "YES",
+            "deviants": {
+              "yes": 85,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Linke",
+            "main": "YES",
+            "deviants": {
+              "yes": 64,
+              "no": 0,
+              "abstination": 0
+            }
+          }
+        ]
+      }
+    },
+    "note": "Ergebnis, Vertragsgesetz",
+    "mock": [
+      "history",
+      "votingDocument",
+      "votingRecommendation"
+    ]
+  },
+  {
+    "_id": "mock-326806",
+    "procedureId": "326806",
+    "title": "Gesetz zur Modernisierung des Bundespolizeigesetzes",
+    "type": "Gesetzgebung",
+    "period": 21,
+    "currentStatus": "Verkündet",
+    "voteDate": "2026-09-25T00:00:00.000Z",
+    "namedVote": true,
+    "importantDocuments": [
+      {
+        "editor": "BR",
+        "number": "557/25",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/brd/2025/0557-25.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "557/1/25",
+        "type": "Empfehlungen",
+        "url": "https://dserver.bundestag.de/brd/2025/0557-1-25.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "557/25(B)",
+        "type": "Stellungnahme",
+        "url": "https://dserver.bundestag.de/brd/2025/0557-25B.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/3051",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/btd/21/030/2103051.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/6990",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/069/2106990.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/7001",
+        "type": "Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/070/2107001.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "559/26",
+        "type": "Gesetzesbeschluss",
+        "url": "https://dserver.bundestag.de/brd/2026/0559-26.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "zu559/26",
+        "type": "Beschluss",
+        "url": "https://dserver.bundestag.de/brd/2026/0559-26(zu).pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "559/26(B)",
+        "type": "Beschluss",
+        "url": "https://dserver.bundestag.de/brd/2026/0559-26B.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 21/Beispiel, S. 1A",
+        "findSpotUrl": "http://localhost:4010/plenarprotokoll/326806.pdf",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "yes": 328,
+        "no": 149,
+        "abstination": 151,
+        "decisionText": "Dritte Beratung\nund Schlussabstimmung. Ich bitte diejenigen, die dem Gesetzentwurf zustimmen wollen, sich zu erheben. – Das sind die Unionsfraktion und die SPD-Fraktion. Wer stimmt dagegen? – Das sind Bündnis 90/Die Grünen und Die Linke. Wer enthält sich? – Das ist die Fraktion der AfD. Damit ist der Gesetzentwurf angenommen.",
+        "votingDocument": "mainDocument",
+        "votingRecommendation": true,
+        "partyVotes": [
+          {
+            "party": "Union",
+            "main": "YES",
+            "deviants": {
+              "yes": 208,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "AfD",
+            "main": "ABSTINATION",
+            "deviants": {
+              "yes": 0,
+              "no": 0,
+              "abstination": 151
+            }
+          },
+          {
+            "party": "SPD",
+            "main": "YES",
+            "deviants": {
+              "yes": 120,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Grüne",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 85,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Linke",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 64,
+              "abstination": 0
+            }
+          }
+        ]
+      }
+    },
+    "note": "namentliche Abstimmung",
+    "mock": [
+      "history",
+      "votingDocument",
+      "votingRecommendation"
+    ]
+  },
+  {
+    "_id": "mock-336653",
+    "procedureId": "336653",
+    "title": "Herstellerabgabe auf zuckergesüßte Getränke einführen - Gesundheit schützen, Krankenkassen entlasten, Rezepturen verbessern",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Beschlussempfehlung liegt vor",
+    "voteDate": "2026-11-26T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/6659",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/066/2106659.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9190",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109190.pdf"
+      }
+    ],
+    "history": [],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "kommend",
+    "mock": []
+  },
+  {
+    "_id": "mock-325565",
+    "procedureId": "325565",
+    "title": "Risikogruppen vor veganer Ernährung warnen",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Beschlussempfehlung liegt vor",
+    "voteDate": "2026-11-26T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/1577",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/015/2101577.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9190",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/091/2109190.pdf"
+      }
+    ],
+    "history": [],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "kommend",
+    "mock": []
+  },
+  {
+    "_id": "mock-338366",
+    "procedureId": "338366",
+    "title": "Haushaltsbegleitgesetz 2027",
+    "type": "Gesetzgebung",
+    "period": 21,
+    "currentStatus": "Überwiesen",
+    "voteDate": "2026-11-27T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BR",
+        "number": "442/26",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/brd/2026/0442-26.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/7860",
+        "type": "Gesetzentwurf",
+        "url": "https://dserver.bundestag.de/btd/21/078/2107860.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "442/1/26",
+        "type": "Empfehlungen",
+        "url": "https://dserver.bundestag.de/brd/2026/0442-1-26.pdf"
+      },
+      {
+        "editor": "BR",
+        "number": "442/26(B)",
+        "type": "Stellungnahme",
+        "url": "https://dserver.bundestag.de/brd/2026/0442-26B.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/8534",
+        "type": "Unterrichtung",
+        "url": "https://dserver.bundestag.de/btd/21/085/2108534.pdf"
+      }
+    ],
+    "history": [],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "kommend, Haushalt",
+    "mock": []
+  },
+  {
+    "_id": "mock-341128",
+    "procedureId": "341128",
+    "title": "Diesel-Abkommen für Deutschland - Energiesicherheit nach US-Vorbild in Kooperation mit Russland gewährleisten",
+    "type": "Antrag",
+    "period": 21,
+    "currentStatus": "Beschlussempfehlung liegt vor",
+    "voteDate": null,
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "21/8902",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/21/089/2108902.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "21/9207",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/21/092/2109207.pdf"
+      }
+    ],
+    "history": [],
+    "customData": {
+      "voteResults": {
+        "partyVotes": []
+      }
+    },
+    "note": "ohne Abstimmungstermin",
+    "mock": []
+  },
+  {
+    "_id": "mock-231103",
+    "procedureId": "231103",
+    "title": "Familiennachzug auch zu subsidiär Schutzberechtigten ermöglichen",
+    "type": "Antrag",
+    "period": 19,
+    "currentStatus": "Abgelehnt",
+    "voteDate": "2018-02-01T09:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "19/454",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/19/004/1900454.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "19/586",
+        "type": "Beschlussempfehlung",
+        "url": "https://dserver.bundestag.de/btd/19/005/1900586.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "19/595",
+        "type": "Bericht",
+        "url": "https://dserver.bundestag.de/btd/19/005/1900595.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 19/11, S. 798A",
+        "findSpotUrl": "https://dserver.bundestag.de/btp/19/19011.pdf#P.798",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "yes": 136,
+        "no": 571,
+        "abstination": 0,
+        "decisionText": "Wer  für  diese  Beschlussempfehlung  stimmt,  den  bitte  ich  um  das  Handzeichen? Das sind die Fraktionen CDU/CSU, SPD, FDP und AfD. – Wer stimmt dagegen? Das sind die Fraktionen Die Linke und Bündnis 90/Die Grünen. – Damit ist die Beschlussempfehlung angenommen.",
+        "votingDocument": "recommendedDecision",
+        "votingRecommendation": false,
+        "partyVotes": [
+          {
+            "party": "CDU",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 246,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "SPD",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 153,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "AfD",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 92,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Grüne",
+            "main": "YES",
+            "deviants": {
+              "yes": 67,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Linke",
+            "main": "YES",
+            "deviants": {
+              "yes": 69,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "FDP",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 80,
+              "abstination": 0
+            }
+          }
+        ]
+      }
+    },
+    "note": "WP 19, über Beschlussempfehlung, gedreht",
+    "mock": []
+  },
+  {
+    "_id": "mock-84344",
+    "procedureId": "84344",
+    "title": "Festlegung der Zahl der Stellvertreterinnen und Stellvertreter des Präsidenten",
+    "type": "Antrag",
+    "period": 19,
+    "currentStatus": "Angenommen",
+    "voteDate": "2017-10-24T00:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "19/3",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/19/000/1900003.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 19/1, S. 16B",
+        "findSpotUrl": "https://dserver.bundestag.de/btp/19/19001.pdf#P.16",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "yes": 707,
+        "no": 0,
+        "abstination": 0,
+        "decisionText": "Wer stimmt für den Antrag auf Drucksache 19/3? – Gegenstimmen? – Enthaltungen?– Bei zwei Enthaltungen ist der Antrag einstimmig angenommen.",
+        "votingDocument": "mainDocument",
+        "votingRecommendation": true,
+        "partyVotes": [
+          {
+            "party": "FDP",
+            "main": "YES",
+            "deviants": {
+              "yes": 80,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Linke",
+            "main": "YES",
+            "deviants": {
+              "yes": 69,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "AfD",
+            "main": "YES",
+            "deviants": {
+              "yes": 92,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Grüne",
+            "main": "YES",
+            "deviants": {
+              "yes": 67,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "SPD",
+            "main": "YES",
+            "deviants": {
+              "yes": 153,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "CDU",
+            "main": "YES",
+            "deviants": {
+              "yes": 246,
+              "no": 0,
+              "abstination": 0
+            }
+          }
+        ]
+      }
+    },
+    "note": "WP 19, über den Antrag",
+    "mock": []
+  },
+  {
+    "_id": "mock-283069",
+    "procedureId": "283069",
+    "title": "Keine Corona-Impfpflicht",
+    "type": "Antrag",
+    "period": 20,
+    "currentStatus": "Abgelehnt",
+    "voteDate": "2021-12-10T09:00:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "20/192",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/20/001/2000192.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "20/250",
+        "type": "Beschlussempfehlung und Bericht",
+        "url": "https://dserver.bundestag.de/btd/20/002/2000250.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 20/7, S. 303D",
+        "findSpotUrl": "https://dserver.bundestag.de/btp/20/20007.pdf#P.303",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "yes": 82,
+        "no": 652,
+        "abstination": 0,
+        "decisionText": "Der Hauptausschuss empfiehlt unter Buchstabe b seiner Beschlussempfehlung die Ablehnung des Antrages der Fraktion der AfD auf Drucksache 20/192 mit dem Titel „Keine Corona-Impfpflicht“. Wer stimmt für diese Beschlussempfehlung? – Das sind die Fraktionen Die Linke, SPD, Bündnis 90/Die Grünen, CDU/CSU und FDP. Wer stimmt dagegen? – Das ist die AfD-Fraktion. Enthaltungen? – Sehe ich nicht. Damit ist die Beschlussempfehlung angenommen.",
+        "votingDocument": "recommendedDecision",
+        "votingRecommendation": false,
+        "partyVotes": [
+          {
+            "party": "Union",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 197,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "SPD",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 206,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "AfD",
+            "main": "YES",
+            "deviants": {
+              "yes": 82,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Grüne",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 118,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "FDP",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 92,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Linke",
+            "main": "NO",
+            "deviants": {
+              "yes": 0,
+              "no": 39,
+              "abstination": 0
+            }
+          }
+        ]
+      }
+    },
+    "note": "WP 20, über Beschlussempfehlung, gedreht",
+    "mock": []
+  },
+  {
+    "_id": "mock-282689",
+    "procedureId": "282689",
+    "title": "Einsetzung eines Hauptausschusses, eines Petitionsausschusses sowie eines Ausschusses für Wahlprüfung, Immunität und Geschäftsordnung",
+    "type": "Antrag",
+    "period": 20,
+    "currentStatus": "Angenommen",
+    "voteDate": "2021-11-11T09:10:00.000Z",
+    "namedVote": false,
+    "importantDocuments": [
+      {
+        "editor": "BT",
+        "number": "20/26",
+        "type": "Antrag",
+        "url": "https://dserver.bundestag.de/btd/20/000/2000026.pdf"
+      },
+      {
+        "editor": "BT",
+        "number": "20/30",
+        "type": "Änderungsantrag",
+        "url": "https://dserver.bundestag.de/btd/20/000/2000030.pdf"
+      }
+    ],
+    "history": [
+      {
+        "assignment": "BT",
+        "initiator": "Beratung",
+        "findSpot": "BT-Plenarprotokoll 20/2, S. 38D",
+        "findSpotUrl": "https://dserver.bundestag.de/btp/20/20002.pdf#P.38",
+        "decision": [
+          {
+            "type": "Beschluss"
+          }
+        ]
+      }
+    ],
+    "customData": {
+      "voteResults": {
+        "yes": 734,
+        "no": 0,
+        "abstination": 0,
+        "decisionText": "Wer stimmt dafür? – Das sind die Fraktionen Die Linke, SPD, Bündnis 90/Die Grünen, CDU/ CSU, FDP und AfD. Dann scheint es keine Gegenstimmen zu geben; ich frage trotzdem danach. – Enthaltungen? – Damit ist der Antrag auf Drucksache 20/26 im Übrigen einstimmig angenommen.",
+        "votingDocument": "mainDocument",
+        "votingRecommendation": true,
+        "partyVotes": [
+          {
+            "party": "Union",
+            "main": "YES",
+            "deviants": {
+              "yes": 197,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "SPD",
+            "main": "YES",
+            "deviants": {
+              "yes": 206,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "AfD",
+            "main": "YES",
+            "deviants": {
+              "yes": 82,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Grüne",
+            "main": "YES",
+            "deviants": {
+              "yes": 118,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "FDP",
+            "main": "YES",
+            "deviants": {
+              "yes": 92,
+              "no": 0,
+              "abstination": 0
+            }
+          },
+          {
+            "party": "Linke",
+            "main": "YES",
+            "deviants": {
+              "yes": 39,
+              "no": 0,
+              "abstination": 0
+            }
+          }
+        ]
+      }
+    },
+    "note": "WP 20, über den Antrag",
+    "mock": []
+  }
+]
