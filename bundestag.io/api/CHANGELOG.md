@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.76](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.75...bundestag.io@v0.1.76) (2026-11-14)
+
+### 🚀 Feature
+
+* **admin:** add mock server for local development ([2833374](https://github.com/demokratie-live/democracy-development/commit/283337496c0dd52bc6515a971e4abf7a68212856))
+
 ## [0.1.75](https://github.com/demokratie-live/democracy-development/compare/bundestag.io@v0.1.74...bundestag.io@v0.1.75) (2026-11-05)
 
 * **bundestag.io:** read directive args from generated SDL ([65a046b](https://github.com/demokratie-live/democracy-development/commit/65a046b331496670f29e98018de76a5621297398))
