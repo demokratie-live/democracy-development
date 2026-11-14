@@ -1,26 +1,24 @@
-import { Layout } from '../../components/Layout';
-import { useRouter } from 'next/router';
-import styled from 'styled-components';
 import Link from 'next/link';
-import { Alert } from 'antd';
+import { useRouter } from 'next/router';
+import { useQuery } from '@apollo/client';
+import { AlertCircle, ArrowLeft } from 'lucide-react';
 
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 
+import { Layout } from '../../components/Layout';
+import { ProcedureHeader, type ProtocolEntry } from '../../components/Procedures/ProcedureHeader';
 import VoteResultsForm from '../../components/Procedures/VoteResultsForm';
 import { VoteResultsFormNamedPoll } from '../../components/Procedures/VoteResultsFormNamedPoll';
-
-// GraphQL
-import { PROCEDURE } from '../../graphql/queries/procedure';
 import { VoteResultTextHelper } from '../../components/Procedures/VoteResultTextHelper';
-import { useQuery } from '@apollo/client';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { PROCEDURE } from '../../graphql/queries/procedure';
 
-const DT = styled.dt`
-  font-weight: bold;
-`;
-
-const DD = styled.dt`
-  padding-left: 15px;
-`;
+const BackLink = () => (
+  <Link href="/procedures" className="mb-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">
+    <ArrowLeft aria-hidden className="size-4" />
+    ToDo
+  </Link>
+);
 
 const Procedure: React.FC = () => {
   const router = useRouter();
@@ -31,112 +29,73 @@ const Procedure: React.FC = () => {
     },
     fetchPolicy: 'cache-and-network',
   });
-  console.log('data.procedure', data);
 
-  if (loading) {
-    return <div>…loading</div>;
+  if (loading && !data) {
+    return (
+      <Layout title="Vorgang">
+        <p className="text-sm text-muted-foreground">Lädt …</p>
+      </Layout>
+    );
   }
   if (error) {
-    return <Alert type="error" showIcon message="Vorgang konnte nicht geladen werden" description={error.message} />;
-  }
-  if (!data || !data.procedure) {
-    return <div>no data</div>;
-  }
-
-  const {
-    loadingProcedure,
-    procedureId,
-    title,
-    currentStatus,
-    type,
-    period,
-    importantDocuments,
-    history,
-    customData,
-    namedVote,
-  } = data.procedure;
-  if (loadingProcedure) {
     return (
-      <Layout>
-        <div>loading</div>
+      <Layout title="Vorgang">
+        <Alert variant="destructive">
+          <AlertCircle />
+          <AlertTitle>Vorgang konnte nicht geladen werden</AlertTitle>
+          <AlertDescription>{error.message}</AlertDescription>
+        </Alert>
+      </Layout>
+    );
+  }
+  if (!data?.procedure) {
+    return (
+      <Layout title="Vorgang">
+        <BackLink />
+        <p className="text-sm">Vorgang {router.query.id} nicht gefunden.</p>
       </Layout>
     );
   }
 
-  const plenaryProtocolls =
-    history?.filter(({ findSpot }) => {
-      return findSpot?.search(PROCEDURE_DEFINITIONS.HISTORY.FINDSPOT.FIND_BT_PLENARPROTOKOLL) !== -1;
-    }) || [];
+  const { procedureId, title, type, period, importantDocuments, history, customData, namedVote } = data.procedure;
+
+  const plenaryProtocols: ProtocolEntry[] =
+    history?.filter(
+      ({ findSpot }) => findSpot?.search(PROCEDURE_DEFINITIONS.HISTORY.FINDSPOT.FIND_BT_PLENARPROTOKOLL) !== -1,
+    ) || [];
 
   return (
     <Layout title={title}>
-        <dl
-          style={{
-            display: 'block',
-            marginTop: '1em',
-            marginBottom: '1em',
-            marginLeft: 0,
-            marginRight: 0,
-          }}
-        >
-          <DT>Prozedur ID</DT>
-          <DD>{procedureId}</DD>
-          <DT>Status</DT>
-          <DD>{currentStatus}</DD>
-          <DT>Typ</DT>
-          <DD>{type}</DD>
-          <DT>Legislaturperiode</DT>
-          <DD>{period}</DD>
-          <DT>Dokumente</DT>
-          {importantDocuments?.map((document) => {
-            return (
-              <DD key={document.number}>
-                {document.url ? (
-                  <Link href={document.url} legacyBehavior>
-                    <a target="_blank" className="text-primary hover:underline">{`${document.type} (${document.editor} – ${document.number})`}</a>
-                  </Link>
-                ) : (
-                  <span>{`${document.type} (${document.editor} – ${document.number})`}</span>
-                )}
-              </DD>
-            );
-          })}
-          {plenaryProtocolls?.length > 0 && (
-            <>
-              <DT>Plenarprotokoll</DT>
-              {plenaryProtocolls.map(({ initiator, findSpotUrl, findSpot }) => {
-                return (
-                  <DD key={findSpot}>
-                    {findSpotUrl ? (
-                      <Link href={findSpotUrl} legacyBehavior>
-                        <a target="_blank" className="text-primary hover:underline">
-                          {initiator} – {findSpot}
-                        </a>
-                      </Link>
-                    ) : (
-                      <span>
-                        {initiator} – {findSpot}
-                      </span>
-                    )}
-                  </DD>
-                );
-              })}
-            </>
-          )}
-        </dl>
-        {!namedVote && <VoteResultTextHelper procedureId={procedureId} importantDocuments={importantDocuments} />}
-        {!namedVote && (
+      <BackLink />
+      <ProcedureHeader {...data.procedure} plenaryProtocols={plenaryProtocols} />
+
+      {!namedVote && (
+        <section aria-labelledby="passages-heading" className="mt-6">
+          <h2 id="passages-heading" className="mb-2 text-sm font-semibold">
+            Textstellen im Plenarprotokoll
+          </h2>
+          <VoteResultTextHelper procedureId={procedureId} importantDocuments={importantDocuments} />
+        </section>
+      )}
+
+      <section aria-labelledby="result-heading" className="mt-8 border-t pt-6">
+        <h2 id="result-heading" className="mb-4 text-lg font-semibold">
+          Ergebnis
+        </h2>
+        {namedVote ? (
+          <VoteResultsFormNamedPoll data={customData.voteResults} procedureId={procedureId} />
+        ) : (
           <VoteResultsForm
             data={customData.voteResults}
             type={type}
             procedureId={procedureId}
             period={period}
-            lastPlenaryProtocoll={plenaryProtocolls?.slice(-1)?.[0]}
+            lastPlenaryProtocoll={plenaryProtocols.slice(-1)[0]}
             title={title}
             drucksachen={importantDocuments?.map(({ number }) => number).filter(Boolean)}
           />
         )}
-        {namedVote && <VoteResultsFormNamedPoll data={customData.voteResults} procedureId={procedureId} />}
+      </section>
     </Layout>
   );
 };
