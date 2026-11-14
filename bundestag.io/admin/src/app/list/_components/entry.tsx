@@ -16,7 +16,7 @@ export default function Entry({ title, procedureId, votes }: EntryProps) {
         margin: '1rem 0',
       }}
     >
-      <h1 style={{ fontSize: '1.5rem' }}>{title}</h1>
+      <h1 className="text-xl font-semibold">{title}</h1>
       <h3>Procedure ID: {procedureId}</h3>
       {votes && (
         <ul>
@@ -27,7 +27,7 @@ export default function Entry({ title, procedureId, votes }: EntryProps) {
           ))}
         </ul>
       )}
-      <a href={`/procedure/${procedureId}`}>Edit</a>
+      <a href={`/procedure/${procedureId}`} className="text-primary hover:underline">Edit</a>
     </article>
   );
 }

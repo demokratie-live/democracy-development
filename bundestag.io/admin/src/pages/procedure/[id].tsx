@@ -1,5 +1,4 @@
 import { Layout } from '../../components/Layout';
-import App from '../../components/App';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Link from 'next/link';
@@ -59,9 +58,7 @@ const Procedure: React.FC = () => {
   if (loadingProcedure) {
     return (
       <Layout>
-        <App>
-          <div>loading</div>
-        </App>
+        <div>loading</div>
       </Layout>
     );
   }
@@ -72,9 +69,7 @@ const Procedure: React.FC = () => {
     }) || [];
 
   return (
-    <Layout>
-      <App>
-        <h2>{title}</h2>
+    <Layout title={title}>
         <dl
           style={{
             display: 'block',
@@ -98,7 +93,7 @@ const Procedure: React.FC = () => {
               <DD key={document.number}>
                 {document.url ? (
                   <Link href={document.url} legacyBehavior>
-                    <a target="_blank">{`${document.type} (${document.editor} – ${document.number})`}</a>
+                    <a target="_blank" className="text-primary hover:underline">{`${document.type} (${document.editor} – ${document.number})`}</a>
                   </Link>
                 ) : (
                   <span>{`${document.type} (${document.editor} – ${document.number})`}</span>
@@ -114,7 +109,7 @@ const Procedure: React.FC = () => {
                   <DD key={findSpot}>
                     {findSpotUrl ? (
                       <Link href={findSpotUrl} legacyBehavior>
-                        <a target="_blank">
+                        <a target="_blank" className="text-primary hover:underline">
                           {initiator} – {findSpot}
                         </a>
                       </Link>
@@ -142,7 +137,6 @@ const Procedure: React.FC = () => {
           />
         )}
         {namedVote && <VoteResultsFormNamedPoll data={customData.voteResults} procedureId={procedureId} />}
-      </App>
     </Layout>
   );
 };

@@ -3,6 +3,10 @@ const withVanillaExtract = createVanillaExtractPlugin();
 
 // nextjs config
 const config = {
+  // the old start page only showed a heading
+  async redirects() {
+    return [{ source: '/', destination: '/procedures', permanent: false }];
+  },
   transpilePackages: [
     // antd & deps
     '@ant-design',

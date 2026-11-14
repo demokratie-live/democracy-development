@@ -15,7 +15,7 @@ export default function PageTemplate({ title, procedures, count, currentPage }: 
 
   return (
     <>
-      <h1>{title}</h1>
+      <h1 className="mb-4 text-2xl font-semibold tracking-tight">{title}</h1>
       {totalPages === 0 && <p>There are no {title.toLowerCase()}.</p>}
       {totalPages > 0 && (
         <>
