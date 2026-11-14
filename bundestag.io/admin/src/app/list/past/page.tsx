@@ -4,7 +4,7 @@ import PageTemplate from '../_components/PageTemplate';
 
 export const dynamic = 'force-dynamic';
 
-type Props = { searchParams: Promise<{ [key: string]: string | string[] | undefined }>; };
+type Props = { searchParams: Promise<{ [key: string]: string | string[] | undefined }> };
 
 export default async function Page({ searchParams }: Props) {
   noStore();
@@ -15,5 +15,13 @@ export default async function Page({ searchParams }: Props) {
     currentPage,
   );
 
-  return <PageTemplate title="Past procedures" procedures={procedures} count={count} currentPage={currentPage} />;
+  return (
+    <PageTemplate
+      title="Vergangene Abstimmungen"
+      empty="Keine vergangenen Abstimmungen."
+      procedures={procedures}
+      count={count}
+      currentPage={currentPage}
+    />
+  );
 }

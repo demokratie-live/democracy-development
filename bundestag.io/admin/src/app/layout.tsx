@@ -11,7 +11,7 @@ export default function AdminLayout({
   return (
     <html lang="de">
       <body>
-        <Shell>{children}</Shell>
+        <Shell card={false}>{children}</Shell>
       </body>
     </html>
   );
