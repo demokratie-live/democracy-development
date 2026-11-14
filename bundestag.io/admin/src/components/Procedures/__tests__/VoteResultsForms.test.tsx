@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -125,5 +125,78 @@ describe('VoteResultsForm payload', () => {
     });
     expect(screen.getByRole('button', { name: 'Fetch AI Votes' })).toBeTruthy();
     get.mockRestore();
+  });
+});
+
+describe('VoteResultsForm input', () => {
+  beforeEach(() => {
+    post.mockReset();
+    post.mockResolvedValue({});
+  });
+
+  const empty = { partyVotes: [], decisionText: '', votingRecommendation: null };
+  const renderEmpty = () => render(<VoteResultsForm data={empty} type="Antrag" procedureId={7} period={21} />);
+  const card = (party: string) => screen.getByText(party, { selector: 'div.font-medium' }).parentElement as HTMLElement;
+
+  it('does not save with missing fields and says which are missing', async () => {
+    renderEmpty();
+    fireEvent.click(screen.getByRole('button', { name: 'Speichern' }));
+    expect(await screen.findByText('Speichern fehlgeschlagen! Überprüfe deine Eingaben.')).toBeTruthy();
+    expect(screen.getByText('Abstimmung über fehlt!')).toBeTruthy();
+    expect(screen.getByText('Beschlusstext fehlt!')).toBeTruthy();
+    expect(screen.getByText('Stimme der Fraktion Linke fehlt!')).toBeTruthy();
+    expect(post).not.toHaveBeenCalled();
+  });
+
+  it('sends the chosen votes and deviants; the main vote has no number field', async () => {
+    renderEmpty();
+    fireEvent.click(screen.getByLabelText('Antrag'));
+    fireEvent.change(screen.getByPlaceholderText('Beschlusstext'), { target: { value: 'Der Antrag ist abgelehnt.' } });
+    for (const party of ['Union', 'AfD', 'SPD', 'Grüne', 'Linke']) {
+      fireEvent.click(within(card(party)).getByLabelText(party === 'Grüne' ? 'Enthaltung' : 'Nein'));
+    }
+    fireEvent.change(within(card('AfD')).getByLabelText('Ja abweichend'), { target: { value: '3' } });
+    expect(within(card('AfD')).getByText('Rest')).toBeTruthy();
+
+    const payload = await save();
+    expect(payload.votingDocument).toBe('mainDocument');
+    expect(payload.procedureId).toBe(7);
+    expect((payload.partyVotes as unknown[])[1]).toEqual({
+      party: 'AfD',
+      main: 'NO',
+      deviants: { yes: 3, abstination: 0, no: 0 },
+    });
+    expect((payload.partyVotes as { main: string }[]).map((p) => p.main)).toEqual([
+      'NO',
+      'NO',
+      'NO',
+      'ABSTINATION',
+      'NO',
+    ]);
+  });
+
+  it('takes the AI votes into the party choices', async () => {
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response(
+        JSON.stringify([
+          { name: 'Linke', vote: 'YES' },
+          { name: 'Union', vote: 'NO' },
+        ]),
+      ),
+    );
+    render(
+      <VoteResultsForm
+        data={{ ...empty, decisionText: 'Der Antrag ist abgelehnt.' }}
+        type="Antrag"
+        procedureId={7}
+        period={21}
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Fetch AI Votes' }));
+    expect(await screen.findByText('KI-Vorschlag übernommen:')).toBeTruthy();
+    expect((within(card('Linke')).getByLabelText('Ja') as HTMLInputElement).checked).toBe(true);
+    expect((within(card('Union')).getByLabelText('Nein') as HTMLInputElement).checked).toBe(true);
+    expect((within(card('SPD')).getByLabelText('Nein') as HTMLInputElement).checked).toBe(false);
+    fetchMock.mockRestore();
   });
 });

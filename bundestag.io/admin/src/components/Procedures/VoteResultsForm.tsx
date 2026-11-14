@@ -1,74 +1,109 @@
-import React from 'react';
-import { Form, Input, Button, InputNumber, Radio, Row, Col, notification, Switch } from 'antd';
-import { axiosClient } from '../../lib/axios';
-import { errorMessage } from '../../lib/errorMessage';
+import React, { useState } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { cn } from '@/lib/utils';
 import { AiVotes, AiVotesProps } from './AiVotes';
 import { Beschlusstext } from './Beschlusstext';
+import { getFractions } from './fractions';
+import { SaveStatus, useSave } from './SaveStatus';
 
-// Ant Design Sub-Elements
-const FormItem = Form.Item;
+export { getFractions };
 
-// Props-Interface
+type Main = 'YES' | 'NO' | 'ABSTINATION';
+type Count = 'yes' | 'abstination' | 'no';
+
 interface VoteResultsFormProps {
   data: {
     votingDocument?: string;
     decisionText?: string;
     partyVotes: {
       party: string;
-      main?: 'YES' | 'NO' | 'ABSTINATION' | null;
+      main?: Main | null;
       deviants: { yes: number; abstination: number; no: number };
     }[];
     votingRecommendation?: boolean | null;
   };
   type: string;
-  procedureId: number;
+  procedureId: number | string;
   period: number;
   lastPlenaryProtocoll?: { findSpotUrl?: string | null };
   title?: string;
   drucksachen?: string[];
 }
 
-export const getFractions = (period: number) =>
-  period === 21
-    ? [
-        {
-          name: 'Union',
-        },
-        {
-          name: 'AfD',
-        },
-        {
-          name: 'SPD',
-        },
-        {
-          name: 'Grüne',
-        },
-        {
-          name: 'Linke',
-        },
-      ]
-    : [
-        {
-          name: 'Union',
-        },
-        {
-          name: 'SPD',
-        },
-        {
-          name: 'AfD',
-        },
-        {
-          name: 'Grüne',
-        },
-        {
-          name: 'FDP',
-        },
-        {
-          name: 'Linke',
-        },
-      ];
+type PartyRow = { party: string; main: string | null; yes: number; abstination: number; no: number };
 
-// Component-Typisierung und Form-Layout
+const CHOICES: { value: Main; label: string; count: Count; selected: string; idle: string }[] = [
+  { value: 'YES', label: 'Ja', count: 'yes', selected: 'bg-green-600 text-white', idle: 'bg-green-50 text-green-900' },
+  {
+    value: 'ABSTINATION',
+    label: 'Enthaltung',
+    count: 'abstination',
+    selected: 'bg-amber-500 text-white',
+    idle: 'bg-amber-50 text-amber-900',
+  },
+  { value: 'NO', label: 'Nein', count: 'no', selected: 'bg-red-600 text-white', idle: 'bg-red-50 text-red-900' },
+];
+const COUNT_LABEL: Record<Count, string> = { yes: 'Ja', abstination: 'Enth.', no: 'Nein' };
+
+const initialRows = (data: VoteResultsFormProps['data'], period: number): PartyRow[] => {
+  if (data.partyVotes?.length) {
+    return data.partyVotes.map(({ party, main, deviants }) => ({
+      party,
+      main: main ?? null,
+      yes: deviants?.yes ?? 0,
+      abstination: deviants?.abstination ?? 0,
+      no: deviants?.no ?? 0,
+    }));
+  }
+  return getFractions(period).map(({ name }) => ({ party: name, main: null, yes: 0, abstination: 0, no: 0 }));
+};
+
+const Segmented: React.FC<{
+  name: string;
+  legend: string;
+  value: string;
+  options: { value: string; label: string; selected?: string; idle?: string }[];
+  onChange: (value: string) => void;
+  invalid?: boolean;
+}> = ({ name, legend, value, options, onChange, invalid }) => (
+  <fieldset>
+    <legend className="sr-only">{legend}</legend>
+    <div
+      className={cn(
+        'inline-flex overflow-hidden rounded-md border text-sm',
+        invalid && 'border-destructive ring-1 ring-destructive',
+      )}
+    >
+      {options.map((o) => {
+        const checked = value === o.value;
+        return (
+          <label
+            key={o.value}
+            className={cn(
+              'cursor-pointer border-r px-3 py-1.5 font-medium transition-colors last:border-r-0 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-inset',
+              checked
+                ? (o.selected ?? 'bg-primary text-primary-foreground')
+                : (o.idle ?? 'bg-background hover:bg-accent'),
+            )}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={o.value}
+              checked={checked}
+              onChange={() => onChange(o.value)}
+              className="sr-only"
+            />
+            {o.label}
+          </label>
+        );
+      })}
+    </div>
+  </fieldset>
+);
+
 const VoteResultsForm: React.FC<VoteResultsFormProps> = ({
   data,
   type,
@@ -78,206 +113,151 @@ const VoteResultsForm: React.FC<VoteResultsFormProps> = ({
   title,
   drucksachen,
 }) => {
-  // 1. useNotification-Hook
-  const [notificationApi, contextHolder] = notification.useNotification();
-  const [form] = Form.useForm();
+  const [votingDocument, setVotingDocument] = useState(data.votingDocument ?? '');
+  const [decisionText, setDecisionText] = useState(data.decisionText ?? '');
+  // the API stores the inverse: votingRecommendation === false means "flip"
+  const [toggleDecision, setToggleDecision] = useState(data.votingRecommendation === false);
+  const [rows, setRows] = useState<PartyRow[]>(() => initialRows(data, period));
+  const [submitted, setSubmitted] = useState(false);
+  const { state, save, invalid } = useSave();
 
-  const onFinish = (values: any) => {
-    notificationApi.info({
-      key: 'saveProcedure',
-      message: 'Vorgang wird gespeichert!',
-      duration: 0,
-    });
+  const updateRow = (index: number, patch: Partial<PartyRow>) =>
+    setRows((current) => current.map((row, i) => (i === index ? { ...row, ...patch } : row)));
 
-    const payload = {
-      ...values,
-      partyVotes: values.partyVotes.map((party: any) => ({
-        party: party.party,
-        main: party.main,
-        deviants: {
-          yes: party.yes,
-          abstination: party.abstination,
-          no: party.no,
-        },
-      })),
-    };
-
-    axiosClient
-      .post('/api/procedures/save', {
-        ...payload,
-        toggleDecision: !values.toggleDecision,
-        procedureId,
-      })
-      .then(() => {
-        notificationApi.success({
-          key: 'saveProcedure',
-          message: 'Vorgang wurde gespeichert!',
-        });
-      })
-      .catch((err) => {
-        notificationApi.error({
-          key: 'saveProcedure',
-          message: 'Ein Fehler ist vorgefallen',
-          description: errorMessage(err),
-          duration: 0,
-        });
-        console.error('Error:', err);
-      });
-  };
-
-  const onFinishFailed = () => {
-    notificationApi.warning({
-      message: 'Speichern Fehlgeschlagen!',
-      description: 'Überprüfe deine eingaben',
-    });
-  };
-
-  let parties = getFractions(period);
-  if (data.partyVotes && data.partyVotes.length > 0) {
-    parties = data.partyVotes.map(({ party }) => ({
-      name: party,
-    }));
-  }
-
-  const onAiVoteResult: AiVotesProps['onResult'] = (votes) => {
-    const fieldValue: { party: string; main?: string | null }[] = form.getFieldValue('partyVotes');
-    form.setFieldValue(
-      'partyVotes',
-      fieldValue.map((partyVote) => {
-        const vote = votes.find(({ name }) => name === partyVote.party)?.vote;
-        return vote ? { ...partyVote, main: vote } : partyVote;
+  const onAiVoteResult: AiVotesProps['onResult'] = (votes) =>
+    setRows((current) =>
+      current.map((row) => {
+        const vote = votes.find(({ name }) => name === row.party)?.vote;
+        return vote ? { ...row, main: vote } : row;
       }),
     );
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    const problems = [
+      !votingDocument && 'Abstimmung über fehlt!',
+      !decisionText.trim() && 'Beschlusstext fehlt!',
+      ...rows.filter((r) => !r.main).map((r) => `Stimme der Fraktion ${r.party} fehlt!`),
+    ].filter((p): p is string => Boolean(p));
+    if (problems.length) return invalid(problems);
+
+    save({
+      votingDocument,
+      decisionText,
+      partyVotes: rows.map(({ party, main, yes, abstination, no }) => ({
+        party,
+        main,
+        deviants: { yes, abstination, no },
+      })),
+      toggleDecision: !toggleDecision,
+      procedureId,
+    });
   };
 
   return (
-    <>
-      {contextHolder}
-      <Form
-        form={form}
-        layout="vertical"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        className="login-form"
-        initialValues={{
-          votingDocument: data.votingDocument ?? '',
-          decisionText: data.decisionText ?? '',
-          // the API stores the inverse: votingRecommendation === false means "flip"
-          toggleDecision: data.votingRecommendation === false,
-          partyVotes: parties.map((p, i) => ({
-            party: p.name,
-            main: data.partyVotes.length > 0 ? data.partyVotes[i].main : null,
-            yes: data.partyVotes.length > 0 ? data.partyVotes[i].deviants.yes : 0,
-            abstination: data.partyVotes.length > 0 ? data.partyVotes[i].deviants.abstination : 0,
-            no: data.partyVotes.length > 0 ? data.partyVotes[i].deviants.no : 0,
-          })),
-        }}
-      >
-        <FormItem
-          label="Abstimmung über"
-          name="votingDocument"
-          rules={[{ required: true, message: 'Abstimmung über fehlt!' }]}
-        >
-          <Radio.Group>
-            <Radio.Button value="mainDocument">{type}</Radio.Button>
-            <Radio.Button value="recommendedDecision">Beschlussempfehlung</Radio.Button>
-          </Radio.Group>
-        </FormItem>
-        <Form.Item label="Ergebnis umdrehen" name="toggleDecision" valuePropName="checked">
-          <Switch />
-        </Form.Item>
-        <Beschlusstext
-          pdfUrl={lastPlenaryProtocoll?.findSpotUrl ?? undefined}
-          title={title}
-          drucksachen={drucksachen}
-        />
-        <Form.Item noStyle shouldUpdate={(prev, next) => prev.decisionText !== next.decisionText}>
-          {({ getFieldValue }) =>
-            getFieldValue('decisionText') && period ? (
-              <AiVotes decision={getFieldValue('decisionText')} period={period} onResult={onAiVoteResult} />
-            ) : null
-          }
-        </Form.Item>
-        <Form.List name="partyVotes">
-          {(fields) => (
-            <Row gutter={8}>
-              {fields.map((field) => (
-                <Col span={8} key={`${field.key ?? field.name}`}>
-                  <Form.Item {...field} name={[field.name, 'party']} rules={[{ required: true }]}>
-                    <Input readOnly />
-                  </Form.Item>
-                  <Form.Item {...field} name={[field.name, 'main']} rules={[{ required: true }]}>
-                    <Radio.Group>
-                      <Radio.Button value="YES" style={{ backgroundColor: '#f6ffed' }}>
-                        Ja
-                      </Radio.Button>
-                      <Radio.Button value="ABSTINATION" style={{ backgroundColor: '#e6f7ff' }}>
-                        Enthaltung
-                      </Radio.Button>
-                      <Radio.Button value="NO" style={{ backgroundColor: '#fff1f0' }}>
-                        Nein
-                      </Radio.Button>
-                    </Radio.Group>
-                  </Form.Item>
-                  <Form.Item
-                    {...field}
-                    label="Ja"
-                    name={[field.name, 'yes']}
-                    labelCol={{
-                      xs: { span: 24 },
-                      sm: { span: 8 },
-                    }}
-                  >
-                    <InputNumber
-                      min={0}
-                      max={999}
-                      disabled={form.getFieldValue(['partyVotes', field.name, 'main']) === 'YES'}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    {...field}
-                    label="Enth."
-                    name={[field.name, 'abstination']}
-                    labelCol={{
-                      xs: { span: 24 },
-                      sm: { span: 8 },
-                    }}
-                  >
-                    <InputNumber
-                      min={0}
-                      max={999}
-                      disabled={form.getFieldValue(['partyVotes', field.name, 'main']) === 'ABSTINATION'}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    {...field}
-                    label="Nein"
-                    name={[field.name, 'no']}
-                    labelCol={{
-                      xs: { span: 24 },
-                      sm: { span: 8 },
-                    }}
-                  >
-                    <InputNumber
-                      min={0}
-                      max={999}
-                      disabled={form.getFieldValue(['partyVotes', field.name, 'main']) === 'NO'}
-                    />
-                  </Form.Item>
-                </Col>
-              ))}
-            </Row>
-          )}
-        </Form.List>
-        <FormItem>
-          <Button type="primary" htmlType="submit" className="login-form-button">
-            Speichern
-          </Button>
-        </FormItem>
-      </Form>
-    </>
+    <form onSubmit={onSubmit} noValidate className="space-y-6">
+      <div className="flex flex-wrap items-end gap-x-10 gap-y-4">
+        <div className="space-y-1.5">
+          <div className="text-sm font-medium">
+            Abstimmung über <span className="text-destructive">*</span>
+          </div>
+          <Segmented
+            name="votingDocument"
+            legend="Abstimmung über"
+            value={votingDocument}
+            onChange={setVotingDocument}
+            invalid={submitted && !votingDocument}
+            options={[
+              { value: 'mainDocument', label: type },
+              { value: 'recommendedDecision', label: 'Beschlussempfehlung' },
+            ]}
+          />
+        </div>
+        <div className="flex items-center gap-2 pb-1.5">
+          <Switch id="toggleDecision" checked={toggleDecision} onCheckedChange={setToggleDecision} />
+          <label htmlFor="toggleDecision" className="text-sm font-medium">
+            Ergebnis umdrehen
+          </label>
+        </div>
+      </div>
+
+      <Beschlusstext
+        value={decisionText}
+        onChange={setDecisionText}
+        invalid={submitted && !decisionText.trim()}
+        pdfUrl={lastPlenaryProtocoll?.findSpotUrl ?? undefined}
+        title={title}
+        drucksachen={drucksachen}
+      />
+
+      {decisionText && period ? <AiVotes decision={decisionText} period={period} onResult={onAiVoteResult} /> : null}
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {rows.map((row, index) => (
+          <div
+            key={row.party}
+            className={cn('space-y-3 rounded-md border p-3', submitted && !row.main && 'border-destructive')}
+          >
+            <div className="font-medium">{row.party}</div>
+            <Segmented
+              name={`main-${index}`}
+              legend={`Stimme ${row.party}`}
+              value={row.main ?? ''}
+              onChange={(main) => updateRow(index, { main })}
+              invalid={submitted && !row.main}
+              options={CHOICES}
+            />
+            <div>
+              <div className="mb-1 text-xs text-muted-foreground">Abweichende Stimmen</div>
+              <div className="grid grid-cols-3 gap-2">
+                {CHOICES.map(({ value, count }) => {
+                  const id = `${count}-${index}`;
+                  const isMain = row.main === value;
+                  return (
+                    <div key={count}>
+                      <div aria-hidden className="mb-0.5 text-xs font-medium">
+                        {COUNT_LABEL[count]}
+                      </div>
+                      {isMain ? (
+                        <div
+                          id={id}
+                          className="flex h-8 items-center rounded-md border border-dashed px-2 text-xs text-muted-foreground"
+                          title="Ergibt sich aus den Sitzen der Fraktion"
+                        >
+                          Rest
+                        </div>
+                      ) : (
+                        <input
+                          id={id}
+                          aria-label={`${COUNT_LABEL[count]} abweichend`}
+                          type="number"
+                          inputMode="numeric"
+                          min={0}
+                          max={999}
+                          value={row[count]}
+                          onChange={(e) =>
+                            updateRow(index, { [count]: Math.max(0, Math.min(999, Number(e.target.value) || 0)) })
+                          }
+                          className="h-8 w-full rounded-md border border-input bg-background px-2 text-sm tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-4 border-t pt-4">
+        <Button type="submit" disabled={state.kind === 'saving'}>
+          Speichern
+        </Button>
+        <SaveStatus state={state} />
+      </div>
+    </form>
   );
 };
 

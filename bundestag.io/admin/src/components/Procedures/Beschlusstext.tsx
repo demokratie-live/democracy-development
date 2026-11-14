@@ -1,19 +1,23 @@
+import { useState } from 'react';
+import axios from 'axios';
+import { CircleAlert, Loader2, Sparkles } from 'lucide-react';
+
 import { log } from '@/lib/logger';
 import { errorMessage } from '@/lib/errorMessage';
-import { Alert, Button, Form, Spin } from 'antd';
-import FormItem from 'antd/es/form/FormItem';
-import TextArea from 'antd/es/input/TextArea';
-import axios from 'axios';
-import { useState } from 'react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 type Props = {
+  value: string;
+  onChange: (value: string) => void;
+  invalid?: boolean;
   pdfUrl?: string;
   title?: string;
   drucksachen?: string[];
 };
 
-export const Beschlusstext: React.FC<Props> = ({ pdfUrl, title, drucksachen }) => {
-  const form = Form.useFormInstance();
+export const Beschlusstext: React.FC<Props> = ({ value, onChange, invalid, pdfUrl, title, drucksachen }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,7 +29,7 @@ export const Beschlusstext: React.FC<Props> = ({ pdfUrl, title, drucksachen }) =
       const response = await axios.get('/api/non-named-votes-ai/get', {
         params: { pdfUrl, title, drucksachen },
       });
-      form.setFieldValue('decisionText', response.data.text);
+      onChange(response.data.text);
     } catch (err) {
       setError(errorMessage(err));
     } finally {
@@ -34,16 +38,33 @@ export const Beschlusstext: React.FC<Props> = ({ pdfUrl, title, drucksachen }) =
   };
 
   return (
-    <>
-      <FormItem label="Beschlusstext" name="decisionText" rules={[{ required: true, message: 'Beschlusstext fehlt!' }]}>
-        <TextArea placeholder="Beschlusstext" rows={3} />
-      </FormItem>
-      {pdfUrl && title && (
-        <Button type="dashed" onClick={onGetViaAi} disabled={loading}>
-          {!loading ? 'get via AI' : <Spin />}
-        </Button>
+    <div className="space-y-2">
+      <div className="flex items-end justify-between gap-2">
+        <label htmlFor="decisionText" className="text-sm font-medium">
+          Beschlusstext <span className="text-destructive">*</span>
+        </label>
+        {pdfUrl && title && (
+          <Button type="button" variant="outline" size="sm" onClick={onGetViaAi} disabled={loading}>
+            {loading ? <Loader2 className="animate-spin" /> : <Sparkles />}
+            get via AI
+          </Button>
+        )}
+      </div>
+      <Textarea
+        id="decisionText"
+        placeholder="Beschlusstext"
+        rows={4}
+        value={value}
+        aria-invalid={invalid || undefined}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      {error && (
+        <Alert variant="destructive">
+          <CircleAlert />
+          <AlertTitle>KI-Beschlusstext fehlgeschlagen</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
-      {error && <Alert type="error" showIcon message="KI-Beschlusstext fehlgeschlagen" description={error} />}
-    </>
+    </div>
   );
 };
