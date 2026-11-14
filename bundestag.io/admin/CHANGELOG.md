@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.9.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.8.12...bundestag.io-admin@v3.9.0) (2026-11-14)
+
+### 🚀 Feature
+
+* **admin:** add mock server for local development ([2833374](https://github.com/demokratie-live/democracy-development/commit/283337496c0dd52bc6515a971e4abf7a68212856))
+* **admin:** add Tailwind, shadcn/ui and new layout ([00d5a59](https://github.com/demokratie-live/democracy-development/commit/00d5a594b16581164ebb4ae0d081e5b308499245))
+* **admin:** procedure header and sources with shadcn/ui ([fa68c68](https://github.com/demokratie-live/democracy-development/commit/fa68c68aea211a238e72f5140aaeefd44c42da7f))
+* **admin:** remove antd and clean up lists ([50e6f1b](https://github.com/demokratie-live/democracy-development/commit/50e6f1b3f331ef5a90ef3967862dba9f28739821))
+* **admin:** to-do list grouped by week with shadcn/ui ([c40a793](https://github.com/demokratie-live/democracy-development/commit/c40a793ff37906cf51ccfcaf289bae20f32ca113))
+* **admin:** vote result form with shadcn/ui ([cc9d33e](https://github.com/demokratie-live/democracy-development/commit/cc9d33ecf2f5c392d0ca21b2871de7f17ca24361))
+
 ## [3.8.12](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.8.11...bundestag.io-admin@v3.8.12) (2026-11-13)
 
 * **admin:** restore AI helpers for non-named votes ([3092d20](https://github.com/demokratie-live/democracy-development/commit/3092d2099c881cc923065e6605253664999de1a3))
