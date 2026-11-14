@@ -1,36 +1,42 @@
 import { useQuery } from '@apollo/client';
+import { ChevronRight } from 'lucide-react';
+
 import { VOTE_TEXTS } from '../../graphql/queries/voteTexts';
-import { Collapse } from 'antd';
 import { PlenarText } from './PlenarText';
 
-const { Panel } = Collapse;
+type Props = {
+  procedureId: string;
+  importantDocuments?: { number?: string | null }[] | null;
+};
 
-export const VoteResultTextHelper = ({ procedureId, importantDocuments }) => {
-  const { data, loading } = useQuery(VOTE_TEXTS, {
-    variables: { procedureId },
-  });
+/** Passages of the plenary protocol that name one of the documents. */
+export const VoteResultTextHelper: React.FC<Props> = ({ procedureId, importantDocuments }) => {
+  const { data, loading, error } = useQuery(VOTE_TEXTS, { variables: { procedureId } });
+  const docIds = (importantDocuments ?? []).map(({ number }) => number).filter((n): n is string => Boolean(n));
 
-  if (loading) {
-    return <div>…loading</div>;
-  }
+  if (loading) return <p className="text-sm text-muted-foreground">Textstellen werden gesucht …</p>;
+  if (error) return <p className="text-sm text-muted-foreground">Keine Textstellen: {error.message}</p>;
 
-  if (!data || !data.voteResultTextHelper || data.voteResultTextHelper.length === 0) {
-    return <div>no helper texts</div>;
-  }
+  const passages: { results: string[] }[] = data?.voteResultTextHelper ?? [];
+  if (!passages.length)
+    return <p className="text-sm text-muted-foreground">Keine Textstellen im Plenarprotokoll gefunden.</p>;
 
-  const { voteResultTextHelper } = data;
-  console.log('voteResultTextHelper', voteResultTextHelper);
   return (
-    <Collapse>
-      {voteResultTextHelper.map(({ results }, i) => {
-        return (
-          <Panel header={`📚 ${results[1].substr(0, 50)}`} key={i}>
-            {results.map((value, i) => (
-              <PlenarText key={i} text={value} docIds={importantDocuments.map(({ number }) => number)} />
+    <div className="divide-y rounded-md border">
+      {passages.map(({ results }, i) => (
+        <details key={i} className="group" open={passages.length === 1}>
+          <summary className="flex cursor-pointer list-none items-center gap-2 px-3 py-2 text-sm hover:bg-muted [&::-webkit-details-marker]:hidden">
+            <ChevronRight aria-hidden className="size-4 shrink-0 transition-transform group-open:rotate-90" />
+            {/* the API puts the line naming the document second */}
+            <span className="truncate">{results[1] ?? results[0]}</span>
+          </summary>
+          <div className="space-y-2 border-t bg-muted/40 px-3 py-3 text-sm">
+            {results.filter(Boolean).map((value, j) => (
+              <PlenarText key={j} text={value} docIds={docIds} />
             ))}
-          </Panel>
-        );
-      })}
-    </Collapse>
+          </div>
+        </details>
+      ))}
+    </div>
   );
 };

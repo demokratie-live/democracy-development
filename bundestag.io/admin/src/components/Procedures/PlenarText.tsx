@@ -1,43 +1,52 @@
 import React from 'react';
 
-const replaceText = (text, strPart, color) => {
-  return text.replaceAll(strPart, `<span style="background-color: ${color}">${strPart}</span>`);
+// highlight colours as in the old admin; parties, result words and document numbers
+const PARTY_COLORS: [string, string][] = [
+  ['Grüne', '#abffb3'],
+  ['Linke', '#fa9db0'],
+  ['CDU', '#d1c9ca'],
+  ['CSU', '#d1c9ca'],
+  ['Union', '#d1c9ca'],
+  ['FDP', '#f8ffa6'],
+  ['AfD', '#94fff8'],
+  ['SPD', '#fab59d'],
+  ['alle übrigen', '#ffe1a1'],
+];
+const KEYWORD_COLOR = '#ffb3f2';
+const KEYWORDS = ['abgelehnt', 'angenommen'];
+
+const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * Splits the text into plain parts and highlighted parts. The protocol text is
+ * rendered as text, never as HTML.
+ */
+export const highlight = (text: string, docIds: string[]) => {
+  const colors = new Map<string, string>(PARTY_COLORS);
+  for (const word of [...KEYWORDS, ...docIds]) colors.set(word, KEYWORD_COLOR);
+  const words = Array.from(colors.keys())
+    .filter(Boolean)
+    // longest first, so "alle übrigen" wins over shorter matches
+    .sort((a, b) => b.length - a.length);
+  if (!words.length || !text) return [{ text, color: undefined as string | undefined }];
+
+  const pattern = new RegExp(`(${words.map(escape).join('|')})`, 'g');
+  return text
+    .split(pattern)
+    .filter(Boolean)
+    .map((part) => ({ text: part, color: colors.get(part) }));
 };
 
-const replaceParties = (text) => {
-  const outText = [
-    ['Grüne', '#abffb3'],
-    ['Linke', '#fa9db0'],
-    ['CDU', '#d1c9ca'],
-    ['CSU', '#d1c9ca'],
-    ['Union', '#d1c9ca'],
-    ['FDP', '#f8ffa6'],
-    ['AfD', '#94fff8'],
-    ['SPD', '#fab59d'],
-    ['alle übrigen', '#ffe1a1'],
-  ].reduce((prev, p) => {
-    return replaceText(prev, p[0], p[1]);
-  }, text);
-  return outText;
-};
-
-const replaceVoteKeywords = (text) => {
-  const returnText = ['abgelehnt', 'angenommen'].reduce((prev, docId) => {
-    return replaceText(prev, docId, '#ff42e0');
-  }, text);
-  return returnText;
-};
-
-const replaceDocNumbers = (text, docIds) => {
-  const returnText = docIds.reduce((prev, docId) => {
-    return replaceText(prev, docId, '#ff42e0');
-  }, text);
-  return returnText;
-};
-
-export const PlenarText = ({ text, docIds }) => {
-  let outText = replaceParties(text);
-  outText = replaceVoteKeywords(outText);
-  outText = replaceDocNumbers(outText, docIds);
-  return <div dangerouslySetInnerHTML={{ __html: outText }} style={{ paddingBottom: '10px' }} />;
-};
+export const PlenarText: React.FC<{ text: string; docIds: string[] }> = ({ text, docIds }) => (
+  <p className="leading-relaxed">
+    {highlight(text, docIds).map(({ text: part, color }, i) =>
+      color ? (
+        <mark key={i} className="rounded-sm px-0.5 text-inherit" style={{ backgroundColor: color }}>
+          {part}
+        </mark>
+      ) : (
+        <React.Fragment key={i}>{part}</React.Fragment>
+      ),
+    )}
+  </p>
+);
