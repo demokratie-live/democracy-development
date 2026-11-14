@@ -1,71 +1,42 @@
-import React from 'react';
-import { Form, Button, notification, Switch } from 'antd';
-import { axiosClient } from '../../lib/axios';
-import { errorMessage } from '../../lib/errorMessage';
+import React, { useState } from 'react';
 
-const FormItem = Form.Item;
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { SaveStatus, useSave } from './SaveStatus';
 
-export const VoteResultsFormNamedPoll = ({ data, procedureId }) => {
-  const [notificationApi, contextHolder] = notification.useNotification();
+type Props = {
+  data?: { votingRecommendation?: boolean | null } | null;
+  procedureId: string;
+};
 
-  const onFinish = (values) => {
-    notificationApi.info({
-      key: 'saveProcedure',
-      message: 'Vorgang wird gespeichert!',
-      duration: 0,
-    });
+/** Named votes come from the poll import; only the direction of the result is edited here. */
+export const VoteResultsFormNamedPoll: React.FC<Props> = ({ data, procedureId }) => {
+  // the API stores the inverse: votingRecommendation === false means "flip"
+  const [toggleDecision, setToggleDecision] = useState(data?.votingRecommendation === false);
+  const { state, save } = useSave();
 
-    axiosClient
-      .post('/api/procedures/save', {
-        namedPoll: true,
-        toggleDecision: !values.toggleDecision,
-        procedureId,
-      })
-      .then(() => {
-        notificationApi.success({
-          key: 'saveProcedure',
-          message: 'Vorgang wurde gespeichert!',
-        });
-      })
-      .catch((err) => {
-        notificationApi.error({
-          key: 'saveProcedure',
-          message: 'Ein Fehler ist vorgefallen',
-          description: errorMessage(err),
-          duration: 0,
-        });
-        console.log('Error:', err);
-      });
-  };
-
-  const onFinishFailed = (...args) => {
-    console.log(...args);
-    notificationApi.error({
-      message: 'Speichern Fehlgeschlagen!',
-      description: 'Überprüfe deine eingaben',
-    });
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    save({ namedPoll: true, toggleDecision: !toggleDecision, procedureId });
   };
 
   return (
-    <>
-      {contextHolder}
-      <Form
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        className="login-form"
-        // the API stores the inverse: votingRecommendation === false means "flip"
-        initialValues={{ toggleDecision: data?.votingRecommendation === false }}
-      >
-        <FormItem label="Ergebnis umdrehen" name="toggleDecision" valuePropName="checked">
-          <Switch />
-        </FormItem>
-
-        <FormItem>
-          <Button type="primary" htmlType="submit" className="login-form-button">
-            Speichern
-          </Button>
-        </FormItem>
-      </Form>
-    </>
+    <form onSubmit={onSubmit} className="space-y-4">
+      <p className="text-sm text-muted-foreground">
+        Die Stimmen kommen aus der namentlichen Abstimmung und werden automatisch übernommen.
+      </p>
+      <div className="flex items-center gap-2">
+        <Switch id="toggleDecisionNamed" checked={toggleDecision} onCheckedChange={setToggleDecision} />
+        <label htmlFor="toggleDecisionNamed" className="text-sm font-medium">
+          Ergebnis umdrehen
+        </label>
+      </div>
+      <div className="flex flex-wrap items-center gap-4 border-t pt-4">
+        <Button type="submit" disabled={state.kind === 'saving'}>
+          Speichern
+        </Button>
+        <SaveStatus state={state} />
+      </div>
+    </form>
   );
 };
