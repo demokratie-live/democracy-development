@@ -5,6 +5,6 @@
     "moduleResolution": "bundler",
     "target": "es2022"
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "**/*.tsx"],
   "exclude": []
 }

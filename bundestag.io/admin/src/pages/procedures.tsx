@@ -3,7 +3,7 @@ import { ProcedureList } from '../components/Procedures/List';
 
 export default function Procedures() {
   return (
-    <Layout title="Vorgänge">
+    <Layout title="ToDo">
       <ProcedureList />
     </Layout>
   );
