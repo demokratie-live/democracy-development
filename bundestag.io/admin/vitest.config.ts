@@ -8,7 +8,7 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
-    include: ['src/**/__tests__/**/*.test.{ts,tsx}'],
+    include: ['src/**/__tests__/**/*.test.{ts,tsx}', 'mocks/**/__tests__/**/*.test.ts'],
     setupFiles: ['./vitest.setup.ts'],
     // the first antd render is slow on a cold start
     testTimeout: 15000,

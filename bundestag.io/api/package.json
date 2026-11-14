@@ -54,6 +54,7 @@
     "@graphql-codegen/typescript-resolvers": "4.0.1",
     "@types/graphql-date": "1.0.8",
     "@types/lodash": "4.14.200",
+    "@types/node": "^22.13.10",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
     "@typescript-eslint/parser": "^8.26.0",
     "eslint": "9.21.0",
