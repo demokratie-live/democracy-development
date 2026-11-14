@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
-import VoteResults from '../fragments/voteResults';
 
+// only what the to-do list shows; the detail page loads the rest
 const proceduresQuery = gql`
   query procedures($manageVoteDate: Boolean, $limit: Int, $offset: Int, $period: Int!) {
     proceduresData(manageVoteDate: $manageVoteDate, limit: $limit, offset: $offset, period: [$period]) {
@@ -12,27 +12,17 @@ const proceduresQuery = gql`
         period
         currentStatus
         namedVote
-        importantDocuments {
-          type
-          editor
-          number
-          url
-        }
-        history {
-          assignment
-          initiator
-          findSpot
-          findSpotUrl
-          decision {
-            type
+        voteDate
+        customData {
+          voteResults {
+            yes
+            no
+            abstination
           }
         }
-        voteDate
-        ...VoteResults
       }
     }
   }
-  ${VoteResults}
 `;
 
 export default proceduresQuery;

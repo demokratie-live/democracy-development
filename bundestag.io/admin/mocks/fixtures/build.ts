@@ -150,9 +150,10 @@ const build = (c: Case, p: PublicProcedure) => {
   let voteResults: Record<string, unknown> | null = null;
   if (c.result === 'zero-yes') {
     voteResults = {
+      // sums as the API computes them from the seats of WP 21
       yes: 0,
-      no: 0,
-      abstination: 0,
+      no: 208 + 151 + 120 + 64,
+      abstination: 85,
       decisionText: 'Beispieltext: Der Antrag ist abgelehnt.',
       votingDocument: 'mainDocument',
       votingRecommendation: true,

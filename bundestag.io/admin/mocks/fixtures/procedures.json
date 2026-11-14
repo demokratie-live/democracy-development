@@ -716,8 +716,8 @@
     "customData": {
       "voteResults": {
         "yes": 0,
-        "no": 0,
-        "abstination": 0,
+        "no": 543,
+        "abstination": 85,
         "decisionText": "Beispieltext: Der Antrag ist abgelehnt.",
         "votingDocument": "mainDocument",
         "votingRecommendation": true,

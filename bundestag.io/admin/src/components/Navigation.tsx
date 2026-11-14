@@ -9,8 +9,8 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 const items = [
-  // the detail page /procedure/[id] belongs to Vorgänge
-  { href: '/procedures', label: 'Vorgänge', match: ['/procedures', '/procedure/'] },
+  // the detail page /procedure/[id] belongs to ToDo
+  { href: '/procedures', label: 'ToDo', match: ['/procedures', '/procedure/'] },
   { href: '/list/past', label: 'Vergangen', match: ['/list/past'] },
   { href: '/list/upcoming', label: 'Kommende', match: ['/list/upcoming'] },
 ];
