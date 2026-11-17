@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.10.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.9.0...bundestag.io-admin@v3.10.0) (2026-11-17)
+
+### 🚀 Feature
+
+* **admin:** sort to-do list, multi-select status, keep view in URL ([4e17eec](https://github.com/demokratie-live/democracy-development/commit/4e17eecd300e8f66d90b7562085f03030e3c00b9))
+
 ## [3.9.0](https://github.com/demokratie-live/democracy-development/compare/bundestag.io-admin@v3.8.12...bundestag.io-admin@v3.9.0) (2026-11-14)
 
 ### 🚀 Feature
