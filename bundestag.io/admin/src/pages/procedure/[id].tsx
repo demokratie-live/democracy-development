@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
@@ -6,6 +7,7 @@ import { AlertCircle, ArrowLeft } from 'lucide-react';
 import { PROCEDURE as PROCEDURE_DEFINITIONS } from '@democracy-deutschland/bundestag.io-definitions';
 
 import { Layout } from '../../components/Layout';
+import { lastListHref, LIST_PATH } from '../../components/Procedures/listHref';
 import { ProcedureHeader, type ProtocolEntry } from '../../components/Procedures/ProcedureHeader';
 import VoteResultsForm from '../../components/Procedures/VoteResultsForm';
 import { VoteResultsFormNamedPoll } from '../../components/Procedures/VoteResultsFormNamedPoll';
@@ -13,12 +15,17 @@ import { VoteResultTextHelper } from '../../components/Procedures/VoteResultText
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { PROCEDURE } from '../../graphql/queries/procedure';
 
-const BackLink = () => (
-  <Link href="/procedures" className="mb-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">
-    <ArrowLeft aria-hidden className="size-4" />
-    ToDo
-  </Link>
-);
+// back to the list as it was left; read after mount, since storage is browser-only
+const BackLink = () => {
+  const [href, setHref] = useState(LIST_PATH);
+  useEffect(() => setHref(lastListHref()), []);
+  return (
+    <Link href={href} className="mb-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">
+      <ArrowLeft aria-hidden className="size-4" />
+      ToDo
+    </Link>
+  );
+};
 
 const Procedure: React.FC = () => {
   const router = useRouter();
