@@ -10,6 +10,15 @@ import { ProcedureList } from '../../src/components/Procedures/List';
 import { resetDb } from '../db';
 import { handlers, MOCK_ENV } from '../handlers';
 
+// a minimal Pages Router: the list reads its state from the query and writes it back
+const router = vi.hoisted(() => ({
+  isReady: true,
+  pathname: '/procedures',
+  query: {} as Record<string, string | string[]>,
+  replace: vi.fn(),
+}));
+vi.mock('next/router', () => ({ useRouter: () => router }));
+
 const server = setupServer(...handlers);
 beforeAll(() => {
   // only Date: the fixtures' upcoming votes must stay in the future
@@ -17,7 +26,11 @@ beforeAll(() => {
   vi.setSystemTime(new Date('2026-11-14T12:00:00.000Z'));
   server.listen({ onUnhandledFrame: 'error' });
 });
-beforeEach(() => resetDb());
+beforeEach(() => {
+  resetDb();
+  router.query = {};
+  router.replace.mockReset();
+});
 afterAll(() => {
   server.close();
   vi.useRealTimers();
@@ -56,8 +69,54 @@ describe('to-do list', () => {
     expect(screen.getByText('2 von 13 offen')).toBeTruthy();
 
     fireEvent.click(screen.getByText('Filter zurücksetzen'));
-    fireEvent.change(screen.getByLabelText('Stand'), { target: { value: 'Überwiesen' } });
+    fireEvent.click(screen.getByLabelText('Überwiesen'));
     expect(screen.getByText('1 von 13 offen')).toBeTruthy();
     expect(screen.getByText(/Fossile Profite/)).toBeTruthy();
+
+    fireEvent.click(screen.getByLabelText('Verabschiedet'));
+    expect(screen.getByText(/^[3-9] von 13 offen$/)).toBeTruthy();
+    expect(screen.getByText('2 Stände')).toBeTruthy();
+  });
+
+  it('sorts by status as a flat list, latest status first, and writes it to the URL', async () => {
+    renderList();
+    await screen.findByText('13 offen');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Stand' }));
+    const header = screen.getByRole('columnheader', { name: 'Stand' });
+    expect(header.getAttribute('aria-sort')).toBe('descending');
+    expect(screen.queryByText(/^KW /)).toBeNull();
+
+    const statuses = screen
+      .getAllByRole('row')
+      .slice(1)
+      .map((row) => row.querySelectorAll('td')[3]?.textContent);
+    expect(statuses[0]).toBe('Verabschiedet');
+    expect(statuses.at(-2)).toBe('Überwiesen');
+    // not in the process order: last, also when sorted descending
+    expect(statuses.at(-1)).toBe('Für erledigt erklärt');
+    expect(router.replace).toHaveBeenLastCalledWith(
+      { pathname: '/procedures', query: { sort: 'status', dir: 'desc' } },
+      undefined,
+      { shallow: true, scroll: false },
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Stand' }));
+    expect(header.getAttribute('aria-sort')).toBe('ascending');
+  });
+
+  it('restores filters and sorting from the URL', async () => {
+    router.query = { status: ['Überwiesen', 'Verabschiedet'], sort: 'status', dir: 'desc' };
+    renderList();
+    await screen.findByText(/von 13 offen$/);
+    expect(screen.getByText('2 Stände')).toBeTruthy();
+    const statuses = screen
+      .getAllByRole('row')
+      .slice(1)
+      .map((row) => row.querySelectorAll('td')[3]?.textContent);
+    expect(statuses.at(0)).toBe('Verabschiedet');
+    expect(statuses.at(-1)).toBe('Überwiesen');
+    expect(new Set(statuses)).toEqual(new Set(['Verabschiedet', 'Überwiesen']));
+    expect(router.replace).not.toHaveBeenCalled();
   });
 });

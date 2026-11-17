@@ -7,7 +7,9 @@ import PROCEDURE_LIST from '../../../graphql/queries/procedureList';
 import Procedure from '../../../pages/procedure/[id]';
 import { ProcedureList } from '../List';
 
-vi.mock('next/router', () => ({ useRouter: () => ({ query: { id: '1' } }) }));
+vi.mock('next/router', () => ({
+  useRouter: () => ({ isReady: true, pathname: '/procedure/[id]', query: { id: '1' }, replace: vi.fn() }),
+}));
 
 const failing = (query) => [
   { request: { query }, variableMatcher: () => true, error: new Error('connect ECONNREFUSED') },
