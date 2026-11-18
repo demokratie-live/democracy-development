@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.44](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.43...import-conference-week-details@v0.1.44) (2026-11-18)
+
+* ignore tsup temp config in eslint ([d1d711e](https://github.com/demokratie-live/democracy-development/commit/d1d711eed5d24f81d3dbfa2a8db140743012dcd0))
+
 ## [0.1.43](https://github.com/demokratie-live/democracy-development/compare/import-conference-week-details@v0.1.42...import-conference-week-details@v0.1.43) (2026-11-04)
 
 * update node to 22.23.4 ([7a97c62](https://github.com/demokratie-live/democracy-development/commit/7a97c62cc40b763a4f19f675978ac430e3d499ce))
