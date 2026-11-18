@@ -7,7 +7,7 @@ import globals from 'globals';
 
 export default [
   {
-    ignores: ['**/build/**', '**/dist/**'],
+    ignores: ['**/build/**', '**/dist/**', '**/tsup.config.bundled_*'],
   },
   js.configs.recommended,
   {
