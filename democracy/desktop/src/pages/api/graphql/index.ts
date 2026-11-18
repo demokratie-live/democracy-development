@@ -1,4 +1,3 @@
-import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const graphql = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -10,14 +9,19 @@ const graphql = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const response = await axios.post(process.env.APP_API_URL, {
-      query,
-      variables,
+    const response = await fetch(process.env.APP_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, variables }),
     });
 
-    res.status(response.status).send(response.data);
+    if (!response.ok) {
+      throw new Error(`Upstream responded with ${response.status}`);
+    }
+
+    res.status(response.status).send(await response.json());
   } catch (error) {
-    process.stdout.write(JSON.stringify(error, null, 2));
+    process.stdout.write(`${error instanceof Error ? error.message : String(error)}\n`);
     res.status(500).send("Couldn't fetch data");
   }
 };
