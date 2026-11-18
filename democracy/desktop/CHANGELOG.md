@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.4](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.2.3...democracy-app.de@v1.2.4) (2026-11-18)
+
+* **app:** use fetch in graphql proxy ([918719c](https://github.com/demokratie-live/democracy-development/commit/918719c0d799a546dec49cfd5d7736c51a27195f))
+
 ## [1.2.3](https://github.com/demokratie-live/democracy-development/compare/democracy-app.de@v1.2.2...democracy-app.de@v1.2.3) (2026-11-18)
 
 * **app:** update next and sharp ([c2b768d](https://github.com/demokratie-live/democracy-development/commit/c2b768d2d746df29a247c500d69a2973d02078fb))
