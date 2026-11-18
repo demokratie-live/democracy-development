@@ -16,7 +16,7 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['**/build/**', '**/dist/**'],
+    ignores: ['**/build/**', '**/dist/**', '**/tsup.config.bundled_*'],
   },
   {
     files: ['**/*.js', '**/*.ts'],
