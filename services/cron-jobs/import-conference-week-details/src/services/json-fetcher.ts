@@ -10,6 +10,28 @@ export interface FetchConferenceWeekOptions {
 }
 
 /**
+ * Returns the number of ISO weeks in a given year.
+ * ISO week 1 is the week containing the year's first Thursday.
+ * A year has 53 ISO weeks when Jan 1 or Dec 31 falls on Thursday,
+ * because that extra Thursday either starts or extends a week into a new year.
+ */
+export function getISOWeeksInYear(year: number): number {
+  const jan1Day = new Date(Date.UTC(year, 0, 1)).getUTCDay();
+  const dec31Day = new Date(Date.UTC(year, 11, 31)).getUTCDay();
+  return jan1Day === 4 || dec31Day === 4 ? 53 : 52;
+}
+
+/**
+ * Advances to the next ISO week, crossing the year boundary when necessary.
+ */
+export function getNextISOWeek(year: number, week: number): { year: number; week: number } {
+  if (week < getISOWeeksInYear(year)) {
+    return { year, week: week + 1 };
+  }
+  return { year: year + 1, week: 1 };
+}
+
+/**
  * Fetches conference week details from Bundestag JSON API
  */
 export async function fetchConferenceWeek(options: FetchConferenceWeekOptions): Promise<BundestagJSONResponse> {
@@ -62,8 +84,9 @@ export async function fetchConferenceWeek(options: FetchConferenceWeekOptions): 
 }
 
 /**
- * Fetches multiple conference weeks in sequence
- * Stops when encountering a 404 (week not available yet)
+ * Fetches multiple conference weeks in sequence starting from the given week.
+ * When a week has no sessions (404), advances to the next ISO week and continues.
+ * Stops when there are no more upcoming weeks or the limit is reached.
  */
 export async function fetchConferenceWeeks(
   options: FetchConferenceWeekOptions,
@@ -97,8 +120,12 @@ export async function fetchConferenceWeeks(
       }
     } catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
-        log.info(`Stopping at ${currentYear}-${currentWeek}: Week not available`);
-        break;
+        // Week has no sessions – advance to the next week and keep going
+        log.info(`Week ${currentYear}-${currentWeek} not available, trying next week`);
+        const next = getNextISOWeek(currentYear, currentWeek);
+        currentYear = next.year;
+        currentWeek = next.week;
+        continue;
       }
       throw error;
     }
