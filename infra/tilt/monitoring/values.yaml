@@ -1,0 +1,12 @@
+prometheus-node-exporter:
+  hostRootFsMount:
+    enabled: false
+prometheusOperator:
+  tls:
+    enabled: false
+  admissionWebhooks:
+    enabled: false
+
+alertmanager:
+  ingress:
+    enabled: false

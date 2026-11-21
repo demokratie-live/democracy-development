@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-zipkin-cassandra
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: {{ template "name" . }}
+spec:
+  ports:
+  - port: 9042
+  clusterIP: None
+  selector:
+    app: zipkin-cassandra
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-zipkin-cassandra
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: zipkin-cassandra
+spec:
+  serviceName: zipkin-cassandra
+  replicas: {{ .Values.cassandra.replicas }}
+  selector:
+    matchLabels:
+      app: zipkin-cassandra
+  volumeClaimTemplates:
+  - metadata:
+      name: data-storage
+    spec:
+      storageClassName: local-path
+      accessModes:
+       - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.cassandra.pvSize }}
+  template:
+    metadata:
+      labels:
+        app: zipkin-cassandra
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    spec:
+      {{- if .Values.cassandra.tolerations }}
+      tolerations:
+{{ toYaml .Values.cassandra.tolerations | indent 8 }}
+      {{- end }}
+      initContainers:
+      - name: volume-mount-hack
+        image: busybox
+        command: ["sh", "-c", "chmod -R 777 /cassandra/"]
+        volumeMounts:
+        - name: data-storage
+          mountPath: /cassandra/data
+      imagePullSecrets:
+        - name: nexusregistrykey
+      containers:
+      - name: zipkin-cassandra
+        image: {{ .Values.cassandra.image }}:{{ .Values.cassandra.tag }}
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "PID=$(pidof java) && kill $PID && while ps -p $PID > /dev/null; do sleep 1; done"]
+        ports:
+        - containerPort: 9042
+        livenessProbe:
+          initialDelaySeconds: {{ .Values.cassandra.probeStartupDelay }}
+          tcpSocket:
+            port: 9042
+        readinessProbe:
+          initialDelaySeconds: {{ .Values.cassandra.probeStartupDelay }}
+          tcpSocket:
+            port: 9042
+        resources:
+          limits:
+            cpu: "{{ .Values.cassandra.resources.cpuLimit }}"
+            memory: "{{ .Values.cassandra.resources.ramMb }}Mi" # TODO fix this, this field id mi but the value is mb. There will be slight wastage
+          requests:
+            cpu: "{{ .Values.cassandra.resources.cpuRequest }}"
+            memory: "{{ .Values.cassandra.resources.ramMb }}Mi" # TODO fix this, this field id mi but the value is mb. There will be slight wastage
+        volumeMounts:
+          - name: data-storage
+            mountPath: /cassandra/data
+
