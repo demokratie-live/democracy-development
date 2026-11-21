@@ -23,12 +23,12 @@ export default function Example({ onSelect = (_: string) => {} }) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+        <Menu.Button className="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
           {/* <SortDescendingIcon className="mr-2 -ml-1 mt-1 h-4 text-gray-700" />{' '} */}
           {/* Sortierung */}
           {selectedItem!.name}
           <ChevronDownIcon
-            className="-mr-1 ml-1 h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-500"
+            className="-mr-1 ml-1 h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
             aria-hidden="true"
           />
         </Menu.Button>
@@ -42,7 +42,7 @@ export default function Example({ onSelect = (_: string) => {} }) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black/5 focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black/5 focus:outline-none dark:bg-gray-800 dark:ring-gray-700">
           <div className="py-1">
             {items.map((option, index) => (
               <Menu.Item key={option.name}>
@@ -50,8 +50,8 @@ export default function Example({ onSelect = (_: string) => {} }) {
                   <a
                     onClick={() => setSelectedItem(items[index])}
                     className={classNames(
-                      option.id === selectedItem!.id ? 'font-semibold text-gray-900' : 'text-gray-700',
-                      active ? 'bg-gray-100' : '',
+                      option.id === selectedItem!.id ? 'font-semibold text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300',
+                      active ? 'bg-gray-100 dark:bg-gray-700' : '',
                       'block px-4 py-2 text-sm cursor-pointer',
                     )}
                   >

@@ -1,11 +1,12 @@
 import { Disclosure } from '@headlessui/react';
-import { MenuIcon, XIcon } from '@heroicons/react/outline';
+import { MenuIcon, MoonIcon, SunIcon, XIcon } from '@heroicons/react/outline';
 import { HeartIcon, SearchIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 
 import { searchTermState } from '@/components/state/states';
+import { useTheme } from '@/utils/useTheme';
 import Image from 'next/image';
 
 function classNames(...classes: string[]) {
@@ -20,6 +21,7 @@ const navigation = [
 
 const Navigation = () => {
   const router = useRouter();
+  const { theme, initialized, toggleTheme } = useTheme();
 
   const [searchTerm, setSearchTerm] = useRecoilState(searchTermState);
 
@@ -41,18 +43,27 @@ const Navigation = () => {
   };
 
   return (
-    <Disclosure as="nav" className="fixed top-0 z-50 w-full bg-white shadow">
+    <Disclosure as="nav" className="fixed top-0 z-50 w-full bg-white shadow dark:bg-gray-900 dark:shadow-gray-800">
       {({ open }) => (
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <Link href="/" className="flex shrink-0 items-center rounded">
+                  {/* Light mode logo (black text) */}
                   <Image
-                    className="hidden h-[38px] w-auto lg:inline-flex"
+                    className="hidden h-[38px] w-auto lg:inline-flex dark:lg:hidden"
                     height="161"
                     width="1024"
                     src="/assets/images/logo-text.svg"
+                    alt="Democracy App"
+                  />
+                  {/* Dark mode logo (white text) */}
+                  <Image
+                    className="hidden h-[38px] w-auto dark:lg:inline-flex"
+                    height="161"
+                    width="1024"
+                    src="/assets/images/logo-text-dark.svg"
                     alt="Democracy App"
                   />
                   <Image
@@ -71,9 +82,9 @@ const Navigation = () => {
                       key={item.href}
                       className={classNames(
                         router.pathname === item.href
-                          ? 'border-ci-blue text-gray-900'
-                          : 'border-transparent text-gray-500 hover:text-gray-700',
-                        'inline-flex focus:rounded items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-900',
+                          ? 'border-ci-blue text-gray-900 dark:text-white'
+                          : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white',
+                        'inline-flex focus:rounded items-center border-b-2 px-1 pt-1 text-sm font-medium',
                       )}
                     >
                       {item.name}
@@ -93,7 +104,7 @@ const Navigation = () => {
                     <input
                       id="search"
                       name="search"
-                      className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 leading-5 placeholder:text-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:placeholder:text-gray-400 sm:text-sm"
+                      className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 leading-5 placeholder:text-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-400 dark:focus:border-ci-blue dark:focus:ring-ci-blue sm:text-sm"
                       placeholder="Suche"
                       type="search"
                       value={searchTerm}
@@ -102,7 +113,21 @@ const Navigation = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center px-2">
+              <div className="flex items-center space-x-2 px-2">
+                {initialized && (
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
+                    className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-ci-blue dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                    aria-label={theme === 'dark' ? 'Zu hellem Modus wechseln' : 'Zu dunklem Modus wechseln'}
+                  >
+                    {theme === 'dark' ? (
+                      <SunIcon className="h-5 w-5" aria-hidden="true" />
+                    ) : (
+                      <MoonIcon className="h-5 w-5" aria-hidden="true" />
+                    )}
+                  </button>
+                )}
                 <a
                   href="https://www.democracy-deutschland.de/#!donate"
                   target="_blank"
@@ -115,7 +140,7 @@ const Navigation = () => {
               </div>
               <div className="flex items-center md:hidden">
                 {/* Mobile menu button */}
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:hover:bg-gray-800 dark:hover:text-gray-300">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -141,10 +166,9 @@ const Navigation = () => {
                     }}
                     className={classNames(
                       router.pathname === item.href
-                        ? 'bg-indigo-50 border-ci-darker text-ci-darker font-bold'
-                        : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800',
+                        ? 'bg-indigo-50 border-ci-darker text-ci-darker font-bold dark:bg-gray-800 dark:border-ci-blue dark:text-white'
+                        : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white',
                       'block border-l-4 py-2 pl-3 pr-4 text-base font-medium rounded-md',
-                      // 'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-900'
                     )}
                   >
                     {item.name}
@@ -152,55 +176,6 @@ const Navigation = () => {
                 </Link>
               ))}
             </div>
-            {/* <div className="border-t border-gray-200 pt-4 pb-3">
-              <div className="flex items-center px-4">
-                <div className="shrink-0">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
-                </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">
-                    Tom Cook
-                  </div>
-                  <div className="text-sm font-medium text-gray-500">
-                    tom@example.com
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  className="ml-auto shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
-              </div>
-              <div className="mt-3 space-y-1">
-                <Disclosure.Button
-                  as="a"
-                  href="#"
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                >
-                  Your Profile
-                </Disclosure.Button>
-                <Disclosure.Button
-                  as="a"
-                  href="#"
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                >
-                  Settings
-                </Disclosure.Button>
-                <Disclosure.Button
-                  as="a"
-                  href="#"
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                >
-                  Sign out
-                </Disclosure.Button>
-              </div>
-            </div> */}
           </Disclosure.Panel>
         </div>
       )}

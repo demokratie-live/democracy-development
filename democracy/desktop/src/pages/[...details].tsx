@@ -34,17 +34,17 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
           <Loading />
         ) : (
           <>
-            <div className="border-b border-gray-300 bg-gray-200">
+            <div className="border-b border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-800">
               <div className="mx-auto max-w-7xl px-4 pb-7 pt-28 text-center sm:px-6 lg:px-8">
                 <ChartPair
                   item={data.procedure}
                   className="mb-12 flex w-full items-center justify-center space-x-6"
                   large={true}
                 />
-                <h1 className="mx-auto max-w-3xl text-2xl font-semibold leading-7 tracking-tight text-gray-900">
+                <h1 className="mx-auto max-w-3xl text-2xl font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-100">
                   {data.procedure.title}
                 </h1>
-                <h2 className="mx-auto max-w-3xl pt-2 text-sm leading-5 text-gray-600">
+                <h2 className="mx-auto max-w-3xl pt-2 text-sm leading-5 text-gray-600 dark:text-gray-400">
                   {data.procedure.sessionTOPHeading}
                 </h2>
               </div>
@@ -54,84 +54,84 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                 {data.procedure.abstract}
               </div> */}
 
-              <div className="mt-10 overflow-hidden border bg-white shadow sm:rounded-lg">
+              <div className="mt-10 overflow-hidden border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800 sm:rounded-lg">
                 <div className="px-4 py-5 sm:px-6">
-                  <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
                     Details
                   </h3>
                   {/* <p className="mt-1 max-w-2xl text-sm text-gray-500">
                     Personal details and application.
                   </p> */}
                 </div>
-                <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
+                <div className="border-t border-gray-200 px-4 py-5 dark:border-gray-700 sm:px-6">
                   <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
                     <div className="sm:col-span-1 ">
-                      <dt className="text-sm font-medium text-gray-800">Typ</dt>
-                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
+                      <dt className="text-sm font-medium text-gray-800 dark:text-gray-300">Typ</dt>
+                      <dd className="mt-1 text-sm text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
                         {data.procedure.type}
                       </dd>
                     </div>
                     <div className="sm:col-span-1 ">
-                      <dt className="text-sm font-medium text-gray-800">
+                      <dt className="text-sm font-medium text-gray-800 dark:text-gray-300">
                         Vorgang
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
+                      <dd className="mt-1 text-sm text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
                         {data.procedure.procedureId}
                       </dd>
                     </div>
                     <div className="sm:col-span-1 ">
-                      <dt className="text-sm font-medium text-gray-800">
+                      <dt className="text-sm font-medium text-gray-800 dark:text-gray-300">
                         Sachgebiete
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
+                      <dd className="mt-1 text-sm text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
                         {data.procedure.subjectGroups.join(', ')}
                       </dd>
                     </div>
                     <div className="sm:col-span-1 ">
-                      <dt className="text-sm font-medium text-gray-800">
+                      <dt className="text-sm font-medium text-gray-800 dark:text-gray-300">
                         erstellt am
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
+                      <dd className="mt-1 text-sm text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
                         {dayjs(data.procedure.submissionDate).format(
                           'DD.MM.YYYY'
                         )}
                       </dd>
                     </div>
                     <div className="sm:col-span-1 ">
-                      <dt className="text-sm font-medium text-gray-800">
+                      <dt className="text-sm font-medium text-gray-800 dark:text-gray-300">
                         Abstimmung
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
+                      <dd className="mt-1 text-sm text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
                         {dayjs(data.procedure.voteDate).format('DD.MM.YYYY')}
                       </dd>
                     </div>
                     <div className="sm:col-span-1 ">
-                      <dt className="text-sm font-medium text-gray-800">
+                      <dt className="text-sm font-medium text-gray-800 dark:text-gray-300">
                         Aktueller Stand
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
+                      <dd className="mt-1 text-sm text-gray-700 dark:text-gray-400 sm:col-span-2 sm:mt-0">
                         {data.procedure.currentStatus}
                       </dd>
                     </div>
                     {data.procedure.abstract && (
                       <div className="sm:col-span-2 ">
-                        <dt className="text-sm font-medium text-gray-800">
+                        <dt className="text-sm font-medium text-gray-800 dark:text-gray-300">
                           Inhalt
                         </dt>
-                        <dd className="prose mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
+                        <dd className="prose mt-1 text-sm text-gray-700 dark:prose-invert dark:text-gray-400 sm:col-span-2 sm:mt-0">
                           {data.procedure.abstract}
                         </dd>
                       </div>
                     )}
-                    <hr className="my-5 border-dashed sm:col-span-3" />
+                    <hr className="my-5 border-dashed border-gray-300 dark:border-gray-600 sm:col-span-3" />
                     <div className="sm:col-span-3 sm:grid sm:grid-cols-3 sm:gap-4 md:col-span-3">
-                      <dt className="text-sm font-medium text-gray-800">
+                      <dt className="text-sm font-medium text-gray-800 dark:text-gray-300">
                         Dokumente
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-700 sm:col-span-3 sm:mt-0">
+                      <dd className="mt-1 text-sm text-gray-700 dark:text-gray-400 sm:col-span-3 sm:mt-0">
                         <ul
                           role="list"
-                          className="divide-y divide-gray-200 rounded-md border border-gray-200"
+                          className="divide-y divide-gray-200 rounded-md border border-gray-200 dark:divide-gray-700 dark:border-gray-700"
                         >
                           {sortBy(data.procedure.importantDocuments, [
                             /*  'number',
@@ -141,7 +141,7 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                               <a
                                 href={document.url}
                                 target="_blank"
-                                className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
+                                className="flex items-center justify-between py-3 pl-3 pr-4 text-sm hover:bg-gray-50 dark:hover:bg-gray-700"
                                 rel="noreferrer"
                               >
                                 <div className="flex w-0 flex-1 items-start">
@@ -153,12 +153,12 @@ export default function DetailsPage({ data, resolvedUrl }: any) {
                                     <span className="truncate font-medium">
                                       {document.type}
                                     </span>
-                                    <small className="truncate text-gray-700">
+                                    <small className="truncate text-gray-700 dark:text-gray-400">
                                       {document.editor}&nbsp;{document.number}
                                     </small>
                                   </div>
                                 </div>
-                                <div className="ml-4 shrink-0 font-medium text-ci-blue-darker hover:text-ci-blue-darker">
+                                <div className="ml-4 shrink-0 font-medium text-ci-blue-darker hover:text-ci-blue-darker dark:text-ci-blue dark:hover:text-ci-blue">
                                   Öffnen
                                 </div>
                               </a>
